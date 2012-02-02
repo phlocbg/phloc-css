@@ -1,0 +1,54 @@
+/*
+This file is part of pDAF.
+Copyright (c) 2005-2008 by Gregorcic & Helger IT systems OEG.
+All rights reserved.
+http://www.phloc.com
+*/
+
+/* Link handling */
+a:link, a:visited, a:active,
+a:link span, a:visited span, a:active span
+{
+  font-family:Arial, Verdana, Helvetica, Sans-serif;
+  font-size:13px;
+  font-weight:bold;
+  color:#880000;
+}
+
+a:hover, a:hover span
+{    
+  font-family:Arial, Verdana, Helvetica, Sans-serif;
+  color:#ca5656;
+}
+
+/* Make it bold */
+.pdaf_bold {
+  font-weight:bold;
+}
+
+/* Make it underlined */
+.pdaf_underline {
+  text-decoration:underline;
+}
+
+/* Code fragment */
+.pdaf_code {
+  font-family:monospace;
+}
+
+
+.content_header_1
+{
+  font-weight:bold;
+  font-size:17px;
+  padding-top:5px;
+  display:block;
+}
+
+.content_header_2
+{
+  font-weight:bold;
+  font-size:14px;
+  padding-top:5px;
+  display:block;
+}

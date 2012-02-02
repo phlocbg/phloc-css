@@ -1,0 +1,68 @@
+/* 1 error per element */
+/*
+element {
+  #zoom:1;
+}
+
+element {
+  color:red;
+  #zoom:1;
+}
+
+element {
+  #zoom:1;
+  color:red;
+}
+
+element {
+  background-color:red;
+  #zoom:1;
+  color:red;
+}
+*/
+
+/* 2 errors per element */
+/*
+element {
+  #zoom:1;
+  #zoom:1;
+  background-color:red;
+  color:red;
+}
+
+element {
+  #zoom:1;
+  background-color:red;
+  #zoom:1;
+  color:red;
+}
+
+element {
+  #zoom:1;
+  background-color:red;
+  color:red;
+  #zoom:1;
+}
+
+element {
+  background-color:red;
+  #zoom:1;
+  #zoom:1;
+  color:red;
+}
+
+element {
+  background-color:red;
+  #zoom:1;
+  color:red;
+  #zoom:1;
+}
+
+element {
+  background-color:red;
+  #zoom:1;
+  color:red;
+  #zoom:1;
+  color:red;
+}
+*/

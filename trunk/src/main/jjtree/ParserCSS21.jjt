@@ -1,0 +1,800 @@
+options {
+  // JavaCC options
+  // LOOKAHEAD = 2;
+  CHOICE_AMBIGUITY_CHECK = 5;
+  STATIC = false;  // to allow for multiple parser instances
+  // DEBUG_PARSER = true;
+  // DEBUG_LOOKAHEAD = true;
+  // DEBUG_TOKEN_MANAGER = true;
+  // ERROR_REPORTING = false;
+  JAVA_UNICODE_ESCAPE = true;
+  UNICODE_INPUT = true;
+  IGNORE_CASE = true;
+  // USER_TOKEN_MANAGER = true;
+  // SUPPORT_CLASS_VISIBILITY_PUBLIC = false;
+  // USER_CHAR_STREAM = true;
+  FORCE_LA_CHECK = true;
+
+// JJTree options
+  // BUILD_NODE_FILES = false;
+  // NODE_DEFAULT_VOID = true;
+  NODE_CLASS = "com.phloc.css.parser.CSSNode";
+  NODE_PREFIX = "";
+  // NODE_USES_PARSER = true;
+}
+
+PARSER_BEGIN(ParserCSS21)
+package com.phloc.css.parser;
+
+public class ParserCSS21
+{
+  private static final org.slf4j.Logger s_aLogger = org.slf4j.LoggerFactory.getLogger (ParserCSS21.class);
+}
+PARSER_END(ParserCSS21)
+
+TOKEN_MGR_DECLS :
+{
+  private static final org.slf4j.Logger s_aLogger = org.slf4j.LoggerFactory.getLogger (ParserCSS21TokenManager.class);
+}
+
+<DEFAULT> TOKEN :
+{
+// s        [ \t\r\n\f]+
+// {s}          {return S;}
+    < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
+// w        {s}?
+    | < W: ( <S> )? >
+}
+
+<DEFAULT> MORE :
+{
+  < "/*" > : COMMENT
+}
+
+<COMMENT> MORE :
+{
+  < ~[] > : COMMENT
+}
+
+<COMMENT> SKIP :
+{
+  < "*/" > : DEFAULT
+}
+
+<DEFAULT> TOKEN :
+{
+// h        [0-9a-f]
+  < #H: ["0"-"9","a"-"f"] >
+| < #HNUM: <H> | <H><H> | <H><H><H> | <H><H><H><H> | <H><H><H><H><H> | <H><H><H><H><H><H> >
+
+// nonascii [\200-\377]
+// The two occurrences of "\377" represent the highest character number that
+// current versions of Flex can deal with (decimal 255). They should be read as
+// "\4177777" (decimal 1114111), which is the highest possible code point in
+// Unicode/ISO-10646.
+// Limitation: This parser can only handle Unicode characters up to \uFFFF
+// (decimal 65535).
+| < #NONASCII: ["\u0080"-"\uFFFF"] >
+
+// unicode      \\{h}{1,6}(\r\n|[ \t\r\n\f])?
+| < #UNICODE: "\\" <HNUM> ( "\r\n" | [" ","\t","\r","\n","\f"] )? >
+
+// escape       {unicode}|\\[^\r\n\f0-9a-f]
+| < #ESCAPE: <UNICODE> | ( "\\" ~["\r","\n","\f","0"-"9","a"-"f"] ) >
+
+// nmstart      [_a-z]|{nonascii}|{escape}
+// Extension: added "A"-"Z"
+| < #NMSTART: ["_","a"-"z","A"-"Z"] | <NONASCII> | <ESCAPE> >
+
+// nmchar       [_a-z0-9-]|{nonascii}|{escape}
+// Extension: added "A"-"Z"
+| < #NMCHAR: ["_","a"-"z","A"-"Z","0"-"9","-"] | <NONASCII> | <ESCAPE> >
+
+// nl       \n|\r\n|\r|\f
+| < NL: "\n" | "\r\n" | "\r" | "\f" >
+
+// string1      \"([^\n\r\f\\"]|\\{nl}|{escape})*\"
+| < STRING1: "\"" ( ~["\n","\r","\f","\\","\""] | "\\" <NL> | <ESCAPE> )* "\"" >
+
+// string2      \'([^\n\r\f\\']|\\{nl}|{escape})*\'
+| < STRING2: "'" ( ~["\n","\r","\f","\\","'"] | "\\" <NL> | <ESCAPE> )* "'" >
+
+// invalid1 \"([^\n\r\f\\"]|\\{nl}|{escape})*
+| < INVALID1: "\"" ( ~["\n","\r","\f","\\","\""] | "\\" <NL> | <ESCAPE> )* >
+
+// invalid2 \'([^\n\r\f\\']|\\{nl}|{escape})*
+| < INVALID2: "'" ( ~["\n","\r","\f","\\","'"] | "\\" <NL> | <ESCAPE> )* >
+
+// comment      \/\*[^*]*\*+([^/*][^*]*\*+)*\/
+| < #COMMENT_: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/">
+
+// {num}            {return NUMBER;}
+| < NUMBER: <NUM> >
+
+// before ident!
+| < INHERIT: "inherit" >
+
+// ident        -?{nmstart}{nmchar}*
+// {ident}         {return IDENT;}
+// Note: "*" hack for IE <= 6
+// Note: "$" hack for IE <= 7
+| < IDENT: ("-"|"$"|"*")? <NMSTART> ( <NMCHAR> )* >
+
+// name     {nmchar}+
+| < #NAME: ( <NMCHAR> )+ >
+
+// num      [0-9]+|[0-9]*"."[0-9]+
+| < NUM: ( ["0"-"9"] )+ | ( ["0"-"9"] )* "." ( ["0"-"9"] )+ >
+
+// url      ([!#$%&*-~]|{nonascii}|{escape})*
+| < #URL: ["!","#","$","%","&","*"-"[","]"-"~"] | <NONASCII> | <ESCAPE> >
+
+// "<!--"       {return CDO;}
+| < CDO: "<!--" >
+
+// "-->"            {return CDC;}
+| < CDC: "-->" >
+
+// "~="         {return INCLUDES;}
+| < INCLUDES: "~=" >
+
+// "|="         {return DASHMATCH;}
+| < DASHMATCH: "|=" >
+
+// {w}"{"           {return LBRACE;}
+| < LBRACE: <W> "{" >
+
+// {w}"+"           {return PLUS;}
+| < PLUS: <W> "+" >
+
+// {w}">"           {return GREATER;}
+| < GREATER: <W> ">" >
+
+// {w}","           {return COMMA;}
+| < COMMA: <W> "," >
+
+// "#"{name}        {return HASH;}
+| < HASH: "#" <NAME> >
+
+// @{I}{M}{P}{O}{R}{T}  {return IMPORT_SYM;}
+| < IMPORT_SYM: "@import" >
+
+// @{P}{A}{G}{E}        {return PAGE_SYM;}
+| < PAGE_SYM: "@page" >
+
+// @{M}{E}{D}{I}{A} {return MEDIA_SYM;}
+| < MEDIA_SYM: "@media" >
+
+// @{C}{H}{A}{R}{S}{E}{T}   {return CHARSET_SYM;}
+| < CHARSET_SYM: "@charset" >
+
+// "!"({w}|{comment})*{I}{M}{P}{O}{R}{T}{A}{N}{T}   {return IMPORTANT_SYM;}
+| < IMPORTANT_SYM: "!" ( <W> | <COMMENT_> )* "important" >
+
+// {num}{E}{M}      {return EMS;}
+| < EMS: <NUM> "em" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{E}{X}      {return EXS;}
+| < EXS: <NUM> "ex" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{P}{X}      {return LENGTH;}
+| < LENGTH_PX: <NUM> "px" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{C}{M}      {return LENGTH;}
+| < LENGTH_CM: <NUM> "cm" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{M}{M}      {return LENGTH;}
+| < LENGTH_MM: <NUM> "mm" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{I}{N}      {return LENGTH;}
+| < LENGTH_IN: <NUM> "in" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{P}{T}      {return LENGTH;}
+| < LENGTH_PT: <NUM> "pt" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{P}{C}      {return LENGTH;}
+| < LENGTH_PC: <NUM> "pc" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{D}{E}{G}       {return ANGLE;}
+| < ANGLE_DEG: <NUM> "deg" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{R}{A}{D}       {return ANGLE;}
+| < ANGLE_RAD: <NUM> "rad" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{G}{R}{A}{D}    {return ANGLE;}
+| < ANGLE_GRAD: <NUM> "grad" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{M}{S}      {return TIME;}
+| < TIME_MS: <NUM> "ms" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{S}     {return TIME;}
+| < TIME_S: <NUM> "s" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{H}{Z}      {return FREQ;}
+| < FREQ_HZ: <NUM> "hz" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{K}{H}{Z}       {return FREQ;}
+| < FREQ_KHZ: <NUM> "khz" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// {num}{ident}     {return DIMENSION;}
+| < DIMENSION: <NUM> <IDENT> >
+
+// {num}%           {return PERCENTAGE;}
+| < PERCENTAGE: <NUM> "%" >
+  { matchedToken.image = ParseUtils.splitNumber(image); }
+
+// "url("{w}{string}{w}")"  {return URI;}
+// "url("{w}{url}{w}")" {return URI;}
+| < URI: "url(" ( <S> )* ( <STRING1> | <STRING2> | ( <URL> )* ) ( <S> )* ")" >
+  { matchedToken.image = ParseUtils.trimUrl(image); }
+
+// {ident}"(        {return FUNCTION;}
+// OLD:
+//| < FUNCTION: <IDENT> "(" >
+// Extension for IE filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50); */
+| < FUNCTION: <IDENT> "(" |
+              "progid:" <IDENT> ( <DOT> <IDENT> )* "("
+  >
+  { matchedToken.image = image.toString (); }
+
+| < RBRACE: "}" >
+| < DOT: "." >
+| < SEMICOLON: ";" >
+| < COLON: ":" >
+| < ASTERISK: "*" >
+| < SLASH: "/" >
+| < MINUS: "-" >
+| < EQUALS: "=" >
+| < LSQUARE: "[" >
+| < RSQUARE: "]" >
+| < RROUND: ")" >
+| < ATKEYWORD: "@" <IDENT> >
+}
+
+<*> TOKEN:
+{
+  < UNKNOWN: ~[] >
+  {
+    s_aLogger.error("Illegal character: " + image.toString());
+  }
+}
+
+JAVACODE
+void error_skipto(final int... aKinds)
+{
+  // generate the exception object and print it
+  final ParseException e = generateParseException();
+  s_aLogger.warn(e.toString());
+  // Skip until (including) the first matching token
+  Token t;
+  do
+  {
+    t = getNextToken();
+  } while (!com.phloc.commons.collections.ArrayHelper.contains (aKinds, t.kind));
+}
+
+//
+// stylesheet
+//  : [ CHARSET_SYM STRING ';' ]?
+//    [S|CDO|CDC]* [ import [S|CDO|CDC]* ]*
+//    [ [ ruleset | media | page ] [S|CDO|CDC]* ]*
+//  ;
+//
+CSSNode styleSheet() #Root : {}
+{
+  ( charsetRule() )?
+  ( <S>
+  | <CDO>
+  | <CDC>
+  )*
+  ( importRule()
+    ( <S>
+    | <CDO>
+    | <CDC>
+    )*
+  )*
+  ( ( styleRule()
+    | mediaRule()
+    | pageRule()
+    | unknownRule()
+    )
+    ( <S>
+    | <CDO>
+    | <CDC>
+    )*
+  )*
+  <EOF>
+  { return jjtThis; }
+}
+
+void charsetRule() #Charset :
+{ String sStr; }
+{
+  <CHARSET_SYM>
+  <S>
+  sStr = string ()
+  <SEMICOLON>
+  { jjtThis.setText (sStr); }
+}
+
+void unknownRule() : {}
+{
+  <ATKEYWORD>
+}
+
+//
+// import
+//  : IMPORT_SYM S*
+//    [STRING|URI] S* [ medium [ COMMA S* medium]* ]? ';' S*
+//  ;
+//
+void importRule() #ImportRule :
+{
+  String sUrl;
+  Token t;
+}
+{
+  <IMPORT_SYM>
+  ( <S> )*
+  ( sUrl = string() { jjtThis.setText (sUrl); }
+  | t = <URI>       { jjtThis.setText (t.image); }
+  )
+  ( <S> )*
+  ( mediaList() )?
+  <SEMICOLON>
+}
+
+//
+// media
+//  : MEDIA_SYM S* medium [ COMMA S* medium ]* LBRACE S* ruleset* '}' S*
+//  ;
+//
+void mediaRule() : {}
+{
+  <MEDIA_SYM>
+  ( <S> )*
+  mediaList()
+  <LBRACE>
+  ( <S> )*
+  ( mediaRuleList() )?
+  <RBRACE>
+}
+
+void mediaList() : {}
+{
+  medium()
+  ( <COMMA>
+    ( <S> )*
+    medium()
+  )*
+}
+
+void mediaRuleList() #void : {}
+{
+  ( ( styleRule()
+    | pageRule()
+    | unknownRule()
+    )
+    ( <S> )*
+  )+
+}
+
+//
+// medium
+//   : IDENT S*
+//   ;
+//
+void medium() #Medium :
+{ Token t; }
+{
+  t = <IDENT>
+  ( <S> )*
+  { jjtThis.setText (t.image); }
+}
+
+//
+// page
+//  : PAGE_SYM S* pseudo_page? S*
+//    LBRACE S* declaration [ ';' S* declaration ]* '}' S*
+//  ;
+//
+void pageRule() : {}
+{
+  <PAGE_SYM>
+  ( <S> )*
+  ( pseudoPage()
+    ( <S> )*
+  )?
+  <LBRACE>
+  ( <S> )*
+  ( declaration() )?
+  ( <SEMICOLON>
+    ( <S> )*
+    ( declaration() )?
+  )*
+  <RBRACE>
+}
+
+//
+// pseudoPage
+//   : ':' IDENT
+//   ;
+//
+void pseudoPage() #PseudoPage :
+{ Token t; }
+{
+  <COLON>
+  t = <IDENT>
+  { jjtThis.setText (t.image); }
+}
+
+//
+// operator
+//  : '/' S* | COMMA S* | /* empty */
+//  ;
+//
+void operator() #Operator : {}
+{
+  ( <SLASH> ( <S> )*  { jjtThis.setText ("/"); }
+  | <COMMA> ( <S> )*  { jjtThis.setText (","); }
+  /* Extension for Microsoft filters (alpha=50) */
+  | <EQUALS> ( <S> )* { jjtThis.setText ("="); }
+  )
+}
+
+//
+// combinator
+//  : PLUS S*
+//  | GREATER S*
+//  | S
+//  ;
+//
+void combinator() #Combinator : {}
+{
+  ( <PLUS>    ( <S> )* { jjtThis.setText ("+"); }
+  | <GREATER> ( <S> )* { jjtThis.setText (">"); }
+  | <S>                { jjtThis.setText (" "); }
+  )
+}
+
+//
+// unary_operator
+//  : '-' | PLUS
+//  ;
+//
+String unaryOperator() #void : {}
+{
+  ( <MINUS> { return "-"; }
+  | <PLUS>  { return "+"; }
+  )
+}
+
+//
+// property
+//   : IDENT S*
+//   ;
+//
+void property() #Property :
+{ Token t; }
+{
+  t = <IDENT>
+  ( <S> )*
+  { jjtThis.setText (t.image); }
+}
+
+//
+// ruleset
+//  : selector [ COMMA S* selector ]*
+//    LBRACE S* declaration [ ';' S* declaration ]* '}' S*
+//  ;
+//
+void styleRule() : {}
+{
+  selector ()
+  ( <S> )*
+  ( <COMMA>
+    ( <S> )*
+    selector()
+  )*
+  <LBRACE>
+  ( <S> )*
+  styleDeclaration()
+  <RBRACE>
+}
+
+//
+// selector
+//   : simple_selector [ combinator simple_selector ]*
+//   ;
+//
+void selector() : {}
+{
+  simpleSelector()
+  ( LOOKAHEAD(2)
+    combinator()
+    simpleSelector()
+  )*
+}
+
+//
+// simple_selector
+//  : element_name [ HASH | class | attrib | pseudo ]*
+//  | [ HASH | class | attrib | pseudo ]+
+//  ;
+//
+void simpleSelector() #void : {}
+{
+  ( elementName()
+    ( hash()
+    | _class()
+    | attrib()
+    | pseudo()
+    )*
+  )
+  | ( hash()
+    | _class()
+    | attrib()
+    | pseudo()
+    )+
+}
+
+//
+// class
+//   : '.' IDENT
+//   ;
+//
+void _class() #Class :
+{ Token t; }
+{
+  <DOT>
+  t = <IDENT>
+  { jjtThis.setText ("." + t.image); }
+}
+
+//
+// element_name
+//   : IDENT | '*'
+//   ;
+//
+void elementName() #ElementName :
+{ Token t; }
+{
+  ( t = <IDENT>    { jjtThis.setText (t.image); }
+  | t = <ASTERISK> { jjtThis.setText (t.image); }
+  )
+}
+
+//
+// attrib
+//   : '[' S* IDENT S* [ [ '=' | INCLUDES | DASHMATCH ] S*
+//     [ IDENT | STRING ] S* ]? ']'
+//   ;
+//
+void attrib() #Attrib :
+{ Token t; }
+{
+  <LSQUARE>
+  ( <S> )*
+  t = <IDENT> { jjtThis.setText (t.image); }
+  ( <S> )*
+  ( attribOperator()
+    ( <S> )*
+    attribValue()
+    ( <S> )*
+  )?
+  <RSQUARE>
+}
+
+void attribOperator() #AttribOperator : {}
+{
+  ( <EQUALS>    { jjtThis.setText ("="); }
+  | <INCLUDES>  { jjtThis.setText ("~="); }
+  | <DASHMATCH> { jjtThis.setText ("|="); }
+  )
+}
+
+void attribValue() #AttribValue :
+{
+  Token t;
+  String sStr;
+}
+{
+  ( t = <IDENT>     { jjtThis.setText (t.image); }
+  | sStr = string() { jjtThis.setText (sStr); }
+  )
+}
+
+//
+// pseudo
+//  : ':' [ IDENT | FUNCTION S* IDENT? S* ')' ]
+//  ;
+//
+void pseudo() #Pseudo :
+{ Token t; }
+{
+  <COLON> { jjtThis.setText (":"); }
+  /* Extension for "::-moz-selection */
+  ( <COLON> { jjtThis.appendText (":"); } ) ?
+  ( t = <FUNCTION> { jjtThis.appendText (t.image); }
+    ( <S> )*
+    ( expr() )?
+    LOOKAHEAD(2)
+    <RROUND>  // do not append because of expression!
+    ( <S> )*
+  | t = <IDENT> { jjtThis.appendText (t.image); }
+  )
+}
+
+void hash() #Hash :
+{ Token t; }
+{
+  t = <HASH>
+  { jjtThis.setText (t.image); }
+}
+
+void styleDeclaration() #void : {}
+{
+  ( declaration() )?
+  ( <SEMICOLON>
+    ( <S> )*
+    ( declaration() )?
+  )*
+}
+
+//
+// declaration
+//   : property ':' S* expr prio?
+//   |
+//   ;
+//
+void declaration() : {}
+{
+  property()
+  <COLON>
+  ( <S> )*
+  expr()
+  ( prio() )?
+}
+
+//
+// prio
+//   : IMPORTANT_SYM S*
+//   ;
+void prio() #Important :
+{ Token t; }
+{
+  t = <IMPORTANT_SYM>
+  ( <S> )*
+  { jjtThis.setText (t.image); }
+}
+
+//
+// expr
+//   : term [ operator term ]*
+//   ;
+//
+void expr() : {}
+{
+  term()
+  ( ( operator() )?
+    term()
+  )*
+}
+
+//
+// term
+//  : unary_operator?
+//    [ NUMBER S* | PERCENTAGE S* | LENGTH S* | EMS S* | EXS S* | ANGLE S* | TIME S* | FREQ S* ]
+//  | STRING S* | IDENT S* | URI S* | hexcolor | function | inherit
+//  ;
+//
+void term() #Term :
+{
+  String sPrefix = null;
+  Token t = null;
+  String sStr;
+}
+{
+  ( ( sPrefix = unaryOperator() )?
+    ( t = <NUMBER> ( <S> )*
+    | t = <PERCENTAGE> ( <S> )* { t.image += "%"; }
+    | t = <LENGTH_PX> ( <S> )*  { t.image += "px"; }
+    | t = <LENGTH_CM> ( <S> )*  { t.image += "cm"; }
+    | t = <LENGTH_MM> ( <S> )*  { t.image += "mm"; }
+    | t = <LENGTH_IN> ( <S> )*  { t.image += "in"; }
+    | t = <LENGTH_PT> ( <S> )*  { t.image += "pt"; }
+    | t = <LENGTH_PC> ( <S> )*  { t.image += "pc"; }
+    | t = <EMS> ( <S> )*        { t.image += "em"; }
+    | t = <EXS> ( <S> )*        { t.image += "ex"; }
+    | t = <ANGLE_DEG> ( <S> )*  { t.image += "deg"; }
+    | t = <ANGLE_RAD> ( <S> )*  { t.image += "rad"; }
+    | t = <ANGLE_GRAD> ( <S> )* { t.image += "grad"; }
+    | t = <TIME_MS> ( <S> )*    { t.image += "ms"; }
+    | t = <TIME_S> ( <S> )*     { t.image += "s"; }
+    | t = <FREQ_HZ> ( <S> )*    { t.image += "hz"; }
+    | t = <FREQ_KHZ> ( <S> )*   { t.image += "khz"; }
+  )
+  | sStr = string() ( <S> )*    { jjtThis.setText (sStr); }
+  | t = <IDENT> ( <S> )*
+  | t = <URI> ( <S> )*          { t.image = com.phloc.css.CCSS.url (t.image); }
+  | sStr = hexcolor()           { jjtThis.setText (sStr); }
+  | function()
+  /* extensions */
+  | t = <DIMENSION>
+  | t = <INHERIT> ( <S> )*
+  )
+  {
+    if (sPrefix != null)
+      jjtThis.appendText (sPrefix);
+    if (t != null)
+      jjtThis.appendText (t.image);
+  }
+}
+
+//
+// function
+//   : FUNCTION S* expr ')' S*
+//   ;
+//
+void function() #Function :
+{ Token t; }
+{
+  t = <FUNCTION>
+  ( <S> )*
+  // Original was:
+  // expr ()
+  // Extension to support functions without parameters (e.g. "gray ()")
+  ( expr() )?
+  <RROUND>
+  ( <S> )*
+  { jjtThis.setText (t.image + ")"); }
+}
+
+//
+// hexcolor
+//   : HASH S*
+//   ;
+//
+String hexcolor() #void :
+{ Token t; }
+{
+  t = <HASH>
+  ( <S> )*
+  { return t.image; }
+}
+
+
+// string       {string1}|{string2}
+// {string}        {return STRING;}
+String string () #void :
+{ Token t; }
+{
+  ( t = <STRING1>
+  | t = <STRING2>
+  )
+  { return t.image; }
+}
+
+// invalid      {invalid1}|{invalid2}
+// {invalid}        {return INVALID; /* unclosed string */}
+void invalid () : {}
+{
+  ( <INVALID1>
+  | <INVALID2>
+  )
+}
