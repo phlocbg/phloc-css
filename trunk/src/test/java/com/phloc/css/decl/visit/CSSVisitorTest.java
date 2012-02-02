@@ -17,6 +17,8 @@
  */
 package com.phloc.css.decl.visit;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.File;
 
 import org.junit.Test;
@@ -69,6 +71,7 @@ public final class CSSVisitorTest
     {
       s_aLogger.info (aFile.getAbsolutePath ());
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS21);
+      assertNotNull (aFile.getAbsolutePath (), aCSS);
       CSSVisitor.visitCSSUrl (aCSS, new SysOutVisitor ());
     }
   }

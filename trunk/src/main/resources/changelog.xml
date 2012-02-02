@@ -21,6 +21,17 @@
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
   <release date="2011-11-06" version="2.5.3" />
+  <entry date="2012-02-02" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed bug in grammar concerning spaces before @charset</text>
+    </change>
+  </entry>
+  <entry date="2012-02-02" category="tech" action="change">
+    <change>
+      <text locale="en">Moved to Google Code as Open Source</text>
+    </change>
+  </entry>
+  <release date="2011-11-06" version="2.5.3" />
   <entry date="2011-10-24" category="api" action="add">
     <change>
       <text locale="en">Added new CSS3 and browser specific CSS properties</text>
