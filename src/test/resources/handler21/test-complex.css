@@ -1,0 +1,36 @@
+@charSet 'UTF-8';
+@import url("../dijit.css");
+@import 'legacy.css' print;
+@import 'legacy.css' media, projector;
+
+a+b {
+  border-top: 2px;
+}
+@page :Section1
+    {
+    size:8.5in 11.0in;
+    margin:1.0in .75in 1.0in .75in;
+}
+
+@media print {
+  /** make sure this fits the page **/
+  div#container {
+    width:100%;
+    min-height:0px;
+  }
+}
+#content input[type=radio],
+#content input[type=checkbox]
+{
+  border:0px !important;
+  background:none;
+  \u0077idth:auto !important;
+}
+input {}
+a, p, td{color:red;}
+
+#mitte #mitte_links p a[href~="/"]:link:after,
+#mitte #mitte_links p a[href~="/"]:visited:after {
+  /* hinter Links URL ausgeben (nur Gecko-Engine); wenn URL mit / anfängt, heise.de davor */
+  content: " [http://www.heise.de" attr(href)"] ";
+}

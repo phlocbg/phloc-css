@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2011-11-06" version="2.5.3" />
+  <entry date="2011-10-24" category="api" action="add">
+    <change>
+      <text locale="en">Added new CSS3 and browser specific CSS properties</text>
+    </change>
+  </entry>
+  <entry date="2011-10-23" category="api" action="add">
+    <change>
+      <text locale="en">Added support for border-radius</text>
+    </change>
+  </entry>
+  <release date="2011-09-23" version="2.5.2" />
+  <entry date="2011-09-23" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed bug in parser to read "inherit !important"</text>
+    </change>
+  </entry>
+  <entry date="2011-09-23" category="tech" action="add">
+    <change>
+      <text locale="en">Added support for CSSMediaRule in the CSSVisitor</text>
+    </change>
+  </entry>
+  <release date="2011-08-12" version="2.5.1" />
+  <entry date="2011-08-11" category="tech" action="fix">
+    <change>
+      <text locale="en">CSS 3.0 parser can now handle negation, nth-* functions, ~ combinator, namespace prefix etc.</text>
+    </change>
+  </entry>
+  <entry date="2011-08-11" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed CSS parser speed by using LL(1) by default and LL(k) only on demand</text>
+    </change>
+  </entry>
+</changelog>

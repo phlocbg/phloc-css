@@ -1,0 +1,42 @@
+/*
+This file is part of pDAF.
+Copyright (c) 2005-2008 by Gregorcic & Helger IT systems OEG.
+All rights reserved.
+http://www.phloc.com
+*/
+
+tr.header,
+tr.navbar,
+tr.footer,
+#menu,
+#content_r
+{
+  display:none;
+}
+
+
+#content
+{ 
+  padding:0px;
+  background:#ffffff;  
+}
+
+body,
+#vp
+{ 
+  margin:0px;
+  padding:0px;
+  background:#ffffff;  
+}
+
+#vp col
+{
+  width:21cm;  
+}
+
+table,
+table td
+{
+  padding:0px;
+  margin:0px;
+}

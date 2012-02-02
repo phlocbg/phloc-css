@@ -1,0 +1,9 @@
+/* File comment */
+div { font-size: 12px; }
+/* after div */
+div /* before bracket */ { /* after bracket */  white-space: normal; /* after value */ } /* after bracket */
+/*before*/div/*between1*/,/*between2*/span/*before bracket*/{/*after bracket*/white-space/*before colon*/:/*after colon*/normal;/*after value*/}/*after bracket*/
+
+/*before*/@media/*here*/print/*here*/{/*here*/span/*here*/{/*here*/}/*here*/}/*here*/
+/*before*/@media/*here*/print/*here*/,/*here*/media2/*here*/{/*here*/span/*here*/{/*here*/}/*here*/}/*here*/
+/*before*/ @media /*here*/ print /*here*/ , /*here*/ media2 /*here*/ { /*here*/ span /*here*/ { /*here*/ } /*here*/ } /*here*/

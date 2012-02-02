@@ -1,0 +1,61 @@
+/**
+ * phloc javadoc CSS
+ *
+ * (c) 2011-2012 phloc systems.
+ * All rights reserved!
+ */
+
+/* Page background color */
+body { 
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #FFFFFF; 
+  color:#000000 
+}
+
+/* Headings */
+h1, h2, h3 {
+ color: #880000;
+}
+
+a:link {
+ line-height: 14px;
+ font-weight: bold;
+ text-decoration: none;
+ color: #880000;
+}
+
+a:visited {
+ color: #886060;
+ text-decoration: none;
+ font-weight: bold;
+}
+
+hr{
+ color: #880000;
+ background-color: #880000;
+ border: 0;
+ text-align: left;/*IE*/
+ margin-left: 0; /*Mozilla*/
+}
+
+/* Table colors */
+.TableHeadingColor  { background-color:#880000; color:#ffffff; }
+.TableHeadingColor a:link, .TableHeadingColor a:visited { }
+.TableHeadingColor a:hover { }
+.TableSubHeadingColor  { }
+.TableRowColor         { }
+
+/* Font used in left-hand frame lists */
+.FrameTitleFont   { }
+.FrameHeadingFont { }
+.FrameItemFont    { }
+
+/* Navigation bar fonts and colors */
+.NavBarCell1    { background-color:#880000; }
+.NavBarFont1    { color:#ffffff; }
+
+.NavBarCell1Rev { background-color:#ffffff; }
+.NavBarFont1Rev { color:#880000; }
+
+.NavBarCell2    { }
+.NavBarCell3    { }

@@ -1,0 +1,72 @@
+package com.phloc.css;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.regex.RegExHelper;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
+
+/**
+ * Default implementation of the {@link ICSSClassProvider} interface.
+ * 
+ * @author philip
+ */
+@Immutable
+public final class DefaultCSSClassProvider implements ICSSClassProvider
+{
+  private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultCSSClassProvider.class);
+  private static Map <String, DefaultCSSClassProvider> s_aAll = new HashMap <String, DefaultCSSClassProvider> ();
+
+  private final String m_sCSSClass;
+
+  private DefaultCSSClassProvider (@Nonnull @Nonempty final String sCSSClass)
+  {
+    if (StringHelper.hasNoText (sCSSClass))
+      throw new IllegalArgumentException ("Empty CSS class provided");
+    if (sCSSClass.contains (" "))
+      throw new IllegalArgumentException ("CSS class may not contain spaces '" + sCSSClass + "'");
+    {
+      // Happens more frequently because people are reusing existing attributes
+      // for configuration purposes.
+      if (!RegExHelper.stringMatchesPattern ("-?[_a-zA-Z]+[_a-zA-Z0-9-]*", sCSSClass))
+        s_aLogger.warn ("The CSS class '" + sCSSClass + "' does not match the naming requirements!");
+    }
+    if (sCSSClass.startsWith ("_"))
+      throw new IllegalArgumentException ("The CSS class name '" + sCSSClass + "' may rise problems with IE6!");
+
+    m_sCSSClass = sCSSClass;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getCSSClass ()
+  {
+    return m_sCSSClass;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("cssClass", m_sCSSClass).toString ();
+  }
+
+  @Nonnull
+  public static DefaultCSSClassProvider create (@Nonnull @Nonempty final String sCSSClass)
+  {
+    DefaultCSSClassProvider aProvider = s_aAll.get (sCSSClass);
+    if (aProvider != null)
+      return aProvider;
+
+    aProvider = new DefaultCSSClassProvider (sCSSClass);
+    s_aAll.put (sCSSClass, aProvider);
+    return aProvider;
+  }
+}

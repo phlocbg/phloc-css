@@ -1,0 +1,27 @@
+element {}
+element.class {}
+element#id {}
+element:pseudo {}
+
+.class {}
+#id {}
+:pseudo {}
+[attr] {}
+.class .class2 {}
+#id #id2 {}
+:pseudo :pseudo2 {}
+[attr] [attr2=value] {}
+
+element+element {}
+element.class+element {}
+element#id+element {}
+element:pseudo+element {}
+element:pseudo+element:pseudo {}
+
+element1, element2 {}
+element1 element2 {}
+element1[attr] {}
+element1[attr=value] {}
+element1[attr~=value] {}
+element1[attr|=value] {}
+element1[attr|=value] element2 {}
