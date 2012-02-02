@@ -232,7 +232,9 @@ void error_skipto(final int... aKinds)
 //
 CSSNode styleSheet() #Root : {}
 {
-  ( charsetRule() )?
+  ( LOOKAHEAD(2)
+    charsetRule() 
+  )?
   ( <S>
   | <CDO>
   | <CDC>
@@ -261,6 +263,7 @@ CSSNode styleSheet() #Root : {}
 void charsetRule() #Charset :
 { String sStr; }
 {
+  ( <S> )?
   <CHARSET_SYM>
   <S>
   sStr = string ()
