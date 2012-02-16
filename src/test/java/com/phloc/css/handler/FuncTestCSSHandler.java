@@ -93,11 +93,12 @@ public final class FuncTestCSSHandler
   }
 
   @Test
-  public void testScanTestResourcesCss () throws IOException
+  public void testScanTestResourcesCss21 () throws IOException
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css"),
                                                                 new FileFilterFileFromFilenameFilter (FilenameFilterFactory.getEndsWithFilter (".css"))))
     {
+      s_aLogger.info (aFile.getPath ());
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS21);
       assertNotNull (aFile.getAbsolutePath (), aCSS);
 
@@ -112,6 +113,30 @@ public final class FuncTestCSSHandler
       assertNotNull (s);
       assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8),
                                                      ECSSVersion.CSS21));
+    }
+  }
+
+  @Test
+  public void testScanTestResourcesCss30 () throws IOException
+  {
+    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css30"),
+                                                                new FileFilterFileFromFilenameFilter (FilenameFilterFactory.getEndsWithFilter (".css"))))
+    {
+      s_aLogger.info (aFile.getPath ());
+      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS30);
+      assertNotNull (aFile.getAbsolutePath (), aCSS);
+
+      // Write optimized version and compare it
+      String s = new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS);
+      assertNotNull (s);
+      assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8),
+                                                     ECSSVersion.CSS30));
+
+      // Write non-optimized version and compare it
+      s = new CSSWriter (ECSSVersion.CSS30, false).getCSSAsString (aCSS);
+      assertNotNull (s);
+      assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8),
+                                                     ECSSVersion.CSS30));
     }
   }
 
