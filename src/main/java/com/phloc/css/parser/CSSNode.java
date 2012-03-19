@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 import com.phloc.commons.string.ToStringGenerator;
 
 public class CSSNode implements Node, Iterable <CSSNode>
@@ -75,6 +78,7 @@ public class CSSNode implements Node, Iterable <CSSNode>
     return m_aChildren[nIndex];
   }
 
+  @Nonnegative
   public int jjtGetNumChildren ()
   {
     return m_aChildren == null ? 0 : m_aChildren.length;
@@ -118,6 +122,7 @@ public class CSSNode implements Node, Iterable <CSSNode>
     return m_nType;
   }
 
+  @Nonnull
   public Iterator <CSSNode> iterator ()
   {
     final List <CSSNode> aChildren = new ArrayList <CSSNode> (jjtGetNumChildren ());
@@ -132,7 +137,7 @@ public class CSSNode implements Node, Iterable <CSSNode>
   public String toString ()
   {
     return new ToStringGenerator (this).append ("type", m_nType)
-                                       .appendIfNotNull ("parent",
+                                       .appendIfNotNull ("parentType",
                                                          m_aParent == null ? null : Integer.valueOf (m_aParent.m_nType))
                                        .appendIfNotNull ("value", m_aValue)
                                        .appendIfNotNull ("text", m_sText)

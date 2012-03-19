@@ -17,6 +17,8 @@
  */
 package com.phloc.css.decl.visit;
 
+import javax.annotation.Nonnull;
+
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
@@ -28,6 +30,7 @@ import com.phloc.css.decl.CSSStyleRule;
  * Interface for visiting different elements of a CSS domain object.
  * 
  * @author philip
+ * @see DefaultCSSVisitor
  */
 public interface ICSSVisitor
 {
@@ -42,29 +45,29 @@ public interface ICSSVisitor
    * @param aImportRule
    *          Other imported CSS
    */
-  void onImport (CSSImportRule aImportRule);
+  void onImport (@Nonnull CSSImportRule aImportRule);
 
   // style rules:
-  void onBeginStyleRule (CSSStyleRule aStyleRule);
+  void onBeginStyleRule (@Nonnull CSSStyleRule aStyleRule);
 
-  void onStyleRuleSelector (CSSSelector aSelector);
+  void onStyleRuleSelector (@Nonnull CSSSelector aSelector);
 
-  void onStyleRuleDeclaration (CSSDeclaration aDeclaration);
+  void onStyleRuleDeclaration (@Nonnull CSSDeclaration aDeclaration);
 
-  void onEndStyleRule (CSSStyleRule aStyleRule);
+  void onEndStyleRule (@Nonnull CSSStyleRule aStyleRule);
 
   // font face rules:
   // contained declarations are handled by onStyleRuleDeclaration
 
-  void onBeginFontFaceRule (CSSFontFaceRule aFontFaceRule);
+  void onBeginFontFaceRule (@Nonnull CSSFontFaceRule aFontFaceRule);
 
-  void onEndFontFaceRule (CSSFontFaceRule aFontFaceRule);
+  void onEndFontFaceRule (@Nonnull CSSFontFaceRule aFontFaceRule);
 
   // media rules:
   // contained style rules are handled by the on*StyleRule* methods
-  void onBeginMediaRule (CSSMediaRule aMediaRule);
+  void onBeginMediaRule (@Nonnull CSSMediaRule aMediaRule);
 
-  void onEndMediaRule (CSSMediaRule aMediaRule);
+  void onEndMediaRule (@Nonnull CSSMediaRule aMediaRule);
 
   /**
    * After visiting is done.

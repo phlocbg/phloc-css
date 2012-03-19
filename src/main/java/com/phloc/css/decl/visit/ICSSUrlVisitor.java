@@ -17,6 +17,8 @@
  */
 package com.phloc.css.decl.visit;
 
+import javax.annotation.Nonnull;
+
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
 import com.phloc.css.decl.CSSImportRule;
@@ -26,6 +28,7 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * Interface for visiting all URLs in a CSS document.
  * 
  * @author philip
+ * @see DefaultCSSUrlVisitor
  */
 public interface ICSSUrlVisitor
 {
@@ -40,7 +43,7 @@ public interface ICSSUrlVisitor
    * @param aImportRule
    *          Other imported CSS
    */
-  void onImport (CSSImportRule aImportRule);
+  void onImport (@Nonnull CSSImportRule aImportRule);
 
   /**
    * Called on a CSS declaration value that contains an URL.
@@ -52,9 +55,9 @@ public interface ICSSUrlVisitor
    * @param aExprTerm
    *          The expression member that contains the value.
    */
-  void onUrlDeclaration (ICSSTopLevelRule aTopLevelRule,
-                         CSSDeclaration aDeclaration,
-                         CSSExpressionMemberTermSimple aExprTerm);
+  void onUrlDeclaration (@Nonnull ICSSTopLevelRule aTopLevelRule,
+                         @Nonnull CSSDeclaration aDeclaration,
+                         @Nonnull CSSExpressionMemberTermSimple aExprTerm);
 
   /**
    * After visiting is done.

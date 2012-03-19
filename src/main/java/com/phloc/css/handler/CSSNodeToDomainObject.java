@@ -50,8 +50,10 @@ final class CSSNodeToDomainObject
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSNodeToDomainObject.class);
   private final ECSSVersion m_eVersion;
 
-  public CSSNodeToDomainObject (final ECSSVersion eVersion)
+  public CSSNodeToDomainObject (@Nonnull final ECSSVersion eVersion)
   {
+    if (eVersion == null)
+      throw new NullPointerException ("version");
     m_eVersion = eVersion;
   }
 
@@ -66,6 +68,7 @@ final class CSSNodeToDomainObject
                                           aNode);
   }
 
+  @Nonnull
   private CSSImportRule _createImportRule (final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.IMPORTRULE);
@@ -73,17 +76,23 @@ final class CSSNodeToDomainObject
     if (nChildCount != 0 && nChildCount != 1)
       throw new IllegalArgumentException ("Expected 0 or 1 children but got " + nChildCount + "!");
 
+    // Import rule
     final CSSImportRule ret = new CSSImportRule (ParseUtils.extractStringValue (aNode.getText ()));
     if (nChildCount == 1)
     {
+      // We have a medium present!
       final CSSNode aMediaListNode = aNode.jjtGetChild (0);
       for (final CSSNode aMedium : aMediaListNode)
         ret.addMedium (aMedium.getText ());
     }
+    else
+      if (nChildCount > 0)
+        s_aLogger.warn ("Import statement has " + nChildCount + " children which are unhandled.");
     return ret;
   }
 
-  private CSSSelectorAttribute _createSelectorAttribute (final CSSNode aNode)
+  @Nonnull
+  private CSSSelectorAttribute _createSelectorAttribute (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.ATTRIB);
     final int nChildren = aNode.jjtGetNumChildren ();
@@ -94,7 +103,7 @@ final class CSSNodeToDomainObject
     }
 
     if (nChildren != 2)
-      throw new IllegalArgumentException ("Illegal number of children present (" + nChildren + ")!");
+      throw new IllegalArgumentException ("Illegal number of children present (" + nChildren + ") - expected 2");
 
     // With operator and value
     return new CSSSelectorAttribute (aNode.getText (),
@@ -176,6 +185,7 @@ final class CSSNodeToDomainObject
     return ret;
   }
 
+  @Nonnull
   private ICSSExpressionMember _createExpressionTerm (final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.TERM);
@@ -200,6 +210,7 @@ final class CSSNodeToDomainObject
     return new CSSExpressionMemberFunction (sFunctionName, aFuncExpr);
   }
 
+  @Nonnull
   private CSSExpression _createExpression (final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.EXPR);
@@ -221,7 +232,8 @@ final class CSSNodeToDomainObject
     return ret;
   }
 
-  private CSSDeclaration _createDeclaration (final CSSNode aNode)
+  @Nonnull
+  private CSSDeclaration _createDeclaration (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.DECLARATION);
     final int nChildCount = aNode.jjtGetNumChildren ();
@@ -246,7 +258,8 @@ final class CSSNodeToDomainObject
     return new CSSDeclaration (sProperty, aExpression, bImportant);
   }
 
-  private CSSStyleRule _createStyleRule (final CSSNode aNode)
+  @Nonnull
+  private CSSStyleRule _createStyleRule (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.STYLERULE);
     final CSSStyleRule ret = new CSSStyleRule ();
@@ -278,7 +291,8 @@ final class CSSNodeToDomainObject
     return ret;
   }
 
-  private CSSMediaRule _createMediaRule (final CSSNode aNode)
+  @Nonnull
+  private CSSMediaRule _createMediaRule (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.MEDIARULE);
     final CSSMediaRule ret = new CSSMediaRule ();
@@ -300,7 +314,8 @@ final class CSSNodeToDomainObject
     return ret;
   }
 
-  private CSSFontFaceRule _createFontFaceRule (final CSSNode aNode)
+  @Nonnull
+  private CSSFontFaceRule _createFontFaceRule (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.FONTFACERULE);
     final CSSFontFaceRule ret = new CSSFontFaceRule ();
@@ -317,7 +332,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  public CascadingStyleSheet createFromNode (final CSSNode aNode)
+  public CascadingStyleSheet createFromNode (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.ROOT);
     final CascadingStyleSheet ret = new CascadingStyleSheet ();

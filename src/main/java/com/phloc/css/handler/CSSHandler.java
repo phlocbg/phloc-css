@@ -40,6 +40,11 @@ import com.phloc.css.parser.ParserCSS21TokenManager;
 import com.phloc.css.parser.ParserCSS30;
 import com.phloc.css.parser.ParserCSS30TokenManager;
 
+/**
+ * This is the central class for reading and parsing CSS from an input stream.
+ * 
+ * @author philip
+ */
 public final class CSSHandler
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSHandler.class);
@@ -48,7 +53,7 @@ public final class CSSHandler
   {}
 
   @Nullable
-  private static CSSNode _readFromStream (final JavaCharStream aStream, final ECSSVersion eVersion)
+  private static CSSNode _readFromStream (@Nonnull final JavaCharStream aStream, @Nonnull final ECSSVersion eVersion)
   {
     switch (eVersion)
     {
@@ -89,6 +94,8 @@ public final class CSSHandler
   {
     if (aISP == null)
       throw new NullPointerException ("inputStreamProvider");
+    if (eVersion == null)
+      throw new NullPointerException ("version");
 
     final InputStream aIS = aISP.getInputStream ();
     if (aIS == null)
@@ -101,6 +108,10 @@ public final class CSSHandler
 
   /**
    * Check if the passed input stream can be resembled to valid CSS content.
+   * This is accomplished by fully parsing the CSS file each time the method is
+   * called. This is similar to calling
+   * {@link #readFromStream(IInputStreamProvider, ECSSVersion)} and checking for
+   * a non-<code>null</code> result.
    * 
    * @param aIS
    *          The input stream to use. May not be <code>null</code>.
@@ -184,6 +195,15 @@ public final class CSSHandler
     return aNode == null ? null : readFromNode (eVersion, aNode);
   }
 
+  /**
+   * Create a {@link CascadingStyleSheet} object from a parsed object.
+   * 
+   * @param eVersion
+   *          The CSS version to use. May not be <code>null</code>.
+   * @param aNode
+   *          The parsed CSS object to read. May not be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
   @Nonnull
   public static CascadingStyleSheet readFromNode (@Nonnull final ECSSVersion eVersion, @Nonnull final CSSNode aNode)
   {

@@ -20,17 +20,13 @@ package com.phloc.css.decl.visit;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.css.CCSS;
 import com.phloc.css.decl.CSSDeclaration;
-import com.phloc.css.decl.CSSExpression;
-import com.phloc.css.decl.CSSExpressionMemberTermSimple;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.CascadingStyleSheet;
-import com.phloc.css.decl.ICSSExpressionMember;
 import com.phloc.css.decl.ICSSTopLevelRule;
 
 /**
@@ -67,6 +63,15 @@ public final class CSSVisitor
     }
   }
 
+  /**
+   * Visit CSS elements in the order of their declaration.
+   * 
+   * @param aCSS
+   *          The CSS to visit. May not be <code>null</code>.
+   * @param aVisitor
+   *          The callback to be invoked for each element found. May not be
+   *          <code>null</code>.
+   */
   public static void visitCSS (@Nonnull final CascadingStyleSheet aCSS, @Nonnull final ICSSVisitor aVisitor)
   {
     if (aCSS == null)
@@ -140,58 +145,7 @@ public final class CSSVisitor
    */
   public static void visitCSSUrl (@Nonnull final CascadingStyleSheet aCSS, @Nonnull final ICSSUrlVisitor aVisitor)
   {
-    visitCSS (aCSS, new DefaultCSSVisitor ()
-    {
-      private ICSSTopLevelRule m_aTopLevelRule;
-
-      @Override
-      public void begin ()
-      {
-        aVisitor.begin ();
-      }
-
-      @Override
-      public void onImport (final CSSImportRule aImportRule)
-      {
-        aVisitor.onImport (aImportRule);
-      }
-
-      @Override
-      public void onBeginStyleRule (final CSSStyleRule aStyleRule)
-      {
-        m_aTopLevelRule = aStyleRule;
-      }
-
-      @Override
-      public void onStyleRuleDeclaration (final CSSDeclaration aDeclaration)
-      {
-        final CSSExpression aExpr = aDeclaration.getExpression ();
-        for (final ICSSExpressionMember aMember : aExpr.getAllMembers ())
-          if (aMember instanceof CSSExpressionMemberTermSimple)
-          {
-            final CSSExpressionMemberTermSimple aExprTerm = (CSSExpressionMemberTermSimple) aMember;
-            if (CCSS.isURLValue (aExprTerm.getValue ()))
-              aVisitor.onUrlDeclaration (m_aTopLevelRule, aDeclaration, aExprTerm);
-          }
-      }
-
-      @Override
-      public void onBeginFontFaceRule (final CSSFontFaceRule aFontFaceRule)
-      {
-        m_aTopLevelRule = aFontFaceRule;
-      }
-
-      @Override
-      public void onBeginMediaRule (final CSSMediaRule aMediaRule)
-      {
-        m_aTopLevelRule = aMediaRule;
-      }
-
-      @Override
-      public void end ()
-      {
-        aVisitor.end ();
-      }
-    });
+    // Visit only the URLs of a CSS with a specific CSS visitor
+    visitCSS (aCSS, new CSSVisitorForUrl (aVisitor));
   }
 }

@@ -17,6 +17,8 @@
  */
 package com.phloc.css.decl.visit;
 
+import javax.annotation.Nonnull;
+
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSFontFaceRule;
@@ -41,39 +43,39 @@ public class DefaultCSSVisitor implements ICSSVisitor
   {}
 
   @OverrideOnDemand
-  public void onImport (final CSSImportRule aImportRule)
+  public void onImport (@Nonnull final CSSImportRule aImportRule)
   {}
 
   @OverrideOnDemand
-  public void onBeginStyleRule (final CSSStyleRule aStyleRule)
+  public void onBeginStyleRule (@Nonnull final CSSStyleRule aStyleRule)
   {}
 
   @OverrideOnDemand
-  public void onStyleRuleSelector (final CSSSelector aSelector)
+  public void onStyleRuleSelector (@Nonnull final CSSSelector aSelector)
   {}
 
   @OverrideOnDemand
-  public void onStyleRuleDeclaration (final CSSDeclaration aDeclaration)
+  public void onStyleRuleDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {}
 
   @OverrideOnDemand
-  public void onEndStyleRule (final CSSStyleRule aStyleRule)
+  public void onEndStyleRule (@Nonnull final CSSStyleRule aStyleRule)
   {}
 
   @OverrideOnDemand
-  public void onBeginFontFaceRule (final CSSFontFaceRule aStyleRule)
+  public void onBeginFontFaceRule (@Nonnull final CSSFontFaceRule aStyleRule)
   {}
 
   @OverrideOnDemand
-  public void onEndFontFaceRule (final CSSFontFaceRule aStyleRule)
+  public void onEndFontFaceRule (@Nonnull final CSSFontFaceRule aStyleRule)
   {}
 
   @OverrideOnDemand
-  public void onBeginMediaRule (final CSSMediaRule aStyleRule)
+  public void onBeginMediaRule (@Nonnull final CSSMediaRule aStyleRule)
   {}
 
   @OverrideOnDemand
-  public void onEndMediaRule (final CSSMediaRule aStyleRule)
+  public void onEndMediaRule (@Nonnull final CSSMediaRule aStyleRule)
   {}
 
   @OverrideOnDemand

@@ -17,6 +17,8 @@
  */
 package com.phloc.css.decl.visit;
 
+import javax.annotation.Nonnull;
+
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
@@ -39,13 +41,13 @@ public class DefaultCSSUrlVisitor implements ICSSUrlVisitor
   {}
 
   @OverrideOnDemand
-  public void onImport (final CSSImportRule aImportRule)
+  public void onImport (@Nonnull final CSSImportRule aImportRule)
   {}
 
   @OverrideOnDemand
-  public void onUrlDeclaration (final ICSSTopLevelRule aTopLevelRule,
-                                final CSSDeclaration aDeclaration,
-                                final CSSExpressionMemberTermSimple aExprTerm)
+  public void onUrlDeclaration (@Nonnull final ICSSTopLevelRule aTopLevelRule,
+                                @Nonnull final CSSDeclaration aDeclaration,
+                                @Nonnull final CSSExpressionMemberTermSimple aExprTerm)
   {}
 
   @OverrideOnDemand

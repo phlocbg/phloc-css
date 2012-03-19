@@ -20,6 +20,7 @@ package com.phloc.css.writer;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ import com.phloc.css.handler.CSSHandler;
  * 
  * @author philip
  */
+@Immutable
 public final class CSSCompressor
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSCompressor.class);
@@ -52,8 +54,14 @@ public final class CSSCompressor
    * @return If compression failed because the CSS is invalid or whatsoever, the
    *         original CSS is returned, else the compressed version is returned.
    */
+  @Nonnull
   public static String getCompressedCSS (@Nonnull final String sOriginalCSS, @Nonnull final ECSSVersion eCSSVersion)
   {
+    if (sOriginalCSS == null)
+      throw new NullPointerException ("originalCSS");
+    if (eCSSVersion == null)
+      throw new NullPointerException ("CSSversion");
+
     final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new ByteArrayInputStreamProvider (sOriginalCSS.getBytes ()),
                                                                 eCSSVersion);
     if (aCSS != null)

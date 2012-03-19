@@ -17,20 +17,35 @@
  */
 package com.phloc.css.parser;
 
-import com.phloc.commons.string.StringHelper;
-import com.phloc.commons.regex.RegExHelper;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.regex.RegExHelper;
+import com.phloc.commons.string.StringHelper;
+
+@Immutable
 public final class ParseUtils
 {
   private ParseUtils ()
   {}
 
-  private static String _trimBy (final CharSequence s, final int nLeft, final int nRight)
+  @Nonnull
+  private static String _trimBy (@Nonnull final CharSequence s, final int nLeft, final int nRight)
   {
     return s.toString ().substring (nLeft, s.length () - nRight);
   }
 
-  public static String extractStringValue (final String sStr)
+  /**
+   * Remove surrounding quotes (single or double) of a string (if present). If
+   * the start and the end quote are not equal, nothing happens.
+   * 
+   * @param sStr
+   *          The string where the quotes should be removed
+   * @return The string without quotes.
+   */
+  @Nullable
+  public static String extractStringValue (@Nullable final String sStr)
   {
     if (StringHelper.hasNoText (sStr) || sStr.length () < 2)
       return sStr;
@@ -40,7 +55,16 @@ public final class ParseUtils
     return sStr;
   }
 
-  public static String trimUrl (final CharSequence s)
+  /**
+   * Remove the leading "url(" and the trailing ")" from an URL CSS value. No
+   * check is performed for the existance of a leading "url("!
+   * 
+   * @param s
+   *          The value to remove the string from.
+   * @return The trimmed value.
+   */
+  @Nonnull
+  public static String trimUrl (@Nonnull final CharSequence s)
   {
     // Extract from "url(...)"
     final String s1 = _trimBy (s, 4, 1).trim ();
