@@ -19,6 +19,7 @@ package com.phloc.css.writer;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,7 +50,7 @@ public final class CSSWriter
    *          The CSS version to emit the code for. May not be <code>null</code>
    *          .
    */
-  public CSSWriter (final ECSSVersion eVersion)
+  public CSSWriter (@Nonnull final ECSSVersion eVersion)
   {
     this (eVersion, false);
   }
@@ -128,6 +129,7 @@ public final class CSSWriter
         aWriter.write (" */\n");
       }
 
+      // Charset?
       if (sCharset != null)
       {
         aWriter.write ("@charset \"" + sCharset + "\"\n");
@@ -135,11 +137,17 @@ public final class CSSWriter
           aWriter.write ('\n');
       }
 
-      for (final CSSImportRule aImportRule : aCSS.getAllImportRules ())
-        aWriter.write (aImportRule.getAsCSSString (m_eVersion, m_bOptimizedOutput));
-      if (!m_bOptimizedOutput && !aCSS.getAllImportRules ().isEmpty ())
-        aWriter.write ('\n');
+      // Import rules
+      final List <CSSImportRule> aImportRules = aCSS.getAllImportRules ();
+      if (!aImportRules.isEmpty ())
+      {
+        for (final CSSImportRule aImportRule : aImportRules)
+          aWriter.write (aImportRule.getAsCSSString (m_eVersion, m_bOptimizedOutput));
+        if (!m_bOptimizedOutput)
+          aWriter.write ('\n');
+      }
 
+      // Main CSS rules
       for (final ICSSTopLevelRule aRule : aCSS.getAllRules ())
         aWriter.write (aRule.getAsCSSString (m_eVersion, m_bOptimizedOutput));
     }
@@ -158,6 +166,7 @@ public final class CSSWriter
    * @throws IOException
    *           If writing fails. Should never happen!
    */
+  @Nonnull
   public String getCSSAsString (@Nonnull final CascadingStyleSheet aCSS) throws IOException
   {
     return getCSSAsString (aCSS, null);
@@ -174,6 +183,7 @@ public final class CSSWriter
    * @throws IOException
    *           If writing fails. Should never happen!
    */
+  @Nonnull
   public String getCSSAsString (@Nonnull final CascadingStyleSheet aCSS, @Nullable final String sCharset) throws IOException
   {
     final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
