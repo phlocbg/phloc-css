@@ -22,6 +22,11 @@
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
   <entry date="2012-04-19" category="api" action="add">
     <change>
+      <text locale="en">Added modifying methods for CascadingStyleSheet</text>
+    </change>
+  </entry>
+  <entry date="2012-04-19" category="api" action="add">
+    <change>
       <text locale="en">Added new method isNode in ECSSNodeType for more easier readable code</text>
     </change>
   </entry>

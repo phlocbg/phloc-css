@@ -18,10 +18,16 @@
 package com.phloc.css.parser;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.StringReader;
 
 import org.junit.Test;
+
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.decl.ICSSTopLevelRule;
+import com.phloc.css.handler.CSSHandler;
 
 public final class ParserCSS30Test
 {
@@ -367,5 +373,11 @@ public final class ParserCSS30Test
     aParser.disable_tracing ();
     final CSSNode aNode = aParser.styleSheet ();
     assertNotNull (aNode);
+
+    final CascadingStyleSheet aCSS = CSSHandler.readFromNode (ECSSVersion.CSS30, aNode);
+    assertNotNull (aCSS);
+
+    for (final ICSSTopLevelRule aTopLevelRule : aCSS.getAllFontFaceRules ())
+      assertTrue (aCSS.removeRule (aTopLevelRule).isChanged ());
   }
 }

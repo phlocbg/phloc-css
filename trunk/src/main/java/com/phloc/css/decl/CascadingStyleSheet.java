@@ -21,10 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 
 public final class CascadingStyleSheet
@@ -35,11 +38,24 @@ public final class CascadingStyleSheet
   public CascadingStyleSheet ()
   {}
 
-  public void addImportRule (final CSSImportRule aImportRule)
+  public void addImportRule (@Nonnull final CSSImportRule aImportRule)
   {
     if (aImportRule == null)
       throw new NullPointerException ("importRule");
     m_aImportRules.add (aImportRule);
+  }
+
+  @Nonnull
+  public EChange removeImportRule (@Nullable final CSSImportRule aImportRule)
+  {
+    return EChange.valueOf (m_aImportRules.remove (aImportRule));
+  }
+
+  @Nonnull
+  @ReturnsImmutableObject
+  public List <CSSImportRule> getAllImportRules ()
+  {
+    return ContainerHelper.makeUnmodifiable (m_aImportRules);
   }
 
   public void addRule (@Nonnull final ICSSTopLevelRule aStyleRule)
@@ -51,16 +67,48 @@ public final class CascadingStyleSheet
 
   @Nonnull
   @ReturnsImmutableObject
-  public List <CSSImportRule> getAllImportRules ()
-  {
-    return ContainerHelper.makeUnmodifiable (m_aImportRules);
-  }
-
-  @Nonnull
-  @ReturnsImmutableObject
   public List <ICSSTopLevelRule> getAllRules ()
   {
     return ContainerHelper.makeUnmodifiable (m_aRules);
+  }
+
+  @Nonnull
+  public EChange removeRule (@Nullable final ICSSTopLevelRule aRule)
+  {
+    return EChange.valueOf (m_aRules.remove (aRule));
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSFontFaceRule> getAllFontFaceRules ()
+  {
+    final List <CSSFontFaceRule> ret = new ArrayList <CSSFontFaceRule> ();
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSFontFaceRule)
+        ret.add ((CSSFontFaceRule) aTopLevelRule);
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSMediaRule> getAllMediaRules ()
+  {
+    final List <CSSMediaRule> ret = new ArrayList <CSSMediaRule> ();
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSMediaRule)
+        ret.add ((CSSMediaRule) aTopLevelRule);
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSStyleRule> getAllStyleRules ()
+  {
+    final List <CSSStyleRule> ret = new ArrayList <CSSStyleRule> ();
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSStyleRule)
+        ret.add ((CSSStyleRule) aTopLevelRule);
+    return ret;
   }
 
   @Override
