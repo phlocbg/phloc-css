@@ -51,9 +51,13 @@ public class CSSPropertyNumbers extends AbstractCSSProperty
   {
     if (sValue == null)
       return false;
+
+    // Split by whitespaces
     final String [] aParts = RegExHelper.split (sValue.trim (), "\\s+");
     if (aParts.length < m_nMinNumbers || aParts.length > m_nMaxNumbers)
       return false;
+
+    // Check if each part is a valid number
     for (int i = 0; i < aParts.length; ++i)
       if (!CCSS.isNumberWithUnitValue (aParts[i].trim (), m_bWithPercentage))
         return false;

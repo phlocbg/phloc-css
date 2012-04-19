@@ -18,6 +18,7 @@
 package com.phloc.css.decl.visit;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.css.CCSS;
 import com.phloc.css.decl.CSSDeclaration;
@@ -36,6 +37,7 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * 
  * @author philip
  */
+@NotThreadSafe
 public final class CSSVisitorForUrl extends DefaultCSSVisitor
 {
   private final ICSSUrlVisitor m_aVisitor;

@@ -24,6 +24,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -38,8 +39,11 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * 
  * @author philip
  */
+@Immutable
 public final class CSSWriter
 {
+  public static final boolean DEFAULT_OPTIMIZED_OUTPUT = false;
+
   private final ECSSVersion m_eVersion;
   private final boolean m_bOptimizedOutput;
 
@@ -52,7 +56,7 @@ public final class CSSWriter
    */
   public CSSWriter (@Nonnull final ECSSVersion eVersion)
   {
-    this (eVersion, false);
+    this (eVersion, DEFAULT_OPTIMIZED_OUTPUT);
   }
 
   /**
