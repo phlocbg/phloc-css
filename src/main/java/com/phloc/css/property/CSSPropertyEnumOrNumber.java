@@ -20,8 +20,8 @@ package com.phloc.css.property;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
 import com.phloc.css.ECSSProperty;
 
@@ -37,10 +37,25 @@ public class CSSPropertyEnumOrNumber extends CSSPropertyEnum
     m_bWithPercentage = bWithPercentage;
   }
 
+  public CSSPropertyEnumOrNumber (@Nonnull final ECSSProperty eProp,
+                                  final boolean bWithPercentage,
+                                  @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  {
+    super (eProp, aEnumValues);
+    m_bWithPercentage = bWithPercentage;
+  }
+
   @Override
   public boolean isValidValue (@Nullable final String sValue)
   {
     return super.isValidValue (sValue) || CCSS.isNumberWithUnitValue (sValue, m_bWithPercentage);
+  }
+
+  @Override
+  @Nonnull
+  public CSSPropertyEnumOrNumber getClone (@Nonnull final ECSSProperty eProp)
+  {
+    return new CSSPropertyEnumOrNumber (eProp, m_bWithPercentage, m_aEnumValues);
   }
 
   @Override

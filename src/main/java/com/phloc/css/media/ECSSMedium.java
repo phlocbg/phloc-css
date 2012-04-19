@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 
@@ -97,9 +98,10 @@ public enum ECSSMedium implements ICSSVersionAware
   @Nullable
   public static ECSSMedium getFromAttrOrNull (@Nullable final String sAttr)
   {
-    for (final ECSSMedium eMedia : values ())
-      if (eMedia.m_sAttrValue.equals (sAttr))
-        return eMedia;
+    if (StringHelper.hasText (sAttr))
+      for (final ECSSMedium eMedia : values ())
+        if (eMedia.m_sAttrValue.equals (sAttr))
+          return eMedia;
     return null;
   }
 }

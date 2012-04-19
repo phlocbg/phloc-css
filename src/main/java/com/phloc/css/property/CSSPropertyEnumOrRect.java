@@ -31,9 +31,22 @@ public class CSSPropertyEnumOrRect extends CSSPropertyEnum
     super (eProp, aEnumValues);
   }
 
+  public CSSPropertyEnumOrRect (@Nonnull final ECSSProperty eProp,
+                                @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  {
+    super (eProp, aEnumValues);
+  }
+
   @Override
   public boolean isValidValue (@Nullable final String sValue)
   {
     return super.isValidValue (sValue) || CCSS.isRectValue (sValue);
+  }
+
+  @Override
+  @Nonnull
+  public CSSPropertyEnumOrRect getClone (@Nonnull final ECSSProperty eProp)
+  {
+    return new CSSPropertyEnumOrRect (eProp, m_aEnumValues);
   }
 }

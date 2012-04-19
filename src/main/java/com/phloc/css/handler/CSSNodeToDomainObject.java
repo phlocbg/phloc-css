@@ -123,19 +123,26 @@ final class CSSNodeToDomainObject
         ECSSNodeType.CLASS.isNode (aNode, m_eVersion))
     {
       if (nChildCount != 0)
-        s_aLogger.warn ("Expected 0 children and got " + nChildCount);
+        s_aLogger.warn ("CSS simple selector member expected 0 children and got " + nChildCount);
       return new CSSSelectorSimpleMember (aNode.getText ());
     }
+
     if (ECSSNodeType.ATTRIB.isNode (aNode, m_eVersion))
       return _createSelectorAttribute (aNode);
 
     if (ECSSNodeType.COMBINATOR.isNode (aNode, m_eVersion))
-      return ECSSSelectorCombinator.fromTextOrNull (aNode.getText ());
+    {
+      final String sText = aNode.getText ();
+      final ECSSSelectorCombinator eCombinator = ECSSSelectorCombinator.fromTextOrNull (sText);
+      if (eCombinator == null)
+        s_aLogger.warn ("Failed to parse CSS selector combinator '" + sText + "'");
+      return eCombinator;
+    }
 
     if (ECSSNodeType.NEGATION.isNode (aNode, m_eVersion))
     {
       if (nChildCount != 1)
-        throw new IllegalArgumentException ("Illegal number of children present (" + nChildCount + ")!");
+        throw new IllegalArgumentException ("CSS Negation expected 1 child and got " + nChildCount);
 
       final CSSNode aChildNode = aNode.jjtGetChild (0);
       final ICSSSelectorMember aNestedSelector = _createSelectorMember (aChildNode);
@@ -171,7 +178,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSSelector _createSelector (final CSSNode aNode)
+  private CSSSelector _createSelector (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.SELECTOR);
     final CSSSelector ret = new CSSSelector ();
@@ -185,7 +192,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private ICSSExpressionMember _createExpressionTerm (final CSSNode aNode)
+  private ICSSExpressionMember _createExpressionTerm (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.TERM);
     final int nChildCount = aNode.jjtGetNumChildren ();
@@ -215,7 +222,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSExpression _createExpression (final CSSNode aNode)
+  private CSSExpression _createExpression (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.EXPR);
     final CSSExpression ret = new CSSExpression ();
@@ -225,12 +232,20 @@ final class CSSNodeToDomainObject
         ret.addMember (_createExpressionTerm (aChildNode));
       else
         if (ECSSNodeType.OPERATOR.isNode (aChildNode, m_eVersion))
-          ret.addMember (ECSSExpressionOperator.fromTextOrNull (aChildNode.getText ()));
+        {
+          final String sText = aChildNode.getText ();
+          final ECSSExpressionOperator eOp = ECSSExpressionOperator.fromTextOrNull (sText);
+          if (eOp == null)
+            s_aLogger.warn ("Failed to parse expression operator '" + sText + "'");
+          ret.addMember (eOp);
+        }
         else
+        {
           s_aLogger.warn ("Unsupported child of " +
                           ECSSNodeType.getNodeName (aNode, m_eVersion) +
                           ": " +
                           ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+        }
     }
     return ret;
   }
@@ -248,6 +263,7 @@ final class CSSNodeToDomainObject
     boolean bImportant = false;
     if (nChildCount == 3)
     {
+      // Must be an "!important" node
       final CSSNode aChildNode = aNode.jjtGetChild (2);
       if (ECSSNodeType.IMPORTANT.isNode (aChildNode, m_eVersion))
         bImportant = true;
@@ -344,10 +360,14 @@ final class CSSNodeToDomainObject
       }
       else
         if (ECSSNodeType.IMPORTRULE.isNode (aChildNode, m_eVersion))
+        {
           ret.addImportRule (_createImportRule (aChildNode));
+        }
         else
           if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
+          {
             ret.addRule (_createStyleRule (aChildNode));
+          }
           else
             if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
             {
@@ -367,7 +387,7 @@ final class CSSNodeToDomainObject
                 else
                   if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
                   {
-                    // TODO unknown rule
+                    // Unknown rule most likely indicates a parsing error
                     s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);
                   }
                   else

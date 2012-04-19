@@ -31,9 +31,22 @@ public class CSSPropertyEnumOrColor extends CSSPropertyEnum
     super (eProp, aEnumValues);
   }
 
+  public CSSPropertyEnumOrColor (@Nonnull final ECSSProperty eProp,
+                                 @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  {
+    super (eProp, aEnumValues);
+  }
+
   @Override
   public boolean isValidValue (@Nullable final String sValue)
   {
     return super.isValidValue (sValue) || CCSS.isColorValue (sValue);
+  }
+
+  @Override
+  @Nonnull
+  public CSSPropertyEnumOrColor getClone (@Nonnull final ECSSProperty eProp)
+  {
+    return new CSSPropertyEnumOrColor (eProp, m_aEnumValues);
   }
 }

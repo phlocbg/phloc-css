@@ -381,6 +381,7 @@ public final class CCSSProperties
 
   public static final ICSSProperty OPACITY = new CSSPropertyNumber (ECSSProperty.OPACITY, false);
 
+  // Special values
   public static final ICSSValue DISPLAY_BLOCK = DISPLAY.newValue (CCSS.BLOCK);
   public static final ICSSValue DISPLAY_NONE = DISPLAY.newValue (CCSS.NONE);
 
