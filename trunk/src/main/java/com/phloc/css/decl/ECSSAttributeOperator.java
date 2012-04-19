@@ -18,8 +18,10 @@
 package com.phloc.css.decl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.css.CSSVersionHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
@@ -54,17 +56,21 @@ public enum ECSSAttributeOperator implements ICSSVersionAware, ICSSWriteable
     return m_eVersion;
   }
 
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  @Nonnull
+  @Nonempty
+  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     CSSVersionHelper.checkVersionRequirements (eVersion, this);
     return m_sText;
   }
 
-  public static ECSSAttributeOperator fromTextOrNull (final String sText)
+  @Nullable
+  public static ECSSAttributeOperator fromTextOrNull (@Nullable final String sText)
   {
-    for (final ECSSAttributeOperator eOperator : values ())
-      if (eOperator.m_sText.equals (sText))
-        return eOperator;
+    if (StringHelper.hasText (sText))
+      for (final ECSSAttributeOperator eOperator : values ())
+        if (eOperator.m_sText.equals (sText))
+          return eOperator;
     return null;
   }
 }

@@ -17,8 +17,11 @@
  */
 package com.phloc.css.decl;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
@@ -31,14 +34,25 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember
   private final String m_sFunctionName;
   private final CSSExpression m_aExpression;
 
-  private static String _skipBrackets (final String sName)
+  @Nonnull
+  private static String _skipBrackets (@Nonnull final String sName)
   {
-    if (sName.length () > 2 && sName.endsWith ("()"))
-      return sName.substring (0, sName.length () - 2);
-    return sName;
+    final String sRealName = sName.trim ();
+    if (sRealName.length () > 2 && sRealName.endsWith ("()"))
+      return sRealName.substring (0, sRealName.length () - 2).trim ();
+    return sRealName;
   }
 
-  public CSSExpressionMemberFunction (final String sFunctionName, final CSSExpression aExpression)
+  /**
+   * Ctor
+   * 
+   * @param sFunctionName
+   *          Function name
+   * @param aExpression
+   *          Optional parameter expression
+   */
+  public CSSExpressionMemberFunction (@Nonnull @Nonempty final String sFunctionName,
+                                      @Nullable final CSSExpression aExpression)
   {
     if (StringHelper.hasNoText (sFunctionName))
       throw new IllegalArgumentException ("Empty function name is not allowed");
@@ -47,16 +61,21 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember
     m_aExpression = aExpression;
   }
 
+  @Nonnull
+  @Nonempty
   public String getFunctionName ()
   {
     return m_sFunctionName;
   }
 
+  @Nullable
   public CSSExpression getExpression ()
   {
     return m_aExpression;
   }
 
+  @Nonnull
+  @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     if (m_aExpression == null)

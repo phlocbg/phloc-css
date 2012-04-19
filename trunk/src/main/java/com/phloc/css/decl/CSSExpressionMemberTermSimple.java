@@ -19,8 +19,10 @@ package com.phloc.css.decl;
 
 import java.util.Arrays;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -32,18 +34,20 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
 {
   private String m_sValue;
 
-  public CSSExpressionMemberTermSimple (final String sValue)
+  public CSSExpressionMemberTermSimple (@Nonnull @Nonempty final String sValue)
   {
     setValue (sValue);
   }
 
-  public void setValue (final String sValue)
+  public void setValue (@Nonnull @Nonempty final String sValue)
   {
     if (StringHelper.hasNoText (sValue))
       throw new IllegalArgumentException ("Empty value is not allowed");
     m_sValue = sValue;
   }
 
+  @Nonnull
+  @Nonempty
   public String getValue ()
   {
     return m_sValue;
@@ -53,6 +57,8 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
   {
     if (false && bOptimizedOutput)
     {
+      // TODO optimize CSS values!!!!
+
       // Replace e.g. "0px" with "0"
       for (final ECSSUnit eUnit : ECSSUnit.values ())
         if (m_sValue.equals (eUnit.format (0)))

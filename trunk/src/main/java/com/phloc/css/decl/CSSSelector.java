@@ -50,6 +50,7 @@ public final class CSSSelector implements ICSSWriteable
     return ContainerHelper.makeUnmodifiable (m_aMembers);
   }
 
+  @Nonnull
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     final StringBuilder aSB = new StringBuilder ();

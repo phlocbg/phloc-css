@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
@@ -29,7 +30,7 @@ import com.phloc.css.ECSSVersion;
 
 /**
  * Check the value of an attribute.
- *
+ * 
  * @author philip
  */
 @Immutable
@@ -39,7 +40,7 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
   private final ECSSAttributeOperator m_eOperator;
   private final String m_sAttrValue;
 
-  public CSSSelectorAttribute (@Nonnull final String sAttrName)
+  public CSSSelectorAttribute (@Nonnull @Nonempty final String sAttrName)
   {
     if (StringHelper.hasNoText (sAttrName))
       throw new IllegalArgumentException ("attrName");
@@ -48,7 +49,7 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
     m_sAttrValue = null;
   }
 
-  public CSSSelectorAttribute (@Nonnull final String sAttrName,
+  public CSSSelectorAttribute (@Nonnull @Nonempty final String sAttrName,
                                @Nonnull final ECSSAttributeOperator eOperator,
                                @Nonnull final String sAttrValue)
   {
@@ -64,6 +65,7 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
   }
 
   @Nonnull
+  @Nonempty
   public String getAttrName ()
   {
     return m_sAttrName;
@@ -82,6 +84,7 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
   }
 
   @Nonnull
+  @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     if (m_eOperator == null)

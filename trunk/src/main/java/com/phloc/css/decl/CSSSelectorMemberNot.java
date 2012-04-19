@@ -40,6 +40,12 @@ public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersi
   }
 
   @Nonnull
+  public ICSSSelectorMember getNestedMember ()
+  {
+    return m_aNestedSelectorMember;
+  }
+
+  @Nonnull
   @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {

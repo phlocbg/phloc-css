@@ -20,6 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -29,7 +30,7 @@ import com.phloc.css.ICSSWriteable;
 
 /**
  * Represents a single element in a CSS style rule.
- *
+ * 
  * @author philip
  */
 @Immutable
@@ -39,7 +40,7 @@ public final class CSSDeclaration implements ICSSWriteable
   private final CSSExpression m_aExpression;
   private final boolean m_bImportant;
 
-  public CSSDeclaration (@Nonnull final String sProperty,
+  public CSSDeclaration (@Nonnull @Nonempty final String sProperty,
                          @Nonnull final CSSExpression aExpression,
                          final boolean bImportant)
   {
@@ -52,11 +53,14 @@ public final class CSSDeclaration implements ICSSWriteable
     m_bImportant = bImportant;
   }
 
+  @Nonnull
+  @Nonempty
   public String getProperty ()
   {
     return m_sProperty;
   }
 
+  @Nonnull
   public CSSExpression getExpression ()
   {
     return m_aExpression;
@@ -67,6 +71,8 @@ public final class CSSDeclaration implements ICSSWriteable
     return m_bImportant;
   }
 
+  @Nonnull
+  @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     return m_sProperty +

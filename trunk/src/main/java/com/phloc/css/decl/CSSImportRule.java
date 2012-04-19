@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -35,12 +36,12 @@ public final class CSSImportRule implements ICSSWriteable
   private String m_sLocation;
   private final List <String> m_aMedia = new ArrayList <String> ();
 
-  public CSSImportRule (@Nonnull final String sLocation)
+  public CSSImportRule (@Nonnull @Nonempty final String sLocation)
   {
     setLocation (sLocation);
   }
 
-  public void addMedium (@Nonnull final String sMedium)
+  public void addMedium (@Nonnull @Nonempty final String sMedium)
   {
     if (StringHelper.hasNoText (sMedium))
       throw new IllegalArgumentException ("medium");
@@ -55,18 +56,21 @@ public final class CSSImportRule implements ICSSWriteable
   }
 
   @Nonnull
+  @Nonempty
   public String getLocation ()
   {
     return m_sLocation;
   }
 
-  public void setLocation (@Nonnull final String sLocation)
+  public void setLocation (@Nonnull @Nonempty final String sLocation)
   {
     if (StringHelper.hasNoText (sLocation))
       throw new IllegalArgumentException ("location may not be empty");
     m_sLocation = sLocation;
   }
 
+  @Nonnull
+  @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     final StringBuilder aSB = new StringBuilder ();

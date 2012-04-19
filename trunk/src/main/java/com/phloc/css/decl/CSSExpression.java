@@ -62,6 +62,7 @@ public final class CSSExpression implements ICSSWriteable
     return ret;
   }
 
+  @Nonnull
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     final StringBuilder aSB = new StringBuilder ();
