@@ -41,11 +41,8 @@ public final class CSSVisitor
   private CSSVisitor ()
   {}
 
-  private static void _visitStyleRule (@Nonnull final ICSSVisitor aVisitor,
-                                       @Nonnull final ICSSTopLevelRule aTopLevelRule)
+  private static void _visitStyleRule (@Nonnull final ICSSVisitor aVisitor, @Nonnull final CSSStyleRule aStyleRule)
   {
-    // Handle a single style rule
-    final CSSStyleRule aStyleRule = (CSSStyleRule) aTopLevelRule;
     aVisitor.onBeginStyleRule (aStyleRule);
     try
     {
@@ -91,7 +88,7 @@ public final class CSSVisitor
       {
         if (aTopLevelRule instanceof CSSStyleRule)
         {
-          _visitStyleRule (aVisitor, aTopLevelRule);
+          _visitStyleRule (aVisitor, (CSSStyleRule) aTopLevelRule);
         }
         else
           if (aTopLevelRule instanceof CSSFontFaceRule)
