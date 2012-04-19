@@ -50,6 +50,13 @@ public final class CSSStyleRule implements ICSSTopLevelRule
     m_aSelectors.add (aSelector);
   }
 
+  @Nonnull
+  @ReturnsImmutableObject
+  public List <CSSSelector> getAllSelectors ()
+  {
+    return ContainerHelper.makeUnmodifiable (m_aSelectors);
+  }
+
   public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     if (aDeclaration == null)
@@ -59,19 +66,13 @@ public final class CSSStyleRule implements ICSSTopLevelRule
 
   @Nonnull
   @ReturnsImmutableObject
-  public List <CSSSelector> getAllSelectors ()
-  {
-    return ContainerHelper.makeUnmodifiable (m_aSelectors);
-  }
-
-  @Nonnull
-  @ReturnsImmutableObject
   public List <CSSDeclaration> getAllDeclarations ()
   {
     return ContainerHelper.makeUnmodifiable (m_aDeclarations);
   }
 
-  public String getSelectorsAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  @Nonnull
+  public String getSelectorsAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     final StringBuilder aSB = new StringBuilder ();
     boolean bFirst = true;
@@ -86,7 +87,8 @@ public final class CSSStyleRule implements ICSSTopLevelRule
     return aSB.toString ();
   }
 
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  @Nonnull
+  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     final StringBuilder aSB = new StringBuilder ();
     if (!bOptimizedOutput && (m_aSelectors.size () > 1 || m_aDeclarations.size () > 1))
@@ -94,16 +96,21 @@ public final class CSSStyleRule implements ICSSTopLevelRule
 
     aSB.append (getSelectorsAsCSSString (eVersion, bOptimizedOutput));
     if (m_aDeclarations.isEmpty ())
+    {
+      // No declarations present
       aSB.append (bOptimizedOutput ? "{}" : " {}\n");
+    }
     else
       if (m_aSelectors.size () == 1 && m_aDeclarations.size () == 1)
       {
+        // Exactly one selector present
         aSB.append (bOptimizedOutput ? "{" : " { ")
            .append (m_aDeclarations.get (0).getAsCSSString (eVersion, bOptimizedOutput))
            .append (bOptimizedOutput ? "}" : " }\n");
       }
       else
       {
+        // More than one selector present
         aSB.append (bOptimizedOutput ? "{" : " {\n");
         for (final CSSDeclaration aDeclaration : m_aDeclarations)
         {

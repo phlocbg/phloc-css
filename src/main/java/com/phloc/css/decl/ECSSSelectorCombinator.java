@@ -18,8 +18,10 @@
 package com.phloc.css.decl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.css.CSSVersionHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
@@ -58,11 +60,13 @@ public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAwa
     return m_eVersion;
   }
 
-  public static ECSSSelectorCombinator fromTextOrNull (final String sText)
+  @Nullable
+  public static ECSSSelectorCombinator fromTextOrNull (@Nullable final String sText)
   {
-    for (final ECSSSelectorCombinator eCombinator : values ())
-      if (eCombinator.m_sText.equals (sText))
-        return eCombinator;
+    if (StringHelper.hasText (sText))
+      for (final ECSSSelectorCombinator eCombinator : values ())
+        if (eCombinator.m_sText.equals (sText))
+          return eCombinator;
     return null;
   }
 }

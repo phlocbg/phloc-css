@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -54,6 +55,8 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule
     return ContainerHelper.makeUnmodifiable (m_aDeclarations);
   }
 
+  @Nonnull
+  @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     final StringBuilder aSB = new StringBuilder ("@font-face");
