@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2012-04-19" category="api" action="add">
+    <change>
+      <text locale="en">Added new method isNode in ECSSNodeType for more easier readable code</text>
+    </change>
+  </entry>
   <release date="2012-02-02" version="2.6.0" />
   <entry date="2012-02-02" category="tech" action="fix">
     <change>
