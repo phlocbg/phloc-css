@@ -28,6 +28,11 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 
+/**
+ * Represents a CSS function element
+ * 
+ * @author philip
+ */
 @Immutable
 public final class CSSExpressionMemberFunction implements ICSSExpressionMember
 {
@@ -41,6 +46,17 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember
     if (sRealName.length () > 2 && sRealName.endsWith ("()"))
       return sRealName.substring (0, sRealName.length () - 2).trim ();
     return sRealName;
+  }
+
+  /**
+   * Ctor
+   * 
+   * @param sFunctionName
+   *          Function name
+   */
+  public CSSExpressionMemberFunction (@Nonnull @Nonempty final String sFunctionName)
+  {
+    this (sFunctionName, null);
   }
 
   /**

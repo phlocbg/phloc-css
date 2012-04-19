@@ -29,8 +29,9 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 
 /**
- * Check the value of an attribute.
+ * A single CSS selector attribute.
  * 
+ * @see ECSSAttributeOperator
  * @author philip
  */
 @Immutable
@@ -85,7 +86,7 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     if (m_eOperator == null)
       return "[" + m_sAttrName + "]";

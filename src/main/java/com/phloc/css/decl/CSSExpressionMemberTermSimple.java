@@ -18,7 +18,7 @@
 package com.phloc.css.decl;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -26,7 +26,12 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 
-@NotThreadSafe
+/**
+ * Represents a simple expression member
+ * 
+ * @author philip
+ */
+@Immutable
 public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
 {
   private String m_sValue;

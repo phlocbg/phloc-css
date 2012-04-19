@@ -27,6 +27,11 @@ import com.phloc.css.CSSVersionHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 
+/**
+ * Represents an inverted CSS selector.
+ * 
+ * @author philip
+ */
 @Immutable
 public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersionAware
 {
@@ -47,7 +52,7 @@ public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersi
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     CSSVersionHelper.checkVersionRequirements (eVersion, this);
     return ":not(" + m_aNestedSelectorMember.getAsCSSString (eVersion, bOptimizedOutput) + ")";

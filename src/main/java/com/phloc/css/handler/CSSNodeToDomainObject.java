@@ -203,10 +203,15 @@ final class CSSNodeToDomainObject
                                        ECSSNodeType.getNodeName (aFuncNode, m_eVersion));
 
     final String sFunctionName = aFuncNode.getText ();
-    CSSExpression aFuncExpr = null;
     if (aFuncNode.jjtGetNumChildren () == 1)
-      aFuncExpr = _createExpression (aFuncNode.jjtGetChild (0));
-    return new CSSExpressionMemberFunction (sFunctionName, aFuncExpr);
+    {
+      // Parameters present
+      final CSSExpression aFuncExpr = _createExpression (aFuncNode.jjtGetChild (0));
+      return new CSSExpressionMemberFunction (sFunctionName, aFuncExpr);
+    }
+
+    // No parameters
+    return new CSSExpressionMemberFunction (sFunctionName);
   }
 
   @Nonnull
