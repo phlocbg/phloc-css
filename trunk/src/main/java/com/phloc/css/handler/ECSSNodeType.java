@@ -87,6 +87,13 @@ enum ECSSNodeType
     m_nType30 = nType30;
   }
 
+  /**
+   * Get the internal node type for the specified CSS version
+   * 
+   * @param eVersion
+   *          CSS version to use
+   * @return The internal node type for this node type
+   */
   public int getNodeType (@Nonnull final ECSSVersion eVersion)
   {
     switch (eVersion)
@@ -98,6 +105,11 @@ enum ECSSNodeType
       default:
         throw new IllegalStateException ("Illegal version provided: " + eVersion);
     }
+  }
+
+  public boolean isNode (@Nonnull final CSSNode aNode, @Nonnull final ECSSVersion eVersion)
+  {
+    return aNode.getNodeType () == getNodeType (eVersion);
   }
 
   @Nonnull
@@ -117,11 +129,10 @@ enum ECSSNodeType
   @Nullable
   public static String getNodeName (@Nonnull final CSSNode aNode, @Nonnull final ECSSVersion eVersion)
   {
-    final int nNodeType = aNode.getNodeType ();
     for (final ECSSNodeType eNodeType : values ())
-      if (eNodeType.getNodeType (eVersion) == nNodeType)
+      if (eNodeType.isNode (aNode, eVersion))
         return eNodeType.getNodeName (eVersion);
-    s_aLogger.warn ("Unsupported node type " + nNodeType + " in version " + eVersion);
+    s_aLogger.warn ("Unsupported node type " + aNode.getNodeType () + " in version " + eVersion);
     return null;
   }
 

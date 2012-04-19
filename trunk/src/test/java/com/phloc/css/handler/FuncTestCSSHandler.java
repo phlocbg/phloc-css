@@ -29,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.io.file.filter.FileFilterFileFromFilenameFilter;
 import com.phloc.commons.io.file.filter.FilenameFilterFactory;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.commons.io.resource.FileSystemResource;
@@ -48,7 +47,7 @@ public final class FuncTestCSSHandler
   public void testScanTestResourcesHandler21 () throws IOException
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler21"),
-                                                                new FileFilterFileFromFilenameFilter (FilenameFilterFactory.getEndsWithFilter (".css"))))
+                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       s_aLogger.info (aFile.getName ());
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS21);
@@ -72,7 +71,7 @@ public final class FuncTestCSSHandler
   public void testScanTestResourcesHandler30 () throws IOException
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
-                                                                new FileFilterFileFromFilenameFilter (FilenameFilterFactory.getEndsWithFilter (".css"))))
+                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS30);
@@ -96,7 +95,7 @@ public final class FuncTestCSSHandler
   public void testScanTestResourcesCss21 () throws IOException
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css"),
-                                                                new FileFilterFileFromFilenameFilter (FilenameFilterFactory.getEndsWithFilter (".css"))))
+                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       s_aLogger.info (aFile.getPath ());
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS21);
@@ -120,7 +119,7 @@ public final class FuncTestCSSHandler
   public void testScanTestResourcesCss30 () throws IOException
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css30"),
-                                                                new FileFilterFileFromFilenameFilter (FilenameFilterFactory.getEndsWithFilter (".css"))))
+                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       s_aLogger.info (aFile.getPath ());
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS30);
@@ -146,7 +145,7 @@ public final class FuncTestCSSHandler
   public void testScanDrive ()
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("/"),
-                                                                new FileFilterFileFromFilenameFilter (FilenameFilterFactory.getEndsWithFilter (".css"))))
+                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       if (false)
         s_aLogger.info (aFile.getAbsolutePath ());

@@ -59,7 +59,7 @@ final class CSSNodeToDomainObject
 
   private void _expectNodeType (@Nonnull final CSSNode aNode, @Nonnull final ECSSNodeType eExpected)
   {
-    if (aNode.getNodeType () != eExpected.getNodeType (m_eVersion))
+    if (!eExpected.isNode (aNode, m_eVersion))
       throw new IllegalArgumentException ("Expected an " +
                                           eExpected.getNodeName (m_eVersion) +
                                           " but received a " +
@@ -114,26 +114,25 @@ final class CSSNodeToDomainObject
   @Nullable
   private ICSSSelectorMember _createSelectorMember (final CSSNode aNode)
   {
-    final int nNodeType = aNode.getNodeType ();
     final int nChildCount = aNode.jjtGetNumChildren ();
 
-    if (nNodeType == ECSSNodeType.NAMESPACEPREFIX.getNodeType (m_eVersion) ||
-        nNodeType == ECSSNodeType.UNIVERSAL.getNodeType (m_eVersion) ||
-        nNodeType == ECSSNodeType.ELEMENTNAME.getNodeType (m_eVersion) ||
-        nNodeType == ECSSNodeType.HASH.getNodeType (m_eVersion) ||
-        nNodeType == ECSSNodeType.CLASS.getNodeType (m_eVersion))
+    if (ECSSNodeType.NAMESPACEPREFIX.isNode (aNode, m_eVersion) ||
+        ECSSNodeType.UNIVERSAL.isNode (aNode, m_eVersion) ||
+        ECSSNodeType.ELEMENTNAME.isNode (aNode, m_eVersion) ||
+        ECSSNodeType.HASH.isNode (aNode, m_eVersion) ||
+        ECSSNodeType.CLASS.isNode (aNode, m_eVersion))
     {
       if (nChildCount != 0)
         s_aLogger.warn ("Expected 0 children and got " + nChildCount);
       return new CSSSelectorSimpleMember (aNode.getText ());
     }
-    if (nNodeType == ECSSNodeType.ATTRIB.getNodeType (m_eVersion))
+    if (ECSSNodeType.ATTRIB.isNode (aNode, m_eVersion))
       return _createSelectorAttribute (aNode);
 
-    if (nNodeType == ECSSNodeType.COMBINATOR.getNodeType (m_eVersion))
+    if (ECSSNodeType.COMBINATOR.isNode (aNode, m_eVersion))
       return ECSSSelectorCombinator.fromTextOrNull (aNode.getText ());
 
-    if (nNodeType == ECSSNodeType.NEGATION.getNodeType (m_eVersion))
+    if (ECSSNodeType.NEGATION.isNode (aNode, m_eVersion))
     {
       if (nChildCount != 1)
         throw new IllegalArgumentException ("Illegal number of children present (" + nChildCount + ")!");
@@ -143,7 +142,7 @@ final class CSSNodeToDomainObject
       return new CSSSelectorMemberNot (aNestedSelector);
     }
 
-    if (nNodeType == ECSSNodeType.PSEUDO.getNodeType (m_eVersion))
+    if (ECSSNodeType.PSEUDO.isNode (aNode, m_eVersion))
     {
       if (nChildCount == 0)
         return new CSSSelectorSimpleMember (aNode.getText ());
@@ -151,7 +150,7 @@ final class CSSNodeToDomainObject
       if (nChildCount == 1)
       {
         final CSSNode aChildNode = aNode.jjtGetChild (0);
-        if (aChildNode.getNodeType () == ECSSNodeType.NTH.getNodeType (m_eVersion))
+        if (ECSSNodeType.NTH.isNode (aChildNode, m_eVersion))
         {
           // Handle nth
           return new CSSSelectorSimpleMember (aNode.getText () + aChildNode.getText () + ")");
@@ -199,7 +198,7 @@ final class CSSNodeToDomainObject
 
     // function value
     final CSSNode aFuncNode = aNode.jjtGetChild (0);
-    if (aFuncNode.getNodeType () != ECSSNodeType.FUNCTION.getNodeType (m_eVersion))
+    if (!ECSSNodeType.FUNCTION.isNode (aFuncNode, m_eVersion))
       throw new IllegalStateException ("Expected a function but got " +
                                        ECSSNodeType.getNodeName (aFuncNode, m_eVersion));
 
@@ -217,11 +216,10 @@ final class CSSNodeToDomainObject
     final CSSExpression ret = new CSSExpression ();
     for (final CSSNode aChildNode : aNode)
     {
-      final int nNodeType = aChildNode.getNodeType ();
-      if (nNodeType == ECSSNodeType.TERM.getNodeType (m_eVersion))
+      if (ECSSNodeType.TERM.isNode (aChildNode, m_eVersion))
         ret.addMember (_createExpressionTerm (aChildNode));
       else
-        if (nNodeType == ECSSNodeType.OPERATOR.getNodeType (m_eVersion))
+        if (ECSSNodeType.OPERATOR.isNode (aChildNode, m_eVersion))
           ret.addMember (ECSSExpressionOperator.fromTextOrNull (aChildNode.getText ()));
         else
           s_aLogger.warn ("Unsupported child of " +
@@ -246,7 +244,7 @@ final class CSSNodeToDomainObject
     if (nChildCount == 3)
     {
       final CSSNode aChildNode = aNode.jjtGetChild (2);
-      if (aChildNode.getNodeType () == ECSSNodeType.IMPORTANT.getNodeType (m_eVersion))
+      if (ECSSNodeType.IMPORTANT.isNode (aChildNode, m_eVersion))
         bImportant = true;
       else
         s_aLogger.warn ("Expected an " +
@@ -266,8 +264,7 @@ final class CSSNodeToDomainObject
     boolean bSelectors = true;
     for (final CSSNode aChildNode : aNode)
     {
-      final int nNodeType = aChildNode.getNodeType ();
-      if (nNodeType == ECSSNodeType.SELECTOR.getNodeType (m_eVersion))
+      if (ECSSNodeType.SELECTOR.isNode (aChildNode, m_eVersion))
       {
         if (!bSelectors)
           s_aLogger.error ("Found a selector after a declaration!");
@@ -278,10 +275,10 @@ final class CSSNodeToDomainObject
       {
         // OK, we're after the selectors
         bSelectors = false;
-        if (nNodeType == ECSSNodeType.DECLARATION.getNodeType (m_eVersion))
+        if (ECSSNodeType.DECLARATION.isNode (aChildNode, m_eVersion))
           ret.addDeclaration (_createDeclaration (aChildNode));
         else
-          if (nNodeType != ECSSNodeType.ERROR_SKIPTO.getNodeType (m_eVersion))
+          if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
             s_aLogger.warn ("Unsupported child of " +
                             ECSSNodeType.getNodeName (aNode, m_eVersion) +
                             ": " +
@@ -298,17 +295,16 @@ final class CSSNodeToDomainObject
     final CSSMediaRule ret = new CSSMediaRule ();
     for (final CSSNode aChildNode : aNode)
     {
-      final int nNodeType = aChildNode.getNodeType ();
-      if (nNodeType == ECSSNodeType.MEDIALIST.getNodeType (m_eVersion))
+      if (ECSSNodeType.MEDIALIST.isNode (aChildNode, m_eVersion))
       {
         for (final CSSNode aMedium : aChildNode)
           ret.addMedium (aMedium.getText ());
       }
       else
-        if (nNodeType == ECSSNodeType.STYLERULE.getNodeType (m_eVersion))
+        if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
           ret.addStyleRule (_createStyleRule (aChildNode));
         else
-          if (nNodeType != ECSSNodeType.ERROR_SKIPTO.getNodeType (m_eVersion))
+          if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
             s_aLogger.warn ("Unsupported media-rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
@@ -321,11 +317,10 @@ final class CSSNodeToDomainObject
     final CSSFontFaceRule ret = new CSSFontFaceRule ();
     for (final CSSNode aChildNode : aNode)
     {
-      final int nNodeType = aChildNode.getNodeType ();
-      if (nNodeType == ECSSNodeType.DECLARATION.getNodeType (m_eVersion))
+      if (ECSSNodeType.DECLARATION.isNode (aChildNode, m_eVersion))
         ret.addDeclaration (_createDeclaration (aChildNode));
       else
-        if (nNodeType != ECSSNodeType.ERROR_SKIPTO.getNodeType (m_eVersion))
+        if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
           s_aLogger.warn ("Unsupported font-face rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
@@ -338,35 +333,34 @@ final class CSSNodeToDomainObject
     final CascadingStyleSheet ret = new CascadingStyleSheet ();
     for (final CSSNode aChildNode : aNode)
     {
-      final int nNodeType = aChildNode.getNodeType ();
-      if (nNodeType == ECSSNodeType.CHARSET.getNodeType (m_eVersion))
+      if (ECSSNodeType.CHARSET.isNode (aChildNode, m_eVersion))
       {
         // Ignore because this was handled when reading!
       }
       else
-        if (nNodeType == ECSSNodeType.IMPORTRULE.getNodeType (m_eVersion))
+        if (ECSSNodeType.IMPORTRULE.isNode (aChildNode, m_eVersion))
           ret.addImportRule (_createImportRule (aChildNode));
         else
-          if (nNodeType == ECSSNodeType.STYLERULE.getNodeType (m_eVersion))
+          if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
             ret.addRule (_createStyleRule (aChildNode));
           else
-            if (nNodeType == ECSSNodeType.PAGERULE.getNodeType (m_eVersion))
+            if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
             {
               // TODO page rule
               s_aLogger.warn ("Page rule object is currently ignored!");
             }
             else
-              if (nNodeType == ECSSNodeType.MEDIARULE.getNodeType (m_eVersion))
+              if (ECSSNodeType.MEDIARULE.isNode (aChildNode, m_eVersion))
               {
                 ret.addRule (_createMediaRule (aChildNode));
               }
               else
-                if (nNodeType == ECSSNodeType.FONTFACERULE.getNodeType (m_eVersion))
+                if (ECSSNodeType.FONTFACERULE.isNode (aChildNode, m_eVersion))
                 {
                   ret.addRule (_createFontFaceRule (aChildNode));
                 }
                 else
-                  if (nNodeType == ECSSNodeType.UNKNOWNRULE.getNodeType (m_eVersion))
+                  if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
                   {
                     // TODO unknown rule
                     s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);

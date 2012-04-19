@@ -137,10 +137,15 @@ public final class CSSHandler
   }
 
   /**
-   * Read the CSS from the passed {@link IInputStreamProvider}.
+   * Read the CSS from the passed {@link IInputStreamProvider}. If the CSS
+   * contains an explicit charset, the whole CSS is parsed again, with the
+   * charset found inside the file, so the passed {@link IInputStreamProvider}
+   * must be able to create a new input stream on second invocation!
    * 
    * @param aISP
-   *          The input stream provider to use. May not be <code>null</code>.
+   *          The input stream provider to use. Must be able to create new input
+   *          streams on every invocation, in case an explicit charset node was
+   *          found. May not be <code>null</code>.
    * @param eVersion
    *          The CSS version to use. May not be <code>null</code>.
    * @return <code>null</code> if reading failed, the CSS declarations
@@ -166,15 +171,15 @@ public final class CSSHandler
       {
         StreamUtils.close (aIS);
       }
-    if (aNode != null)
+    if (aNode != null && aNode.jjtGetNumChildren () > 0)
     {
       // Is the first node a charset node?
-      if (aNode.jjtGetNumChildren () > 0 &&
-          aNode.jjtGetChild (0).getNodeType () == ECSSNodeType.CHARSET.getNodeType (eVersion))
+      final CSSNode aFirstNode = aNode.jjtGetChild (0);
+      if (ECSSNodeType.CHARSET.isNode (aFirstNode, eVersion))
       {
         // A charset was been specified -> re-read with that charset
-        final String sCharset = ParseUtils.extractStringValue (aNode.jjtGetChild (0).getText ());
-        s_aLogger.info ("Reading CSS definition with explicit charset '" + sCharset + "'");
+        final String sCharset = ParseUtils.extractStringValue (aFirstNode.getText ());
+        s_aLogger.info ("Reading CSS definition again with explicit charset '" + sCharset + "'");
         try
         {
           aIS = aISP.getInputStream ();
@@ -211,7 +216,7 @@ public final class CSSHandler
       throw new NullPointerException ("version");
     if (aNode == null)
       throw new NullPointerException ("node");
-    if (aNode.getNodeType () != ECSSNodeType.ROOT.getNodeType (eVersion))
+    if (!ECSSNodeType.ROOT.isNode (aNode, eVersion))
       throw new IllegalArgumentException ("Passed node is not a root node!");
 
     return new CSSNodeToDomainObject (eVersion).createFromNode (aNode);
