@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.io.file.filter.FileFilterFileFromFilenameFilter;
 import com.phloc.commons.io.file.filter.FilenameFilterFactory;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
+import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.io.streamprovider.ByteArrayInputStreamProvider;
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
@@ -112,15 +113,15 @@ public final class FuncTestCSSWriter
   @Test
   public void testCompressCSS_Size () throws IOException
   {
-    final File aFile = new File ("src/test/resources/css/phloc/test/content.css");
     final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
 
-    final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS21);
+    final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new ClassPathResource ("/css/phloc/test/content.css"),
+                                                                ECSSVersion.CSS21);
     assertNotNull (aCSS);
 
     // write to buffer
     new CSSWriter (ECSSVersion.CSS21, true).writeCSS (aCSS, aSW);
     final String sContent = aSW.getBuffer ().toString ();
-    assertEquals (2884, sContent.length ());
+    assertEquals (2866, sContent.length ());
   }
 }
