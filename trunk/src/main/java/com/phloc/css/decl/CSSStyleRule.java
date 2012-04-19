@@ -20,11 +20,14 @@ package com.phloc.css.decl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 
@@ -35,6 +38,7 @@ import com.phloc.css.ECSSVersion;
  * 
  * @author philip
  */
+@NotThreadSafe
 public final class CSSStyleRule implements ICSSTopLevelRule
 {
   private final List <CSSSelector> m_aSelectors = new ArrayList <CSSSelector> ();
@@ -51,6 +55,21 @@ public final class CSSStyleRule implements ICSSTopLevelRule
   }
 
   @Nonnull
+  public EChange removeSelector (@Nonnull final CSSSelector aSelector)
+  {
+    return EChange.valueOf (m_aSelectors.remove (aSelector));
+  }
+
+  @Nonnull
+  public EChange removeSelector (@Nonnegative final int nSelectorIndex)
+  {
+    if (nSelectorIndex < 0 || nSelectorIndex >= m_aSelectors.size ())
+      return EChange.UNCHANGED;
+    m_aSelectors.remove (nSelectorIndex);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
   @ReturnsImmutableObject
   public List <CSSSelector> getAllSelectors ()
   {
@@ -62,6 +81,21 @@ public final class CSSStyleRule implements ICSSTopLevelRule
     if (aDeclaration == null)
       throw new NullPointerException ("declaration");
     m_aDeclarations.add (aDeclaration);
+  }
+
+  @Nonnull
+  public EChange removeDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  {
+    return EChange.valueOf (m_aDeclarations.remove (aDeclaration));
+  }
+
+  @Nonnull
+  public EChange removeDeclaration (@Nonnegative final int nDeclarationIndex)
+  {
+    if (nDeclarationIndex < 0 || nDeclarationIndex >= m_aDeclarations.size ())
+      return EChange.UNCHANGED;
+    m_aDeclarations.remove (nDeclarationIndex);
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -90,18 +124,22 @@ public final class CSSStyleRule implements ICSSTopLevelRule
   @Nonnull
   public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
+    final int nSelectorCount = m_aSelectors.size ();
+    final int nDeclarationCount = m_aDeclarations.size ();
+
     final StringBuilder aSB = new StringBuilder ();
-    if (!bOptimizedOutput && (m_aSelectors.size () > 1 || m_aDeclarations.size () > 1))
+    if (!bOptimizedOutput && (nSelectorCount > 1 || nDeclarationCount > 1))
       aSB.append ('\n');
 
+    // Append the selectors
     aSB.append (getSelectorsAsCSSString (eVersion, bOptimizedOutput));
-    if (m_aDeclarations.isEmpty ())
+    if (nDeclarationCount == 0)
     {
       // No declarations present
       aSB.append (bOptimizedOutput ? "{}" : " {}\n");
     }
     else
-      if (m_aSelectors.size () == 1 && m_aDeclarations.size () == 1)
+      if (nSelectorCount == 1 && nDeclarationCount == 1)
       {
         // Exactly one selector present
         aSB.append (bOptimizedOutput ? "{" : " { ")
@@ -110,12 +148,16 @@ public final class CSSStyleRule implements ICSSTopLevelRule
       }
       else
       {
-        // More than one selector present
+        // More than one selector or more than one declaration present
         aSB.append (bOptimizedOutput ? "{" : " {\n");
         for (final CSSDeclaration aDeclaration : m_aDeclarations)
         {
           if (!bOptimizedOutput)
+          {
+            // Indentation
             aSB.append ("  ");
+          }
+          // Emit the main declaration
           aSB.append (aDeclaration.getAsCSSString (eVersion, bOptimizedOutput));
           if (!bOptimizedOutput)
             aSB.append ('\n');

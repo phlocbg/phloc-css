@@ -20,15 +20,22 @@ package com.phloc.css.decl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSWriteable;
 
+/**
+ * Represents a single selector as the aggregation of selector members.
+ * 
+ * @author philip
+ */
 public final class CSSSelector implements ICSSWriteable
 {
   private final List <ICSSSelectorMember> m_aMembers = new ArrayList <ICSSSelectorMember> ();
@@ -41,6 +48,21 @@ public final class CSSSelector implements ICSSWriteable
     if (aMember == null)
       throw new NullPointerException ("member");
     m_aMembers.add (aMember);
+  }
+
+  @Nonnull
+  public EChange removeMember (@Nonnull final ICSSSelectorMember aMember)
+  {
+    return EChange.valueOf (m_aMembers.remove (aMember));
+  }
+
+  @Nonnull
+  public EChange removeMember (@Nonnegative final int nMemberIndex)
+  {
+    if (nMemberIndex < 0 || nMemberIndex >= m_aMembers.size ())
+      return EChange.UNCHANGED;
+    m_aMembers.remove (nMemberIndex);
+    return EChange.CHANGED;
   }
 
   @Nonnull

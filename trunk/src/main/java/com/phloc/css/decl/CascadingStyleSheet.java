@@ -20,8 +20,10 @@ package com.phloc.css.decl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -30,6 +32,12 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * This is the main object for a parsed CSS declaration.
+ * 
+ * @author philip
+ */
+@NotThreadSafe
 public final class CascadingStyleSheet
 {
   private final List <CSSImportRule> m_aImportRules = new ArrayList <CSSImportRule> ();
@@ -52,6 +60,15 @@ public final class CascadingStyleSheet
   }
 
   @Nonnull
+  public EChange removeImportRule (@Nonnegative final int nImportRuleIndex)
+  {
+    if (nImportRuleIndex < 0 || nImportRuleIndex >= m_aImportRules.size ())
+      return EChange.UNCHANGED;
+    m_aImportRules.remove (nImportRuleIndex);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
   @ReturnsImmutableObject
   public List <CSSImportRule> getAllImportRules ()
   {
@@ -66,16 +83,24 @@ public final class CascadingStyleSheet
   }
 
   @Nonnull
+  public EChange removeRule (@Nullable final ICSSTopLevelRule aRule)
+  {
+    return EChange.valueOf (m_aRules.remove (aRule));
+  }
+
+  public EChange removeRule (@Nonnegative final int nRuleIndex)
+  {
+    if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
+      return EChange.UNCHANGED;
+    m_aRules.remove (nRuleIndex);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
   @ReturnsImmutableObject
   public List <ICSSTopLevelRule> getAllRules ()
   {
     return ContainerHelper.makeUnmodifiable (m_aRules);
-  }
-
-  @Nonnull
-  public EChange removeRule (@Nullable final ICSSTopLevelRule aRule)
-  {
-    return EChange.valueOf (m_aRules.remove (aRule));
   }
 
   @Nonnull

@@ -20,17 +20,26 @@ package com.phloc.css.decl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSWriteable;
 
+/**
+ * Represents a single import rule on top level
+ * 
+ * @author philip
+ */
+@NotThreadSafe
 public final class CSSImportRule implements ICSSWriteable
 {
   private String m_sLocation;
@@ -46,6 +55,21 @@ public final class CSSImportRule implements ICSSWriteable
     if (StringHelper.hasNoText (sMedium))
       throw new IllegalArgumentException ("medium");
     m_aMedia.add (sMedium);
+  }
+
+  @Nonnull
+  public EChange removeMedium (@Nonnull final String sMedium)
+  {
+    return EChange.valueOf (m_aMedia.remove (sMedium));
+  }
+
+  @Nonnull
+  public EChange removeMedium (@Nonnegative final int nMediumIndex)
+  {
+    if (nMediumIndex < 0 || nMediumIndex >= m_aMedia.size ())
+      return EChange.UNCHANGED;
+    m_aMedia.remove (nMediumIndex);
+    return EChange.CHANGED;
   }
 
   @Nonnull

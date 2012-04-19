@@ -26,6 +26,12 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 
+/**
+ * Represents a single CSS selector like an element name, a hash value (ID), a
+ * class or a pseudo class.
+ * 
+ * @author philip
+ */
 @Immutable
 public final class CSSSelectorSimpleMember implements ICSSSelectorMember
 {
@@ -45,21 +51,33 @@ public final class CSSSelectorSimpleMember implements ICSSSelectorMember
     return m_sValue;
   }
 
+  /**
+   * @return <code>true</code> if it is no hash, no class and no pseudo selector
+   */
   public boolean isElementName ()
   {
     return !isHash () && !isClass () && !isPseudo ();
   }
 
+  /**
+   * @return <code>true</code> if it is a hash selector
+   */
   public boolean isHash ()
   {
     return m_sValue.charAt (0) == '#';
   }
 
+  /**
+   * @return <code>true</code> if it is a class selector
+   */
   public boolean isClass ()
   {
     return m_sValue.charAt (0) == '.';
   }
 
+  /**
+   * @return <code>true</code> if it is a pseudo selector
+   */
   public boolean isPseudo ()
   {
     return m_sValue.charAt (0) == ':';
