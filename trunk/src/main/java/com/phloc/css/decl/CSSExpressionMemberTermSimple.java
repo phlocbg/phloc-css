@@ -17,8 +17,6 @@
  */
 package com.phloc.css.decl;
 
-import java.util.Arrays;
-
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -26,13 +24,13 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.ECSSUnit;
 import com.phloc.css.ECSSVersion;
 
 @NotThreadSafe
 public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
 {
   private String m_sValue;
+  private String m_sOptimizedValue;
 
   public CSSExpressionMemberTermSimple (@Nonnull @Nonempty final String sValue)
   {
@@ -44,6 +42,7 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
     if (StringHelper.hasNoText (sValue))
       throw new IllegalArgumentException ("Empty value is not allowed");
     m_sValue = sValue;
+    m_sOptimizedValue = CSSExpressionTermOptimizer.getOptimizedValue (sValue);
   }
 
   @Nonnull
@@ -53,28 +52,18 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
     return m_sValue;
   }
 
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  @Nonnull
+  @Nonempty
+  public String getOptimizedValue ()
   {
-    if (false && bOptimizedOutput)
-    {
-      // TODO optimize CSS values!!!!
+    return m_sOptimizedValue;
+  }
 
-      // Replace e.g. "0px" with "0"
-      for (final ECSSUnit eUnit : ECSSUnit.values ())
-        if (m_sValue.equals (eUnit.format (0)))
-          return "0";
-
-      // Replace e.g. "#ffffff" with "#fff"
-      final char [] cLong = new char [7];
-      cLong[0] = '#';
-      for (final char c : new char [] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' })
-      {
-        Arrays.fill (cLong, 1, 6, c);
-        if (m_sValue.equalsIgnoreCase (new String (cLong)))
-          return new String (cLong, 0, 4);
-      }
-    }
-    return m_sValue;
+  @Nonnull
+  @Nonempty
+  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  {
+    return bOptimizedOutput ? m_sOptimizedValue : m_sValue;
   }
 
   @Override
@@ -85,13 +74,13 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
     if (!(o instanceof CSSExpressionMemberTermSimple))
       return false;
     final CSSExpressionMemberTermSimple rhs = (CSSExpressionMemberTermSimple) o;
-    return m_sValue.equals (rhs.m_sValue);
+    return m_sOptimizedValue.equals (rhs.m_sOptimizedValue);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sValue).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sOptimizedValue).getHashCode ();
   }
 
   @Override
