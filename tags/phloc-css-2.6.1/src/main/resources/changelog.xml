@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2006-2012 phloc systems
+    http://www.phloc.com
+    office[at]phloc[dot]com
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2012-04-19" version="2.6.1" />
+  <entry date="2012-04-19" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed cloning of CSSProperty implementations</text>
+    </change>
+  </entry>
+  <entry date="2012-04-19" category="tech" action="add">
+    <change>
+      <text locale="en">Enabled compression of simple expression values (like #aabbcc =&gt; #abc)</text>
+    </change>
+  </entry>
+  <entry date="2012-04-19" category="api" action="add">
+    <change>
+      <text locale="en">Added modifying methods for CascadingStyleSheet</text>
+    </change>
+  </entry>
+  <entry date="2012-04-19" category="api" action="add">
+    <change>
+      <text locale="en">Added new method isNode in ECSSNodeType for more easier readable code</text>
+    </change>
+  </entry>
+  <release date="2012-02-02" version="2.6.0" />
+  <entry date="2012-02-02" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed bug in grammar concerning spaces before @charset</text>
+    </change>
+  </entry>
+  <entry date="2012-02-02" category="tech" action="change">
+    <change>
+      <text locale="en">Moved to Google Code as Open Source</text>
+    </change>
+  </entry>
+  <release date="2011-11-06" version="2.5.3" />
+  <entry date="2011-10-24" category="api" action="add">
+    <change>
+      <text locale="en">Added new CSS3 and browser specific CSS properties</text>
+    </change>
+  </entry>
+  <entry date="2011-10-23" category="api" action="add">
+    <change>
+      <text locale="en">Added support for border-radius</text>
+    </change>
+  </entry>
+  <release date="2011-09-23" version="2.5.2" />
+  <entry date="2011-09-23" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed bug in parser to read "inherit !important"</text>
+    </change>
+  </entry>
+  <entry date="2011-09-23" category="tech" action="add">
+    <change>
+      <text locale="en">Added support for CSSMediaRule in the CSSVisitor</text>
+    </change>
+  </entry>
+  <release date="2011-08-12" version="2.5.1" />
+  <entry date="2011-08-11" category="tech" action="fix">
+    <change>
+      <text locale="en">CSS 3.0 parser can now handle negation, nth-* functions, ~ combinator, namespace prefix etc.</text>
+    </change>
+  </entry>
+  <entry date="2011-08-11" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed CSS parser speed by using LL(1) by default and LL(k) only on demand</text>
+    </change>
+  </entry>
+</changelog>
