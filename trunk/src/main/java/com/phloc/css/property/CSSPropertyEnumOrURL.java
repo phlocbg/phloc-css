@@ -31,9 +31,21 @@ public class CSSPropertyEnumOrURL extends CSSPropertyEnum
     super (eProp, aEnumValues);
   }
 
+  public CSSPropertyEnumOrURL (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  {
+    super (eProp, aEnumValues);
+  }
+
   @Override
   public boolean isValidValue (@Nullable final String sValue)
   {
     return super.isValidValue (sValue) || CCSS.isURLValue (sValue);
+  }
+
+  @Override
+  @Nonnull
+  public CSSPropertyEnumOrURL getClone (@Nonnull final ECSSProperty eProp)
+  {
+    return new CSSPropertyEnumOrURL (eProp, m_aEnumValues);
   }
 }

@@ -23,6 +23,11 @@ import javax.annotation.Nullable;
 import com.phloc.css.CCSS;
 import com.phloc.css.ECSSProperty;
 
+/**
+ * Represents a color value
+ * 
+ * @author philip
+ */
 public class CSSPropertyColor extends AbstractCSSProperty
 {
   public CSSPropertyColor (@Nonnull final ECSSProperty eProp)

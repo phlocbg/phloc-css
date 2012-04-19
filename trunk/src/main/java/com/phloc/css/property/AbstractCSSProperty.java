@@ -30,6 +30,11 @@ import com.phloc.css.ECSSProperty;
 import com.phloc.css.ICSSProperty;
 import com.phloc.css.ICSSValue;
 
+/**
+ * Abstract base class for implementing {@link ICSSProperty}
+ * 
+ * @author philip
+ */
 public abstract class AbstractCSSProperty implements ICSSProperty
 {
   private final ECSSProperty m_eProp;

@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.css.CHTMLColors;
 import com.phloc.css.ECSSUnit;
 
 /**
@@ -54,14 +55,14 @@ public final class CSSExpressionTermOptimizer
         return "0";
 
     // Check for optimized color values
-    if (sValue.length () == 7 &&
-        sValue.charAt (0) == '#' &&
+    if (sValue.length () == CHTMLColors.HEXVALUE_LENGTH &&
+        sValue.charAt (0) == CHTMLColors.PREFIX_HEX &&
         sValue.charAt (1) == sValue.charAt (2) &&
         sValue.charAt (3) == sValue.charAt (4) &&
         sValue.charAt (5) == sValue.charAt (6))
     {
       // #112233 => #123
-      return "#" + sValue.charAt (1) + sValue.charAt (3) + sValue.charAt (5);
+      return Character.toString (CHTMLColors.PREFIX_HEX) + sValue.charAt (1) + sValue.charAt (3) + sValue.charAt (5);
     }
 
     return sValue;
