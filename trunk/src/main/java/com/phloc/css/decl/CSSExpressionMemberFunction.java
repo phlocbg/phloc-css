@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -107,8 +107,7 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember
     if (!(o instanceof CSSExpressionMemberFunction))
       return false;
     final CSSExpressionMemberFunction rhs = (CSSExpressionMemberFunction) o;
-    return m_sFunctionName.equals (rhs.m_sFunctionName) &&
-           EqualsUtils.nullSafeEquals (m_aExpression, rhs.m_aExpression);
+    return m_sFunctionName.equals (rhs.m_sFunctionName) && EqualsUtils.equals (m_aExpression, rhs.m_aExpression);
   }
 
   @Override
