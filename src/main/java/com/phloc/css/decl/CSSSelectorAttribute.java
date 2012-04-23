@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -102,8 +102,8 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
       return false;
     final CSSSelectorAttribute rhs = (CSSSelectorAttribute) o;
     return m_sAttrName.equals (rhs.m_sAttrName) &&
-           EqualsUtils.nullSafeEquals (m_eOperator, rhs.m_eOperator) &&
-           EqualsUtils.nullSafeEquals (m_sAttrValue, rhs.m_sAttrValue);
+           EqualsUtils.equals (m_eOperator, rhs.m_eOperator) &&
+           EqualsUtils.equals (m_sAttrValue, rhs.m_sAttrValue);
   }
 
   @Override
