@@ -1,0 +1,74 @@
+/**
+ * Copyright (C) 2006-2012 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+em { color: lime }               /* predefined color name */
+em { color: rgb(0,255,0) }       /* RGB range 0-255   */
+body {color: black; background: white }
+h1 { color: maroon }
+h2 { color: olive }
+em { color: #f00 }              /* #rgb */
+em { color: #ff0000 }           /* #rrggbb */
+em { color: rgb(255,0,0) }
+em { color: rgb(100%, 0%, 0%) }
+em { color: rgb(255,0,0) }       /* integer range 0 - 255 */
+em { color: rgb(300,0,0) }       /* clipped to rgb(255,0,0) */
+em { color: rgb(255,-10,0) }     /* clipped to rgb(255,0,0) */
+em { color: rgb(110%, 0%, 0%) }  /* clipped to rgb(100%,0%,0%) */
+em { color: rgb(255,0,0) }      /* integer range 0 - 255 */
+em { color: rgba(255,0,0,1) }   /* the same, with explicit opacity of 1 */
+em { color: rgb(100%,0%,0%) }   /* float range 0.0% - 100.0% */
+em { color: rgba(100%,0%,0%,1) } /* the same, with explicit opacity of 1 */
+p { color: rgba(0,0,255,0.5) }        /* semi-transparent solid blue */
+p { color: rgba(100%, 50%, 0%, 0.1) } /* very transparent solid orange */
+* { color: hsl(0, 100%, 50%) }   /* red */
+* { color: hsl(120, 100%, 50%) } /* green */ 
+* { color: hsl(120, 100%, 25%) } /* dark green */ 
+* { color: hsl(120, 100%, 75%) } /* light green */ 
+* { color: hsl(120, 75%, 75%) }  /* pastel green, and so on */
+em { color: hsl(120, 100%, 50%) }     /* green */
+em { color: hsla(120, 100%, 50%, 1) } /* the same, with explicit opacity of 1 */
+p { color: hsla(240, 100%, 50%, 0.5) } /* semi-transparent solid blue */
+p { color: hsla(30, 100%, 50%, 0.1) }  /* very transparent solid orange */
+
+html { 
+  color: black;
+  background: white;
+}
+
+body[text] {
+    /* using attr() syntax from [CSS3VAL] */
+    color: attr(text,color);
+}
+
+body[bgcolor],table[bgcolor],tr[bgcolor],td[bgcolor],th[bgcolor] {
+    /* using attr() syntax from [CSS3VAL] */
+    background-color: attr(bgcolor,color);
+}
+
+font[color] {
+    /* using attr() syntax from [CSS3VAL] */
+    color: attr(color,color);
+}
+
+/* traditional desktop user agent colors for hyperlinks */
+:link    { color: blue; }   
+:visited { color: purple; }
+
+/* default focus outline */
+:focus {
+  outline: 1px dotted;  /* or 1px dotted invert */
+}
