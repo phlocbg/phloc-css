@@ -33,7 +33,7 @@ import com.phloc.css.ECSSUnit;
  */
 public final class CSSExpressionTermOptimizer
 {
-  private static List <String> UNIT_VALUES_0 = new ArrayList <String> ();
+  private static final List <String> UNIT_VALUES_0 = new ArrayList <String> ();
 
   static
   {
