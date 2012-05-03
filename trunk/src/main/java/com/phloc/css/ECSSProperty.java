@@ -213,6 +213,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _SCROLLBAR_SHADOW_COLOR ("scrollbar-shadow-color"),
   _SCROLLBAR_TRACK_COLOR ("scrollbar-track-color"),
   SPEAK_HEADER ("speak-header"),
+  SRC ("src", ECSSVersion.CSS30),
   TABLE_LAYOUT ("table-layout"),
   TEXT_ALIGN ("text-align"),
   TEXT_COMBINE_HORIZONTAL ("text-combine-horizontal", ECSSVersion.CSS30),
