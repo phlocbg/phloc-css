@@ -57,7 +57,7 @@ public final class FuncTestCSSWriter
       // write to buffer
       final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
       new CSSWriter (eVersion, i == 1).writeCSS (aCSS, aSW);
-      final String sContent = aSW.getBuffer ().toString ();
+      final String sContent = aSW.toString ();
       if (false)
         System.out.println ("--" + i + "--\n" + sContent);
 
@@ -121,7 +121,7 @@ public final class FuncTestCSSWriter
 
     // write to buffer
     new CSSWriter (ECSSVersion.CSS21, true).writeCSS (aCSS, aSW);
-    final String sContent = aSW.getBuffer ().toString ();
+    final String sContent = aSW.toString ();
     assertEquals (2866, sContent.length ());
   }
 }
