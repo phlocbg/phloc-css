@@ -1,0 +1,23 @@
+#summary Change log of phloc-css
+= Change log =
+<wiki:comment>This content is generated. Do not modify!</wiki:comment>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>4/23/12</td><td colspan="4">_Release *2.6.5*_</td></tr>
+<tr><td>4/23/12</td><td>update</td><td>tech</td><td>*yes*</td><td>Updated to [http://code.google.com/p/phloc-commons phloc-commons] 3.5.0</td></tr>
+<tr border="1"><td>4/19/12</td><td colspan="4">_Release *2.6.1*_</td></tr>
+<tr><td>4/19/12</td><td>fix</td><td>tech</td><td></td><td>Fixed cloning of CSSProperty implementations</td></tr>
+<tr><td>4/19/12</td><td>add</td><td>tech</td><td></td><td>Enabled compression of simple expression values (like #aabbcc =`>` #abc)</td></tr>
+<tr><td>4/19/12</td><td>add</td><td>api</td><td></td><td>Added modifying methods for CascadingStyleSheet</td></tr>
+<tr><td>4/19/12</td><td>add</td><td>api</td><td></td><td>Added new method isNode in ECSSNodeType for more easier readable code</td></tr>
+<tr border="1"><td>2/2/12</td><td colspan="4">_Release *2.6.0*_</td></tr>
+<tr><td>2/2/12</td><td>fix</td><td>tech</td><td></td><td>Fixed bug in grammar concerning spaces before @charset</td></tr>
+<tr><td>2/2/12</td><td>change</td><td>tech</td><td></td><td>Moved to Google Code as Open Source</td></tr>
+<tr border="1"><td>11/6/11</td><td colspan="4">_Release *2.5.3*_</td></tr>
+<tr><td>10/24/11</td><td>add</td><td>api</td><td></td><td>Added new CSS3 and browser specific CSS properties</td></tr>
+<tr><td>10/23/11</td><td>add</td><td>api</td><td></td><td>Added support for border-radius</td></tr>
+<tr border="1"><td>9/23/11</td><td colspan="4">_Release *2.5.2*_</td></tr>
+<tr><td>9/23/11</td><td>fix</td><td>tech</td><td></td><td>Fixed bug in parser to read "inherit !important"</td></tr>
+<tr><td>9/23/11</td><td>add</td><td>tech</td><td></td><td>Added support for CSSMediaRule in the CSSVisitor</td></tr>
+<tr border="1"><td>8/12/11</td><td colspan="4">_Release *2.5.1*_</td></tr>
+<tr><td>8/11/11</td><td>fix</td><td>tech</td><td></td><td>CSS 3.0 parser can now handle negation, nth-`*` functions, ~ combinator, namespace prefix etc.</td></tr>
+<tr><td>8/11/11</td><td>fix</td><td>tech</td><td></td><td>Fixed CSS parser speed by using LL(1) by default and LL(k) only on demand</td></tr>
+</tbody></table>
