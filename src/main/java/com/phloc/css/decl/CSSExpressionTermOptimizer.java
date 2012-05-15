@@ -33,13 +33,13 @@ import com.phloc.css.ECSSUnit;
  */
 public final class CSSExpressionTermOptimizer
 {
-  private static final List <String> UNIT_VALUES_0 = new ArrayList <String> ();
+  private static final List <String> s_aUnitValues0 = new ArrayList <String> ();
 
   static
   {
     // Save all "0" formatted unit values
     for (final ECSSUnit eUnit : ECSSUnit.values ())
-      UNIT_VALUES_0.add (eUnit.format (0));
+      s_aUnitValues0.add (eUnit.format (0));
   }
 
   private CSSExpressionTermOptimizer ()
@@ -50,7 +50,7 @@ public final class CSSExpressionTermOptimizer
   public static String getOptimizedValue (@Nonnull @Nonempty final String sValue)
   {
     // Replace e.g. "0px" with "0"
-    for (final String sUnit0 : UNIT_VALUES_0)
+    for (final String sUnit0 : s_aUnitValues0)
       if (sValue.equals (sUnit0))
         return "0";
 
