@@ -50,19 +50,23 @@ public final class FuncTestCSSHandler
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       s_aLogger.info (aFile.getName ());
-      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS21);
+      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
+                                                                  CCharset.CHARSET_UTF_8,
+                                                                  ECSSVersion.CSS21);
       assertNotNull (aFile.getAbsolutePath (), aCSS);
 
       // Write optimized version and compare it
       String s = new CSSWriter (ECSSVersion.CSS21, true).getCSSAsString (aCSS);
       assertNotNull (s);
       assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8),
+                                                     CCharset.CHARSET_UTF_8,
                                                      ECSSVersion.CSS21));
 
       // Write non-optimized version and compare it
       s = new CSSWriter (ECSSVersion.CSS21, false).getCSSAsString (aCSS);
       assertNotNull (s);
       assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8),
+                                                     CCharset.CHARSET_UTF_8,
                                                      ECSSVersion.CSS21));
     }
   }
@@ -74,19 +78,23 @@ public final class FuncTestCSSHandler
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
-      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS30);
+      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
+                                                                  CCharset.CHARSET_UTF_8,
+                                                                  ECSSVersion.CSS30);
       assertNotNull (sKey, aCSS);
 
       // Write optimized version and compare it
       String s = new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS);
       assertNotNull (sKey, s);
       assertEquals (sKey, aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8),
+                                                           CCharset.CHARSET_UTF_8,
                                                            ECSSVersion.CSS30));
 
       // Write non-optimized version and compare it
       s = new CSSWriter (ECSSVersion.CSS30, false).getCSSAsString (aCSS);
       assertNotNull (sKey, s);
       assertEquals (sKey, aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8),
+                                                           CCharset.CHARSET_UTF_8,
                                                            ECSSVersion.CSS30));
     }
   }
@@ -98,19 +106,23 @@ public final class FuncTestCSSHandler
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       s_aLogger.info (aFile.getPath ());
-      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS21);
+      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
+                                                                  CCharset.CHARSET_UTF_8,
+                                                                  ECSSVersion.CSS21);
       assertNotNull (aFile.getAbsolutePath (), aCSS);
 
       // Write optimized version and compare it
       String s = new CSSWriter (ECSSVersion.CSS21, true).getCSSAsString (aCSS);
       assertNotNull (s);
       assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8),
+                                                     CCharset.CHARSET_UTF_8,
                                                      ECSSVersion.CSS21));
 
       // Write non-optimized version and compare it
       s = new CSSWriter (ECSSVersion.CSS21, false).getCSSAsString (aCSS);
       assertNotNull (s);
       assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8),
+                                                     CCharset.CHARSET_UTF_8,
                                                      ECSSVersion.CSS21));
     }
   }
@@ -122,19 +134,23 @@ public final class FuncTestCSSHandler
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       s_aLogger.info (aFile.getPath ());
-      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS30);
+      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
+                                                                  CCharset.CHARSET_UTF_8,
+                                                                  ECSSVersion.CSS30);
       assertNotNull (aFile.getAbsolutePath (), aCSS);
 
       // Write optimized version and compare it
       String s = new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS);
       assertNotNull (s);
       assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8),
+                                                     CCharset.CHARSET_UTF_8,
                                                      ECSSVersion.CSS30));
 
       // Write non-optimized version and compare it
       s = new CSSWriter (ECSSVersion.CSS30, false).getCSSAsString (aCSS);
       assertNotNull (s);
       assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8),
+                                                     CCharset.CHARSET_UTF_8,
                                                      ECSSVersion.CSS30));
     }
   }
@@ -149,7 +165,7 @@ public final class FuncTestCSSHandler
     {
       if (false)
         s_aLogger.info (aFile.getAbsolutePath ());
-      CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS21);
+      CSSHandler.readFromStream (new FileSystemResource (aFile), CCharset.CHARSET_UTF_8, ECSSVersion.CSS21);
     }
   }
 }

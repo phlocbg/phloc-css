@@ -25,8 +25,9 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.io.streamprovider.ByteArrayInputStreamProvider;
+import com.phloc.commons.io.streamprovider.StringInputStreamProvider;
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
+import com.phloc.commons.system.SystemHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.handler.CSSHandler;
@@ -55,14 +56,38 @@ public final class CSSCompressor
    *         original CSS is returned, else the compressed version is returned.
    */
   @Nonnull
+  @Deprecated
   public static String getCompressedCSS (@Nonnull final String sOriginalCSS, @Nonnull final ECSSVersion eCSSVersion)
+  {
+    return getCompressedCSS (sOriginalCSS, SystemHelper.getSystemCharsetName (), eCSSVersion);
+  }
+
+  /**
+   * Get the compressed version of the passed CSS code.
+   * 
+   * @param sOriginalCSS
+   *          The original CSS code to be compressed.
+   * @param sCharset
+   *          The character set to be used. May not be <code>null</code>.
+   * @param eCSSVersion
+   *          The CSS version to use.
+   * @return If compression failed because the CSS is invalid or whatsoever, the
+   *         original CSS is returned, else the compressed version is returned.
+   */
+  @Nonnull
+  public static String getCompressedCSS (@Nonnull final String sOriginalCSS,
+                                         @Nonnull final String sCharset,
+                                         @Nonnull final ECSSVersion eCSSVersion)
   {
     if (sOriginalCSS == null)
       throw new NullPointerException ("originalCSS");
+    if (sCharset == null)
+      throw new NullPointerException ("charset");
     if (eCSSVersion == null)
       throw new NullPointerException ("CSSversion");
 
-    final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new ByteArrayInputStreamProvider (sOriginalCSS.getBytes ()),
+    final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new StringInputStreamProvider (sOriginalCSS, sCharset),
+                                                                sCharset,
                                                                 eCSSVersion);
     if (aCSS != null)
     {

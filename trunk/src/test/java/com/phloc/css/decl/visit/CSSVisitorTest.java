@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.file.filter.FileFilterFileFromFilenameFilter;
 import com.phloc.commons.io.file.filter.FilenameFilterFactory;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
@@ -70,7 +71,9 @@ public final class CSSVisitorTest
                                                                 new FileFilterFileFromFilenameFilter (FilenameFilterFactory.getEndsWithFilter (".css"))))
     {
       s_aLogger.info (aFile.getAbsolutePath ());
-      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS21);
+      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
+                                                                  CCharset.CHARSET_ISO_8859_1,
+                                                                  ECSSVersion.CSS21);
       assertNotNull (aFile.getAbsolutePath (), aCSS);
       CSSVisitor.visitCSSUrl (aCSS, new SysOutVisitor ());
     }

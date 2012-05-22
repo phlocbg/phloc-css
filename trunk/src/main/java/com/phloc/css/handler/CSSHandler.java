@@ -27,8 +27,11 @@ import javax.annotation.WillClose;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.streams.StreamUtils;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.system.SystemHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.parser.CSSNode;
@@ -90,10 +93,20 @@ public final class CSSHandler
     }
   }
 
+  @Deprecated
   public static boolean isValidCSS (@Nonnull final IInputStreamProvider aISP, @Nonnull final ECSSVersion eVersion)
+  {
+    return isValidCSS (aISP, SystemHelper.getSystemCharsetName (), eVersion);
+  }
+
+  public static boolean isValidCSS (@Nonnull final IInputStreamProvider aISP,
+                                    @Nonnull @Nonempty final String sCharset,
+                                    @Nonnull final ECSSVersion eVersion)
   {
     if (aISP == null)
       throw new NullPointerException ("inputStreamProvider");
+    if (StringHelper.hasNoText (sCharset))
+      throw new IllegalArgumentException ("charset");
     if (eVersion == null)
       throw new NullPointerException ("version");
 
@@ -103,7 +116,7 @@ public final class CSSHandler
       s_aLogger.warn ("Failed to open CSS input stream " + aISP);
       return false;
     }
-    return isValidCSS (aIS, eVersion);
+    return isValidCSS (aIS, sCharset, eVersion);
   }
 
   /**
@@ -119,16 +132,45 @@ public final class CSSHandler
    *          The CSS version to use. May not be <code>null</code>.
    * @return <code>true</code> if the CSS is valid according to the version
    */
+  @Deprecated
   public static boolean isValidCSS (@Nonnull @WillClose final InputStream aIS, @Nonnull final ECSSVersion eVersion)
+  {
+    return isValidCSS (aIS, SystemHelper.getSystemCharsetName (), eVersion);
+  }
+
+  /**
+   * Check if the passed input stream can be resembled to valid CSS content.
+   * This is accomplished by fully parsing the CSS file each time the method is
+   * called. This is similar to calling
+   * {@link #readFromStream(IInputStreamProvider, ECSSVersion)} and checking for
+   * a non-<code>null</code> result.
+   * 
+   * @param aIS
+   *          The input stream to use. May not be <code>null</code>.
+   * @param sCharset
+   *          The charset to be used. May not be <code>null</code>.
+   * @param eVersion
+   *          The CSS version to use. May not be <code>null</code>.
+   * @return <code>true</code> if the CSS is valid according to the version
+   */
+  public static boolean isValidCSS (@Nonnull @WillClose final InputStream aIS,
+                                    @Nonnull @Nonempty final String sCharset,
+                                    @Nonnull final ECSSVersion eVersion)
   {
     if (aIS == null)
       throw new NullPointerException ("inputStream");
+    if (StringHelper.hasNoText (sCharset))
+      throw new IllegalArgumentException ("charset");
     if (eVersion == null)
       throw new NullPointerException ("version");
 
     try
     {
-      return _readFromStream (new JavaCharStream (aIS), eVersion) != null;
+      return _readFromStream (new JavaCharStream (aIS, sCharset), eVersion) != null;
+    }
+    catch (final UnsupportedEncodingException ex)
+    {
+      throw new IllegalArgumentException ("Illegal charset passed!", ex);
     }
     finally
     {
@@ -151,12 +193,40 @@ public final class CSSHandler
    * @return <code>null</code> if reading failed, the CSS declarations
    *         otherwise.
    */
+  @Deprecated
   @Nullable
   public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
                                                     @Nonnull final ECSSVersion eVersion)
   {
+    return readFromStream (aISP, SystemHelper.getSystemCharsetName (), eVersion);
+  }
+
+  /**
+   * Read the CSS from the passed {@link IInputStreamProvider}. If the CSS
+   * contains an explicit charset, the whole CSS is parsed again, with the
+   * charset found inside the file, so the passed {@link IInputStreamProvider}
+   * must be able to create a new input stream on second invocation!
+   * 
+   * @param aISP
+   *          The input stream provider to use. Must be able to create new input
+   *          streams on every invocation, in case an explicit charset node was
+   *          found. May not be <code>null</code>.
+   * @param sCharset
+   *          The charset to be used. May not be <code>null</code>.
+   * @param eVersion
+   *          The CSS version to use. May not be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
+  @Nullable
+  public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
+                                                    @Nonnull @Nonempty final String sCharset,
+                                                    @Nonnull final ECSSVersion eVersion)
+  {
     if (aISP == null)
       throw new NullPointerException ("inputStreamProvider");
+    if (StringHelper.hasNoText (sCharset))
+      throw new IllegalArgumentException ("charset");
     if (eVersion == null)
       throw new NullPointerException ("version");
 
@@ -165,12 +235,17 @@ public final class CSSHandler
     if (aIS != null)
       try
       {
-        aNode = _readFromStream (new JavaCharStream (aIS), eVersion);
+        aNode = _readFromStream (new JavaCharStream (aIS, sCharset), eVersion);
+      }
+      catch (final UnsupportedEncodingException ex)
+      {
+        throw new IllegalArgumentException ("Illegal charset passed!", ex);
       }
       finally
       {
         StreamUtils.close (aIS);
       }
+
     if (aNode != null && aNode.jjtGetNumChildren () > 0)
     {
       // Is the first node a charset node?
@@ -178,17 +253,17 @@ public final class CSSHandler
       if (ECSSNodeType.CHARSET.isNode (aFirstNode, eVersion))
       {
         // A charset was been specified -> re-read with that charset
-        final String sCharset = ParseUtils.extractStringValue (aFirstNode.getText ());
-        s_aLogger.info ("Reading CSS definition again with explicit charset '" + sCharset + "'");
+        final String sCSSCharset = ParseUtils.extractStringValue (aFirstNode.getText ());
+        s_aLogger.info ("Reading CSS definition again with explicit charset '" + sCSSCharset + "'");
         try
         {
           aIS = aISP.getInputStream ();
-          aNode = _readFromStream (new JavaCharStream (aIS, sCharset), eVersion);
+          aNode = _readFromStream (new JavaCharStream (aIS, sCSSCharset), eVersion);
         }
         catch (final UnsupportedEncodingException ex)
         {
           // Keep original node!
-          s_aLogger.error ("Failed to read CSS with charset '" + sCharset + "'", ex);
+          s_aLogger.error ("Failed to read CSS with charset '" + sCSSCharset + "'", ex);
         }
         finally
         {

@@ -237,7 +237,8 @@ final class CSSNodeToDomainObject
           final ECSSExpressionOperator eOp = ECSSExpressionOperator.fromTextOrNull (sText);
           if (eOp == null)
             s_aLogger.warn ("Failed to parse expression operator '" + sText + "'");
-          ret.addMember (eOp);
+          else
+            ret.addMember (eOp);
         }
         else
         {
