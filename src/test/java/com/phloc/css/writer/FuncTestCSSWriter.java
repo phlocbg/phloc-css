@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.file.filter.FileFilterFileFromFilenameFilter;
 import com.phloc.commons.io.file.filter.FilenameFilterFactory;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
@@ -48,7 +49,9 @@ public final class FuncTestCSSWriter
     s_aLogger.info (aFile.getAbsolutePath ());
 
     // read and interpret
-    final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), eVersion);
+    final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
+                                                                CCharset.CHARSET_UTF_8,
+                                                                eVersion);
     assertNotNull (aCSS);
 
     // Both normal and optimized!
@@ -64,7 +67,9 @@ public final class FuncTestCSSWriter
       // read again from buffer
       assertEquals (aFile.getAbsolutePath () + (i == 0 ? " unoptimized" : " optimized"),
                     aCSS,
-                    CSSHandler.readFromStream (new ByteArrayInputStreamProvider (sContent.getBytes ()), eVersion));
+                    CSSHandler.readFromStream (new ByteArrayInputStreamProvider (sContent.getBytes (CCharset.CHARSET_UTF_8)),
+                                               CCharset.CHARSET_UTF_8,
+                                               eVersion));
     }
   }
 
@@ -97,7 +102,9 @@ public final class FuncTestCSSWriter
       try
       {
         // read and interpret CSS 3.0
-        final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile), ECSSVersion.CSS30);
+        final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
+                                                                    CCharset.CHARSET_UTF_8,
+                                                                    ECSSVersion.CSS30);
         assertNotNull (aCSS);
 
         // write to CSS 2.1
@@ -116,6 +123,7 @@ public final class FuncTestCSSWriter
     final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
 
     final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new ClassPathResource ("/css/phloc/test/content.css"),
+                                                                CCharset.CHARSET_UTF_8,
                                                                 ECSSVersion.CSS21);
     assertNotNull (aCSS);
 
