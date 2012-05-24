@@ -25,7 +25,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -69,10 +68,10 @@ public final class CascadingStyleSheet
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <CSSImportRule> getAllImportRules ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aImportRules);
+    return ContainerHelper.newList (m_aImportRules);
   }
 
   public void addRule (@Nonnull final ICSSTopLevelRule aStyleRule)
@@ -97,10 +96,10 @@ public final class CascadingStyleSheet
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <ICSSTopLevelRule> getAllRules ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aRules);
+    return ContainerHelper.newList (m_aRules);
   }
 
   @Nonnull

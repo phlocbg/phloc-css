@@ -18,6 +18,7 @@
 package com.phloc.css.writer;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -59,7 +60,7 @@ public final class CSSCompressor
   @Deprecated
   public static String getCompressedCSS (@Nonnull final String sOriginalCSS, @Nonnull final ECSSVersion eCSSVersion)
   {
-    return getCompressedCSS (sOriginalCSS, SystemHelper.getSystemCharsetName (), eCSSVersion);
+    return getCompressedCSS (sOriginalCSS, SystemHelper.getSystemCharset (), eCSSVersion);
   }
 
   /**
@@ -67,7 +68,7 @@ public final class CSSCompressor
    * 
    * @param sOriginalCSS
    *          The original CSS code to be compressed.
-   * @param sCharset
+   * @param aCharset
    *          The character set to be used. May not be <code>null</code>.
    * @param eCSSVersion
    *          The CSS version to use.
@@ -76,18 +77,18 @@ public final class CSSCompressor
    */
   @Nonnull
   public static String getCompressedCSS (@Nonnull final String sOriginalCSS,
-                                         @Nonnull final String sCharset,
+                                         @Nonnull final Charset aCharset,
                                          @Nonnull final ECSSVersion eCSSVersion)
   {
     if (sOriginalCSS == null)
       throw new NullPointerException ("originalCSS");
-    if (sCharset == null)
+    if (aCharset == null)
       throw new NullPointerException ("charset");
     if (eCSSVersion == null)
       throw new NullPointerException ("CSSversion");
 
-    final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new StringInputStreamProvider (sOriginalCSS, sCharset),
-                                                                sCharset,
+    final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new StringInputStreamProvider (sOriginalCSS, aCharset),
+                                                                aCharset,
                                                                 eCSSVersion);
     if (aCSS != null)
     {

@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.file.filter.FileFilterFileFromFilenameFilter;
 import com.phloc.commons.io.file.filter.FilenameFilterFactory;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
@@ -49,7 +50,8 @@ public final class FuncTestParserCSS21Iterate
       final InputStream aIS = new FileInputStream (aFile);
       try
       {
-        final ParserCSS21TokenManager aTokenHdl = new ParserCSS21TokenManager (new JavaCharStream (aIS));
+        final ParserCSS21TokenManager aTokenHdl = new ParserCSS21TokenManager (new JavaCharStream (aIS,
+                                                                                                   CCharset.CHARSET_UTF_8_OBJ));
         aTokenHdl.setDebugStream (System.out);
         final ParserCSS21 aParser = new ParserCSS21 (aTokenHdl);
         aParser.disable_tracing ();

@@ -22,6 +22,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+/**
+ * Test class for class {@link CCSSProperties}.
+ * 
+ * @author philip
+ */
 public final class CCSSPropertiesTest
 {
   @Test
@@ -42,7 +47,11 @@ public final class CCSSPropertiesTest
     assertTrue (CCSSProperties.COLOR.isValidValue (" #ffffff "));
     assertTrue (CCSSProperties.COLOR.isValidValue ("#fff"));
     assertTrue (CCSSProperties.COLOR.isValidValue (" #fff   "));
+    assertTrue (CCSSProperties.COLOR.isValidValue ("#fffe"));
+    assertTrue (CCSSProperties.COLOR.isValidValue (" #fffe   "));
     assertFalse (CCSSProperties.COLOR.isValidValue ("#fffffff"));
+    assertFalse (CCSSProperties.COLOR.isValidValue ("#aag"));
+    assertFalse (CCSSProperties.COLOR.isValidValue ("#ppp"));
     assertTrue (CCSSProperties.CLIP.isValidValue ("auto"));
     assertTrue (CCSSProperties.CLIP.isValidValue ("rect(5px,10in,33px,456em)"));
   }
