@@ -23,7 +23,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
@@ -66,10 +66,10 @@ public final class CSSSelector implements ICSSWriteable
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <ICSSSelectorMember> getAllMembers ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aMembers);
+    return ContainerHelper.newList (m_aMembers);
   }
 
   @Nonnull

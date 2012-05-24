@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
@@ -68,10 +68,10 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <CSSDeclaration> getAllDeclarations ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aDeclarations);
+    return ContainerHelper.newList (m_aDeclarations);
   }
 
   @Nonnull

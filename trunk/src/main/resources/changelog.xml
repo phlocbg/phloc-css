@@ -20,6 +20,21 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2012-05-24" category="tech" action="change">
+    <change>
+      <text locale="en">Using a custom CharStream to read CSS files, to ensure that the encoding is used correctly</text>
+    </change>
+  </entry>
+  <entry date="2012-05-24" category="tech" action="change">
+    <change>
+      <text locale="en">Changed some return types from returning unmodifiable objects to return copies instead</text>
+    </change>
+  </entry>
+  <entry date="2012-05-22" category="tech" action="update">
+    <change>
+      <text locale="en">Added support for explicitly reading and writing CSS with a special charset</text>
+    </change>
+  </entry>
   <release date="2012-04-23" version="2.6.5" />
   <entry date="2012-04-23" category="tech" action="update" incompatible="true">
     <change>

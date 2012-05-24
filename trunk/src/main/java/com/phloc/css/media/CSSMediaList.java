@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -82,10 +82,10 @@ public final class CSSMediaList implements Serializable
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public Set <ECSSMedium> getMedia ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aMedia);
+    return ContainerHelper.newSet (m_aMedia);
   }
 
   @Nonnull

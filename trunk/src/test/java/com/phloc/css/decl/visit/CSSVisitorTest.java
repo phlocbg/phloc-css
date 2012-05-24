@@ -72,7 +72,7 @@ public final class CSSVisitorTest
     {
       s_aLogger.info (aFile.getAbsolutePath ());
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
-                                                                  CCharset.CHARSET_ISO_8859_1,
+                                                                  CCharset.CHARSET_UTF_8_OBJ,
                                                                   ECSSVersion.CSS21);
       assertNotNull (aFile.getAbsolutePath (), aCSS);
       CSSVisitor.visitCSSUrl (aCSS, new SysOutVisitor ());

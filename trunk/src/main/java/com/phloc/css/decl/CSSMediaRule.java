@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
@@ -71,10 +71,10 @@ public final class CSSMediaRule implements ICSSTopLevelRule
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <String> getAllMedia ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aMedia);
+    return ContainerHelper.newList (m_aMedia);
   }
 
   public void addStyleRule (@Nonnull final CSSStyleRule aStyleRule)
@@ -100,10 +100,10 @@ public final class CSSMediaRule implements ICSSTopLevelRule
   }
 
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public List <CSSStyleRule> getAllStyleRules ()
   {
-    return ContainerHelper.makeUnmodifiable (m_aStyleRules);
+    return ContainerHelper.newList (m_aStyleRules);
   }
 
   @Nonnull

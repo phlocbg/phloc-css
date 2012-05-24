@@ -20,8 +20,6 @@ package com.phloc.css.parser;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.StringReader;
-
 import org.junit.Test;
 
 import com.phloc.css.ECSSVersion;
@@ -356,7 +354,7 @@ public final class ParserCSS30Test
   @Test
   public void test1 () throws ParseException
   {
-    final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (new JavaCharStream (new StringReader (CSS1)));
+    final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (new JavaCharStream (CSS1));
     aTokenHdl.setDebugStream (System.out);
     final ParserCSS30 aParser = new ParserCSS30 (aTokenHdl);
     aParser.disable_tracing ();
@@ -367,7 +365,7 @@ public final class ParserCSS30Test
   @Test
   public void test2 () throws ParseException
   {
-    final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (new JavaCharStream (new StringReader (CSS2)));
+    final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (new JavaCharStream (CSS2));
     aTokenHdl.setDebugStream (System.out);
     final ParserCSS30 aParser = new ParserCSS30 (aTokenHdl);
     aParser.disable_tracing ();

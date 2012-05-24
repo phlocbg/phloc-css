@@ -18,7 +18,7 @@
 package com.phloc.css.handler;
 
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,14 +27,13 @@ import javax.annotation.WillClose;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.streams.StreamUtils;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.system.SystemHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.parser.CSSNode;
+import com.phloc.css.parser.CharStream;
 import com.phloc.css.parser.JavaCharStream;
 import com.phloc.css.parser.ParseException;
 import com.phloc.css.parser.ParseUtils;
@@ -56,7 +55,7 @@ public final class CSSHandler
   {}
 
   @Nullable
-  private static CSSNode _readFromStream (@Nonnull final JavaCharStream aStream, @Nonnull final ECSSVersion eVersion)
+  private static CSSNode _readFromStream (@Nonnull final CharStream aStream, @Nonnull final ECSSVersion eVersion)
   {
     switch (eVersion)
     {
@@ -96,17 +95,17 @@ public final class CSSHandler
   @Deprecated
   public static boolean isValidCSS (@Nonnull final IInputStreamProvider aISP, @Nonnull final ECSSVersion eVersion)
   {
-    return isValidCSS (aISP, SystemHelper.getSystemCharsetName (), eVersion);
+    return isValidCSS (aISP, SystemHelper.getSystemCharset (), eVersion);
   }
 
   public static boolean isValidCSS (@Nonnull final IInputStreamProvider aISP,
-                                    @Nonnull @Nonempty final String sCharset,
+                                    @Nonnull final Charset aCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
     if (aISP == null)
       throw new NullPointerException ("inputStreamProvider");
-    if (StringHelper.hasNoText (sCharset))
-      throw new IllegalArgumentException ("charset");
+    if (aCharset == null)
+      throw new NullPointerException ("charset");
     if (eVersion == null)
       throw new NullPointerException ("version");
 
@@ -116,7 +115,7 @@ public final class CSSHandler
       s_aLogger.warn ("Failed to open CSS input stream " + aISP);
       return false;
     }
-    return isValidCSS (aIS, sCharset, eVersion);
+    return isValidCSS (aIS, aCharset, eVersion);
   }
 
   /**
@@ -135,7 +134,7 @@ public final class CSSHandler
   @Deprecated
   public static boolean isValidCSS (@Nonnull @WillClose final InputStream aIS, @Nonnull final ECSSVersion eVersion)
   {
-    return isValidCSS (aIS, SystemHelper.getSystemCharsetName (), eVersion);
+    return isValidCSS (aIS, SystemHelper.getSystemCharset (), eVersion);
   }
 
   /**
@@ -147,30 +146,26 @@ public final class CSSHandler
    * 
    * @param aIS
    *          The input stream to use. May not be <code>null</code>.
-   * @param sCharset
+   * @param aCharset
    *          The charset to be used. May not be <code>null</code>.
    * @param eVersion
    *          The CSS version to use. May not be <code>null</code>.
    * @return <code>true</code> if the CSS is valid according to the version
    */
   public static boolean isValidCSS (@Nonnull @WillClose final InputStream aIS,
-                                    @Nonnull @Nonempty final String sCharset,
+                                    @Nonnull final Charset aCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
     if (aIS == null)
       throw new NullPointerException ("inputStream");
-    if (StringHelper.hasNoText (sCharset))
-      throw new IllegalArgumentException ("charset");
+    if (aCharset == null)
+      throw new NullPointerException ("charset");
     if (eVersion == null)
       throw new NullPointerException ("version");
 
     try
     {
-      return _readFromStream (new JavaCharStream (aIS, sCharset), eVersion) != null;
-    }
-    catch (final UnsupportedEncodingException ex)
-    {
-      throw new IllegalArgumentException ("Illegal charset passed!", ex);
+      return _readFromStream (new JavaCharStream (aIS, aCharset), eVersion) != null;
     }
     finally
     {
@@ -198,7 +193,7 @@ public final class CSSHandler
   public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
                                                     @Nonnull final ECSSVersion eVersion)
   {
-    return readFromStream (aISP, SystemHelper.getSystemCharsetName (), eVersion);
+    return readFromStream (aISP, SystemHelper.getSystemCharset (), eVersion);
   }
 
   /**
@@ -211,7 +206,7 @@ public final class CSSHandler
    *          The input stream provider to use. Must be able to create new input
    *          streams on every invocation, in case an explicit charset node was
    *          found. May not be <code>null</code>.
-   * @param sCharset
+   * @param aCharset
    *          The charset to be used. May not be <code>null</code>.
    * @param eVersion
    *          The CSS version to use. May not be <code>null</code>.
@@ -220,13 +215,13 @@ public final class CSSHandler
    */
   @Nullable
   public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
-                                                    @Nonnull @Nonempty final String sCharset,
+                                                    @Nonnull final Charset aCharset,
                                                     @Nonnull final ECSSVersion eVersion)
   {
     if (aISP == null)
       throw new NullPointerException ("inputStreamProvider");
-    if (StringHelper.hasNoText (sCharset))
-      throw new IllegalArgumentException ("charset");
+    if (aCharset == null)
+      throw new NullPointerException ("charset");
     if (eVersion == null)
       throw new NullPointerException ("version");
 
@@ -235,11 +230,7 @@ public final class CSSHandler
     if (aIS != null)
       try
       {
-        aNode = _readFromStream (new JavaCharStream (aIS, sCharset), eVersion);
-      }
-      catch (final UnsupportedEncodingException ex)
-      {
-        throw new IllegalArgumentException ("Illegal charset passed!", ex);
+        aNode = _readFromStream (new JavaCharStream (aIS, aCharset), eVersion);
       }
       finally
       {
@@ -259,11 +250,6 @@ public final class CSSHandler
         {
           aIS = aISP.getInputStream ();
           aNode = _readFromStream (new JavaCharStream (aIS, sCSSCharset), eVersion);
-        }
-        catch (final UnsupportedEncodingException ex)
-        {
-          // Keep original node!
-          s_aLogger.error ("Failed to read CSS with charset '" + sCSSCharset + "'", ex);
         }
         finally
         {
