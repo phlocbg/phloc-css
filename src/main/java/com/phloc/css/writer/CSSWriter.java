@@ -104,9 +104,9 @@ public final class CSSWriter
    * @param aWriter
    *          The write to write the text to. May not be <code>null</code>. Is
    *          automatically closed after the writing!
-   * @param sCharset
-   *          The charset to use. This charset is explicitly written to the CSS
-   *          content. May be <code>null</code>.
+   * @param sCSSCharset
+   *          The charset that is explicitly written to the CSS content. Not the
+   *          encoding of the CSS file! May be <code>null</code>.
    * @throws IOException
    *           In case writing fails.
    * @throws IllegalStateException
@@ -115,7 +115,7 @@ public final class CSSWriter
    */
   public void writeCSS (@Nonnull final CascadingStyleSheet aCSS,
                         @Nonnull @WillClose final Writer aWriter,
-                        @Nullable final String sCharset) throws IOException
+                        @Nullable final String sCSSCharset) throws IOException
   {
     if (aCSS == null)
       throw new NullPointerException ("css");
@@ -134,9 +134,9 @@ public final class CSSWriter
       }
 
       // Charset?
-      if (sCharset != null)
+      if (sCSSCharset != null)
       {
-        aWriter.write ("@charset \"" + sCharset + "\"\n");
+        aWriter.write ("@charset \"" + sCSSCharset + "\"\n");
         if (!m_bOptimizedOutput)
           aWriter.write ('\n');
       }
@@ -181,17 +181,18 @@ public final class CSSWriter
    * 
    * @param aCSS
    *          The CSS object to be converted to text
-   * @param sCharset
-   *          The charset to be added to the CSS
+   * @param sCSSCharset
+   *          The charset to be added to the CSS - not the charset to encode the
+   *          CSS content itself! May be <code>null</code>.
    * @return The text representation of the CSS.
    * @throws IOException
    *           If writing fails. Should never happen!
    */
   @Nonnull
-  public String getCSSAsString (@Nonnull final CascadingStyleSheet aCSS, @Nullable final String sCharset) throws IOException
+  public String getCSSAsString (@Nonnull final CascadingStyleSheet aCSS, @Nullable final String sCSSCharset) throws IOException
   {
     final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
-    writeCSS (aCSS, aSW, sCharset);
+    writeCSS (aCSS, aSW, sCSSCharset);
     return aSW.toString ();
   }
 }
