@@ -534,7 +534,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _WEBKIT_WRITING_MODE ("-webkit-writing-mode");
 
   private final String m_sName;
-  private ECSSVersion m_eVersion;
+  private final ECSSVersion m_eVersion;
 
   private ECSSProperty (@Nonnull @Nonempty final String sName)
   {

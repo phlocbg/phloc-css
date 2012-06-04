@@ -36,8 +36,8 @@ public enum ECSSAttributeOperator implements ICSSVersionAware, ICSSWriteable
   ENDMATCH ("$=", ECSSVersion.CSS30),
   CONTAINSMATCH ("*=");
 
-  private String m_sText;
-  private ECSSVersion m_eVersion;
+  private final String m_sText;
+  private final ECSSVersion m_eVersion;
 
   private ECSSAttributeOperator (@Nonnull @Nonempty final String sText)
   {

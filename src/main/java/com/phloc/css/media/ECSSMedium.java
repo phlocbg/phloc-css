@@ -68,8 +68,8 @@ public enum ECSSMedium implements ICSSVersionAware
   /** for televisions */
   TV ("tv");
 
-  private String m_sAttrValue;
-  private ECSSVersion m_eVersion;
+  private final String m_sAttrValue;
+  private final ECSSVersion m_eVersion;
 
   private ECSSMedium (@Nonnull @Nonempty final String sAttrValue)
   {

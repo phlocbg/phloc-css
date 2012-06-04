@@ -55,8 +55,8 @@ public enum ECSSUnit implements ICSSVersionAware
   FREQ_HZ ("hz"),
   FREQ_KHZ ("khz");
 
-  private String m_sText;
-  private ECSSVersion m_eVersion;
+  private final String m_sText;
+  private final ECSSVersion m_eVersion;
 
   private ECSSUnit (@Nonnull @Nonempty final String sText)
   {

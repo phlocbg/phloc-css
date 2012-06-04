@@ -78,8 +78,9 @@ enum ECSSNodeType
   ERROR_SKIPTO (ParserCSS21TreeConstants.JJTERROR_SKIPTO, ParserCSS30TreeConstants.JJTERROR_SKIPTO);
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (ECSSNodeType.class);
-  private int m_nType21;
-  private int m_nType30;
+
+  private final int m_nType21;
+  private final int m_nType30;
 
   private ECSSNodeType (final int nType21, final int nType30)
   {
