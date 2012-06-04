@@ -35,7 +35,7 @@ public enum ECSSVersion implements IHasVersion
 
   public static final ECSSVersion LATEST = CSS30;
 
-  private Version m_aVersion;
+  private final Version m_aVersion;
 
   private ECSSVersion (@Nonnull final Version aVersion)
   {

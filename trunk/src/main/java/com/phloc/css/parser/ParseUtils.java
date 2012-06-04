@@ -57,7 +57,7 @@ public final class ParseUtils
 
   /**
    * Remove the leading "url(" and the trailing ")" from an URL CSS value. No
-   * check is performed for the existance of a leading "url("!
+   * check is performed for the existence of a leading "url("!
    * 
    * @param s
    *          The value to remove the string from.
@@ -72,19 +72,20 @@ public final class ParseUtils
   }
 
   // Find the longest matching number within the pattern
-  public static String splitNumber (final StringBuilder aPattern)
+  @Nonnull
+  public static String splitNumber (@Nonnull final StringBuilder aPattern)
   {
     final String sRegEx = "[0-9]+|[0-9]*.[0-9]+";
-    int j = 1;
-    while (RegExHelper.stringMatchesPattern (sRegEx, aPattern.substring (0, j)))
-      j++;
+    int nChars = 1;
+    while (RegExHelper.stringMatchesPattern (sRegEx, aPattern.substring (0, nChars)))
+      nChars++;
 
-    if (aPattern.charAt (j - 1) == '.')
+    if (aPattern.charAt (nChars - 1) == '.')
     {
-      j++;
-      while (RegExHelper.stringMatchesPattern (sRegEx, aPattern.substring (0, j)))
-        j++;
+      nChars++;
+      while (RegExHelper.stringMatchesPattern (sRegEx, aPattern.substring (0, nChars)))
+        nChars++;
     }
-    return aPattern.substring (0, j - 1);
+    return aPattern.substring (0, nChars - 1);
   }
 }

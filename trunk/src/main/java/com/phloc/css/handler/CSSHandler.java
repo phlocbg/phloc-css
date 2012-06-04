@@ -29,6 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.io.IInputStreamProvider;
+import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.io.streams.NonBlockingStringReader;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.system.SystemHelper;
 import com.phloc.css.ECSSVersion;
@@ -94,29 +96,29 @@ public final class CSSHandler
   }
 
   @Deprecated
-  public static boolean isValidCSS (@Nonnull final IInputStreamProvider aISP, @Nonnull final ECSSVersion eVersion)
+  public static boolean isValidCSS (@Nonnull final IReadableResource aRes, @Nonnull final ECSSVersion eVersion)
   {
-    return isValidCSS (aISP, SystemHelper.getSystemCharset (), eVersion);
+    return isValidCSS (aRes, SystemHelper.getSystemCharset (), eVersion);
   }
 
-  public static boolean isValidCSS (@Nonnull final IInputStreamProvider aISP,
+  public static boolean isValidCSS (@Nonnull final IReadableResource aRes,
                                     @Nonnull final Charset aCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
-    if (aISP == null)
-      throw new NullPointerException ("inputStreamProvider");
+    if (aRes == null)
+      throw new NullPointerException ("resources");
     if (aCharset == null)
       throw new NullPointerException ("charset");
     if (eVersion == null)
       throw new NullPointerException ("version");
 
-    final InputStream aIS = aISP.getInputStream ();
-    if (aIS == null)
+    final Reader aReader = aRes.getReader (aCharset);
+    if (aReader == null)
     {
-      s_aLogger.warn ("Failed to open CSS input stream " + aISP);
+      s_aLogger.warn ("Failed to open CSS reader " + aRes);
       return false;
     }
-    return isValidCSS (aIS, aCharset, eVersion);
+    return isValidCSS (aReader, eVersion);
   }
 
   /**
@@ -193,6 +195,27 @@ public final class CSSHandler
     {
       StreamUtils.close (aReader);
     }
+  }
+
+  /**
+   * Check if the passed String can be resembled to valid CSS content. This is
+   * accomplished by fully parsing the CSS file each time the method is called.
+   * This is similar to calling
+   * {@link #readFromStream(IInputStreamProvider, ECSSVersion)} and checking for
+   * a non-<code>null</code> result.
+   * 
+   * @param sCSS
+   *          The CSS version to use. May not be <code>null</code>.
+   * @param eVersion
+   *          The CSS version to use. May not be <code>null</code>.
+   * @return <code>true</code> if the CSS is valid according to the version
+   */
+  public static boolean isValidCSS (@Nonnull final String sCSS, @Nonnull final ECSSVersion eVersion)
+  {
+    if (sCSS == null)
+      throw new NullPointerException ("reader");
+
+    return isValidCSS (new NonBlockingStringReader (sCSS), eVersion);
   }
 
   /**

@@ -33,8 +33,8 @@ public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAwa
   TILDE ("~", ECSSVersion.CSS30),
   BLANK (" ");
 
-  private String m_sText;
-  private ECSSVersion m_eVersion;
+  private final String m_sText;
+  private final ECSSVersion m_eVersion;
 
   private ECSSSelectorCombinator (@Nonnull @Nonempty final String sText)
   {
