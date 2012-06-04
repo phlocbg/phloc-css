@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 import com.phloc.commons.io.streams.NonBlockingStringReader;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.string.StringHelper;
@@ -37,24 +40,40 @@ public final class JavaCharStream implements CharStream
   /** Position in buffer. */
   private int m_nBufpos = -1;
 
-  public JavaCharStream (final InputStream aIS, final String sCharset)
+  public JavaCharStream (@Nonnull final InputStream aIS, @Nonnull final String sCharset)
   {
     this (StreamUtils.createReader (aIS, sCharset), 1, 1, 4096);
   }
 
-  public JavaCharStream (final InputStream aIS, final Charset aCharset)
+  public JavaCharStream (@Nonnull final InputStream aIS, @Nonnull final Charset aCharset)
   {
     this (StreamUtils.createReader (aIS, aCharset), 1, 1, 4096);
   }
 
-  public JavaCharStream (final String sCSS)
+  public JavaCharStream (@Nonnull final String sCSS)
   {
     this (new NonBlockingStringReader (sCSS), 1, 1, 4096);
   }
 
-  /** Constructor. */
-  private JavaCharStream (final Reader aReader, final int nStartLine, final int nStartColumn, final int nBufferSize)
+  public JavaCharStream (@Nonnull final Reader aReader)
   {
+    this (aReader, 1, 1, 4096);
+  }
+
+  /** Constructor. */
+  private JavaCharStream (@Nonnull final Reader aReader,
+                          @Nonnegative final int nStartLine,
+                          @Nonnegative final int nStartColumn,
+                          @Nonnegative final int nBufferSize)
+  {
+    if (aReader == null)
+      throw new NullPointerException ("reader");
+    if (nStartLine < 0)
+      throw new IllegalArgumentException ("startLine to small: " + nStartLine);
+    if (nStartColumn < 0)
+      throw new IllegalArgumentException ("startColumn to small: " + nStartColumn);
+    if (nBufferSize < 0)
+      throw new IllegalArgumentException ("bufferSize to small: " + nBufferSize);
     m_aReader = aReader;
     m_nLine = nStartLine;
     m_nColumn = nStartColumn - 1;

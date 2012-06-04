@@ -18,6 +18,7 @@
 package com.phloc.css.handler;
 
 import java.io.InputStream;
+import java.io.Reader;
 import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
@@ -160,16 +161,37 @@ public final class CSSHandler
       throw new NullPointerException ("inputStream");
     if (aCharset == null)
       throw new NullPointerException ("charset");
+
+    return isValidCSS (StreamUtils.createReader (aIS, aCharset), eVersion);
+  }
+
+  /**
+   * Check if the passed input stream can be resembled to valid CSS content.
+   * This is accomplished by fully parsing the CSS file each time the method is
+   * called. This is similar to calling
+   * {@link #readFromStream(IInputStreamProvider, ECSSVersion)} and checking for
+   * a non-<code>null</code> result.
+   * 
+   * @param aReader
+   *          The reader to use. May not be <code>null</code>.
+   * @param eVersion
+   *          The CSS version to use. May not be <code>null</code>.
+   * @return <code>true</code> if the CSS is valid according to the version
+   */
+  public static boolean isValidCSS (@Nonnull @WillClose final Reader aReader, @Nonnull final ECSSVersion eVersion)
+  {
+    if (aReader == null)
+      throw new NullPointerException ("reader");
     if (eVersion == null)
       throw new NullPointerException ("version");
 
     try
     {
-      return _readFromStream (new JavaCharStream (aIS, aCharset), eVersion) != null;
+      return _readFromStream (new JavaCharStream (aReader), eVersion) != null;
     }
     finally
     {
-      StreamUtils.close (aIS);
+      StreamUtils.close (aReader);
     }
   }
 

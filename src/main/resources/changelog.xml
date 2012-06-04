@@ -20,6 +20,16 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2012-06-04" category="api" action="add">
+    <change>
+      <text locale="en">Added CSSHandler method accepting a Reader</text>
+    </change>
+  </entry>
+  <entry date="2012-06-04" category="api" action="add">
+    <change>
+      <text locale="en">Added JavaCharStream constructor</text>
+    </change>
+  </entry>
   <release date="2012-05-24" version="2.7.0" />
   <entry date="2012-05-24" category="tech" action="change">
     <change>
