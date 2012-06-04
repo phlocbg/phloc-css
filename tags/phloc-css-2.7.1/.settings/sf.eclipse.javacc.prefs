@@ -1,0 +1,11 @@
+#Wed Jul 22 20:35:14 CEST 2009
+CLEAR_CONSOLE=true
+JAVACC_OPTIONS=-LOOKAHEAD\=2 -IGNORE_CASE\=true -STATIC\=false -FORCE_LA_CHECK\=true -JDK_VERSION\=1.5 -OUTPUT_DIRECTORY\=D\:\\svn\\phloc-dev\\playground\\hsqldb\\src\\main\\java\\com\\phloc\\css\\parser
+JJDOC_OPTIONS=
+JJTREE_OPTIONS=-BUILD_NODE_FILES\=false -JDK_VERSION\=1.5 -NODE_CLASS\=com.phloc.css.parser.CSS21Node
+JJ_NATURE=true
+JTB_OPTIONS=
+RUNTIME_JAR=C\:\\Users\\philip\\.m2\\repository\\net\\java\\dev\\javacc\\javacc\\4.2\\javacc-4.2.jar
+SHOW_CONSOLE=true
+SUPPRESS_WARNINGS=true
+eclipse.preferences.version=1
