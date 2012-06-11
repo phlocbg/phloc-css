@@ -430,9 +430,9 @@ public final class CCSS
       throw new IllegalArgumentException ("Invalid blue: " + nBlue);
 
     return new StringBuilder (CHTMLColors.HEXVALUE_LENGTH).append (CHTMLColors.PREFIX_HEX)
-                                                          .append (StringHelper.hexStringLeadingZero (nRed, 2))
-                                                          .append (StringHelper.hexStringLeadingZero (nGreen, 2))
-                                                          .append (StringHelper.hexStringLeadingZero (nBlue, 2))
+                                                          .append (StringHelper.getHexStringLeadingZero (nRed, 2))
+                                                          .append (StringHelper.getHexStringLeadingZero (nGreen, 2))
+                                                          .append (StringHelper.getHexStringLeadingZero (nBlue, 2))
                                                           .toString ();
   }
 }
