@@ -43,40 +43,38 @@ import com.phloc.css.ICSSWriteable;
 public final class CSSImportRule implements ICSSWriteable
 {
   private String m_sLocation;
-  private final List <String> m_aMedia = new ArrayList <String> ();
+  private final List <CSSMediaQuery> m_aMediaQueries = new ArrayList <CSSMediaQuery> ();
 
   public CSSImportRule (@Nonnull @Nonempty final String sLocation)
   {
     setLocation (sLocation);
   }
 
-  public void addMedium (@Nonnull @Nonempty final String sMedium)
+  public void addMediaQuery (@Nonnull @Nonempty final CSSMediaQuery aMediaQuery)
   {
-    if (StringHelper.hasNoText (sMedium))
-      throw new IllegalArgumentException ("medium");
-    m_aMedia.add (sMedium);
+    m_aMediaQueries.add (aMediaQuery);
   }
 
   @Nonnull
-  public EChange removeMedium (@Nonnull final String sMedium)
+  public EChange removeMediaQuery (@Nonnull final CSSMediaQuery aMediaQuery)
   {
-    return EChange.valueOf (m_aMedia.remove (sMedium));
+    return EChange.valueOf (m_aMediaQueries.remove (aMediaQuery));
   }
 
   @Nonnull
-  public EChange removeMedium (@Nonnegative final int nMediumIndex)
+  public EChange removeMediaQuery (@Nonnegative final int nMediumIndex)
   {
-    if (nMediumIndex < 0 || nMediumIndex >= m_aMedia.size ())
+    if (nMediumIndex < 0 || nMediumIndex >= m_aMediaQueries.size ())
       return EChange.UNCHANGED;
-    m_aMedia.remove (nMediumIndex);
+    m_aMediaQueries.remove (nMediumIndex);
     return EChange.CHANGED;
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <String> getAllMedia ()
+  public List <CSSMediaQuery> getAllMediaQueries ()
   {
-    return ContainerHelper.newList (m_aMedia);
+    return ContainerHelper.newList (m_aMediaQueries);
   }
 
   @Nonnull
@@ -99,17 +97,17 @@ public final class CSSImportRule implements ICSSWriteable
   {
     final StringBuilder aSB = new StringBuilder ();
     aSB.append ("@import '").append (m_sLocation).append ('\'');
-    if (!m_aMedia.isEmpty ())
+    if (!m_aMediaQueries.isEmpty ())
     {
       aSB.append (' ');
       boolean bFirst = true;
-      for (final String sMedium : m_aMedia)
+      for (final CSSMediaQuery sMedium : m_aMediaQueries)
       {
         if (bFirst)
           bFirst = false;
         else
           aSB.append (bOptimizedOutput ? "," : ", ");
-        aSB.append (sMedium);
+        aSB.append (sMedium.getAsCSSString (eVersion, bOptimizedOutput));
       }
     }
     return aSB.append (";\n").toString ();
@@ -123,18 +121,20 @@ public final class CSSImportRule implements ICSSWriteable
     if (!(o instanceof CSSImportRule))
       return false;
     final CSSImportRule rhs = (CSSImportRule) o;
-    return m_sLocation.equals (rhs.m_sLocation) && m_aMedia.equals (rhs.m_aMedia);
+    return m_sLocation.equals (rhs.m_sLocation) && m_aMediaQueries.equals (rhs.m_aMediaQueries);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sLocation).append (m_aMedia).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sLocation).append (m_aMediaQueries).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("location", m_sLocation).append ("media", m_aMedia).toString ();
+    return new ToStringGenerator (this).append ("location", m_sLocation)
+                                       .append ("mediaQueries", m_aMediaQueries)
+                                       .toString ();
   }
 }

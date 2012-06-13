@@ -63,8 +63,7 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule
   {
     if (nDeclarationIndex < 0 || nDeclarationIndex >= m_aDeclarations.size ())
       return EChange.UNCHANGED;
-    m_aDeclarations.remove (nDeclarationIndex);
-    return EChange.CHANGED;
+    return EChange.valueOf (m_aDeclarations.remove (nDeclarationIndex) != null);
   }
 
   @Nonnull

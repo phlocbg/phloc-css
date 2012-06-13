@@ -78,6 +78,7 @@ public final class FuncTestCSSHandler
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
+      System.out.println (sKey);
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
                                                                   CCharset.CHARSET_UTF_8_OBJ,
                                                                   ECSSVersion.CSS30);
@@ -86,11 +87,12 @@ public final class FuncTestCSSHandler
       // Write optimized version and compare it
       String s = new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS);
       assertNotNull (sKey, s);
-      assertEquals (sKey,
-                    aCSS,
-                    CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8_OBJ),
-                                               CCharset.CHARSET_UTF_8_OBJ,
-                                               ECSSVersion.CSS30));
+      final CascadingStyleSheet aCSSReRead = CSSHandler.readFromStream (new StringInputStreamProvider (s,
+                                                                                                       CCharset.CHARSET_UTF_8_OBJ),
+                                                                        CCharset.CHARSET_UTF_8_OBJ,
+                                                                        ECSSVersion.CSS30);
+      assertNotNull ("Failed to parse:\n" + s, aCSSReRead);
+      assertEquals (sKey, aCSS, aCSSReRead);
 
       // Write non-optimized version and compare it
       s = new CSSWriter (ECSSVersion.CSS30, false).getCSSAsString (aCSS);

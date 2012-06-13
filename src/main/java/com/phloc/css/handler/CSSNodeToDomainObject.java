@@ -30,6 +30,8 @@ import com.phloc.css.decl.CSSExpressionMemberFunction;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSMediaExpression;
+import com.phloc.css.decl.CSSMediaQuery;
 import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSSelectorAttribute;
@@ -42,6 +44,7 @@ import com.phloc.css.decl.ECSSExpressionOperator;
 import com.phloc.css.decl.ECSSSelectorCombinator;
 import com.phloc.css.decl.ICSSExpressionMember;
 import com.phloc.css.decl.ICSSSelectorMember;
+import com.phloc.css.media.ECSSMedium;
 import com.phloc.css.parser.CSSNode;
 import com.phloc.css.parser.ParseUtils;
 
@@ -65,11 +68,11 @@ final class CSSNodeToDomainObject
   private void _expectNodeType (@Nonnull final CSSNode aNode, @Nonnull final ECSSNodeType eExpected)
   {
     if (!eExpected.isNode (aNode, m_eVersion))
-      throw new IllegalArgumentException ("Expected an " +
+      throw new IllegalArgumentException ("Expected a '" +
                                           eExpected.getNodeName (m_eVersion) +
-                                          " but received a " +
+                                          "' node but received a '" +
                                           ECSSNodeType.getNodeName (aNode, m_eVersion) +
-                                          ": " +
+                                          "' node: " +
                                           aNode);
   }
 
@@ -85,10 +88,13 @@ final class CSSNodeToDomainObject
     final CSSImportRule ret = new CSSImportRule (ParseUtils.extractStringValue (aNode.getText ()));
     if (nChildCount == 1)
     {
-      // We have a medium present!
+      // We have a media query present!
       final CSSNode aMediaListNode = aNode.jjtGetChild (0);
-      for (final CSSNode aMedium : aMediaListNode)
-        ret.addMedium (aMedium.getText ());
+      for (final CSSNode aMediaQueryNode : aMediaListNode)
+      {
+        final CSSMediaQuery aMediaQuery = _createMediaQuery (aMediaQueryNode);
+        ret.addMediaQuery (aMediaQuery);
+      }
     }
     else
       if (nChildCount > 0)
@@ -324,8 +330,11 @@ final class CSSNodeToDomainObject
     {
       if (ECSSNodeType.MEDIALIST.isNode (aChildNode, m_eVersion))
       {
-        for (final CSSNode aMedium : aChildNode)
-          ret.addMedium (aMedium.getText ());
+        for (final CSSNode aMediaListChildNode : aChildNode)
+        {
+          // TODO handle medium
+          ret.addMediaQuery (_createMediaQuery (aMediaListChildNode));
+        }
       }
       else
         if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
@@ -335,6 +344,64 @@ final class CSSNodeToDomainObject
             s_aLogger.warn ("Unsupported media-rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
+  }
+
+  @Nonnull
+  private CSSMediaQuery _createMediaQuery (@Nonnull final CSSNode aNode)
+  {
+    _expectNodeType (aNode, ECSSNodeType.MEDIAQUERY);
+    final CSSMediaQuery ret = new CSSMediaQuery ();
+    for (final CSSNode aChildNode : aNode)
+    {
+      if (ECSSNodeType.MEDIAMODIFIER.isNode (aChildNode, m_eVersion))
+      {
+        if (aChildNode.getText () != null && aChildNode.getText ().equalsIgnoreCase ("not"))
+          ret.setNot (true);
+        else
+          if (aChildNode.getText () != null && aChildNode.getText ().equalsIgnoreCase ("only"))
+            ret.setOnly (true);
+      }
+      else
+        if (ECSSNodeType.MEDIUM.isNode (aChildNode, m_eVersion))
+        {
+          final String sMedium = aChildNode.getText ();
+          if (ECSSMedium.getFromAttrOrNull (sMedium) == null)
+            s_aLogger.warn ("Media query uses unknown medium '" + sMedium + "'");
+          ret.setMedium (sMedium);
+        }
+        else
+          if (ECSSNodeType.MEDIAEXPR.isNode (aChildNode, m_eVersion))
+            ret.addMediaExpression (_createMediaExpr (aChildNode));
+          else
+            if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+              s_aLogger.warn ("Unsupported media query child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+    }
+    return ret;
+  }
+
+  @Nonnull
+  private CSSMediaExpression _createMediaExpr (@Nonnull final CSSNode aNode)
+  {
+    _expectNodeType (aNode, ECSSNodeType.MEDIAEXPR);
+    final int nChildCount = aNode.jjtGetNumChildren ();
+    if (nChildCount != 1 && nChildCount != 2)
+      throw new IllegalArgumentException ("Expected 1 or 2 children but got " + nChildCount + ": " + aNode);
+
+    final CSSNode aFeatureNode = aNode.jjtGetChild (0);
+    if (!ECSSNodeType.MEDIAFEATURE.isNode (aFeatureNode, m_eVersion))
+      throw new IllegalStateException ("Expected a media feature but got " +
+                                       ECSSNodeType.getNodeName (aFeatureNode, m_eVersion));
+    if (nChildCount == 1)
+    {
+      // Feature only
+      return new CSSMediaExpression (aFeatureNode.getText ());
+    }
+
+    // Feature + value
+    final CSSNode aValueNode = aNode.jjtGetChild (1);
+    if (!ECSSNodeType.TERM.isNode (aValueNode, m_eVersion))
+      throw new IllegalStateException ("Expected a term but got " + ECSSNodeType.getNodeName (aValueNode, m_eVersion));
+    return new CSSMediaExpression (aFeatureNode.getText (), aValueNode.getText ());
   }
 
   @Nonnull
