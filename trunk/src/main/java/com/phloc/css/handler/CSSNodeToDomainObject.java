@@ -45,6 +45,11 @@ import com.phloc.css.decl.ICSSSelectorMember;
 import com.phloc.css.parser.CSSNode;
 import com.phloc.css.parser.ParseUtils;
 
+/**
+ * This class converts the jjtree node to a domain object
+ * 
+ * @author philip
+ */
 final class CSSNodeToDomainObject
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSNodeToDomainObject.class);

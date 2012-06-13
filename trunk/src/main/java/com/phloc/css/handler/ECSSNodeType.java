@@ -93,7 +93,9 @@ enum ECSSNodeType
    * 
    * @param eVersion
    *          CSS version to use
-   * @return The internal node type for this node type
+   * @return The internal node type for this node type or
+   *         {@link CGlobal#ILLEGAL_UINT} if this node type is not supported by
+   *         the passed version
    */
   public int getNodeType (@Nonnull final ECSSVersion eVersion)
   {
@@ -137,7 +139,7 @@ enum ECSSNodeType
     return null;
   }
 
-  private static String _nodeString (@Nonnull final CSSNode aNode, @Nonnull final ECSSVersion eVersion)
+  private static String _getNodeString (@Nonnull final CSSNode aNode, @Nonnull final ECSSVersion eVersion)
   {
     final String s = getNodeName (aNode, eVersion);
     if (aNode.hasText ())
@@ -150,7 +152,7 @@ enum ECSSNodeType
                                       @Nonnull final StringBuilder aSB,
                                       @Nonnull final String sPrefix)
   {
-    aSB.append (sPrefix).append (_nodeString (aNode, eVersion)).append ('\n');
+    aSB.append (sPrefix).append (_getNodeString (aNode, eVersion)).append ('\n');
     for (final CSSNode aChildNode : aNode)
       _recursiveDump (aChildNode, eVersion, aSB, sPrefix + "  ");
   }
