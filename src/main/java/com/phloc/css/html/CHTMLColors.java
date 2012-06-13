@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.string.StringHelper;
+import com.phloc.css.CCSS;
 
 /**
  * Contains a list of predefined colour values in HTML.
@@ -30,8 +31,10 @@ import com.phloc.commons.string.StringHelper;
 @Immutable
 public final class CHTMLColors
 {
-  public static final int HEXVALUE_LENGTH = 7;
-  public static final char PREFIX_HEX = '#';
+  @Deprecated
+  public static final int HEXVALUE_LENGTH = CCSS.HEXVALUE_LENGTH;
+  @Deprecated
+  public static final char PREFIX_HEX = CCSS.PREFIX_HEX;
 
   // color constants
   public static final String ACTIVEBORDER = "ActiveBorder";

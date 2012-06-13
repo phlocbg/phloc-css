@@ -45,6 +45,7 @@ import com.phloc.css.decl.ECSSExpressionOperator;
 import com.phloc.css.decl.ECSSSelectorCombinator;
 import com.phloc.css.decl.ICSSExpressionMember;
 import com.phloc.css.decl.ICSSSelectorMember;
+import com.phloc.css.media.ECSSMediaExpressionFeature;
 import com.phloc.css.media.ECSSMedium;
 import com.phloc.css.parser.CSSNode;
 import com.phloc.css.parser.ParseUtils;
@@ -424,17 +425,21 @@ final class CSSNodeToDomainObject
     if (!ECSSNodeType.MEDIAFEATURE.isNode (aFeatureNode, m_eVersion))
       throw new IllegalStateException ("Expected a media feature but got " +
                                        ECSSNodeType.getNodeName (aFeatureNode, m_eVersion));
+    final String sFeature = aFeatureNode.getText ();
+    if (ECSSMediaExpressionFeature.getFromNameOrNull (sFeature) == null)
+      s_aLogger.warn ("Media expression uses unsupported feature '" + sFeature + "'");
+
     if (nChildCount == 1)
     {
       // Feature only
-      return new CSSMediaExpression (aFeatureNode.getText ());
+      return new CSSMediaExpression (sFeature);
     }
 
     // Feature + value
     final CSSNode aValueNode = aNode.jjtGetChild (1);
     if (!ECSSNodeType.TERM.isNode (aValueNode, m_eVersion))
       throw new IllegalStateException ("Expected a term but got " + ECSSNodeType.getNodeName (aValueNode, m_eVersion));
-    return new CSSMediaExpression (aFeatureNode.getText (), aValueNode.getText ());
+    return new CSSMediaExpression (sFeature, aValueNode.getText ());
   }
 
   @Nonnull
