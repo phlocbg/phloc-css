@@ -110,7 +110,7 @@ public final class CSSMediaQuery
         // after a medium declaration!
         // The trailing blank is required, because otherwise it is considered a
         // function!
-        aSB.append (" and (").append (aMediaExpression.getAsCSSString (eVersion, bOptimizedOutput)).append (')');
+        aSB.append (" and ").append (aMediaExpression.getAsCSSString (eVersion, bOptimizedOutput));
       }
     }
 
