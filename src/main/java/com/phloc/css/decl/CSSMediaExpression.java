@@ -8,12 +8,14 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSVersionHelper;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSVersionAware;
 
 /**
  * Represents a single media expression
  */
-public final class CSSMediaExpression
+public final class CSSMediaExpression implements ICSSVersionAware
 {
   private final String m_sFeature;
   private final String m_sValue;
@@ -45,10 +47,17 @@ public final class CSSMediaExpression
   @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
-    final StringBuilder aSB = new StringBuilder (m_sFeature);
+    CSSVersionHelper.checkVersionRequirements (eVersion, this);
+    final StringBuilder aSB = new StringBuilder ("(").append (m_sFeature);
     if (StringHelper.hasText (m_sValue))
       aSB.append (':').append (m_sValue);
-    return aSB.toString ();
+    return aSB.append (')').toString ();
+  }
+
+  @Nonnull
+  public ECSSVersion getMinimumCSSVersion ()
+  {
+    return ECSSVersion.CSS30;
   }
 
   @Override
