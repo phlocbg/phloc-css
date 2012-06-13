@@ -191,6 +191,8 @@ public final class CCSS
   public static final String PREFIX_URL = "url";
   public static final String PREFIX_URL_OPEN = PREFIX_URL + '(';
   public static final String PREFIX_RGB = "rgb";
+  public static final int HEXVALUE_LENGTH = 7;
+  public static final char PREFIX_HEX = '#';
 
   public static final String PX0 = px (0);
   public static final String PERC100 = perc (100);
@@ -256,7 +258,7 @@ public final class CCSS
   {
     final String sRealValue = StringHelper.trim (sValue);
     return StringHelper.hasText (sRealValue) &&
-           RegExHelper.stringMatchesPattern ("^" + CHTMLColors.PREFIX_HEX + "[0-9a-fA-F]{1,6}$", sRealValue);
+           RegExHelper.stringMatchesPattern ("^" + PREFIX_HEX + "[0-9a-fA-F]{1,6}$", sRealValue);
   }
 
   /**
@@ -430,10 +432,10 @@ public final class CCSS
     if (nBlue < 0 || nBlue > 255)
       throw new IllegalArgumentException ("Invalid blue: " + nBlue);
 
-    return new StringBuilder (CHTMLColors.HEXVALUE_LENGTH).append (CHTMLColors.PREFIX_HEX)
-                                                          .append (StringHelper.getHexStringLeadingZero (nRed, 2))
-                                                          .append (StringHelper.getHexStringLeadingZero (nGreen, 2))
-                                                          .append (StringHelper.getHexStringLeadingZero (nBlue, 2))
-                                                          .toString ();
+    return new StringBuilder (HEXVALUE_LENGTH).append (PREFIX_HEX)
+                                              .append (StringHelper.getHexStringLeadingZero (nRed, 2))
+                                              .append (StringHelper.getHexStringLeadingZero (nGreen, 2))
+                                              .append (StringHelper.getHexStringLeadingZero (nBlue, 2))
+                                              .toString ();
   }
 }

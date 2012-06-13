@@ -23,8 +23,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.css.CCSS;
 import com.phloc.css.ECSSUnit;
-import com.phloc.css.html.CHTMLColors;
 
 /**
  * This class is responsible for expression term optimization
@@ -55,14 +55,14 @@ public final class CSSExpressionTermOptimizer
         return "0";
 
     // Check for optimized color values
-    if (sValue.length () == CHTMLColors.HEXVALUE_LENGTH &&
-        sValue.charAt (0) == CHTMLColors.PREFIX_HEX &&
+    if (sValue.length () == CCSS.HEXVALUE_LENGTH &&
+        sValue.charAt (0) == CCSS.PREFIX_HEX &&
         sValue.charAt (1) == sValue.charAt (2) &&
         sValue.charAt (3) == sValue.charAt (4) &&
         sValue.charAt (5) == sValue.charAt (6))
     {
       // #112233 => #123
-      return Character.toString (CHTMLColors.PREFIX_HEX) + sValue.charAt (1) + sValue.charAt (3) + sValue.charAt (5);
+      return Character.toString (CCSS.PREFIX_HEX) + sValue.charAt (1) + sValue.charAt (3) + sValue.charAt (5);
     }
 
     return sValue;
