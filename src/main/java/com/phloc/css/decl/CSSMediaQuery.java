@@ -14,7 +14,6 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
-import com.phloc.css.media.ECSSMedium;
 
 /**
  * Represents a single media query
@@ -23,43 +22,52 @@ import com.phloc.css.media.ECSSMedium;
  */
 public final class CSSMediaQuery
 {
-  private boolean m_bNot = false;
-  private boolean m_bOnly = false;
-  private String m_sMedium = ECSSMedium.ALL.getAttrValue ();
+  public static enum EModifier
+  {
+    NONE (""),
+    NOT ("not "),
+    ONLY ("only ");
+
+    private final String m_sText;
+
+    private EModifier (@Nonnull final String sText)
+    {
+      m_sText = sText;
+    }
+
+    @Nonnull
+    public String getCSSText ()
+    {
+      return m_sText;
+    }
+  }
+
+  private final EModifier m_eModifier;
+  private final String m_sMedium;
   private final List <CSSMediaExpression> m_aMediaExpressions = new ArrayList <CSSMediaExpression> ();
 
-  public CSSMediaQuery ()
-  {}
+  public CSSMediaQuery (@Nonnull final EModifier eModifier, @Nullable final String sMedium)
+  {
+    if (eModifier == null)
+      throw new NullPointerException ("modifier");
+    m_eModifier = eModifier;
+    m_sMedium = sMedium;
+  }
 
   public boolean isNot ()
   {
-    return m_bNot;
-  }
-
-  public void setNot (final boolean bNot)
-  {
-    m_bNot = bNot;
+    return m_eModifier == EModifier.NOT;
   }
 
   public boolean isOnly ()
   {
-    return m_bOnly;
-  }
-
-  public void setOnly (final boolean bOnly)
-  {
-    m_bOnly = bOnly;
+    return m_eModifier == EModifier.ONLY;
   }
 
   @Nullable
   public String getMedium ()
   {
     return m_sMedium;
-  }
-
-  public void setMedium (@Nullable final String sMedium)
-  {
-    m_sMedium = sMedium;
   }
 
   @Nonnull
@@ -94,23 +102,32 @@ public final class CSSMediaQuery
   @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
-    final StringBuilder aSB = new StringBuilder ();
-    if (m_bOnly)
-      aSB.append ("only ");
-    else
-      if (m_bNot)
-        aSB.append ("not ");
+    final StringBuilder aSB = new StringBuilder (m_eModifier.getCSSText ());
 
-    aSB.append (m_sMedium);
+    boolean bIsFirstExpression = true;
+    if (m_sMedium != null)
+    {
+      // Medium is optional
+      aSB.append (m_sMedium);
+      bIsFirstExpression = false;
+    }
+
     if (!m_aMediaExpressions.isEmpty ())
     {
       for (final CSSMediaExpression aMediaExpression : m_aMediaExpressions)
       {
-        // The leading blank is required in case this is the first expression
-        // after a medium declaration!
-        // The trailing blank is required, because otherwise it is considered a
-        // function!
-        aSB.append (" and ").append (aMediaExpression.getAsCSSString (eVersion, bOptimizedOutput));
+        if (bIsFirstExpression)
+          bIsFirstExpression = false;
+        else
+        {
+          // The leading blank is required in case this is the first expression
+          // after a medium declaration ("projectorand" instead of
+          // "projector and")!
+          // The trailing blank is required, because otherwise it is considered
+          // a function ("and(")!
+          aSB.append (" and ");
+        }
+        aSB.append (aMediaExpression.getAsCSSString (eVersion, bOptimizedOutput));
       }
     }
 
@@ -128,8 +145,7 @@ public final class CSSMediaQuery
     if (!(o instanceof CSSMediaQuery))
       return false;
     final CSSMediaQuery rhs = (CSSMediaQuery) o;
-    return m_bNot == rhs.m_bNot &&
-           m_bOnly == rhs.m_bOnly &&
+    return m_eModifier.equals (rhs.m_eModifier) &&
            EqualsUtils.equals (m_sMedium, rhs.m_sMedium) &&
            m_aMediaExpressions.equals (rhs.m_aMediaExpressions);
   }
@@ -137,8 +153,7 @@ public final class CSSMediaQuery
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_bNot)
-                                       .append (m_bOnly)
+    return new HashCodeGenerator (this).append (m_eModifier)
                                        .append (m_sMedium)
                                        .append (m_aMediaExpressions)
                                        .getHashCode ();
@@ -147,8 +162,7 @@ public final class CSSMediaQuery
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("not", m_bNot)
-                                       .append ("only", m_bOnly)
+    return new ToStringGenerator (this).append ("modifier", m_eModifier)
                                        .append ("medium", m_sMedium)
                                        .append ("expressions", m_aMediaExpressions)
                                        .toString ();
