@@ -33,11 +33,14 @@ public final class CSSMediaExpression implements ICSSVersionAware
     m_sValue = sValue;
   }
 
+  @Nonnull
+  @Nonempty
   public String getFeature ()
   {
     return m_sFeature;
   }
 
+  @Nullable
   public String getValue ()
   {
     return m_sValue;

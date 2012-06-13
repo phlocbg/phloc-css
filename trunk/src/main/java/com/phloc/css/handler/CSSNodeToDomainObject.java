@@ -32,6 +32,7 @@ import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CSSMediaExpression;
 import com.phloc.css.decl.CSSMediaQuery;
+import com.phloc.css.decl.CSSMediaQuery.EModifier;
 import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSSelectorAttribute;
@@ -92,8 +93,7 @@ final class CSSNodeToDomainObject
       final CSSNode aMediaListNode = aNode.jjtGetChild (0);
       for (final CSSNode aMediaQueryNode : aMediaListNode)
       {
-        final CSSMediaQuery aMediaQuery = _createMediaQuery (aMediaQueryNode);
-        ret.addMediaQuery (aMediaQuery);
+        ret.addMediaQuery (_createMediaQuery (aMediaQueryNode));
       }
     }
     else
@@ -331,10 +331,7 @@ final class CSSNodeToDomainObject
       if (ECSSNodeType.MEDIALIST.isNode (aChildNode, m_eVersion))
       {
         for (final CSSNode aMediaListChildNode : aChildNode)
-        {
-          // TODO handle medium
           ret.addMediaQuery (_createMediaQuery (aMediaListChildNode));
-        }
       }
       else
         if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
@@ -349,32 +346,68 @@ final class CSSNodeToDomainObject
   @Nonnull
   private CSSMediaQuery _createMediaQuery (@Nonnull final CSSNode aNode)
   {
-    _expectNodeType (aNode, ECSSNodeType.MEDIAQUERY);
-    final CSSMediaQuery ret = new CSSMediaQuery ();
-    for (final CSSNode aChildNode : aNode)
+    if (ECSSNodeType.MEDIUM.isNode (aNode, m_eVersion))
     {
-      if (ECSSNodeType.MEDIAMODIFIER.isNode (aChildNode, m_eVersion))
+      // CSS 2.1 compatibility
+      final String sMedium = aNode.getText ();
+      if (ECSSMedium.getFromAttrOrNull (sMedium) == null)
+        s_aLogger.warn ("CSS 2.1 Media query uses unknown medium '" + sMedium + "'");
+      return new CSSMediaQuery (EModifier.NONE, sMedium);
+    }
+
+    // CSS 3.0 media query
+    _expectNodeType (aNode, ECSSNodeType.MEDIAQUERY);
+    final int nChildCount = aNode.jjtGetNumChildren ();
+
+    int nStartIndex = 0;
+    EModifier eModifier = EModifier.NONE;
+
+    // Check if a media modifier is present
+    if (nChildCount > 0)
+    {
+      final CSSNode aFirstChildNode = aNode.jjtGetChild (0);
+      if (ECSSNodeType.MEDIAMODIFIER.isNode (aFirstChildNode, m_eVersion))
       {
-        if (aChildNode.getText () != null && aChildNode.getText ().equalsIgnoreCase ("not"))
-          ret.setNot (true);
-        else
-          if (aChildNode.getText () != null && aChildNode.getText ().equalsIgnoreCase ("only"))
-            ret.setOnly (true);
-      }
-      else
-        if (ECSSNodeType.MEDIUM.isNode (aChildNode, m_eVersion))
+        final String sMediaModifier = aFirstChildNode.getText ();
+        // The "mediaModifier" token might be present, but without text!!!
+        if (sMediaModifier != null)
         {
-          final String sMedium = aChildNode.getText ();
-          if (ECSSMedium.getFromAttrOrNull (sMedium) == null)
-            s_aLogger.warn ("Media query uses unknown medium '" + sMedium + "'");
-          ret.setMedium (sMedium);
-        }
-        else
-          if (ECSSNodeType.MEDIAEXPR.isNode (aChildNode, m_eVersion))
-            ret.addMediaExpression (_createMediaExpr (aChildNode));
+          if ("not".equalsIgnoreCase (sMediaModifier))
+            eModifier = EModifier.NOT;
           else
-            if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
-              s_aLogger.warn ("Unsupported media query child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+            if ("only".equalsIgnoreCase (sMediaModifier))
+              eModifier = EModifier.ONLY;
+            else
+              s_aLogger.warn ("Unsupported media modifier '" + sMediaModifier + "' found!");
+        }
+        ++nStartIndex;
+      }
+    }
+
+    // Next check if a medium is present
+    String sMedium = null;
+    if (nChildCount > nStartIndex)
+    {
+      final CSSNode aNextChild = aNode.jjtGetChild (nStartIndex);
+      if (ECSSNodeType.MEDIUM.isNode (aNextChild, m_eVersion))
+      {
+        sMedium = aNextChild.getText ();
+        if (ECSSMedium.getFromAttrOrNull (sMedium) == null)
+          s_aLogger.warn ("Media query uses unknown medium '" + sMedium + "'");
+        ++nStartIndex;
+      }
+    }
+
+    final CSSMediaQuery ret = new CSSMediaQuery (eModifier, sMedium);
+
+    for (int i = nStartIndex; i < nChildCount; ++i)
+    {
+      final CSSNode aChildNode = aNode.jjtGetChild (i);
+      if (ECSSNodeType.MEDIAEXPR.isNode (aChildNode, m_eVersion))
+        ret.addMediaExpression (_createMediaExpr (aChildNode));
+      else
+        if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+          s_aLogger.warn ("Unsupported media query child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
   }
