@@ -72,6 +72,10 @@ enum ECSSNodeType
   // media stuff
   MEDIALIST (ParserCSS21TreeConstants.JJTMEDIALIST, ParserCSS30TreeConstants.JJTMEDIALIST),
   MEDIUM (ParserCSS21TreeConstants.JJTMEDIUM, ParserCSS30TreeConstants.JJTMEDIUM),
+  MEDIAQUERY (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTMEDIAQUERY),
+  MEDIAMODIFIER (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTMEDIAMODIFIER),
+  MEDIAEXPR (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTMEDIAEXPR),
+  MEDIAFEATURE (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTMEDIAFEATURE),
   // page stuff
   PSEUDOPAGE (ParserCSS21TreeConstants.JJTPSEUDOPAGE, ParserCSS30TreeConstants.JJTPSEUDOPAGE),
   // rest
@@ -121,7 +125,9 @@ enum ECSSNodeType
     switch (eVersion)
     {
       case CSS21:
-        return ParserCSS21TreeConstants.jjtNodeName[m_nType21];
+        // Special handling in case a CSS 3.0 node is requested, and this node
+        // type is not supported in CSS 2.1
+        return m_nType21 == CGlobal.ILLEGAL_UINT ? name () : ParserCSS21TreeConstants.jjtNodeName[m_nType21];
       case CSS30:
         return ParserCSS30TreeConstants.jjtNodeName[m_nType30];
       default:

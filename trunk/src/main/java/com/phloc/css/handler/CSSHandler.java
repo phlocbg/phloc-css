@@ -332,7 +332,13 @@ public final class CSSHandler
       }
     }
 
-    return aNode == null ? null : readFromNode (eVersion, aNode);
+    if (aNode == null)
+    {
+      // Failed to interprete content as CSS
+      return null;
+    }
+
+    return readFromNode (eVersion, aNode);
   }
 
   /**

@@ -76,6 +76,7 @@ TOKEN :
 {
   < PLUS: "+" >
 | < MINUS: "-" >
+| < LROUND: "(" >
 | < RROUND: ")" > : DEFAULT
 }
 
@@ -118,6 +119,9 @@ TOKEN :
 
 // before ident!
 | < INHERIT: "inherit" >
+| < MQ_AND: "and" >
+| < MQ_NOT: "not" >
+| < MQ_ONLY: "only" >
 
 // ident        -?{nmstart}{nmchar}*
 // Note: "*" hack for IE <= 6
@@ -325,10 +329,10 @@ void mediaRule() : {}
 
 void mediaList() : {}
 {
-  medium()
+  mediaQuery()
   ( <COMMA>
     ( <S> )*
-    medium()
+    mediaQuery()
   )*
 }
 
@@ -343,12 +347,59 @@ void mediaRuleList() #void : {}
   )+
 }
 
+void mediaQuery() : {}
+{
+  ( mediaModifier()
+    medium()
+    ( <MQ_AND>
+      ( <S> )*
+      mediaExpr()
+    )*
+  | mediaExpr()
+    ( <MQ_AND>
+      ( <S> )*
+      mediaExpr()
+    )*
+  )  
+}
+
+void mediaModifier() :
+{ Token t; }
+{
+  ( t = <MQ_ONLY> { jjtThis.setText (t.image); } 
+  | t = <MQ_NOT>  { jjtThis.setText (t.image); } 
+  )?
+  ( <S> )*
+}
+
 //
 // medium
 //   : IDENT S*
 //   ;
 //
 void medium() #Medium :
+{ Token t; }
+{
+  t = <IDENT>
+  ( <S> )*
+  { jjtThis.setText (t.image); }
+}
+
+void mediaExpr() : {}
+{
+  <LROUND>
+  ( <S> )*
+  mediaFeature()
+  (
+    <COLON>
+    ( <S> )*
+    term()
+  )?
+  <RROUND>
+  ( <S> )*
+}
+
+void mediaFeature() #MediaFeature :
 { Token t; }
 {
   t = <IDENT>
