@@ -25,6 +25,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.css.html.CHTMLColors;
 
 /**
  * Contains CSS style constants and utility stuff. Only constants that are part
