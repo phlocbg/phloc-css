@@ -28,6 +28,7 @@ import javax.annotation.WillClose;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.streams.NonBlockingStringReader;
@@ -239,6 +240,34 @@ public final class CSSHandler
                                                     @Nonnull final ECSSVersion eVersion)
   {
     return readFromStream (aISP, SystemHelper.getSystemCharset (), eVersion);
+  }
+
+  /**
+   * Read the CSS from the passed {@link IInputStreamProvider}. If the CSS
+   * contains an explicit charset, the whole CSS is parsed again, with the
+   * charset found inside the file, so the passed {@link IInputStreamProvider}
+   * must be able to create a new input stream on second invocation!
+   * 
+   * @param aISP
+   *          The input stream provider to use. Must be able to create new input
+   *          streams on every invocation, in case an explicit charset node was
+   *          found. May not be <code>null</code>.
+   * @param sCharset
+   *          The charset name to be used. May not be <code>null</code>.
+   * @param eVersion
+   *          The CSS version to use. May not be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
+  @Nullable
+  public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
+                                                    @Nonnull final String sCharset,
+                                                    @Nonnull final ECSSVersion eVersion)
+  {
+    final Charset aCharset = CharsetManager.getCharsetFromName (sCharset);
+    if (aCharset == null)
+      throw new IllegalArgumentException ("Failed to resolve charset '" + sCharset + "'");
+    return readFromStream (aISP, aCharset, eVersion);
   }
 
   /**

@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -45,11 +46,12 @@ public class CSSNode implements Node, Iterable <CSSNode>
   public void jjtClose ()
   {}
 
-  public void jjtSetParent (final Node aNode)
+  public void jjtSetParent (@Nullable final Node aNode)
   {
     m_aParent = (CSSNode) aNode;
   }
 
+  @Nullable
   public Node jjtGetParent ()
   {
     return m_aParent;
@@ -84,17 +86,18 @@ public class CSSNode implements Node, Iterable <CSSNode>
     return m_aChildren == null ? 0 : m_aChildren.length;
   }
 
-  public void setValue (final Object aValue)
+  public void setValue (@Nullable final Object aValue)
   {
     m_aValue = aValue;
   }
 
+  @Nullable
   public Object getValue ()
   {
     return m_aValue;
   }
 
-  public void setText (final String sText)
+  public void setText (@Nullable final String sText)
   {
     m_sText = sText;
   }
@@ -107,6 +110,7 @@ public class CSSNode implements Node, Iterable <CSSNode>
       m_sText += sText;
   }
 
+  @Nullable
   public String getText ()
   {
     return m_sText;
