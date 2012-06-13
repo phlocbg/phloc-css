@@ -23,8 +23,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.css.CHTMLColors;
 import com.phloc.css.ECSSUnit;
+import com.phloc.css.html.CHTMLColors;
 
 /**
  * This class is responsible for expression term optimization

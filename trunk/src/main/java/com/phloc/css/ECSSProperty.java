@@ -595,7 +595,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   {
     if (StringHelper.hasText (sName))
       for (final ECSSProperty eProperty : values ())
-        if (eProperty.getName ().equals (sName))
+        if (eProperty.m_sName.equals (sName))
           return eProperty;
     return null;
   }
