@@ -31,7 +31,7 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.ECSSVersion;
+import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ICSSWriteable;
 
 /**
@@ -96,8 +96,10 @@ public final class CSSImportRule implements ICSSWriteable
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
+    final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
+
     final StringBuilder aSB = new StringBuilder ();
     aSB.append ("@import '").append (m_sLocation).append ('\'');
     if (!m_aMediaQueries.isEmpty ())
@@ -110,7 +112,7 @@ public final class CSSImportRule implements ICSSWriteable
           bFirst = false;
         else
           aSB.append (bOptimizedOutput ? "," : ", ");
-        aSB.append (aMediaQuery.getAsCSSString (eVersion, bOptimizedOutput));
+        aSB.append (aMediaQuery.getAsCSSString (aSettings));
       }
     }
     return aSB.append (";\n").toString ();

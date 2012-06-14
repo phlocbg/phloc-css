@@ -30,7 +30,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CSSVersionHelper;
+import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 
@@ -83,9 +83,11 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
-    CSSVersionHelper.checkVersionRequirements (eVersion, this);
+    aSettings.checkVersionRequirements (this);
+    final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
+
     final int nDeclCount = m_aDeclarations.size ();
 
     final StringBuilder aSB = new StringBuilder ("@font-face");
@@ -103,7 +105,7 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
       {
         // A single declaration
         aSB.append (bOptimizedOutput ? "{" : " { ");
-        aSB.append (ContainerHelper.getFirstElement (m_aDeclarations).getAsCSSString (eVersion, bOptimizedOutput));
+        aSB.append (ContainerHelper.getFirstElement (m_aDeclarations).getAsCSSString (aSettings));
         aSB.append (bOptimizedOutput ? "}" : " }\n");
       }
       else
@@ -116,7 +118,7 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
           if (!bOptimizedOutput)
             aSB.append ("  ");
           // Emit the main declaration
-          aSB.append (aDeclaration.getAsCSSString (eVersion, bOptimizedOutput));
+          aSB.append (aDeclaration.getAsCSSString (aSettings));
           if (!bOptimizedOutput)
             aSB.append ('\n');
         }

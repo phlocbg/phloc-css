@@ -29,6 +29,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.vendor.VendorInfo;
+import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
@@ -44,8 +45,7 @@ public final class CSSWriter
 {
   public static final boolean DEFAULT_OPTIMIZED_OUTPUT = false;
 
-  private final ECSSVersion m_eVersion;
-  private final boolean m_bOptimizedOutput;
+  private final CSSWriterSettings m_aSettings;
 
   /**
    * Constructor for creating non-optimized output.
@@ -71,10 +71,14 @@ public final class CSSWriter
    */
   public CSSWriter (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
-    if (eVersion == null)
-      throw new NullPointerException ("version");
-    m_eVersion = eVersion;
-    m_bOptimizedOutput = bOptimizedOutput;
+    this (new CSSWriterSettings (eVersion, bOptimizedOutput));
+  }
+
+  public CSSWriter (@Nonnull final CSSWriterSettings aSettings)
+  {
+    if (aSettings == null)
+      throw new NullPointerException ("settings");
+    m_aSettings = aSettings;
   }
 
   /**
@@ -125,7 +129,7 @@ public final class CSSWriter
     try
     {
       // Write file header
-      if (!m_bOptimizedOutput)
+      if (!m_aSettings.isOptimizedOutput ())
       {
         aWriter.write ("/*\n");
         for (final String sLine : VendorInfo.FILE_HEADER_LINES)
@@ -137,7 +141,7 @@ public final class CSSWriter
       if (sCSSCharset != null)
       {
         aWriter.write ("@charset \"" + sCSSCharset + "\"\n");
-        if (!m_bOptimizedOutput)
+        if (!m_aSettings.isOptimizedOutput ())
           aWriter.write ('\n');
       }
 
@@ -148,7 +152,7 @@ public final class CSSWriter
       {
         for (final CSSImportRule aImportRule : aImportRules)
         {
-          aWriter.write (aImportRule.getAsCSSString (m_eVersion, m_bOptimizedOutput));
+          aWriter.write (aImportRule.getAsCSSString (m_aSettings));
           ++nRulesEmitted;
         }
       }
@@ -156,9 +160,9 @@ public final class CSSWriter
       // Main CSS rules
       for (final ICSSTopLevelRule aRule : aCSS.getAllRules ())
       {
-        if (!m_bOptimizedOutput && nRulesEmitted > 0)
+        if (!m_aSettings.isOptimizedOutput () && nRulesEmitted > 0)
           aWriter.write ('\n');
-        aWriter.write (aRule.getAsCSSString (m_eVersion, m_bOptimizedOutput));
+        aWriter.write (aRule.getAsCSSString (m_aSettings));
         ++nRulesEmitted;
       }
     }

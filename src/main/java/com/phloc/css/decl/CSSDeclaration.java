@@ -25,7 +25,7 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
-import com.phloc.css.ECSSVersion;
+import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ICSSWriteable;
 
 /**
@@ -73,11 +73,11 @@ public final class CSSDeclaration implements ICSSWriteable
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
     return m_sProperty +
            ':' +
-           m_aExpression.getAsCSSString (eVersion, bOptimizedOutput) +
+           m_aExpression.getAsCSSString (aSettings) +
            (m_bImportant ? CCSS.IMPORTANT_SUFFIX : "") +
            ';';
   }

@@ -19,7 +19,6 @@ package com.phloc.css;
 
 import javax.annotation.Nonnull;
 
-
 /**
  * Interface for objects that can be written to CSS.
  * 
@@ -28,14 +27,11 @@ import javax.annotation.Nonnull;
 public interface ICSSWriteable
 {
   /**
-   * @param eVersion
-   *          The version for which the output is indented. May not be
+   * @param aSettings
+   *          The settings to be used to format the output. May not be
    *          <code>null</code>.
-   * @param bOptimizedOutput
-   *          if <code>true</code> the minimum number of bytes should be
-   *          written.
    * @return The content of this object as CSS string.
    */
   @Nonnull
-  String getAsCSSString (@Nonnull ECSSVersion eVersion, boolean bOptimizedOutput);
+  String getAsCSSString (@Nonnull CSSWriterSettings aSettings);
 }

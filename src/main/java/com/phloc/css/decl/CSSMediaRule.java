@@ -30,7 +30,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.ECSSVersion;
+import com.phloc.css.CSSWriterSettings;
 
 /**
  * Represents a single <code>@media</code> rule: a list of style rules only
@@ -107,8 +107,10 @@ public final class CSSMediaRule implements ICSSTopLevelRule
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
+    final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
+
     if (bOptimizedOutput && m_aMediaQueries.isEmpty ())
       return "";
 
@@ -120,7 +122,7 @@ public final class CSSMediaRule implements ICSSTopLevelRule
         bFirst = false;
       else
         aSB.append (bOptimizedOutput ? "," : ", ");
-      aSB.append (sMedium.getAsCSSString (eVersion, bOptimizedOutput));
+      aSB.append (sMedium.getAsCSSString (aSettings));
     }
     aSB.append (bOptimizedOutput ? "{" : " {");
     if (!m_aStyleRules.isEmpty ())
@@ -132,7 +134,7 @@ public final class CSSMediaRule implements ICSSTopLevelRule
       {
         if (!bOptimizedOutput)
           aSB.append ("  ");
-        aSB.append (aStyleRule.getAsCSSString (eVersion, bOptimizedOutput));
+        aSB.append (aStyleRule.getAsCSSString (aSettings));
         if (!bOptimizedOutput)
           aSB.append ('\n');
       }

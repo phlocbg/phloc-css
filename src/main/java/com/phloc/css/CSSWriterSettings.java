@@ -54,4 +54,9 @@ public final class CSSWriterSettings
   {
     return m_bOptimizedOutput;
   }
+
+  public void checkVersionRequirements (@Nonnull final ICSSVersionAware aCSSObject)
+  {
+    CSSVersionHelper.checkVersionRequirements (m_eVersion, aCSSObject);
+  }
 }

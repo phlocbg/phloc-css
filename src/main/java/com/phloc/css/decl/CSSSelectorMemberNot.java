@@ -23,7 +23,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CSSVersionHelper;
+import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 
@@ -52,10 +52,10 @@ public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersi
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
-    CSSVersionHelper.checkVersionRequirements (eVersion, this);
-    return ":not(" + m_aNestedSelectorMember.getAsCSSString (eVersion, bOptimizedOutput) + ")";
+    aSettings.checkVersionRequirements (this);
+    return ":not(" + m_aNestedSelectorMember.getAsCSSString (aSettings) + ")";
   }
 
   @Nonnull

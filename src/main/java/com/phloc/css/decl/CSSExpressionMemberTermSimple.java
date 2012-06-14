@@ -24,7 +24,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.ECSSVersion;
+import com.phloc.css.CSSWriterSettings;
 
 /**
  * Represents a simple expression member
@@ -66,9 +66,9 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
-    return bOptimizedOutput ? m_sOptimizedValue : m_sValue;
+    return aSettings.isOptimizedOutput () ? m_sOptimizedValue : m_sValue;
   }
 
   @Override

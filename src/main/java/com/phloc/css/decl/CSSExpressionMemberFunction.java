@@ -26,7 +26,7 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.ECSSVersion;
+import com.phloc.css.CSSWriterSettings;
 
 /**
  * Represents a CSS function element
@@ -92,11 +92,11 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
     if (m_aExpression == null)
       return m_sFunctionName + "()";
-    return m_sFunctionName + "(" + m_aExpression.getAsCSSString (eVersion, bOptimizedOutput) + ")";
+    return m_sFunctionName + "(" + m_aExpression.getAsCSSString (aSettings) + ")";
   }
 
   @Override

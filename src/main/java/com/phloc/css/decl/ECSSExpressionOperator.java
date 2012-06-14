@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.ECSSVersion;
+import com.phloc.css.CSSWriterSettings;
 
 public enum ECSSExpressionOperator implements ICSSExpressionMember
 {
@@ -39,13 +39,13 @@ public enum ECSSExpressionOperator implements ICSSExpressionMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
     return m_sText;
   }
 
   @Nullable
-  public static ECSSExpressionOperator fromTextOrNull (@Nullable final String sText)
+  public static ECSSExpressionOperator getFromTextOrNull (@Nullable final String sText)
   {
     if (StringHelper.hasText (sText))
       for (final ECSSExpressionOperator eOperator : values ())
