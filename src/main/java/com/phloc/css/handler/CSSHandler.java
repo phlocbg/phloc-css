@@ -17,6 +17,7 @@
  */
 package com.phloc.css.handler;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.io.streams.NonBlockingStringReader;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.system.SystemHelper;
@@ -96,6 +98,30 @@ public final class CSSHandler
     }
   }
 
+  public static boolean isValidCSS (@Nonnull final File aFile,
+                                    @Nonnull final Charset aCharset,
+                                    @Nonnull final ECSSVersion eVersion)
+  {
+    return isValidCSS (new FileSystemResource (aFile), aCharset, eVersion);
+  }
+
+  public static boolean isValidCSS (@Nonnull final File aFile,
+                                    @Nonnull final String sCharset,
+                                    @Nonnull final ECSSVersion eVersion)
+  {
+    return isValidCSS (new FileSystemResource (aFile), sCharset, eVersion);
+  }
+
+  public static boolean isValidCSS (@Nonnull final IReadableResource aRes,
+                                    @Nonnull final String sCharset,
+                                    @Nonnull final ECSSVersion eVersion)
+  {
+    final Charset aCharset = CharsetManager.getCharsetFromName (sCharset);
+    if (aCharset == null)
+      throw new IllegalArgumentException ("Illegal charset '" + sCharset + "'");
+    return isValidCSS (aRes, aCharset, eVersion);
+  }
+
   @Deprecated
   public static boolean isValidCSS (@Nonnull final IReadableResource aRes, @Nonnull final ECSSVersion eVersion)
   {
@@ -145,8 +171,35 @@ public final class CSSHandler
    * Check if the passed input stream can be resembled to valid CSS content.
    * This is accomplished by fully parsing the CSS file each time the method is
    * called. This is similar to calling
-   * {@link #readFromStream(IInputStreamProvider, ECSSVersion)} and checking for
-   * a non-<code>null</code> result.
+   * {@link #readFromStream(IInputStreamProvider, String, ECSSVersion)} and
+   * checking for a non-<code>null</code> result.
+   * 
+   * @param aIS
+   *          The input stream to use. May not be <code>null</code>.
+   * @param sCharset
+   *          The charset to be used. May not be <code>null</code>.
+   * @param eVersion
+   *          The CSS version to use. May not be <code>null</code>.
+   * @return <code>true</code> if the CSS is valid according to the version
+   */
+  public static boolean isValidCSS (@Nonnull @WillClose final InputStream aIS,
+                                    @Nonnull final String sCharset,
+                                    @Nonnull final ECSSVersion eVersion)
+  {
+    if (aIS == null)
+      throw new NullPointerException ("inputStream");
+    if (sCharset == null)
+      throw new NullPointerException ("charset");
+
+    return isValidCSS (StreamUtils.createReader (aIS, sCharset), eVersion);
+  }
+
+  /**
+   * Check if the passed input stream can be resembled to valid CSS content.
+   * This is accomplished by fully parsing the CSS file each time the method is
+   * called. This is similar to calling
+   * {@link #readFromStream(IInputStreamProvider,Charset, ECSSVersion)} and
+   * checking for a non-<code>null</code> result.
    * 
    * @param aIS
    *          The input stream to use. May not be <code>null</code>.
