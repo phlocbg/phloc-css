@@ -122,6 +122,8 @@ TOKEN :
 | < MQ_AND: "and" >
 | < MQ_NOT: "not" >
 | < MQ_ONLY: "only" >
+| < FROM_SYM: "from" >
+| < TO_SYM: "to" >
 
 // ident        -?{nmstart}{nmchar}*
 // Note: "*" hack for IE <= 6
@@ -152,6 +154,8 @@ TOKEN :
 | < MEDIA_SYM: "@media" >
 | < CHARSET_SYM: "@charset" >
 | < FONTFACE_SYM: "@font-face" >
+| < KEYFRAMES_SYM: "@keyframes" 
+                 | "@-" <IDENT> "-keyframes" >
 | < IMPORTANT_SYM: "!" ( <W> | <COMMENT> )* "important" >
 
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image); }
@@ -254,6 +258,7 @@ CSSNode styleSheet() #Root : {}
     | mediaRule()
     | pageRule()
     | fontfaceRule()
+    | keyframesRule()
     | unknownRule()
     )
     ( <S>
@@ -342,6 +347,7 @@ void mediaRuleList() #void : {}
   ( ( styleRule()
     | pageRule()
     | fontfaceRule()
+    | keyframesRule()
     | unknownRule()
     )
     ( <S> )*
@@ -458,6 +464,65 @@ void fontfaceRule() : {}
     ( declaration() )?
   )*
   <RBRACE>
+}
+
+// 
+// @keyframes ...
+// http://dev.w3.org/csswg/css3-animations/#keyframes
+//
+void keyframesRule() : 
+{ Token t; }
+{
+  t = <KEYFRAMES_SYM>
+  { jjtThis.setText (t.image); }    
+  <S>
+  keyframesIdentifier()
+  <LBRACE>
+  ( <S> )*
+  keyframesBlocks()
+  <RBRACE>
+}
+
+void keyframesIdentifier() : 
+{ Token t; }
+{
+  t = <IDENT>
+  { jjtThis.setText (t.image); }    
+}
+
+// #void : do not generate a tree node for this 
+void keyframesBlocks() #void : {}
+{
+  ( keyframesSelector()
+    <LBRACE>
+    ( <S> )*
+    ( declaration() )?
+    ( <SEMICOLON>
+      ( <S> )*
+      ( declaration() )?
+    )*    
+    <RBRACE>
+    ( <S> )* 
+  )*
+}
+
+void keyframesSelector() : {}
+{
+  singleKeyframeSelector()
+  ( <COMMA>
+    ( <S> )*
+    singleKeyframeSelector()
+  )*  
+}
+
+void singleKeyframeSelector() :
+{ Token t = null; }
+{
+  ( t = <FROM_SYM>   { jjtThis.setText (t.image); }
+  | t = <TO_SYM>     { jjtThis.setText (t.image); }
+  | t = <PERCENTAGE> { jjtThis.setText (t.image + "%"); }  
+  )
+  ( <S> )*
 }
 
 // ------------ SELECTORS ------------

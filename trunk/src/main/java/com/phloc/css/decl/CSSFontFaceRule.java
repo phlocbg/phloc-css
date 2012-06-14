@@ -31,6 +31,7 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSVersionAware;
 
 /**
  * Represents a single @font-face rule.
@@ -38,7 +39,7 @@ import com.phloc.css.ECSSVersion;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSFontFaceRule implements ICSSTopLevelRule
+public final class CSSFontFaceRule implements ICSSTopLevelRule, ICSSVersionAware
 {
   private final List <CSSDeclaration> m_aDeclarations = new ArrayList <CSSDeclaration> ();
 
@@ -108,6 +109,12 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule
       }
     aSB.append (bOptimizedOutput ? "}" : "}\n");
     return aSB.toString ();
+  }
+
+  @Nonnull
+  public ECSSVersion getMinimumCSSVersion ()
+  {
+    return ECSSVersion.CSS30;
   }
 
   @Override

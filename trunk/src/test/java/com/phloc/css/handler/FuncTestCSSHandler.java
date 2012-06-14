@@ -169,9 +169,13 @@ public final class FuncTestCSSHandler
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("/"),
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
-      if (false)
+      if (true)
         s_aLogger.info (aFile.getAbsolutePath ());
-      CSSHandler.readFromStream (new FileSystemResource (aFile), CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21);
+      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
+                                                                  CCharset.CHARSET_UTF_8_OBJ,
+                                                                  ECSSVersion.CSS30);
+      if (aCSS == null)
+        s_aLogger.warn ("Failed to read " + aFile);
     }
   }
 }

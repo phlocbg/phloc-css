@@ -30,6 +30,7 @@ import com.phloc.css.decl.CSSExpressionMemberFunction;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaExpression;
 import com.phloc.css.decl.CSSMediaQuery;
 import com.phloc.css.decl.CSSMediaQuery.EModifier;
@@ -459,6 +460,40 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
+  private CSSKeyframesRule _createKeyframesRule (@Nonnull final CSSNode aNode)
+  {
+    _expectNodeType (aNode, ECSSNodeType.KEYFRAMESRULE);
+    final int nChildCount = aNode.jjtGetNumChildren ();
+    if (nChildCount == 0)
+      throw new IllegalArgumentException ("Expected at least 1 child but got " + nChildCount + ": " + aNode);
+
+    // Get the identifier (e.g. the default "@keyframes" or the non-standard
+    // "@-webkit-keyframes")
+    final String sKeyframesDeclaration = aNode.getText ();
+
+    final CSSNode aAnimationNameNode = aNode.jjtGetChild (0);
+    _expectNodeType (aAnimationNameNode, ECSSNodeType.KEYFRAMESIDENTIFIER);
+    final String sAnimationName = aAnimationNameNode.getText ();
+
+    s_aLogger.info ("keyframes " + sKeyframesDeclaration + " " + sAnimationName);
+
+    // Get the key frame blocks
+    for (int i = 1; i < nChildCount; ++i)
+    {
+      final CSSNode aChildNode = aNode.jjtGetChild (i);
+      s_aLogger.info ("  " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+      for (final CSSNode aChildChildNode : aChildNode)
+      {
+        if (ECSSNodeType.SINGLEKEYFRAMESELECTOR.isNode (aChildChildNode, m_eVersion))
+          s_aLogger.info ("    " + aChildChildNode.getText ());
+        else
+          s_aLogger.info ("    " + ECSSNodeType.getNodeName (aChildChildNode, m_eVersion));
+      }
+    }
+    return null;
+  }
+
+  @Nonnull
   public CascadingStyleSheet createFromNode (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.ROOT);
@@ -496,16 +531,21 @@ final class CSSNodeToDomainObject
                   ret.addRule (_createFontFaceRule (aChildNode));
                 }
                 else
-                  if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
+                  if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
                   {
-                    // Unknown rule most likely indicates a parsing error
-                    s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);
+                    _createKeyframesRule (aChildNode);
                   }
                   else
-                    s_aLogger.warn ("Unsupported child of " +
-                                    ECSSNodeType.getNodeName (aNode, m_eVersion) +
-                                    ": " +
-                                    ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+                    if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
+                    {
+                      // Unknown rule most likely indicates a parsing error
+                      s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);
+                    }
+                    else
+                      s_aLogger.warn ("Unsupported child of " +
+                                      ECSSNodeType.getNodeName (aNode, m_eVersion) +
+                                      ": " +
+                                      ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
   }
