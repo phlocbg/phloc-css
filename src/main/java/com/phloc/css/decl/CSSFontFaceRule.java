@@ -30,6 +30,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSVersionHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 
@@ -78,6 +79,7 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, ICSSVersionAware
   @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
+    CSSVersionHelper.checkVersionRequirements (eVersion, this);
     final int nDeclCount = m_aDeclarations.size ();
 
     final StringBuilder aSB = new StringBuilder ("@font-face");

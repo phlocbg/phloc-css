@@ -54,10 +54,13 @@ public interface ICSSUrlVisitor
    *          Declaration of the URL
    * @param aExprTerm
    *          The expression member that contains the value.
+   * @param sURL
+   *          The already extracted URL from the expression member
    */
   void onUrlDeclaration (@Nonnull ICSSTopLevelRule aTopLevelRule,
                          @Nonnull CSSDeclaration aDeclaration,
-                         @Nonnull CSSExpressionMemberTermSimple aExprTerm);
+                         @Nonnull CSSExpressionMemberTermSimple aExprTerm,
+                         @Nonnull String sURL);
 
   /**
    * After visiting is done.

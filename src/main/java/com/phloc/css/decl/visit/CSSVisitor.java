@@ -52,7 +52,7 @@ public final class CSSVisitor
 
       // for all declarations
       for (final CSSDeclaration aDeclaration : aStyleRule.getAllDeclarations ())
-        aVisitor.onStyleRuleDeclaration (aDeclaration);
+        aVisitor.onDeclaration (aDeclaration);
     }
     finally
     {
@@ -99,7 +99,7 @@ public final class CSSVisitor
             {
               // for all declarations
               for (final CSSDeclaration aDeclaration : aFontFaceRule.getAllDeclarations ())
-                aVisitor.onStyleRuleDeclaration (aDeclaration);
+                aVisitor.onDeclaration (aDeclaration);
             }
             finally
             {

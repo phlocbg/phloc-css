@@ -31,7 +31,9 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSVersionHelper;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSVersionAware;
 
 /**
  * Represents a single @keyframes rule.
@@ -39,7 +41,7 @@ import com.phloc.css.ECSSVersion;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSKeyframesRule implements ICSSTopLevelRule
+public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAware
 {
   private final String m_sDeclaration;
   private final String m_sAnimationName;
@@ -99,6 +101,7 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule
   @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
+    CSSVersionHelper.checkVersionRequirements (eVersion, this);
     final StringBuilder aSB = new StringBuilder (m_sDeclaration);
     aSB.append (' ').append (m_sAnimationName).append (bOptimizedOutput ? "{" : " {");
     if (!bOptimizedOutput)

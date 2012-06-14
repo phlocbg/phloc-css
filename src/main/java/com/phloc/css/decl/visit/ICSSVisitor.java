@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
@@ -52,13 +53,12 @@ public interface ICSSVisitor
 
   void onStyleRuleSelector (@Nonnull CSSSelector aSelector);
 
-  void onStyleRuleDeclaration (@Nonnull CSSDeclaration aDeclaration);
+  void onDeclaration (@Nonnull CSSDeclaration aDeclaration);
 
   void onEndStyleRule (@Nonnull CSSStyleRule aStyleRule);
 
   // font face rules:
-  // contained declarations are handled by onStyleRuleDeclaration
-
+  // contained declarations are handled by onDeclaration
   void onBeginFontFaceRule (@Nonnull CSSFontFaceRule aFontFaceRule);
 
   void onEndFontFaceRule (@Nonnull CSSFontFaceRule aFontFaceRule);
@@ -68,6 +68,12 @@ public interface ICSSVisitor
   void onBeginMediaRule (@Nonnull CSSMediaRule aMediaRule);
 
   void onEndMediaRule (@Nonnull CSSMediaRule aMediaRule);
+
+  // keyframes rules:
+  // contained declarations are handled by onDeclaration
+  void onBeginKeyframesRule (@Nonnull CSSKeyframesRule aKeyframesRule);
+
+  void onEndKeyframesRule (@Nonnull CSSKeyframesRule aKeyframesRule);
 
   /**
    * After visiting is done.

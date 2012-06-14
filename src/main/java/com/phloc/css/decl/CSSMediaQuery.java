@@ -119,7 +119,10 @@ public final class CSSMediaQuery
   @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
-    final StringBuilder aSB = new StringBuilder (m_eModifier.getCSSText ());
+    final StringBuilder aSB = new StringBuilder ();
+
+    // The modifier already contains a trailing space if necessary!
+    aSB.append (m_eModifier.getCSSText ());
 
     boolean bIsFirstExpression = true;
     if (m_sMedium != null)
