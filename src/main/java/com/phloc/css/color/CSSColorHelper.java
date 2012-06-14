@@ -41,7 +41,7 @@ public final class CSSColorHelper
             isRGBAColorValue (sRealValue) ||
             isHSLColorValue (sRealValue) ||
             isHSLAColorValue (sRealValue) ||
-            isHexColorValue (sRealValue) || CHTMLColors.isDefaultColorName (sRealValue));
+            isHexColorValue (sRealValue) || CCSSColorNames.isDefaultColorName (sRealValue));
   }
 
   public static boolean isRGBColorValue (@Nullable final String sValue)

@@ -21,21 +21,17 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.CCSS;
 
 /**
- * Contains a list of predefined colour values in HTML.
+ * Contains a list of predefined colour values in CSS 2.1.<br>
+ * These names are deprecated in CSS 3.0 in favour of the appearance property.<br>
+ * Source: http://www.w3.org/TR/css3-color/ chapter 4.5.1
  * 
  * @author philip
  */
 @Immutable
-public final class CHTMLColors
+public final class CCSSColorNames
 {
-  @Deprecated
-  public static final int HEXVALUE_LENGTH = CCSS.HEXVALUE_LENGTH;
-  @Deprecated
-  public static final char PREFIX_HEX = CCSS.PREFIX_HEX;
-
   // color constants
   public static final String ACTIVEBORDER = "ActiveBorder";
   public static final String ACTIVECAPTION = "ActiveCaption";
@@ -66,7 +62,7 @@ public final class CHTMLColors
   public static final String WINDOWFRAME = "WindowFrame";
   public static final String WINDOWTEXT = "WindowText";
 
-  private CHTMLColors ()
+  private CCSSColorNames ()
   {}
 
   public static boolean isDefaultColorName (@Nullable final String s)
