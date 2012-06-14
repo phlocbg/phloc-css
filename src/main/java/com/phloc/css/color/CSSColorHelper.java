@@ -26,7 +26,6 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.CCSS;
-import com.phloc.css.html.CHTMLColors;
 
 @Immutable
 public final class CSSColorHelper
