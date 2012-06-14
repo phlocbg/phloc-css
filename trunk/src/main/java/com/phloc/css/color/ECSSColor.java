@@ -21,6 +21,7 @@ import java.awt.Color;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.name.IHasName;
@@ -185,6 +186,9 @@ public enum ECSSColor implements IHasName
   private final int m_nRed;
   private final int m_nGreen;
   private final int m_nBlue;
+  private final int m_nHue;
+  private final int m_nSaturation;
+  private final int m_nLightness;
 
   private ECSSColor (@Nonnull @Nonempty final String sName,
                      @Nonnegative final int nRed,
@@ -195,6 +199,12 @@ public enum ECSSColor implements IHasName
     m_nRed = nRed;
     m_nGreen = nGreen;
     m_nBlue = nBlue;
+
+    final float [] aHSV = new float [3];
+    Color.RGBtoHSB (nRed, nGreen, nBlue, aHSV);
+    m_nHue = (int) (aHSV[0] * 360);
+    m_nSaturation = (int) (aHSV[1] * 360);
+    m_nLightness = (int) (aHSV[2] * 360);
   }
 
   @Nonnull
@@ -221,6 +231,31 @@ public enum ECSSColor implements IHasName
     return m_nBlue;
   }
 
+  @Nonnegative
+  public int getHue ()
+  {
+    return m_nHue;
+  }
+
+  @Nonnegative
+  public int getSaturation ()
+  {
+    return m_nSaturation;
+  }
+
+  @Nonnegative
+  public int getLightness ()
+  {
+    return m_nLightness;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getAsHexColorValue ()
+  {
+    return CSSColorHelper.getHexColorValue (m_nRed, m_nGreen, m_nBlue);
+  }
+
   @Nonnull
   @Nonempty
   public String getAsRGBColorValue ()
@@ -239,24 +274,28 @@ public enum ECSSColor implements IHasName
   @Nonempty
   public String getAsHSLColorValue ()
   {
-    final float [] aHSV = new float [3];
-    Color.RGBtoHSB (m_nRed, m_nGreen, m_nBlue, aHSV);
-    return CSSColorHelper.getHSLColorValue (aHSV[0], aHSV[1], aHSV[2]);
+    return CSSColorHelper.getHSLColorValue (m_nHue, m_nSaturation, m_nLightness);
   }
 
   @Nonnull
   @Nonempty
   public String getAsHSLAColorValue (@Nonnegative final float fOpacity)
   {
-    final float [] aHSV = new float [3];
-    Color.RGBtoHSB (m_nRed, m_nGreen, m_nBlue, aHSV);
-    return CSSColorHelper.getHSLAColorValue (aHSV[0], aHSV[1], aHSV[2], fOpacity);
+    return CSSColorHelper.getHSLAColorValue (m_nHue, m_nSaturation, m_nLightness, fOpacity);
   }
 
-  @Nonnull
-  @Nonempty
-  public String getAsHexColorValue ()
+  @Nullable
+  public static ECSSColor getFromNameOrNullCaseInsensitive (@Nullable final String sName)
   {
-    return CSSColorHelper.getHexColorValue (m_nRed, m_nGreen, m_nBlue);
+    if (sName != null)
+      for (final ECSSColor eColor : values ())
+        if (eColor.m_sName.equalsIgnoreCase (sName))
+          return eColor;
+    return null;
+  }
+
+  public static boolean isDefaultColorName (@Nullable final String sName)
+  {
+    return getFromNameOrNullCaseInsensitive (sName) != null;
   }
 }
