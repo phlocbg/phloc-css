@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSKeyframesBlock;
 import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSSelector;
@@ -70,8 +71,12 @@ public interface ICSSVisitor
   void onEndMediaRule (@Nonnull CSSMediaRule aMediaRule);
 
   // keyframes rules:
-  // contained declarations are handled by onDeclaration
   void onBeginKeyframesRule (@Nonnull CSSKeyframesRule aKeyframesRule);
+
+  // contained declarations are handled by onDeclaration
+  void onBeginKeyframesBlock (@Nonnull CSSKeyframesBlock aKeyframesBlock);
+
+  void onEndKeyframesBlock (@Nonnull CSSKeyframesBlock aKeyframesBlock);
 
   void onEndKeyframesRule (@Nonnull CSSKeyframesRule aKeyframesRule);
 

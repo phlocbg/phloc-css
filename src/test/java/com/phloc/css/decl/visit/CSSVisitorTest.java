@@ -53,7 +53,7 @@ public final class CSSVisitorTest
     @Override
     public void onImport (final CSSImportRule aImportRule)
     {
-      s_aLogger.info ("import: " + aImportRule.getLocation ());
+      s_aLogger.info ("Import URL: " + aImportRule.getLocation ());
     }
 
     @Override
@@ -62,8 +62,7 @@ public final class CSSVisitorTest
                                   @Nonnull final CSSExpressionMemberTermSimple aExprTerm,
                                   @Nonnull final String sURL)
     {
-      s_aLogger.info ("Expression: " + aExprTerm.getValue ());
-      s_aLogger.info ("            " + sURL);
+      s_aLogger.info ("Expression URL: " + sURL);
     }
   }
 
@@ -77,6 +76,16 @@ public final class CSSVisitorTest
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
                                                                   CCharset.CHARSET_UTF_8_OBJ,
                                                                   ECSSVersion.CSS21);
+      assertNotNull (aFile.getAbsolutePath (), aCSS);
+      CSSVisitor.visitCSSUrl (aCSS, new SysOutVisitor ());
+    }
+    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
+                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
+    {
+      s_aLogger.info (aFile.getAbsolutePath ());
+      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
+                                                                  CCharset.CHARSET_UTF_8_OBJ,
+                                                                  ECSSVersion.CSS30);
       assertNotNull (aFile.getAbsolutePath (), aCSS);
       CSSVisitor.visitCSSUrl (aCSS, new SysOutVisitor ());
     }

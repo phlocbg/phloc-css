@@ -39,7 +39,7 @@ import com.phloc.css.ECSSVersion;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSStyleRule implements ICSSTopLevelRule
+public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
 {
   private final List <CSSSelector> m_aSelectors = new ArrayList <CSSSelector> ();
   private final List <CSSDeclaration> m_aDeclarations = new ArrayList <CSSDeclaration> ();
@@ -105,6 +105,12 @@ public final class CSSStyleRule implements ICSSTopLevelRule
     return ContainerHelper.newList (m_aDeclarations);
   }
 
+  @Nonnegative
+  public int getDeclarationCount ()
+  {
+    return m_aDeclarations.size ();
+  }
+
   @Nonnull
   public String getSelectorsAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
@@ -153,11 +159,9 @@ public final class CSSStyleRule implements ICSSTopLevelRule
         aSB.append (bOptimizedOutput ? "{" : " {\n");
         for (final CSSDeclaration aDeclaration : m_aDeclarations)
         {
+          // Indentation
           if (!bOptimizedOutput)
-          {
-            // Indentation
             aSB.append ("  ");
-          }
           // Emit the main declaration
           aSB.append (aDeclaration.getAsCSSString (eVersion, bOptimizedOutput));
           if (!bOptimizedOutput)

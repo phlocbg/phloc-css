@@ -77,6 +77,9 @@ public final class CSSImportRule implements ICSSWriteable
     return ContainerHelper.newList (m_aMediaQueries);
   }
 
+  /**
+   * @return The URL of the CSS file to import.
+   */
   @Nonnull
   @Nonempty
   public String getLocation ()
@@ -101,13 +104,13 @@ public final class CSSImportRule implements ICSSWriteable
     {
       aSB.append (' ');
       boolean bFirst = true;
-      for (final CSSMediaQuery sMedium : m_aMediaQueries)
+      for (final CSSMediaQuery aMediaQuery : m_aMediaQueries)
       {
         if (bFirst)
           bFirst = false;
         else
           aSB.append (bOptimizedOutput ? "," : ", ");
-        aSB.append (sMedium.getAsCSSString (eVersion, bOptimizedOutput));
+        aSB.append (aMediaQuery.getAsCSSString (eVersion, bOptimizedOutput));
       }
     }
     return aSB.append (";\n").toString ();

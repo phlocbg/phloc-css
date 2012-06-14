@@ -83,7 +83,7 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
   }
 
   @Nonnull
-  public EChange removeDeclaration (@Nonnegative final int nBlockIndex)
+  public EChange removeBlock (@Nonnegative final int nBlockIndex)
   {
     if (nBlockIndex < 0 || nBlockIndex >= m_aBlocks.size ())
       return EChange.UNCHANGED;

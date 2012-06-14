@@ -38,24 +38,28 @@ public interface ICSSUrlVisitor
   void begin ();
 
   /**
-   * Called on CSS import statement - rarely used :)
+   * Called on CSS import statement - rarely used :). Use
+   * <code>aImportRule.getLocation()</code> to retrieve the imported URL.
    * 
    * @param aImportRule
-   *          Other imported CSS
+   *          Other imported CSS. Never <code>null</code>.
    */
   void onImport (@Nonnull CSSImportRule aImportRule);
 
   /**
-   * Called on a CSS declaration value that contains an URL.
+   * Called on a CSS declaration value that contains an URL.<br>
+   * Note: for keyframes it is currently not possible to retrieve the keyframes
+   * block to which the declaration belongs.
    * 
    * @param aTopLevelRule
-   *          Top level rule of the URL
+   *          Top level rule of the URL. Never <code>null</code>.
    * @param aDeclaration
-   *          Declaration of the URL
+   *          Declaration of the URL. Never <code>null</code>.
    * @param aExprTerm
    *          The expression member that contains the value.
    * @param sURL
-   *          The already extracted URL from the expression member
+   *          The already extracted URL from the expression member. This was
+   *          retrieved by <code>CCSS.getURLValue (aExprTerm.getValue ())</code>
    */
   void onUrlDeclaration (@Nonnull ICSSTopLevelRule aTopLevelRule,
                          @Nonnull CSSDeclaration aDeclaration,

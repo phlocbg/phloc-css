@@ -1,3 +1,20 @@
+/**
+ * Copyright (C) 2006-2012 phloc systems
+ * http://www.phloc.com
+ * office[at]phloc[dot]com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.phloc.css.decl;
 
 import java.util.ArrayList;
@@ -16,10 +33,9 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSVersionHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
-import com.phloc.css.ICSSWriteable;
 
 @NotThreadSafe
-public final class CSSKeyframesBlock implements ICSSWriteable, ICSSVersionAware
+public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware
 {
   private final List <String> m_aKeyframesSelectors;
   private final List <CSSDeclaration> m_aDeclarations = new ArrayList <CSSDeclaration> ();
@@ -68,6 +84,12 @@ public final class CSSKeyframesBlock implements ICSSWriteable, ICSSVersionAware
     return ContainerHelper.newList (m_aDeclarations);
   }
 
+  @Nonnegative
+  public int getDeclarationCount ()
+  {
+    return m_aDeclarations.size ();
+  }
+
   @Nonnull
   @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
@@ -108,8 +130,10 @@ public final class CSSKeyframesBlock implements ICSSWriteable, ICSSVersionAware
         aSB.append (bOptimizedOutput ? "{" : " {\n");
         for (final CSSDeclaration aDeclaration : m_aDeclarations)
         {
+          // Indentation
           if (!bOptimizedOutput)
             aSB.append ("    ");
+          // Emit the main declaration
           aSB.append (aDeclaration.getAsCSSString (eVersion, bOptimizedOutput));
           if (!bOptimizedOutput)
             aSB.append ('\n');

@@ -44,12 +44,37 @@ public class DefaultCSSUrlVisitor implements ICSSUrlVisitor
   public void onImport (@Nonnull final CSSImportRule aImportRule)
   {}
 
+  /**
+   * Called on a CSS declaration value that contains an URL.<br>
+   * Note: for keyframes it is currently not possible to retrieve the keyframes
+   * block to which the declaration belongs. <br>
+   * Note: this method is deprecated, overwrite
+   * {@link #onUrlDeclaration(ICSSTopLevelRule, CSSDeclaration, CSSExpressionMemberTermSimple, String)}
+   * instead.
+   * 
+   * @param aTopLevelRule
+   *          Top level rule of the URL. Never <code>null</code>.
+   * @param aDeclaration
+   *          Declaration of the URL. Never <code>null</code>.
+   * @param aExprTerm
+   *          The expression member that contains the value.
+   */
+  @OverrideOnDemand
+  @Deprecated
+  public void onUrlDeclaration (@Nonnull final ICSSTopLevelRule aTopLevelRule,
+                                @Nonnull final CSSDeclaration aDeclaration,
+                                @Nonnull final CSSExpressionMemberTermSimple aExprTerm)
+  {}
+
   @OverrideOnDemand
   public void onUrlDeclaration (@Nonnull final ICSSTopLevelRule aTopLevelRule,
                                 @Nonnull final CSSDeclaration aDeclaration,
                                 @Nonnull final CSSExpressionMemberTermSimple aExprTerm,
                                 @Nonnull final String sURL)
-  {}
+  {
+    // For backward compatibility, invoke the old version by default
+    onUrlDeclaration (aTopLevelRule, aDeclaration, aExprTerm);
+  }
 
   @OverrideOnDemand
   public void end ()
