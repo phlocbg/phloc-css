@@ -58,7 +58,7 @@ import com.phloc.css.annotations.DeprecatedInCSS3;
  * <li>TODO
  * http://www.w3.org/TR/2009/WD-css3-3d-transforms-20090320/#property-index</li>
  * <li>TODO http://www.w3.org/TR/2007/WD-css3-grid-20070905/#property-index</li>
- * <li>TODO http://www.w3.org/TR/2008/CR-css3-marquee-20081205/#property</li>
+ * <li>http://www.w3.org/TR/2008/CR-css3-marquee-20081205/#property</li>
  * </ul>
  * 
  * @author philip
@@ -174,6 +174,10 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   MARGIN_LEFT ("margin-left"),
   MARGIN_RIGHT ("margin-right"),
   MARGIN_TOP ("margin-top"),
+  MARQUEE_DIRECTION ("marquee-direction", ECSSVersion.CSS30),
+  MARQUEE_PLAY_COUNT ("marquee-play-count", ECSSVersion.CSS30),
+  MARQUEE_SPEED ("marquee-speed", ECSSVersion.CSS30),
+  MARQUEE_STYLE ("marquee-style", ECSSVersion.CSS30),
   MAX_HEIGHT ("max-height"),
   MAX_WIDTH ("max-width"),
   MAX_ZOOM ("max-zoom", ECSSVersion.CSS30),
@@ -188,6 +192,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   OUTLINE_STYLE ("outline-style"),
   OUTLINE_WIDTH ("outline-width"),
   OVERFLOW ("overflow"),
+  OVERFLOW_STYLE ("overflow-style", ECSSVersion.CSS30),
   OVERFLOW_X ("overflow-x", ECSSVersion.CSS30),
   OVERFLOW_Y ("overflow-y", ECSSVersion.CSS30),
   PADDING ("padding"),
