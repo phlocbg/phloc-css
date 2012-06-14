@@ -79,6 +79,7 @@ public final class CCSS
   public static final String CIRCLE = "circle";
   public static final String COLLAPSE = "collapse";
   public static final String CROSSHAIR = "crosshair";
+  public static final String CURRENTCOLOR = "currentColor";
   public static final String CURSIVE = "cursive";
   public static final String DASHED = "dashed";
   public static final String DECIMAL = "decimal";

@@ -53,7 +53,8 @@ public final class CSSColorHelper
            isHSLAColorValue (sRealValue) ||
            isHexColorValue (sRealValue) ||
            ECSSColor.isDefaultColorName (sRealValue) ||
-           ECSSColorName.isDefaultColorName (sRealValue);
+           ECSSColorName.isDefaultColorName (sRealValue) ||
+           sRealValue.equals (CCSS.CURRENTCOLOR);
   }
 
   public static boolean isRGBColorValue (@Nullable final String sValue)
