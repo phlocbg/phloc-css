@@ -38,7 +38,11 @@ public final class CSSColorHelper
   {
     final String sRealValue = StringHelper.trim (sValue);
     return StringHelper.hasText (sRealValue) &&
-           (isRGBColorValue (sRealValue) || isRGBAColorValue (sRealValue) || isHexColorValue (sRealValue) || CHTMLColors.isDefaultColorName (sRealValue));
+           (isRGBColorValue (sRealValue) ||
+            isRGBAColorValue (sRealValue) ||
+            isHSLColorValue (sRealValue) ||
+            isHSLAColorValue (sRealValue) ||
+            isHexColorValue (sRealValue) || CHTMLColors.isDefaultColorName (sRealValue));
   }
 
   public static boolean isRGBColorValue (@Nullable final String sValue)
@@ -56,6 +60,25 @@ public final class CSSColorHelper
     return StringHelper.hasText (sRealValue) &&
            RegExHelper.stringMatchesPattern ("^" +
                                                  CCSS.PREFIX_RGBA +
+                                                 "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){3}\\s*[0-9]+(\\.[0-9]*)?\\s*\\)$",
+                                             sRealValue);
+  }
+
+  public static boolean isHSLColorValue (@Nullable final String sValue)
+  {
+    final String sRealValue = StringHelper.trim (sValue);
+    return StringHelper.hasText (sRealValue) &&
+           RegExHelper.stringMatchesPattern ("^" +
+                                             CCSS.PREFIX_HSL +
+                                             "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){2}\\s*\\-?[0-9]+%?\\s*\\)$", sRealValue);
+  }
+
+  public static boolean isHSLAColorValue (@Nullable final String sValue)
+  {
+    final String sRealValue = StringHelper.trim (sValue);
+    return StringHelper.hasText (sRealValue) &&
+           RegExHelper.stringMatchesPattern ("^" +
+                                                 CCSS.PREFIX_HSLA +
                                                  "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){3}\\s*[0-9]+(\\.[0-9]*)?\\s*\\)$",
                                              sRealValue);
   }
@@ -96,7 +119,7 @@ public final class CSSColorHelper
   public static String getRGBAColorValue (@Nonnegative final int nRed,
                                           @Nonnegative final int nGreen,
                                           @Nonnegative final int nBlue,
-                                          @Nonnegative final double dOpacity)
+                                          @Nonnegative final float fOpacity)
   {
     if (nRed < 0 || nRed > 255)
       throw new IllegalArgumentException ("Invalid red: " + nRed);
@@ -104,8 +127,8 @@ public final class CSSColorHelper
       throw new IllegalArgumentException ("Invalid green: " + nGreen);
     if (nBlue < 0 || nBlue > 255)
       throw new IllegalArgumentException ("Invalid blue: " + nBlue);
-    if (dOpacity < 0 || dOpacity > 1)
-      throw new IllegalArgumentException ("Invalid opacity: " + dOpacity);
+    if (fOpacity < 0 || fOpacity > 1)
+      throw new IllegalArgumentException ("Invalid opacity: " + fOpacity);
 
     return new StringBuilder (16).append (CCSS.PREFIX_RGBA)
                                  .append ('(')
@@ -115,7 +138,60 @@ public final class CSSColorHelper
                                  .append (',')
                                  .append (nBlue)
                                  .append (',')
-                                 .append (dOpacity)
+                                 .append (fOpacity)
+                                 .append (')')
+                                 .toString ();
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String getHSLColorValue (@Nonnegative final float fHue,
+                                         @Nonnegative final float fSaturation,
+                                         @Nonnegative final float fLightness)
+  {
+    if (fHue < 0 || fHue > 360)
+      throw new IllegalArgumentException ("Invalid hue: " + fHue);
+    if (fSaturation < 0 || fSaturation > 360)
+      throw new IllegalArgumentException ("Invalid saturation: " + fSaturation);
+    if (fLightness < 0 || fLightness > 360)
+      throw new IllegalArgumentException ("Invalid lightness: " + fLightness);
+
+    return new StringBuilder (16).append (CCSS.PREFIX_HSL)
+                                 .append ('(')
+                                 .append (fHue)
+                                 .append (',')
+                                 .append (fSaturation)
+                                 .append (',')
+                                 .append (fLightness)
+                                 .append (')')
+                                 .toString ();
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String getHSLAColorValue (@Nonnegative final float fHue,
+                                          @Nonnegative final float fSaturation,
+                                          @Nonnegative final float fLightness,
+                                          @Nonnegative final float fOpacity)
+  {
+    if (fHue < 0 || fHue > 360)
+      throw new IllegalArgumentException ("Invalid hue: " + fHue);
+    if (fSaturation < 0 || fSaturation > 360)
+      throw new IllegalArgumentException ("Invalid saturation: " + fSaturation);
+    if (fLightness < 0 || fLightness > 360)
+      throw new IllegalArgumentException ("Invalid lightness: " + fLightness);
+    if (fOpacity < 0 || fOpacity > 1)
+      throw new IllegalArgumentException ("Invalid opacity: " + fOpacity);
+
+    return new StringBuilder (16).append (CCSS.PREFIX_HSLA)
+                                 .append ('(')
+                                 .append (fHue)
+                                 .append (',')
+                                 .append (fSaturation)
+                                 .append (',')
+                                 .append (fLightness)
+                                 .append (',')
+                                 .append (fOpacity)
                                  .append (')')
                                  .toString ();
   }
