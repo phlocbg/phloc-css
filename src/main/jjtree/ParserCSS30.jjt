@@ -373,10 +373,11 @@ void mediaQuery() : {}
 void mediaModifier() :
 { Token t; }
 {
-  ( t = <MQ_ONLY> { jjtThis.setText (t.image); } 
+  ( t = <MQ_ONLY> { jjtThis.setText (t.image); }
+    <S>
   | t = <MQ_NOT>  { jjtThis.setText (t.image); } 
+    <S>
   )?
-  ( <S> )*
 }
 
 //
@@ -571,8 +572,8 @@ void namespacePrefix() #NamespacePrefix :
 { Token t; }
 {
   ( t = <IDENT> { jjtThis.setText (t.image); }
-  | <ASTERISK> 	{ jjtThis.setText ("*"); }
-  )?		{ jjtThis.appendText ("|"); }
+  | <ASTERISK>  { jjtThis.setText ("*"); }
+  )?    { jjtThis.appendText ("|"); }
   <DASH>
 }
 
