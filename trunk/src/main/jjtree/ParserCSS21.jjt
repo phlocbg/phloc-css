@@ -247,11 +247,9 @@ TOKEN_MGR_DECLS :
 // OLD:
 //| < FUNCTION: <IDENT> "(" >
 // Extension for IE filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50); */
-| < FUNCTION: <IDENT> "(" |
-              "progid:" <IDENT> ( <DOT> <IDENT> )* "("
-  >
-  { matchedToken.image = image.toString (); }
-
+| < FUNCTION: <IDENT> "(" 
+            | "progid" ( <S> )* ":" ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
+  > { matchedToken.image = image.toString (); }
 | < RBRACE: "}" >
 | < DOT: "." >
 | < SEMICOLON: ";" >

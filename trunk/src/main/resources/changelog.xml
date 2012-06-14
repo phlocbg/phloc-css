@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2012-06-14" category="feature" action="update">
+    <change>
+      <text locale="en">Made parsing of IE filters (progid:...) more flexible by adding whitespace support</text>
+    </change>
+  </entry>
   <entry date="2012-06-13" category="api" action="change" incompatible="true">
     <change>
       <text locale="en">Moved all HTML relevant things to the new package .html</text>

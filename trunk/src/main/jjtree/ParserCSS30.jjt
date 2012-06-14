@@ -191,7 +191,8 @@ TOKEN :
                 | "nth-of-type(" 
                 | "nth-last-of-type(" > : IN_NTH
 | < FUNCTION: <IDENT> "(" 
-            | "progid:" <IDENT> ( <DOT> <IDENT> )* "(" >  { matchedToken.image = image.toString (); }
+            | "progid" ( <S> )* ":" ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
+  > { matchedToken.image = image.toString (); }
 | < RBRACE: "}" >
 | < DOT: "." >
 | < SEMICOLON: ";" >
