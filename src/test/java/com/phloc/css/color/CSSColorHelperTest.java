@@ -20,7 +20,6 @@ package com.phloc.css.color;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -37,54 +36,14 @@ public final class CSSColorHelperTest
   {
     assertEquals ("rgb(0,0,0)", CSSColorHelper.getRGBColorValue (0, 0, 0));
     assertEquals ("rgb(13,123,145)", CSSColorHelper.getRGBColorValue (13, 123, 145));
-    try
-    {
-      // illegal red
-      CSSColorHelper.getRGBColorValue (-1, 0, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal red
-      CSSColorHelper.getRGBColorValue (256, 0, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal green
-      CSSColorHelper.getRGBColorValue (0, -1, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal green
-      CSSColorHelper.getRGBColorValue (0, 256, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal blue
-      CSSColorHelper.getRGBColorValue (0, 0, -1);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal blue
-      CSSColorHelper.getRGBColorValue (0, 0, 256);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
+    assertEquals ("rgb(255,0,0)", CSSColorHelper.getRGBColorValue (-1, 0, 0));
+    assertEquals ("rgb(255,0,0)", CSSColorHelper.getRGBColorValue (-257, 0, 0));
+    assertEquals ("rgb(255,0,0)", CSSColorHelper.getRGBColorValue (-513, 0, 0));
+    assertEquals ("rgb(0,0,0)", CSSColorHelper.getRGBColorValue (256, 0, 0));
+    assertEquals ("rgb(0,255,0)", CSSColorHelper.getRGBColorValue (0, -1, 0));
+    assertEquals ("rgb(0,0,0)", CSSColorHelper.getRGBColorValue (0, 256, 0));
+    assertEquals ("rgb(0,0,255)", CSSColorHelper.getRGBColorValue (0, 0, -1));
+    assertEquals ("rgb(0,0,0)", CSSColorHelper.getRGBColorValue (0, 0, 256));
   }
 
   @Test
@@ -93,54 +52,11 @@ public final class CSSColorHelperTest
   {
     assertEquals ("#000000", CSSColorHelper.getHexColorValue (0, 0, 0));
     assertEquals ("#0f80ff", CSSColorHelper.getHexColorValue (15, 128, 255));
-    try
-    {
-      // illegal red
-      CSSColorHelper.getHexColorValue (-1, 0, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal red
-      CSSColorHelper.getHexColorValue (256, 0, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal green
-      CSSColorHelper.getHexColorValue (0, -1, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal green
-      CSSColorHelper.getHexColorValue (0, 256, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal blue
-      CSSColorHelper.getHexColorValue (0, 0, -1);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal blue
-      CSSColorHelper.getHexColorValue (0, 0, 256);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
+
+    // Check overflow
+    assertEquals ("#000000", CSSColorHelper.getHexColorValue (256, 256, 256));
+    assertEquals ("#010101", CSSColorHelper.getHexColorValue (257, 257, 257));
+    assertEquals ("#ffffff", CSSColorHelper.getHexColorValue (-1, -1, -1));
   }
 
   @Test

@@ -15,37 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css;
+package com.phloc.css.annotations;
 
-import javax.annotation.Nonnull;
-
-import com.phloc.commons.version.IHasVersion;
-import com.phloc.commons.version.Version;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
- * Contains the different CSS versions that may be of relevance.
+ * Marker annotation that denotes all CSS elements that are marked deprecated in
+ * CSS 3
  * 
  * @author philip
  */
-public enum ECSSVersion implements IHasVersion
+@Documented
+@Retention (RetentionPolicy.RUNTIME)
+public @interface DeprecatedInCSS3
 {
-  // Sort fields according to the version!
-  CSS21 (new Version (2, 1)),
-  CSS30 (new Version (3, 0));
-
-  @Nonnull
-  public static final ECSSVersion LATEST = CSS30;
-
-  private final Version m_aVersion;
-
-  private ECSSVersion (@Nonnull final Version aVersion)
-  {
-    m_aVersion = aVersion;
-  }
-
-  @Nonnull
-  public Version getVersion ()
-  {
-    return m_aVersion;
-  }
+  String value() default "";
 }
