@@ -16,9 +16,18 @@
  * limitations under the License.
  */
 @import url("style.css") screen;
-@import url("style.css") screen, projection;
-@import url("style.css") screen, projection and (min-width: 800px);
-@import url("style.css") screen and (min-width: 800px), projection and (min-width: 800px);
+
+@import url("style.css") screen , projection;
+
+@import url("style.css") screen , projection
+  and
+  (min-width:
+  800px);
+
+@import url("style.css") screen and (min-width: 800px) , projection
+  and
+  (min-width:
+  800px);
 
 @media print {
   div#header,div#sidebar,div#footer {
@@ -41,9 +50,14 @@
 @media ( min-width : 950px) { /* breite Browserfenster */
 }
 
-@media (min-width:450px) and (max-width:950px){}
-@media ( min-width : 450px ) and ( max-width : 950px ) { /* Darstellung auf Netbooks */ }
-@media  (  min-width  :  450px  )  and  (  max-width  :  950px  )  {  /* Darstellung auf Netbooks */  }  
+@media ( min-width :450px) and (max-width:950px) {
+}
+
+@media ( min-width : 450px ) and ( max-width : 950px ) { /* Darstellung auf Netbooks */
+}
+
+@media ( min-width : 450px ) and ( max-width : 950px ) { /* Darstellung auf Netbooks */
+}
 
 @media ( max-width : 450px) { /* mobile Geräte */
 }
@@ -55,7 +69,7 @@
   }
 }
 
-@media all and (max-width: 699px) and (min-width: 520px), (min-width: 1151px) {
+@media all and (max-width: 699px) and (min-width: 520px) , ( min-width : 1151px) {
   body {
     background: #ccc;
   }
@@ -70,9 +84,25 @@
   }
 }
 
-@media all and (max-width: 699px) and (min-width: 520px), (min-width: 1151px) {
+@media all and (max-width: 699px) and (min-width: 520px) , ( min-width : 1151px) {
   #sidebar ul li a {
     padding-left: 21px;
     background: url(../images/email.png) left center no-repeat;
+  }
+}
+
+@media not all and (color) {
+}
+
+@media not screen and (color) , print and (color) {
+}
+
+@media only screen and (color) , print and (color) {
+}
+
+@media ( orientation :portrait) , ( max-device-width :480px) , ( max-width :480px) {
+  #wrapper #nav {
+    margin: 0 0 0 -160px;
+    opacity: 0.95;
   }
 }
