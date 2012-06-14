@@ -100,7 +100,21 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
     final StringBuilder aSB = new StringBuilder (m_sDeclaration);
-    aSB.append (' ').append (m_sAnimationName);
+    aSB.append (' ').append (m_sAnimationName).append (bOptimizedOutput ? "{" : " {");
+    if (!bOptimizedOutput)
+      aSB.append ('\n');
+
+    // Add all blocks
+    for (final CSSKeyframesBlock aBlock : m_aBlocks)
+    {
+      if (!bOptimizedOutput)
+        aSB.append ("  ");
+      aSB.append (aBlock.getAsCSSString (eVersion, bOptimizedOutput));
+      if (!bOptimizedOutput)
+        aSB.append ('\n');
+    }
+
+    aSB.append (bOptimizedOutput ? "}" : "}\n");
     return aSB.toString ();
   }
 
@@ -118,18 +132,26 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule
     if (!(o instanceof CSSKeyframesRule))
       return false;
     final CSSKeyframesRule rhs = (CSSKeyframesRule) o;
-    return m_sDeclaration.equals (rhs.m_sDeclaration) && m_aBlocks.equals (rhs.m_aBlocks);
+    return m_sDeclaration.equals (rhs.m_sDeclaration) &&
+           m_sAnimationName.equals (rhs.m_sAnimationName) &&
+           m_aBlocks.equals (rhs.m_aBlocks);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sDeclaration).append (m_aBlocks).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sDeclaration)
+                                       .append (m_sAnimationName)
+                                       .append (m_aBlocks)
+                                       .getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("declaration", m_sDeclaration).append ("blocks", m_aBlocks).toString ();
+    return new ToStringGenerator (this).append ("declaration", m_sDeclaration)
+                                       .append ("animationName", m_sAnimationName)
+                                       .append ("blocks", m_aBlocks)
+                                       .toString ();
   }
 }

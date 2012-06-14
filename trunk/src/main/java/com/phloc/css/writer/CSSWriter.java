@@ -142,18 +142,25 @@ public final class CSSWriter
       }
 
       // Import rules
+      int nRulesEmitted = 0;
       final List <CSSImportRule> aImportRules = aCSS.getAllImportRules ();
       if (!aImportRules.isEmpty ())
       {
         for (final CSSImportRule aImportRule : aImportRules)
+        {
           aWriter.write (aImportRule.getAsCSSString (m_eVersion, m_bOptimizedOutput));
-        if (!m_bOptimizedOutput)
-          aWriter.write ('\n');
+          ++nRulesEmitted;
+        }
       }
 
       // Main CSS rules
       for (final ICSSTopLevelRule aRule : aCSS.getAllRules ())
+      {
+        if (!m_bOptimizedOutput && nRulesEmitted > 0)
+          aWriter.write ('\n');
         aWriter.write (aRule.getAsCSSString (m_eVersion, m_bOptimizedOutput));
+        ++nRulesEmitted;
+      }
     }
     finally
     {

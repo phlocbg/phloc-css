@@ -104,12 +104,12 @@ public final class CascadingStyleSheet
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <CSSFontFaceRule> getAllFontFaceRules ()
+  public List <CSSStyleRule> getAllStyleRules ()
   {
-    final List <CSSFontFaceRule> ret = new ArrayList <CSSFontFaceRule> ();
+    final List <CSSStyleRule> ret = new ArrayList <CSSStyleRule> ();
     for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
-      if (aTopLevelRule instanceof CSSFontFaceRule)
-        ret.add ((CSSFontFaceRule) aTopLevelRule);
+      if (aTopLevelRule instanceof CSSStyleRule)
+        ret.add ((CSSStyleRule) aTopLevelRule);
     return ret;
   }
 
@@ -126,12 +126,23 @@ public final class CascadingStyleSheet
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <CSSStyleRule> getAllStyleRules ()
+  public List <CSSFontFaceRule> getAllFontFaceRules ()
   {
-    final List <CSSStyleRule> ret = new ArrayList <CSSStyleRule> ();
+    final List <CSSFontFaceRule> ret = new ArrayList <CSSFontFaceRule> ();
     for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
-      if (aTopLevelRule instanceof CSSStyleRule)
-        ret.add ((CSSStyleRule) aTopLevelRule);
+      if (aTopLevelRule instanceof CSSFontFaceRule)
+        ret.add ((CSSFontFaceRule) aTopLevelRule);
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSKeyframesRule> getAllKeyframesRules ()
+  {
+    final List <CSSKeyframesRule> ret = new ArrayList <CSSKeyframesRule> ();
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSKeyframesRule)
+        ret.add ((CSSKeyframesRule) aTopLevelRule);
     return ret;
   }
 

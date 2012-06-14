@@ -80,24 +80,28 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, ICSSVersionAware
   {
     final int nDeclCount = m_aDeclarations.size ();
 
-    // Skip the whole rule
-    if (bOptimizedOutput && nDeclCount == 0)
-      return "";
-
     final StringBuilder aSB = new StringBuilder ("@font-face");
-    aSB.append (bOptimizedOutput ? "{" : " {");
-    if (!bOptimizedOutput && nDeclCount > 1)
-      aSB.append ('\n');
 
-    if (nDeclCount == 1)
+    if (nDeclCount == 0)
     {
-      // A single declaration
-      aSB.append (m_aDeclarations.get (0).getAsCSSString (eVersion, bOptimizedOutput));
+      // Skip the whole rule
+      if (false && bOptimizedOutput)
+        return "";
+      aSB.append (bOptimizedOutput ? "{}\n" : " {}\n");
     }
     else
-      if (nDeclCount > 1)
+    {
+      if (nDeclCount == 1)
+      {
+        // A single declaration
+        aSB.append (bOptimizedOutput ? "{" : " { ");
+        aSB.append (ContainerHelper.getFirstElement (m_aDeclarations).getAsCSSString (eVersion, bOptimizedOutput));
+        aSB.append (bOptimizedOutput ? "}" : " }\n");
+      }
+      else
       {
         // More than one declaration
+        aSB.append (bOptimizedOutput ? "{" : " {\n");
         for (final CSSDeclaration aDeclaration : m_aDeclarations)
         {
           if (!bOptimizedOutput)
@@ -106,8 +110,9 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, ICSSVersionAware
           if (!bOptimizedOutput)
             aSB.append ('\n');
         }
+        aSB.append (bOptimizedOutput ? "}" : "}\n");
       }
-    aSB.append (bOptimizedOutput ? "}" : "}\n");
+    }
     return aSB.toString ();
   }
 

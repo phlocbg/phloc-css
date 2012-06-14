@@ -128,8 +128,9 @@ public final class CSSStyleRule implements ICSSTopLevelRule
     final int nDeclarationCount = m_aDeclarations.size ();
 
     final StringBuilder aSB = new StringBuilder ();
-    if (!bOptimizedOutput && (nSelectorCount > 1 || nDeclarationCount > 1))
-      aSB.append ('\n');
+    if (false)
+      if (!bOptimizedOutput && (nSelectorCount > 1 || nDeclarationCount > 1))
+        aSB.append ('\n');
 
     // Append the selectors
     aSB.append (getSelectorsAsCSSString (eVersion, bOptimizedOutput));
