@@ -21,8 +21,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.css.CCSS;
 import com.phloc.css.ECSSProperty;
+import com.phloc.css.color.CSSColorHelper;
 
 public class CSSPropertyEnumOrColor extends CSSPropertyEnum
 {
@@ -40,7 +40,7 @@ public class CSSPropertyEnumOrColor extends CSSPropertyEnum
   @Override
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return super.isValidValue (sValue) || CCSS.isColorValue (sValue);
+    return super.isValidValue (sValue) || CSSColorHelper.isColorValue (sValue);
   }
 
   @Override

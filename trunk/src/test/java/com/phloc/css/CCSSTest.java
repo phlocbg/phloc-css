@@ -21,7 +21,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -60,116 +59,6 @@ public final class CCSSTest
     assertEquals ("5%", CCSS.perc (5));
     assertEquals ("0%", CCSS.perc (0));
     assertEquals ("-5%", CCSS.perc (-5));
-  }
-
-  @Test
-  public void testColorRGB ()
-  {
-    assertEquals ("rgb(0,0,0)", CCSS.colorRGB (0, 0, 0));
-    assertEquals ("rgb(13,123,145)", CCSS.colorRGB (13, 123, 145));
-    try
-    {
-      // illegal red
-      CCSS.colorRGB (-1, 0, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal red
-      CCSS.colorRGB (256, 0, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal green
-      CCSS.colorRGB (0, -1, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal green
-      CCSS.colorRGB (0, 256, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal blue
-      CCSS.colorRGB (0, 0, -1);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal blue
-      CCSS.colorRGB (0, 0, 256);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-  }
-
-  @Test
-  public void testColorHex ()
-  {
-    assertEquals ("#000000", CCSS.colorHex (0, 0, 0));
-    assertEquals ("#0f80ff", CCSS.colorHex (15, 128, 255));
-    try
-    {
-      // illegal red
-      CCSS.colorHex (-1, 0, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal red
-      CCSS.colorHex (256, 0, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal green
-      CCSS.colorHex (0, -1, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal green
-      CCSS.colorHex (0, 256, 0);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal blue
-      CCSS.colorHex (0, 0, -1);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
-    try
-    {
-      // illegal blue
-      CCSS.colorHex (0, 0, 256);
-      fail ();
-    }
-    catch (final IllegalArgumentException ex)
-    {}
   }
 
   @Test
