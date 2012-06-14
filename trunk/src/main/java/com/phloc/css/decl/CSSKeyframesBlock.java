@@ -13,6 +13,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSVersionHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriteable;
@@ -71,7 +72,7 @@ public final class CSSKeyframesBlock implements ICSSWriteable, ICSSVersionAware
   @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
-    final int nDeclCount = m_aDeclarations.size ();
+    CSSVersionHelper.checkVersionRequirements (eVersion, this);
 
     final StringBuilder aSB = new StringBuilder ();
 
@@ -83,6 +84,7 @@ public final class CSSKeyframesBlock implements ICSSWriteable, ICSSVersionAware
       aSB.append (sSelector);
     }
 
+    final int nDeclCount = m_aDeclarations.size ();
     if (nDeclCount == 0)
     {
       // Skip the whole rule

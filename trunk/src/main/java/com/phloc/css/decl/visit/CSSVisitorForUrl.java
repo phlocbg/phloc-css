@@ -26,6 +26,7 @@ import com.phloc.css.decl.CSSExpression;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.ICSSExpressionMember;
@@ -69,7 +70,7 @@ public final class CSSVisitorForUrl extends DefaultCSSVisitor
   }
 
   @Override
-  public void onStyleRuleDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  public void onDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     final CSSExpression aExpr = aDeclaration.getExpression ();
     for (final ICSSExpressionMember aMember : aExpr.getAllMembers ())
@@ -77,7 +78,10 @@ public final class CSSVisitorForUrl extends DefaultCSSVisitor
       {
         final CSSExpressionMemberTermSimple aExprTerm = (CSSExpressionMemberTermSimple) aMember;
         if (CCSS.isURLValue (aExprTerm.getValue ()))
-          m_aVisitor.onUrlDeclaration (m_aTopLevelRule, aDeclaration, aExprTerm);
+        {
+          final String sURL = CCSS.getURLValue (aExprTerm.getValue ());
+          m_aVisitor.onUrlDeclaration (m_aTopLevelRule, aDeclaration, aExprTerm, sURL);
+        }
       }
   }
 
@@ -91,6 +95,12 @@ public final class CSSVisitorForUrl extends DefaultCSSVisitor
   public void onBeginMediaRule (@Nonnull final CSSMediaRule aMediaRule)
   {
     m_aTopLevelRule = aMediaRule;
+  }
+
+  @Override
+  public void onBeginKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule)
+  {
+    m_aTopLevelRule = aKeyframesRule;
   }
 
   @Override

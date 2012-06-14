@@ -47,7 +47,8 @@ public class DefaultCSSUrlVisitor implements ICSSUrlVisitor
   @OverrideOnDemand
   public void onUrlDeclaration (@Nonnull final ICSSTopLevelRule aTopLevelRule,
                                 @Nonnull final CSSDeclaration aDeclaration,
-                                @Nonnull final CSSExpressionMemberTermSimple aExprTerm)
+                                @Nonnull final CSSExpressionMemberTermSimple aExprTerm,
+                                @Nonnull final String sURL)
   {}
 
   @OverrideOnDemand

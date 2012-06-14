@@ -102,6 +102,8 @@ public final class FuncTestCSSHandler
                     CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8_OBJ),
                                                CCharset.CHARSET_UTF_8_OBJ,
                                                ECSSVersion.CSS30));
+      if (false)
+        System.out.println (s);
     }
   }
 
@@ -163,13 +165,13 @@ public final class FuncTestCSSHandler
 
   @Test
   @Ignore
-  @SuppressWarnings (value = "DMI_HARDCODED_ABSOLUTE_FILENAME")
+  @SuppressWarnings ("DMI_HARDCODED_ABSOLUTE_FILENAME")
   public void testScanDrive ()
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("/"),
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
-      if (true)
+      if (false)
         s_aLogger.info (aFile.getAbsolutePath ());
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
                                                                   CCharset.CHARSET_UTF_8_OBJ,
