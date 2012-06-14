@@ -202,4 +202,43 @@ public final class CSSColorHelperTest
     assertFalse (CSSColorHelper.isRGBAColorValue ("rgba(a,0,0)"));
     assertFalse (CSSColorHelper.isRGBAColorValue ("rgba(0,0,0,5%)"));
   }
+
+  @Test
+  public void testIsHSLColorValue ()
+  {
+    final String [] HSL_COLORS = new String [] { "hsl(0,0,0)",
+                                                "hsl(255,0,0)",
+                                                "hsl(300,0,0)",
+                                                "hsl(  300  ,  0  ,  0  )  ",
+                                                "hsl(255,-10,0)",
+                                                "hsl(110%, 0%, 0%)",
+                                                "hsl(100%, 0%, 0%)" };
+    for (final String sHSLColor : HSL_COLORS)
+    {
+      assertTrue (sHSLColor, CSSColorHelper.isHSLColorValue (sHSLColor));
+      assertTrue (sHSLColor, CSSColorHelper.isColorValue (sHSLColor));
+    }
+    assertFalse (CSSColorHelper.isHSLColorValue ("hsl(a,0,0)"));
+    assertFalse (CSSColorHelper.isHSLColorValue ("hsl(0,0,0,0)"));
+  }
+
+  @Test
+  public void testIsHSLAColorValue ()
+  {
+    final String [] HSLA_COLORS = new String [] { "hsla(0,0,0,0)",
+                                                 "hsla(0,0,0,1)",
+                                                 "hsla(255,0,0, 0.1)",
+                                                 "hsla(255,0,0, 0.875)",
+                                                 "hsla(300,0,0, 0.999999)",
+                                                 "hsla(255,-10,0, 0)",
+                                                 "hsla(110%, 0%, 0%, 1.)",
+                                                 "hsla(100%, 0%, 0%, 1.  )" };
+    for (final String sHSLAColor : HSLA_COLORS)
+    {
+      assertTrue (sHSLAColor, CSSColorHelper.isHSLAColorValue (sHSLAColor));
+      assertTrue (sHSLAColor, CSSColorHelper.isColorValue (sHSLAColor));
+    }
+    assertFalse (CSSColorHelper.isHSLAColorValue ("hsla(a,0,0)"));
+    assertFalse (CSSColorHelper.isHSLAColorValue ("hsla(0,0,0,5%)"));
+  }
 }

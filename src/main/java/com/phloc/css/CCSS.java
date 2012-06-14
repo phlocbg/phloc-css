@@ -192,6 +192,8 @@ public final class CCSS
   public static final String PREFIX_URL_OPEN = PREFIX_URL + '(';
   public static final String PREFIX_RGB = "rgb";
   public static final String PREFIX_RGBA = "rgba";
+  public static final String PREFIX_HSL = "hsl";
+  public static final String PREFIX_HSLA = "hsla";
   public static final int HEXVALUE_LENGTH = 7;
   public static final char PREFIX_HEX = '#';
 

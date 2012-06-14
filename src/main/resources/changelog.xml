@@ -27,7 +27,7 @@
   </entry>
   <entry date="2012-06-14" category="feature" action="add">
     <change>
-      <text locale="en">Added support for RGBA values</text>
+      <text locale="en">Added support for RGBA, HSL and HSLA values</text>
     </change>
   </entry>
   <entry date="2012-06-14" category="api" action="update" incompatible="true">
