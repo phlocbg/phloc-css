@@ -40,7 +40,7 @@ import com.phloc.commons.string.ToStringGenerator;
 public final class DefaultCSSClassProvider implements ICSSClassProvider
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (DefaultCSSClassProvider.class);
-  private static Map <String, DefaultCSSClassProvider> s_aAll = new HashMap <String, DefaultCSSClassProvider> ();
+  private static final Map <String, DefaultCSSClassProvider> s_aAll = new HashMap <String, DefaultCSSClassProvider> ();
 
   private final String m_sCSSClass;
 
