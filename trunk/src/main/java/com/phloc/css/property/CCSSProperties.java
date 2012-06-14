@@ -21,8 +21,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.css.CCSS;
 import com.phloc.css.ECSSProperty;
-import com.phloc.css.ICSSProperty;
-import com.phloc.css.ICSSValue;
+import com.phloc.css.propertyvalue.ICSSValue;
 
 /**
  * Contains the most commonly used CSS properties plus the available value

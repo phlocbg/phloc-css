@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpression;
@@ -124,7 +125,7 @@ final class CSSNodeToDomainObject
 
     // With operator and value
     return new CSSSelectorAttribute (aNode.getText (),
-                                     ECSSAttributeOperator.fromTextOrNull (aNode.jjtGetChild (0).getText ()),
+                                     ECSSAttributeOperator.getFromTextOrNull (aNode.jjtGetChild (0).getText ()),
                                      aNode.jjtGetChild (1).getText ());
   }
 
@@ -150,7 +151,7 @@ final class CSSNodeToDomainObject
     if (ECSSNodeType.COMBINATOR.isNode (aNode, m_eVersion))
     {
       final String sText = aNode.getText ();
-      final ECSSSelectorCombinator eCombinator = ECSSSelectorCombinator.fromTextOrNull (sText);
+      final ECSSSelectorCombinator eCombinator = ECSSSelectorCombinator.getFromTextOrNull (sText);
       if (eCombinator == null)
         s_aLogger.warn ("Failed to parse CSS selector combinator '" + sText + "'");
       return eCombinator;
@@ -180,8 +181,11 @@ final class CSSNodeToDomainObject
           return new CSSSelectorSimpleMember (aNode.getText () + aChildNode.getText () + ")");
         }
 
+        // It's a function (e.g. ":lang(fr)")
         final CSSExpression aExpr = _createExpression (aChildNode);
-        return new CSSSelectorSimpleMember (aNode.getText () + aExpr.getAsCSSString (m_eVersion, true) + ")");
+        final CSSWriterSettings aSettings = new CSSWriterSettings (m_eVersion, true);
+        final String sSelectorCode = aNode.getText () + aExpr.getAsCSSString (aSettings) + ')';
+        return new CSSSelectorSimpleMember (sSelectorCode);
       }
 
       throw new UnsupportedOperationException ("Not supporting pseudo-selectors with functions and " +
@@ -251,7 +255,7 @@ final class CSSNodeToDomainObject
         if (ECSSNodeType.OPERATOR.isNode (aChildNode, m_eVersion))
         {
           final String sText = aChildNode.getText ();
-          final ECSSExpressionOperator eOp = ECSSExpressionOperator.fromTextOrNull (sText);
+          final ECSSExpressionOperator eOp = ECSSExpressionOperator.getFromTextOrNull (sText);
           if (eOp == null)
             s_aLogger.warn ("Failed to parse expression operator '" + sText + "'");
           else

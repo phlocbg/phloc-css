@@ -22,13 +22,13 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
-import com.phloc.css.CSSValue;
-import com.phloc.css.CSSValueList;
-import com.phloc.css.CSSValueMultiProperty;
-import com.phloc.css.CSSValueMultiValue;
 import com.phloc.css.ECSSProperty;
-import com.phloc.css.ICSSProperty;
-import com.phloc.css.ICSSValue;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.propertyvalue.CSSValue;
+import com.phloc.css.propertyvalue.CSSValueList;
+import com.phloc.css.propertyvalue.CSSValueMultiProperty;
+import com.phloc.css.propertyvalue.CSSValueMultiValue;
+import com.phloc.css.propertyvalue.ICSSValue;
 
 /**
  * Abstract base class for implementing {@link ICSSProperty}
@@ -44,6 +44,12 @@ public abstract class AbstractCSSProperty implements ICSSProperty
     if (eProp == null)
       throw new NullPointerException ("prop");
     m_eProp = eProp;
+  }
+
+  @Nonnull
+  public final ECSSVersion getMinimumCSSVersion ()
+  {
+    return m_eProp.getMinimumCSSVersion ();
   }
 
   @Nonnull

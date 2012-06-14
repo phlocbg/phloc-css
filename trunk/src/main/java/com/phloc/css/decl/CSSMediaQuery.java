@@ -30,14 +30,15 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.ECSSVersion;
+import com.phloc.css.CSSWriterSettings;
+import com.phloc.css.ICSSWriteable;
 
 /**
  * Represents a single media query
  * 
  * @author philip
  */
-public final class CSSMediaQuery
+public final class CSSMediaQuery implements ICSSWriteable
 {
   public static enum EModifier
   {
@@ -117,8 +118,10 @@ public final class CSSMediaQuery
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
+    final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
+
     final StringBuilder aSB = new StringBuilder ();
 
     // The modifier already contains a trailing space if necessary!
@@ -147,7 +150,7 @@ public final class CSSMediaQuery
           // a function ("and(")!
           aSB.append (" and ");
         }
-        aSB.append (aMediaExpression.getAsCSSString (eVersion, bOptimizedOutput));
+        aSB.append (aMediaExpression.getAsCSSString (aSettings));
       }
     }
 

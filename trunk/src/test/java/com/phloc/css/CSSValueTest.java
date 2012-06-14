@@ -25,6 +25,10 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.phloc.css.property.CCSSProperties;
+import com.phloc.css.propertyvalue.CSSValue;
+import com.phloc.css.propertyvalue.CSSValueList;
+import com.phloc.css.propertyvalue.CSSValueMultiValue;
+import com.phloc.css.propertyvalue.ICSSValue;
 
 /**
  * Test class for class {@link CSSValue}.

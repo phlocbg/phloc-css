@@ -15,11 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css;
+package com.phloc.css.propertyvalue;
 
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
+import com.phloc.css.ECSSProperty;
+import com.phloc.css.ICSSWriteable;
 
 /**
  * Represents a single CSS value.

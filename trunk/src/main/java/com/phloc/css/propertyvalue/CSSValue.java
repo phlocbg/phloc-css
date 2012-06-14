@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css;
+package com.phloc.css.propertyvalue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -25,6 +25,10 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CCSS;
+import com.phloc.css.CSSWriterSettings;
+import com.phloc.css.ECSSProperty;
+import com.phloc.css.property.ICSSProperty;
 
 /**
  * Represents the combination of a single CSS property and it's according value.
@@ -79,9 +83,9 @@ public final class CSSValue implements ICSSValue
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
-    CSSVersionHelper.checkVersionRequirements (eVersion, m_aProperty.getProp ());
+    aSettings.checkVersionRequirements (m_aProperty);
     return m_aProperty.getProp ().getName () + CCSS.SEPARATOR_PROPERTY_VALUE + m_sValue + CCSS.DEFINITION_END;
   }
 

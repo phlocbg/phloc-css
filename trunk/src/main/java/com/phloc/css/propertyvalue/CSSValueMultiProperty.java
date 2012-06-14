@@ -15,56 +15,60 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css;
+package com.phloc.css.propertyvalue;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSWriterSettings;
+import com.phloc.css.ECSSProperty;
+import com.phloc.css.property.ICSSProperty;
 
 /**
- * Represents a CSS value that has both different property names and multiple
- * different values. This is e.g. if the property <code>display</code> is used
- * with the value <code>inline-block</code> than the result coding should first
- * emit <code>display:-moz-inline-block;</code> and them
- * <code>display:inline-block;</code> for FireFox 2.x specific support.
+ * Represents a CSS value that has several property names, but only one value.
+ * This is e.g. if the property <code>border-radius</code> is used, as in this
+ * case also <code>-moz-border-radius</code> should be emitted (with the same
+ * value).<br>
+ * For consistency issues,
  * 
  * @author philip
  */
-public final class CSSValueList implements ICSSValue
+public final class CSSValueMultiProperty implements ICSSValue
 {
   private final List <CSSValue> m_aValues = new ArrayList <CSSValue> ();
 
-  public CSSValueList (@Nonnull final ICSSProperty [] aProperties,
-                       @Nonnull final String [] aValues,
-                       final boolean bIsImportant)
+  public CSSValueMultiProperty (@Nonnull final ICSSProperty [] aProperties,
+                                @Nonnull @Nonempty final String sValue,
+                                final boolean bIsImportant)
   {
-    if (aProperties == null || aProperties.length == 0)
+    if (ArrayHelper.isEmpty (aProperties))
       throw new IllegalArgumentException ("No properties passed!");
-    if (aValues == null || aValues.length == 0)
-      throw new IllegalArgumentException ("No value passed!");
-    if (aProperties.length != aValues.length)
-      throw new IllegalArgumentException ("Different number of properties and values passed");
+    if (sValue == null)
+      throw new NullPointerException ("value");
 
-    for (int i = 0; i < aProperties.length; ++i)
-      m_aValues.add (new CSSValue (aProperties[i], aValues[i], bIsImportant));
-  }
-
-  public ECSSProperty getProp ()
-  {
-    return ContainerHelper.getLastElement (m_aValues).getProp ();
+    for (final ICSSProperty aProperty : aProperties)
+      m_aValues.add (new CSSValue (aProperty, sValue, bIsImportant));
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public ECSSProperty getProp ()
+  {
+    // ... not necessarily right
+    return m_aValues.get (0).getProp ();
+  }
+
+  @Nonnull
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
     final StringBuilder ret = new StringBuilder ();
     for (final CSSValue aValue : m_aValues)
-      ret.append (aValue.getAsCSSString (eVersion, bOptimizedOutput));
+      ret.append (aValue.getAsCSSString (aSettings));
     return ret.toString ();
   }
 
@@ -73,9 +77,9 @@ public final class CSSValueList implements ICSSValue
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSValueList))
+    if (!(o instanceof CSSValueMultiProperty))
       return false;
-    final CSSValueList rhs = (CSSValueList) o;
+    final CSSValueMultiProperty rhs = (CSSValueMultiProperty) o;
     return m_aValues.equals (rhs.m_aValues);
   }
 

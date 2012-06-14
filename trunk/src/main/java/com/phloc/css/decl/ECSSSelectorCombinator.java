@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.CSSVersionHelper;
+import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 
@@ -48,9 +48,9 @@ public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAwa
   }
 
   @Nonnull
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
-    CSSVersionHelper.checkVersionRequirements (eVersion, this);
+    aSettings.checkVersionRequirements (this);
     return m_sText;
   }
 
@@ -61,7 +61,7 @@ public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAwa
   }
 
   @Nullable
-  public static ECSSSelectorCombinator fromTextOrNull (@Nullable final String sText)
+  public static ECSSSelectorCombinator getFromTextOrNull (@Nullable final String sText)
   {
     if (StringHelper.hasText (sText))
       for (final ECSSSelectorCombinator eCombinator : values ())

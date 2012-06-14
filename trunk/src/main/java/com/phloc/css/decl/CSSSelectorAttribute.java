@@ -26,7 +26,7 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.ECSSVersion;
+import com.phloc.css.CSSWriterSettings;
 
 /**
  * A single CSS selector attribute.
@@ -86,11 +86,11 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
     if (m_eOperator == null)
       return "[" + m_sAttrName + "]";
-    return "[" + m_sAttrName + m_eOperator.getAsCSSString (eVersion, bOptimizedOutput) + m_sAttrValue + "]";
+    return "[" + m_sAttrName + m_eOperator.getAsCSSString (aSettings) + m_sAttrValue + "]";
   }
 
   @Override

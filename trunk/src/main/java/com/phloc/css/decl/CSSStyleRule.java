@@ -29,7 +29,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.ECSSVersion;
+import com.phloc.css.CSSWriterSettings;
 
 /**
  * Represents a single CSS style rule. A style rule consists of a number of
@@ -112,8 +112,9 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
   }
 
   @Nonnull
-  public String getSelectorsAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getSelectorsAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
+    final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
     final StringBuilder aSB = new StringBuilder ();
     boolean bFirst = true;
     for (final CSSSelector aSelector : m_aSelectors)
@@ -122,14 +123,15 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
         bFirst = false;
       else
         aSB.append (bOptimizedOutput ? "," : ",\n");
-      aSB.append (aSelector.getAsCSSString (eVersion, bOptimizedOutput));
+      aSB.append (aSelector.getAsCSSString (aSettings));
     }
     return aSB.toString ();
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
+    final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
     final int nSelectorCount = m_aSelectors.size ();
     final int nDeclarationCount = m_aDeclarations.size ();
 
@@ -139,7 +141,7 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
         aSB.append ('\n');
 
     // Append the selectors
-    aSB.append (getSelectorsAsCSSString (eVersion, bOptimizedOutput));
+    aSB.append (getSelectorsAsCSSString (aSettings));
     if (nDeclarationCount == 0)
     {
       // No declarations present
@@ -150,7 +152,7 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
       {
         // Exactly one selector present
         aSB.append (bOptimizedOutput ? "{" : " { ")
-           .append (m_aDeclarations.get (0).getAsCSSString (eVersion, bOptimizedOutput))
+           .append (m_aDeclarations.get (0).getAsCSSString (aSettings))
            .append (bOptimizedOutput ? "}" : " }\n");
       }
       else
@@ -163,7 +165,7 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
           if (!bOptimizedOutput)
             aSB.append ("  ");
           // Emit the main declaration
-          aSB.append (aDeclaration.getAsCSSString (eVersion, bOptimizedOutput));
+          aSB.append (aDeclaration.getAsCSSString (aSettings));
           if (!bOptimizedOutput)
             aSB.append ('\n');
         }

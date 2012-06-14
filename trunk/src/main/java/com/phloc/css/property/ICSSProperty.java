@@ -15,10 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css;
+package com.phloc.css.property;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.phloc.css.ECSSProperty;
+import com.phloc.css.ICSSVersionAware;
+import com.phloc.css.propertyvalue.ICSSValue;
 
 /**
  * Base interface for a single CSS property.
@@ -27,7 +31,7 @@ import javax.annotation.Nullable;
  *      properties
  * @author philip
  */
-public interface ICSSProperty
+public interface ICSSProperty extends ICSSVersionAware
 {
   @Nonnull
   ECSSProperty getProp ();

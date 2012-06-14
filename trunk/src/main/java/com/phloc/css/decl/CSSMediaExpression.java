@@ -25,15 +25,16 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CSSVersionHelper;
+import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
+import com.phloc.css.ICSSWriteable;
 import com.phloc.css.media.ECSSMediaExpressionFeature;
 
 /**
  * Represents a single media expression
  */
-public final class CSSMediaExpression implements ICSSVersionAware
+public final class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware
 {
   private final String m_sFeature;
   private final String m_sValue;
@@ -76,9 +77,10 @@ public final class CSSMediaExpression implements ICSSVersionAware
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
-    CSSVersionHelper.checkVersionRequirements (eVersion, this);
+    aSettings.checkVersionRequirements (this);
+
     final StringBuilder aSB = new StringBuilder ("(").append (m_sFeature);
     if (StringHelper.hasText (m_sValue))
       aSB.append (':').append (m_sValue);

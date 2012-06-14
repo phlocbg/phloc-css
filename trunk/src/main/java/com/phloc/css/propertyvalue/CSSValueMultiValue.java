@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css;
+package com.phloc.css.propertyvalue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +24,12 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSWriterSettings;
+import com.phloc.css.ECSSProperty;
+import com.phloc.css.property.ICSSProperty;
 
 /**
  * Represents a CSS value that has one property name, but multiple different
@@ -56,15 +60,17 @@ public final class CSSValueMultiValue implements ICSSValue
   @Nonnull
   public ECSSProperty getProp ()
   {
-    return m_aValues.get (0).getProp ();
+    if (m_aValues.isEmpty ())
+      throw new IllegalStateException ("no value present to determine the property from!");
+    return ContainerHelper.getFirstElement (m_aValues).getProp ();
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
+  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
     final StringBuilder ret = new StringBuilder ();
     for (final CSSValue aValue : m_aValues)
-      ret.append (aValue.getAsCSSString (eVersion, bOptimizedOutput));
+      ret.append (aValue.getAsCSSString (aSettings));
     return ret.toString ();
   }
 
