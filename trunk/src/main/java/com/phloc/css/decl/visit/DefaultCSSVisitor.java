@@ -23,6 +23,7 @@ import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSKeyframesBlock;
 import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSSelector;
@@ -81,6 +82,14 @@ public class DefaultCSSVisitor implements ICSSVisitor
 
   @OverrideOnDemand
   public void onBeginKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule)
+  {}
+
+  @OverrideOnDemand
+  public void onBeginKeyframesBlock (@Nonnull final CSSKeyframesBlock aKeyframesBlock)
+  {}
+
+  @OverrideOnDemand
+  public void onEndKeyframesBlock (@Nonnull final CSSKeyframesBlock aKeyframesBlock)
   {}
 
   @OverrideOnDemand

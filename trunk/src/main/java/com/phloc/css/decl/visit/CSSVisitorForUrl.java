@@ -64,12 +64,6 @@ public final class CSSVisitorForUrl extends DefaultCSSVisitor
   }
 
   @Override
-  public void onBeginStyleRule (@Nonnull final CSSStyleRule aStyleRule)
-  {
-    m_aTopLevelRule = aStyleRule;
-  }
-
-  @Override
   public void onDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     final CSSExpression aExpr = aDeclaration.getExpression ();
@@ -79,10 +73,23 @@ public final class CSSVisitorForUrl extends DefaultCSSVisitor
         final CSSExpressionMemberTermSimple aExprTerm = (CSSExpressionMemberTermSimple) aMember;
         if (CCSS.isURLValue (aExprTerm.getValue ()))
         {
+          // Extract the URL for sanity reasons
           final String sURL = CCSS.getURLValue (aExprTerm.getValue ());
           m_aVisitor.onUrlDeclaration (m_aTopLevelRule, aDeclaration, aExprTerm, sURL);
         }
       }
+  }
+
+  @Override
+  public void onBeginStyleRule (@Nonnull final CSSStyleRule aStyleRule)
+  {
+    m_aTopLevelRule = aStyleRule;
+  }
+
+  @Override
+  public void onEndStyleRule (@Nonnull final CSSStyleRule aStyleRule)
+  {
+    m_aTopLevelRule = null;
   }
 
   @Override
@@ -92,15 +99,33 @@ public final class CSSVisitorForUrl extends DefaultCSSVisitor
   }
 
   @Override
+  public void onEndFontFaceRule (@Nonnull final CSSFontFaceRule aFontFaceRule)
+  {
+    m_aTopLevelRule = null;
+  }
+
+  @Override
   public void onBeginMediaRule (@Nonnull final CSSMediaRule aMediaRule)
   {
     m_aTopLevelRule = aMediaRule;
   }
 
   @Override
+  public void onEndMediaRule (@Nonnull final CSSMediaRule aMediaRule)
+  {
+    m_aTopLevelRule = null;
+  }
+
+  @Override
   public void onBeginKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule)
   {
     m_aTopLevelRule = aKeyframesRule;
+  }
+
+  @Override
+  public void onEndKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule)
+  {
+    m_aTopLevelRule = null;
   }
 
   @Override

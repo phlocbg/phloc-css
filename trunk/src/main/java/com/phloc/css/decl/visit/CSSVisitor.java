@@ -23,6 +23,8 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSKeyframesBlock;
+import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
@@ -123,7 +125,35 @@ public final class CSSVisitor
               }
             }
             else
-              throw new IllegalStateException ("Top level rule " + aTopLevelRule + " is unsupported!");
+              if (aTopLevelRule instanceof CSSKeyframesRule)
+              {
+                final CSSKeyframesRule aKeyframesRule = (CSSKeyframesRule) aTopLevelRule;
+                aVisitor.onBeginKeyframesRule (aKeyframesRule);
+                try
+                {
+                  // for all keyframes blocks
+                  for (final CSSKeyframesBlock aBlock : aKeyframesRule.getAllBlocks ())
+                  {
+                    aVisitor.onBeginKeyframesBlock (aBlock);
+                    try
+                    {
+                      // for all declarations
+                      for (final CSSDeclaration aDeclaration : aBlock.getAllDeclarations ())
+                        aVisitor.onDeclaration (aDeclaration);
+                    }
+                    finally
+                    {
+                      aVisitor.onEndKeyframesBlock (aBlock);
+                    }
+                  }
+                }
+                finally
+                {
+                  aVisitor.onEndKeyframesRule (aKeyframesRule);
+                }
+              }
+              else
+                throw new IllegalStateException ("Top level rule " + aTopLevelRule + " is unsupported!");
       }
     }
     finally

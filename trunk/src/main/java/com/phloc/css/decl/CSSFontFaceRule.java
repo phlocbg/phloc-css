@@ -40,7 +40,7 @@ import com.phloc.css.ICSSVersionAware;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSFontFaceRule implements ICSSTopLevelRule, ICSSVersionAware
+public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSVersionAware
 {
   private final List <CSSDeclaration> m_aDeclarations = new ArrayList <CSSDeclaration> ();
 
@@ -75,6 +75,12 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, ICSSVersionAware
     return ContainerHelper.newList (m_aDeclarations);
   }
 
+  @Nonnegative
+  public int getDeclarationCount ()
+  {
+    return m_aDeclarations.size ();
+  }
+
   @Nonnull
   @Nonempty
   public String getAsCSSString (final ECSSVersion eVersion, final boolean bOptimizedOutput)
@@ -106,8 +112,10 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, ICSSVersionAware
         aSB.append (bOptimizedOutput ? "{" : " {\n");
         for (final CSSDeclaration aDeclaration : m_aDeclarations)
         {
+          // Indentation
           if (!bOptimizedOutput)
             aSB.append ("  ");
+          // Emit the main declaration
           aSB.append (aDeclaration.getAsCSSString (eVersion, bOptimizedOutput));
           if (!bOptimizedOutput)
             aSB.append ('\n');
