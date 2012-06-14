@@ -20,8 +20,8 @@ package com.phloc.css.property;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.css.CCSS;
 import com.phloc.css.ECSSProperty;
+import com.phloc.css.color.CSSColorHelper;
 
 /**
  * Represents a color value
@@ -37,7 +37,7 @@ public class CSSPropertyColor extends AbstractCSSProperty
 
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return CCSS.isColorValue (sValue);
+    return CSSColorHelper.isColorValue (sValue);
   }
 
   @Nonnull

@@ -24,8 +24,8 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CCSS;
 import com.phloc.css.ECSSProperty;
+import com.phloc.css.color.CSSColorHelper;
 
 public class CSSPropertyEnumOrColors extends CSSPropertyEnum
 {
@@ -71,7 +71,7 @@ public class CSSPropertyEnumOrColors extends CSSPropertyEnum
     for (int i = 0; i < aParts.length; ++i)
     {
       aParts[i] = aParts[i].trim ();
-      if (!super.isValidValue (aParts[i]) && !CCSS.isColorValue (aParts[i]))
+      if (!super.isValidValue (aParts[i]) && !CSSColorHelper.isColorValue (aParts[i]))
         return false;
     }
     return true;

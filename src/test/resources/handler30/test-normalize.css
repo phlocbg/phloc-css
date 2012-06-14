@@ -459,4 +459,5 @@ table {
     alpha(opacity = 20);
   margin-top: -2px;
   margin-left: -2px;
+  color: rgba(255,0,0,1);
 }

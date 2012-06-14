@@ -25,7 +25,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.html.CHTMLColors;
+import com.phloc.css.color.CSSColorHelper;
 
 /**
  * Contains CSS style constants and utility stuff. Only constants that are part
@@ -191,6 +191,7 @@ public final class CCSS
   public static final String PREFIX_URL = "url";
   public static final String PREFIX_URL_OPEN = PREFIX_URL + '(';
   public static final String PREFIX_RGB = "rgb";
+  public static final String PREFIX_RGBA = "rgba";
   public static final int HEXVALUE_LENGTH = 7;
   public static final char PREFIX_HEX = '#';
 
@@ -239,26 +240,22 @@ public final class CCSS
     return StringHelper.hasText (sRealValue) && StringHelper.isDouble (sRealValue);
   }
 
+  @Deprecated
   public static boolean isColorValue (@Nullable final String sValue)
   {
-    final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) &&
-           (isRGBColorValue (sRealValue) || isHexColorValue (sRealValue) || CHTMLColors.isDefaultColorName (sRealValue));
+    return CSSColorHelper.isColorValue (sValue);
   }
 
+  @Deprecated
   public static boolean isRGBColorValue (@Nullable final String sValue)
   {
-    final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) &&
-           RegExHelper.stringMatchesPattern ("^" + PREFIX_RGB + "\\s*\\((\\s*[0-9]+%?\\s*,){2}\\s*[0-9]+%?\\s*\\)$",
-                                             sRealValue);
+    return CSSColorHelper.isRGBColorValue (sValue);
   }
 
+  @Deprecated
   public static boolean isHexColorValue (@Nullable final String sValue)
   {
-    final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) &&
-           RegExHelper.stringMatchesPattern ("^" + PREFIX_HEX + "[0-9a-fA-F]{1,6}$", sRealValue);
+    return CSSColorHelper.isHexColorValue (sValue);
   }
 
   /**
@@ -399,43 +396,21 @@ public final class CCSS
 
   @Nonnull
   @Nonempty
-  public static String colorRGB (@Nonnegative final int r, @Nonnegative final int g, @Nonnegative final int b)
+  @Deprecated
+  public static String colorRGB (@Nonnegative final int nRed,
+                                 @Nonnegative final int nGreen,
+                                 @Nonnegative final int nBlue)
   {
-    if (r < 0 || r > 255)
-      throw new IllegalArgumentException ("Invalid red: " + r);
-    if (g < 0 || g > 255)
-      throw new IllegalArgumentException ("Invalid green: " + g);
-    if (b < 0 || b > 255)
-      throw new IllegalArgumentException ("Invalid blue: " + b);
-
-    return new StringBuilder (16).append (PREFIX_RGB)
-                                 .append ('(')
-                                 .append (r)
-                                 .append (',')
-                                 .append (g)
-                                 .append (',')
-                                 .append (b)
-                                 .append (')')
-                                 .toString ();
+    return CSSColorHelper.getRGBColorValue (nRed, nGreen, nBlue);
   }
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String colorHex (@Nonnegative final int nRed,
                                  @Nonnegative final int nGreen,
                                  @Nonnegative final int nBlue)
   {
-    if (nRed < 0 || nRed > 255)
-      throw new IllegalArgumentException ("Invalid red: " + nRed);
-    if (nGreen < 0 || nGreen > 255)
-      throw new IllegalArgumentException ("Invalid green: " + nGreen);
-    if (nBlue < 0 || nBlue > 255)
-      throw new IllegalArgumentException ("Invalid blue: " + nBlue);
-
-    return new StringBuilder (HEXVALUE_LENGTH).append (PREFIX_HEX)
-                                              .append (StringHelper.getHexStringLeadingZero (nRed, 2))
-                                              .append (StringHelper.getHexStringLeadingZero (nGreen, 2))
-                                              .append (StringHelper.getHexStringLeadingZero (nBlue, 2))
-                                              .toString ();
+    return CSSColorHelper.getHexColorValue (nRed, nGreen, nBlue);
   }
 }
