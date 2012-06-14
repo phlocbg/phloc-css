@@ -17,6 +17,9 @@
  */
 package com.phloc.css.handler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -30,6 +33,7 @@ import com.phloc.css.decl.CSSExpressionMemberFunction;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSKeyframesBlock;
 import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaExpression;
 import com.phloc.css.decl.CSSMediaQuery;
@@ -471,26 +475,42 @@ final class CSSNodeToDomainObject
     // "@-webkit-keyframes")
     final String sKeyframesDeclaration = aNode.getText ();
 
+    // get the name of the animation
     final CSSNode aAnimationNameNode = aNode.jjtGetChild (0);
     _expectNodeType (aAnimationNameNode, ECSSNodeType.KEYFRAMESIDENTIFIER);
     final String sAnimationName = aAnimationNameNode.getText ();
 
-    s_aLogger.info ("keyframes " + sKeyframesDeclaration + " " + sAnimationName);
+    final CSSKeyframesRule ret = new CSSKeyframesRule (sKeyframesDeclaration, sAnimationName);
 
     // Get the key frame blocks
-    for (int i = 1; i < nChildCount; ++i)
+    int nIndex = 1;
+    CSSKeyframesBlock aBlock = null;
+    while (nIndex < nChildCount)
     {
-      final CSSNode aChildNode = aNode.jjtGetChild (i);
-      s_aLogger.info ("  " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
-      for (final CSSNode aChildChildNode : aChildNode)
+      final CSSNode aChildNode = aNode.jjtGetChild (nIndex);
+      if (ECSSNodeType.KEYFRAMESSELECTOR.isNode (aChildNode, m_eVersion))
       {
-        if (ECSSNodeType.SINGLEKEYFRAMESELECTOR.isNode (aChildChildNode, m_eVersion))
-          s_aLogger.info ("    " + aChildChildNode.getText ());
-        else
-          s_aLogger.info ("    " + ECSSNodeType.getNodeName (aChildChildNode, m_eVersion));
+        // Read all single selectors
+        final List <String> aKeyframesSelectors = new ArrayList <String> ();
+        for (final CSSNode aSelectorChild : aChildNode)
+        {
+          _expectNodeType (aSelectorChild, ECSSNodeType.SINGLEKEYFRAMESELECTOR);
+          aKeyframesSelectors.add (aSelectorChild.getText ());
+        }
+        aBlock = new CSSKeyframesBlock (aKeyframesSelectors);
+        ret.addBlock (aBlock);
       }
+      else
+      {
+        // Must be a declaration
+        if (aBlock == null)
+          throw new IllegalStateException ("No keyframes block present!");
+        aBlock.addDeclaration (_createDeclaration (aChildNode));
+      }
+
+      ++nIndex;
     }
-    return null;
+    return ret;
   }
 
   @Nonnull
@@ -533,7 +553,7 @@ final class CSSNodeToDomainObject
                 else
                   if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
                   {
-                    _createKeyframesRule (aChildNode);
+                    ret.addRule (_createKeyframesRule (aChildNode));
                   }
                   else
                     if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))

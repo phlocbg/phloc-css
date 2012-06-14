@@ -429,11 +429,7 @@ void pageRule() : {}
   )?
   <LBRACE>
   ( <S> )*
-  ( declaration() )?
-  ( <SEMICOLON>
-    ( <S> )*
-    ( declaration() )?
-  )*
+  styleDeclaration()
   <RBRACE>
 }
 
@@ -458,11 +454,7 @@ void fontfaceRule() : {}
   <FONTFACE_SYM>
   <LBRACE>
   ( <S> )*
-  ( declaration() )?
-  ( <SEMICOLON>
-    ( <S> )*
-    ( declaration() )?
-  )*
+  styleDeclaration()
   <RBRACE>
 }
 
@@ -496,11 +488,7 @@ void keyframesBlocks() #void : {}
   ( keyframesSelector()
     <LBRACE>
     ( <S> )*
-    ( declaration() )?
-    ( <SEMICOLON>
-      ( <S> )*
-      ( declaration() )?
-    )*    
+    styleDeclaration()
     <RBRACE>
     ( <S> )* 
   )*
@@ -752,15 +740,6 @@ void hash() #Hash :
   t = <HASH> { jjtThis.setText (t.image); }
 }
 
-void styleDeclaration() #void : {}
-{
-  ( declaration() )?
-  ( <SEMICOLON>
-    ( <S> )*
-    ( declaration() )?
-  )*
-}
-
 //
 // declaration
 //   : property ':' S* expr prio?
@@ -774,6 +753,18 @@ void declaration() : {}
   ( <S> )*
   expr()
   ( prio() )?
+}
+
+//
+// Multiple style declarations together
+// 
+void styleDeclaration() #void : {}
+{
+  ( declaration() )?
+  ( <SEMICOLON>
+    ( <S> )*
+    ( declaration() )?
+  )*
 }
 
 //
