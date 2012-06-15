@@ -134,8 +134,15 @@ public final class CSSMediaRule implements ICSSTopLevelRule
     {
       // At least one style rule present
       aSB.append (bOptimizedOutput ? "{" : " {\n");
+      bFirst = true;
       for (final ICSSTopLevelRule aStyleRule : m_aRules)
       {
+        if (bFirst)
+          bFirst = false;
+        else
+          if (!bOptimizedOutput)
+            aSB.append ('\n');
+
         if (!bOptimizedOutput)
           aSB.append (aSettings.getIndent (nIndentLevel + 1));
         aSB.append (aStyleRule.getAsCSSString (aSettings, nIndentLevel + 1));
