@@ -111,7 +111,7 @@ public final class CSSMediaRule implements ICSSTopLevelRule
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
-    if (bOptimizedOutput && m_aMediaQueries.isEmpty ())
+    if (false && bOptimizedOutput && m_aMediaQueries.isEmpty ())
       return "";
 
     final StringBuilder aSB = new StringBuilder ("@media ");
