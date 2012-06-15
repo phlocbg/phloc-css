@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2006-2012 phloc systems
+    http://www.phloc.com
+    office[at]phloc[dot]com
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2012-06-15" version="3.0.0-RC2" />
+  <entry date="2012-06-15" category="api" action="remove">
+    <change>
+      <text locale="en">Removed the content of the .html package</text>
+    </change>
+  </entry>
+  <release date="2012-06-14" version="3.0.0-RC1" />
+  <entry date="2012-06-15" category="feature" action="add">
+    <change>
+      <text locale="en">Added possibility to provide a custom exception handler to handle the generated ParseExceptions</text>
+    </change>
+  </entry>
+  <entry date="2012-06-15" category="feature" action="add">
+    <change>
+      <text locale="en">Added new writer feature "remove unnecessary code" which removes unnecessary statements</text>
+    </change>
+  </entry>
+  <entry date="2012-06-15" category="feature" action="add">
+    <change>
+      <text locale="en">Correctly handling font-face, page and keyframes as child of media rule</text>
+    </change>
+  </entry>
+  <entry date="2012-06-15" category="tech" action="fix">
+    <change>
+      <text locale="en">CSS 3.0 media list is now optional on @media rule</text>
+    </change>
+  </entry>
+  <entry date="2012-06-15" category="feature" action="add">
+    <change>
+      <text locale="en">Added support for "dpi" and "dpcm" CSS units</text>
+    </change>
+  </entry>
+  <entry date="2012-06-15" category="feature" action="add">
+    <change>
+      <text locale="en">Added support for simple CSS 2.1 page rule in model</text>
+    </change>
+  </entry>
+  <entry date="2012-06-15" category="feature" action="add">
+    <change>
+      <text locale="en">Extended CSSWriter with options to format the output (header?, header text, content charset)</text>
+    </change>
+  </entry>
+  <entry date="2012-06-15" category="api" action="add">
+    <change>
+      <text locale="en">Extracted ICSSWriterSettings interface and using it</text>
+    </change>
+  </entry>
+  <entry date="2012-06-15" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed hack in internal handling of complex pseudo selectors (added class CSSSelectorMemberFunctionLike)</text>
+    </change>
+  </entry>
+  <entry date="2012-06-14" category="api" action="change" incompatible="true">
+    <change>
+      <text locale="en">Moved all color related elements to a separate subpackage ".color"</text>
+    </change>
+  </entry>
+  <entry date="2012-06-14" category="feature" action="add">
+    <change>
+      <text locale="en">Added support for RGBA, HSL and HSLA values</text>
+    </change>
+  </entry>
+  <entry date="2012-06-14" category="api" action="update" incompatible="true">
+    <change>
+      <text locale="en">Updated URL visitor API so that the URL is passed in directly</text>
+    </change>
+  </entry>
+  <entry date="2012-06-14" category="api" action="update" incompatible="true">
+    <change>
+      <text locale="en">Updated visitor API to handle keyframes rules</text>
+    </change>
+  </entry>
+  <entry date="2012-06-14" category="feature" action="add">
+    <change>
+      <text locale="en">Added support for parsing and writing CSS animation rules (CSSKeyframesRule)</text>
+    </change>
+  </entry>
+  <entry date="2012-06-14" category="feature" action="update">
+    <change>
+      <text locale="en">Made parsing of IE filters (progid:...) more flexible by adding whitespace support</text>
+    </change>
+  </entry>
+  <entry date="2012-06-13" category="api" action="change" incompatible="true">
+    <change>
+      <text locale="en">Moved all HTML relevant things to the new package .html</text>
+    </change>
+  </entry>
+  <entry date="2012-06-13" category="api" action="add">
+    <change>
+      <text locale="en">Added new enum ECSSMediaExpressionFeature</text>
+    </change>
+  </entry>
+  <entry date="2012-06-13" category="feature" action="add">
+    <change>
+      <text locale="en">Added support for parsing and writing CSS 3 media queries. Many thanks to Thomas Draier from jahia.com!!!!!</text>
+    </change>
+  </entry>
+  <entry date="2012-06-13" category="api" action="add">
+    <change>
+      <text locale="en">Added CSSHandler.readFromStream with String charset name</text>
+    </change>
+  </entry>
+  <release date="2012-06-04" version="2.7.1" />
+  <entry date="2012-06-04" category="api" action="add">
+    <change>
+      <text locale="en">Added CSSHandler.isValidCSS method accepting a Reader</text>
+    </change>
+  </entry>
+  <entry date="2012-06-04" category="api" action="add">
+    <change>
+      <text locale="en">Added JavaCharStream constructor</text>
+    </change>
+  </entry>
+  <release date="2012-05-24" version="2.7.0" />
+  <entry date="2012-05-24" category="tech" action="change">
+    <change>
+      <text locale="en">Using a custom CharStream to read CSS files, to ensure that the encoding is used correctly</text>
+    </change>
+  </entry>
+  <entry date="2012-05-24" category="tech" action="change">
+    <change>
+      <text locale="en">Changed some return types from returning unmodifiable objects to return copies instead</text>
+    </change>
+  </entry>
+  <entry date="2012-05-22" category="tech" action="update">
+    <change>
+      <text locale="en">Added support for explicitly reading and writing CSS with a special charset</text>
+    </change>
+  </entry>
+  <release date="2012-04-23" version="2.6.5" />
+  <entry date="2012-04-23" category="tech" action="update" incompatible="true">
+    <change>
+      <text locale="en">Updated to phloc-commons 3.5.0</text>
+    </change>
+  </entry>
+  <release date="2012-04-19" version="2.6.1" />
+  <entry date="2012-04-19" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed cloning of CSSProperty implementations</text>
+    </change>
+  </entry>
+  <entry date="2012-04-19" category="tech" action="add">
+    <change>
+      <text locale="en">Enabled compression of simple expression values (like #aabbcc =&gt; #abc)</text>
+    </change>
+  </entry>
+  <entry date="2012-04-19" category="api" action="add">
+    <change>
+      <text locale="en">Added modifying methods for CascadingStyleSheet</text>
+    </change>
+  </entry>
+  <entry date="2012-04-19" category="api" action="add">
+    <change>
+      <text locale="en">Added new method isNode in ECSSNodeType for more easier readable code</text>
+    </change>
+  </entry>
+  <release date="2012-02-02" version="2.6.0" />
+  <entry date="2012-02-02" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed bug in grammar concerning spaces before @charset</text>
+    </change>
+  </entry>
+  <entry date="2012-02-02" category="tech" action="change">
+    <change>
+      <text locale="en">Moved to Google Code as Open Source</text>
+    </change>
+  </entry>
+  <release date="2011-11-06" version="2.5.3" />
+  <entry date="2011-10-24" category="api" action="add">
+    <change>
+      <text locale="en">Added new CSS3 and browser specific CSS properties</text>
+    </change>
+  </entry>
+  <entry date="2011-10-23" category="api" action="add">
+    <change>
+      <text locale="en">Added support for border-radius</text>
+    </change>
+  </entry>
+  <release date="2011-09-23" version="2.5.2" />
+  <entry date="2011-09-23" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed bug in parser to read "inherit !important"</text>
+    </change>
+  </entry>
+  <entry date="2011-09-23" category="tech" action="add">
+    <change>
+      <text locale="en">Added support for CSSMediaRule in the CSSVisitor</text>
+    </change>
+  </entry>
+  <release date="2011-08-12" version="2.5.1" />
+  <entry date="2011-08-11" category="tech" action="fix">
+    <change>
+      <text locale="en">CSS 3.0 parser can now handle negation, nth-* functions, ~ combinator, namespace prefix etc.</text>
+    </change>
+  </entry>
+  <entry date="2011-08-11" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed CSS parser speed by using LL(1) by default and LL(k) only on demand</text>
+    </change>
+  </entry>
+</changelog>
