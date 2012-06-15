@@ -69,9 +69,9 @@ public final class CSSSelectorMemberFunctionLike implements ICSSSelectorMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
-    return m_sFuncName + m_aParamExpr.getAsCSSString (aSettings) + ')';
+    return m_sFuncName + m_aParamExpr.getAsCSSString (aSettings, nIndentLevel) + ')';
   }
 
   @Override

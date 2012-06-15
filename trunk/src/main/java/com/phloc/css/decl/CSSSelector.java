@@ -73,11 +73,11 @@ public final class CSSSelector implements ICSSWriteable
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     final StringBuilder aSB = new StringBuilder ();
     for (final ICSSSelectorMember aMember : m_aMembers)
-      aSB.append (aMember.getAsCSSString (aSettings));
+      aSB.append (aMember.getAsCSSString (aSettings, nIndentLevel));
     return aSB.toString ();
   }
 

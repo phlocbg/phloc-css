@@ -66,11 +66,11 @@ public final class CSSValueMultiValue implements ICSSValue
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     final StringBuilder ret = new StringBuilder ();
     for (final CSSValue aValue : m_aValues)
-      ret.append (aValue.getAsCSSString (aSettings));
+      ret.append (aValue.getAsCSSString (aSettings, nIndentLevel));
     return ret.toString ();
   }
 

@@ -85,7 +85,7 @@ public final class CSSExpression implements ICSSWriteable
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     final StringBuilder aSB = new StringBuilder ();
     boolean bPrevWasOperator = false;
@@ -97,7 +97,7 @@ public final class CSSExpression implements ICSSWriteable
         // The space is required for separating values like "solid 1px black"
         aSB.append (' ');
       }
-      aSB.append (aMember.getAsCSSString (aSettings));
+      aSB.append (aMember.getAsCSSString (aSettings, nIndentLevel));
       bPrevWasOperator = bIsOp;
     }
     return aSB.toString ();

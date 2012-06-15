@@ -118,7 +118,7 @@ public final class CSSMediaQuery implements ICSSWriteable
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
@@ -150,12 +150,9 @@ public final class CSSMediaQuery implements ICSSWriteable
           // a function ("and(")!
           aSB.append (" and ");
         }
-        aSB.append (aMediaExpression.getAsCSSString (aSettings));
+        aSB.append (aMediaExpression.getAsCSSString (aSettings, nIndentLevel));
       }
     }
-
-    if (!bOptimizedOutput)
-      aSB.append ('\n');
 
     return aSB.toString ();
   }

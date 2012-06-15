@@ -78,13 +78,13 @@ public final class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
 
     final StringBuilder aSB = new StringBuilder ("(").append (m_sFeature);
     if (m_aValue != null)
-      aSB.append (CCSS.SEPARATOR_PROPERTY_VALUE).append (m_aValue.getAsCSSString (aSettings));
+      aSB.append (CCSS.SEPARATOR_PROPERTY_VALUE).append (m_aValue.getAsCSSString (aSettings, nIndentLevel));
     return aSB.append (')').toString ();
   }
 

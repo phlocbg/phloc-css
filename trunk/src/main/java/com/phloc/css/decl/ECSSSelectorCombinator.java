@@ -56,7 +56,7 @@ public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAwa
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
     return m_sName;

@@ -66,7 +66,7 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     return aSettings.isOptimizedOutput () ? m_sOptimizedValue : m_sValue;
   }

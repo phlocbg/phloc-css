@@ -52,10 +52,10 @@ public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersi
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
-    return ":not(" + m_aNestedSelectorMember.getAsCSSString (aSettings) + ")";
+    return ":not(" + m_aNestedSelectorMember.getAsCSSString (aSettings, nIndentLevel) + ")";
   }
 
   @Nonnull

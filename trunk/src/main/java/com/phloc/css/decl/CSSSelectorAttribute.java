@@ -86,11 +86,11 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     if (m_eOperator == null)
       return "[" + m_sAttrName + "]";
-    return "[" + m_sAttrName + m_eOperator.getAsCSSString (aSettings) + m_sAttrValue + "]";
+    return "[" + m_sAttrName + m_eOperator.getAsCSSString (aSettings, nIndentLevel) + m_sAttrValue + "]";
   }
 
   @Override

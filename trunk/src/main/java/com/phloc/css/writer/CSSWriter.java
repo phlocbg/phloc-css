@@ -235,7 +235,7 @@ public final class CSSWriter
       {
         for (final CSSImportRule aImportRule : aImportRules)
         {
-          aWriter.write (aImportRule.getAsCSSString (m_aSettings));
+          aWriter.write (aImportRule.getAsCSSString (m_aSettings, 0));
           ++nRulesEmitted;
         }
       }
@@ -245,7 +245,7 @@ public final class CSSWriter
       {
         if (!m_aSettings.isOptimizedOutput () && nRulesEmitted > 0)
           aWriter.write ('\n');
-        aWriter.write (aRule.getAsCSSString (m_aSettings));
+        aWriter.write (aRule.getAsCSSString (m_aSettings, 0));
         ++nRulesEmitted;
       }
     }

@@ -17,7 +17,6 @@
  */
 package com.phloc.css.decl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnegative;
@@ -32,13 +31,14 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
+import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
 @NotThreadSafe
-public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware
+public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware, ICSSWriteable
 {
   private final List <String> m_aKeyframesSelectors;
-  private final List <CSSDeclaration> m_aDeclarations = new ArrayList <CSSDeclaration> ();
+  private final CSSDeclarationContainer m_aDeclarations = new CSSDeclarationContainer ();
 
   public CSSKeyframesBlock (@Nonnull @Nonempty final List <String> aKeyframesSelectors)
   {
@@ -58,41 +58,37 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
 
   public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
-    if (aDeclaration == null)
-      throw new NullPointerException ("declaration");
-    m_aDeclarations.add (aDeclaration);
+    m_aDeclarations.addDeclaration (aDeclaration);
   }
 
   @Nonnull
   public EChange removeDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
-    return EChange.valueOf (m_aDeclarations.remove (aDeclaration));
+    return m_aDeclarations.removeDeclaration (aDeclaration);
   }
 
   @Nonnull
   public EChange removeDeclaration (@Nonnegative final int nDeclarationIndex)
   {
-    if (nDeclarationIndex < 0 || nDeclarationIndex >= m_aDeclarations.size ())
-      return EChange.UNCHANGED;
-    return EChange.valueOf (m_aDeclarations.remove (nDeclarationIndex) != null);
+    return m_aDeclarations.removeDeclaration (nDeclarationIndex);
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSDeclaration> getAllDeclarations ()
   {
-    return ContainerHelper.newList (m_aDeclarations);
+    return m_aDeclarations.getAllDeclarations ();
   }
 
   @Nonnegative
   public int getDeclarationCount ()
   {
-    return m_aDeclarations.size ();
+    return m_aDeclarations.getDeclarationCount ();
   }
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
@@ -107,43 +103,7 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
       aSB.append (sSelector);
     }
 
-    final int nDeclCount = m_aDeclarations.size ();
-    if (nDeclCount == 0)
-    {
-      // Skip the whole rule
-      // Leads to different results in comparison!
-      if (false && bOptimizedOutput)
-        return "";
-      aSB.append (bOptimizedOutput ? "{}" : " {}");
-    }
-    else
-    {
-      if (nDeclCount == 1)
-      {
-        // A single declaration
-        aSB.append (bOptimizedOutput ? "{" : " { ");
-        aSB.append (ContainerHelper.getFirstElement (m_aDeclarations).getAsCSSString (aSettings));
-        aSB.append (bOptimizedOutput ? "}" : " }");
-      }
-      else
-      {
-        // More than one declaration
-        aSB.append (bOptimizedOutput ? "{" : " {\n");
-        for (final CSSDeclaration aDeclaration : m_aDeclarations)
-        {
-          // Indentation
-          if (!bOptimizedOutput)
-            aSB.append (aSettings.getIndent (2));
-          // Emit the main declaration
-          aSB.append (aDeclaration.getAsCSSString (aSettings));
-          if (!bOptimizedOutput)
-            aSB.append ('\n');
-        }
-        if (!bOptimizedOutput)
-          aSB.append (aSettings.getIndent ());
-        aSB.append ('}');
-      }
-    }
+    aSB.append (m_aDeclarations.getAsCSSString (aSettings, nIndentLevel + 1));
     return aSB.toString ();
   }
 
