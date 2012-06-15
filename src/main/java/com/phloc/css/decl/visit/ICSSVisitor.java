@@ -25,6 +25,7 @@ import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CSSKeyframesBlock;
 import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaRule;
+import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
 
@@ -57,6 +58,12 @@ public interface ICSSVisitor
   void onDeclaration (@Nonnull CSSDeclaration aDeclaration);
 
   void onEndStyleRule (@Nonnull CSSStyleRule aStyleRule);
+
+  // page rules:
+  // contained declarations are handled by onDeclaration
+  void onBeginPageRule (@Nonnull CSSPageRule aPageRule);
+
+  void onEndPageRule (@Nonnull CSSPageRule aPageRule);
 
   // font face rules:
   // contained declarations are handled by onDeclaration

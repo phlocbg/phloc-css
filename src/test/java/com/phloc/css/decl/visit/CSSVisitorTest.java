@@ -18,6 +18,7 @@
 package com.phloc.css.decl.visit;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
@@ -31,6 +32,7 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.file.filter.FilenameFilterFactory;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.commons.io.resource.FileSystemResource;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
@@ -50,10 +52,17 @@ public final class CSSVisitorTest
 
   private static final class SysOutVisitor extends DefaultCSSUrlVisitor
   {
+    private final String m_sFilename;
+
+    public SysOutVisitor (final String sFilename)
+    {
+      m_sFilename = sFilename;
+    }
+
     @Override
     public void onImport (final CSSImportRule aImportRule)
     {
-      s_aLogger.info ("Import URL: " + aImportRule.getLocation ());
+      assertTrue (m_sFilename, StringHelper.hasText (aImportRule.getLocation ()));
     }
 
     @Override
@@ -62,7 +71,7 @@ public final class CSSVisitorTest
                                   @Nonnull final CSSExpressionMemberTermSimple aExprTerm,
                                   @Nonnull final String sURL)
     {
-      s_aLogger.info ("Expression URL: " + sURL);
+      assertTrue (m_sFilename, StringHelper.hasText (sURL));
     }
   }
 
@@ -72,22 +81,26 @@ public final class CSSVisitorTest
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css"),
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
-      s_aLogger.info (aFile.getAbsolutePath ());
+      final String sKey = aFile.getAbsolutePath ();
+      if (false)
+        s_aLogger.info (sKey);
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
                                                                   CCharset.CHARSET_UTF_8_OBJ,
                                                                   ECSSVersion.CSS21);
-      assertNotNull (aFile.getAbsolutePath (), aCSS);
-      CSSVisitor.visitCSSUrl (aCSS, new SysOutVisitor ());
+      assertNotNull (sKey, aCSS);
+      CSSVisitor.visitCSSUrl (aCSS, new SysOutVisitor (sKey));
     }
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
-      s_aLogger.info (aFile.getAbsolutePath ());
+      final String sKey = aFile.getAbsolutePath ();
+      if (false)
+        s_aLogger.info (sKey);
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
                                                                   CCharset.CHARSET_UTF_8_OBJ,
                                                                   ECSSVersion.CSS30);
-      assertNotNull (aFile.getAbsolutePath (), aCSS);
-      CSSVisitor.visitCSSUrl (aCSS, new SysOutVisitor ());
+      assertNotNull (sKey, aCSS);
+      CSSVisitor.visitCSSUrl (aCSS, new SysOutVisitor (sKey));
     }
   }
 }
