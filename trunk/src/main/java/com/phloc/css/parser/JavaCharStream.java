@@ -164,12 +164,12 @@ public final class JavaCharStream implements CharStream
       if ((i = m_aReader.read (m_aNextCharBuf, m_nMaxNextCharInd, 4096 - m_nMaxNextCharInd)) == -1)
       {
         m_aReader.close ();
-        throw new IOException ();
+        throw new IOException ("EOF in JavaCharStream");
       }
       m_nMaxNextCharInd += i;
       return;
     }
-    catch (final IOException e)
+    catch (final IOException ex)
     {
       if (m_nBufpos != 0)
       {
@@ -181,7 +181,7 @@ public final class JavaCharStream implements CharStream
         m_aBufLine[m_nBufpos] = m_nLine;
         m_aBufColumn[m_nBufpos] = m_nColumn;
       }
-      throw e;
+      throw ex;
     }
   }
 
