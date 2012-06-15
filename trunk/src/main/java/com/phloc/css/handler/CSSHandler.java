@@ -36,7 +36,6 @@ import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.io.streamprovider.StringInputStreamProvider;
 import com.phloc.commons.io.streams.NonBlockingStringReader;
 import com.phloc.commons.io.streams.StreamUtils;
-import com.phloc.commons.system.SystemHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.parser.CSSNode;
@@ -123,12 +122,6 @@ public final class CSSHandler
     return isValidCSS (aRes, aCharset, eVersion);
   }
 
-  @Deprecated
-  public static boolean isValidCSS (@Nonnull final IReadableResource aRes, @Nonnull final ECSSVersion eVersion)
-  {
-    return isValidCSS (aRes, SystemHelper.getSystemCharset (), eVersion);
-  }
-
   public static boolean isValidCSS (@Nonnull final IReadableResource aRes,
                                     @Nonnull final Charset aCharset,
                                     @Nonnull final ECSSVersion eVersion)
@@ -147,25 +140,6 @@ public final class CSSHandler
       return false;
     }
     return isValidCSS (aReader, eVersion);
-  }
-
-  /**
-   * Check if the passed input stream can be resembled to valid CSS content.
-   * This is accomplished by fully parsing the CSS file each time the method is
-   * called. This is similar to calling
-   * {@link #readFromStream(IInputStreamProvider, ECSSVersion)} and checking for
-   * a non-<code>null</code> result.
-   * 
-   * @param aIS
-   *          The input stream to use. May not be <code>null</code>.
-   * @param eVersion
-   *          The CSS version to use. May not be <code>null</code>.
-   * @return <code>true</code> if the CSS is valid according to the version
-   */
-  @Deprecated
-  public static boolean isValidCSS (@Nonnull @WillClose final InputStream aIS, @Nonnull final ECSSVersion eVersion)
-  {
-    return isValidCSS (aIS, SystemHelper.getSystemCharset (), eVersion);
   }
 
   /**
@@ -226,8 +200,8 @@ public final class CSSHandler
    * Check if the passed input stream can be resembled to valid CSS content.
    * This is accomplished by fully parsing the CSS file each time the method is
    * called. This is similar to calling
-   * {@link #readFromStream(IInputStreamProvider, ECSSVersion)} and checking for
-   * a non-<code>null</code> result.
+   * {@link #readFromStream(IInputStreamProvider, Charset, ECSSVersion)} and
+   * checking for a non-<code>null</code> result.
    * 
    * @param aReader
    *          The reader to use. May not be <code>null</code>.
@@ -256,8 +230,8 @@ public final class CSSHandler
    * Check if the passed String can be resembled to valid CSS content. This is
    * accomplished by fully parsing the CSS file each time the method is called.
    * This is similar to calling
-   * {@link #readFromStream(IInputStreamProvider, ECSSVersion)} and checking for
-   * a non-<code>null</code> result.
+   * {@link #readFromString(String, Charset, ECSSVersion)} and checking for a
+   * non-<code>null</code> result.
    * 
    * @param sCSS
    *          The CSS version to use. May not be <code>null</code>.
@@ -303,29 +277,6 @@ public final class CSSHandler
                                                   @Nonnull final ECSSVersion eVersion)
   {
     return readFromStream (new FileSystemResource (aFile), aCharset, eVersion);
-  }
-
-  /**
-   * Read the CSS from the passed {@link IInputStreamProvider}. If the CSS
-   * contains an explicit charset, the whole CSS is parsed again, with the
-   * charset found inside the file, so the passed {@link IInputStreamProvider}
-   * must be able to create a new input stream on second invocation!
-   * 
-   * @param aISP
-   *          The input stream provider to use. Must be able to create new input
-   *          streams on every invocation, in case an explicit charset node was
-   *          found. May not be <code>null</code>.
-   * @param eVersion
-   *          The CSS version to use. May not be <code>null</code>.
-   * @return <code>null</code> if reading failed, the CSS declarations
-   *         otherwise.
-   */
-  @Deprecated
-  @Nullable
-  public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
-                                                    @Nonnull final ECSSVersion eVersion)
-  {
-    return readFromStream (aISP, SystemHelper.getSystemCharset (), eVersion);
   }
 
   /**

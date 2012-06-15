@@ -200,11 +200,12 @@ public enum ECSSColor implements IHasName
     m_nGreen = nGreen;
     m_nBlue = nBlue;
 
+    // Convert RGB to HSL
     final float [] aHSV = new float [3];
     Color.RGBtoHSB (nRed, nGreen, nBlue, aHSV);
-    m_nHue = (int) (aHSV[0] * 360);
-    m_nSaturation = (int) (aHSV[1] * 360);
-    m_nLightness = (int) (aHSV[2] * 360);
+    m_nHue = (int) (aHSV[0] * CSSColorHelper.HSL_RANGE);
+    m_nSaturation = (int) (aHSV[1] * CSSColorHelper.HSL_RANGE);
+    m_nLightness = (int) (aHSV[2] * CSSColorHelper.HSL_RANGE);
   }
 
   @Nonnull
