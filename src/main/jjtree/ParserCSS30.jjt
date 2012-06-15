@@ -328,7 +328,7 @@ void mediaRule() : {}
 {
   <MEDIA_SYM>
   ( <S> )*
-  mediaList()
+  ( mediaList() )?
   <LBRACE>
   ( <S> )*
   ( mediaRuleList() )?
