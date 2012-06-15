@@ -21,8 +21,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
-import com.phloc.commons.string.StringHelper;
 
 /**
  * This enum represents the W3C standard media query expression features.
@@ -82,10 +82,6 @@ public enum ECSSMediaExpressionFeature implements IHasName
   @Nullable
   public static ECSSMediaExpressionFeature getFromNameOrNull (@Nullable final String sName)
   {
-    if (StringHelper.hasText (sName))
-      for (final ECSSMediaExpressionFeature eProperty : values ())
-        if (eProperty.m_sName.equals (sName))
-          return eProperty;
-    return null;
+    return EnumHelper.getFromNameOrNull (ECSSMediaExpressionFeature.class, sName);
   }
 }

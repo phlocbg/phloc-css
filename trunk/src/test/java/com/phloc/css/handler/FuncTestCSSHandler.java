@@ -26,6 +26,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -171,7 +172,7 @@ public final class FuncTestCSSHandler
   }
 
   @Test
-  // @Ignore
+  @Ignore
   @SuppressWarnings ("DMI_HARDCODED_ABSOLUTE_FILENAME")
   public void testScanDrive ()
   {

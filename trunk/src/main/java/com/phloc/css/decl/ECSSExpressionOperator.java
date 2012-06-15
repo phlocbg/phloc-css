@@ -22,36 +22,40 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.lang.EnumHelper;
+import com.phloc.commons.name.IHasName;
 import com.phloc.css.ICSSWriterSettings;
 
-public enum ECSSExpressionOperator implements ICSSExpressionMember
+public enum ECSSExpressionOperator implements ICSSExpressionMember, IHasName
 {
   SLASH ("/"),
   COMMA (","),
   EQUALS ("=");
 
-  private final String m_sText;
+  private final String m_sName;
 
-  private ECSSExpressionOperator (@Nonnull @Nonempty final String sText)
+  private ECSSExpressionOperator (@Nonnull @Nonempty final String sName)
   {
-    m_sText = sText;
+    m_sName = sName;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getName ()
+  {
+    return m_sName;
   }
 
   @Nonnull
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    return m_sText;
+    return m_sName;
   }
 
   @Nullable
-  public static ECSSExpressionOperator getFromTextOrNull (@Nullable final String sText)
+  public static ECSSExpressionOperator getFromNameOrNull (@Nullable final String sName)
   {
-    if (StringHelper.hasText (sText))
-      for (final ECSSExpressionOperator eOperator : values ())
-        if (eOperator.m_sText.equals (sText))
-          return eOperator;
-    return null;
+    return EnumHelper.getFromNameOrNull (ECSSExpressionOperator.class, sName);
   }
 }

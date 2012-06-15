@@ -20,16 +20,19 @@ package com.phloc.css;
 import java.text.NumberFormat;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.lang.EnumHelper;
+import com.phloc.commons.name.IHasName;
 
 /**
  * Enumeration containing all predefined CSS units.
  * 
  * @author philip
  */
-public enum ECSSUnit implements ICSSVersionAware
+public enum ECSSUnit implements IHasName, ICSSVersionAware
 {
   EM ("em"),
   EX ("ex"),
@@ -59,25 +62,25 @@ public enum ECSSUnit implements ICSSVersionAware
   FREQ_HZ ("hz"),
   FREQ_KHZ ("khz");
 
-  private final String m_sText;
+  private final String m_sName;
   private final ECSSVersion m_eVersion;
 
-  private ECSSUnit (@Nonnull @Nonempty final String sText)
+  private ECSSUnit (@Nonnull @Nonempty final String sName)
   {
-    this (sText, ECSSVersion.CSS21);
+    this (sName, ECSSVersion.CSS21);
   }
 
-  private ECSSUnit (@Nonnull @Nonempty final String sText, @Nonnull final ECSSVersion eVersion)
+  private ECSSUnit (@Nonnull @Nonempty final String sName, @Nonnull final ECSSVersion eVersion)
   {
-    m_sText = sText;
+    m_sName = sName;
     m_eVersion = eVersion;
   }
 
   @Nonnull
   @Nonempty
-  public String getText ()
+  public String getName ()
   {
-    return m_sText;
+    return m_sName;
   }
 
   @Nonnull
@@ -90,7 +93,7 @@ public enum ECSSUnit implements ICSSVersionAware
   @Nonempty
   public String format (final int nValue)
   {
-    return Integer.toString (nValue) + m_sText;
+    return Integer.toString (nValue) + m_sName;
   }
 
   @Nonnull
@@ -98,6 +101,12 @@ public enum ECSSUnit implements ICSSVersionAware
   public String format (final double dValue)
   {
     // Always format with English locale ('.' as decimal separator)
-    return NumberFormat.getNumberInstance (CGlobal.LOCALE_FIXED_NUMBER_FORMAT).format (dValue) + m_sText;
+    return NumberFormat.getNumberInstance (CGlobal.LOCALE_FIXED_NUMBER_FORMAT).format (dValue) + m_sName;
+  }
+
+  @Nullable
+  public static ECSSUnit getFromNameOrNull (@Nullable final String sName)
+  {
+    return EnumHelper.getFromNameOrNull (ECSSUnit.class, sName);
   }
 }
