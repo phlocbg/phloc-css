@@ -403,7 +403,7 @@ void mediaExpr() : {}
   (
     <COLON>
     ( <S> )*
-    term()
+    expr()
   )?
   <RROUND>
   ( <S> )*
