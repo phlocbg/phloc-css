@@ -89,10 +89,6 @@ public final class CSSDeclarationContainer implements IHasCSSDeclarations
     final int nDeclCount = m_aDeclarations.size ();
     if (nDeclCount == 0)
     {
-      // Skip the whole rule
-      // Leads to different results in comparison!
-      if (false && bOptimizedOutput)
-        return "";
       aSB.append (bOptimizedOutput ? "{}" : " {}");
     }
     else

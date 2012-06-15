@@ -90,6 +90,10 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
+
+    if (aSettings.isRemoveUnnecessaryCode () && getDeclarationCount () == 0)
+      return "";
+
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
     final StringBuilder aSB = new StringBuilder ();

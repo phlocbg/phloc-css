@@ -289,6 +289,22 @@ public final class CSSHandler
     return readFromStream (new StringInputStreamProvider (sCSS, aCharset), aCharset, eVersion);
   }
 
+  @Nullable
+  public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
+                                                  @Nonnull final String sCharset,
+                                                  @Nonnull final ECSSVersion eVersion)
+  {
+    return readFromStream (new FileSystemResource (aFile), sCharset, eVersion);
+  }
+
+  @Nullable
+  public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
+                                                  @Nonnull final Charset aCharset,
+                                                  @Nonnull final ECSSVersion eVersion)
+  {
+    return readFromStream (new FileSystemResource (aFile), aCharset, eVersion);
+  }
+
   /**
    * Read the CSS from the passed {@link IInputStreamProvider}. If the CSS
    * contains an explicit charset, the whole CSS is parsed again, with the
