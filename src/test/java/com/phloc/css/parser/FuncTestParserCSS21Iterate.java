@@ -46,7 +46,6 @@ public final class FuncTestParserCSS21Iterate
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css"),
                                                                 new FileFilterFileFromFilenameFilter (FilenameFilterFactory.getEndsWithFilter (".css"))))
     {
-      s_aLogger.info (aFile.getAbsolutePath ());
       final InputStream aIS = new FileInputStream (aFile);
       try
       {

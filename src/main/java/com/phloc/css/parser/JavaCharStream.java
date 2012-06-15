@@ -30,8 +30,12 @@ import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * An implementation of interface CharStream, where the stream is assumed to
- * contain only ASCII characters (with java-like unicode escape processing).
+ * This class is only used internally as the source for the generated parsers.<br>
+ * An implementation of interface {@link CharStream}, where the stream is
+ * assumed to contain only ASCII characters (with java-like unicode escape
+ * processing).
+ * 
+ * @author philip
  */
 @edu.umd.cs.findbugs.annotations.SuppressWarnings ("NM_METHOD_NAMING_CONVENTION")
 public final class JavaCharStream implements CharStream

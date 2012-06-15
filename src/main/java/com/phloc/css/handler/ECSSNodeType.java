@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.parser.CSSNode;
 import com.phloc.css.parser.ParserCSS21TreeConstants;
@@ -88,13 +89,13 @@ enum ECSSNodeType
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (ECSSNodeType.class);
 
-  private final int m_nType21;
-  private final int m_nType30;
+  private final int m_nParserType21;
+  private final int m_nParserType30;
 
-  private ECSSNodeType (final int nType21, final int nType30)
+  private ECSSNodeType (final int nParserType21, final int nParserType30)
   {
-    m_nType21 = nType21;
-    m_nType30 = nType30;
+    m_nParserType21 = nParserType21;
+    m_nParserType30 = nParserType30;
   }
 
   /**
@@ -106,22 +107,32 @@ enum ECSSNodeType
    *         {@link CGlobal#ILLEGAL_UINT} if this node type is not supported by
    *         the passed version
    */
-  public int getNodeType (@Nonnull final ECSSVersion eVersion)
+  public int getParserNodeType (@Nonnull final ECSSVersion eVersion)
   {
     switch (eVersion)
     {
       case CSS21:
-        return m_nType21;
+        return m_nParserType21;
       case CSS30:
-        return m_nType30;
+        return m_nParserType30;
       default:
         throw new IllegalStateException ("Illegal version provided: " + eVersion);
     }
   }
 
-  public boolean isNode (@Nonnull final CSSNode aNode, @Nonnull final ECSSVersion eVersion)
+  /**
+   * Check if the passed parser node is of <code>this</code> type.
+   * 
+   * @param aParserNode
+   *          The parser node to be checked.
+   * @param eVersion
+   *          The desired version.
+   * @return <code>true</code> if <code>this</code> is the type of the passed
+   *         parser node in the given version
+   */
+  public boolean isNode (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
   {
-    return aNode.getNodeType () == getNodeType (eVersion);
+    return aParserNode.getNodeType () == getParserNodeType (eVersion);
   }
 
   @Nonnull
@@ -132,46 +143,53 @@ enum ECSSNodeType
       case CSS21:
         // Special handling in case a CSS 3.0 node is requested, and this node
         // type is not supported in CSS 2.1
-        return m_nType21 == CGlobal.ILLEGAL_UINT ? name () : ParserCSS21TreeConstants.jjtNodeName[m_nType21];
+        return m_nParserType21 == CGlobal.ILLEGAL_UINT ? name ()
+                                                      : ParserCSS21TreeConstants.jjtNodeName[m_nParserType21];
       case CSS30:
-        return ParserCSS30TreeConstants.jjtNodeName[m_nType30];
+        return ParserCSS30TreeConstants.jjtNodeName[m_nParserType30];
       default:
         throw new IllegalStateException ("Illegal version provided: " + eVersion);
     }
   }
 
   @Nullable
-  public static String getNodeName (@Nonnull final CSSNode aNode, @Nonnull final ECSSVersion eVersion)
+  public static ECSSNodeType getNodeType (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
   {
     for (final ECSSNodeType eNodeType : values ())
-      if (eNodeType.isNode (aNode, eVersion))
-        return eNodeType.getNodeName (eVersion);
-    s_aLogger.warn ("Unsupported node type " + aNode.getNodeType () + " in version " + eVersion);
+      if (eNodeType.isNode (aParserNode, eVersion))
+        return eNodeType;
     return null;
   }
 
-  private static String _getNodeString (@Nonnull final CSSNode aNode, @Nonnull final ECSSVersion eVersion)
+  @Nullable
+  public static String getNodeName (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
   {
-    final String s = getNodeName (aNode, eVersion);
-    if (aNode.hasText ())
-      return s + "[" + aNode.getText () + "]";
-    return s;
+    final ECSSNodeType eNodeType = getNodeType (aParserNode, eVersion);
+    if (eNodeType != null)
+      return eNodeType.getNodeName (eVersion);
+    s_aLogger.warn ("Unsupported node type " + aParserNode.getNodeType () + " in version " + eVersion);
+    return null;
   }
 
-  private static void _recursiveDump (@Nonnull final CSSNode aNode,
+  private static void _dumpRecursive (@Nonnull final CSSNode aParserNode,
                                       @Nonnull final ECSSVersion eVersion,
                                       @Nonnull final StringBuilder aSB,
                                       @Nonnull final String sPrefix)
   {
-    aSB.append (sPrefix).append (_getNodeString (aNode, eVersion)).append ('\n');
-    for (final CSSNode aChildNode : aNode)
-      _recursiveDump (aChildNode, eVersion, aSB, sPrefix + "  ");
+    aSB.append (sPrefix).append (getNodeName (aParserNode, eVersion));
+    if (aParserNode.hasText ())
+      aSB.append ('[').append (aParserNode.getText ()).append (']');
+    aSB.append ('\n');
+    for (final CSSNode aChildNode : aParserNode)
+      _dumpRecursive (aChildNode, eVersion, aSB, sPrefix + "  ");
   }
 
-  public static void dump (@Nonnull final CSSNode aNode, @Nonnull final ECSSVersion eVersion)
+  @Nonnull
+  @Nonempty
+  public static String getDump (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
   {
     final StringBuilder aSB = new StringBuilder ();
-    _recursiveDump (aNode, eVersion, aSB, "");
-    s_aLogger.info (aSB.toString ());
+    _dumpRecursive (aParserNode, eVersion, aSB, "");
+    return aSB.toString ();
   }
 }
