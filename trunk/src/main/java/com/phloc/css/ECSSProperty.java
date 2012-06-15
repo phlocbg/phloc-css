@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.name.IHasName;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.annotations.DeprecatedInCSS3;
+import com.phloc.css.annotations.DeprecatedInCSS30;
 
 /**
  * Contains a list of most CSS property names.<br>
@@ -214,21 +214,21 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   RUBY_OVERHANG ("ruby-overhang", ECSSVersion.CSS30),
   RUBY_POSITION ("ruby-position", ECSSVersion.CSS30),
   RUBY_SPAN ("ruby-span", ECSSVersion.CSS30),
-  @DeprecatedInCSS3
+  @DeprecatedInCSS30
   _SCROLLBAR_3DLIGHT_COLOR ("scrollbar-3dlight-color"),
-  @DeprecatedInCSS3
+  @DeprecatedInCSS30
   _SCROLLBAR_ARROW_COLOR ("scrollbar-arrow-color"),
-  @DeprecatedInCSS3
+  @DeprecatedInCSS30
   _SCROLLBAR_BASE_COLOR ("scrollbar-base-color"),
-  @DeprecatedInCSS3
+  @DeprecatedInCSS30
   _SCROLLBAR_DARKSHADOW_COLOR ("scrollbar-darkshadow-color"),
-  @DeprecatedInCSS3
+  @DeprecatedInCSS30
   _SCROLLBAR_FACE_COLOR ("scrollbar-face-color"),
-  @DeprecatedInCSS3
+  @DeprecatedInCSS30
   _SCROLLBAR_HIGHLIGHT_COLOR ("scrollbar-highlight-color"),
-  @DeprecatedInCSS3
+  @DeprecatedInCSS30
   _SCROLLBAR_SHADOW_COLOR ("scrollbar-shadow-color"),
-  @DeprecatedInCSS3
+  @DeprecatedInCSS30
   _SCROLLBAR_TRACK_COLOR ("scrollbar-track-color"),
   SPEAK_HEADER ("speak-header"),
   SRC ("src", ECSSVersion.CSS30),

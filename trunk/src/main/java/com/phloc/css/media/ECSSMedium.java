@@ -24,6 +24,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
+import com.phloc.css.annotations.DeprecatedInCSS21;
 
 /**
  * Defines all default CSS media types.
@@ -39,6 +40,7 @@ public enum ECSSMedium implements ICSSVersionAware
    * For computer synthesized voice. Deprecated in CSS 2.1. Is "speech" in CSS
    * 3.
    */
+  @DeprecatedInCSS21
   AURAL ("aural"),
 
   /** for blind people */
@@ -51,16 +53,16 @@ public enum ECSSMedium implements ICSSVersionAware
   HANDHELD ("handheld"),
 
   /** for printing */
-  PRINT ("print"),
+  PRINT ("print", ECSSVersion.HTML4),
 
   /** for projection */
   PROJECTION ("projection"),
 
   /** for normal screen display */
-  SCREEN ("screen"),
+  SCREEN ("screen", ECSSVersion.HTML4),
 
-  /** For computer synthesized voice. As of CSS 3 */
-  SPEECH ("speech", ECSSVersion.CSS30),
+  /** For computer synthesized voice. */
+  SPEECH ("speech"),
 
   /** for text oriented devices */
   TTY ("tty"),
