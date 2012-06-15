@@ -405,7 +405,7 @@ final class CSSNodeToDomainObject
       // CSS 2.1 compatibility
       final String sMedium = aNode.getText ();
       if (ECSSMedium.getFromNameOrNull (sMedium) == null)
-        s_aLogger.warn ("CSS 2.1 Media query uses unknown medium '" + sMedium + "'");
+        s_aLogger.warn ("CSS " + m_eVersion.getVersionString () + " Media query uses unknown medium '" + sMedium + "'");
       return new CSSMediaQuery (EModifier.NONE, sMedium);
     }
 
@@ -447,7 +447,11 @@ final class CSSNodeToDomainObject
       {
         sMedium = aNextChild.getText ();
         if (ECSSMedium.getFromNameOrNull (sMedium) == null)
-          s_aLogger.warn ("Media query uses unknown medium '" + sMedium + "'");
+          s_aLogger.warn ("CSS " +
+                          m_eVersion.getVersionString () +
+                          " media query uses unknown medium '" +
+                          sMedium +
+                          "'");
         ++nStartIndex;
       }
     }
