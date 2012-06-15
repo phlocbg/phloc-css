@@ -42,7 +42,7 @@ import com.phloc.css.ICSSWriterSettings;
 public final class CSSMediaRule implements ICSSTopLevelRule
 {
   private final List <CSSMediaQuery> m_aMediaQueries = new ArrayList <CSSMediaQuery> ();
-  private final List <CSSStyleRule> m_aStyleRules = new ArrayList <CSSStyleRule> ();
+  private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();
 
   public CSSMediaRule ()
   {}
@@ -76,33 +76,33 @@ public final class CSSMediaRule implements ICSSTopLevelRule
     return ContainerHelper.newList (m_aMediaQueries);
   }
 
-  public void addStyleRule (@Nonnull final CSSStyleRule aStyleRule)
+  public void addRule (@Nonnull final ICSSTopLevelRule aRule)
   {
-    if (aStyleRule == null)
-      throw new NullPointerException ("styleRule");
-    m_aStyleRules.add (aStyleRule);
+    if (aRule == null)
+      throw new NullPointerException ("rule");
+    m_aRules.add (aRule);
   }
 
   @Nonnull
-  public EChange removeStyleRule (@Nonnull final CSSStyleRule aStyleRule)
+  public EChange removeRule (@Nonnull final ICSSTopLevelRule aRule)
   {
-    return EChange.valueOf (m_aStyleRules.remove (aStyleRule));
+    return EChange.valueOf (m_aRules.remove (aRule));
   }
 
   @Nonnull
-  public EChange removeStyleRule (@Nonnegative final int nStyleRuleIndex)
+  public EChange removeRule (@Nonnegative final int nRuleIndex)
   {
-    if (nStyleRuleIndex < 0 || nStyleRuleIndex >= m_aStyleRules.size ())
+    if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
       return EChange.UNCHANGED;
-    m_aStyleRules.remove (nStyleRuleIndex);
+    m_aRules.remove (nRuleIndex);
     return EChange.CHANGED;
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <CSSStyleRule> getAllStyleRules ()
+  public List <ICSSTopLevelRule> getAllRules ()
   {
-    return ContainerHelper.newList (m_aStyleRules);
+    return ContainerHelper.newList (m_aRules);
   }
 
   @Nonnull
@@ -111,7 +111,7 @@ public final class CSSMediaRule implements ICSSTopLevelRule
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
-    if (false && bOptimizedOutput && m_aStyleRules.isEmpty ())
+    if (false && bOptimizedOutput && m_aRules.isEmpty ())
       return "";
 
     final StringBuilder aSB = new StringBuilder ("@media ");
@@ -125,7 +125,7 @@ public final class CSSMediaRule implements ICSSTopLevelRule
       aSB.append (sMedium.getAsCSSString (aSettings, nIndentLevel));
     }
 
-    final int nStyleRuleCount = m_aStyleRules.size ();
+    final int nStyleRuleCount = m_aRules.size ();
     if (nStyleRuleCount == 0)
     {
       aSB.append (bOptimizedOutput ? "{}" : " {}\n");
@@ -134,13 +134,17 @@ public final class CSSMediaRule implements ICSSTopLevelRule
     {
       // At least one style rule present
       aSB.append (bOptimizedOutput ? "{" : " {\n");
-      for (final CSSStyleRule aStyleRule : m_aStyleRules)
+      for (final ICSSTopLevelRule aStyleRule : m_aRules)
       {
         if (!bOptimizedOutput)
           aSB.append (aSettings.getIndent (nIndentLevel + 1));
         aSB.append (aStyleRule.getAsCSSString (aSettings, nIndentLevel + 1));
       }
-      aSB.append (bOptimizedOutput ? "}" : "}\n");
+      if (!bOptimizedOutput)
+        aSB.append (aSettings.getIndent (nIndentLevel));
+      aSB.append ('}');
+      if (!bOptimizedOutput)
+        aSB.append ('\n');
     }
     return aSB.toString ();
   }
@@ -153,20 +157,20 @@ public final class CSSMediaRule implements ICSSTopLevelRule
     if (!(o instanceof CSSMediaRule))
       return false;
     final CSSMediaRule rhs = (CSSMediaRule) o;
-    return m_aMediaQueries.equals (rhs.m_aMediaQueries) && m_aStyleRules.equals (rhs.m_aStyleRules);
+    return m_aMediaQueries.equals (rhs.m_aMediaQueries) && m_aRules.equals (rhs.m_aRules);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_aMediaQueries).append (m_aStyleRules).getHashCode ();
+    return new HashCodeGenerator (this).append (m_aMediaQueries).append (m_aRules).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
     return new ToStringGenerator (this).append ("mediaQueries", m_aMediaQueries)
-                                       .append ("styleRules", m_aStyleRules)
+                                       .append ("styleRules", m_aRules)
                                        .toString ();
   }
 }
