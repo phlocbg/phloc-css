@@ -591,6 +591,8 @@ void attrib() #Attrib :
   <LSQUARE>
   ( <S> )*
   t = <IDENT> { jjtThis.setText (t.image); }
+  /* Hack for html[xmlns*=""] */
+  ( <ASTERISK> { jjtThis.appendText ("*"); } )?          
   ( <S> )*
   ( attribOperator()
     ( <S> )*
