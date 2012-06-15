@@ -63,7 +63,9 @@ public enum ECSSMediaExpressionFeature implements IHasName
   MIN_RESOLUTION ("min-resolution"),
   MAX_RESOLUTION ("max-resolution"),
   SCAN ("scan"),
-  GRID ("grid");
+  GRID ("grid"),
+  _WEBKIT_MAX_DEVICE_PIXEL_RATIO ("-webkit-max-device-pixel-ratio"),
+  _WEBKIT_MIN_DEVICE_PIXEL_RATIO ("-webkit-min-device-pixel-ratio");
 
   private final String m_sName;
 

@@ -23,8 +23,8 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -34,8 +34,10 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.file.filter.FilenameFilterFactory;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
+import com.phloc.commons.mutable.Wrapper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.parser.ParseException;
 import com.phloc.css.writer.CSSWriter;
 import com.phloc.css.writer.CSSWriterSettings;
 
@@ -178,25 +180,34 @@ public final class FuncTestCSSHandler
   {
     int nFilesOK = 0;
     int nFilesError = 0;
-    final List <File> aErrors = new ArrayList <File> ();
+    final Map <File, ParseException> aErrors = new LinkedHashMap <File, ParseException> ();
+    final Wrapper <File> aCurrentFile = new Wrapper <File> ();
+    final ICSSParseExceptionHandler aHdl = new ICSSParseExceptionHandler ()
+    {
+      public void onException (final ParseException ex)
+      {
+        aErrors.put (aCurrentFile.get (), ex);
+      }
+    };
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("/"),
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       if (false)
         s_aLogger.info (aFile.getAbsolutePath ());
-      final CascadingStyleSheet aCSS = CSSHandler.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+      aCurrentFile.set (aFile);
+      final CascadingStyleSheet aCSS = CSSHandler.readFromFile (aFile,
+                                                                CCharset.CHARSET_UTF_8_OBJ,
+                                                                ECSSVersion.CSS30,
+                                                                aHdl);
       if (aCSS == null)
-      {
-        aErrors.add (aFile);
         nFilesError++;
-      }
       else
         nFilesOK++;
     }
 
     s_aLogger.info ("Done");
-    for (final File aErrorFiles : aErrors)
-      s_aLogger.info ("  " + aErrorFiles.getAbsolutePath ());
+    for (final Map.Entry <File, ParseException> aEntry : aErrors.entrySet ())
+      s_aLogger.info ("  " + aEntry.getKey ().getAbsolutePath () + ":\n" + aEntry.getValue ().getMessage () + "\n");
     s_aLogger.info ("OK: " + nFilesOK + "; Error: " + nFilesError);
   }
 }
