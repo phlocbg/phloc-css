@@ -17,6 +17,7 @@
  */
 package com.phloc.css.decl;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -86,7 +87,7 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     if (m_eOperator == null)
       return "[" + m_sAttrName + "]";

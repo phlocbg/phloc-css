@@ -77,10 +77,14 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
-    return "@font-face" + m_aDeclarations.getAsCSSString (aSettings, nIndentLevel + 1);
+    final StringBuilder aSB = new StringBuilder ("@font-face");
+    aSB.append (m_aDeclarations.getAsCSSString (aSettings, nIndentLevel));
+    if (!aSettings.isOptimizedOutput ())
+      aSB.append ('\n');
+    return aSB.toString ();
   }
 
   @Nonnull

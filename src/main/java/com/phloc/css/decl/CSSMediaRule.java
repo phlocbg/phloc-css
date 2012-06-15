@@ -107,11 +107,11 @@ public final class CSSMediaRule implements ICSSTopLevelRule
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
-    if (false && bOptimizedOutput && m_aMediaQueries.isEmpty ())
+    if (false && bOptimizedOutput && m_aStyleRules.isEmpty ())
       return "";
 
     final StringBuilder aSB = new StringBuilder ("@media ");

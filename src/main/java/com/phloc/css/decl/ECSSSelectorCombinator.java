@@ -17,6 +17,7 @@
  */
 package com.phloc.css.decl;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -56,7 +57,7 @@ public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAwa
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
     return m_sName;

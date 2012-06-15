@@ -125,7 +125,7 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
     final int nSelectorCount = m_aSelectors.size ();
@@ -136,7 +136,7 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
     aSB.append (getSelectorsAsCSSString (aSettings, nIndentLevel));
 
     // Append the declarations
-    aSB.append (m_aDeclarations.getAsCSSString (aSettings, nIndentLevel + 1));
+    aSB.append (m_aDeclarations.getAsCSSString (aSettings, nIndentLevel));
     if (!bOptimizedOutput)
       aSB.append ('\n');
     return aSB.toString ();

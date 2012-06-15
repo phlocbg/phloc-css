@@ -136,7 +136,8 @@ public final class FuncTestCSSWriter
     final String sCSS = "h1 { color : red ; margin: 1px; } h2 { color: rgb(1,2,3);} h3{}"
                         + " @keyframes x { from { align:left;color:#123;} to { x:y; }}"
                         + " @page {margin: 1in; marks: none; } @page :first {margin: 2in; }"
-                        + "@media print { div { width:100%; min-height:0; }} @media all { div { width:90%; }} @media tv { }";
+                        + " @media print { div { width:100%; min-height:0; }} @media all { div { width:90%; }} @media tv { }"
+                        + "@font-face { font-family: 'Soho'; src: url('Soho.eot'); } @font-face { src: local('Soho Gothic Pro');} @font-face { }";
     final CascadingStyleSheet aCSS = CSSHandler.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
@@ -176,7 +177,16 @@ public final class FuncTestCSSWriter
                   + "  div { width:90%; }\n"
                   + "}\n"
                   + "\n"
-                  + "@media tv {}\n", aWriter.getCSSAsString (aCSS));
+                  + "@media tv {}\n"
+                  + "\n"
+                  + "@font-face {\n"
+                  + "  font-family:'Soho';\n"
+                  + "  src:url(Soho.eot);\n"
+                  + "}\n"
+                  + "\n"
+                  + "@font-face { src:local('Soho Gothic Pro'); }\n"
+                  + "\n"
+                  + "@font-face {}\n", aWriter.getCSSAsString (aCSS));
 
     // Change indentation
     aSettings.setIndent ("\t");
@@ -215,7 +225,16 @@ public final class FuncTestCSSWriter
                   + "\tdiv { width:90%; }\n"
                   + "}\n"
                   + "\n"
-                  + "@media tv {}\n", aWriter.getCSSAsString (aCSS));
+                  + "@media tv {}\n"
+                  + "\n"
+                  + "@font-face {\n"
+                  + "\tfont-family:'Soho';\n"
+                  + "\tsrc:url(Soho.eot);\n"
+                  + "}\n"
+                  + "\n"
+                  + "@font-face { src:local('Soho Gothic Pro'); }\n"
+                  + "\n"
+                  + "@font-face {}\n", aWriter.getCSSAsString (aCSS));
   }
 
   @Test

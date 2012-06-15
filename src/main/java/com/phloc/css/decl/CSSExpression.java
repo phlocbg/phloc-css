@@ -85,7 +85,7 @@ public final class CSSExpression implements ICSSWriteable
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     final StringBuilder aSB = new StringBuilder ();
     boolean bPrevWasOperator = false;

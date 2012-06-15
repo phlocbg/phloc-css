@@ -73,7 +73,7 @@ public final class CSSSelector implements ICSSWriteable
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     final StringBuilder aSB = new StringBuilder ();
     for (final ICSSSelectorMember aMember : m_aMembers)
