@@ -116,7 +116,7 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
         {
           // Indentation
           if (!bOptimizedOutput)
-            aSB.append ("  ");
+            aSB.append (aSettings.getIndent ());
           // Emit the main declaration
           aSB.append (aDeclaration.getAsCSSString (aSettings));
           if (!bOptimizedOutput)

@@ -133,13 +133,15 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
         {
           // Indentation
           if (!bOptimizedOutput)
-            aSB.append ("    ");
+            aSB.append (aSettings.getIndent (2));
           // Emit the main declaration
           aSB.append (aDeclaration.getAsCSSString (aSettings));
           if (!bOptimizedOutput)
             aSB.append ('\n');
         }
-        aSB.append (bOptimizedOutput ? "}" : "  }");
+        if (!bOptimizedOutput)
+          aSB.append (aSettings.getIndent ());
+        aSB.append ('}');
       }
     }
     return aSB.toString ();
