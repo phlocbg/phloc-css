@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.name.IHasName;
-import com.phloc.css.annotations.DeprecatedInCSS3;
+import com.phloc.css.annotations.DeprecatedInCSS30;
 
 /**
  * Contains a list of predefined color values in CSS 2.1.<br>
@@ -31,7 +31,7 @@ import com.phloc.css.annotations.DeprecatedInCSS3;
  * 
  * @author philip
  */
-@DeprecatedInCSS3
+@DeprecatedInCSS30
 public enum ECSSColorName implements IHasName
 {
   ACTIVEBORDER ("ActiveBorder"),

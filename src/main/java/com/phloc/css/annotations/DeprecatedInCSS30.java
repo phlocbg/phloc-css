@@ -23,13 +23,13 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * Marker annotation that denotes all CSS elements that are marked deprecated in
- * CSS 3
+ * CSS 3.0
  * 
  * @author philip
  */
 @Documented
 @Retention (RetentionPolicy.RUNTIME)
-public @interface DeprecatedInCSS3
+public @interface DeprecatedInCSS30
 {
   String value() default "";
 }
