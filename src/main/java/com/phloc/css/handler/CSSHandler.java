@@ -25,6 +25,7 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
+import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +54,7 @@ import com.phloc.css.parser.ParserCSS30TokenManager;
  * 
  * @author philip
  */
+@Immutable
 public final class CSSHandler
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSHandler.class);
@@ -61,7 +63,9 @@ public final class CSSHandler
   {}
 
   @Nullable
-  private static CSSNode _readFromStream (@Nonnull final CharStream aStream, @Nonnull final ECSSVersion eVersion)
+  private static CSSNode _readFromStream (@Nonnull final CharStream aStream,
+                                          @Nonnull final ECSSVersion eVersion,
+                                          @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
     switch (eVersion)
     {
@@ -75,7 +79,10 @@ public final class CSSHandler
         }
         catch (final ParseException ex)
         {
-          s_aLogger.error ("Failed to parse CSS 2.1 definition: " + ex.getMessage ());
+          if (aCustomExceptionHandler != null)
+            aCustomExceptionHandler.onException (ex);
+          else
+            s_aLogger.error ("Failed to parse CSS 2.1 definition: " + ex.getMessage ());
           return null;
         }
       }
@@ -89,7 +96,10 @@ public final class CSSHandler
         }
         catch (final ParseException ex)
         {
-          s_aLogger.error ("Failed to parse CSS 3.0 definition: " + ex.getMessage ());
+          if (aCustomExceptionHandler != null)
+            aCustomExceptionHandler.onException (ex);
+          else
+            s_aLogger.error ("Failed to parse CSS 3.0 definition: " + ex.getMessage ());
           return null;
         }
       }
@@ -218,7 +228,7 @@ public final class CSSHandler
 
     try
     {
-      return _readFromStream (new JavaCharStream (aReader), eVersion) != null;
+      return _readFromStream (new JavaCharStream (aReader), eVersion, new DoNothingCSSParseExceptionHandler ()) != null;
     }
     finally
     {
@@ -252,7 +262,7 @@ public final class CSSHandler
                                                     @Nonnull final String sCharset,
                                                     @Nonnull final ECSSVersion eVersion)
   {
-    return readFromStream (new StringInputStreamProvider (sCSS, sCharset), sCharset, eVersion);
+    return readFromString (sCSS, sCharset, eVersion, null);
   }
 
   @Nullable
@@ -260,7 +270,25 @@ public final class CSSHandler
                                                     @Nonnull final Charset aCharset,
                                                     @Nonnull final ECSSVersion eVersion)
   {
-    return readFromStream (new StringInputStreamProvider (sCSS, aCharset), aCharset, eVersion);
+    return readFromString (sCSS, aCharset, eVersion, null);
+  }
+
+  @Nullable
+  public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
+                                                    @Nonnull final String sCharset,
+                                                    @Nonnull final ECSSVersion eVersion,
+                                                    @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+  {
+    return readFromStream (new StringInputStreamProvider (sCSS, sCharset), sCharset, eVersion, aCustomExceptionHandler);
+  }
+
+  @Nullable
+  public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
+                                                    @Nonnull final Charset aCharset,
+                                                    @Nonnull final ECSSVersion eVersion,
+                                                    @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+  {
+    return readFromStream (new StringInputStreamProvider (sCSS, aCharset), aCharset, eVersion, aCustomExceptionHandler);
   }
 
   @Nullable
@@ -268,7 +296,7 @@ public final class CSSHandler
                                                   @Nonnull final String sCharset,
                                                   @Nonnull final ECSSVersion eVersion)
   {
-    return readFromStream (new FileSystemResource (aFile), sCharset, eVersion);
+    return readFromFile (aFile, sCharset, eVersion, null);
   }
 
   @Nullable
@@ -276,7 +304,25 @@ public final class CSSHandler
                                                   @Nonnull final Charset aCharset,
                                                   @Nonnull final ECSSVersion eVersion)
   {
-    return readFromStream (new FileSystemResource (aFile), aCharset, eVersion);
+    return readFromFile (aFile, aCharset, eVersion, null);
+  }
+
+  @Nullable
+  public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
+                                                  @Nonnull final String sCharset,
+                                                  @Nonnull final ECSSVersion eVersion,
+                                                  @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+  {
+    return readFromStream (new FileSystemResource (aFile), sCharset, eVersion, aCustomExceptionHandler);
+  }
+
+  @Nullable
+  public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
+                                                  @Nonnull final Charset aCharset,
+                                                  @Nonnull final ECSSVersion eVersion,
+                                                  @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+  {
+    return readFromStream (new FileSystemResource (aFile), aCharset, eVersion, aCustomExceptionHandler);
   }
 
   /**
@@ -301,10 +347,7 @@ public final class CSSHandler
                                                     @Nonnull final String sCharset,
                                                     @Nonnull final ECSSVersion eVersion)
   {
-    final Charset aCharset = CharsetManager.getCharsetFromName (sCharset);
-    if (aCharset == null)
-      throw new IllegalArgumentException ("Failed to resolve charset '" + sCharset + "'");
-    return readFromStream (aISP, aCharset, eVersion);
+    return readFromStream (aISP, sCharset, eVersion, null);
   }
 
   /**
@@ -329,6 +372,67 @@ public final class CSSHandler
                                                     @Nonnull final Charset aCharset,
                                                     @Nonnull final ECSSVersion eVersion)
   {
+    return readFromStream (aISP, aCharset, eVersion, null);
+  }
+
+  /**
+   * Read the CSS from the passed {@link IInputStreamProvider}. If the CSS
+   * contains an explicit charset, the whole CSS is parsed again, with the
+   * charset found inside the file, so the passed {@link IInputStreamProvider}
+   * must be able to create a new input stream on second invocation!
+   * 
+   * @param aISP
+   *          The input stream provider to use. Must be able to create new input
+   *          streams on every invocation, in case an explicit charset node was
+   *          found. May not be <code>null</code>.
+   * @param sCharset
+   *          The charset name to be used. May not be <code>null</code>.
+   * @param eVersion
+   *          The CSS version to use. May not be <code>null</code>.
+   * @param aCustomExceptionHandler
+   *          An optional custom exception handler that can be used to collect
+   *          the parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
+  @Nullable
+  public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
+                                                    @Nonnull final String sCharset,
+                                                    @Nonnull final ECSSVersion eVersion,
+                                                    @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+  {
+    final Charset aCharset = CharsetManager.getCharsetFromName (sCharset);
+    if (aCharset == null)
+      throw new IllegalArgumentException ("Failed to resolve charset '" + sCharset + "'");
+    return readFromStream (aISP, aCharset, eVersion, aCustomExceptionHandler);
+  }
+
+  /**
+   * Read the CSS from the passed {@link IInputStreamProvider}. If the CSS
+   * contains an explicit charset, the whole CSS is parsed again, with the
+   * charset found inside the file, so the passed {@link IInputStreamProvider}
+   * must be able to create a new input stream on second invocation!
+   * 
+   * @param aISP
+   *          The input stream provider to use. Must be able to create new input
+   *          streams on every invocation, in case an explicit charset node was
+   *          found. May not be <code>null</code>.
+   * @param aCharset
+   *          The charset to be used. May not be <code>null</code>.
+   * @param eVersion
+   *          The CSS version to use. May not be <code>null</code>.
+   * @param aCustomExceptionHandler
+   *          An optional custom exception handler that can be used to collect
+   *          the parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
+  @Nullable
+  public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
+                                                    @Nonnull final Charset aCharset,
+                                                    @Nonnull final ECSSVersion eVersion,
+                                                    @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+  {
     if (aISP == null)
       throw new NullPointerException ("inputStreamProvider");
     if (aCharset == null)
@@ -341,7 +445,7 @@ public final class CSSHandler
     if (aIS != null)
       try
       {
-        aNode = _readFromStream (new JavaCharStream (aIS, aCharset), eVersion);
+        aNode = _readFromStream (new JavaCharStream (aIS, aCharset), eVersion, aCustomExceptionHandler);
       }
       finally
       {
@@ -360,7 +464,7 @@ public final class CSSHandler
         try
         {
           aIS = aISP.getInputStream ();
-          aNode = _readFromStream (new JavaCharStream (aIS, sCSSCharset), eVersion);
+          aNode = _readFromStream (new JavaCharStream (aIS, sCSSCharset), eVersion, aCustomExceptionHandler);
         }
         finally
         {

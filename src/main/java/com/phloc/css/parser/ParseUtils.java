@@ -17,6 +17,8 @@
  */
 package com.phloc.css.parser;
 
+import java.util.regex.Matcher;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -36,9 +38,9 @@ public final class ParseUtils
   {}
 
   @Nonnull
-  private static String _trimBy (@Nonnull final CharSequence s, final int nLeft, final int nRight)
+  private static String _trimBy (@Nonnull final CharSequence s, final int nLeftSkip, final int nRightSkip)
   {
-    return s.toString ().substring (nLeft, s.length () - nRight);
+    return s.toString ().substring (nLeftSkip, s.length () - nRightSkip);
   }
 
   /**
@@ -54,9 +56,13 @@ public final class ParseUtils
   {
     if (StringHelper.hasNoText (sStr) || sStr.length () < 2)
       return sStr;
+
     final char cFirst = sStr.charAt (0);
     if ((cFirst == '"' || cFirst == '\'') && StringHelper.getLastChar (sStr) == cFirst)
+    {
+      // Remove quotes around the string
       return _trimBy (sStr, 1, 1);
+    }
     return sStr;
   }
 
@@ -76,21 +82,15 @@ public final class ParseUtils
     return extractStringValue (s1);
   }
 
-  // Find the longest matching number within the pattern
   @Nonnull
   public static String splitNumber (@Nonnull final StringBuilder aPattern)
   {
-    final String sRegEx = "[0-9]+|[0-9]*.[0-9]+";
-    int nChars = 1;
-    while (RegExHelper.stringMatchesPattern (sRegEx, aPattern.substring (0, nChars)))
-      nChars++;
-
-    if (aPattern.charAt (nChars - 1) == '.')
-    {
-      nChars++;
-      while (RegExHelper.stringMatchesPattern (sRegEx, aPattern.substring (0, nChars)))
-        nChars++;
-    }
-    return aPattern.substring (0, nChars - 1);
+    // Find the longest matching number within the pattern
+    // Order of the rules in brackets is important!
+    final String sRegEx = "^([0-9]*\\.[0-9]+|[0-9]+).*$";
+    final Matcher m = RegExHelper.getMatcher (sRegEx, aPattern.toString ());
+    if (m.matches ())
+      return m.group (1);
+    return "";
   }
 }
