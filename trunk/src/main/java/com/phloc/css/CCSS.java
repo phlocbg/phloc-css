@@ -201,6 +201,15 @@ public final class CCSS
   public static final String PX0 = px (0);
   public static final String PERC100 = perc (100);
 
+  // CSS values that occur recurrently but are not part of the CSS
+  // specification.
+  public static final String FONT_ARIAL = "Arial";
+  public static final String FONT_COURIER_NEW = "Courier New";
+  public static final String FONT_HELVETICA = "Helvetica";
+  public static final String FONT_TAHOMA = "Tahoma";
+  public static final String FONT_VERDANA = "Verdana";
+  public static final String FONT_MONOSPACE = FONT_COURIER_NEW;
+
   private CCSS ()
   {}
 
