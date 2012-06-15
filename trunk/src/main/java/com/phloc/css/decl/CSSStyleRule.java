@@ -127,8 +127,10 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
   @Nonnull
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
+    if (aSettings.isRemoveUnnecessaryCode () && getDeclarationCount () == 0)
+      return "";
+
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
-    final int nSelectorCount = m_aSelectors.size ();
 
     final StringBuilder aSB = new StringBuilder ();
 

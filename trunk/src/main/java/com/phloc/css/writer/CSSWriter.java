@@ -243,10 +243,15 @@ public final class CSSWriter
       // Main CSS rules
       for (final ICSSTopLevelRule aRule : aCSS.getAllRules ())
       {
-        if (!m_aSettings.isOptimizedOutput () && nRulesEmitted > 0)
-          aWriter.write ('\n');
-        aWriter.write (aRule.getAsCSSString (m_aSettings, 0));
-        ++nRulesEmitted;
+        final String sRuleCSS = aRule.getAsCSSString (m_aSettings, 0);
+        if (StringHelper.hasText (sRuleCSS))
+        {
+          if (!m_aSettings.isOptimizedOutput () && nRulesEmitted > 0)
+            aWriter.write ('\n');
+
+          aWriter.write (sRuleCSS);
+          ++nRulesEmitted;
+        }
       }
     }
     finally

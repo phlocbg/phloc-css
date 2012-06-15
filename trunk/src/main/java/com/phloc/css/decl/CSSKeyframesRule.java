@@ -102,6 +102,10 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
+
+    if (aSettings.isRemoveUnnecessaryCode () && m_aBlocks.isEmpty ())
+      return "";
+
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
     final StringBuilder aSB = new StringBuilder (m_sDeclaration);
@@ -112,11 +116,15 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
     // Add all blocks
     for (final CSSKeyframesBlock aBlock : m_aBlocks)
     {
-      if (!bOptimizedOutput)
-        aSB.append (aSettings.getIndent (nIndentLevel + 1));
-      aSB.append (aBlock.getAsCSSString (aSettings, nIndentLevel + 1));
-      if (!bOptimizedOutput)
-        aSB.append ('\n');
+      final String sBlockCSS = aBlock.getAsCSSString (aSettings, nIndentLevel + 1);
+      if (StringHelper.hasText (sBlockCSS))
+      {
+        if (!bOptimizedOutput)
+          aSB.append (aSettings.getIndent (nIndentLevel + 1));
+        aSB.append (sBlockCSS);
+        if (!bOptimizedOutput)
+          aSB.append ('\n');
+      }
     }
     if (!bOptimizedOutput)
       aSB.append (aSettings.getIndent (nIndentLevel));

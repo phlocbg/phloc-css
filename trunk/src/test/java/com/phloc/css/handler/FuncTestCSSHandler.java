@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.file.filter.FilenameFilterFactory;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
-import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.writer.CSSWriter;
@@ -51,9 +50,7 @@ public final class FuncTestCSSHandler
       final String sKey = aFile.getAbsolutePath ();
       if (false)
         s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
-                                                                  CCharset.CHARSET_UTF_8_OBJ,
-                                                                  ECSSVersion.CSS21);
+      final CascadingStyleSheet aCSS = CSSHandler.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21);
       assertNotNull (sKey, aCSS);
 
       // Write optimized version and compare it
@@ -77,9 +74,7 @@ public final class FuncTestCSSHandler
       final String sKey = aFile.getAbsolutePath ();
       if (false)
         s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
-                                                                  CCharset.CHARSET_UTF_8_OBJ,
-                                                                  ECSSVersion.CSS30);
+      final CascadingStyleSheet aCSS = CSSHandler.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
       assertNotNull (sKey, aCSS);
 
       // Write optimized version and compare it
@@ -109,9 +104,7 @@ public final class FuncTestCSSHandler
       final String sKey = aFile.getAbsolutePath ();
       if (false)
         s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
-                                                                  CCharset.CHARSET_UTF_8_OBJ,
-                                                                  ECSSVersion.CSS21);
+      final CascadingStyleSheet aCSS = CSSHandler.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21);
       assertNotNull (sKey, aCSS);
 
       // Write optimized version and compare it
@@ -135,9 +128,7 @@ public final class FuncTestCSSHandler
       final String sKey = aFile.getAbsolutePath ();
       if (false)
         s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
-                                                                  CCharset.CHARSET_UTF_8_OBJ,
-                                                                  ECSSVersion.CSS30);
+      final CascadingStyleSheet aCSS = CSSHandler.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
       assertNotNull (sKey, aCSS);
 
       // Write optimized version and compare it
@@ -162,9 +153,7 @@ public final class FuncTestCSSHandler
     {
       if (false)
         s_aLogger.info (aFile.getAbsolutePath ());
-      final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
-                                                                  CCharset.CHARSET_UTF_8_OBJ,
-                                                                  ECSSVersion.CSS30);
+      final CascadingStyleSheet aCSS = CSSHandler.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
       if (aCSS == null)
         s_aLogger.warn ("Failed to read " + aFile);
     }

@@ -18,6 +18,13 @@ public interface ICSSWriterSettings
   boolean isOptimizedOutput ();
 
   /**
+   * @return <code>true</code> if all unnecessary elements (like empty style
+   *         declarations) should be removed. This will than potentially lead to
+   *         CSS that is not equal to the original CSS!
+   */
+  boolean isRemoveUnnecessaryCode ();
+
+  /**
    * Get the indentation for an arbitrary number of levels.
    * 
    * @param nCount

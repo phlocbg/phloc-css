@@ -29,6 +29,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ICSSWriterSettings;
 
@@ -111,7 +112,7 @@ public final class CSSMediaRule implements ICSSTopLevelRule
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
-    if (false && bOptimizedOutput && m_aRules.isEmpty ())
+    if (aSettings.isRemoveUnnecessaryCode () && m_aRules.isEmpty ())
       return "";
 
     final StringBuilder aSB = new StringBuilder ("@media ");
@@ -125,27 +126,31 @@ public final class CSSMediaRule implements ICSSTopLevelRule
       aSB.append (sMedium.getAsCSSString (aSettings, nIndentLevel));
     }
 
-    final int nStyleRuleCount = m_aRules.size ();
-    if (nStyleRuleCount == 0)
+    final int nRuleCount = m_aRules.size ();
+    if (nRuleCount == 0)
     {
       aSB.append (bOptimizedOutput ? "{}" : " {}\n");
     }
     else
     {
-      // At least one style rule present
+      // At least one rule present
       aSB.append (bOptimizedOutput ? "{" : " {\n");
       bFirst = true;
-      for (final ICSSTopLevelRule aStyleRule : m_aRules)
+      for (final ICSSTopLevelRule aRule : m_aRules)
       {
-        if (bFirst)
-          bFirst = false;
-        else
-          if (!bOptimizedOutput)
-            aSB.append ('\n');
+        final String sRuleCSS = aRule.getAsCSSString (aSettings, nIndentLevel + 1);
+        if (StringHelper.hasText (sRuleCSS))
+        {
+          if (bFirst)
+            bFirst = false;
+          else
+            if (!bOptimizedOutput)
+              aSB.append ('\n');
 
-        if (!bOptimizedOutput)
-          aSB.append (aSettings.getIndent (nIndentLevel + 1));
-        aSB.append (aStyleRule.getAsCSSString (aSettings, nIndentLevel + 1));
+          if (!bOptimizedOutput)
+            aSB.append (aSettings.getIndent (nIndentLevel + 1));
+          aSB.append (sRuleCSS);
+        }
       }
       if (!bOptimizedOutput)
         aSB.append (aSettings.getIndent (nIndentLevel));

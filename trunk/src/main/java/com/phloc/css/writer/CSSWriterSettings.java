@@ -21,7 +21,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
@@ -34,10 +36,12 @@ import com.phloc.css.ICSSWriterSettings;
 @NotThreadSafe
 public class CSSWriterSettings implements ICSSWriterSettings
 {
+  public static final boolean DEFAULT_REMOVE_UNNECESSARY_CODE = false;
   public static final String DEFAULT_INDENT = "  ";
 
   private final ECSSVersion m_eVersion;
   private final boolean m_bOptimizedOutput;
+  private boolean m_bRemoveUnnecessaryCode = DEFAULT_REMOVE_UNNECESSARY_CODE;
   private String m_sIndent = DEFAULT_INDENT;
 
   /**
@@ -66,6 +70,18 @@ public class CSSWriterSettings implements ICSSWriterSettings
     return m_bOptimizedOutput;
   }
 
+  public final boolean isRemoveUnnecessaryCode ()
+  {
+    return m_bRemoveUnnecessaryCode;
+  }
+
+  @Nonnull
+  public final CSSWriterSettings setRemoveUnnecessaryCode (final boolean bRemoveUnnecessaryCode)
+  {
+    m_bRemoveUnnecessaryCode = bRemoveUnnecessaryCode;
+    return this;
+  }
+
   @Nonnull
   public final String getIndent (@Nonnegative final int nCount)
   {
@@ -73,7 +89,7 @@ public class CSSWriterSettings implements ICSSWriterSettings
   }
 
   @Nonnull
-  public final ICSSWriterSettings setIndent (@Nonnull final String sIndent)
+  public final CSSWriterSettings setIndent (@Nonnull final String sIndent)
   {
     if (sIndent == null)
       throw new NullPointerException ("indent");
@@ -89,5 +105,39 @@ public class CSSWriterSettings implements ICSSWriterSettings
                                        m_eVersion.getVersion ().getAsString () +
                                        " but requires at least " +
                                        eMinCSSVersion.getVersion ().getAsString ());
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final CSSWriterSettings rhs = (CSSWriterSettings) o;
+    return m_eVersion.equals (rhs.m_eVersion) &&
+           m_bOptimizedOutput == rhs.m_bOptimizedOutput &&
+           m_bRemoveUnnecessaryCode == rhs.m_bRemoveUnnecessaryCode &&
+           m_sIndent.equals (rhs.m_sIndent);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_eVersion)
+                                       .append (m_bOptimizedOutput)
+                                       .append (m_bRemoveUnnecessaryCode)
+                                       .append (m_sIndent)
+                                       .getHashCode ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("version", m_eVersion)
+                                       .append ("optimizedOutput", m_bOptimizedOutput)
+                                       .append ("removeUnnecessaryCode", m_bRemoveUnnecessaryCode)
+                                       .append ("indent", m_sIndent)
+                                       .toString ();
   }
 }
