@@ -23,8 +23,9 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -170,10 +171,13 @@ public final class FuncTestCSSHandler
   }
 
   @Test
-  @Ignore
+  // @Ignore
   @SuppressWarnings ("DMI_HARDCODED_ABSOLUTE_FILENAME")
   public void testScanDrive ()
   {
+    int nFilesOK = 0;
+    int nFilesError = 0;
+    final List <File> aErrors = new ArrayList <File> ();
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("/"),
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
@@ -181,7 +185,17 @@ public final class FuncTestCSSHandler
         s_aLogger.info (aFile.getAbsolutePath ());
       final CascadingStyleSheet aCSS = CSSHandler.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
       if (aCSS == null)
-        s_aLogger.warn ("Failed to read " + aFile);
+      {
+        aErrors.add (aFile);
+        nFilesError++;
+      }
+      else
+        nFilesOK++;
     }
+
+    s_aLogger.info ("Done");
+    for (final File aErrorFiles : aErrors)
+      s_aLogger.info ("  " + aErrorFiles.getAbsolutePath ());
+    s_aLogger.info ("OK: " + nFilesOK + "; Error: " + nFilesError);
   }
 }
