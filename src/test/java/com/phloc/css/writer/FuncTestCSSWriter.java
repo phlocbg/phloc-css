@@ -133,7 +133,10 @@ public final class FuncTestCSSWriter
   @Test
   public void testIndentation () throws IOException
   {
-    final String sCSS = "h1 { color : red ; margin: 1px; } h2 { color: rgb(1,2,3);} h3{} @keyframes x { from { align:left;color:#123;} to { x:y; }}";
+    final String sCSS = "h1 { color : red ; margin: 1px; } h2 { color: rgb(1,2,3);} h3{}"
+                        + " @keyframes x { from { align:left;color:#123;} to { x:y; }}"
+                        + " @page {margin: 1in; marks: none; } @page :first {margin: 2in; }"
+                        + "@media print { div { width:100%; min-height:0; }} @media all { div { width:90%; }} @media tv { }";
     final CascadingStyleSheet aCSS = CSSHandler.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
@@ -153,7 +156,27 @@ public final class FuncTestCSSWriter
                   + "    color:#123;\n"
                   + "  }\n"
                   + "  to { x:y; }\n"
-                  + "}\n", aWriter.getCSSAsString (aCSS));
+                  + "}\n"
+                  + "\n"
+                  + "@page {\n"
+                  + "  margin:1in;\n"
+                  + "  marks:none;\n"
+                  + "}\n"
+                  + "\n"
+                  + "@page :first { margin:2in; }\n"
+                  + "\n"
+                  + "@media print {\n"
+                  + "  div {\n"
+                  + "    width:100%;\n"
+                  + "    min-height:0;\n"
+                  + "  }\n"
+                  + "}\n"
+                  + "\n"
+                  + "@media all {\n"
+                  + "  div { width:90%; }\n"
+                  + "}\n"
+                  + "\n"
+                  + "@media tv {}\n", aWriter.getCSSAsString (aCSS));
 
     // Change indentation
     aSettings.setIndent ("\t");
@@ -172,7 +195,27 @@ public final class FuncTestCSSWriter
                   + "\t\tcolor:#123;\n"
                   + "\t}\n"
                   + "\tto { x:y; }\n"
-                  + "}\n", aWriter.getCSSAsString (aCSS));
+                  + "}\n"
+                  + "\n"
+                  + "@page {\n"
+                  + "\tmargin:1in;\n"
+                  + "\tmarks:none;\n"
+                  + "}\n"
+                  + "\n"
+                  + "@page :first { margin:2in; }\n"
+                  + "\n"
+                  + "@media print {\n"
+                  + "\tdiv {\n"
+                  + "\t\twidth:100%;\n"
+                  + "\t\tmin-height:0;\n"
+                  + "\t}\n"
+                  + "}\n"
+                  + "\n"
+                  + "@media all {\n"
+                  + "\tdiv { width:90%; }\n"
+                  + "}\n"
+                  + "\n"
+                  + "@media tv {}\n", aWriter.getCSSAsString (aCSS));
   }
 
   @Test

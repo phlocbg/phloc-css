@@ -85,7 +85,7 @@ public final class CSSSelectorSimpleMember implements ICSSSelectorMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     return m_sValue;
   }

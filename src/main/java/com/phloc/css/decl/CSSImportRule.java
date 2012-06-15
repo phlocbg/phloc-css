@@ -96,7 +96,7 @@ public final class CSSImportRule implements ICSSWriteable
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
@@ -112,7 +112,7 @@ public final class CSSImportRule implements ICSSWriteable
           bFirst = false;
         else
           aSB.append (bOptimizedOutput ? "," : ", ");
-        aSB.append (aMediaQuery.getAsCSSString (aSettings));
+        aSB.append (aMediaQuery.getAsCSSString (aSettings, nIndentLevel));
       }
     }
     return aSB.append (";\n").toString ();

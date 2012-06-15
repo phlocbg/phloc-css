@@ -18,16 +18,6 @@ public interface ICSSWriterSettings
   boolean isOptimizedOutput ();
 
   /**
-   * Get the indentation for a single level. This is similar to calling
-   * <code>getIndent (1)</code>.
-   * 
-   * @return The string to be used for indentation. May not be <code>null</code>
-   *         but may be empty.
-   */
-  @Nonnull
-  String getIndent ();
-
-  /**
    * Get the indentation for an arbitrary number of levels.
    * 
    * @param nCount

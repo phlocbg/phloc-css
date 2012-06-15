@@ -73,13 +73,13 @@ public final class CSSDeclaration implements ICSSWriteable
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     return m_sProperty +
-           ':' +
-           m_aExpression.getAsCSSString (aSettings) +
+           CCSS.SEPARATOR_PROPERTY_VALUE +
+           m_aExpression.getAsCSSString (aSettings, nIndentLevel) +
            (m_bImportant ? CCSS.IMPORTANT_SUFFIX : "") +
-           ';';
+           CCSS.DEFINITION_END;
   }
 
   @Override

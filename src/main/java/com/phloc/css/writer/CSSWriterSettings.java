@@ -67,12 +67,6 @@ public class CSSWriterSettings implements ICSSWriterSettings
   }
 
   @Nonnull
-  public final String getIndent ()
-  {
-    return m_sIndent;
-  }
-
-  @Nonnull
   public final String getIndent (@Nonnegative final int nCount)
   {
     return StringHelper.getRepeated (m_sIndent, nCount);

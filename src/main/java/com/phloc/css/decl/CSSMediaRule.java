@@ -107,7 +107,7 @@ public final class CSSMediaRule implements ICSSTopLevelRule
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
@@ -122,24 +122,26 @@ public final class CSSMediaRule implements ICSSTopLevelRule
         bFirst = false;
       else
         aSB.append (bOptimizedOutput ? "," : ", ");
-      aSB.append (sMedium.getAsCSSString (aSettings));
+      aSB.append (sMedium.getAsCSSString (aSettings, nIndentLevel));
     }
-    aSB.append (bOptimizedOutput ? "{" : " {");
-    if (!m_aStyleRules.isEmpty ())
+
+    final int nStyleRuleCount = m_aStyleRules.size ();
+    if (nStyleRuleCount == 0)
+    {
+      aSB.append (bOptimizedOutput ? "{}" : " {}\n");
+    }
+    else
     {
       // At least one style rule present
-      if (!bOptimizedOutput)
-        aSB.append ('\n');
+      aSB.append (bOptimizedOutput ? "{" : " {\n");
       for (final CSSStyleRule aStyleRule : m_aStyleRules)
       {
         if (!bOptimizedOutput)
-          aSB.append (aSettings.getIndent ());
-        aSB.append (aStyleRule.getAsCSSString (aSettings));
-        if (!bOptimizedOutput)
-          aSB.append ('\n');
+          aSB.append (aSettings.getIndent (nIndentLevel + 1));
+        aSB.append (aStyleRule.getAsCSSString (aSettings, nIndentLevel + 1));
       }
+      aSB.append (bOptimizedOutput ? "}" : "}\n");
     }
-    aSB.append (bOptimizedOutput ? "}" : "}\n");
     return aSB.toString ();
   }
 

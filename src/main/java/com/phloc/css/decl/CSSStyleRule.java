@@ -42,7 +42,7 @@ import com.phloc.css.ICSSWriterSettings;
 public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
 {
   private final List <CSSSelector> m_aSelectors = new ArrayList <CSSSelector> ();
-  private final List <CSSDeclaration> m_aDeclarations = new ArrayList <CSSDeclaration> ();
+  private final CSSDeclarationContainer m_aDeclarations = new CSSDeclarationContainer ();
 
   public CSSStyleRule ()
   {}
@@ -78,41 +78,37 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
 
   public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
-    if (aDeclaration == null)
-      throw new NullPointerException ("declaration");
-    m_aDeclarations.add (aDeclaration);
+    m_aDeclarations.addDeclaration (aDeclaration);
   }
 
   @Nonnull
   public EChange removeDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
-    return EChange.valueOf (m_aDeclarations.remove (aDeclaration));
+    return m_aDeclarations.removeDeclaration (aDeclaration);
   }
 
   @Nonnull
   public EChange removeDeclaration (@Nonnegative final int nDeclarationIndex)
   {
-    if (nDeclarationIndex < 0 || nDeclarationIndex >= m_aDeclarations.size ())
-      return EChange.UNCHANGED;
-    m_aDeclarations.remove (nDeclarationIndex);
-    return EChange.CHANGED;
+    return m_aDeclarations.removeDeclaration (nDeclarationIndex);
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSDeclaration> getAllDeclarations ()
   {
-    return ContainerHelper.newList (m_aDeclarations);
+    return m_aDeclarations.getAllDeclarations ();
   }
 
   @Nonnegative
   public int getDeclarationCount ()
   {
-    return m_aDeclarations.size ();
+    return m_aDeclarations.getDeclarationCount ();
   }
 
   @Nonnull
-  public String getSelectorsAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getSelectorsAsCSSString (@Nonnull final ICSSWriterSettings aSettings,
+                                         @Nonnegative final int nIndentLevel)
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
     final StringBuilder aSB = new StringBuilder ();
@@ -123,54 +119,26 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
         bFirst = false;
       else
         aSB.append (bOptimizedOutput ? "," : ",\n");
-      aSB.append (aSelector.getAsCSSString (aSettings));
+      aSB.append (aSelector.getAsCSSString (aSettings, nIndentLevel));
     }
     return aSB.toString ();
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
     final int nSelectorCount = m_aSelectors.size ();
-    final int nDeclarationCount = m_aDeclarations.size ();
 
     final StringBuilder aSB = new StringBuilder ();
-    if (false)
-      if (!bOptimizedOutput && (nSelectorCount > 1 || nDeclarationCount > 1))
-        aSB.append ('\n');
 
     // Append the selectors
-    aSB.append (getSelectorsAsCSSString (aSettings));
-    if (nDeclarationCount == 0)
-    {
-      // No declarations present
-      aSB.append (bOptimizedOutput ? "{}" : " {}\n");
-    }
-    else
-      if (nSelectorCount == 1 && nDeclarationCount == 1)
-      {
-        // Exactly one selector present
-        aSB.append (bOptimizedOutput ? "{" : " { ")
-           .append (m_aDeclarations.get (0).getAsCSSString (aSettings))
-           .append (bOptimizedOutput ? "}" : " }\n");
-      }
-      else
-      {
-        // More than one selector or more than one declaration present
-        aSB.append (bOptimizedOutput ? "{" : " {\n");
-        for (final CSSDeclaration aDeclaration : m_aDeclarations)
-        {
-          // Indentation
-          if (!bOptimizedOutput)
-            aSB.append (aSettings.getIndent ());
-          // Emit the main declaration
-          aSB.append (aDeclaration.getAsCSSString (aSettings));
-          if (!bOptimizedOutput)
-            aSB.append ('\n');
-        }
-        aSB.append (bOptimizedOutput ? "}" : "}\n");
-      }
+    aSB.append (getSelectorsAsCSSString (aSettings, nIndentLevel));
+
+    // Append the declarations
+    aSB.append (m_aDeclarations.getAsCSSString (aSettings, nIndentLevel + 1));
+    if (!bOptimizedOutput)
+      aSB.append ('\n');
     return aSB.toString ();
   }
 
