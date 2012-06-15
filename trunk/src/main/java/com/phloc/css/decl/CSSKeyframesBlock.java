@@ -31,11 +31,10 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
-import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
 @NotThreadSafe
-public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware, ICSSWriteable
+public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware
 {
   private final List <String> m_aKeyframesSelectors;
   private final CSSDeclarationContainer m_aDeclarations = new CSSDeclarationContainer ();
@@ -103,7 +102,7 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
       aSB.append (sSelector);
     }
 
-    aSB.append (m_aDeclarations.getAsCSSString (aSettings, nIndentLevel + 1));
+    aSB.append (m_aDeclarations.getAsCSSString (aSettings, nIndentLevel));
     return aSB.toString ();
   }
 

@@ -88,7 +88,7 @@ public final class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations,
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
@@ -98,7 +98,7 @@ public final class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations,
     if (StringHelper.hasText (m_sPseudoPage))
       aSB.append (' ').append (m_sPseudoPage);
 
-    aSB.append (m_aDeclarations.getAsCSSString (aSettings, nIndentLevel + 1));
+    aSB.append (m_aDeclarations.getAsCSSString (aSettings, nIndentLevel));
     if (!bOptimizedOutput)
       aSB.append ('\n');
 

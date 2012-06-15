@@ -24,13 +24,14 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.EChange;
+import com.phloc.css.ICSSWriteable;
 
 /**
  * Sanity interface for all objects having CSS declarations.
  * 
  * @author philip
  */
-public interface IHasCSSDeclarations
+public interface IHasCSSDeclarations extends ICSSWriteable
 {
   /**
    * Add a new declaration.

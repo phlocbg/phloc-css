@@ -17,6 +17,7 @@
  */
 package com.phloc.css.decl;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
@@ -69,7 +70,7 @@ public final class CSSSelectorMemberFunctionLike implements ICSSSelectorMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     return m_sFuncName + m_aParamExpr.getAsCSSString (aSettings, nIndentLevel) + ')';
   }

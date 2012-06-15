@@ -83,9 +83,6 @@ public final class CSSDeclarationContainer implements IHasCSSDeclarations
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    if (nIndentLevel < 1)
-      throw new NullPointerException ("This cannot be on top level!");
-
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
     final StringBuilder aSB = new StringBuilder ();
@@ -115,14 +112,14 @@ public final class CSSDeclarationContainer implements IHasCSSDeclarations
         {
           // Indentation
           if (!bOptimizedOutput)
-            aSB.append (aSettings.getIndent (nIndentLevel));
+            aSB.append (aSettings.getIndent (nIndentLevel + 1));
           // Emit the main declaration
           aSB.append (aDeclaration.getAsCSSString (aSettings, nIndentLevel + 1));
           if (!bOptimizedOutput)
             aSB.append ('\n');
         }
         if (!bOptimizedOutput)
-          aSB.append (aSettings.getIndent (nIndentLevel - 1));
+          aSB.append (aSettings.getIndent (nIndentLevel));
         aSB.append ('}');
       }
     }

@@ -17,6 +17,7 @@
  */
 package com.phloc.css.decl;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -92,7 +93,7 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     if (m_aExpression == null)
       return m_sFunctionName + "()";

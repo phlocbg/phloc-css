@@ -20,6 +20,7 @@ package com.phloc.css.propertyvalue;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.collections.ContainerHelper;
@@ -66,7 +67,7 @@ public final class CSSValueList implements ICSSValue
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, final int nIndentLevel)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     final StringBuilder ret = new StringBuilder ();
     for (final CSSValue aValue : m_aValues)
