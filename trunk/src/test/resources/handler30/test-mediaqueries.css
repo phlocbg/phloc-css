@@ -106,3 +106,5 @@
     opacity: 0.95;
   }
 }
+@media print and (min-resolution: 300dpi) { }
+@media print and (min-resolution: 118dpcm) { }

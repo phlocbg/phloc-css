@@ -40,6 +40,10 @@ public enum ECSSUnit implements ICSSVersionAware
   VH ("vh", ECSSVersion.CSS30),
   VM ("vm", ECSSVersion.CSS30),
   CH ("ch", ECSSVersion.CSS30),
+  /** Dots per CSS inch */
+  DPI ("dpi", ECSSVersion.CSS30),
+  /** Dots per CSS centimetre */
+  DPCM ("dpcm", ECSSVersion.CSS30),
   LENGTH_IN ("in"),
   LENGTH_CM ("cm"),
   LENGTH_MM ("mm"),
