@@ -38,7 +38,7 @@ import com.phloc.css.media.ECSSMediaExpressionFeature;
 public final class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware
 {
   private final String m_sFeature;
-  private final String m_sValue;
+  private final CSSExpression m_aValue;
 
   public CSSMediaExpression (@Nonnull final ECSSMediaExpressionFeature eFeature)
   {
@@ -50,17 +50,17 @@ public final class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware
     this (sFeature, null);
   }
 
-  public CSSMediaExpression (@Nonnull final ECSSMediaExpressionFeature eFeature, @Nullable final String sValue)
+  public CSSMediaExpression (@Nonnull final ECSSMediaExpressionFeature eFeature, @Nullable final CSSExpression aValue)
   {
-    this (eFeature.getName (), sValue);
+    this (eFeature.getName (), aValue);
   }
 
-  public CSSMediaExpression (@Nonnull @Nonempty final String sFeature, @Nullable final String sValue)
+  public CSSMediaExpression (@Nonnull @Nonempty final String sFeature, @Nullable final CSSExpression aValue)
   {
     if (StringHelper.hasNoText (sFeature))
       throw new IllegalArgumentException ("feature");
     m_sFeature = sFeature;
-    m_sValue = sValue;
+    m_aValue = aValue;
   }
 
   @Nonnull
@@ -71,9 +71,9 @@ public final class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware
   }
 
   @Nullable
-  public String getValue ()
+  public CSSExpression getValue ()
   {
-    return m_sValue;
+    return m_aValue;
   }
 
   @Nonnull
@@ -83,8 +83,8 @@ public final class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware
     aSettings.checkVersionRequirements (this);
 
     final StringBuilder aSB = new StringBuilder ("(").append (m_sFeature);
-    if (StringHelper.hasText (m_sValue))
-      aSB.append (CCSS.SEPARATOR_PROPERTY_VALUE).append (m_sValue);
+    if (m_aValue != null)
+      aSB.append (CCSS.SEPARATOR_PROPERTY_VALUE).append (m_aValue.getAsCSSString (aSettings));
     return aSB.append (')').toString ();
   }
 
@@ -102,18 +102,18 @@ public final class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware
     if (!(o instanceof CSSMediaExpression))
       return false;
     final CSSMediaExpression rhs = (CSSMediaExpression) o;
-    return m_sFeature.equals (rhs.m_sFeature) && EqualsUtils.equals (m_sValue, rhs.m_sValue);
+    return m_sFeature.equals (rhs.m_sFeature) && EqualsUtils.equals (m_aValue, rhs.m_aValue);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sFeature).append (m_sValue).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sFeature).append (m_aValue).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("feature", m_sFeature).appendIfNotNull ("value", m_sValue).toString ();
+    return new ToStringGenerator (this).append ("feature", m_sFeature).appendIfNotNull ("value", m_aValue).toString ();
   }
 }

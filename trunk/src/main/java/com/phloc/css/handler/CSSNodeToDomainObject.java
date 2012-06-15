@@ -481,9 +481,7 @@ final class CSSNodeToDomainObject
 
     // Feature + value
     final CSSNode aValueNode = aNode.jjtGetChild (1);
-    if (!ECSSNodeType.TERM.isNode (aValueNode, m_eVersion))
-      throw new IllegalStateException ("Expected a term but got " + ECSSNodeType.getNodeName (aValueNode, m_eVersion));
-    return new CSSMediaExpression (sFeature, aValueNode.getText ());
+    return new CSSMediaExpression (sFeature, _createExpression (aValueNode));
   }
 
   @Nonnull
