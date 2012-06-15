@@ -49,4 +49,10 @@ public enum ECSSVersion implements IHasVersion
   {
     return m_aVersion;
   }
+
+  @Nonnull
+  public String getVersionString ()
+  {
+    return m_aVersion.getMajor () + "." + m_aVersion.getMinor ();
+  }
 }
