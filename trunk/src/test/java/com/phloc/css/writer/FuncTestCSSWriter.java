@@ -178,45 +178,28 @@ public final class FuncTestCSSWriter
   @Test
   public void testHeaderText () throws IOException
   {
-    final String sCSS = "h1 { color : red ; margin: 1px; }";
+    final String sCSS = "h1 { color : red ; margin: 1px; }h2 { color : red ; margin: 1px; }";
     final CascadingStyleSheet aCSS = CSSHandler.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
-    final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
-    final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
-    assertEquals ("h1 {\n"
+
+    // Non-optimized version
+    CSSWriter aWriter = new CSSWriter (ECSSVersion.CSS30, false).setWriteHeaderText (true).setHeaderText ("Unit test");
+    assertEquals ("/*\n"
+                  + " * Unit test\n"
+                  + " */\n"
+                  + "h1 {\n"
                   + "  color:red;\n"
                   + "  margin:1px;\n"
                   + "}\n"
                   + "\n"
-                  + "h2 { color:rgb(1,2,3); }\n"
-                  + "\n"
-                  + "h3 {}\n"
-                  + "\n"
-                  + "@keyframes x {\n"
-                  + "  from {\n"
-                  + "    align:left;\n"
-                  + "    color:#123;\n"
-                  + "  }\n"
-                  + "  to { x:y; }\n"
+                  + "h2 {\n"
+                  + "  color:red;\n"
+                  + "  margin:1px;\n"
                   + "}\n", aWriter.getCSSAsString (aCSS));
 
-    // Change indentation
-    aSettings.setIndent ("\t");
-    assertEquals ("h1 {\n"
-                  + "\tcolor:red;\n"
-                  + "\tmargin:1px;\n"
-                  + "}\n"
-                  + "\n"
-                  + "h2 { color:rgb(1,2,3); }\n"
-                  + "\n"
-                  + "h3 {}\n"
-                  + "\n"
-                  + "@keyframes x {\n"
-                  + "\tfrom {\n"
-                  + "\t\talign:left;\n"
-                  + "\t\tcolor:#123;\n"
-                  + "\t}\n"
-                  + "\tto { x:y; }\n"
-                  + "}\n", aWriter.getCSSAsString (aCSS));
+    // Optimized version
+    aWriter = new CSSWriter (ECSSVersion.CSS30, true).setWriteHeaderText (true).setHeaderText ("Unit test2");
+    assertEquals ("/*\n" + " * Unit test2\n" + " */\n" + "h1{color:red;margin:1px;}h2{color:red;margin:1px;}",
+                  aWriter.getCSSAsString (aCSS));
   }
 }

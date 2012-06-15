@@ -27,7 +27,12 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.string.ToStringGenerator;
 
-public class CSSNode implements Node, Iterable <CSSNode>
+/**
+ * This class represents a simple node in the tree built by jjtree.
+ * 
+ * @author philip
+ */
+public final class CSSNode implements Node, Iterable <CSSNode>
 {
   private final int m_nType;
   private CSSNode m_aParent;

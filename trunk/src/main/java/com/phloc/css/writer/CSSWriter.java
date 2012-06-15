@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import javax.annotation.WillClose;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.string.StringHelper;
@@ -173,6 +174,18 @@ public final class CSSWriter
   {
     m_sContentCharset = sContentCharset;
     return this;
+  }
+
+  /**
+   * @return The CSS writer settings that are used to generate the different
+   *         element code. This is the same object as passed into/created by the
+   *         constructor. Never <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableObject (reason = "Design")
+  public CSSWriterSettings getSettings ()
+  {
+    return m_aSettings;
   }
 
   /**

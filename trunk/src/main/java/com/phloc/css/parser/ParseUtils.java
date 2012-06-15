@@ -24,6 +24,11 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 
+/**
+ * This class is used by the generated parsers to do some common stuff.
+ * 
+ * @author philip
+ */
 @Immutable
 public final class ParseUtils
 {
