@@ -238,6 +238,55 @@ public final class FuncTestCSSWriter
   }
 
   @Test
+  public void testIndentationNested () throws IOException
+  {
+    final String sCSS = "@media print { "
+                        + "h1 { color : red ; margin: 1px; } h2 { color: rgb(1,2,3);} h3{}"
+                        + " @keyframes x { from { align:left;color:#123;} to { x:y; }}"
+                        + " @page {margin: 1in; marks: none; } @page :first {margin: 2in; }"
+                        + "@font-face { font-family: 'Soho'; src: url('Soho.eot'); } @font-face { src: local('Soho Gothic Pro');} @font-face { }"
+                        + "}";
+    final CascadingStyleSheet aCSS = CSSHandler.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    assertNotNull (aCSS);
+    final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
+    final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
+    assertEquals ("@media print {\n"
+                  + "  h1 {\n"
+                  + "    color:red;\n"
+                  + "    margin:1px;\n"
+                  + "  }\n"
+                  + "\n"
+                  + "  h2 { color:rgb(1,2,3); }\n"
+                  + "\n"
+                  + "  h3 {}\n"
+                  + "\n"
+                  + "  @keyframes x {\n"
+                  + "    from {\n"
+                  + "      align:left;\n"
+                  + "      color:#123;\n"
+                  + "    }\n"
+                  + "    to { x:y; }\n"
+                  + "  }\n"
+                  + "\n"
+                  + "  @page {\n"
+                  + "    margin:1in;\n"
+                  + "    marks:none;\n"
+                  + "  }\n"
+                  + "\n"
+                  + "  @page :first { margin:2in; }\n"
+                  + "\n"
+                  + "  @font-face {\n"
+                  + "    font-family:'Soho';\n"
+                  + "    src:url(Soho.eot);\n"
+                  + "  }\n"
+                  + "\n"
+                  + "  @font-face { src:local('Soho Gothic Pro'); }\n"
+                  + "\n"
+                  + "  @font-face {}\n"
+                  + "}\n", aWriter.getCSSAsString (aCSS));
+  }
+
+  @Test
   public void testHeaderText () throws IOException
   {
     final String sCSS = "h1 { color : red ; margin: 1px; }h2 { color : red ; margin: 1px; }";
