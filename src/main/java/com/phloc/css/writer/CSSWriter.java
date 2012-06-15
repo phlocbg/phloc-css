@@ -28,8 +28,8 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
 import com.phloc.commons.io.streams.StreamUtils;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.vendor.VendorInfo;
-import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
@@ -46,6 +46,9 @@ public final class CSSWriter
   public static final boolean DEFAULT_OPTIMIZED_OUTPUT = false;
 
   private final CSSWriterSettings m_aSettings;
+  private boolean m_bWriteHeaderText;
+  private String m_sHeaderText = StringHelper.getImploded ("\n", VendorInfo.FILE_HEADER_LINES);
+  private String m_sContentCharset;
 
   /**
    * Constructor for creating non-optimized output.
@@ -74,11 +77,102 @@ public final class CSSWriter
     this (new CSSWriterSettings (eVersion, bOptimizedOutput));
   }
 
+  /**
+   * Constructor
+   * 
+   * @param aSettings
+   *          The settings to be used. May not be <code>null</code>.
+   */
   public CSSWriter (@Nonnull final CSSWriterSettings aSettings)
   {
     if (aSettings == null)
       throw new NullPointerException ("settings");
     m_aSettings = aSettings;
+    m_bWriteHeaderText = !aSettings.isOptimizedOutput ();
+  }
+
+  /**
+   * Check if the header text should be emitted. By default it is enabled, if
+   * non-optimized output is desired.
+   * 
+   * @return <code>true</code> if the header text should be emitted,
+   *         <code>false</code> if not.
+   */
+  public boolean isWriteHeaderText ()
+  {
+    return m_bWriteHeaderText;
+  }
+
+  /**
+   * Determine whether the file header should be written or not. By default it
+   * is enabled, if non-optimized output is desired.
+   * 
+   * @param bWriteHeaderText
+   *          If <code>true</code> the header text will be written, if
+   *          <code>false</code> the text will not be written.
+   * @return this
+   */
+  @Nonnull
+  public CSSWriter setWriteHeaderText (@Nullable final boolean bWriteHeaderText)
+  {
+    m_bWriteHeaderText = bWriteHeaderText;
+    return this;
+  }
+
+  /**
+   * @return The currently defined header text. May be <code>null</code>.
+   */
+  @Nullable
+  public String getHeaderText ()
+  {
+    return m_sHeaderText;
+  }
+
+  /**
+   * Set a custom header text that should be emitted. This text may be multi
+   * line separated by the '\n' character. It will emitted if
+   * {@link #isWriteHeaderText()} returns <code>true</code>.
+   * 
+   * @param sHeaderText
+   *          The header text to be emitted. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public CSSWriter setHeaderText (@Nullable final String sHeaderText)
+  {
+    m_sHeaderText = sHeaderText;
+    return this;
+  }
+
+  /**
+   * @return The current defined content charset for the CSS. By default it is
+   *         <code>null</code>.
+   */
+  @Nullable
+  public String getContentCharset ()
+  {
+    return m_sContentCharset;
+  }
+
+  /**
+   * Define the content charset to be used. If not <code>null</code> and not
+   * empty, the <code>@charset</code> element is emitted into the CSS. By
+   * default no charset is defined.<br>
+   * <b>Important:</b> this does not define the encoding of the output - it is
+   * just a declarative marker inside the code. Best practise is to use the same
+   * encoding for the CSS and the respective writer!
+   * 
+   * @param sContentCharset
+   *          The content charset to be used. May be <code>null</code> to
+   *          indicate that no special charset name should be emitted into the
+   *          CSS.
+   * @return this
+   */
+  @Nonnull
+  public CSSWriter setContentCharset (@Nullable final String sContentCharset)
+  {
+    m_sContentCharset = sContentCharset;
+    return this;
   }
 
   /**
@@ -97,30 +191,6 @@ public final class CSSWriter
    */
   public void writeCSS (@Nonnull final CascadingStyleSheet aCSS, @Nonnull @WillClose final Writer aWriter) throws IOException
   {
-    writeCSS (aCSS, aWriter, null);
-  }
-
-  /**
-   * Write the CSS content to the passed writer. No specific charset is used.
-   * 
-   * @param aCSS
-   *          The CSS to write. May not be <code>null</code>.
-   * @param aWriter
-   *          The write to write the text to. May not be <code>null</code>. Is
-   *          automatically closed after the writing!
-   * @param sCSSCharset
-   *          The charset that is explicitly written to the CSS content. Not the
-   *          encoding of the CSS file! May be <code>null</code>.
-   * @throws IOException
-   *           In case writing fails.
-   * @throws IllegalStateException
-   *           In case some elements cannot be written in the version supplied
-   *           in the constructor.
-   */
-  public void writeCSS (@Nonnull final CascadingStyleSheet aCSS,
-                        @Nonnull @WillClose final Writer aWriter,
-                        @Nullable final String sCSSCharset) throws IOException
-  {
     if (aCSS == null)
       throw new NullPointerException ("css");
     if (aWriter == null)
@@ -129,18 +199,18 @@ public final class CSSWriter
     try
     {
       // Write file header
-      if (!m_aSettings.isOptimizedOutput ())
+      if (m_bWriteHeaderText && StringHelper.hasText (m_sHeaderText))
       {
         aWriter.write ("/*\n");
-        for (final String sLine : VendorInfo.FILE_HEADER_LINES)
+        for (final String sLine : StringHelper.getExploded ("\n", m_sHeaderText))
           aWriter.write (" * " + sLine + "\n");
         aWriter.write (" */\n");
       }
 
-      // Charset?
-      if (sCSSCharset != null)
+      // Charset? Must be the first element before the import
+      if (StringHelper.hasText (m_sContentCharset))
       {
-        aWriter.write ("@charset \"" + sCSSCharset + "\"\n");
+        aWriter.write ("@charset \"" + m_sContentCharset + "\"\n");
         if (!m_aSettings.isOptimizedOutput ())
           aWriter.write ('\n');
       }
@@ -173,6 +243,32 @@ public final class CSSWriter
   }
 
   /**
+   * Write the CSS content to the passed writer. No specific charset is used.
+   * 
+   * @param aCSS
+   *          The CSS to write. May not be <code>null</code>.
+   * @param aWriter
+   *          The write to write the text to. May not be <code>null</code>. Is
+   *          automatically closed after the writing!
+   * @param sCSSCharset
+   *          The charset that is explicitly written to the CSS content. Not the
+   *          encoding of the CSS file! May be <code>null</code>.
+   * @throws IOException
+   *           In case writing fails.
+   * @throws IllegalStateException
+   *           In case some elements cannot be written in the version supplied
+   *           in the constructor.
+   * @deprecated Use {@link #setContentCharset(String)} instead!
+   */
+  @Deprecated
+  public void writeCSS (@Nonnull final CascadingStyleSheet aCSS,
+                        @Nonnull @WillClose final Writer aWriter,
+                        @Nullable final String sCSSCharset) throws IOException
+  {
+    writeCSS (aCSS, aWriter);
+  }
+
+  /**
    * Create the CSS without a specific charset.
    * 
    * @param aCSS
@@ -184,7 +280,9 @@ public final class CSSWriter
   @Nonnull
   public String getCSSAsString (@Nonnull final CascadingStyleSheet aCSS) throws IOException
   {
-    return getCSSAsString (aCSS, null);
+    final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
+    writeCSS (aCSS, aSW);
+    return aSW.toString ();
   }
 
   /**
@@ -198,12 +296,12 @@ public final class CSSWriter
    * @return The text representation of the CSS.
    * @throws IOException
    *           If writing fails. Should never happen!
+   * @deprecated Use {@link #setContentCharset(String)} instead!
    */
   @Nonnull
+  @Deprecated
   public String getCSSAsString (@Nonnull final CascadingStyleSheet aCSS, @Nullable final String sCSSCharset) throws IOException
   {
-    final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
-    writeCSS (aCSS, aSW, sCSSCharset);
-    return aSW.toString ();
+    return getCSSAsString (aCSS);
   }
 }

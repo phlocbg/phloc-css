@@ -25,10 +25,11 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CSSWriterSettings;
+import com.phloc.css.CCSS;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriteable;
+import com.phloc.css.ICSSWriterSettings;
 import com.phloc.css.media.ECSSMediaExpressionFeature;
 
 /**
@@ -77,13 +78,13 @@ public final class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
   {
     aSettings.checkVersionRequirements (this);
 
     final StringBuilder aSB = new StringBuilder ("(").append (m_sFeature);
     if (StringHelper.hasText (m_sValue))
-      aSB.append (':').append (m_sValue);
+      aSB.append (CCSS.SEPARATOR_PROPERTY_VALUE).append (m_sValue);
     return aSB.append (')').toString ();
   }
 

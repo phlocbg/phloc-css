@@ -26,8 +26,6 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.io.streamprovider.StringInputStreamProvider;
-import com.phloc.commons.io.streams.NonBlockingStringWriter;
 import com.phloc.commons.system.SystemHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
@@ -87,20 +85,17 @@ public final class CSSCompressor
     if (eCSSVersion == null)
       throw new NullPointerException ("CSSversion");
 
-    final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new StringInputStreamProvider (sOriginalCSS, aCharset),
-                                                                aCharset,
-                                                                eCSSVersion);
+    final CascadingStyleSheet aCSS = CSSHandler.readFromString (sOriginalCSS, aCharset, eCSSVersion);
     if (aCSS != null)
     {
-      final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
       try
       {
-        new CSSWriter (eCSSVersion, true).writeCSS (aCSS, aSW);
-        return aSW.toString ();
+        final CSSWriterSettings aSettings = new CSSWriterSettings (eCSSVersion, true);
+        return new CSSWriter (aSettings).getCSSAsString (aCSS);
       }
       catch (final IOException ex)
       {
-        s_aLogger.warn ("Failed to write CSS!", ex);
+        s_aLogger.warn ("Failed to write optimized CSS!", ex);
       }
     }
     return sOriginalCSS;

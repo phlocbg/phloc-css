@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.CSSWriterSettings;
+import com.phloc.css.ICSSWriterSettings;
 
 public enum ECSSExpressionOperator implements ICSSExpressionMember
 {
@@ -39,7 +39,7 @@ public enum ECSSExpressionOperator implements ICSSExpressionMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
   {
     return m_sText;
   }

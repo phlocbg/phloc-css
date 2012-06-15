@@ -30,7 +30,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CSSWriterSettings;
+import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a single <code>@media</code> rule: a list of style rules only
@@ -107,7 +107,7 @@ public final class CSSMediaRule implements ICSSTopLevelRule
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 

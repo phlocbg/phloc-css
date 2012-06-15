@@ -26,7 +26,7 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CSSWriterSettings;
+import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a CSS function element
@@ -92,7 +92,7 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
   {
     if (m_aExpression == null)
       return m_sFunctionName + "()";

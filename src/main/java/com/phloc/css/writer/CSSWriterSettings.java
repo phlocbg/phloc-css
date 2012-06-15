@@ -15,13 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css;
+package com.phloc.css.writer;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.string.StringHelper;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSVersionAware;
+import com.phloc.css.ICSSWriterSettings;
 
 /**
  * This class represents the options required for writing
@@ -29,7 +32,7 @@ import com.phloc.commons.string.StringHelper;
  * @author philip
  */
 @NotThreadSafe
-public class CSSWriterSettings
+public class CSSWriterSettings implements ICSSWriterSettings
 {
   public static final String DEFAULT_INDENT = "  ";
 
@@ -76,7 +79,7 @@ public class CSSWriterSettings
   }
 
   @Nonnull
-  public final CSSWriterSettings setIndent (@Nonnull final String sIndent)
+  public final ICSSWriterSettings setIndent (@Nonnull final String sIndent)
   {
     if (sIndent == null)
       throw new NullPointerException ("indent");

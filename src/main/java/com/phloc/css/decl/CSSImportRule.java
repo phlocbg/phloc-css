@@ -31,8 +31,8 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ICSSWriteable;
+import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a single import rule on top level
@@ -96,7 +96,7 @@ public final class CSSImportRule implements ICSSWriteable
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 

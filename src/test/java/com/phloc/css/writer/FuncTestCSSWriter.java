@@ -29,12 +29,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.io.file.filter.FileFilterFileFromFilenameFilter;
 import com.phloc.commons.io.file.filter.FilenameFilterFactory;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.io.resource.FileSystemResource;
-import com.phloc.commons.io.streamprovider.StringInputStreamProvider;
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
@@ -46,13 +44,14 @@ public final class FuncTestCSSWriter
 
   private void _testMe (final File aFile, final ECSSVersion eVersion) throws IOException
   {
-    s_aLogger.info (aFile.getAbsolutePath ());
+    if (false)
+      s_aLogger.info (aFile.getAbsolutePath ());
 
     // read and interpret
     final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
                                                                 CCharset.CHARSET_UTF_8_OBJ,
                                                                 eVersion);
-    assertNotNull (aCSS);
+    assertNotNull (aFile.getAbsolutePath (), aCSS);
 
     // Both normal and optimized!
     for (int i = 0; i < 2; ++i)
@@ -67,9 +66,7 @@ public final class FuncTestCSSWriter
       // read again from buffer
       assertEquals (aFile.getAbsolutePath () + (i == 0 ? " unoptimized" : " optimized"),
                     aCSS,
-                    CSSHandler.readFromStream (new StringInputStreamProvider (sContent, CCharset.CHARSET_UTF_8_OBJ),
-                                               CCharset.CHARSET_UTF_8_OBJ,
-                                               eVersion));
+                    CSSHandler.readFromString (sContent, CCharset.CHARSET_UTF_8_OBJ, eVersion));
     }
   }
 
@@ -77,7 +74,7 @@ public final class FuncTestCSSWriter
   public void testScanTestResourcesHandler21 () throws IOException
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler21"),
-                                                                new FileFilterFileFromFilenameFilter (FilenameFilterFactory.getEndsWithFilter (".css"))))
+                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       _testMe (aFile, ECSSVersion.CSS21);
     }
@@ -87,7 +84,7 @@ public final class FuncTestCSSWriter
   public void testScanTestResourcesHandler30 () throws IOException
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
-                                                                new FileFilterFileFromFilenameFilter (FilenameFilterFactory.getEndsWithFilter (".css"))))
+                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       _testMe (aFile, ECSSVersion.CSS30);
     }
@@ -97,7 +94,7 @@ public final class FuncTestCSSWriter
   public void testRead30Write21 () throws IOException
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
-                                                                new FileFilterFileFromFilenameFilter (FilenameFilterFactory.getEndsWithFilter (".css"))))
+                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       try
       {
@@ -131,5 +128,95 @@ public final class FuncTestCSSWriter
     new CSSWriter (ECSSVersion.CSS21, true).writeCSS (aCSS, aSW);
     final String sContent = aSW.toString ();
     assertEquals (2866, sContent.length ());
+  }
+
+  @Test
+  public void testIndentation () throws IOException
+  {
+    final String sCSS = "h1 { color : red ; margin: 1px; } h2 { color: rgb(1,2,3);} h3{} @keyframes x { from { align:left;color:#123;} to { x:y; }}";
+    final CascadingStyleSheet aCSS = CSSHandler.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    assertNotNull (aCSS);
+    final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
+    final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
+    assertEquals ("h1 {\n"
+                  + "  color:red;\n"
+                  + "  margin:1px;\n"
+                  + "}\n"
+                  + "\n"
+                  + "h2 { color:rgb(1,2,3); }\n"
+                  + "\n"
+                  + "h3 {}\n"
+                  + "\n"
+                  + "@keyframes x {\n"
+                  + "  from {\n"
+                  + "    align:left;\n"
+                  + "    color:#123;\n"
+                  + "  }\n"
+                  + "  to { x:y; }\n"
+                  + "}\n", aWriter.getCSSAsString (aCSS));
+
+    // Change indentation
+    aSettings.setIndent ("\t");
+    assertEquals ("h1 {\n"
+                  + "\tcolor:red;\n"
+                  + "\tmargin:1px;\n"
+                  + "}\n"
+                  + "\n"
+                  + "h2 { color:rgb(1,2,3); }\n"
+                  + "\n"
+                  + "h3 {}\n"
+                  + "\n"
+                  + "@keyframes x {\n"
+                  + "\tfrom {\n"
+                  + "\t\talign:left;\n"
+                  + "\t\tcolor:#123;\n"
+                  + "\t}\n"
+                  + "\tto { x:y; }\n"
+                  + "}\n", aWriter.getCSSAsString (aCSS));
+  }
+
+  @Test
+  public void testHeaderText () throws IOException
+  {
+    final String sCSS = "h1 { color : red ; margin: 1px; }";
+    final CascadingStyleSheet aCSS = CSSHandler.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    assertNotNull (aCSS);
+    final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
+    final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
+    assertEquals ("h1 {\n"
+                  + "  color:red;\n"
+                  + "  margin:1px;\n"
+                  + "}\n"
+                  + "\n"
+                  + "h2 { color:rgb(1,2,3); }\n"
+                  + "\n"
+                  + "h3 {}\n"
+                  + "\n"
+                  + "@keyframes x {\n"
+                  + "  from {\n"
+                  + "    align:left;\n"
+                  + "    color:#123;\n"
+                  + "  }\n"
+                  + "  to { x:y; }\n"
+                  + "}\n", aWriter.getCSSAsString (aCSS));
+
+    // Change indentation
+    aSettings.setIndent ("\t");
+    assertEquals ("h1 {\n"
+                  + "\tcolor:red;\n"
+                  + "\tmargin:1px;\n"
+                  + "}\n"
+                  + "\n"
+                  + "h2 { color:rgb(1,2,3); }\n"
+                  + "\n"
+                  + "h3 {}\n"
+                  + "\n"
+                  + "@keyframes x {\n"
+                  + "\tfrom {\n"
+                  + "\t\talign:left;\n"
+                  + "\t\tcolor:#123;\n"
+                  + "\t}\n"
+                  + "\tto { x:y; }\n"
+                  + "}\n", aWriter.getCSSAsString (aCSS));
   }
 }
