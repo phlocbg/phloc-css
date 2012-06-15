@@ -23,9 +23,9 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.name.IHasName;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
+import com.phloc.css.ICSSWriterSettings;
 
 public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAware, IHasName
 {
@@ -56,7 +56,7 @@ public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAwa
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
   {
     aSettings.checkVersionRequirements (this);
     return m_sName;

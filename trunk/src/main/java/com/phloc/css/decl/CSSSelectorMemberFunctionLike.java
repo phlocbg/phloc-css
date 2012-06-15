@@ -24,7 +24,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CSSWriterSettings;
+import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a single CSS complex selector pseudo element. Like
@@ -69,7 +69,7 @@ public final class CSSSelectorMemberFunctionLike implements ICSSSelectorMember
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
   {
     return m_sFuncName + m_aParamExpr.getAsCSSString (aSettings) + ')';
   }

@@ -32,7 +32,6 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.file.filter.FilenameFilterFactory;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.commons.io.resource.FileSystemResource;
-import com.phloc.commons.io.streamprovider.StringInputStreamProvider;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.writer.CSSWriter;
@@ -58,16 +57,12 @@ public final class FuncTestCSSHandler
       // Write optimized version and compare it
       String s = new CSSWriter (ECSSVersion.CSS21, true).getCSSAsString (aCSS);
       assertNotNull (s);
-      assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8_OBJ),
-                                                     CCharset.CHARSET_UTF_8_OBJ,
-                                                     ECSSVersion.CSS21));
+      assertEquals (aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21));
 
       // Write non-optimized version and compare it
       s = new CSSWriter (ECSSVersion.CSS21, false).getCSSAsString (aCSS);
       assertNotNull (s);
-      assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8_OBJ),
-                                                     CCharset.CHARSET_UTF_8_OBJ,
-                                                     ECSSVersion.CSS21));
+      assertEquals (aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21));
     }
   }
 
@@ -87,8 +82,7 @@ public final class FuncTestCSSHandler
       // Write optimized version and compare it
       String s = new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS);
       assertNotNull (sKey, s);
-      final CascadingStyleSheet aCSSReRead = CSSHandler.readFromStream (new StringInputStreamProvider (s,
-                                                                                                       CCharset.CHARSET_UTF_8_OBJ),
+      final CascadingStyleSheet aCSSReRead = CSSHandler.readFromString (s,
                                                                         CCharset.CHARSET_UTF_8_OBJ,
                                                                         ECSSVersion.CSS30);
       assertNotNull ("Failed to parse:\n" + s, aCSSReRead);
@@ -97,11 +91,7 @@ public final class FuncTestCSSHandler
       // Write non-optimized version and compare it
       s = new CSSWriter (ECSSVersion.CSS30, false).getCSSAsString (aCSS);
       assertNotNull (sKey, s);
-      assertEquals (sKey,
-                    aCSS,
-                    CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8_OBJ),
-                                               CCharset.CHARSET_UTF_8_OBJ,
-                                               ECSSVersion.CSS30));
+      assertEquals (sKey, aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30));
       if (false)
         System.out.println (s);
     }
@@ -122,16 +112,12 @@ public final class FuncTestCSSHandler
       // Write optimized version and compare it
       String s = new CSSWriter (ECSSVersion.CSS21, true).getCSSAsString (aCSS);
       assertNotNull (s);
-      assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8_OBJ),
-                                                     CCharset.CHARSET_UTF_8_OBJ,
-                                                     ECSSVersion.CSS21));
+      assertEquals (aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21));
 
       // Write non-optimized version and compare it
       s = new CSSWriter (ECSSVersion.CSS21, false).getCSSAsString (aCSS);
       assertNotNull (s);
-      assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8_OBJ),
-                                                     CCharset.CHARSET_UTF_8_OBJ,
-                                                     ECSSVersion.CSS21));
+      assertEquals (aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21));
     }
   }
 
@@ -150,16 +136,12 @@ public final class FuncTestCSSHandler
       // Write optimized version and compare it
       String s = new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS);
       assertNotNull (s);
-      assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8_OBJ),
-                                                     CCharset.CHARSET_UTF_8_OBJ,
-                                                     ECSSVersion.CSS30));
+      assertEquals (aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30));
 
       // Write non-optimized version and compare it
       s = new CSSWriter (ECSSVersion.CSS30, false).getCSSAsString (aCSS);
       assertNotNull (s);
-      assertEquals (aCSS, CSSHandler.readFromStream (new StringInputStreamProvider (s, CCharset.CHARSET_UTF_8_OBJ),
-                                                     CCharset.CHARSET_UTF_8_OBJ,
-                                                     ECSSVersion.CSS30));
+      assertEquals (aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30));
     }
   }
 

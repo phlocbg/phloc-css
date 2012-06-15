@@ -33,6 +33,7 @@ import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.FileSystemResource;
+import com.phloc.commons.io.streamprovider.StringInputStreamProvider;
 import com.phloc.commons.io.streams.NonBlockingStringReader;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.system.SystemHelper;
@@ -270,6 +271,22 @@ public final class CSSHandler
       throw new NullPointerException ("reader");
 
     return isValidCSS (new NonBlockingStringReader (sCSS), eVersion);
+  }
+
+  @Nullable
+  public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
+                                                    @Nonnull final String sCharset,
+                                                    @Nonnull final ECSSVersion eVersion)
+  {
+    return readFromStream (new StringInputStreamProvider (sCSS, sCharset), sCharset, eVersion);
+  }
+
+  @Nullable
+  public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
+                                                    @Nonnull final Charset aCharset,
+                                                    @Nonnull final ECSSVersion eVersion)
+  {
+    return readFromStream (new StringInputStreamProvider (sCSS, aCharset), aCharset, eVersion);
   }
 
   /**

@@ -33,5 +33,5 @@ public interface ICSSWriteable
    * @return The content of this object as CSS string.
    */
   @Nonnull
-  String getAsCSSString (@Nonnull CSSWriterSettings aSettings);
+  String getAsCSSString (@Nonnull ICSSWriterSettings aSettings);
 }

@@ -25,8 +25,8 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSProperty;
+import com.phloc.css.ICSSWriterSettings;
 import com.phloc.css.property.ICSSProperty;
 
 /**
@@ -66,7 +66,7 @@ public final class CSSValueList implements ICSSValue
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
   {
     final StringBuilder ret = new StringBuilder ();
     for (final CSSValue aValue : m_aValues)

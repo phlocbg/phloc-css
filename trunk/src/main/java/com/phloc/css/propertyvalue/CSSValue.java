@@ -26,8 +26,8 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
-import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSProperty;
+import com.phloc.css.ICSSWriterSettings;
 import com.phloc.css.property.ICSSProperty;
 
 /**
@@ -83,7 +83,7 @@ public final class CSSValue implements ICSSValue
   }
 
   @Nonnull
-  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
   {
     aSettings.checkVersionRequirements (m_aProperty);
     return m_aProperty.getProp ().getName () + CCSS.SEPARATOR_PROPERTY_VALUE + m_sValue + CCSS.DEFINITION_END;

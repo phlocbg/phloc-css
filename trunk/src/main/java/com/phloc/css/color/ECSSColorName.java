@@ -19,7 +19,6 @@ package com.phloc.css.color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.name.IHasName;
@@ -32,7 +31,6 @@ import com.phloc.css.annotations.DeprecatedInCSS3;
  * 
  * @author philip
  */
-@Immutable
 @DeprecatedInCSS3
 public enum ECSSColorName implements IHasName
 {

@@ -25,8 +25,8 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
-import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ICSSWriteable;
+import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a single element in a CSS style rule.
@@ -73,7 +73,7 @@ public final class CSSDeclaration implements ICSSWriteable
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
   {
     return m_sProperty +
            ':' +

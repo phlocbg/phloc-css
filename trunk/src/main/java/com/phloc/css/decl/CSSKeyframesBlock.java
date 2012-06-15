@@ -30,9 +30,9 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
+import com.phloc.css.ICSSWriterSettings;
 
 @NotThreadSafe
 public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware
@@ -92,7 +92,7 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
 
   @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings)
   {
     aSettings.checkVersionRequirements (this);
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
