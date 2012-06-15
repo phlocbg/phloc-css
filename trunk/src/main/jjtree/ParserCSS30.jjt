@@ -608,6 +608,8 @@ void attrib() #Attrib :
     namespacePrefix() 
   )?
   t = <IDENT> { jjtThis.setText (t.image); }
+  /* Hack for html[xmlns*=""] */
+  ( <ASTERISK> { jjtThis.appendText ("*"); } )?          
   ( <S> )*
   ( __attribOperator()
     ( <S> )*
