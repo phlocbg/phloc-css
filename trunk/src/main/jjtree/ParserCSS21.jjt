@@ -440,7 +440,7 @@ void pseudoPage() #PseudoPage :
 {
   <COLON>
   t = <IDENT>
-  { jjtThis.setText (t.image); }
+  { jjtThis.setText (":" + t.image); }
 }
 
 //

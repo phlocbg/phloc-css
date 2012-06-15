@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -29,23 +30,33 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single <code>@font-face</code> rule.
+ * Represents a single <code>@page</code> rule.
  * 
  * @author philip
  */
 @NotThreadSafe
-public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSVersionAware
+public final class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSVersionAware
 {
+  private final String m_sPseudoPage;
   private final List <CSSDeclaration> m_aDeclarations = new ArrayList <CSSDeclaration> ();
 
-  public CSSFontFaceRule ()
-  {}
+  public CSSPageRule (@Nullable final String sPseudoPage)
+  {
+    m_sPseudoPage = sPseudoPage;
+  }
+
+  @Nullable
+  public String getPseudoPage ()
+  {
+    return m_sPseudoPage;
+  }
 
   public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
@@ -88,10 +99,12 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
     aSettings.checkVersionRequirements (this);
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
+    final StringBuilder aSB = new StringBuilder ("@page");
+
+    if (StringHelper.hasText (m_sPseudoPage))
+      aSB.append (' ').append (m_sPseudoPage);
+
     final int nDeclCount = m_aDeclarations.size ();
-
-    final StringBuilder aSB = new StringBuilder ("@font-face");
-
     if (nDeclCount == 0)
     {
       // Skip the whole rule
@@ -131,7 +144,7 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
   @Nonnull
   public ECSSVersion getMinimumCSSVersion ()
   {
-    return ECSSVersion.CSS30;
+    return ECSSVersion.CSS21;
   }
 
   @Override
@@ -139,9 +152,9 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSFontFaceRule))
+    if (!(o instanceof CSSPageRule))
       return false;
-    final CSSFontFaceRule rhs = (CSSFontFaceRule) o;
+    final CSSPageRule rhs = (CSSPageRule) o;
     return m_aDeclarations.equals (rhs.m_aDeclarations);
   }
 

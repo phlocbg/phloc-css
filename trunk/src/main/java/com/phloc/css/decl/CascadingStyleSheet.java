@@ -115,6 +115,17 @@ public final class CascadingStyleSheet
 
   @Nonnull
   @ReturnsMutableCopy
+  public List <CSSPageRule> getAllPageRules ()
+  {
+    final List <CSSPageRule> ret = new ArrayList <CSSPageRule> ();
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSPageRule)
+        ret.add ((CSSPageRule) aTopLevelRule);
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
   public List <CSSMediaRule> getAllMediaRules ()
   {
     final List <CSSMediaRule> ret = new ArrayList <CSSMediaRule> ();

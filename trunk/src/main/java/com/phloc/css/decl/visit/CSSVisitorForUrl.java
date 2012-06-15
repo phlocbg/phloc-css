@@ -28,6 +28,7 @@ import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaRule;
+import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.ICSSExpressionMember;
 import com.phloc.css.decl.ICSSTopLevelRule;
@@ -88,6 +89,18 @@ public final class CSSVisitorForUrl extends DefaultCSSVisitor
 
   @Override
   public void onEndStyleRule (@Nonnull final CSSStyleRule aStyleRule)
+  {
+    m_aTopLevelRule = null;
+  }
+
+  @Override
+  public void onBeginPageRule (@Nonnull final CSSPageRule aPageRule)
+  {
+    m_aTopLevelRule = aPageRule;
+  }
+
+  @Override
+  public void onEndPageRule (@Nonnull final CSSPageRule aPageRule)
   {
     m_aTopLevelRule = null;
   }

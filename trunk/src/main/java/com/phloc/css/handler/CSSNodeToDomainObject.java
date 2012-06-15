@@ -39,6 +39,7 @@ import com.phloc.css.decl.CSSMediaExpression;
 import com.phloc.css.decl.CSSMediaQuery;
 import com.phloc.css.decl.CSSMediaQuery.EModifier;
 import com.phloc.css.decl.CSSMediaRule;
+import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSSelectorAttribute;
 import com.phloc.css.decl.CSSSelectorMemberFunctionLike;
@@ -333,6 +334,39 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
+  private CSSPageRule _createPageRule (@Nonnull final CSSNode aNode)
+  {
+    _expectNodeType (aNode, ECSSNodeType.PAGERULE);
+
+    final int nChildCount = aNode.jjtGetNumChildren ();
+    String sPseudoPage = null;
+    int nStartIndex = 0;
+    if (nChildCount > 0)
+    {
+      final CSSNode aFirstChild = aNode.jjtGetChild (0);
+      if (ECSSNodeType.PSEUDOPAGE.isNode (aFirstChild, m_eVersion))
+      {
+        sPseudoPage = aFirstChild.getText ();
+        nStartIndex++;
+      }
+    }
+
+    final CSSPageRule ret = new CSSPageRule (sPseudoPage);
+
+    for (int nIndex = nStartIndex; nIndex < nChildCount; ++nIndex)
+    {
+      final CSSNode aChildNode = aNode.jjtGetChild (nIndex);
+
+      if (ECSSNodeType.DECLARATION.isNode (aChildNode, m_eVersion))
+        ret.addDeclaration (_createDeclaration (aChildNode));
+      else
+        if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+          s_aLogger.warn ("Unsupported page rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+    }
+    return ret;
+  }
+
+  @Nonnull
   private CSSMediaRule _createMediaRule (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.MEDIARULE);
@@ -542,8 +576,7 @@ final class CSSNodeToDomainObject
           else
             if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
             {
-              // TODO page rule
-              s_aLogger.warn ("Page rule object is currently ignored!");
+              ret.addRule (_createPageRule (aChildNode));
             }
             else
               if (ECSSNodeType.MEDIARULE.isNode (aChildNode, m_eVersion))

@@ -48,26 +48,23 @@ public final class FuncTestCSSHandler
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler21"),
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
+      final String sKey = aFile.getAbsolutePath ();
       if (false)
-        s_aLogger.info (aFile.getName ());
+        s_aLogger.info (sKey);
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
                                                                   CCharset.CHARSET_UTF_8_OBJ,
                                                                   ECSSVersion.CSS21);
-      assertNotNull (aFile.getAbsolutePath (), aCSS);
+      assertNotNull (sKey, aCSS);
 
       // Write optimized version and compare it
       String s = new CSSWriter (ECSSVersion.CSS21, true).getCSSAsString (aCSS);
-      assertNotNull (aFile.getAbsolutePath (), s);
-      assertEquals (aFile.getAbsolutePath (),
-                    aCSS,
-                    CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21));
+      assertNotNull (sKey, s);
+      assertEquals (sKey, aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21));
 
       // Write non-optimized version and compare it
       s = new CSSWriter (ECSSVersion.CSS21, false).getCSSAsString (aCSS);
-      assertNotNull (aFile.getAbsolutePath (), s);
-      assertEquals (aFile.getAbsolutePath (),
-                    aCSS,
-                    CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21));
+      assertNotNull (sKey, s);
+      assertEquals (sKey, aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21));
     }
   }
 
@@ -78,7 +75,8 @@ public final class FuncTestCSSHandler
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
-      System.out.println (sKey);
+      if (false)
+        s_aLogger.info (sKey);
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
                                                                   CCharset.CHARSET_UTF_8_OBJ,
                                                                   ECSSVersion.CSS30);
@@ -108,21 +106,23 @@ public final class FuncTestCSSHandler
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css"),
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
-      s_aLogger.info (aFile.getPath ());
+      final String sKey = aFile.getAbsolutePath ();
+      if (false)
+        s_aLogger.info (sKey);
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
                                                                   CCharset.CHARSET_UTF_8_OBJ,
                                                                   ECSSVersion.CSS21);
-      assertNotNull (aFile.getAbsolutePath (), aCSS);
+      assertNotNull (sKey, aCSS);
 
       // Write optimized version and compare it
       String s = new CSSWriter (ECSSVersion.CSS21, true).getCSSAsString (aCSS);
-      assertNotNull (s);
-      assertEquals (aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21));
+      assertNotNull (sKey, s);
+      assertEquals (sKey, aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21));
 
       // Write non-optimized version and compare it
       s = new CSSWriter (ECSSVersion.CSS21, false).getCSSAsString (aCSS);
-      assertNotNull (s);
-      assertEquals (aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21));
+      assertNotNull (sKey, s);
+      assertEquals (sKey, aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21));
     }
   }
 
@@ -132,21 +132,23 @@ public final class FuncTestCSSHandler
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css30"),
                                                                 FilenameFilterFactory.getEndsWithFilter (".css")))
     {
-      s_aLogger.info (aFile.getPath ());
+      final String sKey = aFile.getAbsolutePath ();
+      if (false)
+        s_aLogger.info (sKey);
       final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new FileSystemResource (aFile),
                                                                   CCharset.CHARSET_UTF_8_OBJ,
                                                                   ECSSVersion.CSS30);
-      assertNotNull (aFile.getAbsolutePath (), aCSS);
+      assertNotNull (sKey, aCSS);
 
       // Write optimized version and compare it
       String s = new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS);
-      assertNotNull (s);
-      assertEquals (aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30));
+      assertNotNull (sKey, s);
+      assertEquals (sKey, aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30));
 
       // Write non-optimized version and compare it
       s = new CSSWriter (ECSSVersion.CSS30, false).getCSSAsString (aCSS);
-      assertNotNull (s);
-      assertEquals (aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30));
+      assertNotNull (sKey, s);
+      assertEquals (sKey, aCSS, CSSHandler.readFromString (s, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30));
     }
   }
 
