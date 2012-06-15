@@ -300,7 +300,7 @@ public final class CSSWriter
   {
     final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
     writeCSS (aCSS, aSW);
-    return aSW.toString ();
+    return aSW.getAsString ();
   }
 
   /**
