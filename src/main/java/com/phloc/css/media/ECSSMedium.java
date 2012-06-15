@@ -21,7 +21,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.lang.EnumHelper;
+import com.phloc.commons.name.IHasName;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.annotations.DeprecatedInCSS21;
@@ -31,7 +32,7 @@ import com.phloc.css.annotations.DeprecatedInCSS21;
  * 
  * @author philip
  */
-public enum ECSSMedium implements ICSSVersionAware
+public enum ECSSMedium implements ICSSVersionAware, IHasName
 {
   /** for all media types */
   ALL ("all"),
@@ -70,25 +71,25 @@ public enum ECSSMedium implements ICSSVersionAware
   /** for televisions */
   TV ("tv");
 
-  private final String m_sAttrValue;
+  private final String m_sName;
   private final ECSSVersion m_eVersion;
 
-  private ECSSMedium (@Nonnull @Nonempty final String sAttrValue)
+  private ECSSMedium (@Nonnull @Nonempty final String sName)
   {
-    this (sAttrValue, ECSSVersion.CSS21);
+    this (sName, ECSSVersion.CSS21);
   }
 
-  private ECSSMedium (@Nonnull @Nonempty final String sAttrValue, @Nonnull final ECSSVersion eVersion)
+  private ECSSMedium (@Nonnull @Nonempty final String sName, @Nonnull final ECSSVersion eVersion)
   {
-    m_sAttrValue = sAttrValue;
+    m_sName = sName;
     m_eVersion = eVersion;
   }
 
   @Nonnull
   @Nonempty
-  public String getAttrValue ()
+  public String getName ()
   {
-    return m_sAttrValue;
+    return m_sName;
   }
 
   @Nonnull
@@ -98,12 +99,8 @@ public enum ECSSMedium implements ICSSVersionAware
   }
 
   @Nullable
-  public static ECSSMedium getFromAttrOrNull (@Nullable final String sAttr)
+  public static ECSSMedium getFromNameOrNull (@Nullable final String sName)
   {
-    if (StringHelper.hasText (sAttr))
-      for (final ECSSMedium eMedia : values ())
-        if (eMedia.m_sAttrValue.equals (sAttr))
-          return eMedia;
-    return null;
+    return EnumHelper.getFromNameOrNull (ECSSMedium.class, sName);
   }
 }

@@ -209,7 +209,7 @@ public final class CCSS
   {
     // sValue cannot be null here!
     for (final ECSSUnit eUnit : ECSSUnit.values ())
-      if (sValue.endsWith (eUnit.getText ()))
+      if (sValue.endsWith (eUnit.getName ()))
         return eUnit;
     return null;
   }
@@ -219,7 +219,7 @@ public final class CCSS
   {
     for (final ECSSUnit eUnit : ECSSUnit.values ())
       if (eUnit != ECSSUnit.PERCENTAGE)
-        if (sValue.endsWith (eUnit.getText ()))
+        if (sValue.endsWith (eUnit.getName ()))
           return eUnit;
     return null;
   }
@@ -231,7 +231,10 @@ public final class CCSS
     {
       final ECSSUnit eUnit = bWithPerc ? _findUnitWithPerc (sRealValue) : _findUnitWithoutPerc (sRealValue);
       if (eUnit != null)
-        sRealValue = sRealValue.substring (0, sRealValue.length () - eUnit.getText ().length ()).trim ();
+      {
+        // Cut the unit
+        sRealValue = sRealValue.substring (0, sRealValue.length () - eUnit.getName ().length ()).trim ();
+      }
       return isNumberValue (sRealValue);
     }
     return false;

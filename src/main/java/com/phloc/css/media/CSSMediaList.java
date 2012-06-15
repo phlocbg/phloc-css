@@ -99,7 +99,7 @@ public final class CSSMediaList implements Serializable
     {
       if (aSB.length () > 0)
         aSB.append (", ");
-      aSB.append (eMedia.getAttrValue ());
+      aSB.append (eMedia.getName ());
     }
     return aSB.toString ();
   }

@@ -22,13 +22,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.lang.EnumHelper;
+import com.phloc.commons.name.IHasName;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
-public enum ECSSAttributeOperator implements ICSSVersionAware, ICSSWriteable
+public enum ECSSAttributeOperator implements ICSSVersionAware, ICSSWriteable, IHasName
 {
   EQUALS ("="),
   INCLUDES ("~="),
@@ -37,18 +38,25 @@ public enum ECSSAttributeOperator implements ICSSVersionAware, ICSSWriteable
   ENDMATCH ("$=", ECSSVersion.CSS30),
   CONTAINSMATCH ("*=");
 
-  private final String m_sText;
+  private final String m_sName;
   private final ECSSVersion m_eVersion;
 
-  private ECSSAttributeOperator (@Nonnull @Nonempty final String sText)
+  private ECSSAttributeOperator (@Nonnull @Nonempty final String sName)
   {
-    this (sText, ECSSVersion.CSS21);
+    this (sName, ECSSVersion.CSS21);
   }
 
-  private ECSSAttributeOperator (@Nonnull @Nonempty final String sText, @Nonnull final ECSSVersion eVersion)
+  private ECSSAttributeOperator (@Nonnull @Nonempty final String sName, @Nonnull final ECSSVersion eVersion)
   {
-    m_sText = sText;
+    m_sName = sName;
     m_eVersion = eVersion;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getName ()
+  {
+    return m_sName;
   }
 
   @Nonnull
@@ -62,16 +70,12 @@ public enum ECSSAttributeOperator implements ICSSVersionAware, ICSSWriteable
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
-    return m_sText;
+    return m_sName;
   }
 
   @Nullable
-  public static ECSSAttributeOperator getFromTextOrNull (@Nullable final String sText)
+  public static ECSSAttributeOperator getFromNameOrNull (@Nullable final String sName)
   {
-    if (StringHelper.hasText (sText))
-      for (final ECSSAttributeOperator eOperator : values ())
-        if (eOperator.m_sText.equals (sText))
-          return eOperator;
-    return null;
+    return EnumHelper.getFromNameOrNull (ECSSAttributeOperator.class, sName);
   }
 }

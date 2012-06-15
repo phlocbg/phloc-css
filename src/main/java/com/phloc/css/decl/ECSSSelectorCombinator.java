@@ -22,8 +22,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
@@ -72,10 +72,6 @@ public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAwa
   @Nullable
   public static ECSSSelectorCombinator getFromNameOrNull (@Nullable final String sName)
   {
-    if (StringHelper.hasText (sName))
-      for (final ECSSSelectorCombinator eCombinator : values ())
-        if (eCombinator.m_sName.equals (sName))
-          return eCombinator;
-    return null;
+    return EnumHelper.getFromNameOrNull (ECSSSelectorCombinator.class, sName);
   }
 }

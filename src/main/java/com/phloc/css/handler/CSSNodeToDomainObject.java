@@ -126,7 +126,7 @@ final class CSSNodeToDomainObject
 
     // With operator and value
     return new CSSSelectorAttribute (aNode.getText (),
-                                     ECSSAttributeOperator.getFromTextOrNull (aNode.jjtGetChild (0).getText ()),
+                                     ECSSAttributeOperator.getFromNameOrNull (aNode.jjtGetChild (0).getText ()),
                                      aNode.jjtGetChild (1).getText ());
   }
 
@@ -257,7 +257,7 @@ final class CSSNodeToDomainObject
         if (ECSSNodeType.OPERATOR.isNode (aChildNode, m_eVersion))
         {
           final String sText = aChildNode.getText ();
-          final ECSSExpressionOperator eOp = ECSSExpressionOperator.getFromTextOrNull (sText);
+          final ECSSExpressionOperator eOp = ECSSExpressionOperator.getFromNameOrNull (sText);
           if (eOp == null)
             s_aLogger.warn ("Failed to parse expression operator '" + sText + "'");
           else
@@ -404,7 +404,7 @@ final class CSSNodeToDomainObject
     {
       // CSS 2.1 compatibility
       final String sMedium = aNode.getText ();
-      if (ECSSMedium.getFromAttrOrNull (sMedium) == null)
+      if (ECSSMedium.getFromNameOrNull (sMedium) == null)
         s_aLogger.warn ("CSS 2.1 Media query uses unknown medium '" + sMedium + "'");
       return new CSSMediaQuery (EModifier.NONE, sMedium);
     }
@@ -446,7 +446,7 @@ final class CSSNodeToDomainObject
       if (ECSSNodeType.MEDIUM.isNode (aNextChild, m_eVersion))
       {
         sMedium = aNextChild.getText ();
-        if (ECSSMedium.getFromAttrOrNull (sMedium) == null)
+        if (ECSSMedium.getFromNameOrNull (sMedium) == null)
           s_aLogger.warn ("Media query uses unknown medium '" + sMedium + "'");
         ++nStartIndex;
       }

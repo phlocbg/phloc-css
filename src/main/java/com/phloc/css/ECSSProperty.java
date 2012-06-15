@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.annotations.DeprecatedInCSS30;
@@ -612,11 +613,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   @Nullable
   public static ECSSProperty getFromNameOrNull (@Nullable final String sName)
   {
-    if (StringHelper.hasText (sName))
-      for (final ECSSProperty eProperty : values ())
-        if (eProperty.m_sName.equals (sName))
-          return eProperty;
-    return null;
+    return EnumHelper.getFromNameOrNull (ECSSProperty.class, sName);
   }
 
   @Nullable

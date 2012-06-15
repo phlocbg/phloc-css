@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
 import com.phloc.css.annotations.DeprecatedInCSS30;
 
@@ -79,11 +80,7 @@ public enum ECSSColorName implements IHasName
   @Nullable
   public static ECSSColorName getFromNameOrNullCaseInsensitive (@Nullable final String sName)
   {
-    if (sName != null)
-      for (final ECSSColorName eColor : values ())
-        if (eColor.m_sName.equalsIgnoreCase (sName))
-          return eColor;
-    return null;
+    return EnumHelper.getFromNameCaseInsensitiveOrNull (ECSSColorName.class, sName);
   }
 
   public static boolean isDefaultColorName (@Nullable final String sName)

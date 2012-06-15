@@ -26,7 +26,6 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.system.SystemHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.handler.CSSHandler;
@@ -49,23 +48,6 @@ public final class CSSCompressor
    * 
    * @param sOriginalCSS
    *          The original CSS code to be compressed.
-   * @param eCSSVersion
-   *          The CSS version to use.
-   * @return If compression failed because the CSS is invalid or whatsoever, the
-   *         original CSS is returned, else the compressed version is returned.
-   */
-  @Nonnull
-  @Deprecated
-  public static String getCompressedCSS (@Nonnull final String sOriginalCSS, @Nonnull final ECSSVersion eCSSVersion)
-  {
-    return getCompressedCSS (sOriginalCSS, SystemHelper.getSystemCharset (), eCSSVersion);
-  }
-
-  /**
-   * Get the compressed version of the passed CSS code.
-   * 
-   * @param sOriginalCSS
-   *          The original CSS code to be compressed.
    * @param aCharset
    *          The character set to be used. May not be <code>null</code>.
    * @param eCSSVersion
@@ -77,6 +59,29 @@ public final class CSSCompressor
   public static String getCompressedCSS (@Nonnull final String sOriginalCSS,
                                          @Nonnull final Charset aCharset,
                                          @Nonnull final ECSSVersion eCSSVersion)
+  {
+    return getCompressedCSS (sOriginalCSS, aCharset, eCSSVersion, false);
+  }
+
+  /**
+   * Get the compressed version of the passed CSS code.
+   * 
+   * @param sOriginalCSS
+   *          The original CSS code to be compressed.
+   * @param aCharset
+   *          The character set to be used. May not be <code>null</code>.
+   * @param eCSSVersion
+   *          The CSS version to use.
+   * @param bRemoveUnnecessaryCode
+   *          if <code>true</code> unnecessary empty declarations are omitted
+   * @return If compression failed because the CSS is invalid or whatsoever, the
+   *         original CSS is returned, else the compressed version is returned.
+   */
+  @Nonnull
+  public static String getCompressedCSS (@Nonnull final String sOriginalCSS,
+                                         @Nonnull final Charset aCharset,
+                                         @Nonnull final ECSSVersion eCSSVersion,
+                                         final boolean bRemoveUnnecessaryCode)
   {
     if (sOriginalCSS == null)
       throw new NullPointerException ("originalCSS");
@@ -90,7 +95,7 @@ public final class CSSCompressor
     {
       try
       {
-        final CSSWriterSettings aSettings = new CSSWriterSettings (eCSSVersion, true);
+        final CSSWriterSettings aSettings = new CSSWriterSettings (eCSSVersion, true).setRemoveUnnecessaryCode (bRemoveUnnecessaryCode);
         return new CSSWriter (aSettings).getCSSAsString (aCSS);
       }
       catch (final IOException ex)
