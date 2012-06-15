@@ -17,17 +17,25 @@
  */
 package com.phloc.css;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
+
+import com.phloc.commons.string.StringHelper;
 
 /**
  * This class represents the options required for writing
  * 
  * @author philip
  */
-public final class CSSWriterSettings
+@NotThreadSafe
+public class CSSWriterSettings
 {
+  public static final String DEFAULT_INDENT = "  ";
+
   private final ECSSVersion m_eVersion;
   private final boolean m_bOptimizedOutput;
+  private String m_sIndent = DEFAULT_INDENT;
 
   /**
    * @param eVersion
@@ -45,18 +53,44 @@ public final class CSSWriterSettings
   }
 
   @Nonnull
-  public ECSSVersion getVersion ()
+  public final ECSSVersion getVersion ()
   {
     return m_eVersion;
   }
 
-  public boolean isOptimizedOutput ()
+  public final boolean isOptimizedOutput ()
   {
     return m_bOptimizedOutput;
   }
 
+  @Nonnull
+  public final String getIndent ()
+  {
+    return m_sIndent;
+  }
+
+  @Nonnull
+  public final String getIndent (@Nonnegative final int nCount)
+  {
+    return StringHelper.getRepeated (m_sIndent, nCount);
+  }
+
+  @Nonnull
+  public final CSSWriterSettings setIndent (@Nonnull final String sIndent)
+  {
+    if (sIndent == null)
+      throw new NullPointerException ("indent");
+    m_sIndent = sIndent;
+    return this;
+  }
+
   public void checkVersionRequirements (@Nonnull final ICSSVersionAware aCSSObject)
   {
-    CSSVersionHelper.checkVersionRequirements (m_eVersion, aCSSObject);
+    final ECSSVersion eMinCSSVersion = aCSSObject.getMinimumCSSVersion ();
+    if (m_eVersion.compareTo (eMinCSSVersion) < 0)
+      throw new IllegalStateException ("This object cannot be serialized to CSS version " +
+                                       m_eVersion.getVersion ().getAsString () +
+                                       " but requires at least " +
+                                       eMinCSSVersion.getVersion ().getAsString ());
   }
 }

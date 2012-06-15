@@ -163,7 +163,7 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
         {
           // Indentation
           if (!bOptimizedOutput)
-            aSB.append ("  ");
+            aSB.append (aSettings.getIndent ());
           // Emit the main declaration
           aSB.append (aDeclaration.getAsCSSString (aSettings));
           if (!bOptimizedOutput)

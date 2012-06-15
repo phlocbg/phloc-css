@@ -113,7 +113,7 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
     for (final CSSKeyframesBlock aBlock : m_aBlocks)
     {
       if (!bOptimizedOutput)
-        aSB.append ("  ");
+        aSB.append (aSettings.getIndent ());
       aSB.append (aBlock.getAsCSSString (aSettings));
       if (!bOptimizedOutput)
         aSB.append ('\n');

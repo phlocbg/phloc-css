@@ -133,7 +133,7 @@ public final class CSSMediaRule implements ICSSTopLevelRule
       for (final CSSStyleRule aStyleRule : m_aStyleRules)
       {
         if (!bOptimizedOutput)
-          aSB.append ("  ");
+          aSB.append (aSettings.getIndent ());
         aSB.append (aStyleRule.getAsCSSString (aSettings));
         if (!bOptimizedOutput)
           aSB.append ('\n');
