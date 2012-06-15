@@ -167,6 +167,8 @@ TOKEN :
 | < VH: <NUM> "vh" >           { matchedToken.image = ParseUtils.splitNumber(image); }
 | < VM: <NUM> "vm" >           { matchedToken.image = ParseUtils.splitNumber(image); }
 | < CH: <NUM> "ch" >           { matchedToken.image = ParseUtils.splitNumber(image); }
+| < DPI: <NUM> "dpi" >         { matchedToken.image = ParseUtils.splitNumber(image); }
+| < DPCM: <NUM> "dpcm" >       { matchedToken.image = ParseUtils.splitNumber(image); }
 | < LENGTH_CM: <NUM> "cm" >    { matchedToken.image = ParseUtils.splitNumber(image); }
 | < LENGTH_MM: <NUM> "mm" >    { matchedToken.image = ParseUtils.splitNumber(image); }
 | < LENGTH_IN: <NUM> "in" >    { matchedToken.image = ParseUtils.splitNumber(image); }
@@ -819,6 +821,8 @@ void term() #Term :
     | t = <VH> ( <S> )*         { t.image += "vh"; }
     | t = <VM> ( <S> )*         { t.image += "vm"; }
     | t = <CH> ( <S> )*         { t.image += "ch"; }
+    | t = <DPI> ( <S> )*        { t.image += "dpi"; }
+    | t = <DPCM> ( <S> )*       { t.image += "dpcm"; }
     | t = <LENGTH_CM> ( <S> )*  { t.image += "cm"; }
     | t = <LENGTH_MM> ( <S> )*  { t.image += "mm"; }
     | t = <LENGTH_IN> ( <S> )*  { t.image += "in"; }
