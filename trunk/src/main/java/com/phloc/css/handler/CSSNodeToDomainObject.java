@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpression;
@@ -42,6 +41,7 @@ import com.phloc.css.decl.CSSMediaQuery.EModifier;
 import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSSelectorAttribute;
+import com.phloc.css.decl.CSSSelectorMemberFunctionLike;
 import com.phloc.css.decl.CSSSelectorMemberNot;
 import com.phloc.css.decl.CSSSelectorSimpleMember;
 import com.phloc.css.decl.CSSStyleRule;
@@ -151,7 +151,7 @@ final class CSSNodeToDomainObject
     if (ECSSNodeType.COMBINATOR.isNode (aNode, m_eVersion))
     {
       final String sText = aNode.getText ();
-      final ECSSSelectorCombinator eCombinator = ECSSSelectorCombinator.getFromTextOrNull (sText);
+      final ECSSSelectorCombinator eCombinator = ECSSSelectorCombinator.getFromNameOrNull (sText);
       if (eCombinator == null)
         s_aLogger.warn ("Failed to parse CSS selector combinator '" + sText + "'");
       return eCombinator;
@@ -170,22 +170,23 @@ final class CSSNodeToDomainObject
     if (ECSSNodeType.PSEUDO.isNode (aNode, m_eVersion))
     {
       if (nChildCount == 0)
+      {
+        // E.g. ":focus" or ":hover"
         return new CSSSelectorSimpleMember (aNode.getText ());
+      }
 
       if (nChildCount == 1)
       {
         final CSSNode aChildNode = aNode.jjtGetChild (0);
         if (ECSSNodeType.NTH.isNode (aChildNode, m_eVersion))
         {
-          // Handle nth
+          // Handle nth. E.g. ":nth-child(even)" or ":nth-child(3n+1)"
           return new CSSSelectorSimpleMember (aNode.getText () + aChildNode.getText () + ")");
         }
 
         // It's a function (e.g. ":lang(fr)")
         final CSSExpression aExpr = _createExpression (aChildNode);
-        final CSSWriterSettings aSettings = new CSSWriterSettings (m_eVersion, true);
-        final String sSelectorCode = aNode.getText () + aExpr.getAsCSSString (aSettings) + ')';
-        return new CSSSelectorSimpleMember (sSelectorCode);
+        return new CSSSelectorMemberFunctionLike (aNode.getText (), aExpr);
       }
 
       throw new UnsupportedOperationException ("Not supporting pseudo-selectors with functions and " +

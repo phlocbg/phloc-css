@@ -21,37 +21,45 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.name.IHasName;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.CSSWriterSettings;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 
-public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAware
+public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAware, IHasName
 {
   PLUS ("+"),
   GREATER (">"),
   TILDE ("~", ECSSVersion.CSS30),
   BLANK (" ");
 
-  private final String m_sText;
+  private final String m_sName;
   private final ECSSVersion m_eVersion;
 
-  private ECSSSelectorCombinator (@Nonnull @Nonempty final String sText)
+  private ECSSSelectorCombinator (@Nonnull @Nonempty final String sName)
   {
-    this (sText, ECSSVersion.CSS21);
+    this (sName, ECSSVersion.CSS21);
   }
 
-  private ECSSSelectorCombinator (@Nonnull @Nonempty final String sText, @Nonnull final ECSSVersion eVersion)
+  private ECSSSelectorCombinator (@Nonnull @Nonempty final String sName, @Nonnull final ECSSVersion eVersion)
   {
-    m_sText = sText;
+    m_sName = sName;
     m_eVersion = eVersion;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getName ()
+  {
+    return m_sName;
   }
 
   @Nonnull
   public String getAsCSSString (@Nonnull final CSSWriterSettings aSettings)
   {
     aSettings.checkVersionRequirements (this);
-    return m_sText;
+    return m_sName;
   }
 
   @Nonnull
@@ -61,11 +69,11 @@ public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAwa
   }
 
   @Nullable
-  public static ECSSSelectorCombinator getFromTextOrNull (@Nullable final String sText)
+  public static ECSSSelectorCombinator getFromNameOrNull (@Nullable final String sName)
   {
-    if (StringHelper.hasText (sText))
+    if (StringHelper.hasText (sName))
       for (final ECSSSelectorCombinator eCombinator : values ())
-        if (eCombinator.m_sText.equals (sText))
+        if (eCombinator.m_sName.equals (sName))
           return eCombinator;
     return null;
   }
