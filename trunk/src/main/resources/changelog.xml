@@ -20,6 +20,7 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2012-06-14" version="3.0.0-RC1" />
   <entry date="2012-06-15" category="feature" action="add">
     <change>
       <text locale="en">Added possibility to provide a custom exception handler to handle the generated ParseExceptions</text>

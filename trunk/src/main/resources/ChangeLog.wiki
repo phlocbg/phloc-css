@@ -1,7 +1,9 @@
 #summary Change log of phloc-css
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Added new writer feature "remove unnecessary code" which removes unnecessary statements</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>6/14/12</td><td colspan="4">_Release *3.0.0*_</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Added possibility to provide a custom exception handler to handle the generated ParseExceptions</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Added new writer feature "remove unnecessary code" which removes unnecessary statements</td></tr>
 <tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Correctly handling font-face, page and keyframes as child of media rule</td></tr>
 <tr><td>6/15/12</td><td>fix</td><td>tech</td><td></td><td>CSS 3.0 media list is now optional on @media rule</td></tr>
 <tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Added support for "dpi" and "dpcm" CSS units</td></tr>
