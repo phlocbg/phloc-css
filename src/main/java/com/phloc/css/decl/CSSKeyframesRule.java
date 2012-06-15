@@ -118,8 +118,11 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
       if (!bOptimizedOutput)
         aSB.append ('\n');
     }
-
-    aSB.append (bOptimizedOutput ? "}" : "}\n");
+    if (!bOptimizedOutput)
+      aSB.append (aSettings.getIndent (nIndentLevel));
+    aSB.append ('}');
+    if (!bOptimizedOutput)
+      aSB.append ('\n');
     return aSB.toString ();
   }
 

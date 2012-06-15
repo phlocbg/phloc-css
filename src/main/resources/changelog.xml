@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2012-06-15" category="feature" action="add">
+    <change>
+      <text locale="en">Correctly handling font-face, page and keyframes as child of media rule</text>
+    </change>
+  </entry>
   <entry date="2012-06-15" category="tech" action="fix">
     <change>
       <text locale="en">CSS 3.0 media list is now optional on @media rule</text>

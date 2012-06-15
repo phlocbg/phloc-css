@@ -380,10 +380,19 @@ final class CSSNodeToDomainObject
       }
       else
         if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
-          ret.addStyleRule (_createStyleRule (aChildNode));
+          ret.addRule (_createStyleRule (aChildNode));
         else
-          if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
-            s_aLogger.warn ("Unsupported media-rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+          if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
+            ret.addRule (_createPageRule (aChildNode));
+          else
+            if (ECSSNodeType.FONTFACERULE.isNode (aChildNode, m_eVersion))
+              ret.addRule (_createFontFaceRule (aChildNode));
+            else
+              if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
+                ret.addRule (_createKeyframesRule (aChildNode));
+              else
+                if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+                  s_aLogger.warn ("Unsupported media-rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
   }

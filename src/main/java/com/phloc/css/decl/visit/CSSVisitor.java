@@ -63,6 +63,93 @@ public final class CSSVisitor
     }
   }
 
+  private static void _visitTopLevelRule (@Nonnull final ICSSVisitor aVisitor,
+                                          @Nonnull final ICSSTopLevelRule aTopLevelRule)
+  {
+    if (aTopLevelRule instanceof CSSStyleRule)
+    {
+      _visitStyleRule (aVisitor, (CSSStyleRule) aTopLevelRule);
+    }
+    else
+      if (aTopLevelRule instanceof CSSPageRule)
+      {
+        final CSSPageRule aPageRule = (CSSPageRule) aTopLevelRule;
+        aVisitor.onBeginPageRule (aPageRule);
+        try
+        {
+          // for all declarations
+          for (final CSSDeclaration aDeclaration : aPageRule.getAllDeclarations ())
+            aVisitor.onDeclaration (aDeclaration);
+        }
+        finally
+        {
+          aVisitor.onEndPageRule (aPageRule);
+        }
+      }
+      else
+        if (aTopLevelRule instanceof CSSFontFaceRule)
+        {
+          final CSSFontFaceRule aFontFaceRule = (CSSFontFaceRule) aTopLevelRule;
+          aVisitor.onBeginFontFaceRule (aFontFaceRule);
+          try
+          {
+            // for all declarations
+            for (final CSSDeclaration aDeclaration : aFontFaceRule.getAllDeclarations ())
+              aVisitor.onDeclaration (aDeclaration);
+          }
+          finally
+          {
+            aVisitor.onEndFontFaceRule (aFontFaceRule);
+          }
+        }
+        else
+          if (aTopLevelRule instanceof CSSMediaRule)
+          {
+            final CSSMediaRule aMediaRule = (CSSMediaRule) aTopLevelRule;
+            aVisitor.onBeginMediaRule (aMediaRule);
+            try
+            {
+              // for all rules
+              for (final ICSSTopLevelRule aRule : aMediaRule.getAllRules ())
+                _visitTopLevelRule (aVisitor, aRule);
+            }
+            finally
+            {
+              aVisitor.onEndMediaRule (aMediaRule);
+            }
+          }
+          else
+            if (aTopLevelRule instanceof CSSKeyframesRule)
+            {
+              final CSSKeyframesRule aKeyframesRule = (CSSKeyframesRule) aTopLevelRule;
+              aVisitor.onBeginKeyframesRule (aKeyframesRule);
+              try
+              {
+                // for all keyframes blocks
+                for (final CSSKeyframesBlock aBlock : aKeyframesRule.getAllBlocks ())
+                {
+                  aVisitor.onBeginKeyframesBlock (aBlock);
+                  try
+                  {
+                    // for all declarations
+                    for (final CSSDeclaration aDeclaration : aBlock.getAllDeclarations ())
+                      aVisitor.onDeclaration (aDeclaration);
+                  }
+                  finally
+                  {
+                    aVisitor.onEndKeyframesBlock (aBlock);
+                  }
+                }
+              }
+              finally
+              {
+                aVisitor.onEndKeyframesRule (aKeyframesRule);
+              }
+            }
+            else
+              throw new IllegalStateException ("Top level rule " + aTopLevelRule + " is unsupported!");
+  }
+
   /**
    * Visit CSS elements in the order of their declaration.
    * 
@@ -88,90 +175,7 @@ public final class CSSVisitor
 
       // for all other top level rules
       for (final ICSSTopLevelRule aTopLevelRule : aCSS.getAllRules ())
-      {
-        if (aTopLevelRule instanceof CSSStyleRule)
-        {
-          _visitStyleRule (aVisitor, (CSSStyleRule) aTopLevelRule);
-        }
-        else
-          if (aTopLevelRule instanceof CSSPageRule)
-          {
-            final CSSPageRule aPageRule = (CSSPageRule) aTopLevelRule;
-            aVisitor.onBeginPageRule (aPageRule);
-            try
-            {
-              // for all declarations
-              for (final CSSDeclaration aDeclaration : aPageRule.getAllDeclarations ())
-                aVisitor.onDeclaration (aDeclaration);
-            }
-            finally
-            {
-              aVisitor.onEndPageRule (aPageRule);
-            }
-          }
-          else
-            if (aTopLevelRule instanceof CSSFontFaceRule)
-            {
-              final CSSFontFaceRule aFontFaceRule = (CSSFontFaceRule) aTopLevelRule;
-              aVisitor.onBeginFontFaceRule (aFontFaceRule);
-              try
-              {
-                // for all declarations
-                for (final CSSDeclaration aDeclaration : aFontFaceRule.getAllDeclarations ())
-                  aVisitor.onDeclaration (aDeclaration);
-              }
-              finally
-              {
-                aVisitor.onEndFontFaceRule (aFontFaceRule);
-              }
-            }
-            else
-              if (aTopLevelRule instanceof CSSMediaRule)
-              {
-                final CSSMediaRule aMediaRule = (CSSMediaRule) aTopLevelRule;
-                aVisitor.onBeginMediaRule (aMediaRule);
-                try
-                {
-                  // for all declarations
-                  for (final CSSStyleRule aStyleRule : aMediaRule.getAllStyleRules ())
-                    _visitStyleRule (aVisitor, aStyleRule);
-                }
-                finally
-                {
-                  aVisitor.onEndMediaRule (aMediaRule);
-                }
-              }
-              else
-                if (aTopLevelRule instanceof CSSKeyframesRule)
-                {
-                  final CSSKeyframesRule aKeyframesRule = (CSSKeyframesRule) aTopLevelRule;
-                  aVisitor.onBeginKeyframesRule (aKeyframesRule);
-                  try
-                  {
-                    // for all keyframes blocks
-                    for (final CSSKeyframesBlock aBlock : aKeyframesRule.getAllBlocks ())
-                    {
-                      aVisitor.onBeginKeyframesBlock (aBlock);
-                      try
-                      {
-                        // for all declarations
-                        for (final CSSDeclaration aDeclaration : aBlock.getAllDeclarations ())
-                          aVisitor.onDeclaration (aDeclaration);
-                      }
-                      finally
-                      {
-                        aVisitor.onEndKeyframesBlock (aBlock);
-                      }
-                    }
-                  }
-                  finally
-                  {
-                    aVisitor.onEndKeyframesRule (aKeyframesRule);
-                  }
-                }
-                else
-                  throw new IllegalStateException ("Top level rule " + aTopLevelRule + " is unsupported!");
-      }
+        _visitTopLevelRule (aVisitor, aTopLevelRule);
     }
     finally
     {
