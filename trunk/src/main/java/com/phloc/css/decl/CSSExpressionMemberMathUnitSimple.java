@@ -19,14 +19,17 @@ package com.phloc.css.decl;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.ECSSUnit;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSWriterSettings;
+import com.phloc.css.utils.CSSNumberHelper;
 
 /**
  * Represents a CSS calc element
@@ -37,18 +40,26 @@ import com.phloc.css.ICSSWriterSettings;
 public final class CSSExpressionMemberMathUnitSimple implements ICSSExpressionMathMember
 {
   private final String m_sText;
+  private final ECSSUnit m_eUnit;
 
   public CSSExpressionMemberMathUnitSimple (@Nonnull @Nonempty final String sText)
   {
-    if (StringHelper.hasNoText (sText))
+    if (StringHelper.hasNoTextAfterTrim (sText))
       throw new IllegalArgumentException ("text");
-    m_sText = sText;
+    m_sText = sText.trim ();
+    m_eUnit = CSSNumberHelper.getMatchingUnitExclPercentage (m_sText);
   }
 
   @Nonnull
   public String getText ()
   {
     return m_sText;
+  }
+
+  @Nullable
+  public ECSSUnit getUnit ()
+  {
+    return m_eUnit;
   }
 
   @Nonnull
@@ -85,6 +96,6 @@ public final class CSSExpressionMemberMathUnitSimple implements ICSSExpressionMa
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("text", m_sText).toString ();
+    return new ToStringGenerator (this).append ("text", m_sText).append ("unit", m_eUnit).toString ();
   }
 }
