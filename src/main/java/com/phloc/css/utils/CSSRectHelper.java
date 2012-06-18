@@ -17,6 +17,8 @@
  */
 package com.phloc.css.utils;
 
+import java.util.regex.Matcher;
+
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
@@ -32,19 +34,39 @@ import com.phloc.css.CCSS;
 @Immutable
 public final class CSSRectHelper
 {
+  // Possible values are: "0", "0px", "0%" or "auto"
+  // "?:" - non-capturing group
+  private static final String PATTERN_PART_VALUE = "([0-9]+(?:[a-zA-Z]+|%)?|auto)";
+  // Do not use a recurring group (...{3}) so that capturing works!
   private static final String PATTERN_CURRENT_SYNTAX = "^" +
                                                        CCSS.PREFIX_RECT +
-                                                       "\\s*\\((\\s*[0-9]+([a-z]*|%)\\s*,){3}\\s*[0-9]+([a-z]*|%)\\s*\\)$";
+                                                       "\\s*\\(\\s*" +
+                                                       PATTERN_PART_VALUE +
+                                                       "\\s*,\\s*" +
+                                                       PATTERN_PART_VALUE +
+                                                       "\\s*,\\s*" +
+                                                       PATTERN_PART_VALUE +
+                                                       "\\s*,\\s*" +
+                                                       PATTERN_PART_VALUE +
+                                                       "\\s*\\)$";
   private static final String PATTERN_OLD_SYNTAX = "^" +
                                                    CCSS.PREFIX_RECT +
-                                                   "\\s*\\((\\s*[0-9]+([a-z]*|%)\\s+){3}\\s*[0-9]+([a-z]*|%)\\s*\\)$";
+                                                   "\\s*\\(\\s*" +
+                                                   PATTERN_PART_VALUE +
+                                                   "\\s+" +
+                                                   PATTERN_PART_VALUE +
+                                                   "\\s+" +
+                                                   PATTERN_PART_VALUE +
+                                                   "\\s+" +
+                                                   PATTERN_PART_VALUE +
+                                                   "\\s*\\)$";
 
   private CSSRectHelper ()
   {}
 
-  public static boolean isRectValue (@Nullable final String sValue)
+  public static boolean isRectValue (@Nullable final String sCSSValue)
   {
-    final String sRealValue = StringHelper.trim (sValue);
+    final String sRealValue = StringHelper.trim (sCSSValue);
     if (StringHelper.hasText (sRealValue))
     {
       // Current syntax: rect(a,b,c,d)
@@ -56,5 +78,29 @@ public final class CSSRectHelper
         return true;
     }
     return false;
+  }
+
+  @Nullable
+  public static String [] getRectValue (@Nullable final String sCSSValue)
+  {
+    final String sRealValue = StringHelper.trim (sCSSValue);
+    if (StringHelper.hasText (sRealValue))
+    {
+      // TODO use RegHexHelper.getAllMatchingGroupValues
+      Matcher m = RegExHelper.getMatcher (PATTERN_CURRENT_SYNTAX, sRealValue);
+      if (!m.find ())
+      {
+        m = RegExHelper.getMatcher (PATTERN_OLD_SYNTAX, sRealValue);
+        if (!m.find ())
+          return null;
+      }
+
+      // groupCount is excluding the .group(0) match!
+      final String [] ret = new String [m.groupCount ()];
+      for (int i = 0; i < m.groupCount (); ++i)
+        ret[i] = m.group (i + 1);
+      return ret;
+    }
+    return null;
   }
 }

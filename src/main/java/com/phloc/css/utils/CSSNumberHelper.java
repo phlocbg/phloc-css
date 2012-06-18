@@ -36,44 +36,45 @@ public final class CSSNumberHelper
   {}
 
   @Nullable
-  private static ECSSUnit _findUnitWithPerc (@Nonnull final String sValue)
+  private static ECSSUnit _getMatchingUnitWithPerc (@Nonnull final String sCSSValue)
   {
     // sValue cannot be null here!
     for (final ECSSUnit eUnit : ECSSUnit.values ())
-      if (sValue.endsWith (eUnit.getName ()))
+      if (sCSSValue.endsWith (eUnit.getName ()))
         return eUnit;
     return null;
   }
 
   @Nullable
-  private static ECSSUnit _findUnitWithoutPerc (@Nonnull final String sValue)
+  private static ECSSUnit _getMatchingUnitWithoutPerc (@Nonnull final String sCSSValue)
   {
     for (final ECSSUnit eUnit : ECSSUnit.values ())
       if (eUnit != ECSSUnit.PERCENTAGE)
-        if (sValue.endsWith (eUnit.getName ()))
+        if (sCSSValue.endsWith (eUnit.getName ()))
           return eUnit;
     return null;
   }
 
-  public static boolean isNumberWithUnitValue (@Nullable final String sValue, final boolean bWithPerc)
+  public static boolean isNumberValue (@Nullable final String sCSSValue)
   {
-    String sRealValue = StringHelper.trim (sValue);
+    final String sRealValue = StringHelper.trim (sCSSValue);
+    return StringHelper.hasText (sRealValue) && StringHelper.isDouble (sRealValue);
+  }
+
+  public static boolean isNumberWithUnitValue (@Nullable final String sCSSValue, final boolean bWithPerc)
+  {
+    String sRealValue = StringHelper.trim (sCSSValue);
     if (StringHelper.hasText (sRealValue))
     {
-      final ECSSUnit eUnit = bWithPerc ? _findUnitWithPerc (sRealValue) : _findUnitWithoutPerc (sRealValue);
+      final ECSSUnit eUnit = bWithPerc ? _getMatchingUnitWithPerc (sRealValue)
+                                      : _getMatchingUnitWithoutPerc (sRealValue);
       if (eUnit != null)
       {
         // Cut the unit
         sRealValue = sRealValue.substring (0, sRealValue.length () - eUnit.getName ().length ()).trim ();
       }
-      return CSSNumberHelper.isNumberValue (sRealValue);
+      return isNumberValue (sRealValue);
     }
     return false;
-  }
-
-  public static boolean isNumberValue (@Nullable final String sValue)
-  {
-    final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) && StringHelper.isDouble (sRealValue);
   }
 }
