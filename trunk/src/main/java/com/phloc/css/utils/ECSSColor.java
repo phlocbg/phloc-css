@@ -284,13 +284,13 @@ public enum ECSSColor implements ICSSNamedColor
   }
 
   @Nullable
-  public static ECSSColor getFromNameOrNullCaseInsensitive (@Nullable final String sName)
+  public static ECSSColor getFromNameCaseInsensitiveOrNull (@Nullable final String sName)
   {
     return EnumHelper.getFromNameCaseInsensitiveOrNull (ECSSColor.class, sName);
   }
 
   public static boolean isDefaultColorName (@Nullable final String sName)
   {
-    return getFromNameOrNullCaseInsensitive (sName) != null;
+    return getFromNameCaseInsensitiveOrNull (sName) != null;
   }
 }

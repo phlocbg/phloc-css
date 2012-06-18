@@ -34,45 +34,53 @@ import com.phloc.commons.name.IHasName;
  */
 public enum ECSSUnit implements IHasName, ICSSVersionAware
 {
-  EM ("em"),
-  EX ("ex"),
-  PX ("px"),
-  GD ("gd", ECSSVersion.CSS30),
-  REM ("rem", ECSSVersion.CSS30),
-  VW ("vw", ECSSVersion.CSS30),
-  VH ("vh", ECSSVersion.CSS30),
-  VM ("vm", ECSSVersion.CSS30),
-  CH ("ch", ECSSVersion.CSS30),
+  EM ("em", ECSSMetaUnit.FONT_RELATIVE_LENGTH),
+  EX ("ex", ECSSMetaUnit.FONT_RELATIVE_LENGTH),
+  PX ("px", ECSSMetaUnit.ABSOLUTE_LENGTH),
+  REM ("rem", ECSSMetaUnit.FONT_RELATIVE_LENGTH, ECSSVersion.CSS30),
+  /** Equal to 1% of the width of the initial containing block. */
+  VW ("vw", ECSSMetaUnit.VIEWPORT_RELATIVE_LENGTH, ECSSVersion.CSS30),
+  /** Equal to 1% of the height of the initial containing block. */
+  VH ("vh", ECSSMetaUnit.VIEWPORT_RELATIVE_LENGTH, ECSSVersion.CSS30),
+  /** Equal to the smaller of ‘vw’ or ‘vh’. */
+  VMIN ("vmin", ECSSMetaUnit.VIEWPORT_RELATIVE_LENGTH, ECSSVersion.CSS30),
+  CH ("ch", ECSSMetaUnit.FONT_RELATIVE_LENGTH, ECSSVersion.CSS30),
+  LENGTH_IN ("in", ECSSMetaUnit.ABSOLUTE_LENGTH),
+  LENGTH_CM ("cm", ECSSMetaUnit.ABSOLUTE_LENGTH),
+  LENGTH_MM ("mm", ECSSMetaUnit.ABSOLUTE_LENGTH),
+  LENGTH_PT ("pt", ECSSMetaUnit.ABSOLUTE_LENGTH),
+  LENGTH_PC ("pc", ECSSMetaUnit.ABSOLUTE_LENGTH),
+  PERCENTAGE ("%", ECSSMetaUnit.PERCENTAGE),
+  ANGLE_DEG ("deg", ECSSMetaUnit.ANGLE),
+  ANGLE_RAD ("rad", ECSSMetaUnit.ANGLE),
+  ANGLE_GRAD ("grad", ECSSMetaUnit.ANGLE),
+  ANGLE_TURN ("turn", ECSSMetaUnit.ANGLE, ECSSVersion.CSS30),
+  TIME_MS ("ms", ECSSMetaUnit.TIME),
+  TIME_S ("s", ECSSMetaUnit.TIME),
+  FREQ_HZ ("hz", ECSSMetaUnit.FREQUENZY),
+  FREQ_KHZ ("khz", ECSSMetaUnit.FREQUENZY),
   /** Dots per CSS inch */
-  DPI ("dpi", ECSSVersion.CSS30),
+  DPI ("dpi", ECSSMetaUnit.RESOLUTION, ECSSVersion.CSS30),
   /** Dots per CSS centimetre */
-  DPCM ("dpcm", ECSSVersion.CSS30),
-  LENGTH_IN ("in"),
-  LENGTH_CM ("cm"),
-  LENGTH_MM ("mm"),
-  LENGTH_PT ("pt"),
-  LENGTH_PC ("pc"),
-  PERCENTAGE ("%"),
-  ANGLE_DEG ("deg"),
-  ANGLE_RAD ("rad"),
-  ANGLE_GRAD ("grad"),
-  ANGLE_TURN ("turn", ECSSVersion.CSS30),
-  TIME_MS ("ms"),
-  TIME_S ("s"),
-  FREQ_HZ ("hz"),
-  FREQ_KHZ ("khz");
+  DPCM ("dpcm", ECSSMetaUnit.RESOLUTION, ECSSVersion.CSS30),
+  /** Dots per pixel centimetre */
+  DPPX ("dppx", ECSSMetaUnit.RESOLUTION, ECSSVersion.CSS30);
 
   private final String m_sName;
+  private ECSSMetaUnit m_eMetaUnit;
   private final ECSSVersion m_eVersion;
 
-  private ECSSUnit (@Nonnull @Nonempty final String sName)
+  private ECSSUnit (@Nonnull @Nonempty final String sName, @Nonnull final ECSSMetaUnit eMetaUnit)
   {
-    this (sName, ECSSVersion.CSS21);
+    this (sName, eMetaUnit, ECSSVersion.CSS21);
   }
 
-  private ECSSUnit (@Nonnull @Nonempty final String sName, @Nonnull final ECSSVersion eVersion)
+  private ECSSUnit (@Nonnull @Nonempty final String sName,
+                    @Nonnull final ECSSMetaUnit eMetaUnit,
+                    @Nonnull final ECSSVersion eVersion)
   {
     m_sName = sName;
+    m_eMetaUnit = eMetaUnit;
     m_eVersion = eVersion;
   }
 
@@ -81,6 +89,12 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public String getName ()
   {
     return m_sName;
+  }
+
+  @Nonnull
+  public ECSSMetaUnit getMetaUnit ()
+  {
+    return m_eMetaUnit;
   }
 
   @Nonnull

@@ -393,7 +393,7 @@ public final class CCSSProperties
 
   public static final ICSSProperty OPACITY = new CSSPropertyNumber (ECSSProperty.OPACITY, false);
 
-  // Special values
+  // Special predefined properties
   public static final ICSSValue DISPLAY_BLOCK = DISPLAY.newValue (CCSSValue.BLOCK);
   public static final ICSSValue DISPLAY_INLINE_BLOCK = DISPLAY.newValue (CCSSValue.INLINE_BLOCK);
   public static final ICSSValue DISPLAY_NONE = DISPLAY.newValue (CCSSValue.NONE);

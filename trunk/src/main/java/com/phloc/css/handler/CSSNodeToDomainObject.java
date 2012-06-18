@@ -30,6 +30,7 @@ import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpression;
 import com.phloc.css.decl.CSSExpressionMemberFunction;
+import com.phloc.css.decl.CSSExpressionMemberMath;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
@@ -215,33 +216,59 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
+  private CSSExpressionMemberMath _createExpressionMathTerm (@Nonnull final CSSNode aNode)
+  {
+    _expectNodeType (aNode, ECSSNodeType.MATH);
+
+    final CSSExpressionMemberMath ret = new CSSExpressionMemberMath ();
+
+    // read all sums
+    for (final CSSNode aSumNode : aNode)
+    {
+      System.out.print (ECSSNodeType.getDump (aSumNode, m_eVersion));
+    }
+    System.out.println ("----");
+
+    return ret;
+  }
+
+  @Nonnull
   private ICSSExpressionMember _createExpressionTerm (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.TERM);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount != 0 && nChildCount != 1)
-      throw new IllegalArgumentException ("Expected 0 or 1  children but got " + nChildCount + "!");
+      throw new IllegalArgumentException ("Expected 0 or 1 children but got " + nChildCount + "!");
 
     // Simple value
     if (nChildCount == 0)
       return new CSSExpressionMemberTermSimple (aNode.getText ());
 
-    // function value
-    final CSSNode aFuncNode = aNode.jjtGetChild (0);
-    if (!ECSSNodeType.FUNCTION.isNode (aFuncNode, m_eVersion))
-      throw new IllegalStateException ("Expected a function but got " +
-                                       ECSSNodeType.getNodeName (aFuncNode, m_eVersion));
+    final CSSNode aChildNode = aNode.jjtGetChild (0);
 
-    final String sFunctionName = aFuncNode.getText ();
-    if (aFuncNode.jjtGetNumChildren () == 1)
+    if (ECSSNodeType.FUNCTION.isNode (aChildNode, m_eVersion))
     {
-      // Parameters present
-      final CSSExpression aFuncExpr = _createExpression (aFuncNode.jjtGetChild (0));
-      return new CSSExpressionMemberFunction (sFunctionName, aFuncExpr);
-    }
+      // function value
+      final String sFunctionName = aChildNode.getText ();
+      if (aChildNode.jjtGetNumChildren () == 1)
+      {
+        // Parameters present
+        final CSSExpression aFuncExpr = _createExpression (aChildNode.jjtGetChild (0));
+        return new CSSExpressionMemberFunction (sFunctionName, aFuncExpr);
+      }
 
-    // No parameters
-    return new CSSExpressionMemberFunction (sFunctionName);
+      // No parameters
+      return new CSSExpressionMemberFunction (sFunctionName);
+    }
+    else
+      if (ECSSNodeType.MATH.isNode (aChildNode, m_eVersion))
+      {
+        // Math value
+        return _createExpressionMathTerm (aChildNode);
+      }
+      else
+        throw new IllegalStateException ("Expected an expression term but got " +
+                                         ECSSNodeType.getNodeName (aChildNode, m_eVersion));
   }
 
   @Nonnull
