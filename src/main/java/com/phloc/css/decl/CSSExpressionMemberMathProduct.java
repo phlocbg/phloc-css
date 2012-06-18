@@ -31,7 +31,6 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
-import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -40,11 +39,11 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @Immutable
-public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSSVersionAware
+public final class CSSExpressionMemberMathProduct implements ICSSExpressionMathMember
 {
   private final List <ICSSExpressionMathMember> m_aMembers = new ArrayList <ICSSExpressionMathMember> ();
 
-  public CSSExpressionMemberMath ()
+  public CSSExpressionMemberMathProduct ()
   {}
 
   public void addMember (@Nonnull final ICSSExpressionMathMember aMember)
@@ -81,10 +80,10 @@ public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSS
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
-    final StringBuilder aSB = new StringBuilder ("calc(");
+    final StringBuilder aSB = new StringBuilder ();
     for (final ICSSExpressionMathMember aMember : m_aMembers)
       aSB.append (aMember.getAsCSSString (aSettings, nIndentLevel));
-    return aSB.append (")").toString ();
+    return aSB.toString ();
   }
 
   @Nonnull
@@ -98,9 +97,9 @@ public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSS
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSExpressionMemberMath))
+    if (!(o instanceof CSSExpressionMemberMathProduct))
       return false;
-    final CSSExpressionMemberMath rhs = (CSSExpressionMemberMath) o;
+    final CSSExpressionMemberMathProduct rhs = (CSSExpressionMemberMathProduct) o;
     return m_aMembers.equals (rhs.m_aMembers);
   }
 
@@ -113,6 +112,6 @@ public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSS
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (null).append ("members", m_aMembers).toString ();
+    return new ToStringGenerator (this).append ("members", m_aMembers).toString ();
   }
 }
