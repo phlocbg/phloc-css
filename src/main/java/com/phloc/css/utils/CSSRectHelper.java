@@ -17,8 +17,6 @@
  */
 package com.phloc.css.utils;
 
-import java.util.regex.Matcher;
-
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
@@ -83,24 +81,14 @@ public final class CSSRectHelper
   @Nullable
   public static String [] getRectValue (@Nullable final String sCSSValue)
   {
+    String [] ret = null;
     final String sRealValue = StringHelper.trim (sCSSValue);
     if (StringHelper.hasText (sRealValue))
     {
-      // TODO use RegHexHelper.getAllMatchingGroupValues
-      Matcher m = RegExHelper.getMatcher (PATTERN_CURRENT_SYNTAX, sRealValue);
-      if (!m.find ())
-      {
-        m = RegExHelper.getMatcher (PATTERN_OLD_SYNTAX, sRealValue);
-        if (!m.find ())
-          return null;
-      }
-
-      // groupCount is excluding the .group(0) match!
-      final String [] ret = new String [m.groupCount ()];
-      for (int i = 0; i < m.groupCount (); ++i)
-        ret[i] = m.group (i + 1);
-      return ret;
+      ret = RegExHelper.getAllMatchingGroupValues (PATTERN_CURRENT_SYNTAX, sRealValue);
+      if (ret == null)
+        ret = RegExHelper.getAllMatchingGroupValues (PATTERN_OLD_SYNTAX, sRealValue);
     }
-    return null;
+    return ret;
   }
 }
