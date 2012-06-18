@@ -21,6 +21,7 @@ section {
   width: calc(100%/3 - 2*1em - 2*1px);
   widthx: calc(100%/3 + 2*1em + 2*1px);
   max-width: calc(100%/3 - 2*1em - 5 - 2*1px + (2*5*2hz));
+  max-width: calc(100%/3 - 2*1em - 5 - 2*1px + 2*5*2hz);
 }
 
 p {
@@ -32,6 +33,7 @@ p {
 }
 
 div {
+  font-size: calc(40);
   font-size: calc(+40);
   font-size: calc(-40);
   font-size: calc(+40 - -2em*+3);

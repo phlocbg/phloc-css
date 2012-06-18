@@ -36,7 +36,7 @@ public final class CSSNumberHelper
   {}
 
   @Nullable
-  private static ECSSUnit _getMatchingUnitWithPerc (@Nonnull final String sCSSValue)
+  public static ECSSUnit getMatchingUnitInclPercentage (@Nonnull final String sCSSValue)
   {
     // sValue cannot be null here!
     for (final ECSSUnit eUnit : ECSSUnit.values ())
@@ -46,7 +46,7 @@ public final class CSSNumberHelper
   }
 
   @Nullable
-  private static ECSSUnit _getMatchingUnitWithoutPerc (@Nonnull final String sCSSValue)
+  public static ECSSUnit getMatchingUnitExclPercentage (@Nonnull final String sCSSValue)
   {
     for (final ECSSUnit eUnit : ECSSUnit.values ())
       if (eUnit != ECSSUnit.PERCENTAGE)
@@ -66,8 +66,8 @@ public final class CSSNumberHelper
     String sRealValue = StringHelper.trim (sCSSValue);
     if (StringHelper.hasText (sRealValue))
     {
-      final ECSSUnit eUnit = bWithPerc ? _getMatchingUnitWithPerc (sRealValue)
-                                      : _getMatchingUnitWithoutPerc (sRealValue);
+      final ECSSUnit eUnit = bWithPerc ? getMatchingUnitInclPercentage (sRealValue)
+                                      : getMatchingUnitExclPercentage (sRealValue);
       if (eUnit != null)
       {
         // Cut the unit

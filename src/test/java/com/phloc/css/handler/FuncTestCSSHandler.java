@@ -96,7 +96,7 @@ public final class FuncTestCSSHandler
       String s = new CSSWriter (eVersion, true).getCSSAsString (aCSS);
       assertNotNull (sKey, s);
 
-      if (true)
+      if (false)
         s_aLogger.info (s);
 
       final CascadingStyleSheet aCSSReRead = CSSHandler.readFromString (s, aCharset, eVersion);
