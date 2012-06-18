@@ -17,15 +17,13 @@
  */
 package com.phloc.css.color;
 
-import java.awt.Color;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
-import com.phloc.commons.name.IHasName;
+import com.phloc.css.ICSSNamedColor;
 
 /**
  * CSS basic colors. Source: http://www.w3.org/TR/css3-color/ chapter 4.1 and
@@ -33,7 +31,7 @@ import com.phloc.commons.name.IHasName;
  * 
  * @author philip
  */
-public enum ECSSColor implements IHasName
+public enum ECSSColor implements ICSSNamedColor
 {
   ALICEBLUE ("aliceblue", 240, 248, 255),
   ANTIQUEWHITE ("antiquewhite ", 250, 235, 215),
@@ -202,11 +200,10 @@ public enum ECSSColor implements IHasName
     m_nBlue = nBlue;
 
     // Convert RGB to HSL
-    final float [] aHSV = new float [3];
-    Color.RGBtoHSB (nRed, nGreen, nBlue, aHSV);
-    m_nHue = (int) (aHSV[0] * CSSColorHelper.HSL_RANGE);
-    m_nSaturation = (int) (aHSV[1] * CSSColorHelper.HSL_RANGE);
-    m_nLightness = (int) (aHSV[2] * CSSColorHelper.HSL_RANGE);
+    final int [] aHSL = CSSColorHelper.getRGBAsHSLValue (nRed, nGreen, nBlue);
+    m_nHue = aHSL[0];
+    m_nSaturation = aHSL[1];
+    m_nLightness = aHSL[2];
   }
 
   @Nonnull

@@ -25,7 +25,6 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
-import com.phloc.css.ECSSProperty;
 
 public class CSSPropertyEnumOrNumbers extends CSSPropertyEnum
 {

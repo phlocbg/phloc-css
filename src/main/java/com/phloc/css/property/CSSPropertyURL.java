@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.css.CCSS;
-import com.phloc.css.ECSSProperty;
 
 public class CSSPropertyURL extends AbstractCSSProperty
 {

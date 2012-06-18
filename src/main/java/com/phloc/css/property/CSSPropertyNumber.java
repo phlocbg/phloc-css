@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
-import com.phloc.css.ECSSProperty;
 
 public class CSSPropertyNumber extends AbstractCSSProperty
 {

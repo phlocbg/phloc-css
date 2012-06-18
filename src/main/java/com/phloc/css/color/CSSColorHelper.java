@@ -17,6 +17,8 @@
  */
 package com.phloc.css.color;
 
+import java.awt.Color;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -194,5 +196,30 @@ public final class CSSColorHelper
                                                                                                         RGB_RANGE),
                                                                                                   2))
                                                    .toString ();
+  }
+
+  /**
+   * Get the passed RGB values as HSL values compliant for CSS in the range
+   * 0-359
+   * 
+   * @param nRed
+   *          red value
+   * @param nGreen
+   *          green value
+   * @param nBlue
+   *          blue value
+   * @return An array of 3 ints, containing hue, saturation and lightness (in
+   *         this order)
+   */
+  @Nonnull
+  @Nonempty
+  public static int [] getRGBAsHSLValue (final int nRed, final int nGreen, final int nBlue)
+  {
+    // Convert RGB to HSB(=HSL) - brightness vs. lightness
+    final float [] aHSL = new float [3];
+    Color.RGBtoHSB (nRed, nGreen, nBlue, aHSL);
+    return new int [] { (int) (aHSL[0] * CSSColorHelper.HSL_RANGE),
+                       (int) (aHSL[1] * CSSColorHelper.HSL_RANGE),
+                       (int) (aHSL[2] * CSSColorHelper.HSL_RANGE) };
   }
 }

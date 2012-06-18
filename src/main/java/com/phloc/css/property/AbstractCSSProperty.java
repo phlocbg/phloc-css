@@ -22,7 +22,6 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
-import com.phloc.css.ECSSProperty;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.propertyvalue.CSSValue;
 import com.phloc.css.propertyvalue.CSSValueList;

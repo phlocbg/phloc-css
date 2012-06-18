@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.CCSS;
-import com.phloc.css.ECSSProperty;
 
 public class CSSPropertyEnumOrURL extends CSSPropertyEnum
 {
