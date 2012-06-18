@@ -25,7 +25,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
-import com.phloc.css.CCSS;
+import com.phloc.css.propertyvalue.CCSSValue;
 
 /**
  * Provides URL handling sanity methods.
@@ -49,7 +49,7 @@ public final class CSSURLHelper
   {
     final String sRealValue = StringHelper.trim (sValue);
     return StringHelper.hasText (sRealValue) &&
-           RegExHelper.stringMatchesPattern ("^" + CCSS.PREFIX_URL + "\\(.+\\)$", sRealValue);
+           RegExHelper.stringMatchesPattern ("^" + CCSSValue.PREFIX_URL + "\\(.+\\)$", sRealValue);
   }
 
   /**
@@ -67,7 +67,7 @@ public final class CSSURLHelper
     {
       final String sRealValue = sValue.trim ();
       // Skip leading "url(" and trailing ")"
-      return sRealValue.substring (CCSS.PREFIX_URL_OPEN.length (), sRealValue.length () - 1);
+      return sRealValue.substring (CCSSValue.PREFIX_URL_OPEN.length (), sRealValue.length () - 1);
     }
     return null;
   }
@@ -101,6 +101,6 @@ public final class CSSURLHelper
   {
     if (StringHelper.hasNoText (sURL))
       throw new IllegalArgumentException ("passed URL is empty!");
-    return CCSS.PREFIX_URL_OPEN + sURL + ')';
+    return CCSSValue.PREFIX_URL_OPEN + sURL + ')';
   }
 }

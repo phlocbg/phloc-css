@@ -21,9 +21,9 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CCSS;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSNamedColor;
+import com.phloc.css.propertyvalue.CCSSValue;
 import com.phloc.css.propertyvalue.CSSValue;
 import com.phloc.css.propertyvalue.CSSValueList;
 import com.phloc.css.propertyvalue.CSSValueMultiProperty;
@@ -68,7 +68,7 @@ public abstract class AbstractCSSProperty implements ICSSProperty
     switch (m_eProp)
     {
       case DISPLAY:
-        if (sValue.equals (CCSS.INLINE_BLOCK))
+        if (sValue.equals (CCSSValue.INLINE_BLOCK))
           return new CSSValueMultiValue (this, new String [] { "-moz-inline-block", sValue }, bIsImportant);
         break;
       case OPACITY:

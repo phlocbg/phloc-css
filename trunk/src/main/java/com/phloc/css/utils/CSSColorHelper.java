@@ -26,7 +26,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.CCSS;
+import com.phloc.css.propertyvalue.CCSSValue;
 
 /**
  * Provides color handling sanity methods.
@@ -46,18 +46,18 @@ public final class CSSColorHelper
   public static final float OPACITY_MAX = 1f;
 
   private static final String PATTERN_RGB = "^" +
-                                            CCSS.PREFIX_RGB +
+                                            CCSSValue.PREFIX_RGB +
                                             "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){2}\\s*\\-?[0-9]+%?\\s*\\)$";
   private static final String PATTERN_RGBA = "^" +
-                                             CCSS.PREFIX_RGBA +
+                                             CCSSValue.PREFIX_RGBA +
                                              "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){3}\\s*[0-9]+(\\.[0-9]*)?\\s*\\)$";
   private static final String PATTERN_HSL = "^" +
-                                            CCSS.PREFIX_HSL +
+                                            CCSSValue.PREFIX_HSL +
                                             "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){2}\\s*\\-?[0-9]+%?\\s*\\)$";
   private static final String PATTERN_HSLA = "^" +
-                                             CCSS.PREFIX_HSLA +
+                                             CCSSValue.PREFIX_HSLA +
                                              "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){3}\\s*[0-9]+(\\.[0-9]*)?\\s*\\)$";
-  private static final String PATTERN_HEX = "^" + CCSS.PREFIX_HEX + "[0-9a-fA-F]{1,6}$";
+  private static final String PATTERN_HEX = "^" + CCSSValue.PREFIX_HEX + "[0-9a-fA-F]{1,6}$";
 
   private CSSColorHelper ()
   {}
@@ -75,7 +75,7 @@ public final class CSSColorHelper
            isHexColorValue (sRealValue) ||
            ECSSColor.isDefaultColorName (sRealValue) ||
            ECSSColorName.isDefaultColorName (sRealValue) ||
-           sRealValue.equals (CCSS.CURRENTCOLOR);
+           sRealValue.equals (CCSSValue.CURRENTCOLOR);
   }
 
   public static boolean isRGBColorValue (@Nullable final String sValue)
@@ -121,7 +121,7 @@ public final class CSSColorHelper
   @Nonempty
   public static String getRGBColorValue (final int nRed, final int nGreen, final int nBlue)
   {
-    return new StringBuilder (16).append (CCSS.PREFIX_RGB)
+    return new StringBuilder (16).append (CCSSValue.PREFIX_RGB)
                                  .append ('(')
                                  .append (_mod (nRed, RGB_RANGE))
                                  .append (',')
@@ -137,7 +137,7 @@ public final class CSSColorHelper
   public static String getRGBAColorValue (final int nRed, final int nGreen, final int nBlue, final float fOpacity)
   {
     final float fRealOpacity = fOpacity < OPACITY_MIN ? OPACITY_MIN : fOpacity > OPACITY_MAX ? OPACITY_MAX : fOpacity;
-    return new StringBuilder (24).append (CCSS.PREFIX_RGBA)
+    return new StringBuilder (24).append (CCSSValue.PREFIX_RGBA)
                                  .append ('(')
                                  .append (_mod (nRed, RGB_RANGE))
                                  .append (',')
@@ -154,7 +154,7 @@ public final class CSSColorHelper
   @Nonempty
   public static String getHSLColorValue (final int nHue, final int nSaturation, final int nLightness)
   {
-    return new StringBuilder (16).append (CCSS.PREFIX_HSL)
+    return new StringBuilder (16).append (CCSSValue.PREFIX_HSL)
                                  .append ('(')
                                  .append (_mod (nHue, HSL_RANGE))
                                  .append (',')
@@ -173,7 +173,7 @@ public final class CSSColorHelper
                                           final float fOpacity)
   {
     final float fRealOpacity = fOpacity < OPACITY_MIN ? OPACITY_MIN : fOpacity > OPACITY_MAX ? OPACITY_MAX : fOpacity;
-    return new StringBuilder (24).append (CCSS.PREFIX_HSLA)
+    return new StringBuilder (24).append (CCSSValue.PREFIX_HSLA)
                                  .append ('(')
                                  .append (_mod (nHue, HSL_RANGE))
                                  .append (',')
@@ -197,11 +197,11 @@ public final class CSSColorHelper
   @Nonempty
   public static String getHexColorValue (final int nRed, final int nGreen, final int nBlue)
   {
-    return new StringBuilder (CCSS.HEXVALUE_LENGTH).append (CCSS.PREFIX_HEX)
-                                                   .append (_getRGBPartAsHexString (nRed))
-                                                   .append (_getRGBPartAsHexString (nGreen))
-                                                   .append (_getRGBPartAsHexString (nBlue))
-                                                   .toString ();
+    return new StringBuilder (CCSSValue.HEXVALUE_LENGTH).append (CCSSValue.PREFIX_HEX)
+                                                        .append (_getRGBPartAsHexString (nRed))
+                                                        .append (_getRGBPartAsHexString (nGreen))
+                                                        .append (_getRGBPartAsHexString (nBlue))
+                                                        .toString ();
   }
 
   /**
@@ -222,10 +222,9 @@ public final class CSSColorHelper
   public static int [] getRGBAsHSLValue (final int nRed, final int nGreen, final int nBlue)
   {
     // Convert RGB to HSB(=HSL) - brightness vs. lightness
+    // All returned values in the range 0-1
     final float [] aHSL = new float [3];
     Color.RGBtoHSB (nRed, nGreen, nBlue, aHSL);
-    return new int [] { (int) (aHSL[0] * CSSColorHelper.HSL_RANGE),
-                       (int) (aHSL[1] * CSSColorHelper.HSL_RANGE),
-                       (int) (aHSL[2] * CSSColorHelper.HSL_RANGE) };
+    return new int [] { (int) (aHSL[0] * HSL_RANGE), (int) (aHSL[1] * HSL_RANGE), (int) (aHSL[2] * HSL_RANGE) };
   }
 }

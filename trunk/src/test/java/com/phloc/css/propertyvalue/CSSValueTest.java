@@ -24,12 +24,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.phloc.css.CCSS;
 import com.phloc.css.property.CCSSProperties;
-import com.phloc.css.propertyvalue.CSSValue;
-import com.phloc.css.propertyvalue.CSSValueList;
-import com.phloc.css.propertyvalue.CSSValueMultiValue;
-import com.phloc.css.propertyvalue.ICSSValue;
 
 /**
  * Test class for class {@link CSSValue}.
@@ -41,10 +36,10 @@ public final class CSSValueTest
   @Test
   public void testBasic ()
   {
-    final ICSSValue v1 = CCSSProperties.DISPLAY.newValue (CCSS.BLOCK);
-    final ICSSValue v21 = CCSSProperties.DISPLAY.newValue (CCSS.BLOCK);
-    final ICSSValue v22 = CCSSProperties.DISPLAY.newValue (CCSS.INLINE);
-    final ICSSValue v3 = CCSSProperties.DISPLAY.newValue (CCSS.INLINE_BLOCK);
+    final ICSSValue v1 = CCSSProperties.DISPLAY.newValue (CCSSValue.BLOCK);
+    final ICSSValue v21 = CCSSProperties.DISPLAY.newValue (CCSSValue.BLOCK);
+    final ICSSValue v22 = CCSSProperties.DISPLAY.newValue (CCSSValue.INLINE);
+    final ICSSValue v3 = CCSSProperties.DISPLAY.newValue (CCSSValue.INLINE_BLOCK);
     final ICSSValue v4 = CCSSProperties.OPACITY.newValue (Double.toString (0.39));
     assertNotNull (v1);
     assertNotNull (v21);
