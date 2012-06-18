@@ -20,7 +20,6 @@ package com.phloc.css.property;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.css.ECSSProperty;
 import com.phloc.css.color.CSSColorHelper;
 
 /**

@@ -28,8 +28,8 @@ import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.ECSSProperty;
 import com.phloc.css.ICSSWriterSettings;
+import com.phloc.css.property.ECSSProperty;
 import com.phloc.css.property.ICSSProperty;
 
 /**

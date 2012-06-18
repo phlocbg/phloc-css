@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css;
+package com.phloc.css.property;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,6 +24,8 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.annotations.DeprecatedInCSS30;
 
 /**

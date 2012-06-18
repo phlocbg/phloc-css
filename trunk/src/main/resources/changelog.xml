@@ -20,6 +20,16 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2012-06-18" category="api" action="add">
+    <change>
+      <text locale="en">Added new base interface ICSSNamedColor</text>
+    </change>
+  </entry>
+  <entry date="2012-06-18" category="api" action="change" incompatible="true">
+    <change>
+      <text locale="en">Moved ECSSProperty to .property package</text>
+    </change>
+  </entry>
   <release date="2012-06-15" version="3.0.0-RC2" />
   <entry date="2012-06-15" category="api" action="remove">
     <change>

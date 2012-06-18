@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
-import com.phloc.commons.name.IHasName;
+import com.phloc.css.ICSSNamedColor;
 import com.phloc.css.annotations.DeprecatedInCSS30;
 
 /**
@@ -33,7 +33,7 @@ import com.phloc.css.annotations.DeprecatedInCSS30;
  * @author philip
  */
 @DeprecatedInCSS30
-public enum ECSSColorName implements IHasName
+public enum ECSSColorName implements ICSSNamedColor
 {
   ACTIVEBORDER ("ActiveBorder"),
   ACTIVECAPTION ("ActiveCaption"),

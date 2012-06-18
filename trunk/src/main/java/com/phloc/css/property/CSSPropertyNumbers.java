@@ -24,7 +24,6 @@ import javax.annotation.Nullable;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
-import com.phloc.css.ECSSProperty;
 
 public class CSSPropertyNumbers extends AbstractCSSProperty
 {

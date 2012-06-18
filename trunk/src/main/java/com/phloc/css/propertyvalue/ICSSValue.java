@@ -20,8 +20,8 @@ package com.phloc.css.propertyvalue;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
-import com.phloc.css.ECSSProperty;
 import com.phloc.css.ICSSWriteable;
+import com.phloc.css.property.ECSSProperty;
 
 /**
  * Represents a single CSS value.

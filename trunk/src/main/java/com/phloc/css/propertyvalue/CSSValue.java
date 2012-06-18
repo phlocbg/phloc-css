@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
-import com.phloc.css.ECSSProperty;
 import com.phloc.css.ICSSWriterSettings;
+import com.phloc.css.property.ECSSProperty;
 import com.phloc.css.property.ICSSProperty;
 
 /**

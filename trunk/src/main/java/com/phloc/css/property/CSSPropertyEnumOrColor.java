@@ -21,7 +21,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.css.ECSSProperty;
 import com.phloc.css.color.CSSColorHelper;
 
 public class CSSPropertyEnumOrColor extends CSSPropertyEnum
