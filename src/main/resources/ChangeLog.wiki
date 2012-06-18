@@ -1,7 +1,12 @@
 #summary Change log of phloc-css
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>6/18/12</td><td colspan="4">_Release *3.0.0.RC3*_</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>6/18/12</td><td colspan="4">_Release *3.0.0*_</td></tr>
+<tr><td>6/18/12</td><td>add</td><td>feature</td><td></td><td>Added support for CSS3 calc() functionality</td></tr>
+<tr><td>6/18/12</td><td>add</td><td>api</td><td></td><td>Introduced the enum ECSSMetaUnit to group comparable units</td></tr>
+<tr><td>6/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Added 'dppx' unit, removed the 'gd' unit and renamed the 'vm' unit to 'vmin'</td></tr>
+<tr><td>6/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Moved CSS value constants from CCSS to CCSSValue</td></tr>
+<tr border="1"><td>6/18/12</td><td colspan="4">_Release *3.0.0.RC3*_</td></tr>
 <tr><td>6/18/12</td><td>add</td><td>api</td><td></td><td>Added better support for handling rect values internally</td></tr>
 <tr><td>6/18/12</td><td>update</td><td>tech</td><td></td><td>Added handling for old CSS rectangle syntax 'rect(a b c d)'</td></tr>
 <tr><td>6/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Removed all methods from CCSS into more meaningful helper classes</td></tr>
