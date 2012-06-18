@@ -30,3 +30,10 @@ p {
 :root {
   font-size: calc(100vw / 40);
 }
+
+div {
+  font-size: calc(+40);
+  font-size: calc(-40);
+  font-size: calc(+40 - -2em*+3);
+  font-size: calc(-40 + +2em*-5);
+}

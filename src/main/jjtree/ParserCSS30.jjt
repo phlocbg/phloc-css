@@ -142,11 +142,8 @@ TOKEN :
 | < SUBFIXMATCH: "$=" >
 | < SUBSTRINGMATCH: "*=" >
 | < LBRACE: <W> "{" >
-| < WS_PLUS: <W> <PLUS> >
 | < GREATER: ">" >
-| < WS_GREATER: <W> <GREATER> >
 | < TILDE: "~" >
-| < WS_TILDE: <W> <TILDE> >
 | < COMMA: <W> "," >
 | < HASH: "#" <NAME> >
 | < IMPORT_SYM: "@import" >
@@ -156,7 +153,7 @@ TOKEN :
 | < FONTFACE_SYM: "@font-face" >
 | < KEYFRAMES_SYM: "@keyframes" 
                  | "@-" <IDENT> "-keyframes" >
-| < IMPORTANT_SYM: "!" ( <W> | <COMMENT> )* "important" >
+| < IMPORTANT_SYM: "!" ( <W> )* "important" >
 
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
 | < EX: <NUM> "ex" >           { matchedToken.image = ParseUtils.splitNumber(image) + "ex"; }
@@ -529,12 +526,15 @@ void selector() : {}
 
 void combinator() #Combinator : {}
 {
-  ( <PLUS>       { jjtThis.setText ("+"); }
-  | <WS_PLUS>    { jjtThis.setText ("+"); }
-  | <GREATER>    { jjtThis.setText (">"); }
-  | <WS_GREATER> { jjtThis.setText (">"); }
-  | <TILDE>      { jjtThis.setText ("~"); }
-  | <WS_TILDE>   { jjtThis.setText ("~"); }
+  ( LOOKAHEAD(2)
+    ( <S> )? 
+    <PLUS>       { jjtThis.setText ("+"); }
+  | LOOKAHEAD(2)
+    ( <S> )? 
+    <GREATER>    { jjtThis.setText (">"); }
+  | LOOKAHEAD(2)
+    ( <S> )? 
+    <TILDE>      { jjtThis.setText ("~"); }
   | <S>          { jjtThis.setText (" "); }
   )
 }
@@ -853,8 +853,6 @@ void term() #Term :
   | sStr = hexcolor()           { jjtThis.setText (sStr); }
   | function()
   | math()
-  /* extensions */
-//  | t = <DIMENSION>
   | t = <INHERIT> ( <S> )*
   )
   {
@@ -894,15 +892,16 @@ void math() : {}
 
 void sumOperator() : {}
 {
-  ( <WS_PLUS>    { jjtThis.setText ("+"); } 
-  | <S> <MINUS>  { jjtThis.setText ("-"); }
+  ( <PLUS>  { jjtThis.setText ("+"); } 
+  | <MINUS> { jjtThis.setText ("-"); }
   )
 }
 
 void sum() #void : {}
 {
   product()
-  ( sumOperator()
+  ( <S>
+    sumOperator()
     <S>
     product ()
   )*   

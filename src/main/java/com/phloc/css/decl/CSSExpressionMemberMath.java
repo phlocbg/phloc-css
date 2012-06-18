@@ -24,6 +24,8 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -32,7 +34,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @Immutable
-public final class CSSExpressionMemberMath implements ICSSExpressionMember
+public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSSVersionAware
 {
   public CSSExpressionMemberMath ()
   {}
@@ -41,8 +43,15 @@ public final class CSSExpressionMemberMath implements ICSSExpressionMember
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
+    aSettings.checkVersionRequirements (this);
     // HACK
     return "calc(" + "5" + ")";
+  }
+
+  @Nonnull
+  public ECSSVersion getMinimumCSSVersion ()
+  {
+    return ECSSVersion.CSS30;
   }
 
   @Override
