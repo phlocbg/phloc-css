@@ -20,6 +20,16 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2012-06-18" category="tech" action="update">
+    <change>
+      <text locale="en">Added handling for old CSS rectangle syntax 'rect(a b c d)'</text>
+    </change>
+  </entry>
+  <entry date="2012-06-18" category="api" action="change" incompatible="true">
+    <change>
+      <text locale="en">Removed all methods from CCSS into more meaningful helper classes</text>
+    </change>
+  </entry>
   <entry date="2012-06-18" category="api" action="add">
     <change>
       <text locale="en">Added new base interface ICSSNamedColor</text>

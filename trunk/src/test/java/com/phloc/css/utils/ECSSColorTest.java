@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css.color;
+package com.phloc.css.utils;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -23,6 +23,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.phloc.commons.string.StringHelper;
+import com.phloc.css.utils.CSSColorHelper;
+import com.phloc.css.utils.ECSSColor;
 
 /**
  * Test class for class {@link ECSSColor}.

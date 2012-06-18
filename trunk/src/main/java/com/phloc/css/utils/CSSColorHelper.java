@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css.color;
+package com.phloc.css.utils;
 
 import java.awt.Color;
 
@@ -28,6 +28,11 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.CCSS;
 
+/**
+ * Provides color handling sanity methods.
+ * 
+ * @author philip
+ */
 @Immutable
 public final class CSSColorHelper
 {

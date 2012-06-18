@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CCSS;
+import com.phloc.css.utils.CSSNumberHelper;
 
 public class CSSPropertyNumbers extends AbstractCSSProperty
 {
@@ -58,7 +58,7 @@ public class CSSPropertyNumbers extends AbstractCSSProperty
 
     // Check if each part is a valid number
     for (int i = 0; i < aParts.length; ++i)
-      if (!CCSS.isNumberWithUnitValue (aParts[i].trim (), m_bWithPercentage))
+      if (!CSSNumberHelper.isNumberWithUnitValue (aParts[i].trim (), m_bWithPercentage))
         return false;
     return true;
   }

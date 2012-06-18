@@ -20,7 +20,7 @@ package com.phloc.css.property;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.css.color.CSSColorHelper;
+import com.phloc.css.utils.CSSColorHelper;
 
 /**
  * Represents a color value

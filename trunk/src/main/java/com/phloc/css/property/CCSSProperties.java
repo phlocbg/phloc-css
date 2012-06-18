@@ -355,7 +355,7 @@ public final class CCSSProperties
                                                                      CCSS.VISIBLE,
                                                                      CCSS.HIDDEN,
                                                                      CCSS.COLLAPSE);
-  public static final ICSSProperty CLIP = new CSSPropertyEnumOrRect (ECSSProperty.CLIP, CCSS.AUTO);
+  public static final ICSSProperty CLIP = new CSSPropertyEnumOrRect (ECSSProperty.CLIP, CCSS.AUTO, CCSS.INHERIT);
 
   // display window
   public static final ICSSProperty CURSOR = new CSSPropertyEnum (ECSSProperty.CURSOR,

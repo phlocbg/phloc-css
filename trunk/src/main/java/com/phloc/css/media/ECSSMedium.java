@@ -103,4 +103,10 @@ public enum ECSSMedium implements ICSSVersionAware, IHasName
   {
     return EnumHelper.getFromNameOrNull (ECSSMedium.class, sName);
   }
+
+  @Nullable
+  public static ECSSMedium getFromNameOrDefault (@Nullable final String sName, @Nullable final ECSSMedium eDefault)
+  {
+    return EnumHelper.getFromNameOrDefault (ECSSMedium.class, sName, eDefault);
+  }
 }

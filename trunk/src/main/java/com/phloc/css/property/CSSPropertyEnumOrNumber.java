@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CCSS;
+import com.phloc.css.utils.CSSNumberHelper;
 
 public class CSSPropertyEnumOrNumber extends CSSPropertyEnum
 {
@@ -47,7 +47,7 @@ public class CSSPropertyEnumOrNumber extends CSSPropertyEnum
   @Override
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return super.isValidValue (sValue) || CCSS.isNumberWithUnitValue (sValue, m_bWithPercentage);
+    return super.isValidValue (sValue) || CSSNumberHelper.isNumberWithUnitValue (sValue, m_bWithPercentage);
   }
 
   @Override
