@@ -45,6 +45,20 @@ public final class CSSColorHelper
   public static final float OPACITY_MIN = 0f;
   public static final float OPACITY_MAX = 1f;
 
+  private static final String PATTERN_RGB = "^" +
+                                            CCSS.PREFIX_RGB +
+                                            "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){2}\\s*\\-?[0-9]+%?\\s*\\)$";
+  private static final String PATTERN_RGBA = "^" +
+                                             CCSS.PREFIX_RGBA +
+                                             "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){3}\\s*[0-9]+(\\.[0-9]*)?\\s*\\)$";
+  private static final String PATTERN_HSL = "^" +
+                                            CCSS.PREFIX_HSL +
+                                            "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){2}\\s*\\-?[0-9]+%?\\s*\\)$";
+  private static final String PATTERN_HSLA = "^" +
+                                             CCSS.PREFIX_HSLA +
+                                             "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){3}\\s*[0-9]+(\\.[0-9]*)?\\s*\\)$";
+  private static final String PATTERN_HEX = "^" + CCSS.PREFIX_HEX + "[0-9a-fA-F]{1,6}$";
+
   private CSSColorHelper ()
   {}
 
@@ -67,51 +81,36 @@ public final class CSSColorHelper
   public static boolean isRGBColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) &&
-           RegExHelper.stringMatchesPattern ("^" +
-                                             CCSS.PREFIX_RGB +
-                                             "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){2}\\s*\\-?[0-9]+%?\\s*\\)$", sRealValue);
+    return StringHelper.hasText (sRealValue) && RegExHelper.stringMatchesPattern (PATTERN_RGB, sRealValue);
   }
 
   public static boolean isRGBAColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) &&
-           RegExHelper.stringMatchesPattern ("^" +
-                                                 CCSS.PREFIX_RGBA +
-                                                 "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){3}\\s*[0-9]+(\\.[0-9]*)?\\s*\\)$",
-                                             sRealValue);
+    return StringHelper.hasText (sRealValue) && RegExHelper.stringMatchesPattern (PATTERN_RGBA, sRealValue);
   }
 
   public static boolean isHSLColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) &&
-           RegExHelper.stringMatchesPattern ("^" +
-                                             CCSS.PREFIX_HSL +
-                                             "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){2}\\s*\\-?[0-9]+%?\\s*\\)$", sRealValue);
+    return StringHelper.hasText (sRealValue) && RegExHelper.stringMatchesPattern (PATTERN_HSL, sRealValue);
   }
 
   public static boolean isHSLAColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) &&
-           RegExHelper.stringMatchesPattern ("^" +
-                                                 CCSS.PREFIX_HSLA +
-                                                 "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){3}\\s*[0-9]+(\\.[0-9]*)?\\s*\\)$",
-                                             sRealValue);
+    return StringHelper.hasText (sRealValue) && RegExHelper.stringMatchesPattern (PATTERN_HSLA, sRealValue);
   }
 
   public static boolean isHexColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) &&
-           RegExHelper.stringMatchesPattern ("^" + CCSS.PREFIX_HEX + "[0-9a-fA-F]{1,6}$", sRealValue);
+    return StringHelper.hasText (sRealValue) && RegExHelper.stringMatchesPattern (PATTERN_HEX, sRealValue);
   }
 
   private static int _mod (final int nValue, final int nMod)
   {
-    // modulo does not work on negative numbers
+    // modulo does not work as expected on negative numbers
     int nPositiveValue = nValue;
     while (nPositiveValue < 0)
       nPositiveValue += nMod;
@@ -138,7 +137,7 @@ public final class CSSColorHelper
   public static String getRGBAColorValue (final int nRed, final int nGreen, final int nBlue, final float fOpacity)
   {
     final float fRealOpacity = fOpacity < OPACITY_MIN ? OPACITY_MIN : fOpacity > OPACITY_MAX ? OPACITY_MAX : fOpacity;
-    return new StringBuilder (16).append (CCSS.PREFIX_RGBA)
+    return new StringBuilder (24).append (CCSS.PREFIX_RGBA)
                                  .append ('(')
                                  .append (_mod (nRed, RGB_RANGE))
                                  .append (',')
@@ -174,7 +173,7 @@ public final class CSSColorHelper
                                           final float fOpacity)
   {
     final float fRealOpacity = fOpacity < OPACITY_MIN ? OPACITY_MIN : fOpacity > OPACITY_MAX ? OPACITY_MAX : fOpacity;
-    return new StringBuilder (16).append (CCSS.PREFIX_HSLA)
+    return new StringBuilder (24).append (CCSS.PREFIX_HSLA)
                                  .append ('(')
                                  .append (_mod (nHue, HSL_RANGE))
                                  .append (',')
@@ -189,17 +188,19 @@ public final class CSSColorHelper
 
   @Nonnull
   @Nonempty
+  private static String _getRGBPartAsHexString (final int nRGBPart)
+  {
+    return StringHelper.getHexStringLeadingZero (_mod (nRGBPart, RGB_RANGE), 2);
+  }
+
+  @Nonnull
+  @Nonempty
   public static String getHexColorValue (final int nRed, final int nGreen, final int nBlue)
   {
     return new StringBuilder (CCSS.HEXVALUE_LENGTH).append (CCSS.PREFIX_HEX)
-                                                   .append (StringHelper.getHexStringLeadingZero (_mod (nRed, RGB_RANGE),
-                                                                                                  2))
-                                                   .append (StringHelper.getHexStringLeadingZero (_mod (nGreen,
-                                                                                                        RGB_RANGE),
-                                                                                                  2))
-                                                   .append (StringHelper.getHexStringLeadingZero (_mod (nBlue,
-                                                                                                        RGB_RANGE),
-                                                                                                  2))
+                                                   .append (_getRGBPartAsHexString (nRed))
+                                                   .append (_getRGBPartAsHexString (nGreen))
+                                                   .append (_getRGBPartAsHexString (nBlue))
                                                    .toString ();
   }
 

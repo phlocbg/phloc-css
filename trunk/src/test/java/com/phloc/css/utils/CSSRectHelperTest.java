@@ -17,6 +17,7 @@
  */
 package com.phloc.css.utils;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -39,6 +40,7 @@ public final class CSSRectHelperTest
     assertTrue (CSSRectHelper.isRectValue ("rect( 0% , 0% , 100% , 50% )"));
     assertTrue (CSSRectHelper.isRectValue ("rect(0in,0px,10em,50pt)"));
     assertTrue (CSSRectHelper.isRectValue ("rect( 0in , 0px , 10em , 50pt ) "));
+    assertTrue (CSSRectHelper.isRectValue ("rect(auto, auto, auto, auto)"));
 
     // OK, backward compatible syntax
     assertTrue (CSSRectHelper.isRectValue ("rect(0 0 100 50)"));
@@ -47,17 +49,26 @@ public final class CSSRectHelperTest
     assertTrue (CSSRectHelper.isRectValue ("rect( 0%   0%   100%   50% )"));
     assertTrue (CSSRectHelper.isRectValue ("rect(0in 0px 10em 50pt)"));
     assertTrue (CSSRectHelper.isRectValue ("rect( 0in   0px   10em   50pt ) "));
+    assertTrue (CSSRectHelper.isRectValue ("rect(auto  auto  auto  auto)"));
 
     // error cases
     assertFalse (CSSRectHelper.isRectValue ("rect( a , 0px , 10em , 50pt ) "));
     assertFalse (CSSRectHelper.isRectValue ("rect( 0in , a , 10em , 50pt ) "));
     assertFalse (CSSRectHelper.isRectValue ("rect( 0in , 0px , a , 50pt ) "));
     assertFalse (CSSRectHelper.isRectValue ("rect( 0in , 0px , 10em , a ) "));
+    assertFalse (CSSRectHelper.isRectValue ("rect( 0in , 0px , 10em ) "));
+    assertFalse (CSSRectHelper.isRectValue ("rect( 0in , 0px , 10em, 20pt, 22pt ) "));
+    assertFalse (CSSRectHelper.isRectValue ("rect( 0in , 0px , 10em, 20.5pt ) "));
+    assertFalse (CSSRectHelper.isRectValue ("rect(auto, auto, auto, auto,auto)"));
 
     assertFalse (CSSRectHelper.isRectValue ("rect( a   0px   10em   50pt ) "));
     assertFalse (CSSRectHelper.isRectValue ("rect( 0in   a   10em   50pt ) "));
     assertFalse (CSSRectHelper.isRectValue ("rect( 0in   0px   a   50pt ) "));
     assertFalse (CSSRectHelper.isRectValue ("rect( 0in   0px   10em   a ) "));
+    assertFalse (CSSRectHelper.isRectValue ("rect( 0in   0px   10em    ) "));
+    assertFalse (CSSRectHelper.isRectValue ("rect( 0in   0px   10em  20pt  22pt  ) "));
+    assertFalse (CSSRectHelper.isRectValue ("rect( 0in   0px   10em  20.5pt) "));
+    assertFalse (CSSRectHelper.isRectValue ("rect(auto  auto  auto  auto auto)"));
 
     assertFalse (CSSRectHelper.isRectValue ("rect( 0in% , 0px , 10em , 50pt ) "));
     assertFalse (CSSRectHelper.isRectValue ("rect( 0in , 0px% , 10em , 50pt ) "));
@@ -68,5 +79,39 @@ public final class CSSRectHelperTest
     assertFalse (CSSRectHelper.isRectValue ("rect( 0in   0px%   10em   50pt ) "));
     assertFalse (CSSRectHelper.isRectValue ("rect( 0in   0px   10em%   50pt ) "));
     assertFalse (CSSRectHelper.isRectValue ("rect( 0in   0px   10em   50pt% ) "));
+  }
+
+  @Test
+  public void testGetRectValue ()
+  {
+    // OK, current syntax
+    assertArrayEquals (new String [] { "0in", "0pt", "100ex", "50em" },
+                       CSSRectHelper.getRectValue ("rect(0in,0pt,100ex,50em)"));
+    assertArrayEquals (new String [] { "0", "0", "100", "50" }, CSSRectHelper.getRectValue ("rect(0,0,100,50)"));
+    assertArrayEquals (new String [] { "0", "0", "100", "50" },
+                       CSSRectHelper.getRectValue ("rect( 0 , 0 , 100 , 50 ) "));
+    assertArrayEquals (new String [] { "0%", "0%", "100%", "50%" }, CSSRectHelper.getRectValue ("rect(0%,0%,100%,50%)"));
+    assertArrayEquals (new String [] { "0%", "0%", "100%", "50%" },
+                       CSSRectHelper.getRectValue ("rect( 0% , 0% , 100% , 50% )"));
+    assertArrayEquals (new String [] { "0in", "0px", "10em", "50pt" },
+                       CSSRectHelper.getRectValue ("rect(0in,0px,10em,50pt)"));
+    assertArrayEquals (new String [] { "0in", "0px", "10em", "50pt" },
+                       CSSRectHelper.getRectValue ("rect( 0in , 0px , 10em , 50pt ) "));
+    assertArrayEquals (new String [] { "auto", "auto", "auto", "auto" },
+                       CSSRectHelper.getRectValue ("rect(auto, auto, auto, auto)"));
+
+    // OK, backward compatible syntax
+    assertArrayEquals (new String [] { "0", "0", "100", "50" }, CSSRectHelper.getRectValue ("rect(0 0 100 50)"));
+    assertArrayEquals (new String [] { "0", "0", "100", "50" },
+                       CSSRectHelper.getRectValue ("rect( 0   0   100   50 ) "));
+    assertArrayEquals (new String [] { "0%", "0%", "100%", "50%" }, CSSRectHelper.getRectValue ("rect(0% 0% 100% 50%)"));
+    assertArrayEquals (new String [] { "0%", "0%", "100%", "50%" },
+                       CSSRectHelper.getRectValue ("rect( 0%   0%   100%   50% )"));
+    assertArrayEquals (new String [] { "0in", "0px", "10em", "50pt" },
+                       CSSRectHelper.getRectValue ("rect(0in 0px 10em 50pt)"));
+    assertArrayEquals (new String [] { "0in", "0px", "10em", "50pt" },
+                       CSSRectHelper.getRectValue ("rect( 0in   0px   10em   50pt ) "));
+    assertArrayEquals (new String [] { "auto", "auto", "auto", "auto" },
+                       CSSRectHelper.getRectValue ("rect(auto  auto  auto  auto)"));
   }
 }
