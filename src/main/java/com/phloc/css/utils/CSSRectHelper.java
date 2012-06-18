@@ -24,7 +24,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.CCSS;
+import com.phloc.css.propertyvalue.CCSSValue;
 
 /**
  * Provides rectangle handling sanity methods.
@@ -39,7 +39,7 @@ public final class CSSRectHelper
   private static final String PATTERN_PART_VALUE = "([0-9]+(?:[a-zA-Z]+|%)?|auto)";
   // Do not use a recurring group (...{3}) so that capturing works!
   private static final String PATTERN_CURRENT_SYNTAX = "^" +
-                                                       CCSS.PREFIX_RECT +
+                                                       CCSSValue.PREFIX_RECT +
                                                        "\\s*\\(\\s*" +
                                                        PATTERN_PART_VALUE +
                                                        "\\s*,\\s*" +
@@ -50,7 +50,7 @@ public final class CSSRectHelper
                                                        PATTERN_PART_VALUE +
                                                        "\\s*\\)$";
   private static final String PATTERN_OLD_SYNTAX = "^" +
-                                                   CCSS.PREFIX_RECT +
+                                                   CCSSValue.PREFIX_RECT +
                                                    "\\s*\\(\\s*" +
                                                    PATTERN_PART_VALUE +
                                                    "\\s+" +

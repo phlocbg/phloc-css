@@ -841,7 +841,7 @@ void term() #Term :
   )
   | sStr = string() ( <S> )*    { jjtThis.setText (sStr); }
   | t = <IDENT> ( <S> )*
-  | t = <URI> ( <S> )*          { t.image = com.phloc.css.CCSS.url (t.image); }
+  | t = <URI> ( <S> )*          { t.image = com.phloc.css.utils.CSSURLHelper.getAsCSSURL (t.image); }
   | sStr = hexcolor()           { jjtThis.setText (sStr); }
   | function()
   /* extensions */
