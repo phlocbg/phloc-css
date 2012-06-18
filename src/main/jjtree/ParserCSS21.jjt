@@ -632,10 +632,10 @@ void pseudo() #Pseudo :
   <COLON> { jjtThis.setText (":"); }
   /* Extension for "::-moz-selection */
   ( <COLON> { jjtThis.appendText (":"); } ) ?
-  ( t = <FUNCTION> { jjtThis.appendText (t.image); }
+  ( LOOKAHEAD(2)
+    t = <FUNCTION> { jjtThis.appendText (t.image); }
     ( <S> )*
     ( expr() )?
-    LOOKAHEAD(2)
     <RROUND>  // do not append because of expression!
     ( <S> )*
   | t = <IDENT> { jjtThis.appendText (t.image); }

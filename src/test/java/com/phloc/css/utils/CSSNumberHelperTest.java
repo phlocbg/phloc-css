@@ -50,5 +50,8 @@ public final class CSSNumberHelperTest
     assertFalse (CSSNumberHelper.isNumberWithUnitValue (" ", true));
     assertFalse (CSSNumberHelper.isNumberWithUnitValue (" mm ", true));
     assertFalse (CSSNumberHelper.isNumberWithUnitValue (" % ", true));
+    assertFalse (CSSNumberHelper.isNumberWithUnitValue (" 50 xyz ", true));
+    assertFalse (CSSNumberHelper.isNumberWithUnitValue (" 50 gd ", true));
+    assertFalse (CSSNumberHelper.isNumberWithUnitValue ("50gd", true));
   }
 }

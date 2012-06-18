@@ -158,39 +158,38 @@ TOKEN :
                  | "@-" <IDENT> "-keyframes" >
 | < IMPORTANT_SYM: "!" ( <W> | <COMMENT> )* "important" >
 
-| < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image); }
-| < EX: <NUM> "ex" >           { matchedToken.image = ParseUtils.splitNumber(image); }
-| < PX: <NUM> "px" >           { matchedToken.image = ParseUtils.splitNumber(image); }
-| < GD: <NUM> "gd" >           { matchedToken.image = ParseUtils.splitNumber(image); }
-| < REM: <NUM> "rem" >         { matchedToken.image = ParseUtils.splitNumber(image); }
-| < VW: <NUM> "vw" >           { matchedToken.image = ParseUtils.splitNumber(image); }
-| < VH: <NUM> "vh" >           { matchedToken.image = ParseUtils.splitNumber(image); }
-| < VM: <NUM> "vm" >           { matchedToken.image = ParseUtils.splitNumber(image); }
-| < CH: <NUM> "ch" >           { matchedToken.image = ParseUtils.splitNumber(image); }
-| < DPI: <NUM> "dpi" >         { matchedToken.image = ParseUtils.splitNumber(image); }
-| < DPCM: <NUM> "dpcm" >       { matchedToken.image = ParseUtils.splitNumber(image); }
-| < LENGTH_CM: <NUM> "cm" >    { matchedToken.image = ParseUtils.splitNumber(image); }
-| < LENGTH_MM: <NUM> "mm" >    { matchedToken.image = ParseUtils.splitNumber(image); }
-| < LENGTH_IN: <NUM> "in" >    { matchedToken.image = ParseUtils.splitNumber(image); }
-| < LENGTH_PT: <NUM> "pt" >    { matchedToken.image = ParseUtils.splitNumber(image); }
-| < LENGTH_PC: <NUM> "pc" >    { matchedToken.image = ParseUtils.splitNumber(image); }
-| < ANGLE_DEG: <NUM> "deg" >   { matchedToken.image = ParseUtils.splitNumber(image); }
-| < ANGLE_RAD: <NUM> "rad" >   { matchedToken.image = ParseUtils.splitNumber(image); }
-| < ANGLE_GRAD: <NUM> "grad" > { matchedToken.image = ParseUtils.splitNumber(image); }
-| < ANGLE_TURN: <NUM> "turn" > { matchedToken.image = ParseUtils.splitNumber(image); }
-| < TIME_MS: <NUM> "ms" >      { matchedToken.image = ParseUtils.splitNumber(image); }
-| < TIME_S: <NUM> "s" >        { matchedToken.image = ParseUtils.splitNumber(image); }
-| < FREQ_HZ: <NUM> "hz" >      { matchedToken.image = ParseUtils.splitNumber(image); }
-| < FREQ_KHZ: <NUM> "khz" >    { matchedToken.image = ParseUtils.splitNumber(image); }
-| < PERCENTAGE: <NUM> "%" >    { matchedToken.image = ParseUtils.splitNumber(image); }
-
+| < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
+| < EX: <NUM> "ex" >           { matchedToken.image = ParseUtils.splitNumber(image) + "ex"; }
+| < PX: <NUM> "px" >           { matchedToken.image = ParseUtils.splitNumber(image) + "px"; }
+| < REM: <NUM> "rem" >         { matchedToken.image = ParseUtils.splitNumber(image) + "rem"; }
+| < VW: <NUM> "vw" >           { matchedToken.image = ParseUtils.splitNumber(image) + "vw"; }
+| < VH: <NUM> "vh" >           { matchedToken.image = ParseUtils.splitNumber(image) + "vh"; }
+| < VMIN: <NUM> "vmin" >       { matchedToken.image = ParseUtils.splitNumber(image) + "vmin"; }
+| < CH: <NUM> "ch" >           { matchedToken.image = ParseUtils.splitNumber(image) + "ch"; }
+| < DPI: <NUM> "dpi" >         { matchedToken.image = ParseUtils.splitNumber(image) + "dpi"; }
+| < DPCM: <NUM> "dpcm" >       { matchedToken.image = ParseUtils.splitNumber(image) + "dpcm"; }
+| < DPPX: <NUM> "dppx" >       { matchedToken.image = ParseUtils.splitNumber(image) + "dppx"; }
+| < LENGTH_CM: <NUM> "cm" >    { matchedToken.image = ParseUtils.splitNumber(image) + "cm"; }
+| < LENGTH_MM: <NUM> "mm" >    { matchedToken.image = ParseUtils.splitNumber(image) + "mm"; }
+| < LENGTH_IN: <NUM> "in" >    { matchedToken.image = ParseUtils.splitNumber(image) + "in"; }
+| < LENGTH_PT: <NUM> "pt" >    { matchedToken.image = ParseUtils.splitNumber(image) + "pt"; }
+| < LENGTH_PC: <NUM> "pc" >    { matchedToken.image = ParseUtils.splitNumber(image) + "pc"; }
+| < ANGLE_DEG: <NUM> "deg" >   { matchedToken.image = ParseUtils.splitNumber(image) + "deg"; }
+| < ANGLE_RAD: <NUM> "rad" >   { matchedToken.image = ParseUtils.splitNumber(image) + "rad"; }
+| < ANGLE_GRAD: <NUM> "grad" > { matchedToken.image = ParseUtils.splitNumber(image) + "grad"; }
+| < ANGLE_TURN: <NUM> "turn" > { matchedToken.image = ParseUtils.splitNumber(image) + "turn"; }
+| < TIME_MS: <NUM> "ms" >      { matchedToken.image = ParseUtils.splitNumber(image) + "ms"; }
+| < TIME_S: <NUM> "s" >        { matchedToken.image = ParseUtils.splitNumber(image) + "s"; }
+| < FREQ_HZ: <NUM> "hz" >      { matchedToken.image = ParseUtils.splitNumber(image) + "hz"; }
+| < FREQ_KHZ: <NUM> "khz" >    { matchedToken.image = ParseUtils.splitNumber(image) + "khz"; }
+| < PERCENTAGE: <NUM> "%" >    { matchedToken.image = ParseUtils.splitNumber(image) + "%"; }
 // | < DIMENSION: <NUM> <IDENT> >
 
 // "url("{w}{string}{w}")"  {return URI;}
 // "url("{w}{url}{w}")" {return URI;}
 | < URI: "url(" ( <S> )* ( <STRING1> | <STRING2> | ( <URL> )* ) ( <S> )* ")" >
   { matchedToken.image = ParseUtils.trimUrl(image); }
-
+| < CALC: "calc(" >
 | < NOT: ":not(" >
 | < FUNCTION_NTH: "nth-child(" 
                 | "nth-last-child(" 
@@ -511,7 +510,7 @@ void singleKeyframeSelector() :
 {
   ( t = <FROM_SYM>   { jjtThis.setText (t.image); }
   | t = <TO_SYM>     { jjtThis.setText (t.image); }
-  | t = <PERCENTAGE> { jjtThis.setText (t.image + "%"); }  
+  | t = <PERCENTAGE> { jjtThis.setText (t.image); }  
   )
   ( <S> )*
 }
@@ -797,6 +796,38 @@ void expr() : {}
   )*
 }
 
+
+Token dimension() #void :
+{ Token t; }
+{
+  ( t = <EM>          
+  | t = <EX>          
+  | t = <PX>          
+  | t = <REM>         
+  | t = <VW>          
+  | t = <VH>          
+  | t = <VMIN>        
+  | t = <CH>          
+  | t = <DPI>         
+  | t = <DPCM>        
+  | t = <DPPX>        
+  | t = <LENGTH_CM>   
+  | t = <LENGTH_MM>   
+  | t = <LENGTH_IN>   
+  | t = <LENGTH_PT>   
+  | t = <LENGTH_PC>   
+  | t = <ANGLE_DEG>   
+  | t = <ANGLE_RAD>   
+  | t = <ANGLE_GRAD>  
+  | t = <ANGLE_TURN>  
+  | t = <TIME_MS>     
+  | t = <TIME_S>      
+  | t = <FREQ_HZ>     
+  | t = <FREQ_KHZ>
+  )
+  { return t; }   
+}
+ 
 //
 // term
 //  : unary_operator?
@@ -813,39 +844,17 @@ void term() #Term :
 {
   ( ( sPrefix = unaryOperator() )?
     ( t = <NUMBER> ( <S> )*
-    | t = <PERCENTAGE> ( <S> )* { t.image += "%"; }
-    | t = <EM> ( <S> )*         { t.image += "em"; }
-    | t = <EX> ( <S> )*         { t.image += "ex"; }
-    | t = <PX> ( <S> )*         { t.image += "px"; }
-    | t = <GD> ( <S> )*         { t.image += "gd"; }
-    | t = <REM> ( <S> )*        { t.image += "rem"; }
-    | t = <VW> ( <S> )*         { t.image += "vw"; }
-    | t = <VH> ( <S> )*         { t.image += "vh"; }
-    | t = <VM> ( <S> )*         { t.image += "vm"; }
-    | t = <CH> ( <S> )*         { t.image += "ch"; }
-    | t = <DPI> ( <S> )*        { t.image += "dpi"; }
-    | t = <DPCM> ( <S> )*       { t.image += "dpcm"; }
-    | t = <LENGTH_CM> ( <S> )*  { t.image += "cm"; }
-    | t = <LENGTH_MM> ( <S> )*  { t.image += "mm"; }
-    | t = <LENGTH_IN> ( <S> )*  { t.image += "in"; }
-    | t = <LENGTH_PT> ( <S> )*  { t.image += "pt"; }
-    | t = <LENGTH_PC> ( <S> )*  { t.image += "pc"; }
-    | t = <ANGLE_DEG> ( <S> )*  { t.image += "deg"; }
-    | t = <ANGLE_RAD> ( <S> )*  { t.image += "rad"; }
-    | t = <ANGLE_GRAD> ( <S> )* { t.image += "grad"; }
-    | t = <ANGLE_TURN> ( <S> )* { t.image += "turn"; }
-    | t = <TIME_MS> ( <S> )*    { t.image += "ms"; }
-    | t = <TIME_S> ( <S> )*     { t.image += "s"; }
-    | t = <FREQ_HZ> ( <S> )*    { t.image += "hz"; }
-    | t = <FREQ_KHZ> ( <S> )*   { t.image += "khz"; }
-  )
+    | t = <PERCENTAGE> ( <S> )*
+    | t = dimension() ( <S> )*         
+    )
   | sStr = string() ( <S> )*    { jjtThis.setText (sStr); }
   | t = <IDENT> ( <S> )*
   | t = <URI> ( <S> )*          { t.image = com.phloc.css.utils.CSSURLHelper.getAsCSSURL (t.image); }
   | sStr = hexcolor()           { jjtThis.setText (sStr); }
   | function()
+  | math()
   /* extensions */
-/*   | t = <DIMENSION>*/
+//  | t = <DIMENSION>
   | t = <INHERIT> ( <S> )*
   )
   {
@@ -871,6 +880,73 @@ void function() #Function :
   <RROUND>
   ( <S> )*
   { jjtThis.setText (t.image + ")"); }
+}
+
+void math() : {}
+{
+  <CALC>
+  ( <S> )*
+  sum()
+  ( <S> )*
+  <RROUND> 
+  ( <S> )*
+}
+
+void sumOperator() : {}
+{
+  ( <WS_PLUS>    { jjtThis.setText ("+"); } 
+  | <S> <MINUS>  { jjtThis.setText ("-"); }
+  )
+}
+
+void sum() #void : {}
+{
+  product()
+  ( sumOperator()
+    <S>
+    product ()
+  )*   
+}
+
+void productOperator() : {}
+{
+  <ASTERISK> { jjtThis.setText ("*"); }
+| <SLASH>    { jjtThis.setText ("/"); }
+}
+
+void product() : {}
+{
+  unit()
+  ( LOOKAHEAD(2)
+    ( <S> )*
+    productOperator()
+    ( <S> )*
+    unit()
+  )*   
+}
+
+void unit() : 
+{ 
+  String sPrefix = null;
+  Token t = null; 
+}
+{
+  ( sPrefix = unaryOperator() )?
+  ( t = <NUMBER>
+  | t = <PERCENTAGE>
+  | t = dimension()
+  | <LROUND>
+    ( <S> )*
+    sum()
+    ( <S> )*
+    <RROUND>
+  )  
+  {
+    if (sPrefix != null)
+      jjtThis.appendText (sPrefix);
+    if (t != null)
+      jjtThis.appendText (t.image);
+  }
 }
 
 //

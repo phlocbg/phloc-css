@@ -49,7 +49,7 @@ public final class ECSSColorTest
       assertTrue (sHSL, CSSColorHelper.isHSLColorValue (sHSL));
       final String sHSLA = eColor.getAsHSLAColorValue (1f);
       assertTrue (sHSLA, CSSColorHelper.isHSLAColorValue (sHSLA));
-      assertSame (eColor, ECSSColor.getFromNameOrNullCaseInsensitive (eColor.getName ()));
+      assertSame (eColor, ECSSColor.getFromNameCaseInsensitiveOrNull (eColor.getName ()));
     }
   }
 }
