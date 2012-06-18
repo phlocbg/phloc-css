@@ -2,7 +2,40 @@
 #labels Featured
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>6/4/12</td><td colspan="4">_Release *2.7.1*_</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>6/18/12</td><td colspan="4">_Release *3.0.0*_</td></tr>
+<tr><td>6/18/12</td><td>add</td><td>feature</td><td></td><td>Added support for CSS3 calc() functionality</td></tr>
+<tr><td>6/18/12</td><td>add</td><td>api</td><td></td><td>Introduced the enum ECSSMetaUnit to group comparable units</td></tr>
+<tr><td>6/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Added 'dppx' unit, removed the 'gd' unit and renamed the 'vm' unit to 'vmin'</td></tr>
+<tr><td>6/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Moved CSS value constants from CCSS to CCSSValue</td></tr>
+<tr border="1"><td>6/18/12</td><td colspan="4">_Release *3.0.0.RC3*_</td></tr>
+<tr><td>6/18/12</td><td>add</td><td>api</td><td></td><td>Added better support for handling rect values internally</td></tr>
+<tr><td>6/18/12</td><td>update</td><td>tech</td><td></td><td>Added handling for old CSS rectangle syntax 'rect(a b c d)'</td></tr>
+<tr><td>6/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Removed all methods from CCSS into more meaningful helper classes</td></tr>
+<tr><td>6/18/12</td><td>add</td><td>api</td><td></td><td>Added new base interface ICSSNamedColor</td></tr>
+<tr><td>6/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Moved ECSSProperty to .property package</td></tr>
+<tr border="1"><td>6/15/12</td><td colspan="4">_Release *3.0.0.RC2*_</td></tr>
+<tr><td>6/15/12</td><td>remove</td><td>api</td><td></td><td>Removed the content of the .html package</td></tr>
+<tr border="1"><td>6/14/12</td><td colspan="4">_Release *3.0.0.RC1*_</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Added possibility to provide a custom exception handler to handle the generated ParseExceptions</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Added new writer feature "remove unnecessary code" which removes unnecessary statements</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Correctly handling font-face, page and keyframes as child of media rule</td></tr>
+<tr><td>6/15/12</td><td>fix</td><td>tech</td><td></td><td>CSS 3.0 media list is now optional on @media rule</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Added support for "dpi" and "dpcm" CSS units</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Added support for simple CSS 2.1 page rule in model</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Extended CSSWriter with options to format the output (header?, header text, content charset)</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>api</td><td></td><td>Extracted ICSSWriterSettings interface and using it</td></tr>
+<tr><td>6/15/12</td><td>fix</td><td>tech</td><td></td><td>Fixed hack in internal handling of complex pseudo selectors (added class CSSSelectorMemberFunctionLike)</td></tr>
+<tr><td>6/14/12</td><td>change</td><td>api</td><td>*yes*</td><td>Moved all color related elements to a separate subpackage ".color"</td></tr>
+<tr><td>6/14/12</td><td>add</td><td>feature</td><td></td><td>Added support for RGBA, HSL and HSLA values</td></tr>
+<tr><td>6/14/12</td><td>update</td><td>api</td><td>*yes*</td><td>Updated URL visitor API so that the URL is passed in directly</td></tr>
+<tr><td>6/14/12</td><td>update</td><td>api</td><td>*yes*</td><td>Updated visitor API to handle keyframes rules</td></tr>
+<tr><td>6/14/12</td><td>add</td><td>feature</td><td></td><td>Added support for parsing and writing CSS animation rules (CSSKeyframesRule)</td></tr>
+<tr><td>6/14/12</td><td>update</td><td>feature</td><td></td><td>Made parsing of IE filters (progid:...) more flexible by adding whitespace support</td></tr>
+<tr><td>6/13/12</td><td>change</td><td>api</td><td>*yes*</td><td>Moved all HTML relevant things to the new package .html</td></tr>
+<tr><td>6/13/12</td><td>add</td><td>api</td><td></td><td>Added new enum ECSSMediaExpressionFeature</td></tr>
+<tr><td>6/13/12</td><td>add</td><td>feature</td><td></td><td>Added support for parsing and writing CSS 3 media queries. Many thanks to Thomas Draier from jahia.com!!!!!</td></tr>
+<tr><td>6/13/12</td><td>add</td><td>api</td><td></td><td>Added CSSHandler.readFromStream with String charset name</td></tr>
+<tr border="1"><td>6/4/12</td><td colspan="4">_Release *2.7.1*_</td></tr>
 <tr><td>6/4/12</td><td>add</td><td>api</td><td></td><td>Added CSSHandler.isValidCSS method accepting a Reader</td></tr>
 <tr><td>6/4/12</td><td>add</td><td>api</td><td></td><td>Added JavaCharStream constructor</td></tr>
 <tr border="1"><td>5/24/12</td><td colspan="4">_Release *2.7.0*_</td></tr>
