@@ -20,7 +20,6 @@ package com.phloc.css.decl.visit;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.phloc.css.CCSS;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpression;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
@@ -32,6 +31,7 @@ import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.ICSSExpressionMember;
 import com.phloc.css.decl.ICSSTopLevelRule;
+import com.phloc.css.utils.CSSURLHelper;
 
 /**
  * A special {@link ICSSVisitor} that is used to extract URLs from the available
@@ -72,10 +72,10 @@ public final class CSSVisitorForUrl extends DefaultCSSVisitor
       if (aMember instanceof CSSExpressionMemberTermSimple)
       {
         final CSSExpressionMemberTermSimple aExprTerm = (CSSExpressionMemberTermSimple) aMember;
-        if (CCSS.isURLValue (aExprTerm.getValue ()))
+        if (CSSURLHelper.isURLValue (aExprTerm.getValue ()))
         {
           // Extract the URL for sanity reasons
-          final String sURL = CCSS.getURLValue (aExprTerm.getValue ());
+          final String sURL = CSSURLHelper.getURLValue (aExprTerm.getValue ());
           m_aVisitor.onUrlDeclaration (m_aTopLevelRule, aDeclaration, aExprTerm, sURL);
         }
       }

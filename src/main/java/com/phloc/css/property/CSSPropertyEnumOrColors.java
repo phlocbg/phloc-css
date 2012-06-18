@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.color.CSSColorHelper;
+import com.phloc.css.utils.CSSColorHelper;
 
 public class CSSPropertyEnumOrColors extends CSSPropertyEnum
 {

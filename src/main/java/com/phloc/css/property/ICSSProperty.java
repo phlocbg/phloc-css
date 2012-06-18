@@ -20,6 +20,7 @@ package com.phloc.css.property;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.css.ICSSNamedColor;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.propertyvalue.ICSSValue;
 
@@ -38,10 +39,16 @@ public interface ICSSProperty extends ICSSVersionAware
   boolean isValidValue (@Nullable String sValue);
 
   @Nonnull
-  ICSSValue newValue (String sValue);
+  ICSSValue newValue (@Nonnull String sValue);
 
   @Nonnull
-  ICSSValue newImportantValue (String sValue);
+  ICSSValue newImportantValue (@Nonnull String sValue);
+
+  @Nonnull
+  ICSSValue newValue (@Nonnull ICSSNamedColor aColor);
+
+  @Nonnull
+  ICSSValue newImportantValue (@Nonnull ICSSNamedColor aColor);
 
   @Nonnull
   ICSSProperty getClone (@Nonnull ECSSProperty eProp);

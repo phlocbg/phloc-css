@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CCSS;
+import com.phloc.css.utils.CSSNumberHelper;
 
 public class CSSPropertyEnumOrNumbers extends CSSPropertyEnum
 {
@@ -75,7 +75,7 @@ public class CSSPropertyEnumOrNumbers extends CSSPropertyEnum
     for (int i = 0; i < aParts.length; ++i)
     {
       aParts[i] = aParts[i].trim ();
-      if (!super.isValidValue (aParts[i]) && !CCSS.isNumberWithUnitValue (aParts[i], m_bWithPercentage))
+      if (!super.isValidValue (aParts[i]) && !CSSNumberHelper.isNumberWithUnitValue (aParts[i], m_bWithPercentage))
         return false;
     }
     return true;

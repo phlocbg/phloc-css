@@ -23,9 +23,10 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.regex.RegExHelper;
-import com.phloc.commons.string.StringHelper;
-import com.phloc.css.color.CSSColorHelper;
+import com.phloc.css.utils.CSSColorHelper;
+import com.phloc.css.utils.CSSNumberHelper;
+import com.phloc.css.utils.CSSRectHelper;
+import com.phloc.css.utils.CSSURLHelper;
 
 /**
  * Contains CSS style constants and utility stuff. Only constants that are part
@@ -213,60 +214,47 @@ public final class CCSS
   private CCSS ()
   {}
 
-  @Nullable
-  private static ECSSUnit _findUnitWithPerc (@Nonnull final String sValue)
-  {
-    // sValue cannot be null here!
-    for (final ECSSUnit eUnit : ECSSUnit.values ())
-      if (sValue.endsWith (eUnit.getName ()))
-        return eUnit;
-    return null;
-  }
-
-  @Nullable
-  private static ECSSUnit _findUnitWithoutPerc (@Nonnull final String sValue)
-  {
-    for (final ECSSUnit eUnit : ECSSUnit.values ())
-      if (eUnit != ECSSUnit.PERCENTAGE)
-        if (sValue.endsWith (eUnit.getName ()))
-          return eUnit;
-    return null;
-  }
-
+  /**
+   * @deprecated Use
+   *             {@link CSSNumberHelper#isNumberWithUnitValue(String, boolean)}
+   *             instead
+   */
+  @Deprecated
   public static boolean isNumberWithUnitValue (@Nullable final String sValue, final boolean bWithPerc)
   {
-    String sRealValue = StringHelper.trim (sValue);
-    if (StringHelper.hasText (sRealValue))
-    {
-      final ECSSUnit eUnit = bWithPerc ? _findUnitWithPerc (sRealValue) : _findUnitWithoutPerc (sRealValue);
-      if (eUnit != null)
-      {
-        // Cut the unit
-        sRealValue = sRealValue.substring (0, sRealValue.length () - eUnit.getName ().length ()).trim ();
-      }
-      return isNumberValue (sRealValue);
-    }
-    return false;
+    return CSSNumberHelper.isNumberWithUnitValue (sValue, bWithPerc);
   }
 
+  /**
+   * @deprecated Use {@link CSSNumberHelper#isNumberValue(String)} instead
+   */
+  @Deprecated
   public static boolean isNumberValue (@Nullable final String sValue)
   {
-    final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) && StringHelper.isDouble (sRealValue);
+    return CSSNumberHelper.isNumberValue (sValue);
   }
 
+  /**
+   * @deprecated Use {@link CSSColorHelper#isColorValue(String)} instead
+   */
   @Deprecated
   public static boolean isColorValue (@Nullable final String sValue)
   {
     return CSSColorHelper.isColorValue (sValue);
   }
 
+  /**
+   * @deprecated Use {@link CSSColorHelper#isRGBColorValue(String)} instead
+   */
   @Deprecated
   public static boolean isRGBColorValue (@Nullable final String sValue)
   {
     return CSSColorHelper.isRGBColorValue (sValue);
   }
 
+  /**
+   * @deprecated Use {@link CSSColorHelper#isHexColorValue(String)} instead
+   */
   @Deprecated
   public static boolean isHexColorValue (@Nullable final String sValue)
   {
@@ -279,18 +267,14 @@ public final class CCSS
    * @param sValue
    *          The value containing the CSS value
    * @return <code>null</code> if the passed value is not an URL value
-   * @see #isURLValue(String)
+   * @see CSSURLHelper#isURLValue(String)
+   * @deprecated Use {@link CSSURLHelper#getURLValue(String)} instead
    */
+  @Deprecated
   @Nullable
   public static String getURLValue (@Nullable final String sValue)
   {
-    if (isURLValue (sValue))
-    {
-      final String sRealValue = sValue.trim ();
-      // Skip leading "url(" and trailing ")"
-      return sRealValue.substring (PREFIX_URL_OPEN.length (), sRealValue.length () - 1);
-    }
-    return null;
+    return CSSURLHelper.getURLValue (sValue);
   }
 
   /**
@@ -299,67 +283,74 @@ public final class CCSS
    * @param sValue
    *          The value to be checked.
    * @return <code>true</code> if the passed value starts with "url("
+   * @deprecated Use {@link CSSURLHelper#isURLValue(String)} instead
    */
+  @Deprecated
   public static boolean isURLValue (@Nullable final String sValue)
   {
-    final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) &&
-           RegExHelper.stringMatchesPattern ("^" + PREFIX_URL + "\\(.+\\)$", sRealValue);
+    return CSSURLHelper.isURLValue (sValue);
   }
 
+  /**
+   * @deprecated Use {@link CSSRectHelper#isRectValue(String)} instead
+   */
+  @Deprecated
   public static boolean isRectValue (@Nullable final String sValue)
   {
-    final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) &&
-           RegExHelper.stringMatchesPattern ("^" +
-                                             PREFIX_RECT +
-                                             "\\s*\\((\\s*[0-9]+[a-z%]*\\s*,){3}\\s*[0-9]+[a-z%]*\\s*\\)$", sRealValue);
+    return CSSRectHelper.isRectValue (sValue);
   }
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String pt (final int nValue)
   {
-    return ECSSUnit.LENGTH_PT.format (nValue);
+    return ECSSUnit.pt (nValue);
   }
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String pc (final int nValue)
   {
-    return ECSSUnit.LENGTH_PC.format (nValue);
+    return ECSSUnit.pc (nValue);
   }
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String in (final int nValue)
   {
-    return ECSSUnit.LENGTH_IN.format (nValue);
+    return ECSSUnit.in (nValue);
   }
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String mm (final int nValue)
   {
-    return ECSSUnit.LENGTH_MM.format (nValue);
+    return ECSSUnit.mm (nValue);
   }
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String cm (final int nValue)
   {
-    return ECSSUnit.LENGTH_CM.format (nValue);
+    return ECSSUnit.cm (nValue);
   }
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String px (final int nValue)
   {
-    return ECSSUnit.PX.format (nValue);
+    return ECSSUnit.px (nValue);
   }
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String em (final int nValue)
   {
     return ECSSUnit.EM.format (nValue);
@@ -367,30 +358,34 @@ public final class CCSS
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String em (final double dValue)
   {
-    return ECSSUnit.EM.format (dValue);
+    return ECSSUnit.em (dValue);
   }
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String ex (final int nValue)
   {
-    return ECSSUnit.EX.format (nValue);
+    return ECSSUnit.ex (nValue);
   }
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String perc (final int nValue)
   {
-    return ECSSUnit.PERCENTAGE.format (nValue);
+    return ECSSUnit.perc (nValue);
   }
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String perc (final double dValue)
   {
-    return ECSSUnit.PERCENTAGE.format (dValue);
+    return ECSSUnit.perc (dValue);
   }
 
   /**
@@ -399,14 +394,14 @@ public final class CCSS
    * @param sURL
    *          URL to be wrapped. May neither be <code>null</code> nor empty.
    * @return url(...)
+   * @deprecated Use {@link CSSURLHelper#getAsCSSURL(String)} instead
    */
+  @Deprecated
   @Nonnull
   @Nonempty
   public static String url (@Nonnull final String sURL)
   {
-    if (StringHelper.hasNoText (sURL))
-      throw new IllegalArgumentException ("passed URL is empty!");
-    return PREFIX_URL_OPEN + sURL + ')';
+    return CSSURLHelper.getAsCSSURL (sURL);
   }
 
   @Nonnull

@@ -23,6 +23,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSNamedColor;
 import com.phloc.css.propertyvalue.CSSValue;
 import com.phloc.css.propertyvalue.CSSValueList;
 import com.phloc.css.propertyvalue.CSSValueMultiProperty;
@@ -60,6 +61,9 @@ public abstract class AbstractCSSProperty implements ICSSProperty
   @Nonnull
   private ICSSValue _newValue (@Nonnull final String sValue, final boolean bIsImportant)
   {
+    if (sValue == null)
+      throw new NullPointerException ("value");
+
     // Special handling for browser specific value creation
     switch (m_eProp)
     {
@@ -137,6 +141,18 @@ public abstract class AbstractCSSProperty implements ICSSProperty
   public final ICSSValue newImportantValue (@Nonnull final String sValue)
   {
     return _newValue (sValue, true);
+  }
+
+  @Nonnull
+  public final ICSSValue newValue (@Nonnull final ICSSNamedColor aColor)
+  {
+    return _newValue (aColor.getName (), false);
+  }
+
+  @Nonnull
+  public final ICSSValue newImportantValue (@Nonnull final ICSSNamedColor aColor)
+  {
+    return _newValue (aColor.getName (), true);
   }
 
   @Override

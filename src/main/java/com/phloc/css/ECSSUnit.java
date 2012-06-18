@@ -109,4 +109,81 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   {
     return EnumHelper.getFromNameOrNull (ECSSUnit.class, sName);
   }
+
+  @Nonnull
+  @Nonempty
+  public static String pt (final int nValue)
+  {
+    return LENGTH_PT.format (nValue);
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String pc (final int nValue)
+  {
+    return LENGTH_PC.format (nValue);
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String in (final int nValue)
+  {
+    return LENGTH_IN.format (nValue);
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String mm (final int nValue)
+  {
+    return LENGTH_MM.format (nValue);
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String cm (final int nValue)
+  {
+    return LENGTH_CM.format (nValue);
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String px (final int nValue)
+  {
+    return PX.format (nValue);
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String em (final int nValue)
+  {
+    return EM.format (nValue);
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String em (final double dValue)
+  {
+    return EM.format (dValue);
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String ex (final int nValue)
+  {
+    return EX.format (nValue);
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String perc (final int nValue)
+  {
+    return PERCENTAGE.format (nValue);
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String perc (final double dValue)
+  {
+    return PERCENTAGE.format (dValue);
+  }
 }

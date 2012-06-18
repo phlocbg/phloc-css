@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.CCSS;
+import com.phloc.css.utils.CSSNumberHelper;
 
 public class CSSPropertyNumber extends AbstractCSSProperty
 {
@@ -35,7 +35,7 @@ public class CSSPropertyNumber extends AbstractCSSProperty
 
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return CCSS.isNumberWithUnitValue (sValue, m_bWithPercentage);
+    return CSSNumberHelper.isNumberWithUnitValue (sValue, m_bWithPercentage);
   }
 
   @Nonnull
