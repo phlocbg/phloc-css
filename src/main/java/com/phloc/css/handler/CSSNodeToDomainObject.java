@@ -225,6 +225,36 @@ final class CSSNodeToDomainObject
     // read all sums
     for (final CSSNode aSumNode : aNode)
     {
+      /**
+       * <pre>
+       * product
+       *   unit[100%]
+       *   productOperator[/]
+       *   unit[3]
+       * sumOperator[-]
+       * product
+       *   unit[2]
+       *   productOperator[*]
+       *   unit[1em]
+       * sumOperator[-]
+       * product
+       *   unit[5]
+       * sumOperator[-]
+       * product
+       *   unit[2]
+       *   productOperator[*]
+       *   unit[1px]
+       * sumOperator[+]
+       * product
+       *   unit
+       *     product
+       *       unit[2]
+       *       productOperator[*]
+       *       unit[5]
+       *       productOperator[*]
+       *       unit[2hz]
+       * </pre>
+       */
       System.out.print (ECSSNodeType.getDump (aSumNode, m_eVersion));
     }
     System.out.println ("----");
