@@ -25,8 +25,6 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
 import com.phloc.css.ECSSVersion;
-import com.phloc.css.ICSSVersionAware;
-import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -34,18 +32,21 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author philip
  */
-public enum ECSSMathOperator implements ICSSVersionAware, ICSSWriteable, IHasName
+public enum ECSSMathOperator implements ICSSExpressionMathMember, IHasName
 {
-  PLUS ("+"),
-  MINUS ("-"),
-  MULTIPLY ("*"),
-  DIVIDE ("/");
+  // plus and minus require a whitespace around it when writing!
+  PLUS ("+", " + "),
+  MINUS ("-", " - "),
+  MULTIPLY ("*", "*"),
+  DIVIDE ("/", "/");
 
   private final String m_sName;
+  private final String m_sText;
 
-  private ECSSMathOperator (@Nonnull @Nonempty final String sName)
+  private ECSSMathOperator (@Nonnull @Nonempty final String sName, @Nonnull @Nonempty final String sText)
   {
     m_sName = sName;
+    m_sText = sText;
   }
 
   @Nonnull
@@ -66,7 +67,7 @@ public enum ECSSMathOperator implements ICSSVersionAware, ICSSWriteable, IHasNam
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
-    return m_sName;
+    return m_sText;
   }
 
   @Nullable

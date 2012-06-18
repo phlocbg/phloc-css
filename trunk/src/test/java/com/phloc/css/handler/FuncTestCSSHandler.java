@@ -95,6 +95,10 @@ public final class FuncTestCSSHandler
       // Write optimized version and compare it
       String s = new CSSWriter (eVersion, true).getCSSAsString (aCSS);
       assertNotNull (sKey, s);
+
+      if (true)
+        s_aLogger.info (s);
+
       final CascadingStyleSheet aCSSReRead = CSSHandler.readFromString (s, aCharset, eVersion);
       assertNotNull ("Failed to parse:\n" + s, aCSSReRead);
       assertEquals (sKey, aCSS, aCSSReRead);

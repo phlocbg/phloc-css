@@ -31,6 +31,9 @@ import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpression;
 import com.phloc.css.decl.CSSExpressionMemberFunction;
 import com.phloc.css.decl.CSSExpressionMemberMath;
+import com.phloc.css.decl.CSSExpressionMemberMathProduct;
+import com.phloc.css.decl.CSSExpressionMemberMathUnitProduct;
+import com.phloc.css.decl.CSSExpressionMemberMathUnitSimple;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
@@ -50,6 +53,7 @@ import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ECSSAttributeOperator;
 import com.phloc.css.decl.ECSSExpressionOperator;
+import com.phloc.css.decl.ECSSMathOperator;
 import com.phloc.css.decl.ECSSSelectorCombinator;
 import com.phloc.css.decl.ICSSExpressionMember;
 import com.phloc.css.decl.ICSSSelectorMember;
@@ -216,6 +220,50 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
+  private CSSExpressionMemberMathProduct _createExpressionMathProduct (@Nonnull final CSSNode aNode)
+  {
+    _expectNodeType (aNode, ECSSNodeType.MATH_PRODUCT);
+
+    final CSSExpressionMemberMathProduct ret = new CSSExpressionMemberMathProduct ();
+
+    // read all sums
+    for (final CSSNode aChildNode : aNode)
+    {
+      if (ECSSNodeType.MATH_UNIT.isNode (aChildNode, m_eVersion))
+      {
+        final int nChildCount = aChildNode.jjtGetNumChildren ();
+        if (nChildCount == 0)
+          ret.addMember (new CSSExpressionMemberMathUnitSimple (aChildNode.getText ()));
+        else
+        {
+          if (nChildCount != 1)
+            throw new IllegalArgumentException ("CSS math unit expected 1 child and got " + nChildCount);
+
+          final CSSExpressionMemberMathProduct aNestedProduct = _createExpressionMathProduct (aChildNode.jjtGetChild (0));
+          ret.addMember (new CSSExpressionMemberMathUnitProduct (aNestedProduct));
+        }
+      }
+      else
+        if (ECSSNodeType.MATH_PRODUCTOPERATOR.isNode (aChildNode, m_eVersion))
+        {
+          final String sText = aChildNode.getText ();
+          final ECSSMathOperator eMathOp = ECSSMathOperator.getFromNameOrNull (sText);
+          if (eMathOp == null)
+            s_aLogger.warn ("Failed to parse math product operator '" + sText + "'");
+          else
+            ret.addMember (eMathOp);
+        }
+        else
+          s_aLogger.warn ("Unsupported child of " +
+                          ECSSNodeType.getNodeName (aNode, m_eVersion) +
+                          ": " +
+                          ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+    }
+
+    return ret;
+  }
+
+  @Nonnull
   private CSSExpressionMemberMath _createExpressionMathTerm (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.MATH);
@@ -223,41 +271,28 @@ final class CSSNodeToDomainObject
     final CSSExpressionMemberMath ret = new CSSExpressionMemberMath ();
 
     // read all sums
-    for (final CSSNode aSumNode : aNode)
+    for (final CSSNode aChildNode : aNode)
     {
-      /**
-       * <pre>
-       * product
-       *   unit[100%]
-       *   productOperator[/]
-       *   unit[3]
-       * sumOperator[-]
-       * product
-       *   unit[2]
-       *   productOperator[*]
-       *   unit[1em]
-       * sumOperator[-]
-       * product
-       *   unit[5]
-       * sumOperator[-]
-       * product
-       *   unit[2]
-       *   productOperator[*]
-       *   unit[1px]
-       * sumOperator[+]
-       * product
-       *   unit
-       *     product
-       *       unit[2]
-       *       productOperator[*]
-       *       unit[5]
-       *       productOperator[*]
-       *       unit[2hz]
-       * </pre>
-       */
-      System.out.print (ECSSNodeType.getDump (aSumNode, m_eVersion));
+      if (ECSSNodeType.MATH_PRODUCT.isNode (aChildNode, m_eVersion))
+      {
+        ret.addMember (_createExpressionMathProduct (aChildNode));
+      }
+      else
+        if (ECSSNodeType.MATH_SUMOPERATOR.isNode (aChildNode, m_eVersion))
+        {
+          final String sText = aChildNode.getText ();
+          final ECSSMathOperator eMathOp = ECSSMathOperator.getFromNameOrNull (sText);
+          if (eMathOp == null)
+            s_aLogger.warn ("Failed to parse math operator '" + sText + "'");
+          else
+            ret.addMember (eMathOp);
+        }
+        else
+          s_aLogger.warn ("Unsupported child of " +
+                          ECSSNodeType.getNodeName (aNode, m_eVersion) +
+                          ": " +
+                          ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
-    System.out.println ("----");
 
     return ret;
   }
