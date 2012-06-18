@@ -8,7 +8,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-css</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
+  <version>3.0.0</version>
   <packaging>bundle</packaging>
   <name>phloc-css</name>
   <description>phloc CSS parser an other components</description>
@@ -23,9 +23,9 @@
   </licenses>
  
   <scm>
-    <url>http://code.google.com/p/phloc-css/source/browse/</url>
-    <connection>scm:svn:http://phloc-css.googlecode.com/svn/trunk</connection>
-    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/trunk</developerConnection>
+    <url>http://code.google.com/p/phloc-css/source/browse/tags/phloc-css-3.0.0</url>
+    <connection>scm:svn:http://phloc-css.googlecode.com/svn/tags/phloc-css-3.0.0</connection>
+    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/tags/phloc-css-3.0.0</developerConnection>
   </scm>
 
   <distributionManagement>
