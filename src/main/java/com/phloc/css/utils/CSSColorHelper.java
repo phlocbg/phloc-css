@@ -21,6 +21,7 @@ import java.awt.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.RegEx;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -45,18 +46,55 @@ public final class CSSColorHelper
   public static final float OPACITY_MIN = 0f;
   public static final float OPACITY_MAX = 1f;
 
+  @RegEx
+  private static final String PATTERN_PART_VALUE = "(\\-?[0-9]+%?)";
+  @RegEx
+  private static final String PATTERN_PART_OPACITY = "([0-9]+\\.[0-9]*|[0-9]+)";
+  @RegEx
   private static final String PATTERN_RGB = "^" +
                                             CCSSValue.PREFIX_RGB +
-                                            "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){2}\\s*\\-?[0-9]+%?\\s*\\)$";
+                                            "\\s*\\(\\s*" +
+                                            PATTERN_PART_VALUE +
+                                            "\\s*,\\s*" +
+                                            PATTERN_PART_VALUE +
+                                            "\\s*,\\s*" +
+                                            PATTERN_PART_VALUE +
+                                            "\\s*\\)$";
+  @RegEx
   private static final String PATTERN_RGBA = "^" +
                                              CCSSValue.PREFIX_RGBA +
-                                             "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){3}\\s*[0-9]+(\\.[0-9]*)?\\s*\\)$";
+                                             "\\s*\\(\\s*" +
+                                             PATTERN_PART_VALUE +
+                                             "\\s*,\\s*" +
+                                             PATTERN_PART_VALUE +
+                                             "\\s*,\\s*" +
+                                             PATTERN_PART_VALUE +
+                                             "\\s*,\\s*" +
+                                             PATTERN_PART_OPACITY +
+                                             "\\s*\\)$";
+  @RegEx
   private static final String PATTERN_HSL = "^" +
                                             CCSSValue.PREFIX_HSL +
-                                            "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){2}\\s*\\-?[0-9]+%?\\s*\\)$";
+                                            "\\s*\\(\\s*" +
+                                            PATTERN_PART_VALUE +
+                                            "\\s*,\\s*" +
+                                            PATTERN_PART_VALUE +
+                                            "\\s*,\\s*" +
+                                            PATTERN_PART_VALUE +
+                                            "\\s*\\)$";
+  @RegEx
   private static final String PATTERN_HSLA = "^" +
                                              CCSSValue.PREFIX_HSLA +
-                                             "\\s*\\((\\s*\\-?[0-9]+%?\\s*,){3}\\s*[0-9]+(\\.[0-9]*)?\\s*\\)$";
+                                             "\\s*\\(\\s*" +
+                                             PATTERN_PART_VALUE +
+                                             "\\s*,\\s*" +
+                                             PATTERN_PART_VALUE +
+                                             "\\s*,\\s*" +
+                                             PATTERN_PART_VALUE +
+                                             "\\s*,\\s*" +
+                                             PATTERN_PART_OPACITY +
+                                             "\\s*\\)$";
+  @RegEx
   private static final String PATTERN_HEX = "^" + CCSSValue.PREFIX_HEX + "[0-9a-fA-F]{1,6}$";
 
   private CSSColorHelper ()
