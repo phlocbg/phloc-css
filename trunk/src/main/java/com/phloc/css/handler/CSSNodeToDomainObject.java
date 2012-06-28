@@ -341,10 +341,14 @@ final class CSSNodeToDomainObject
       return new CSSExpressionMemberTermSimple (aNode.getText ());
 
     final CSSNode aChildNode = aNode.jjtGetChild (0);
+    final int nChildChildren = aChildNode.jjtGetNumChildren ();
 
     if (ECSSNodeType.URI.isNode (aChildNode, m_eVersion))
     {
       // URI value
+      if (nChildChildren > 0)
+        throw new IllegalArgumentException ("Expected 0 children but got " + nChildChildren + "!");
+
       final CSSURI aURI = new CSSURI (aChildNode.getText ());
       return new CSSExpressionMemberTermURI (aURI);
     }
@@ -352,8 +356,11 @@ final class CSSNodeToDomainObject
       if (ECSSNodeType.FUNCTION.isNode (aChildNode, m_eVersion))
       {
         // function value
+        if (nChildChildren > 1)
+          throw new IllegalArgumentException ("Expected 0 or 1 children but got " + nChildChildren + "!");
+
         final String sFunctionName = aChildNode.getText ();
-        if (aChildNode.jjtGetNumChildren () == 1)
+        if (nChildChildren == 1)
         {
           // Parameters present
           final CSSExpression aFuncExpr = _createExpression (aChildNode.jjtGetChild (0));
