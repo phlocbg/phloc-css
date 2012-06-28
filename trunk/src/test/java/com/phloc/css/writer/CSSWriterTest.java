@@ -301,4 +301,30 @@ public final class CSSWriterTest extends AbstractCSS30Test
     assertEquals ("/*\n" + " * Unit test2\n" + " */\n" + "h1{color:red;margin:1px;}h2{color:red;margin:1px;}",
                   aWriter.getCSSAsString (aCSS));
   }
+
+  @Test
+  public void testWriteCertainRules () throws IOException
+  {
+    final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, true);
+    aSettings.setWriteFontFaceRules (false);
+    aSettings.setWriteKeyframesRules (false);
+    aSettings.setWriteMediaRules (false);
+    aSettings.setWritePageRules (false);
+    final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
+
+    // Some non-special rules
+    CascadingStyleSheet aCSS = CSSReader.readFromString (CSS3, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    assertNotNull (aCSS);
+    assertEquals ("h1{color:red;margin:1px;}h2{color:rgb(1,2,3);}h3{}", aWriter.getCSSAsString (aCSS));
+
+    // Only @media rule
+    aCSS = CSSReader.readFromString (CSS4, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    assertNotNull (aCSS);
+    assertEquals ("", aWriter.getCSSAsString (aCSS));
+
+    // Nothing special
+    aCSS = CSSReader.readFromString (CSS5, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    assertNotNull (aCSS);
+    assertEquals ("h1{color:red;margin:1px;}h2{color:red;margin:1px;}", aWriter.getCSSAsString (aCSS));
+  }
 }
