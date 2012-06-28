@@ -20,7 +20,7 @@ package com.phloc.css.decl.visit;
 import javax.annotation.Nonnull;
 
 import com.phloc.css.decl.CSSDeclaration;
-import com.phloc.css.decl.CSSExpressionMemberTermSimple;
+import com.phloc.css.decl.CSSExpressionMemberTermURI;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.ICSSTopLevelRule;
 
@@ -55,16 +55,12 @@ public interface ICSSUrlVisitor
    *          Top level rule of the URL. Never <code>null</code>.
    * @param aDeclaration
    *          Declaration of the URL. Never <code>null</code>.
-   * @param aExprTerm
-   *          The expression member that contains the value.
-   * @param sURL
-   *          The already extracted URL from the expression member. This was
-   *          retrieved by <code>CCSS.getURLValue (aExprTerm.getValue ())</code>
+   * @param aURITerm
+   *          The URI term from the current expression. Never <code>null</code>.
    */
   void onUrlDeclaration (@Nonnull ICSSTopLevelRule aTopLevelRule,
                          @Nonnull CSSDeclaration aDeclaration,
-                         @Nonnull CSSExpressionMemberTermSimple aExprTerm,
-                         @Nonnull String sURL);
+                         @Nonnull CSSExpressionMemberTermURI aURITerm);
 
   /**
    * After visiting is done.

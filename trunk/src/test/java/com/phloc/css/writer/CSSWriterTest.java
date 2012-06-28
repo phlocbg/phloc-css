@@ -27,24 +27,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
+import com.phloc.css.AbstractCSS30Test;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.reader.CSSReader;
 
-public final class CSSWriterTest
+public final class CSSWriterTest extends AbstractCSS30Test
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSWriterTest.class);
-
-  private static final String CSS1 = "h1 { color : red ; margin: 1px; } h2 { color: rgb(1,2,3);} h3{}"
-                                     + " @keyframes x { from { align:left;color:#123;} to { x:y; } 50% {}}"
-                                     + " @page {margin: 1in; marks: none; } @page :first {margin: 2in; } @page :last {}"
-                                     + " @media print { div { width:100%; min-height:0; }} @media all { div { width:90%; }} @media tv { }"
-                                     + "@font-face { font-family: 'Soho'; src: url('Soho.eot'); } @font-face { src: local('Soho Gothic Pro');} @font-face { }";
 
   @Test
   public void testIndentation () throws IOException
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS1, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS3, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
@@ -149,17 +144,10 @@ public final class CSSWriterTest
                   + "@font-face {}\n", aWriter.getCSSAsString (aCSS));
   }
 
-  private static final String CSS2 = "@media print { "
-                                     + "h1 { color : red ; margin: 1px; } h2 { color: rgb(1,2,3);} h3{}"
-                                     + " @keyframes x { from { align:left;color:#123;} to { x:y; } 50% { } }"
-                                     + " @page {margin: 1in; marks: none; } @page :first {margin: 2in; }"
-                                     + "@font-face { font-family: 'Soho'; src: url('Soho.eot'); } @font-face { src: local('Soho Gothic Pro');} @font-face { }"
-                                     + "}";
-
   @Test
   public void testIndentationNested () throws IOException
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS2, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS4, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
@@ -203,7 +191,7 @@ public final class CSSWriterTest
   @Test
   public void testRemoveUnnecessaryCode1 () throws IOException
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS1, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS3, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false).setRemoveUnnecessaryCode (true);
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
@@ -251,7 +239,7 @@ public final class CSSWriterTest
   @Test
   public void testRemoveUnnecessaryCode2 () throws IOException
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS2, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS4, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false).setRemoveUnnecessaryCode (true);
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
@@ -290,8 +278,7 @@ public final class CSSWriterTest
   @Test
   public void testHeaderText () throws IOException
   {
-    final String sCSS = "h1 { color : red ; margin: 1px; }h2 { color : red ; margin: 1px; }";
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS5, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
 
     // Non-optimized version

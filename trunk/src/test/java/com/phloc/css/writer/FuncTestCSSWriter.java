@@ -54,16 +54,14 @@ public final class FuncTestCSSWriter
     for (int i = 0; i < 2; ++i)
     {
       // write to buffer
-      final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
-      new CSSWriter (eVersion, i == 1).writeCSS (aCSS, aSW);
-      final String sContent = aSW.getAsString ();
+      final String sCSS = new CSSWriter (eVersion, i == 1).getCSSAsString (aCSS);
       if (false)
-        System.out.println ("--" + i + "--\n" + sContent);
+        System.out.println ("--" + i + "--\n" + sCSS);
 
       // read again from buffer
       assertEquals (aFile.getAbsolutePath () + (i == 0 ? " unoptimized" : " optimized"),
                     aCSS,
-                    CSSReader.readFromString (sContent, CCharset.CHARSET_UTF_8_OBJ, eVersion));
+                    CSSReader.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, eVersion));
     }
   }
 

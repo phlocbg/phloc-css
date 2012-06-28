@@ -69,6 +69,7 @@ public enum ECSSNodeType
   EXPR (ParserCSS21TreeConstants.JJTEXPR, ParserCSS30TreeConstants.JJTEXPR),
   TERM (ParserCSS21TreeConstants.JJTTERM, ParserCSS30TreeConstants.JJTTERM),
   OPERATOR (ParserCSS21TreeConstants.JJTOPERATOR, ParserCSS30TreeConstants.JJTOPERATOR),
+  URI (ParserCSS21TreeConstants.JJTURI, ParserCSS30TreeConstants.JJTURI),
   FUNCTION (ParserCSS21TreeConstants.JJTFUNCTION, ParserCSS30TreeConstants.JJTFUNCTION),
   MATH (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTMATH),
   MATH_SUMOPERATOR (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTSUMOPERATOR),
@@ -112,7 +113,7 @@ public enum ECSSNodeType
    *         {@link CGlobal#ILLEGAL_UINT} if this node type is not supported by
    *         the passed version
    */
-  public int getParserNodeType (@Nonnull final ECSSVersion eVersion)
+  int getParserNodeType (@Nonnull final ECSSVersion eVersion)
   {
     switch (eVersion)
     {
@@ -141,7 +142,7 @@ public enum ECSSNodeType
   }
 
   @Nonnull
-  public String getNodeName (@Nonnull final ECSSVersion eVersion)
+  String getNodeName (@Nonnull final ECSSVersion eVersion)
   {
     switch (eVersion)
     {
@@ -158,7 +159,7 @@ public enum ECSSNodeType
   }
 
   @Nullable
-  public static ECSSNodeType getNodeType (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
+  static ECSSNodeType getNodeType (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
   {
     for (final ECSSNodeType eNodeType : values ())
       if (eNodeType.isNode (aParserNode, eVersion))
@@ -167,7 +168,7 @@ public enum ECSSNodeType
   }
 
   @Nullable
-  public static String getNodeName (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
+  static String getNodeName (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
   {
     final ECSSNodeType eNodeType = getNodeType (aParserNode, eVersion);
     if (eNodeType != null)
@@ -191,7 +192,7 @@ public enum ECSSNodeType
 
   @Nonnull
   @Nonempty
-  public static String getDump (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
+  static String getDump (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
   {
     final StringBuilder aSB = new StringBuilder ();
     _dumpRecursive (aParserNode, eVersion, aSB, "");

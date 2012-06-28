@@ -22,7 +22,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpression;
-import com.phloc.css.decl.CSSExpressionMemberTermSimple;
+import com.phloc.css.decl.CSSExpressionMemberTermURI;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CSSKeyframesRule;
@@ -31,7 +31,6 @@ import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.ICSSExpressionMember;
 import com.phloc.css.decl.ICSSTopLevelRule;
-import com.phloc.css.utils.CSSURLHelper;
 
 /**
  * A special {@link ICSSVisitor} that is used to extract URLs from the available
@@ -69,15 +68,10 @@ public final class CSSVisitorForUrl extends DefaultCSSVisitor
   {
     final CSSExpression aExpr = aDeclaration.getExpression ();
     for (final ICSSExpressionMember aMember : aExpr.getAllMembers ())
-      if (aMember instanceof CSSExpressionMemberTermSimple)
+      if (aMember instanceof CSSExpressionMemberTermURI)
       {
-        final CSSExpressionMemberTermSimple aExprTerm = (CSSExpressionMemberTermSimple) aMember;
-        if (CSSURLHelper.isURLValue (aExprTerm.getValue ()))
-        {
-          // Extract the URL for sanity reasons
-          final String sURL = CSSURLHelper.getURLValue (aExprTerm.getValue ());
-          m_aVisitor.onUrlDeclaration (m_aTopLevelRule, aDeclaration, aExprTerm, sURL);
-        }
+        final CSSExpressionMemberTermURI aExprTerm = (CSSExpressionMemberTermURI) aMember;
+        m_aVisitor.onUrlDeclaration (m_aTopLevelRule, aDeclaration, aExprTerm);
       }
   }
 
