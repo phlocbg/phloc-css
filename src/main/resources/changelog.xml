@@ -20,6 +20,7 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2012-06-28" version="3.1.0" />
   <entry date="2012-06-28" category="api" action="add">
     <change>
       <text locale="en">Added domain objects and utility functions to parse rgb(),rgba(),hsl() and hsla() values</text>
@@ -52,7 +53,7 @@
   </entry>
   <entry date="2012-06-28" category="api" action="add">
     <change>
-      <text locale="en">Added support to quote CSS URL values</text>
+      <text locale="en">Added support to quote CSS URL values in writing</text>
     </change>
   </entry>
   <release date="2012-06-18" version="3.0.0" />
