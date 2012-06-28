@@ -37,9 +37,13 @@ public final class CCSSValue
   public static final String PREFIX_URL = "url";
   public static final String PREFIX_URL_OPEN = PREFIX_URL + '(';
   public static final String PREFIX_RGB = "rgb";
+  public static final String PREFIX_RGB_OPEN = PREFIX_RGB + '(';
   public static final String PREFIX_RGBA = "rgba";
+  public static final String PREFIX_RGBA_OPEN = PREFIX_RGBA + '(';
   public static final String PREFIX_HSL = "hsl";
+  public static final String PREFIX_HSL_OPEN = PREFIX_HSL + '(';
   public static final String PREFIX_HSLA = "hsla";
+  public static final String PREFIX_HSLA_OPEN = PREFIX_HSLA + '(';
   public static final int HEXVALUE_LENGTH = 7;
   public static final char PREFIX_HEX = '#';
 
