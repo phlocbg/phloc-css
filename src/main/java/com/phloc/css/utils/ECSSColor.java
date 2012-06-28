@@ -193,6 +193,12 @@ public enum ECSSColor implements ICSSNamedColor
                      @Nonnegative final int nGreen,
                      @Nonnegative final int nBlue)
   {
+    if (nRed < CSSColorHelper.RGB_MIN || nRed > CSSColorHelper.RGB_MAX)
+      throw new IllegalArgumentException ("red");
+    if (nGreen < CSSColorHelper.RGB_MIN || nGreen > CSSColorHelper.RGB_MAX)
+      throw new IllegalArgumentException ("green");
+    if (nBlue < CSSColorHelper.RGB_MIN || nBlue > CSSColorHelper.RGB_MAX)
+      throw new IllegalArgumentException ("blue");
     m_sName = sName;
     m_nRed = nRed;
     m_nGreen = nGreen;

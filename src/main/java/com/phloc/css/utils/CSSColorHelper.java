@@ -159,8 +159,7 @@ public final class CSSColorHelper
   @Nonempty
   public static String getRGBColorValue (final int nRed, final int nGreen, final int nBlue)
   {
-    return new StringBuilder (16).append (CCSSValue.PREFIX_RGB)
-                                 .append ('(')
+    return new StringBuilder (16).append (CCSSValue.PREFIX_RGB_OPEN)
                                  .append (_mod (nRed, RGB_RANGE))
                                  .append (',')
                                  .append (_mod (nGreen, RGB_RANGE))
@@ -175,8 +174,7 @@ public final class CSSColorHelper
   public static String getRGBAColorValue (final int nRed, final int nGreen, final int nBlue, final float fOpacity)
   {
     final float fRealOpacity = fOpacity < OPACITY_MIN ? OPACITY_MIN : fOpacity > OPACITY_MAX ? OPACITY_MAX : fOpacity;
-    return new StringBuilder (24).append (CCSSValue.PREFIX_RGBA)
-                                 .append ('(')
+    return new StringBuilder (24).append (CCSSValue.PREFIX_RGBA_OPEN)
                                  .append (_mod (nRed, RGB_RANGE))
                                  .append (',')
                                  .append (_mod (nGreen, RGB_RANGE))
@@ -192,8 +190,7 @@ public final class CSSColorHelper
   @Nonempty
   public static String getHSLColorValue (final int nHue, final int nSaturation, final int nLightness)
   {
-    return new StringBuilder (16).append (CCSSValue.PREFIX_HSL)
-                                 .append ('(')
+    return new StringBuilder (16).append (CCSSValue.PREFIX_HSL_OPEN)
                                  .append (_mod (nHue, HSL_RANGE))
                                  .append (',')
                                  .append (_mod (nSaturation, HSL_RANGE))
@@ -211,8 +208,7 @@ public final class CSSColorHelper
                                           final float fOpacity)
   {
     final float fRealOpacity = fOpacity < OPACITY_MIN ? OPACITY_MIN : fOpacity > OPACITY_MAX ? OPACITY_MAX : fOpacity;
-    return new StringBuilder (24).append (CCSSValue.PREFIX_HSLA)
-                                 .append ('(')
+    return new StringBuilder (24).append (CCSSValue.PREFIX_HSLA_OPEN)
                                  .append (_mod (nHue, HSL_RANGE))
                                  .append (',')
                                  .append (_mod (nSaturation, HSL_RANGE))
