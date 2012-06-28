@@ -25,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.phloc.css.property.CCSSProperties;
+import com.phloc.css.utils.ECSSColor;
 
 /**
  * Test class for class {@link CSSValue}.
@@ -41,12 +42,14 @@ public final class CSSValueTest
     final ICSSValue v22 = CCSSProperties.DISPLAY.newValue (CCSSValue.INLINE);
     final ICSSValue v3 = CCSSProperties.DISPLAY.newValue (CCSSValue.INLINE_BLOCK);
     final ICSSValue v4 = CCSSProperties.OPACITY.newValue (Double.toString (0.39));
+    final ICSSValue v5 = CCSSProperties.COLOR.newValue (ECSSColor.ALICEBLUE);
     assertNotNull (v1);
     assertNotNull (v21);
     assertNotNull (v22);
     assertTrue (v1 instanceof CSSValue);
     assertTrue (v3 instanceof CSSValueMultiValue);
     assertTrue (v4 instanceof CSSValueList);
+    assertTrue (v5 instanceof CSSValue);
     assertEquals (v1, v1);
     assertEquals (v1, v21);
     assertEquals (v21, v1);
