@@ -733,7 +733,7 @@ void term() #Term :
   )
   | sStr = string() ( <S> )*    { jjtThis.setText (sStr); }
   | t = <IDENT> ( <S> )*
-  | t = <URI> ( <S> )*          { t.image = com.phloc.css.utils.CSSURLHelper.getAsCSSURL (t.image); }
+  | t = <URI> ( <S> )*          { t.image = com.phloc.css.utils.CSSURLHelper.getAsCSSURL (t.image, false); }
   | sStr = hexcolor()           { jjtThis.setText (sStr); }
   | function()
   /* extensions */

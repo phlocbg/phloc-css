@@ -27,6 +27,7 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
+import com.phloc.css.utils.CSSURLHelper;
 
 /**
  * This class represents the options required for writing
@@ -38,11 +39,13 @@ public class CSSWriterSettings implements ICSSWriterSettings
 {
   public static final boolean DEFAULT_REMOVE_UNNECESSARY_CODE = false;
   public static final String DEFAULT_INDENT = "  ";
+  public static final boolean DEFAULT_QUOTE_URLS = CSSURLHelper.DEFAULT_QUOTE_URLS;
 
   private final ECSSVersion m_eVersion;
   private final boolean m_bOptimizedOutput;
   private boolean m_bRemoveUnnecessaryCode = DEFAULT_REMOVE_UNNECESSARY_CODE;
   private String m_sIndent = DEFAULT_INDENT;
+  private boolean m_bQuoteURLs = DEFAULT_QUOTE_URLS;
 
   /**
    * @param eVersion
@@ -97,6 +100,18 @@ public class CSSWriterSettings implements ICSSWriterSettings
     return this;
   }
 
+  public final boolean isQuoteURLs ()
+  {
+    return m_bQuoteURLs;
+  }
+
+  @Nonnull
+  public final CSSWriterSettings setQuoteURLs (final boolean bQuoteURLs)
+  {
+    m_bQuoteURLs = bQuoteURLs;
+    return this;
+  }
+
   public void checkVersionRequirements (@Nonnull final ICSSVersionAware aCSSObject)
   {
     final ECSSVersion eMinCSSVersion = aCSSObject.getMinimumCSSVersion ();
@@ -118,7 +133,8 @@ public class CSSWriterSettings implements ICSSWriterSettings
     return m_eVersion.equals (rhs.m_eVersion) &&
            m_bOptimizedOutput == rhs.m_bOptimizedOutput &&
            m_bRemoveUnnecessaryCode == rhs.m_bRemoveUnnecessaryCode &&
-           m_sIndent.equals (rhs.m_sIndent);
+           m_sIndent.equals (rhs.m_sIndent) &&
+           m_bQuoteURLs == rhs.m_bQuoteURLs;
   }
 
   @Override
@@ -128,6 +144,7 @@ public class CSSWriterSettings implements ICSSWriterSettings
                                        .append (m_bOptimizedOutput)
                                        .append (m_bRemoveUnnecessaryCode)
                                        .append (m_sIndent)
+                                       .append (m_bQuoteURLs)
                                        .getHashCode ();
   }
 
@@ -138,6 +155,7 @@ public class CSSWriterSettings implements ICSSWriterSettings
                                        .append ("optimizedOutput", m_bOptimizedOutput)
                                        .append ("removeUnnecessaryCode", m_bRemoveUnnecessaryCode)
                                        .append ("indent", m_sIndent)
+                                       .append ("quoteURLs", m_bQuoteURLs)
                                        .toString ();
   }
 }

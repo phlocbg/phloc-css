@@ -22,9 +22,9 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
+import com.phloc.css.parser.ParseUtils;
 import com.phloc.css.propertyvalue.CCSSValue;
 
 /**
@@ -35,6 +35,9 @@ import com.phloc.css.propertyvalue.CCSSValue;
 @Immutable
 public final class CSSURLHelper
 {
+  /** For compatibility reasons, this is set to false */
+  public static final boolean DEFAULT_QUOTE_URLS = false;
+
   private CSSURLHelper ()
   {}
 
@@ -48,8 +51,10 @@ public final class CSSURLHelper
   public static boolean isURLValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
-    return StringHelper.hasText (sRealValue) &&
-           RegExHelper.stringMatchesPattern ("^" + CCSSValue.PREFIX_URL + "\\(.+\\)$", sRealValue);
+    // 5 = "url(".length () + ")".length
+    return StringHelper.getLength (sRealValue) > 5 &&
+           sRealValue.startsWith (CCSSValue.PREFIX_URL_OPEN) &&
+           sRealValue.endsWith (")");
   }
 
   /**
@@ -67,7 +72,9 @@ public final class CSSURLHelper
     {
       final String sRealValue = sValue.trim ();
       // Skip leading "url(" and trailing ")"
-      return sRealValue.substring (CCSSValue.PREFIX_URL_OPEN.length (), sRealValue.length () - 1);
+      final String sStripped = sRealValue.substring (CCSSValue.PREFIX_URL_OPEN.length (), sRealValue.length () - 1);
+      // Eventually remove leading and trailing '"' or '''
+      return ParseUtils.extractStringValue (sStripped);
     }
     return null;
   }
@@ -81,11 +88,28 @@ public final class CSSURLHelper
    */
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String getAsCSSURL (@Nonnull final ISimpleURL aURL)
+  {
+    return getAsCSSURL (aURL, DEFAULT_QUOTE_URLS);
+  }
+
+  /**
+   * Surround the passed URL with the CSS "url(...)"
+   * 
+   * @param aURL
+   *          URL to be wrapped. May not be <code>null</code>.
+   * @param bQuoteURL
+   *          if <code>true</code> single quotes are added around the URL
+   * @return <code>url(<i>sURL</i>)</code> or <code>url('<i>sURL</i>')</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String getAsCSSURL (@Nonnull final ISimpleURL aURL, final boolean bQuoteURL)
   {
     if (aURL == null)
       throw new NullPointerException ("URL");
-    return getAsCSSURL (aURL.getAsString ());
+    return getAsCSSURL (aURL.getAsString (), bQuoteURL);
   }
 
   /**
@@ -97,10 +121,29 @@ public final class CSSURLHelper
    */
   @Nonnull
   @Nonempty
+  @Deprecated
   public static String getAsCSSURL (@Nonnull @Nonempty final String sURL)
+  {
+    return getAsCSSURL (sURL, DEFAULT_QUOTE_URLS);
+  }
+
+  /**
+   * Surround the passed URL with the CSS "url(...)"
+   * 
+   * @param sURL
+   *          URL to be wrapped. May neither be <code>null</code> nor empty.
+   * @param bQuoteURL
+   *          if <code>true</code> single quotes are added around the URL
+   * @return <code>url(<i>sURL</i>)</code> or <code>url('<i>sURL</i>')</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String getAsCSSURL (@Nonnull @Nonempty final String sURL, final boolean bQuoteURL)
   {
     if (StringHelper.hasNoText (sURL))
       throw new IllegalArgumentException ("passed URL is empty!");
+    if (bQuoteURL)
+      return CCSSValue.PREFIX_URL_OPEN + "'" + sURL + "')";
     return CCSSValue.PREFIX_URL_OPEN + sURL + ')';
   }
 }

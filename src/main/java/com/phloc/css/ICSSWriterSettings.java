@@ -53,6 +53,12 @@ public interface ICSSWriterSettings
   String getIndent (@Nonnegative int nCount);
 
   /**
+   * @return <code>true</code> if all URL values should be quoted,
+   *         <code>false</code> if not.
+   */
+  boolean isQuoteURLs ();
+
+  /**
    * Check if the passed object matches the version requirements defined be this
    * settings.
    * 

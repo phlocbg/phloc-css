@@ -37,6 +37,11 @@ public final class CSSURLHelperTest
   public void testGetURLValue ()
   {
     assertEquals ("a.gif", CSSURLHelper.getURLValue ("url(a.gif)"));
+    assertEquals ("a.gif", CSSURLHelper.getURLValue ("url('a.gif')"));
+    assertEquals ("a.gif", CSSURLHelper.getURLValue ("url(\"a.gif\")"));
+    assertEquals ("a.gif?x=y", CSSURLHelper.getURLValue ("url(\"a.gif?x=y\")"));
+    // different quote types
+    assertEquals ("\"a.gif?x=y'", CSSURLHelper.getURLValue ("url(\"a.gif?x=y')"));
     // missing trailing ")"
     assertNull (CSSURLHelper.getURLValue ("url(a.gif"));
     // blank between "url" and "("
@@ -46,13 +51,25 @@ public final class CSSURLHelperTest
   @Test
   public void testGetAsCSSURL ()
   {
-    assertEquals ("url(a.gif)", CSSURLHelper.getAsCSSURL ("a.gif"));
-    assertNull (CSSURLHelper.getURLValue ("url(a.gif"));
-    assertEquals ("url(a.gif?x=y)", CSSURLHelper.getAsCSSURL (new SimpleURL ("a.gif", new SMap ("x", "y"))));
+    assertEquals ("url(a.gif)", CSSURLHelper.getAsCSSURL ("a.gif", false));
+    assertEquals ("url('a.gif')", CSSURLHelper.getAsCSSURL ("a.gif", true));
+    final SimpleURL aURL = new SimpleURL ("a.gif", new SMap ("x", "y"));
+    assertEquals ("url(a.gif?x=y)", CSSURLHelper.getAsCSSURL (aURL, false));
+    assertEquals ("url('a.gif?x=y')", CSSURLHelper.getAsCSSURL (aURL, true));
+    // SimpleURL -> CSS URL -> String -> SimpleURL
+    assertEquals (aURL, new SimpleURL (CSSURLHelper.getURLValue (CSSURLHelper.getAsCSSURL (aURL, true))));
     try
     {
       // Results in an empty URL!
-      CSSURLHelper.getAsCSSURL (new SimpleURL ());
+      CSSURLHelper.getAsCSSURL (new SimpleURL (), false);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+    try
+    {
+      // empty URL!
+      CSSURLHelper.getAsCSSURL ("", false);
       fail ();
     }
     catch (final IllegalArgumentException ex)
