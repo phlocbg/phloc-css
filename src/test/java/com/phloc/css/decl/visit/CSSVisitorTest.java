@@ -38,7 +38,7 @@ import com.phloc.css.decl.CSSExpressionMemberTermSimple;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSTopLevelRule;
-import com.phloc.css.handler.CSSHandler;
+import com.phloc.css.reader.CSSReader;
 
 /**
  * Test class for class {@link CSSVisitor}.
@@ -83,7 +83,7 @@ public final class CSSVisitorTest
       final String sKey = aFile.getAbsolutePath ();
       if (false)
         s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSHandler.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21);
+      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21);
       assertNotNull (sKey, aCSS);
       CSSVisitor.visitCSSUrl (aCSS, new SysOutVisitor (sKey));
     }
@@ -93,7 +93,7 @@ public final class CSSVisitorTest
       final String sKey = aFile.getAbsolutePath ();
       if (false)
         s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSHandler.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
       assertNotNull (sKey, aCSS);
       CSSVisitor.visitCSSUrl (aCSS, new SysOutVisitor (sKey));
     }

@@ -35,7 +35,7 @@ import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
-import com.phloc.css.handler.CSSHandler;
+import com.phloc.css.reader.CSSReader;
 
 public final class FuncTestCSSWriter
 {
@@ -47,7 +47,7 @@ public final class FuncTestCSSWriter
       s_aLogger.info (aFile.getAbsolutePath ());
 
     // read and interpret
-    final CascadingStyleSheet aCSS = CSSHandler.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, eVersion);
+    final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, eVersion);
     assertNotNull (aFile.getAbsolutePath (), aCSS);
 
     // Both normal and optimized!
@@ -63,7 +63,7 @@ public final class FuncTestCSSWriter
       // read again from buffer
       assertEquals (aFile.getAbsolutePath () + (i == 0 ? " unoptimized" : " optimized"),
                     aCSS,
-                    CSSHandler.readFromString (sContent, CCharset.CHARSET_UTF_8_OBJ, eVersion));
+                    CSSReader.readFromString (sContent, CCharset.CHARSET_UTF_8_OBJ, eVersion));
     }
   }
 
@@ -96,7 +96,7 @@ public final class FuncTestCSSWriter
       try
       {
         // read and interpret CSS 3.0
-        final CascadingStyleSheet aCSS = CSSHandler.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+        final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
         assertNotNull (aCSS);
 
         // write to CSS 2.1
@@ -112,9 +112,9 @@ public final class FuncTestCSSWriter
   @Test
   public void testCompressCSS_Size () throws IOException
   {
-    final CascadingStyleSheet aCSS = CSSHandler.readFromStream (new ClassPathResource ("/css/phloc/test/content.css"),
-                                                                CCharset.CHARSET_UTF_8_OBJ,
-                                                                ECSSVersion.CSS21);
+    final CascadingStyleSheet aCSS = CSSReader.readFromStream (new ClassPathResource ("/css/phloc/test/content.css"),
+                                                               CCharset.CHARSET_UTF_8_OBJ,
+                                                               ECSSVersion.CSS21);
     assertNotNull (aCSS);
 
     // Only whitespace optimisation
