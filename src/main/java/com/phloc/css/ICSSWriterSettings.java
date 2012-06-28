@@ -59,6 +59,30 @@ public interface ICSSWriterSettings
   boolean isQuoteURLs ();
 
   /**
+   * @return <code>true</code> if @font-face rules should be written,
+   *         <code>false</code> if not
+   */
+  boolean isWriteFontFaceRules ();
+
+  /**
+   * @return <code>true</code> if @keyframes rules should be written,
+   *         <code>false</code> if not
+   */
+  boolean isWriteKeyframesRules ();
+
+  /**
+   * @return <code>true</code> if @media rules should be written,
+   *         <code>false</code> if not
+   */
+  boolean isWriteMediaRules ();
+
+  /**
+   * @return <code>true</code> if @page rules should be written,
+   *         <code>false</code> if not
+   */
+  boolean isWritePageRules ();
+
+  /**
    * Check if the passed object matches the version requirements defined be this
    * settings.
    * 

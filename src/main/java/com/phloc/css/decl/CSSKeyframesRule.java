@@ -103,6 +103,10 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
   {
     aSettings.checkVersionRequirements (this);
 
+    // Always ignore keyframes rules?
+    if (!aSettings.isWriteKeyframesRules ())
+      return "";
+
     if (aSettings.isRemoveUnnecessaryCode () && m_aBlocks.isEmpty ())
       return "";
 

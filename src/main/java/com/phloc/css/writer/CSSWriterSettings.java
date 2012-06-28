@@ -40,12 +40,20 @@ public class CSSWriterSettings implements ICSSWriterSettings
   public static final boolean DEFAULT_REMOVE_UNNECESSARY_CODE = false;
   public static final String DEFAULT_INDENT = "  ";
   public static final boolean DEFAULT_QUOTE_URLS = CSSURLHelper.DEFAULT_QUOTE_URLS;
+  public static final boolean DEFAULT_WRITE_FONT_FACE_RULES = true;
+  public static final boolean DEFAULT_WRITE_KEYFRAMES_RULES = true;
+  public static final boolean DEFAULT_WRITE_MEDIA_RULES = true;
+  public static final boolean DEFAULT_WRITE_PAGE_RULES = true;
 
   private final ECSSVersion m_eVersion;
   private final boolean m_bOptimizedOutput;
   private boolean m_bRemoveUnnecessaryCode = DEFAULT_REMOVE_UNNECESSARY_CODE;
   private String m_sIndent = DEFAULT_INDENT;
   private boolean m_bQuoteURLs = DEFAULT_QUOTE_URLS;
+  private boolean m_bWriteFontFaceRules = DEFAULT_WRITE_FONT_FACE_RULES;
+  private boolean m_bWriteKeyframesRules = DEFAULT_WRITE_KEYFRAMES_RULES;
+  private boolean m_bWriteMediaRules = DEFAULT_WRITE_MEDIA_RULES;
+  private boolean m_bWritePageRules = DEFAULT_WRITE_PAGE_RULES;
 
   /**
    * @param eVersion
@@ -112,6 +120,54 @@ public class CSSWriterSettings implements ICSSWriterSettings
     return this;
   }
 
+  public final boolean isWriteFontFaceRules ()
+  {
+    return m_bWriteFontFaceRules;
+  }
+
+  @Nonnull
+  public final CSSWriterSettings setWriteFontFaceRules (final boolean bWriteFontFaceRules)
+  {
+    m_bWriteFontFaceRules = bWriteFontFaceRules;
+    return this;
+  }
+
+  public final boolean isWriteKeyframesRules ()
+  {
+    return m_bWriteKeyframesRules;
+  }
+
+  @Nonnull
+  public final CSSWriterSettings setWriteKeyframesRules (final boolean bWriteKeyframesRules)
+  {
+    m_bWriteKeyframesRules = bWriteKeyframesRules;
+    return this;
+  }
+
+  public final boolean isWriteMediaRules ()
+  {
+    return m_bWriteMediaRules;
+  }
+
+  @Nonnull
+  public final CSSWriterSettings setWriteMediaRules (final boolean bWriteMediaRules)
+  {
+    m_bWriteMediaRules = bWriteMediaRules;
+    return this;
+  }
+
+  public final boolean isWritePageRules ()
+  {
+    return m_bWritePageRules;
+  }
+
+  @Nonnull
+  public final CSSWriterSettings setWritePageRules (final boolean bWritePageRules)
+  {
+    m_bWritePageRules = bWritePageRules;
+    return this;
+  }
+
   public void checkVersionRequirements (@Nonnull final ICSSVersionAware aCSSObject)
   {
     final ECSSVersion eMinCSSVersion = aCSSObject.getMinimumCSSVersion ();
@@ -134,7 +190,11 @@ public class CSSWriterSettings implements ICSSWriterSettings
            m_bOptimizedOutput == rhs.m_bOptimizedOutput &&
            m_bRemoveUnnecessaryCode == rhs.m_bRemoveUnnecessaryCode &&
            m_sIndent.equals (rhs.m_sIndent) &&
-           m_bQuoteURLs == rhs.m_bQuoteURLs;
+           m_bQuoteURLs == rhs.m_bQuoteURLs &&
+           m_bWriteFontFaceRules == rhs.m_bWriteFontFaceRules &&
+           m_bWriteKeyframesRules == rhs.m_bWriteKeyframesRules &&
+           m_bWriteMediaRules == rhs.m_bWriteMediaRules &&
+           m_bWritePageRules == rhs.m_bWritePageRules;
   }
 
   @Override
@@ -145,6 +205,10 @@ public class CSSWriterSettings implements ICSSWriterSettings
                                        .append (m_bRemoveUnnecessaryCode)
                                        .append (m_sIndent)
                                        .append (m_bQuoteURLs)
+                                       .append (m_bWriteFontFaceRules)
+                                       .append (m_bWriteKeyframesRules)
+                                       .append (m_bWriteMediaRules)
+                                       .append (m_bWritePageRules)
                                        .getHashCode ();
   }
 
@@ -156,6 +220,10 @@ public class CSSWriterSettings implements ICSSWriterSettings
                                        .append ("removeUnnecessaryCode", m_bRemoveUnnecessaryCode)
                                        .append ("indent", m_sIndent)
                                        .append ("quoteURLs", m_bQuoteURLs)
+                                       .append ("writeFontFaceRules", m_bWriteFontFaceRules)
+                                       .append ("writeKeyframesRules", m_bWriteKeyframesRules)
+                                       .append ("writeMediaRules", m_bWriteMediaRules)
+                                       .append ("writePageRules", m_bWritePageRules)
                                        .toString ();
   }
 }

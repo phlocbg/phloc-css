@@ -92,6 +92,10 @@ public final class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations,
   {
     aSettings.checkVersionRequirements (this);
 
+    // Always ignore page rules?
+    if (!aSettings.isWritePageRules ())
+      return "";
+
     if (aSettings.isRemoveUnnecessaryCode () && getDeclarationCount () == 0)
       return "";
 

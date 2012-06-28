@@ -110,6 +110,10 @@ public final class CSSMediaRule implements ICSSTopLevelRule
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
+    // Always ignore media rules?
+    if (!aSettings.isWriteMediaRules ())
+      return "";
+
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
     final int nRuleCount = m_aRules.size ();
 

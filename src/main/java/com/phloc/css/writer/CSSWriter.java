@@ -211,6 +211,8 @@ public final class CSSWriter
 
     try
     {
+      final boolean bOptimizedOutput = m_aSettings.isOptimizedOutput ();
+
       // Write file header
       if (m_bWriteHeaderText && StringHelper.hasText (m_sHeaderText))
       {
@@ -224,7 +226,7 @@ public final class CSSWriter
       if (StringHelper.hasText (m_sContentCharset))
       {
         aWriter.write ("@charset \"" + m_sContentCharset + "\"\n");
-        if (!m_aSettings.isOptimizedOutput ())
+        if (!bOptimizedOutput)
           aWriter.write ('\n');
       }
 
@@ -246,7 +248,7 @@ public final class CSSWriter
         final String sRuleCSS = aRule.getAsCSSString (m_aSettings, 0);
         if (StringHelper.hasText (sRuleCSS))
         {
-          if (!m_aSettings.isOptimizedOutput () && nRulesEmitted > 0)
+          if (!bOptimizedOutput && nRulesEmitted > 0)
             aWriter.write ('\n');
 
           aWriter.write (sRuleCSS);
