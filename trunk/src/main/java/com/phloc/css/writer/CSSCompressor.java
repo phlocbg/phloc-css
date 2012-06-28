@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
-import com.phloc.css.handler.CSSHandler;
+import com.phloc.css.reader.CSSReader;
 
 /**
  * Utility class to compress CSS content
@@ -90,7 +90,7 @@ public final class CSSCompressor
     if (eCSSVersion == null)
       throw new NullPointerException ("CSSversion");
 
-    final CascadingStyleSheet aCSS = CSSHandler.readFromString (sOriginalCSS, aCharset, eCSSVersion);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sOriginalCSS, aCharset, eCSSVersion);
     if (aCSS != null)
     {
       try

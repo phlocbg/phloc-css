@@ -35,7 +35,7 @@ import com.phloc.css.parser.ParserCSS30TreeConstants;
  * 
  * @author philip
  */
-enum ECSSNodeType
+public enum ECSSNodeType
 {
   ROOT (ParserCSS21TreeConstants.JJTROOT, ParserCSS30TreeConstants.JJTROOT),
   // top level

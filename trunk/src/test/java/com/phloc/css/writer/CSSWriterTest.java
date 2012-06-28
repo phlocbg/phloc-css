@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
-import com.phloc.css.handler.CSSHandler;
+import com.phloc.css.reader.CSSReader;
 
 public final class CSSWriterTest
 {
@@ -44,7 +44,7 @@ public final class CSSWriterTest
   @Test
   public void testIndentation () throws IOException
   {
-    final CascadingStyleSheet aCSS = CSSHandler.readFromString (CSS1, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS1, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
@@ -159,7 +159,7 @@ public final class CSSWriterTest
   @Test
   public void testIndentationNested () throws IOException
   {
-    final CascadingStyleSheet aCSS = CSSHandler.readFromString (CSS2, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS2, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
@@ -203,7 +203,7 @@ public final class CSSWriterTest
   @Test
   public void testRemoveUnnecessaryCode1 () throws IOException
   {
-    final CascadingStyleSheet aCSS = CSSHandler.readFromString (CSS1, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS1, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false).setRemoveUnnecessaryCode (true);
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
@@ -251,7 +251,7 @@ public final class CSSWriterTest
   @Test
   public void testRemoveUnnecessaryCode2 () throws IOException
   {
-    final CascadingStyleSheet aCSS = CSSHandler.readFromString (CSS2, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS2, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false).setRemoveUnnecessaryCode (true);
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
@@ -291,7 +291,7 @@ public final class CSSWriterTest
   public void testHeaderText () throws IOException
   {
     final String sCSS = "h1 { color : red ; margin: 1px; }h2 { color : red ; margin: 1px; }";
-    final CascadingStyleSheet aCSS = CSSHandler.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
 
     // Non-optimized version
