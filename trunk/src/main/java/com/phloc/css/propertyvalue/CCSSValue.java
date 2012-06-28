@@ -33,6 +33,7 @@ import com.phloc.css.ECSSUnit;
 public final class CCSSValue
 {
   public static final String PREFIX_RECT = "rect";
+  public static final String PREFIX_RECT_OPEN = PREFIX_RECT + '(';
   public static final String PREFIX_URL = "url";
   public static final String PREFIX_URL_OPEN = PREFIX_URL + '(';
   public static final String PREFIX_RGB = "rgb";
