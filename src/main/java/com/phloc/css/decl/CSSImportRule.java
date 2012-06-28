@@ -29,7 +29,6 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
@@ -42,12 +41,12 @@ import com.phloc.css.ICSSWriterSettings;
 @NotThreadSafe
 public final class CSSImportRule implements ICSSWriteable
 {
-  private String m_sLocation;
+  private CSSURI m_aLocation;
   private final List <CSSMediaQuery> m_aMediaQueries = new ArrayList <CSSMediaQuery> ();
 
-  public CSSImportRule (@Nonnull @Nonempty final String sLocation)
+  public CSSImportRule (@Nonnull final CSSURI aLocation)
   {
-    setLocation (sLocation);
+    setLocation (aLocation);
   }
 
   public void addMediaQuery (@Nonnull @Nonempty final CSSMediaQuery aMediaQuery)
@@ -81,17 +80,16 @@ public final class CSSImportRule implements ICSSWriteable
    * @return The URL of the CSS file to import.
    */
   @Nonnull
-  @Nonempty
-  public String getLocation ()
+  public CSSURI getLocation ()
   {
-    return m_sLocation;
+    return m_aLocation;
   }
 
-  public void setLocation (@Nonnull @Nonempty final String sLocation)
+  public void setLocation (@Nonnull final CSSURI aLocation)
   {
-    if (StringHelper.hasNoText (sLocation))
-      throw new IllegalArgumentException ("location may not be empty");
-    m_sLocation = sLocation;
+    if (aLocation == null)
+      throw new NullPointerException ("location");
+    m_aLocation = aLocation;
   }
 
   @Nonnull
@@ -101,7 +99,7 @@ public final class CSSImportRule implements ICSSWriteable
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
     final StringBuilder aSB = new StringBuilder ();
-    aSB.append ("@import '").append (m_sLocation).append ('\'');
+    aSB.append ("@import ").append (m_aLocation.getAsCSSString (aSettings, nIndentLevel));
     if (!m_aMediaQueries.isEmpty ())
     {
       aSB.append (' ');
@@ -126,19 +124,19 @@ public final class CSSImportRule implements ICSSWriteable
     if (!(o instanceof CSSImportRule))
       return false;
     final CSSImportRule rhs = (CSSImportRule) o;
-    return m_sLocation.equals (rhs.m_sLocation) && m_aMediaQueries.equals (rhs.m_aMediaQueries);
+    return m_aLocation.equals (rhs.m_aLocation) && m_aMediaQueries.equals (rhs.m_aMediaQueries);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sLocation).append (m_aMediaQueries).getHashCode ();
+    return new HashCodeGenerator (this).append (m_aLocation).append (m_aMediaQueries).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("location", m_sLocation)
+    return new ToStringGenerator (this).append ("location", m_aLocation)
                                        .append ("mediaQueries", m_aMediaQueries)
                                        .toString ();
   }

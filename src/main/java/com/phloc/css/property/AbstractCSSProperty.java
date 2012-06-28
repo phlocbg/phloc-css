@@ -22,13 +22,13 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
-import com.phloc.css.ICSSNamedColor;
 import com.phloc.css.propertyvalue.CCSSValue;
 import com.phloc.css.propertyvalue.CSSValue;
 import com.phloc.css.propertyvalue.CSSValueList;
 import com.phloc.css.propertyvalue.CSSValueMultiProperty;
 import com.phloc.css.propertyvalue.CSSValueMultiValue;
 import com.phloc.css.propertyvalue.ICSSValue;
+import com.phloc.css.utils.ICSSNamedColor;
 
 /**
  * Abstract base class for implementing {@link ICSSProperty}

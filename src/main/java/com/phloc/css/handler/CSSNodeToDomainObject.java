@@ -35,6 +35,7 @@ import com.phloc.css.decl.CSSExpressionMemberMathProduct;
 import com.phloc.css.decl.CSSExpressionMemberMathUnitProduct;
 import com.phloc.css.decl.CSSExpressionMemberMathUnitSimple;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
+import com.phloc.css.decl.CSSExpressionMemberTermURI;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CSSKeyframesBlock;
@@ -50,6 +51,7 @@ import com.phloc.css.decl.CSSSelectorMemberFunctionLike;
 import com.phloc.css.decl.CSSSelectorMemberNot;
 import com.phloc.css.decl.CSSSelectorSimpleMember;
 import com.phloc.css.decl.CSSStyleRule;
+import com.phloc.css.decl.CSSURI;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ECSSAttributeOperator;
 import com.phloc.css.decl.ECSSExpressionOperator;
@@ -95,23 +97,52 @@ final class CSSNodeToDomainObject
   {
     _expectNodeType (aNode, ECSSNodeType.IMPORTRULE);
     final int nChildCount = aNode.jjtGetNumChildren ();
-    if (nChildCount != 0 && nChildCount != 1)
-      throw new IllegalArgumentException ("Expected 0 or 1 children but got " + nChildCount + "!");
+    if (nChildCount > 2)
+      throw new IllegalArgumentException ("Expected at last 2 children but got " + nChildCount + "!");
+
+    CSSURI aImportURI = null;
+    int nCurrentIndex = 0;
+    if (nChildCount > 0)
+    {
+      final CSSNode aURINode = aNode.jjtGetChild (0);
+      if (ECSSNodeType.URI.isNode (aURINode, m_eVersion))
+      {
+        aImportURI = new CSSURI (aURINode.getText ());
+        ++nCurrentIndex;
+      }
+      else
+        if (!ECSSNodeType.MEDIALIST.isNode (aURINode, m_eVersion))
+          throw new IllegalStateException ("Expected an URI node but got " +
+                                           ECSSNodeType.getNodeName (aURINode, m_eVersion));
+    }
+
+    if (aImportURI == null)
+    {
+      // No URI child node present, so the location is printed directly
+      aImportURI = new CSSURI (ParseUtils.extractStringValue (aNode.getText ()));
+    }
 
     // Import rule
-    final CSSImportRule ret = new CSSImportRule (ParseUtils.extractStringValue (aNode.getText ()));
-    if (nChildCount == 1)
+    final CSSImportRule ret = new CSSImportRule (aImportURI);
+    if (nChildCount > nCurrentIndex)
     {
       // We have a media query present!
-      final CSSNode aMediaListNode = aNode.jjtGetChild (0);
-      for (final CSSNode aMediaQueryNode : aMediaListNode)
+      final CSSNode aMediaListNode = aNode.jjtGetChild (nCurrentIndex);
+      if (ECSSNodeType.MEDIALIST.isNode (aMediaListNode, m_eVersion))
       {
-        ret.addMediaQuery (_createMediaQuery (aMediaQueryNode));
+        for (final CSSNode aMediaQueryNode : aMediaListNode)
+        {
+          ret.addMediaQuery (_createMediaQuery (aMediaQueryNode));
+        }
       }
+      else
+        throw new IllegalStateException ("Expected an mediaList node but got " +
+                                         ECSSNodeType.getNodeName (aMediaListNode, m_eVersion));
+      ++nCurrentIndex;
     }
-    else
-      if (nChildCount > 0)
-        s_aLogger.warn ("Import statement has " + nChildCount + " children which are unhandled.");
+
+    if (nCurrentIndex < nChildCount)
+      s_aLogger.warn ("Import statement has children which are unhandled.");
     return ret;
   }
 
@@ -311,29 +342,36 @@ final class CSSNodeToDomainObject
 
     final CSSNode aChildNode = aNode.jjtGetChild (0);
 
-    if (ECSSNodeType.FUNCTION.isNode (aChildNode, m_eVersion))
+    if (ECSSNodeType.URI.isNode (aChildNode, m_eVersion))
     {
-      // function value
-      final String sFunctionName = aChildNode.getText ();
-      if (aChildNode.jjtGetNumChildren () == 1)
-      {
-        // Parameters present
-        final CSSExpression aFuncExpr = _createExpression (aChildNode.jjtGetChild (0));
-        return new CSSExpressionMemberFunction (sFunctionName, aFuncExpr);
-      }
-
-      // No parameters
-      return new CSSExpressionMemberFunction (sFunctionName);
+      // URI value
+      final CSSURI aURI = new CSSURI (aChildNode.getText ());
+      return new CSSExpressionMemberTermURI (aURI);
     }
     else
-      if (ECSSNodeType.MATH.isNode (aChildNode, m_eVersion))
+      if (ECSSNodeType.FUNCTION.isNode (aChildNode, m_eVersion))
       {
-        // Math value
-        return _createExpressionMathTerm (aChildNode);
+        // function value
+        final String sFunctionName = aChildNode.getText ();
+        if (aChildNode.jjtGetNumChildren () == 1)
+        {
+          // Parameters present
+          final CSSExpression aFuncExpr = _createExpression (aChildNode.jjtGetChild (0));
+          return new CSSExpressionMemberFunction (sFunctionName, aFuncExpr);
+        }
+
+        // No parameters
+        return new CSSExpressionMemberFunction (sFunctionName);
       }
       else
-        throw new IllegalStateException ("Expected an expression term but got " +
-                                         ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+        if (ECSSNodeType.MATH.isNode (aChildNode, m_eVersion))
+        {
+          // Math value
+          return _createExpressionMathTerm (aChildNode);
+        }
+        else
+          throw new IllegalStateException ("Expected an expression term but got " +
+                                           ECSSNodeType.getNodeName (aChildNode, m_eVersion));
   }
 
   @Nonnull

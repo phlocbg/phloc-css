@@ -308,7 +308,7 @@ void importRule() #ImportRule :
   <IMPORT_SYM>
   ( <S> )*
   ( sUrl = string() { jjtThis.setText (sUrl); }
-  | t = <URI>       { jjtThis.setText (t.image); }
+  | uri()
   )
   ( <S> )*
   ( mediaList() )?
@@ -849,7 +849,7 @@ void term() #Term :
     )
   | sStr = string() ( <S> )*    { jjtThis.setText (sStr); }
   | t = <IDENT> ( <S> )*
-  | t = <URI> ( <S> )*          { t.image = com.phloc.css.utils.CSSURLHelper.getAsCSSURL (t.image, false); }
+  | uri()
   | sStr = hexcolor()           { jjtThis.setText (sStr); }
   | function()
   | math()
@@ -861,6 +861,13 @@ void term() #Term :
     if (t != null)
       jjtThis.appendText (t.image);
   }
+}
+
+void uri() #URI :
+{ Token t; }
+{
+  t = <URI>  { jjtThis.setText (t.image); } 
+  ( <S> )*
 }
 
 //

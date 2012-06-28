@@ -23,7 +23,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
-import com.phloc.css.ICSSNamedColor;
 
 /**
  * CSS basic colors. Source: http://www.w3.org/TR/css3-color/ chapter 4.1 and

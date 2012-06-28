@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
-import com.phloc.css.ICSSNamedColor;
 import com.phloc.css.annotations.DeprecatedInCSS30;
 
 /**

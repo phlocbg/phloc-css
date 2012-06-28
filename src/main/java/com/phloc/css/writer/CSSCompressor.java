@@ -95,7 +95,8 @@ public final class CSSCompressor
     {
       try
       {
-        final CSSWriterSettings aSettings = new CSSWriterSettings (eCSSVersion, true).setRemoveUnnecessaryCode (bRemoveUnnecessaryCode);
+        final CSSWriterSettings aSettings = new CSSWriterSettings (eCSSVersion, true);
+        aSettings.setRemoveUnnecessaryCode (bRemoveUnnecessaryCode);
         return new CSSWriter (aSettings).getCSSAsString (aCSS);
       }
       catch (final IOException ex)

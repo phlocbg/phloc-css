@@ -20,9 +20,9 @@ package com.phloc.css.property;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.css.ICSSNamedColor;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.propertyvalue.ICSSValue;
+import com.phloc.css.utils.ICSSNamedColor;
 
 /**
  * Base interface for a single CSS property.

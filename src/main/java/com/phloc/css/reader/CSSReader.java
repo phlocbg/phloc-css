@@ -484,6 +484,7 @@ public final class CSSReader
       return null;
     }
 
+    // Convert the AST to a domain object
     return CSSHandler.readFromNode (eVersion, aNode);
   }
 }

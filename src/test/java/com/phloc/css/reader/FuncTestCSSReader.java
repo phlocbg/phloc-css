@@ -17,12 +17,7 @@
  */
 package com.phloc.css.reader;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -39,144 +34,12 @@ import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.handler.ICSSParseExceptionHandler;
 import com.phloc.css.parser.ParseException;
-import com.phloc.css.writer.CSSWriter;
-import com.phloc.css.writer.CSSWriterSettings;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 public final class FuncTestCSSReader
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (FuncTestCSSReader.class);
-
-  @Test
-  public void testScanTestResourcesHandler21 () throws IOException
-  {
-    final ECSSVersion eVersion = ECSSVersion.CSS21;
-    final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler21"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
-    {
-      final String sKey = aFile.getAbsolutePath ();
-      if (false)
-        s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
-      assertNotNull (sKey, aCSS);
-
-      // Write optimized version and compare it
-      String s = new CSSWriter (eVersion, true).getCSSAsString (aCSS);
-      assertNotNull (sKey, s);
-      assertEquals (sKey, aCSS, CSSReader.readFromString (s, aCharset, eVersion));
-
-      // Write non-optimized version and compare it
-      s = new CSSWriter (eVersion, false).getCSSAsString (aCSS);
-      assertNotNull (sKey, s);
-      assertEquals (sKey, aCSS, CSSReader.readFromString (s, aCharset, eVersion));
-
-      // Write non-optimized and code-removed version and ensure it is not null
-      s = new CSSWriter (new CSSWriterSettings (eVersion, false).setRemoveUnnecessaryCode (true)).getCSSAsString (aCSS);
-      assertNotNull (sKey, s);
-      assertNotNull (sKey, CSSReader.readFromString (s, aCharset, eVersion));
-    }
-  }
-
-  @Test
-  public void testScanTestResourcesHandler30 () throws IOException
-  {
-    final ECSSVersion eVersion = ECSSVersion.CSS30;
-    final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
-    {
-      final String sKey = aFile.getAbsolutePath ();
-      if (false)
-        s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
-      assertNotNull (sKey, aCSS);
-
-      // Write optimized version and compare it
-      String s = new CSSWriter (eVersion, true).getCSSAsString (aCSS);
-      assertNotNull (sKey, s);
-
-      if (false)
-        s_aLogger.info (s);
-
-      final CascadingStyleSheet aCSSReRead = CSSReader.readFromString (s, aCharset, eVersion);
-      assertNotNull ("Failed to parse:\n" + s, aCSSReRead);
-      assertEquals (sKey, aCSS, aCSSReRead);
-
-      // Write non-optimized version and compare it
-      s = new CSSWriter (eVersion, false).getCSSAsString (aCSS);
-      assertNotNull (sKey, s);
-      assertEquals (sKey, aCSS, CSSReader.readFromString (s, aCharset, eVersion));
-
-      // Write non-optimized and code-removed version and ensure it is not null
-      s = new CSSWriter (new CSSWriterSettings (eVersion, false).setRemoveUnnecessaryCode (true)).getCSSAsString (aCSS);
-      assertNotNull (sKey, s);
-      assertNotNull (sKey, CSSReader.readFromString (s, aCharset, eVersion));
-    }
-  }
-
-  @Test
-  public void testScanTestResourcesCss21 () throws IOException
-  {
-    final ECSSVersion eVersion = ECSSVersion.CSS21;
-    final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
-    {
-      final String sKey = aFile.getAbsolutePath ();
-      if (false)
-        s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
-      assertNotNull (sKey, aCSS);
-
-      // Write optimized version and compare it
-      String s = new CSSWriter (eVersion, true).getCSSAsString (aCSS);
-      assertNotNull (sKey, s);
-      assertEquals (sKey, aCSS, CSSReader.readFromString (s, aCharset, eVersion));
-
-      // Write non-optimized version and compare it
-      s = new CSSWriter (eVersion, false).getCSSAsString (aCSS);
-      assertNotNull (sKey, s);
-      assertEquals (sKey, aCSS, CSSReader.readFromString (s, aCharset, eVersion));
-
-      // Write non-optimized and code-removed version and ensure it is not null
-      s = new CSSWriter (new CSSWriterSettings (eVersion, false).setRemoveUnnecessaryCode (true)).getCSSAsString (aCSS);
-      assertNotNull (sKey, s);
-      assertNotNull (sKey, CSSReader.readFromString (s, aCharset, eVersion));
-    }
-  }
-
-  @Test
-  public void testScanTestResourcesCss30 () throws IOException
-  {
-    final ECSSVersion eVersion = ECSSVersion.CSS30;
-    final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css30"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
-    {
-      final String sKey = aFile.getAbsolutePath ();
-      if (false)
-        s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
-      assertNotNull (sKey, aCSS);
-
-      // Write optimized version and compare it
-      String s = new CSSWriter (eVersion, true).getCSSAsString (aCSS);
-      assertNotNull (sKey, s);
-      assertEquals (sKey, aCSS, CSSReader.readFromString (s, aCharset, eVersion));
-
-      // Write non-optimized version and compare it
-      s = new CSSWriter (eVersion, false).getCSSAsString (aCSS);
-      assertNotNull (sKey, s);
-      assertEquals (sKey, aCSS, CSSReader.readFromString (s, aCharset, eVersion));
-
-      // Write non-optimized and code-removed version and ensure it is not null
-      s = new CSSWriter (new CSSWriterSettings (eVersion, false).setRemoveUnnecessaryCode (true)).getCSSAsString (aCSS);
-      assertNotNull (sKey, s);
-      assertNotNull (sKey, CSSReader.readFromString (s, aCharset, eVersion));
-    }
-  }
 
   @Test
   @Ignore
