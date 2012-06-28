@@ -19,6 +19,7 @@ package com.phloc.css.utils;
 
 import java.awt.Color;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.RegEx;
@@ -146,6 +147,7 @@ public final class CSSColorHelper
     return StringHelper.hasText (sRealValue) && RegExHelper.stringMatchesPattern (PATTERN_HEX, sRealValue);
   }
 
+  @Nonnegative
   private static int _mod (final int nValue, final int nMod)
   {
     // modulo does not work as expected on negative numbers
@@ -155,35 +157,51 @@ public final class CSSColorHelper
     return nPositiveValue % nMod;
   }
 
+  @Nonnegative
+  public static int getRGBValue (final int nRGBPart)
+  {
+    return _mod (nRGBPart, RGB_RANGE);
+  }
+
   @Nonnull
   @Nonempty
   public static String getRGBColorValue (final int nRed, final int nGreen, final int nBlue)
   {
     return new StringBuilder (16).append (CCSSValue.PREFIX_RGB_OPEN)
-                                 .append (_mod (nRed, RGB_RANGE))
+                                 .append (getRGBValue (nRed))
                                  .append (',')
-                                 .append (_mod (nGreen, RGB_RANGE))
+                                 .append (getRGBValue (nGreen))
                                  .append (',')
-                                 .append (_mod (nBlue, RGB_RANGE))
+                                 .append (getRGBValue (nBlue))
                                  .append (')')
                                  .toString ();
+  }
+
+  @Nonnegative
+  public static float getOpacityToUse (final float fOpacity)
+  {
+    return fOpacity < OPACITY_MIN ? OPACITY_MIN : fOpacity > OPACITY_MAX ? OPACITY_MAX : fOpacity;
   }
 
   @Nonnull
   @Nonempty
   public static String getRGBAColorValue (final int nRed, final int nGreen, final int nBlue, final float fOpacity)
   {
-    final float fRealOpacity = fOpacity < OPACITY_MIN ? OPACITY_MIN : fOpacity > OPACITY_MAX ? OPACITY_MAX : fOpacity;
     return new StringBuilder (24).append (CCSSValue.PREFIX_RGBA_OPEN)
-                                 .append (_mod (nRed, RGB_RANGE))
+                                 .append (getRGBValue (nRed))
                                  .append (',')
-                                 .append (_mod (nGreen, RGB_RANGE))
+                                 .append (getRGBValue (nGreen))
                                  .append (',')
-                                 .append (_mod (nBlue, RGB_RANGE))
+                                 .append (getRGBValue (nBlue))
                                  .append (',')
-                                 .append (fRealOpacity)
+                                 .append (getOpacityToUse (fOpacity))
                                  .append (')')
                                  .toString ();
+  }
+
+  public static int getHSLValue (final int nHSLPart)
+  {
+    return _mod (nHSLPart, RGB_RANGE);
   }
 
   @Nonnull
@@ -191,11 +209,11 @@ public final class CSSColorHelper
   public static String getHSLColorValue (final int nHue, final int nSaturation, final int nLightness)
   {
     return new StringBuilder (16).append (CCSSValue.PREFIX_HSL_OPEN)
-                                 .append (_mod (nHue, HSL_RANGE))
+                                 .append (getHSLValue (nHue))
                                  .append (',')
-                                 .append (_mod (nSaturation, HSL_RANGE))
+                                 .append (getHSLValue (nSaturation))
                                  .append (',')
-                                 .append (_mod (nLightness, HSL_RANGE))
+                                 .append (getHSLValue (nLightness))
                                  .append (')')
                                  .toString ();
   }
@@ -207,15 +225,14 @@ public final class CSSColorHelper
                                           final int nLightness,
                                           final float fOpacity)
   {
-    final float fRealOpacity = fOpacity < OPACITY_MIN ? OPACITY_MIN : fOpacity > OPACITY_MAX ? OPACITY_MAX : fOpacity;
     return new StringBuilder (24).append (CCSSValue.PREFIX_HSLA_OPEN)
-                                 .append (_mod (nHue, HSL_RANGE))
+                                 .append (getHSLValue (nHue))
                                  .append (',')
-                                 .append (_mod (nSaturation, HSL_RANGE))
+                                 .append (getHSLValue (nSaturation))
                                  .append (',')
-                                 .append (_mod (nLightness, HSL_RANGE))
+                                 .append (getHSLValue (nLightness))
                                  .append (',')
-                                 .append (fRealOpacity)
+                                 .append (getOpacityToUse (fOpacity))
                                  .append (')')
                                  .toString ();
   }
@@ -224,7 +241,7 @@ public final class CSSColorHelper
   @Nonempty
   private static String _getRGBPartAsHexString (final int nRGBPart)
   {
-    return StringHelper.getHexStringLeadingZero (_mod (nRGBPart, RGB_RANGE), 2);
+    return StringHelper.getHexStringLeadingZero (getRGBValue (nRGBPart), 2);
   }
 
   @Nonnull
