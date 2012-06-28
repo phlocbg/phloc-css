@@ -114,7 +114,7 @@ public final class CSSWriter
    * @return this
    */
   @Nonnull
-  public CSSWriter setWriteHeaderText (@Nullable final boolean bWriteHeaderText)
+  public CSSWriter setWriteHeaderText (final boolean bWriteHeaderText)
   {
     m_bWriteHeaderText = bWriteHeaderText;
     return this;
