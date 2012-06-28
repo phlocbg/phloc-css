@@ -89,86 +89,40 @@ TOKEN_MGR_DECLS :
 // nmchar       [_a-z0-9-]|{nonascii}|{escape}
 // Extension: added "A"-"Z"
 | < #NMCHAR: ["_","a"-"z","A"-"Z","0"-"9","-"] | <NONASCII> | <ESCAPE> >
-
-// nl       \n|\r\n|\r|\f
 | < NL: "\n" | "\r\n" | "\r" | "\f" >
-
-// string1      \"([^\n\r\f\\"]|\\{nl}|{escape})*\"
 | < STRING1: "\"" ( ~["\n","\r","\f","\\","\""] | "\\" <NL> | <ESCAPE> )* "\"" >
-
-// string2      \'([^\n\r\f\\']|\\{nl}|{escape})*\'
 | < STRING2: "'" ( ~["\n","\r","\f","\\","'"] | "\\" <NL> | <ESCAPE> )* "'" >
-
-// invalid1 \"([^\n\r\f\\"]|\\{nl}|{escape})*
 | < INVALID1: "\"" ( ~["\n","\r","\f","\\","\""] | "\\" <NL> | <ESCAPE> )* >
-
-// invalid2 \'([^\n\r\f\\']|\\{nl}|{escape})*
 | < INVALID2: "'" ( ~["\n","\r","\f","\\","'"] | "\\" <NL> | <ESCAPE> )* >
-
-// comment      \/\*[^*]*\*+([^/*][^*]*\*+)*\/
 | < #COMMENT_: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/">
 
-// {num}            {return NUMBER;}
 | < NUMBER: <NUM> >
 
 // before ident!
 | < INHERIT: "inherit" >
 
 // ident        -?{nmstart}{nmchar}*
-// {ident}         {return IDENT;}
 // Note: "*" hack for IE <= 6
 // Note: "$" hack for IE <= 7
 | < IDENT: ("-"|"$"|"*")? <NMSTART> ( <NMCHAR> )* >
 
-// name     {nmchar}+
 | < #NAME: ( <NMCHAR> )+ >
-
-// num      [0-9]+|[0-9]*"."[0-9]+
 | < NUM: ( ["0"-"9"] )+ | ( ["0"-"9"] )* "." ( ["0"-"9"] )+ >
-
-// url      ([!#$%&*-~]|{nonascii}|{escape})*
 | < #URL: ["!","#","$","%","&","*"-"[","]"-"~"] | <NONASCII> | <ESCAPE> >
 
-// "<!--"       {return CDO;}
 | < CDO: "<!--" >
-
-// "-->"            {return CDC;}
 | < CDC: "-->" >
-
-// "~="         {return INCLUDES;}
 | < INCLUDES: "~=" >
-
-// "|="         {return DASHMATCH;}
 | < DASHMATCH: "|=" >
-
-// {w}"{"           {return LBRACE;}
 | < LBRACE: <W> "{" >
-
-// {w}"+"           {return PLUS;}
 | < PLUS: <W> "+" >
-
-// {w}">"           {return GREATER;}
-| < GREATER: <W> ">" >
-
-// {w}","           {return COMMA;}
+| < GREATER: ">" >
 | < COMMA: <W> "," >
-
-// "#"{name}        {return HASH;}
 | < HASH: "#" <NAME> >
-
-// @{I}{M}{P}{O}{R}{T}  {return IMPORT_SYM;}
 | < IMPORT_SYM: "@import" >
-
-// @{P}{A}{G}{E}        {return PAGE_SYM;}
 | < PAGE_SYM: "@page" >
-
-// @{M}{E}{D}{I}{A} {return MEDIA_SYM;}
 | < MEDIA_SYM: "@media" >
-
-// @{C}{H}{A}{R}{S}{E}{T}   {return CHARSET_SYM;}
 | < CHARSET_SYM: "@charset" >
-
-// "!"({w}|{comment})*{I}{M}{P}{O}{R}{T}{A}{N}{T}   {return IMPORTANT_SYM;}
 | < IMPORTANT_SYM: "!" ( <W> | <COMMENT_> )* "important" >
 
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
@@ -247,7 +201,8 @@ void error_skipto(final int... aKinds)
 CSSNode styleSheet() #Root : {}
 {
   ( LOOKAHEAD(2)
-    charsetRule() )?
+    charsetRule()
+  )?
   ( <S>
   | <CDO>
   | <CDC>
@@ -373,11 +328,7 @@ void pageRule() : {}
   )?
   <LBRACE>
   ( <S> )*
-  ( declaration() )?
-  ( <SEMICOLON>
-    ( <S> )*
-    ( declaration() )?
-  )*
+  styleDeclaration()
   <RBRACE>
 }
 
@@ -417,9 +368,13 @@ void operator() #Operator : {}
 //
 void combinator() #Combinator : {}
 {
-  ( <PLUS>    ( <S> )* { jjtThis.setText ("+"); }
-  | <GREATER> ( <S> )* { jjtThis.setText (">"); }
-  | <S>                { jjtThis.setText (" "); }
+  ( LOOKAHEAD(2)
+    ( <S> )? 
+    <PLUS>       { jjtThis.setText ("+"); }
+  | LOOKAHEAD(2)
+    ( <S> )? 
+    <GREATER>    { jjtThis.setText (">"); }
+  | <S>          { jjtThis.setText (" "); }
   )
 }
 
@@ -478,6 +433,7 @@ void selector() : {}
   simpleSelector()
   ( LOOKAHEAD(2)
     combinator()
+    ( <S> )*
     simpleSelector()
   )*
 }

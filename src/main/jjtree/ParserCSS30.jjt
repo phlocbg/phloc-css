@@ -630,10 +630,13 @@ void __attribOperator() #AttribOperator : {}
 }
 
 void __attribValue() #AttribValue :
-{ Token t; String s; }
+{
+  Token t; 
+  String sStr;
+}
 {
   ( t = <IDENT>  { jjtThis.setText (t.image); }
-  | s = string() { jjtThis.setText (s); }
+  | sStr = string() { jjtThis.setText (sStr); }
   )
 }
 
