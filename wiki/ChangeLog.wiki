@@ -2,7 +2,15 @@
 #labels Featured
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>6/18/12</td><td colspan="4">_Release *3.0.0*_</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>6/28/12</td><td colspan="4">_Release *3.1.0*_</td></tr>
+<tr><td>6/28/12</td><td>add</td><td>api</td><td></td><td>Added domain objects and utility functions to parse rgb(),rgba(),hsl() and hsla() values</td></tr>
+<tr><td>6/28/12</td><td>add</td><td>api</td><td></td><td>Added domain objects and utility functions to parse rect() values</td></tr>
+<tr><td>6/28/12</td><td>change</td><td>api</td><td>*yes*</td><td>Moved interface ICSSNamedColor to utils package</td></tr>
+<tr><td>6/28/12</td><td>change</td><td>api</td><td>*yes*</td><td>Extracted CSSURI class and changed visitor to use this new class</td></tr>
+<tr><td>6/28/12</td><td>change</td><td>api</td><td></td><td>Moved all CSS reading methods from CSSHandler to new class CSSReader</td></tr>
+<tr><td>6/28/12</td><td>add</td><td>api</td><td></td><td>Started support to handle URLs more easily</td></tr>
+<tr><td>6/28/12</td><td>add</td><td>api</td><td></td><td>Added support to quote CSS URL values in writing</td></tr>
+<tr border="1"><td>6/18/12</td><td colspan="4">_Release *3.0.0*_</td></tr>
 <tr><td>6/18/12</td><td>add</td><td>feature</td><td></td><td>Added support for CSS3 calc() functionality</td></tr>
 <tr><td>6/18/12</td><td>add</td><td>api</td><td></td><td>Introduced the enum ECSSMetaUnit to group comparable units</td></tr>
 <tr><td>6/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Added 'dppx' unit, removed the 'gd' unit and renamed the 'vm' unit to 'vmin'</td></tr>
