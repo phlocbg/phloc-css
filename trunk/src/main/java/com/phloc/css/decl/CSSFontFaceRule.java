@@ -81,6 +81,10 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
   {
     aSettings.checkVersionRequirements (this);
 
+    // Always ignore font-face rules?
+    if (!aSettings.isWriteFontFaceRules ())
+      return "";
+
     if (aSettings.isRemoveUnnecessaryCode () && getDeclarationCount () == 0)
       return "";
 

@@ -143,7 +143,7 @@ public final class CSSVisitorTest extends AbstractCSS30Test
     assertNotNull (aCSS);
     aVisitor = new MockCountingVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);
-    assertEquals (17, aVisitor.getCount ());
+    assertEquals (18, aVisitor.getCount ());
 
     // CSS 3
     aCSS = CSSReader.readFromString (CSS3, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
