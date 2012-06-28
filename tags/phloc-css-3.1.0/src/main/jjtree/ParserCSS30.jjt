@@ -1,0 +1,993 @@
+options {
+  // JavaCC options
+  // LOOKAHEAD = 2;
+  CHOICE_AMBIGUITY_CHECK = 5;
+  STATIC = false;  // to allow for multiple parser instances
+  // DEBUG_PARSER = true;
+  // DEBUG_LOOKAHEAD = true;
+  // DEBUG_TOKEN_MANAGER = true;
+  // ERROR_REPORTING = false;
+  JAVA_UNICODE_ESCAPE = true;
+  UNICODE_INPUT = true;
+  IGNORE_CASE = true;
+  // USER_TOKEN_MANAGER = true;
+  // SUPPORT_CLASS_VISIBILITY_PUBLIC = false;
+  // USER_CHAR_STREAM = true;
+  FORCE_LA_CHECK = true;
+
+// JJTree options
+  // BUILD_NODE_FILES = false;
+  // NODE_DEFAULT_VOID = true;
+  NODE_CLASS = "com.phloc.css.parser.CSSNode";
+  NODE_PREFIX = "";
+  // NODE_USES_PARSER = true;
+}
+
+PARSER_BEGIN(ParserCSS30)
+package com.phloc.css.parser;
+
+public class ParserCSS30
+{
+  private static final org.slf4j.Logger s_aLogger = org.slf4j.LoggerFactory.getLogger (ParserCSS30.class);
+}
+PARSER_END(ParserCSS30)
+
+TOKEN_MGR_DECLS :
+{
+  private static final org.slf4j.Logger s_aLogger = org.slf4j.LoggerFactory.getLogger (ParserCSS30TokenManager.class);
+}
+
+<DEFAULT, IN_NTH>
+TOKEN :
+{
+    < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
+  | < W: ( <S> )? >
+}
+
+<DEFAULT>
+MORE :
+{
+  < "/*" > : IN_COMMENT
+}
+
+<IN_COMMENT>
+MORE :
+{
+  < ~[] > : IN_COMMENT
+}
+
+<IN_COMMENT>
+SKIP :
+{
+  < "*/" > : DEFAULT
+}
+
+<IN_NTH>
+TOKEN :
+{
+  < N: "n" >
+| < EVEN: "even" >
+| < ODD: "odd" >
+| < INTEGER: ( ["0"-"9"] )+ >  
+}
+
+<DEFAULT, IN_NTH>
+TOKEN :
+{
+  < PLUS: "+" >
+| < MINUS: "-" >
+| < LROUND: "(" >
+| < RROUND: ")" > : DEFAULT
+}
+
+<DEFAULT>
+TOKEN :
+{
+  < #H: ["0"-"9","a"-"f"] >
+| < #HNUM: <H> | <H><H> | <H><H><H> | <H><H><H><H> | <H><H><H><H><H> | <H><H><H><H><H><H> >
+
+// nonascii [\200-\377]
+// The two occurrences of "\377" represent the highest character number that
+// current versions of Flex can deal with (decimal 255). They should be read as
+// "\4177777" (decimal 1114111), which is the highest possible code point in
+// Unicode/ISO-10646.
+// Limitation: This parser can only handle Unicode characters up to \uFFFF
+// (decimal 65535).
+| < #NONASCII: ["\u0080"-"\uFFFF"] >
+
+// unicode      \\{h}{1,6}(\r\n|[ \t\r\n\f])?
+| < #UNICODE: "\\" <HNUM> ( "\r\n" | [" ","\t","\r","\n","\f"] )? >
+
+// escape       {unicode}|\\[^\r\n\f0-9a-f]
+| < #ESCAPE: <UNICODE> | ( "\\" ~["\r","\n","\f","0"-"9","a"-"f"] ) >
+
+// nmstart      [_a-z]|{nonascii}|{escape}
+// Extension: added "A"-"Z"
+| < #NMSTART: ["_","a"-"z","A"-"Z"] | <NONASCII> | <ESCAPE> >
+
+// nmchar       [_a-z0-9-]|{nonascii}|{escape}
+// Extension: added "A"-"Z"
+| < #NMCHAR: ["_","a"-"z","A"-"Z","0"-"9","-"] | <NONASCII> | <ESCAPE> >
+| < NL: "\n" | "\r\n" | "\r" | "\f" >
+| < STRING1: "\"" ( ~["\n","\r","\f","\\","\""] | "\\" <NL> | <ESCAPE> )* "\"" >
+| < STRING2: "'" ( ~["\n","\r","\f","\\","'"] | "\\" <NL> | <ESCAPE> )* "'" >
+| < INVALID1: "\"" ( ~["\n","\r","\f","\\","\""] | "\\" <NL> | <ESCAPE> )* >
+| < INVALID2: "'" ( ~["\n","\r","\f","\\","'"] | "\\" <NL> | <ESCAPE> )* >
+| < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/">
+
+| < NUMBER: <NUM> >
+
+// before ident!
+| < INHERIT: "inherit" >
+| < MQ_AND: "and" >
+| < MQ_NOT: "not" >
+| < MQ_ONLY: "only" >
+| < FROM_SYM: "from" >
+| < TO_SYM: "to" >
+
+// ident        -?{nmstart}{nmchar}*
+// Note: "*" hack for IE <= 6
+// Note: "$" hack for IE <= 7
+| < IDENT: ("-"|"$"|"*")? <NMSTART> ( <NMCHAR> )* >
+
+| < #NAME: ( <NMCHAR> )+ >
+| < #NUM: ( ( ["0"-"9"] )+ | ( ["0"-"9"] )* "." ( ["0"-"9"] )+ ) >
+| < #URL: ["!","#","$","%","&","*"-"[","]"-"~"] | <NONASCII> | <ESCAPE> >
+
+| < CDO: "<!--" >
+| < CDC: "-->" >
+| < INCLUDES: "~=" >
+| < DASHMATCH: "|=" >
+| < PREFIXMATCH: "^=" >
+| < SUBFIXMATCH: "$=" >
+| < SUBSTRINGMATCH: "*=" >
+| < LBRACE: <W> "{" >
+| < GREATER: ">" >
+| < TILDE: "~" >
+| < COMMA: <W> "," >
+| < HASH: "#" <NAME> >
+| < IMPORT_SYM: "@import" >
+| < PAGE_SYM: "@page" >
+| < MEDIA_SYM: "@media" >
+| < CHARSET_SYM: "@charset" >
+| < FONTFACE_SYM: "@font-face" >
+| < KEYFRAMES_SYM: "@keyframes" 
+                 | "@-" <IDENT> "-keyframes" >
+| < IMPORTANT_SYM: "!" ( <W> )* "important" >
+
+| < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
+| < EX: <NUM> "ex" >           { matchedToken.image = ParseUtils.splitNumber(image) + "ex"; }
+| < PX: <NUM> "px" >           { matchedToken.image = ParseUtils.splitNumber(image) + "px"; }
+| < REM: <NUM> "rem" >         { matchedToken.image = ParseUtils.splitNumber(image) + "rem"; }
+| < VW: <NUM> "vw" >           { matchedToken.image = ParseUtils.splitNumber(image) + "vw"; }
+| < VH: <NUM> "vh" >           { matchedToken.image = ParseUtils.splitNumber(image) + "vh"; }
+| < VMIN: <NUM> "vmin" >       { matchedToken.image = ParseUtils.splitNumber(image) + "vmin"; }
+| < CH: <NUM> "ch" >           { matchedToken.image = ParseUtils.splitNumber(image) + "ch"; }
+| < DPI: <NUM> "dpi" >         { matchedToken.image = ParseUtils.splitNumber(image) + "dpi"; }
+| < DPCM: <NUM> "dpcm" >       { matchedToken.image = ParseUtils.splitNumber(image) + "dpcm"; }
+| < DPPX: <NUM> "dppx" >       { matchedToken.image = ParseUtils.splitNumber(image) + "dppx"; }
+| < LENGTH_CM: <NUM> "cm" >    { matchedToken.image = ParseUtils.splitNumber(image) + "cm"; }
+| < LENGTH_MM: <NUM> "mm" >    { matchedToken.image = ParseUtils.splitNumber(image) + "mm"; }
+| < LENGTH_IN: <NUM> "in" >    { matchedToken.image = ParseUtils.splitNumber(image) + "in"; }
+| < LENGTH_PT: <NUM> "pt" >    { matchedToken.image = ParseUtils.splitNumber(image) + "pt"; }
+| < LENGTH_PC: <NUM> "pc" >    { matchedToken.image = ParseUtils.splitNumber(image) + "pc"; }
+| < ANGLE_DEG: <NUM> "deg" >   { matchedToken.image = ParseUtils.splitNumber(image) + "deg"; }
+| < ANGLE_RAD: <NUM> "rad" >   { matchedToken.image = ParseUtils.splitNumber(image) + "rad"; }
+| < ANGLE_GRAD: <NUM> "grad" > { matchedToken.image = ParseUtils.splitNumber(image) + "grad"; }
+| < ANGLE_TURN: <NUM> "turn" > { matchedToken.image = ParseUtils.splitNumber(image) + "turn"; }
+| < TIME_MS: <NUM> "ms" >      { matchedToken.image = ParseUtils.splitNumber(image) + "ms"; }
+| < TIME_S: <NUM> "s" >        { matchedToken.image = ParseUtils.splitNumber(image) + "s"; }
+| < FREQ_HZ: <NUM> "hz" >      { matchedToken.image = ParseUtils.splitNumber(image) + "hz"; }
+| < FREQ_KHZ: <NUM> "khz" >    { matchedToken.image = ParseUtils.splitNumber(image) + "khz"; }
+| < PERCENTAGE: <NUM> "%" >    { matchedToken.image = ParseUtils.splitNumber(image) + "%"; }
+// | < DIMENSION: <NUM> <IDENT> >
+
+// "url("{w}{string}{w}")"  {return URI;}
+// "url("{w}{url}{w}")" {return URI;}
+| < URI: "url(" ( <S> )* ( <STRING1> | <STRING2> | ( <URL> )* ) ( <S> )* ")" >
+  { matchedToken.image = ParseUtils.trimUrl(image); }
+| < CALC: "calc(" >
+| < NOT: ":not(" >
+| < FUNCTION_NTH: "nth-child(" 
+                | "nth-last-child(" 
+                | "nth-of-type(" 
+                | "nth-last-of-type(" > : IN_NTH
+| < FUNCTION: <IDENT> "(" 
+            | "progid" ( <S> )* ":" ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
+  > { matchedToken.image = image.toString (); }
+| < RBRACE: "}" >
+| < DOT: "." >
+| < SEMICOLON: ";" >
+| < COLON: ":" >
+| < ASTERISK: "*" >
+| < SLASH: "/" >
+| < EQUALS: "=" >
+| < DASH: "|" >
+| < LSQUARE: "[" >
+| < RSQUARE: "]" >
+| < ATKEYWORD: "@" <IDENT> >
+}
+
+<*> TOKEN:
+{
+  < UNKNOWN: ~[] >
+  {
+    s_aLogger.error("Illegal character: " + image.toString());
+  }
+}
+
+JAVACODE
+void error_skipto(final int... aKinds)
+{
+  // generate the exception object and print it
+  final ParseException e = generateParseException();
+  s_aLogger.warn(e.toString());
+  // Skip until (including) the first matching token
+  Token t;
+  do
+  {
+    t = getNextToken();
+  } while (!com.phloc.commons.collections.ArrayHelper.contains (aKinds, t.kind));
+}
+
+//
+// stylesheet
+//  : [ CHARSET_SYM STRING ';' ]?
+//    [S|CDO|CDC]* [ import [S|CDO|CDC]* ]*
+//    [ [ ruleset | media | page ] [S|CDO|CDC]* ]*
+//  ;
+//
+CSSNode styleSheet() #Root : {}
+{
+  ( LOOKAHEAD(2)
+    charsetRule() 
+  )?
+  ( <S>
+  | <CDO>
+  | <CDC>
+  )*
+  ( importRule()
+    ( <S>
+    | <CDO>
+    | <CDC>
+    )*
+  )*
+  ( ( styleRule()
+    | mediaRule()
+    | pageRule()
+    | fontfaceRule()
+    | keyframesRule()
+    | unknownRule()
+    )
+    ( <S>
+    | <CDO>
+    | <CDC>
+    )*
+  )*
+  <EOF>
+  { return jjtThis; }
+}
+
+void charsetRule() #Charset :
+{ String sStr; }
+{
+  ( <S> )?
+  <CHARSET_SYM>
+  <S>
+  sStr = string ()
+  <SEMICOLON>
+  { jjtThis.setText (sStr); }
+}
+
+void unknownRule() : {}
+{
+  <ATKEYWORD>
+  <S> 
+  <IDENT>
+  ( <S> )* 
+  <LBRACE>
+  ( <S> )* 
+  ( styleRule() 
+    ( <S> )* 
+  )*
+  <RBRACE>
+}
+
+//
+// import
+//  : IMPORT_SYM S*
+//    [STRING|URI] S* [ medium [ COMMA S* medium]* ]? ';' S*
+//  ;
+//
+void importRule() #ImportRule :
+{
+  String sUrl;
+  Token t;
+}
+{
+  <IMPORT_SYM>
+  ( <S> )*
+  ( sUrl = string() { jjtThis.setText (sUrl); }
+  | uri()
+  )
+  ( <S> )*
+  ( mediaList() )?
+  <SEMICOLON>
+}
+
+//
+// media
+//  : MEDIA_SYM S* medium [ COMMA S* medium ]* LBRACE S* ruleset* '}' S*
+//  ;
+//
+void mediaRule() : {}
+{
+  <MEDIA_SYM>
+  ( <S> )*
+  ( mediaList() )?
+  <LBRACE>
+  ( <S> )*
+  ( mediaRuleList() )?
+  <RBRACE>
+}
+
+void mediaList() : {}
+{
+  mediaQuery()
+  ( <COMMA>
+    ( <S> )*
+    mediaQuery()
+  )*
+}
+
+void mediaRuleList() #void : {}
+{
+  ( ( styleRule()
+    | pageRule()
+    | fontfaceRule()
+    | keyframesRule()
+    | unknownRule()
+    )
+    ( <S> )*
+  )+
+}
+
+void mediaQuery() : {}
+{
+  ( mediaModifier()
+    medium()
+    ( <MQ_AND>
+      ( <S> )*
+      mediaExpr()
+    )*
+  | mediaExpr()
+    ( <MQ_AND>
+      ( <S> )*
+      mediaExpr()
+    )*
+  )  
+}
+
+void mediaModifier() :
+{ Token t; }
+{
+  ( t = <MQ_ONLY> { jjtThis.setText (t.image); }
+    <S>
+  | t = <MQ_NOT>  { jjtThis.setText (t.image); } 
+    <S>
+  )?
+}
+
+//
+// medium
+//   : IDENT S*
+//   ;
+//
+void medium() #Medium :
+{ Token t; }
+{
+  t = <IDENT>
+  ( <S> )*
+  { jjtThis.setText (t.image); }
+}
+
+void mediaExpr() : {}
+{
+  <LROUND>
+  ( <S> )*
+  mediaFeature()
+  (
+    <COLON>
+    ( <S> )*
+    expr()
+  )?
+  <RROUND>
+  ( <S> )*
+}
+
+void mediaFeature() #MediaFeature :
+{ Token t; }
+{
+  t = <IDENT>
+  ( <S> )*
+  { jjtThis.setText (t.image); }
+}
+
+//
+// page
+//  : PAGE_SYM S* pseudo_page? S*
+//    LBRACE S* declaration [ ';' S* declaration ]* '}' S*
+//  ;
+//
+void pageRule() : {}
+{
+  <PAGE_SYM>
+  ( <S> )*
+  ( pseudoPage()
+    ( <S> )*
+  )?
+  <LBRACE>
+  ( <S> )*
+  styleDeclaration()
+  <RBRACE>
+}
+
+//
+// pseudoPage
+//   : ':' IDENT
+//   ;
+//
+void pseudoPage() #PseudoPage :
+{ Token t; }
+{
+  <COLON>
+  t = <IDENT>
+  { jjtThis.setText (":" + t.image); }
+}
+
+// 
+// @font-face { <font-description> }
+//
+void fontfaceRule() : {}
+{
+  <FONTFACE_SYM>
+  <LBRACE>
+  ( <S> )*
+  styleDeclaration()
+  <RBRACE>
+}
+
+// 
+// @keyframes ...
+// http://dev.w3.org/csswg/css3-animations/#keyframes
+//
+void keyframesRule() : 
+{ Token t; }
+{
+  t = <KEYFRAMES_SYM>
+  { jjtThis.setText (t.image); }    
+  <S>
+  keyframesIdentifier()
+  <LBRACE>
+  ( <S> )*
+  keyframesBlocks()
+  <RBRACE>
+}
+
+void keyframesIdentifier() : 
+{ Token t; }
+{
+  t = <IDENT>
+  { jjtThis.setText (t.image); }    
+}
+
+// #void : do not generate a tree node for this 
+void keyframesBlocks() #void : {}
+{
+  ( keyframesSelector()
+    <LBRACE>
+    ( <S> )*
+    styleDeclaration()
+    <RBRACE>
+    ( <S> )* 
+  )*
+}
+
+void keyframesSelector() : {}
+{
+  singleKeyframeSelector()
+  ( <COMMA>
+    ( <S> )*
+    singleKeyframeSelector()
+  )*  
+}
+
+void singleKeyframeSelector() :
+{ Token t = null; }
+{
+  ( t = <FROM_SYM>   { jjtThis.setText (t.image); }
+  | t = <TO_SYM>     { jjtThis.setText (t.image); }
+  | t = <PERCENTAGE> { jjtThis.setText (t.image); }  
+  )
+  ( <S> )*
+}
+
+// ------------ SELECTORS ------------
+
+void selector() : {}
+{
+  simpleSelectorSequence()
+  ( LOOKAHEAD(2)
+    combinator()
+    ( <S> )*
+    simpleSelectorSequence()
+  )*
+}
+
+void combinator() #Combinator : {}
+{
+  ( LOOKAHEAD(2)
+    ( <S> )? 
+    <PLUS>       { jjtThis.setText ("+"); }
+  | LOOKAHEAD(2)
+    ( <S> )? 
+    <GREATER>    { jjtThis.setText (">"); }
+  | LOOKAHEAD(2)
+    ( <S> )? 
+    <TILDE>      { jjtThis.setText ("~"); }
+  | <S>          { jjtThis.setText (" "); }
+  )
+}
+
+void simpleSelectorSequence() #void : {}
+{
+  ( ( LOOKAHEAD(2)
+      typeSelector()
+    | universal() )
+    ( hash()
+    | _class()
+    | attrib()
+    | pseudo()
+    | negation()
+    )*
+  )
+  | ( hash()
+    | _class()
+    | attrib()
+    | pseudo()
+    | negation()
+    )+
+// Extension for CSS animations (e.g. 50%)
+  | <PERCENTAGE>  
+}
+
+void typeSelector() #void : {}
+{
+  ( LOOKAHEAD(2)
+    namespacePrefix() 
+  )?
+  elementName()
+}
+
+void namespacePrefix() #NamespacePrefix : 
+{ Token t; }
+{
+  ( t = <IDENT> { jjtThis.setText (t.image); }
+  | <ASTERISK>  { jjtThis.setText ("*"); }
+  )?    { jjtThis.appendText ("|"); }
+  <DASH>
+}
+
+void elementName() #ElementName :
+{ Token t; }
+{
+  t = <IDENT> { jjtThis.setText (t.image); }
+}
+
+void universal() #Universal :
+{ Token t; }
+{
+  t = <ASTERISK> { jjtThis.setText ("*"); }
+}
+
+void _class() #Class :
+{ Token t; }
+{
+  <DOT>
+  t = <IDENT>
+  { jjtThis.setText ("." + t.image); }
+}
+
+void attrib() #Attrib :
+{ Token t; }
+{
+  <LSQUARE>
+  ( <S> )*
+  ( LOOKAHEAD(2)
+    namespacePrefix() 
+  )?
+  t = <IDENT> { jjtThis.setText (t.image); }
+  /* Hack for html[xmlns*=""] */
+  ( <ASTERISK> { jjtThis.appendText ("*"); } )?          
+  ( <S> )*
+  ( __attribOperator()
+    ( <S> )*
+    __attribValue()
+    ( <S> )*
+  )?
+  <RSQUARE>
+}
+
+void __attribOperator() #AttribOperator : {}
+{
+  ( <EQUALS>         { jjtThis.setText ("="); }
+  | <INCLUDES>       { jjtThis.setText ("~="); }
+  | <DASHMATCH>      { jjtThis.setText ("|="); }
+  | <PREFIXMATCH>    { jjtThis.setText ("^="); }  /* new in 3.0 */
+  | <SUBFIXMATCH>    { jjtThis.setText ("$="); }  /* new in 3.0 */
+  | <SUBSTRINGMATCH> { jjtThis.setText ("*="); }  /* new in 3.0 */
+  )
+}
+
+void __attribValue() #AttribValue :
+{
+  Token t; 
+  String sStr;
+}
+{
+  ( t = <IDENT>  { jjtThis.setText (t.image); }
+  | sStr = string() { jjtThis.setText (sStr); }
+  )
+}
+
+void pseudo() #Pseudo :
+{ Token t; }
+{
+  <COLON> { jjtThis.setText (":"); }
+  /* Extension for "::-moz-selection */
+  ( <COLON> { jjtThis.appendText (":"); } ) ?
+  ( t = <FUNCTION_NTH> { jjtThis.appendText (t.image); }
+    __pseudoNth()
+    <RROUND>  // do not append because of expression!
+  | t = <FUNCTION> { jjtThis.appendText (t.image); }
+    ( <S> )*
+    ( expr() )?
+    <RROUND>  // do not append because of expression!
+  | t = <IDENT> { jjtThis.appendText (t.image); }
+  )
+}
+
+void __pseudoNth () #nth : 
+{ Token t; String s; }
+{
+  ( <S> )*
+  ( LOOKAHEAD(3)
+    ( s = unaryOperator() { jjtThis.appendText (s); } )?
+    ( t = <INTEGER> { jjtThis.appendText (t.image); } )? 
+    t = <N>        { jjtThis.appendText ("n"); }
+    ( LOOKAHEAD(2)
+      ( <S> )*
+      s = unaryOperator() { jjtThis.appendText (s); }
+      ( <S> )*
+      t = <INTEGER> { jjtThis.appendText (t.image); }
+    )?
+  | ( s = unaryOperator() { jjtThis.appendText (s); } )?
+    t = <INTEGER> { jjtThis.appendText (t.image); }
+  | t = <EVEN>    { jjtThis.appendText (t.image); }
+  | t = <ODD>     { jjtThis.appendText (t.image); }
+  )
+  ( <S> )* 
+}
+
+void negation() #Negation :
+{ Token t; }
+{
+  <NOT> { jjtThis.setText (":not("); }
+  ( <S> )*
+  negationArg()
+  ( <S> )*
+  <RROUND>
+}
+
+void negationArg() #void : {}
+{
+  ( LOOKAHEAD(2)
+    typeSelector()
+  | universal()
+  | hash()
+  | _class()
+  | attrib()
+  | pseudo()
+  )
+}
+
+
+
+void operator() #Operator : {}
+{
+  ( <SLASH> ( <S> )*  { jjtThis.setText ("/"); }
+  | <COMMA> ( <S> )*  { jjtThis.setText (","); }
+  /* Extension for Microsoft filters (alpha=50) */
+  | <EQUALS> ( <S> )* { jjtThis.setText ("="); }
+  )
+}
+
+String unaryOperator() #void : {}
+{
+  ( <MINUS> { return "-"; }
+  | <PLUS>  { return "+"; }
+  )
+}
+
+void property() #Property :
+{ Token t; }
+{
+  t = <IDENT>
+  ( <S> )*
+  { jjtThis.setText (t.image); }
+}
+
+void styleRule() : {}
+{
+  selector ()
+  ( <S> )*
+  ( <COMMA>
+    ( <S> )*
+    selector()
+  )*
+  <LBRACE>
+  ( <S> )*
+  styleDeclaration()
+  <RBRACE>
+}
+
+void hash() #Hash :
+{ Token t; }
+{
+  t = <HASH> { jjtThis.setText (t.image); }
+}
+
+//
+// declaration
+//   : property ':' S* expr prio?
+//   |
+//   ;
+//
+void declaration() : {}
+{
+  property()
+  <COLON>
+  ( <S> )*
+  expr()
+  ( prio() )?
+}
+
+//
+// Multiple style declarations together
+// 
+void styleDeclaration() #void : {}
+{
+  ( declaration() )?
+  ( <SEMICOLON>
+    ( <S> )*
+    ( declaration() )?
+  )*
+}
+
+//
+// prio
+//   : IMPORTANT_SYM S*
+//   ;
+void prio() #Important :
+{ Token t; }
+{
+  t = <IMPORTANT_SYM>
+  ( <S> )*
+  { jjtThis.setText (t.image); }
+}
+
+//
+// expr
+//   : term [ operator term ]*
+//   ;
+//
+void expr() : {}
+{
+  term()
+  ( ( operator() )?
+    term()
+  )*
+}
+
+
+Token dimension() #void :
+{ Token t; }
+{
+  ( t = <EM>          
+  | t = <EX>          
+  | t = <PX>          
+  | t = <REM>         
+  | t = <VW>          
+  | t = <VH>          
+  | t = <VMIN>        
+  | t = <CH>          
+  | t = <DPI>         
+  | t = <DPCM>        
+  | t = <DPPX>        
+  | t = <LENGTH_CM>   
+  | t = <LENGTH_MM>   
+  | t = <LENGTH_IN>   
+  | t = <LENGTH_PT>   
+  | t = <LENGTH_PC>   
+  | t = <ANGLE_DEG>   
+  | t = <ANGLE_RAD>   
+  | t = <ANGLE_GRAD>  
+  | t = <ANGLE_TURN>  
+  | t = <TIME_MS>     
+  | t = <TIME_S>      
+  | t = <FREQ_HZ>     
+  | t = <FREQ_KHZ>
+  )
+  { return t; }   
+}
+ 
+//
+// term
+//  : unary_operator?
+//    [ NUMBER S* | PERCENTAGE S* | LENGTH S* | EM S* | EX S* | ANGLE S* | TIME S* | FREQ S* ... ]
+//  | STRING S* | IDENT S* | URI S* | hexcolor | function | inherit
+//  ;
+//
+void term() #Term :
+{
+  String sPrefix = null;
+  Token t = null;
+  String sStr;
+}
+{
+  ( ( sPrefix = unaryOperator() )?
+    ( t = <NUMBER> ( <S> )*
+    | t = <PERCENTAGE> ( <S> )*
+    | t = dimension() ( <S> )*         
+    )
+  | sStr = string() ( <S> )*    { jjtThis.setText (sStr); }
+  | t = <IDENT> ( <S> )*
+  | uri()
+  | sStr = hexcolor()           { jjtThis.setText (sStr); }
+  | function()
+  | math()
+  | t = <INHERIT> ( <S> )*
+  )
+  {
+    if (sPrefix != null)
+      jjtThis.appendText (sPrefix);
+    if (t != null)
+      jjtThis.appendText (t.image);
+  }
+}
+
+void uri() #URI :
+{ Token t; }
+{
+  t = <URI>  { jjtThis.setText (t.image); } 
+  ( <S> )*
+}
+
+//
+// function
+//   : FUNCTION S* expr ')' S*
+//   ;
+//
+void function() #Function :
+{ Token t; }
+{
+  t = <FUNCTION>
+  ( <S> )*
+  // Support functions without parameters (e.g. "gray ()")
+  ( expr() )?
+  <RROUND>
+  ( <S> )*
+  { jjtThis.setText (t.image + ")"); }
+}
+
+void math() : {}
+{
+  <CALC>
+  ( <S> )*
+  sum()
+  ( <S> )*
+  <RROUND> 
+  ( <S> )*
+}
+
+void sumOperator() : {}
+{
+  ( <PLUS>  { jjtThis.setText ("+"); } 
+  | <MINUS> { jjtThis.setText ("-"); }
+  )
+}
+
+void sum() #void : {}
+{
+  product()
+  ( <S>
+    sumOperator()
+    <S>
+    product ()
+  )*   
+}
+
+void productOperator() : {}
+{
+  <ASTERISK> { jjtThis.setText ("*"); }
+| <SLASH>    { jjtThis.setText ("/"); }
+}
+
+void product() : {}
+{
+  unit()
+  ( LOOKAHEAD(2)
+    ( <S> )*
+    productOperator()
+    ( <S> )*
+    unit()
+  )*   
+}
+
+void unit() : 
+{ 
+  String sPrefix = null;
+  Token t = null; 
+}
+{
+  ( sPrefix = unaryOperator() )?
+  ( t = <NUMBER>
+  | t = <PERCENTAGE>
+  | t = dimension()
+  | <LROUND>
+    ( <S> )*
+    sum()
+    ( <S> )*
+    <RROUND>
+  )  
+  {
+    if (sPrefix != null)
+      jjtThis.appendText (sPrefix);
+    if (t != null)
+      jjtThis.appendText (t.image);
+  }
+}
+
+//
+// hexcolor
+//   : HASH S*
+//   ;
+//
+String hexcolor() #void :
+{ Token t; }
+{
+  t = <HASH>
+  ( <S> )*
+  { return t.image; }
+}
+
+
+// string       {string1}|{string2}
+// {string}        {return STRING;}
+String string () #void :
+{ Token t; }
+{
+  ( t = <STRING1>
+  | t = <STRING2>
+  )
+  { return t.image; }
+}
+
+// invalid      {invalid1}|{invalid2}
+// {invalid}        {return INVALID; /* unclosed string */}
+void invalid () : {}
+{
+  ( <INVALID1>
+  | <INVALID2>
+  )
+}
