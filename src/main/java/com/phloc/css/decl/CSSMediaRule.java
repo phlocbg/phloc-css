@@ -111,8 +111,9 @@ public final class CSSMediaRule implements ICSSTopLevelRule
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
+    final int nRuleCount = m_aRules.size ();
 
-    if (aSettings.isRemoveUnnecessaryCode () && m_aRules.isEmpty ())
+    if (aSettings.isRemoveUnnecessaryCode () && nRuleCount == 0)
       return "";
 
     final StringBuilder aSB = new StringBuilder ("@media ");
@@ -126,7 +127,6 @@ public final class CSSMediaRule implements ICSSTopLevelRule
       aSB.append (sMedium.getAsCSSString (aSettings, nIndentLevel));
     }
 
-    final int nRuleCount = m_aRules.size ();
     if (nRuleCount == 0)
     {
       aSB.append (bOptimizedOutput ? "{}" : " {}\n");
