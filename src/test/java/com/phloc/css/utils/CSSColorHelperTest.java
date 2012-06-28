@@ -19,11 +19,16 @@ package com.phloc.css.utils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.phloc.css.utils.CSSColorHelper;
+import com.phloc.css.decl.CSSHSL;
+import com.phloc.css.decl.CSSHSLA;
+import com.phloc.css.decl.CSSRGB;
+import com.phloc.css.decl.CSSRGBA;
 
 /**
  * Test class for class {@link CSSColorHelper}.
@@ -46,6 +51,90 @@ public final class CSSColorHelperTest
     assertEquals ("rgb(0,0,0)", CSSColorHelper.getRGBColorValue (0, 256, 0));
     assertEquals ("rgb(0,0,255)", CSSColorHelper.getRGBColorValue (0, 0, -1));
     assertEquals ("rgb(0,0,0)", CSSColorHelper.getRGBColorValue (0, 0, 256));
+  }
+
+  @Test
+  public void testParsedRGBColor ()
+  {
+    CSSRGB aRGB = CSSColorHelper.getParsedRGBColorValue ("rgb(1,2,3)");
+    assertNotNull (aRGB);
+    assertEquals ("1", aRGB.getRed ());
+    assertEquals ("2", aRGB.getGreen ());
+    assertEquals ("3", aRGB.getBlue ());
+
+    aRGB = CSSColorHelper.getParsedRGBColorValue (" rgb ( 1 , 2 , 3 ) ");
+    assertNotNull (aRGB);
+    assertEquals ("1", aRGB.getRed ());
+    assertEquals ("2", aRGB.getGreen ());
+    assertEquals ("3", aRGB.getBlue ());
+
+    assertNull (CSSColorHelper.getParsedRGBColorValue (null));
+    assertNull (CSSColorHelper.getParsedRGBColorValue (""));
+    assertNull (CSSColorHelper.getParsedRGBColorValue ("rgb(1,2,3"));
+  }
+
+  @Test
+  public void testParsedRGBAColor ()
+  {
+    CSSRGBA aRGB = CSSColorHelper.getParsedRGBAColorValue ("rgba(1,2,3,0.4)");
+    assertNotNull (aRGB);
+    assertEquals ("1", aRGB.getRed ());
+    assertEquals ("2", aRGB.getGreen ());
+    assertEquals ("3", aRGB.getBlue ());
+    assertEquals ("0.4", aRGB.getOpacity ());
+
+    aRGB = CSSColorHelper.getParsedRGBAColorValue (" rgba ( 1 , 2 , 3 , 0.4 ) ");
+    assertNotNull (aRGB);
+    assertEquals ("1", aRGB.getRed ());
+    assertEquals ("2", aRGB.getGreen ());
+    assertEquals ("3", aRGB.getBlue ());
+    assertEquals ("0.4", aRGB.getOpacity ());
+
+    assertNull (CSSColorHelper.getParsedRGBAColorValue (null));
+    assertNull (CSSColorHelper.getParsedRGBAColorValue (""));
+    assertNull (CSSColorHelper.getParsedRGBAColorValue ("rgba(1,2,3"));
+  }
+
+  @Test
+  public void testParsedHSLColor ()
+  {
+    CSSHSL aHSL = CSSColorHelper.getParsedHSLColorValue ("hsl(1,2,3)");
+    assertNotNull (aHSL);
+    assertEquals ("1", aHSL.getHue ());
+    assertEquals ("2", aHSL.getSaturation ());
+    assertEquals ("3", aHSL.getLightness ());
+
+    aHSL = CSSColorHelper.getParsedHSLColorValue (" hsl ( 1 , 2 , 3 ) ");
+    assertNotNull (aHSL);
+    assertEquals ("1", aHSL.getHue ());
+    assertEquals ("2", aHSL.getSaturation ());
+    assertEquals ("3", aHSL.getLightness ());
+
+    assertNull (CSSColorHelper.getParsedHSLColorValue (null));
+    assertNull (CSSColorHelper.getParsedHSLColorValue (""));
+    assertNull (CSSColorHelper.getParsedHSLColorValue ("hsl(1,2,3"));
+  }
+
+  @Test
+  public void testParsedHSLAColor ()
+  {
+    CSSHSLA aHSL = CSSColorHelper.getParsedHSLAColorValue ("hsla(1,2,3,0.4)");
+    assertNotNull (aHSL);
+    assertEquals ("1", aHSL.getHue ());
+    assertEquals ("2", aHSL.getSaturation ());
+    assertEquals ("3", aHSL.getLightness ());
+    assertEquals ("0.4", aHSL.getOpacity ());
+
+    aHSL = CSSColorHelper.getParsedHSLAColorValue (" hsla ( 1 , 2 , 3 , 0.4 ) ");
+    assertNotNull (aHSL);
+    assertEquals ("1", aHSL.getHue ());
+    assertEquals ("2", aHSL.getSaturation ());
+    assertEquals ("3", aHSL.getLightness ());
+    assertEquals ("0.4", aHSL.getOpacity ());
+
+    assertNull (CSSColorHelper.getParsedHSLAColorValue (null));
+    assertNull (CSSColorHelper.getParsedHSLAColorValue (""));
+    assertNull (CSSColorHelper.getParsedHSLAColorValue ("hsla(1,2,3"));
   }
 
   @Test

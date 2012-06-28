@@ -28,6 +28,10 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.css.decl.CSSHSL;
+import com.phloc.css.decl.CSSHSLA;
+import com.phloc.css.decl.CSSRGB;
+import com.phloc.css.decl.CSSRGBA;
 import com.phloc.css.propertyvalue.CCSSValue;
 
 /**
@@ -123,10 +127,36 @@ public final class CSSColorHelper
     return StringHelper.hasText (sRealValue) && RegExHelper.stringMatchesPattern (PATTERN_RGB, sRealValue);
   }
 
+  @Nullable
+  public static CSSRGB getParsedRGBColorValue (@Nullable final String sValue)
+  {
+    final String sRealValue = StringHelper.trim (sValue);
+    if (StringHelper.hasText (sRealValue))
+    {
+      final String [] aValues = RegExHelper.getAllMatchingGroupValues (PATTERN_RGB, sRealValue);
+      if (aValues != null)
+        return new CSSRGB (aValues[0], aValues[1], aValues[2]);
+    }
+    return null;
+  }
+
   public static boolean isRGBAColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
     return StringHelper.hasText (sRealValue) && RegExHelper.stringMatchesPattern (PATTERN_RGBA, sRealValue);
+  }
+
+  @Nullable
+  public static CSSRGBA getParsedRGBAColorValue (@Nullable final String sValue)
+  {
+    final String sRealValue = StringHelper.trim (sValue);
+    if (StringHelper.hasText (sRealValue))
+    {
+      final String [] aValues = RegExHelper.getAllMatchingGroupValues (PATTERN_RGBA, sRealValue);
+      if (aValues != null)
+        return new CSSRGBA (aValues[0], aValues[1], aValues[2], aValues[3]);
+    }
+    return null;
   }
 
   public static boolean isHSLColorValue (@Nullable final String sValue)
@@ -135,10 +165,36 @@ public final class CSSColorHelper
     return StringHelper.hasText (sRealValue) && RegExHelper.stringMatchesPattern (PATTERN_HSL, sRealValue);
   }
 
+  @Nullable
+  public static CSSHSL getParsedHSLColorValue (@Nullable final String sValue)
+  {
+    final String sRealValue = StringHelper.trim (sValue);
+    if (StringHelper.hasText (sRealValue))
+    {
+      final String [] aValues = RegExHelper.getAllMatchingGroupValues (PATTERN_HSL, sRealValue);
+      if (aValues != null)
+        return new CSSHSL (aValues[0], aValues[1], aValues[2]);
+    }
+    return null;
+  }
+
   public static boolean isHSLAColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
     return StringHelper.hasText (sRealValue) && RegExHelper.stringMatchesPattern (PATTERN_HSLA, sRealValue);
+  }
+
+  @Nullable
+  public static CSSHSLA getParsedHSLAColorValue (@Nullable final String sValue)
+  {
+    final String sRealValue = StringHelper.trim (sValue);
+    if (StringHelper.hasText (sRealValue))
+    {
+      final String [] aValues = RegExHelper.getAllMatchingGroupValues (PATTERN_HSLA, sRealValue);
+      if (aValues != null)
+        return new CSSHSLA (aValues[0], aValues[1], aValues[2], aValues[3]);
+    }
+    return null;
   }
 
   public static boolean isHexColorValue (@Nullable final String sValue)
