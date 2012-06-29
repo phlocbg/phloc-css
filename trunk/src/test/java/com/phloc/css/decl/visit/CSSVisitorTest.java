@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.io.file.filter.FilenameFilterFactory;
+import com.phloc.commons.io.file.filter.FilenameFilterEndsWith;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.css.AbstractCSS30Test;
 import com.phloc.css.ECSSVersion;
@@ -106,7 +106,7 @@ public final class CSSVisitorTest extends AbstractCSS30Test
   public void testVisitContent ()
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
+                                                                new FilenameFilterEndsWith (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
       if (false)
@@ -117,7 +117,7 @@ public final class CSSVisitorTest extends AbstractCSS30Test
     }
 
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
+                                                                new FilenameFilterEndsWith (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
       if (false)

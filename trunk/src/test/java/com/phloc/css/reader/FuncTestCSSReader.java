@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.io.file.filter.FilenameFilterFactory;
+import com.phloc.commons.io.file.filter.FilenameFilterEndsWith;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.commons.mutable.Wrapper;
 import com.phloc.css.ECSSVersion;
@@ -57,8 +57,7 @@ public final class FuncTestCSSReader
         aErrors.put (aCurrentFile.get (), ex);
       }
     };
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("/"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
+    for (final File aFile : FileSystemRecursiveIterator.create (new File ("/"), new FilenameFilterEndsWith (".css")))
     {
       if (false)
         s_aLogger.info (aFile.getAbsolutePath ());

@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.io.file.filter.FilenameFilterFactory;
+import com.phloc.commons.io.file.filter.FilenameFilterEndsWith;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
@@ -69,7 +69,7 @@ public final class FuncTestCSSWriter
   public void testScanTestResourcesHandler21 () throws IOException
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler21"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
+                                                                new FilenameFilterEndsWith (".css")))
     {
       _testMe (aFile, ECSSVersion.CSS21);
     }
@@ -79,7 +79,7 @@ public final class FuncTestCSSWriter
   public void testScanTestResourcesHandler30 () throws IOException
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
+                                                                new FilenameFilterEndsWith (".css")))
     {
       _testMe (aFile, ECSSVersion.CSS30);
     }
@@ -89,7 +89,7 @@ public final class FuncTestCSSWriter
   public void testRead30Write21 () throws IOException
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
+                                                                new FilenameFilterEndsWith (".css")))
     {
       try
       {
