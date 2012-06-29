@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.io.file.filter.FilenameFilterFactory;
+import com.phloc.commons.io.file.filter.FilenameFilterEndsWith;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
@@ -46,7 +46,7 @@ public final class FuncTestCSSReader30
     final ECSSVersion eVersion = ECSSVersion.CSS30;
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
+                                                                new FilenameFilterEndsWith (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
       if (false)
@@ -83,7 +83,7 @@ public final class FuncTestCSSReader30
     final ECSSVersion eVersion = ECSSVersion.CSS30;
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css30"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".css")))
+                                                                new FilenameFilterEndsWith (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
       if (false)
