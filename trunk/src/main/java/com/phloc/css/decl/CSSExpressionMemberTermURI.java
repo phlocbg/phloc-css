@@ -27,7 +27,7 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a simple expression member
+ * Represents an expression member URI
  * 
  * @author philip
  */
@@ -44,7 +44,7 @@ public final class CSSExpressionMemberTermURI implements ICSSExpressionMember
   public void setURI (@Nonnull final CSSURI aURI)
   {
     if (aURI == null)
-      throw new IllegalArgumentException ("Empty URI is not allowed");
+      throw new NullPointerException ("URI");
     m_aURI = aURI;
   }
 
@@ -52,6 +52,13 @@ public final class CSSExpressionMemberTermURI implements ICSSExpressionMember
   public CSSURI getURI ()
   {
     return m_aURI;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getURIString ()
+  {
+    return m_aURI.getURI ();
   }
 
   @Nonnull
