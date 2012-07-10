@@ -63,7 +63,7 @@ public class CSSPropertyEnums extends CSSPropertyEnum
   {
     if (sValue == null)
       return false;
-    final String [] aParts = RegExHelper.split (sValue.trim (), "\\s+");
+    final String [] aParts = RegExHelper.getSplitToArray (sValue.trim (), "\\s+");
     if (aParts.length < m_nMinNumbers || aParts.length > m_nMaxNumbers)
       return false;
     for (int i = 0; i < aParts.length; ++i)

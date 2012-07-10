@@ -52,7 +52,7 @@ public class CSSPropertyNumbers extends AbstractCSSProperty
       return false;
 
     // Split by whitespaces
-    final String [] aParts = RegExHelper.split (sValue.trim (), "\\s+");
+    final String [] aParts = RegExHelper.getSplitToArray (sValue.trim (), "\\s+");
     if (aParts.length < m_nMinNumbers || aParts.length > m_nMaxNumbers)
       return false;
 
