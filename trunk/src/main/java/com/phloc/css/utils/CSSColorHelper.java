@@ -204,6 +204,7 @@ public final class CSSColorHelper
   }
 
   @Nonnegative
+  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("IL_INFINITE_LOOP")
   private static int _mod (final int nValue, final int nMod)
   {
     // modulo does not work as expected on negative numbers
@@ -316,11 +317,11 @@ public final class CSSColorHelper
    * 0-359
    * 
    * @param nRed
-   *          red value
+   *        red value
    * @param nGreen
-   *          green value
+   *        green value
    * @param nBlue
-   *          blue value
+   *        blue value
    * @return An array of 3 ints, containing hue, saturation and lightness (in
    *         this order)
    */
