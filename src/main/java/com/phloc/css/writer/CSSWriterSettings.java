@@ -57,10 +57,10 @@ public class CSSWriterSettings implements ICSSWriterSettings
 
   /**
    * @param eVersion
-   *          CSS version to emit
+   *        CSS version to emit
    * @param bOptimizedOutput
-   *          if <code>true</code> the output will be optimized for space, else
-   *          for readability
+   *        if <code>true</code> the output will be optimized for space, else
+   *        for readability
    */
   public CSSWriterSettings (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
