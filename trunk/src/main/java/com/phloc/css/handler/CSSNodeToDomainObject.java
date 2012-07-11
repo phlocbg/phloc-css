@@ -471,6 +471,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
+  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("IL_INFINITE_LOOP")
   private CSSPageRule _createPageRule (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.PAGERULE);
@@ -489,7 +490,6 @@ final class CSSNodeToDomainObject
     }
 
     final CSSPageRule ret = new CSSPageRule (sPseudoPage);
-
     for (int nIndex = nStartIndex; nIndex < nChildCount; ++nIndex)
     {
       final CSSNode aChildNode = aNode.jjtGetChild (nIndex);
@@ -535,6 +535,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
+  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("IL_INFINITE_LOOP")
   private CSSMediaQuery _createMediaQuery (@Nonnull final CSSNode aNode)
   {
     if (ECSSNodeType.MEDIUM.isNode (aNode, m_eVersion))
@@ -594,7 +595,6 @@ final class CSSNodeToDomainObject
     }
 
     final CSSMediaQuery ret = new CSSMediaQuery (eModifier, sMedium);
-
     for (int i = nStartIndex; i < nChildCount; ++i)
     {
       final CSSNode aChildNode = aNode.jjtGetChild (i);
