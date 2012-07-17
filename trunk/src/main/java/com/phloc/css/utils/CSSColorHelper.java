@@ -34,6 +34,8 @@ import com.phloc.css.decl.CSSRGB;
 import com.phloc.css.decl.CSSRGBA;
 import com.phloc.css.propertyvalue.CCSSValue;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Provides color handling sanity methods.
  * 
@@ -204,7 +206,7 @@ public final class CSSColorHelper
   }
 
   @Nonnegative
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("IL_INFINITE_LOOP")
+  @SuppressFBWarnings ("IL_INFINITE_LOOP")
   private static int _mod (final int nValue, final int nMod)
   {
     // modulo does not work as expected on negative numbers

@@ -35,7 +35,7 @@ import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.handler.ICSSParseExceptionHandler;
 import com.phloc.css.parser.ParseException;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public final class FuncTestCSSReader
 {
@@ -43,7 +43,7 @@ public final class FuncTestCSSReader
 
   @Test
   @Ignore
-  @SuppressWarnings ("DMI_HARDCODED_ABSOLUTE_FILENAME")
+  @SuppressFBWarnings ("DMI_HARDCODED_ABSOLUTE_FILENAME")
   public void testScanDrive ()
   {
     int nFilesOK = 0;

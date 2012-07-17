@@ -64,6 +64,8 @@ import com.phloc.css.media.ECSSMedium;
 import com.phloc.css.parser.CSSNode;
 import com.phloc.css.parser.ParseUtils;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * This class converts the jjtree node to a domain object
  * 
@@ -471,7 +473,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("IL_INFINITE_LOOP")
+  @SuppressFBWarnings ("IL_INFINITE_LOOP")
   private CSSPageRule _createPageRule (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.PAGERULE);
@@ -535,7 +537,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("IL_INFINITE_LOOP")
+  @SuppressFBWarnings ("IL_INFINITE_LOOP")
   private CSSMediaQuery _createMediaQuery (@Nonnull final CSSNode aNode)
   {
     if (ECSSNodeType.MEDIUM.isNode (aNode, m_eVersion))
