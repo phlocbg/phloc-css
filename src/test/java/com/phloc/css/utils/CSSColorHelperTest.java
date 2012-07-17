@@ -30,6 +30,8 @@ import com.phloc.css.decl.CSSHSLA;
 import com.phloc.css.decl.CSSRGB;
 import com.phloc.css.decl.CSSRGBA;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Test class for class {@link CSSColorHelper}.
  * 
@@ -38,7 +40,7 @@ import com.phloc.css.decl.CSSRGBA;
 public final class CSSColorHelperTest
 {
   @Test
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("TQ_NEVER_VALUE_USED_WHERE_ALWAYS_REQUIRED")
+  @SuppressFBWarnings ("TQ_NEVER_VALUE_USED_WHERE_ALWAYS_REQUIRED")
   public void testColorRGB ()
   {
     assertEquals ("rgb(0,0,0)", CSSColorHelper.getRGBColorValue (0, 0, 0));
@@ -138,7 +140,7 @@ public final class CSSColorHelperTest
   }
 
   @Test
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("TQ_NEVER_VALUE_USED_WHERE_ALWAYS_REQUIRED")
+  @SuppressFBWarnings ("TQ_NEVER_VALUE_USED_WHERE_ALWAYS_REQUIRED")
   public void testColorHex ()
   {
     assertEquals ("#000000", CSSColorHelper.getHexColorValue (0, 0, 0));

@@ -29,6 +29,8 @@ import com.phloc.commons.io.streams.NonBlockingStringReader;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.string.StringHelper;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * This class is only used internally as the source for the generated parsers.<br>
  * An implementation of interface {@link CharStream}, where the stream is
@@ -37,7 +39,7 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
-@edu.umd.cs.findbugs.annotations.SuppressWarnings ("NM_METHOD_NAMING_CONVENTION")
+@SuppressFBWarnings ("NM_METHOD_NAMING_CONVENTION")
 public final class JavaCharStream implements CharStream
 {
   private static final int TAB_SIZE = 8;
