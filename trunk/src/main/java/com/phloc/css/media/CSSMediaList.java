@@ -21,13 +21,16 @@ import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.IHasSize;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -36,7 +39,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSMediaList implements Serializable
+public final class CSSMediaList implements Serializable, IHasSize
 {
   // Ordered but unique
   private final Set <ECSSMedium> m_aMedia = new LinkedHashSet <ECSSMedium> ();
@@ -49,10 +52,11 @@ public final class CSSMediaList implements Serializable
     addMedium (eMedium);
   }
 
-  public CSSMediaList (@Nonnull final ECSSMedium... aMedia)
+  public CSSMediaList (@Nullable final ECSSMedium... aMedia)
   {
-    for (final ECSSMedium eMedium : aMedia)
-      addMedium (eMedium);
+    if (aMedia != null)
+      for (final ECSSMedium eMedium : aMedia)
+        addMedium (eMedium);
   }
 
   public CSSMediaList (@Nullable final Iterable <ECSSMedium> aMedia)
@@ -62,6 +66,13 @@ public final class CSSMediaList implements Serializable
         addMedium (eMedium);
   }
 
+  /**
+   * Add a new medium to the list
+   * 
+   * @param eMedium
+   *        The medium to be added.
+   * @return <code>this</code>
+   */
   @Nonnull
   public CSSMediaList addMedium (@Nonnull final ECSSMedium eMedium)
   {
@@ -71,19 +82,64 @@ public final class CSSMediaList implements Serializable
     return this;
   }
 
+  /**
+   * Remove the passed medium
+   * 
+   * @param eMedium
+   *        The medium to be removed. May be <code>null</code>.
+   * @return {@link EChange}
+   */
+  @Nonnull
+  public EChange removeMedium (@Nullable final ECSSMedium eMedium)
+  {
+    return EChange.valueOf (m_aMedia.remove (eMedium));
+  }
+
+  /**
+   * @deprecated Use {@link #hasAnyMedia()} instead
+   */
+  @Deprecated
   public boolean hasMedia ()
+  {
+    return hasAnyMedia ();
+  }
+
+  public boolean hasAnyMedia ()
   {
     return !m_aMedia.isEmpty ();
   }
 
+  public boolean containsMedium (@Nullable final ECSSMedium eMedium)
+  {
+    return m_aMedia.contains (eMedium);
+  }
+
+  public boolean containsMediumOrAll (@Nullable final ECSSMedium eMedium)
+  {
+    // Either the specific medium is contained, or the "all" medium is contained
+    return containsMedium (eMedium) || containsMedium (ECSSMedium.ALL);
+  }
+
   public boolean isForScreen ()
   {
-    return m_aMedia.isEmpty () || m_aMedia.contains (ECSSMedium.SCREEN) || m_aMedia.contains (ECSSMedium.ALL);
+    // Default is "screen" if none is provided
+    return m_aMedia.isEmpty () || containsMediumOrAll (ECSSMedium.SCREEN);
+  }
+
+  /**
+   * @deprecated Use {@link #getAllMedia()} instead
+   */
+  @Deprecated
+  @Nonnull
+  @ReturnsMutableCopy
+  public Set <ECSSMedium> getMedia ()
+  {
+    return getAllMedia ();
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public Set <ECSSMedium> getMedia ()
+  public Set <ECSSMedium> getAllMedia ()
   {
     return ContainerHelper.newSet (m_aMedia);
   }
@@ -102,6 +158,17 @@ public final class CSSMediaList implements Serializable
       aSB.append (eMedia.getName ());
     }
     return aSB.toString ();
+  }
+
+  @Nonnegative
+  public int size ()
+  {
+    return m_aMedia.size ();
+  }
+
+  public boolean isEmpty ()
+  {
+    return m_aMedia.isEmpty ();
   }
 
   @Override
