@@ -104,22 +104,48 @@ public final class CSSMediaList implements Serializable, IHasSize
     return hasAnyMedia ();
   }
 
+  /**
+   * @return <code>true</code> if any explicit media is defined
+   */
   public boolean hasAnyMedia ()
   {
     return !m_aMedia.isEmpty ();
   }
 
+  /**
+   * Check if the passed medium is explicitly specified
+   * 
+   * @param eMedium
+   *        The medium to be checked. May be <code>null</code>.
+   * @return <code>true</code> if it is contained, <code>false</code> otherwise
+   */
   public boolean containsMedium (@Nullable final ECSSMedium eMedium)
   {
     return m_aMedia.contains (eMedium);
   }
 
+  /**
+   * Check if the passed medium or the {@link ECSSMedium#ALL} is explicitly
+   * specified
+   * 
+   * @param eMedium
+   *        The medium to be checked. May be <code>null</code>.
+   * @return <code>true</code> if the passed medium or the "all" medium is
+   *         contained, <code>false</code> otherwise
+   */
   public boolean containsMediumOrAll (@Nullable final ECSSMedium eMedium)
   {
     // Either the specific medium is contained, or the "all" medium is contained
     return containsMedium (eMedium) || containsMedium (ECSSMedium.ALL);
   }
 
+  /**
+   * Check if the passed medium is usable for the screen. This is the case if
+   * either the "screen" medium, the "all" medium or no medium at all is
+   * contained.
+   * 
+   * @return <code>true</code> if the media list is usable for screen display
+   */
   public boolean isForScreen ()
   {
     // Default is "screen" if none is provided
@@ -137,6 +163,9 @@ public final class CSSMediaList implements Serializable, IHasSize
     return getAllMedia ();
   }
 
+  /**
+   * @return A copy of all specified media
+   */
   @Nonnull
   @ReturnsMutableCopy
   public Set <ECSSMedium> getAllMedia ()
@@ -144,9 +173,28 @@ public final class CSSMediaList implements Serializable, IHasSize
     return ContainerHelper.newSet (m_aMedia);
   }
 
+  /**
+   * @return A non-<code>null</code> but maybe empty String with all media in
+   *         the order they where inserted and separated by a ", "
+   */
   @Nonnull
   public String getMediaString ()
   {
+    return getMediaString (", ");
+  }
+
+  /**
+   * @param sSeparator
+   *        The separator to be used. May not be <code>null</code>.
+   * @return A non-<code>null</code> but maybe empty String with all media in
+   *         the order they where inserted and separated by a ", "
+   */
+  @Nonnull
+  public String getMediaString (@Nonnull final String sSeparator)
+  {
+    if (sSeparator == null)
+      throw new NullPointerException ("separator");
+
     if (m_aMedia.isEmpty ())
       return "";
 
@@ -154,7 +202,7 @@ public final class CSSMediaList implements Serializable, IHasSize
     for (final ECSSMedium eMedia : m_aMedia)
     {
       if (aSB.length () > 0)
-        aSB.append (", ");
+        aSB.append (sSeparator);
       aSB.append (eMedia.getName ());
     }
     return aSB.toString ();
