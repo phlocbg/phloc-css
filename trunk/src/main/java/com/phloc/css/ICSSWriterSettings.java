@@ -45,7 +45,7 @@ public interface ICSSWriterSettings
    * Get the indentation for an arbitrary number of levels.
    * 
    * @param nCount
-   *          The number of indentations desired.
+   *        The number of indentations desired.
    * @return The string to be used for indentation. May not be <code>null</code>
    *         but may be empty.
    */
@@ -87,9 +87,9 @@ public interface ICSSWriterSettings
    * settings.
    * 
    * @param aCSSObject
-   *          The object to be checked.
+   *        The object to be checked.
    * @throws IllegalStateException
-   *           In case the version does not match
+   *         In case the version does not match
    */
   void checkVersionRequirements (@Nonnull ICSSVersionAware aCSSObject) throws IllegalStateException;
 }

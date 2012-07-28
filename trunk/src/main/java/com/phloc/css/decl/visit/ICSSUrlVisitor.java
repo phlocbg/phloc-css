@@ -42,7 +42,7 @@ public interface ICSSUrlVisitor
    * <code>aImportRule.getLocation()</code> to retrieve the imported URL.
    * 
    * @param aImportRule
-   *          Other imported CSS. Never <code>null</code>.
+   *        Other imported CSS. Never <code>null</code>.
    */
   void onImport (@Nonnull CSSImportRule aImportRule);
 
@@ -52,11 +52,11 @@ public interface ICSSUrlVisitor
    * block to which the declaration belongs.
    * 
    * @param aTopLevelRule
-   *          Top level rule of the URL. Never <code>null</code>.
+   *        Top level rule of the URL. Never <code>null</code>.
    * @param aDeclaration
-   *          Declaration of the URL. Never <code>null</code>.
+   *        Declaration of the URL. Never <code>null</code>.
    * @param aURITerm
-   *          The URI term from the current expression. Never <code>null</code>.
+   *        The URI term from the current expression. Never <code>null</code>.
    */
   void onUrlDeclaration (@Nonnull ICSSTopLevelRule aTopLevelRule,
                          @Nonnull CSSDeclaration aDeclaration,

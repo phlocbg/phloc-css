@@ -48,7 +48,7 @@ public final class ParseUtils
    * the start and the end quote are not equal, nothing happens.
    * 
    * @param sStr
-   *          The string where the quotes should be removed
+   *        The string where the quotes should be removed
    * @return The string without quotes.
    */
   @Nullable
@@ -71,7 +71,7 @@ public final class ParseUtils
    * check is performed for the existence of a leading "url("!
    * 
    * @param s
-   *          The value to remove the string from.
+   *        The value to remove the string from.
    * @return The trimmed value.
    */
   @Nonnull

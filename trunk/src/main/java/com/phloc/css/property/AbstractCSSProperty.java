@@ -19,7 +19,7 @@ package com.phloc.css.property;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.StringParser;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.propertyvalue.CCSSValue;
@@ -73,7 +73,7 @@ public abstract class AbstractCSSProperty implements ICSSProperty
         break;
       case OPACITY:
       {
-        final double dValue = StringHelper.parseDouble (sValue, Double.NaN);
+        final double dValue = StringParser.parseDouble (sValue, Double.NaN);
         if (!Double.isNaN (dValue))
         {
           final int nPerc = (int) (dValue * 100);

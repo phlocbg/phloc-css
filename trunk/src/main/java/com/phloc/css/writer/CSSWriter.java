@@ -48,15 +48,14 @@ public final class CSSWriter
 
   private final CSSWriterSettings m_aSettings;
   private boolean m_bWriteHeaderText;
-  private String m_sHeaderText = StringHelper.getImploded ("\n", VendorInfo.FILE_HEADER_LINES);
+  private String m_sHeaderText = StringHelper.getImploded ("\n", VendorInfo.getFileHeaderLines ());
   private String m_sContentCharset;
 
   /**
    * Constructor for creating non-optimized output.
    * 
    * @param eVersion
-   *          The CSS version to emit the code for. May not be <code>null</code>
-   *          .
+   *        The CSS version to emit the code for. May not be <code>null</code> .
    */
   public CSSWriter (@Nonnull final ECSSVersion eVersion)
   {
@@ -67,11 +66,10 @@ public final class CSSWriter
    * Constructor.
    * 
    * @param eVersion
-   *          The CSS version to emit the code for. May not be <code>null</code>
-   *          .
+   *        The CSS version to emit the code for. May not be <code>null</code> .
    * @param bOptimizedOutput
-   *          If <code>true</code> the number of bytes emitted by this writer is
-   *          minimized. Also style rules having no declarations are omitted.
+   *        If <code>true</code> the number of bytes emitted by this writer is
+   *        minimized. Also style rules having no declarations are omitted.
    */
   public CSSWriter (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
@@ -82,7 +80,7 @@ public final class CSSWriter
    * Constructor
    * 
    * @param aSettings
-   *          The settings to be used. May not be <code>null</code>.
+   *        The settings to be used. May not be <code>null</code>.
    */
   public CSSWriter (@Nonnull final CSSWriterSettings aSettings)
   {
@@ -109,8 +107,8 @@ public final class CSSWriter
    * is enabled, if non-optimized output is desired.
    * 
    * @param bWriteHeaderText
-   *          If <code>true</code> the header text will be written, if
-   *          <code>false</code> the text will not be written.
+   *        If <code>true</code> the header text will be written, if
+   *        <code>false</code> the text will not be written.
    * @return this
    */
   @Nonnull
@@ -135,7 +133,7 @@ public final class CSSWriter
    * {@link #isWriteHeaderText()} returns <code>true</code>.
    * 
    * @param sHeaderText
-   *          The header text to be emitted. May be <code>null</code>.
+   *        The header text to be emitted. May be <code>null</code>.
    * @return this
    */
   @Nonnull
@@ -164,9 +162,8 @@ public final class CSSWriter
    * encoding for the CSS and the respective writer!
    * 
    * @param sContentCharset
-   *          The content charset to be used. May be <code>null</code> to
-   *          indicate that no special charset name should be emitted into the
-   *          CSS.
+   *        The content charset to be used. May be <code>null</code> to indicate
+   *        that no special charset name should be emitted into the CSS.
    * @return this
    */
   @Nonnull
@@ -192,15 +189,15 @@ public final class CSSWriter
    * Write the CSS content to the passed writer. No specific charset is used.
    * 
    * @param aCSS
-   *          The CSS to write. May not be <code>null</code>.
+   *        The CSS to write. May not be <code>null</code>.
    * @param aWriter
-   *          The write to write the text to. May not be <code>null</code>. Is
-   *          automatically closed after the writing!
+   *        The write to write the text to. May not be <code>null</code>. Is
+   *        automatically closed after the writing!
    * @throws IOException
-   *           In case writing fails.
+   *         In case writing fails.
    * @throws IllegalStateException
-   *           In case some elements cannot be written in the version supplied
-   *           in the constructor.
+   *         In case some elements cannot be written in the version supplied in
+   *         the constructor.
    */
   public void writeCSS (@Nonnull final CascadingStyleSheet aCSS, @Nonnull @WillClose final Writer aWriter) throws IOException
   {
@@ -266,18 +263,18 @@ public final class CSSWriter
    * Write the CSS content to the passed writer. No specific charset is used.
    * 
    * @param aCSS
-   *          The CSS to write. May not be <code>null</code>.
+   *        The CSS to write. May not be <code>null</code>.
    * @param aWriter
-   *          The write to write the text to. May not be <code>null</code>. Is
-   *          automatically closed after the writing!
+   *        The write to write the text to. May not be <code>null</code>. Is
+   *        automatically closed after the writing!
    * @param sCSSCharset
-   *          The charset that is explicitly written to the CSS content. Not the
-   *          encoding of the CSS file! May be <code>null</code>.
+   *        The charset that is explicitly written to the CSS content. Not the
+   *        encoding of the CSS file! May be <code>null</code>.
    * @throws IOException
-   *           In case writing fails.
+   *         In case writing fails.
    * @throws IllegalStateException
-   *           In case some elements cannot be written in the version supplied
-   *           in the constructor.
+   *         In case some elements cannot be written in the version supplied in
+   *         the constructor.
    * @deprecated Use {@link #setContentCharset(String)} instead!
    */
   @Deprecated
@@ -292,10 +289,10 @@ public final class CSSWriter
    * Create the CSS without a specific charset.
    * 
    * @param aCSS
-   *          The CSS object to be converted to text
+   *        The CSS object to be converted to text
    * @return The text representation of the CSS.
    * @throws IOException
-   *           If writing fails. Should never happen!
+   *         If writing fails. Should never happen!
    */
   @Nonnull
   public String getCSSAsString (@Nonnull final CascadingStyleSheet aCSS) throws IOException
@@ -309,13 +306,13 @@ public final class CSSWriter
    * Create the CSS with a specific charset.
    * 
    * @param aCSS
-   *          The CSS object to be converted to text
+   *        The CSS object to be converted to text
    * @param sCSSCharset
-   *          The charset to be added to the CSS - not the charset to encode the
-   *          CSS content itself! May be <code>null</code>.
+   *        The charset to be added to the CSS - not the charset to encode the
+   *        CSS content itself! May be <code>null</code>.
    * @return The text representation of the CSS.
    * @throws IOException
-   *           If writing fails. Should never happen!
+   *         If writing fails. Should never happen!
    * @deprecated Use {@link #setContentCharset(String)} instead!
    */
   @Nonnull

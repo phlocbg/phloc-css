@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.StringParser;
 import com.phloc.css.ECSSUnit;
 
 /**
@@ -58,7 +59,7 @@ public final class CSSNumberHelper
   public static boolean isNumberValue (@Nullable final String sCSSValue)
   {
     final String sRealValue = StringHelper.trim (sCSSValue);
-    return StringHelper.hasText (sRealValue) && StringHelper.isDouble (sRealValue);
+    return StringHelper.hasText (sRealValue) && StringParser.isDouble (sRealValue);
   }
 
   public static boolean isNumberWithUnitValue (@Nullable final String sCSSValue, final boolean bWithPerc)
