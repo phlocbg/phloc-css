@@ -47,11 +47,11 @@ public final class CSSCompressor
    * Get the compressed version of the passed CSS code.
    * 
    * @param sOriginalCSS
-   *          The original CSS code to be compressed.
+   *        The original CSS code to be compressed.
    * @param aCharset
-   *          The character set to be used. May not be <code>null</code>.
+   *        The character set to be used. May not be <code>null</code>.
    * @param eCSSVersion
-   *          The CSS version to use.
+   *        The CSS version to use.
    * @return If compression failed because the CSS is invalid or whatsoever, the
    *         original CSS is returned, else the compressed version is returned.
    */
@@ -67,13 +67,13 @@ public final class CSSCompressor
    * Get the compressed version of the passed CSS code.
    * 
    * @param sOriginalCSS
-   *          The original CSS code to be compressed.
+   *        The original CSS code to be compressed.
    * @param aCharset
-   *          The character set to be used. May not be <code>null</code>.
+   *        The character set to be used. May not be <code>null</code>.
    * @param eCSSVersion
-   *          The CSS version to use.
+   *        The CSS version to use.
    * @param bRemoveUnnecessaryCode
-   *          if <code>true</code> unnecessary empty declarations are omitted
+   *        if <code>true</code> unnecessary empty declarations are omitted
    * @return If compression failed because the CSS is invalid or whatsoever, the
    *         original CSS is returned, else the compressed version is returned.
    */

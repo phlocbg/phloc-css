@@ -37,7 +37,7 @@ public interface IHasCSSDeclarations extends ICSSWriteable
    * Add a new declaration.
    * 
    * @param aDeclaration
-   *          The declaration to be added. May not be <code>null</code>.
+   *        The declaration to be added. May not be <code>null</code>.
    */
   void addDeclaration (@Nonnull CSSDeclaration aDeclaration);
 
@@ -45,7 +45,7 @@ public interface IHasCSSDeclarations extends ICSSWriteable
    * Remove the given declaration
    * 
    * @param aDeclaration
-   *          The declaration to be removed. May not be <code>null</code>.
+   *        The declaration to be removed. May not be <code>null</code>.
    * @return {@link EChange#CHANGED} if the declaration was successfully removed
    */
   @Nonnull
@@ -55,7 +55,7 @@ public interface IHasCSSDeclarations extends ICSSWriteable
    * Remove the declaration at the specified index
    * 
    * @param nDeclarationIndex
-   *          The index of the declaration to be removed. Must be &ge; 0.
+   *        The index of the declaration to be removed. Must be &ge; 0.
    * @return {@link EChange#CHANGED} if the declaration was successfully
    *         removed, {@link EChange#UNCHANGED} if the index was invalid.
    */

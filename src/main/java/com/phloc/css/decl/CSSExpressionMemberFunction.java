@@ -53,7 +53,7 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember
    * Ctor
    * 
    * @param sFunctionName
-   *          Function name
+   *        Function name
    */
   public CSSExpressionMemberFunction (@Nonnull @Nonempty final String sFunctionName)
   {
@@ -64,9 +64,9 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember
    * Ctor
    * 
    * @param sFunctionName
-   *          Function name
+   *        Function name
    * @param aExpression
-   *          Optional parameter expression
+   *        Optional parameter expression
    */
   public CSSExpressionMemberFunction (@Nonnull @Nonempty final String sFunctionName,
                                       @Nullable final CSSExpression aExpression)

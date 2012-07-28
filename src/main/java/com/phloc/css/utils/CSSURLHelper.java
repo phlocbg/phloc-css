@@ -45,7 +45,7 @@ public final class CSSURLHelper
    * Check if the passed CSS value is an URL value.
    * 
    * @param sValue
-   *          The value to be checked.
+   *        The value to be checked.
    * @return <code>true</code> if the passed value starts with "url("
    */
   public static boolean isURLValue (@Nullable final String sValue)
@@ -61,7 +61,7 @@ public final class CSSURLHelper
    * Extract the real URL contained in a CSS URL value.
    * 
    * @param sValue
-   *          The value containing the CSS value
+   *        The value containing the CSS value
    * @return <code>null</code> if the passed value is not an URL value
    * @see #isURLValue
    */
@@ -83,7 +83,7 @@ public final class CSSURLHelper
    * Surround the passed URL with the CSS "url(...)"
    * 
    * @param aURL
-   *          URL to be wrapped. May not be <code>null</code>.
+   *        URL to be wrapped. May not be <code>null</code>.
    * @return <code>url(<i>sURL</i>)</code>
    */
   @Nonnull
@@ -98,9 +98,9 @@ public final class CSSURLHelper
    * Surround the passed URL with the CSS "url(...)"
    * 
    * @param aURL
-   *          URL to be wrapped. May not be <code>null</code>.
+   *        URL to be wrapped. May not be <code>null</code>.
    * @param bQuoteURL
-   *          if <code>true</code> single quotes are added around the URL
+   *        if <code>true</code> single quotes are added around the URL
    * @return <code>url(<i>sURL</i>)</code> or <code>url('<i>sURL</i>')</code>
    */
   @Nonnull
@@ -116,7 +116,7 @@ public final class CSSURLHelper
    * Surround the passed URL with the CSS "url(...)"
    * 
    * @param sURL
-   *          URL to be wrapped. May neither be <code>null</code> nor empty.
+   *        URL to be wrapped. May neither be <code>null</code> nor empty.
    * @return <code>url(<i>sURL</i>)</code>
    */
   @Nonnull
@@ -131,9 +131,9 @@ public final class CSSURLHelper
    * Surround the passed URL with the CSS "url(...)"
    * 
    * @param sURL
-   *          URL to be wrapped. May neither be <code>null</code> nor empty.
+   *        URL to be wrapped. May neither be <code>null</code> nor empty.
    * @param bQuoteURL
-   *          if <code>true</code> single quotes are added around the URL
+   *        if <code>true</code> single quotes are added around the URL
    * @return <code>url(<i>sURL</i>)</code> or <code>url('<i>sURL</i>')</code>
    */
   @Nonnull

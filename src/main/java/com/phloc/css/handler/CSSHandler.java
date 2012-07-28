@@ -280,9 +280,9 @@ public final class CSSHandler
    * Create a {@link CascadingStyleSheet} object from a parsed object.
    * 
    * @param eVersion
-   *          The CSS version to use. May not be <code>null</code>.
+   *        The CSS version to use. May not be <code>null</code>.
    * @param aNode
-   *          The parsed CSS object to read. May not be <code>null</code>.
+   *        The parsed CSS object to read. May not be <code>null</code>.
    * @return Never <code>null</code>.
    */
   @Nonnull

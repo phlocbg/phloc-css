@@ -109,7 +109,7 @@ public final class CCSS
    * Extract the real URL contained in a URL value.
    * 
    * @param sValue
-   *          The value containing the CSS value
+   *        The value containing the CSS value
    * @return <code>null</code> if the passed value is not an URL value
    * @see CSSURLHelper#isURLValue(String)
    * @deprecated Use {@link CSSURLHelper#getURLValue(String)} instead
@@ -125,7 +125,7 @@ public final class CCSS
    * Check if the passed value is an URL value.
    * 
    * @param sValue
-   *          The value to be checked.
+   *        The value to be checked.
    * @return <code>true</code> if the passed value starts with "url("
    * @deprecated Use {@link CSSURLHelper#isURLValue(String)} instead
    */
@@ -236,7 +236,7 @@ public final class CCSS
    * Surround the passed URL with the CSS "url(...)"
    * 
    * @param sURL
-   *          URL to be wrapped. May neither be <code>null</code> nor empty.
+   *        URL to be wrapped. May neither be <code>null</code> nor empty.
    * @return url(...)
    * @deprecated Use {@link CSSURLHelper#getAsCSSURL(String)} instead
    */

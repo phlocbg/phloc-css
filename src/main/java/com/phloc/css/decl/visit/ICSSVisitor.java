@@ -46,7 +46,7 @@ public interface ICSSVisitor
    * Called on CSS import statement - rarely used :)
    * 
    * @param aImportRule
-   *          Other imported CSS
+   *        Other imported CSS
    */
   void onImport (@Nonnull CSSImportRule aImportRule);
 

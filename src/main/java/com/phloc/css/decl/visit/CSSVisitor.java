@@ -154,10 +154,10 @@ public final class CSSVisitor
    * Visit CSS elements in the order of their declaration.
    * 
    * @param aCSS
-   *          The CSS to visit. May not be <code>null</code>.
+   *        The CSS to visit. May not be <code>null</code>.
    * @param aVisitor
-   *          The callback to be invoked for each element found. May not be
-   *          <code>null</code>.
+   *        The callback to be invoked for each element found. May not be
+   *        <code>null</code>.
    */
   public static void visitCSS (@Nonnull final CascadingStyleSheet aCSS, @Nonnull final ICSSVisitor aVisitor)
   {
@@ -187,9 +187,9 @@ public final class CSSVisitor
    * Visit all items that can contain URLs in CSS files.
    * 
    * @param aCSS
-   *          The CSS to visit.
+   *        The CSS to visit.
    * @param aVisitor
-   *          The callback to invoke for each found occurrence.
+   *        The callback to invoke for each found occurrence.
    */
   public static void visitCSSUrl (@Nonnull final CascadingStyleSheet aCSS, @Nonnull final ICSSUrlVisitor aVisitor)
   {

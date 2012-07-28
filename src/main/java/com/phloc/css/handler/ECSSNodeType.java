@@ -108,7 +108,7 @@ public enum ECSSNodeType
    * Get the internal node type for the specified CSS version
    * 
    * @param eVersion
-   *          CSS version to use
+   *        CSS version to use
    * @return The internal node type for this node type or
    *         {@link CGlobal#ILLEGAL_UINT} if this node type is not supported by
    *         the passed version
@@ -130,9 +130,9 @@ public enum ECSSNodeType
    * Check if the passed parser node is of <code>this</code> type.
    * 
    * @param aParserNode
-   *          The parser node to be checked.
+   *        The parser node to be checked.
    * @param eVersion
-   *          The desired version.
+   *        The desired version.
    * @return <code>true</code> if <code>this</code> is the type of the passed
    *         parser node in the given version
    */
