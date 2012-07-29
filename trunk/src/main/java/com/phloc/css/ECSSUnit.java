@@ -67,7 +67,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   DPPX ("dppx", ECSSMetaUnit.RESOLUTION, ECSSVersion.CSS30);
 
   private final String m_sName;
-  private ECSSMetaUnit m_eMetaUnit;
+  private final ECSSMetaUnit m_eMetaUnit;
   private final ECSSVersion m_eVersion;
 
   private ECSSUnit (@Nonnull @Nonempty final String sName, @Nonnull final ECSSMetaUnit eMetaUnit)
