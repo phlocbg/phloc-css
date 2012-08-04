@@ -146,13 +146,13 @@ public abstract class AbstractCSSProperty implements ICSSProperty
   @Nonnull
   public final ICSSValue newValue (@Nonnull final ICSSNamedColor aColor)
   {
-    return _newValue (aColor.getName (), false);
+    return newValue (aColor.getName ());
   }
 
   @Nonnull
   public final ICSSValue newImportantValue (@Nonnull final ICSSNamedColor aColor)
   {
-    return _newValue (aColor.getName (), true);
+    return newImportantValue (aColor.getName ());
   }
 
   @Override
