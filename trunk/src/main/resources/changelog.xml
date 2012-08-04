@@ -20,6 +20,7 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2012-08-04" version="3.1.1" />
   <entry date="2012-08-04" category="performance" action="update">
     <change>
       <text locale="en">Improved performance when reading CSS with explicit charset definitions by trying to read only the charset first</text>
