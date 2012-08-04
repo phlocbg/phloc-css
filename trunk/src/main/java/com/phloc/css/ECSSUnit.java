@@ -28,7 +28,8 @@ import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
 
 /**
- * Enumeration containing all predefined CSS units.
+ * Enumeration containing all predefined CSS units.<br>
+ * Source: http://www.w3.org/TR/css3-values/
  * 
  * @author philip
  */
