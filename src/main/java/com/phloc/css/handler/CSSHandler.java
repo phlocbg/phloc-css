@@ -27,20 +27,11 @@ import javax.annotation.Nullable;
 import javax.annotation.WillClose;
 import javax.annotation.concurrent.Immutable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.parser.CSSNode;
-import com.phloc.css.parser.CharStream;
-import com.phloc.css.parser.ParseException;
-import com.phloc.css.parser.ParserCSS21;
-import com.phloc.css.parser.ParserCSS21TokenManager;
-import com.phloc.css.parser.ParserCSS30;
-import com.phloc.css.parser.ParserCSS30TokenManager;
 import com.phloc.css.reader.CSSReader;
 
 /**
@@ -51,56 +42,8 @@ import com.phloc.css.reader.CSSReader;
 @Immutable
 public final class CSSHandler
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSHandler.class);
-
   private CSSHandler ()
   {}
-
-  @Nullable
-  private static CSSNode _readFromStream (@Nonnull final CharStream aStream,
-                                          @Nonnull final ECSSVersion eVersion,
-                                          @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
-  {
-    switch (eVersion)
-    {
-      case CSS21:
-      {
-        final ParserCSS21TokenManager aTokenHdl = new ParserCSS21TokenManager (aStream);
-        final ParserCSS21 aParser = new ParserCSS21 (aTokenHdl);
-        try
-        {
-          return aParser.styleSheet ();
-        }
-        catch (final ParseException ex)
-        {
-          if (aCustomExceptionHandler != null)
-            aCustomExceptionHandler.onException (ex);
-          else
-            s_aLogger.error ("Failed to parse CSS 2.1 definition: " + ex.getMessage ());
-          return null;
-        }
-      }
-      case CSS30:
-      {
-        final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (aStream);
-        final ParserCSS30 aParser = new ParserCSS30 (aTokenHdl);
-        try
-        {
-          return aParser.styleSheet ();
-        }
-        catch (final ParseException ex)
-        {
-          if (aCustomExceptionHandler != null)
-            aCustomExceptionHandler.onException (ex);
-          else
-            s_aLogger.error ("Failed to parse CSS 3.0 definition: " + ex.getMessage ());
-          return null;
-        }
-      }
-      default:
-        throw new IllegalArgumentException ("Unsupported CSS version " + eVersion);
-    }
-  }
 
   @Deprecated
   public static boolean isValidCSS (@Nonnull final File aFile,

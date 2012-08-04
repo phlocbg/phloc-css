@@ -23,8 +23,6 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.css.AbstractCSS30Test;
@@ -32,10 +30,13 @@ import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.reader.CSSReader;
 
+/**
+ * Test class for class {@link CSSWriter}.
+ * 
+ * @author philip
+ */
 public final class CSSWriterTest extends AbstractCSS30Test
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSWriterTest.class);
-
   @Test
   public void testIndentation () throws IOException
   {

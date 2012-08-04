@@ -121,8 +121,6 @@ public final class CSSMediaQuery implements ICSSWriteable
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
-
     final StringBuilder aSB = new StringBuilder ();
 
     // The modifier already contains a trailing space if necessary!
