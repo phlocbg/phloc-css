@@ -579,7 +579,7 @@ public final class CSSReader
       final JavaCharStream aCharStream = new JavaCharStream (aIS, aCharsetToUse);
       final CSSNode aNode = _readFromStream (aCharStream, eVersion, aCustomExceptionHandler);
 
-      // Failed to interprete content as CSS?
+      // Failed to interpret content as CSS?
       if (aNode == null)
         return null;
 
