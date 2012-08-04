@@ -50,26 +50,24 @@ public class ParserCSSCharsetDetector
 PARSER_END(ParserCSSCharsetDetector)
 
 TOKEN_MGR_DECLS :
-{
-}
+{}
 
 <DEFAULT> TOKEN :
 {
   < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
-| < W: ( <S> )? >
 }
 
 <DEFAULT> MORE :
 {
-  < "/*" > : COMMENT
+  < "/*" > : IN_COMMENT
 }
 
-<COMMENT> MORE :
+<IN_COMMENT> MORE :
 {
-  < ~[] > : COMMENT
+  < ~[] > : IN_COMMENT
 }
 
-<COMMENT> SKIP :
+<IN_COMMENT> SKIP :
 {
   < "*/" > : DEFAULT
 }
@@ -78,15 +76,13 @@ TOKEN_MGR_DECLS :
 {
   < #H: ["0"-"9","a"-"f"] >
 | < #HNUM: <H> | <H><H> | <H><H><H> | <H><H><H><H> | <H><H><H><H><H> | <H><H><H><H><H><H> >
-| < #NONASCII: ["\u0080"-"\uFFFF"] >
 | < #UNICODE: "\\" <HNUM> ( "\r\n" | [" ","\t","\r","\n","\f"] )? >
 | < #ESCAPE: <UNICODE> | ( "\\" ~["\r","\n","\f","0"-"9","a"-"f"] ) >
-| < #NMSTART: ["_","a"-"z","A"-"Z"] | <NONASCII> | <ESCAPE> >
-| < #NMCHAR: ["_","a"-"z","A"-"Z","0"-"9","-"] | <NONASCII> | <ESCAPE> >
 | < NL: "\n" | "\r\n" | "\r" | "\f" >
 | < STRING1: "\"" ( ~["\n","\r","\f","\\","\""] | "\\" <NL> | <ESCAPE> )* "\"" >
 | < STRING2: "'"  ( ~["\n","\r","\f","\\","'"]  | "\\" <NL> | <ESCAPE> )* "'" >
-| < #COMMENT_: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/">
+| < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/">
+| < REST: ~[] >
 }
 
 CSSNode styleSheetCharset() #Root : 
