@@ -23,6 +23,8 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -39,7 +41,7 @@ import com.phloc.css.property.ICSSProperty;
  * 
  * @author philip
  */
-public final class CSSValueList implements ICSSValue
+public final class CSSValueList implements ICSSMultiValue
 {
   private final List <CSSValue> m_aValues = new ArrayList <CSSValue> ();
 
@@ -47,15 +49,22 @@ public final class CSSValueList implements ICSSValue
                        @Nonnull final String [] aValues,
                        final boolean bIsImportant)
   {
-    if (aProperties == null || aProperties.length == 0)
+    if (ArrayHelper.isEmpty (aProperties))
       throw new IllegalArgumentException ("No properties passed!");
-    if (aValues == null || aValues.length == 0)
+    if (ArrayHelper.isEmpty (aValues))
       throw new IllegalArgumentException ("No value passed!");
     if (aProperties.length != aValues.length)
       throw new IllegalArgumentException ("Different number of properties and values passed");
 
     for (int i = 0; i < aProperties.length; ++i)
       m_aValues.add (new CSSValue (aProperties[i], aValues[i], bIsImportant));
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSValue> getContainedValues ()
+  {
+    return ContainerHelper.newList (m_aValues);
   }
 
   @Nonnull

@@ -24,6 +24,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -41,7 +42,7 @@ import com.phloc.css.property.ICSSProperty;
  * 
  * @author philip
  */
-public final class CSSValueMultiValue implements ICSSValue
+public final class CSSValueMultiValue implements ICSSMultiValue
 {
   private final List <CSSValue> m_aValues = new ArrayList <CSSValue> ();
 
@@ -56,6 +57,13 @@ public final class CSSValueMultiValue implements ICSSValue
 
     for (final String sValue : aValues)
       m_aValues.add (new CSSValue (aProperty, sValue, bIsImportant));
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSValue> getContainedValues ()
+  {
+    return ContainerHelper.newList (m_aValues);
   }
 
   @Nonnull
