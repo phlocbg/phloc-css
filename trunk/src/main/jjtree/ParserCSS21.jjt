@@ -66,15 +66,15 @@ TOKEN_MGR_DECLS :
 
 <DEFAULT> MORE :
 {
-  < "/*" > : COMMENT
+  < "/*" > : IN_COMMENT
 }
 
-<COMMENT> MORE :
+<IN_COMMENT> MORE :
 {
-  < ~[] > : COMMENT
+  < ~[] > : IN_COMMENT
 }
 
-<COMMENT> SKIP :
+<IN_COMMENT> SKIP :
 {
   < "*/" > : DEFAULT
 }
@@ -112,7 +112,7 @@ TOKEN_MGR_DECLS :
 | < STRING2: "'" ( ~["\n","\r","\f","\\","'"] | "\\" <NL> | <ESCAPE> )* "'" >
 | < INVALID1: "\"" ( ~["\n","\r","\f","\\","\""] | "\\" <NL> | <ESCAPE> )* >
 | < INVALID2: "'" ( ~["\n","\r","\f","\\","'"] | "\\" <NL> | <ESCAPE> )* >
-| < #COMMENT_: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/">
+| < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/">
 
 | < NUMBER: <NUM> >
 
@@ -141,7 +141,7 @@ TOKEN_MGR_DECLS :
 | < PAGE_SYM: "@page" >
 | < MEDIA_SYM: "@media" >
 | < CHARSET_SYM: "@charset" >
-| < IMPORTANT_SYM: "!" ( <W> | <COMMENT_> )* "important" >
+| < IMPORTANT_SYM: "!" ( <W> | <COMMENT> )* "important" >
 
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
 | < EX: <NUM> "ex" >           { matchedToken.image = ParseUtils.splitNumber(image) + "ex"; }
