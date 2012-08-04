@@ -17,23 +17,25 @@
  */
 package com.phloc.css.propertyvalue;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
-import com.phloc.css.ICSSWriteable;
-import com.phloc.css.property.ECSSProperty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 
 /**
- * Represents a single CSS value.
+ * Base interface for a CSS value that contains more than one value
  * 
  * @author philip
  */
 @MustImplementEqualsAndHashcode
-public interface ICSSValue extends ICSSWriteable
+public interface ICSSMultiValue extends ICSSValue
 {
   /**
-   * @return The underlying CSS property. Never <code>null</code>.
+   * @return The contained CSS values. Never <code>null</code>.
    */
   @Nonnull
-  ECSSProperty getProp ();
+  @ReturnsMutableCopy
+  List <CSSValue> getContainedValues ();
 }
