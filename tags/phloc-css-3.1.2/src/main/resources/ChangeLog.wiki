@@ -1,0 +1,79 @@
+#summary Change log of phloc-css
+= Change log =
+<wiki:comment>This content is generated. Do not modify!</wiki:comment>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>8/8/12</td><td colspan="4">_Release *3.1.2*_</td></tr>
+<tr><td>8/8/12</td><td>add</td><td>api</td><td></td><td>Moved CSSFilenameHelper from [http://code.google.com/p/phloc-html phloc-html] into this project</td></tr>
+<tr border="1"><td>8/4/12</td><td colspan="4">_Release *3.1.1*_</td></tr>
+<tr><td>8/4/12</td><td>update</td><td>performance</td><td></td><td>Improved performance when reading CSS with explicit charset definitions by trying to read only the charset first</td></tr>
+<tr><td>8/4/12</td><td>add</td><td>api</td><td></td><td>Added new interface ICSSMultiValue with informational purpose</td></tr>
+<tr><td>8/4/12</td><td>add</td><td>api</td><td></td><td>Extended ECSSUnit with static methods for all units</td></tr>
+<tr><td>7/20/12</td><td>add</td><td>api</td><td></td><td>Extended CSSMediaList API</td></tr>
+<tr><td>7/9/12</td><td>add</td><td>api</td><td></td><td>Added new sanity method CSSExpressionMemberTermURI.getURIString</td></tr>
+<tr border="1"><td>6/28/12</td><td colspan="4">_Release *3.1.0*_</td></tr>
+<tr><td>6/28/12</td><td>add</td><td>api</td><td></td><td>Added domain objects and utility functions to parse rgb(),rgba(),hsl() and hsla() values</td></tr>
+<tr><td>6/28/12</td><td>add</td><td>api</td><td></td><td>Added domain objects and utility functions to parse rect() values</td></tr>
+<tr><td>6/28/12</td><td>change</td><td>api</td><td>*yes*</td><td>Moved interface ICSSNamedColor to utils package</td></tr>
+<tr><td>6/28/12</td><td>change</td><td>api</td><td>*yes*</td><td>Extracted CSSURI class and changed visitor to use this new class</td></tr>
+<tr><td>6/28/12</td><td>change</td><td>api</td><td></td><td>Moved all CSS reading methods from CSSHandler to new class CSSReader</td></tr>
+<tr><td>6/28/12</td><td>add</td><td>api</td><td></td><td>Started support to handle URLs more easily</td></tr>
+<tr><td>6/28/12</td><td>add</td><td>api</td><td></td><td>Added support to quote CSS URL values in writing</td></tr>
+<tr border="1"><td>6/18/12</td><td colspan="4">_Release *3.0.0*_</td></tr>
+<tr><td>6/18/12</td><td>add</td><td>feature</td><td></td><td>Added support for CSS3 calc() functionality</td></tr>
+<tr><td>6/18/12</td><td>add</td><td>api</td><td></td><td>Introduced the enum ECSSMetaUnit to group comparable units</td></tr>
+<tr><td>6/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Added 'dppx' unit, removed the 'gd' unit and renamed the 'vm' unit to 'vmin'</td></tr>
+<tr><td>6/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Moved CSS value constants from CCSS to CCSSValue</td></tr>
+<tr border="1"><td>6/18/12</td><td colspan="4">_Release *3.0.0.RC3*_</td></tr>
+<tr><td>6/18/12</td><td>add</td><td>api</td><td></td><td>Added better support for handling rect values internally</td></tr>
+<tr><td>6/18/12</td><td>update</td><td>tech</td><td></td><td>Added handling for old CSS rectangle syntax 'rect(a b c d)'</td></tr>
+<tr><td>6/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Removed all methods from CCSS into more meaningful helper classes</td></tr>
+<tr><td>6/18/12</td><td>add</td><td>api</td><td></td><td>Added new base interface ICSSNamedColor</td></tr>
+<tr><td>6/18/12</td><td>change</td><td>api</td><td>*yes*</td><td>Moved ECSSProperty to .property package</td></tr>
+<tr border="1"><td>6/15/12</td><td colspan="4">_Release *3.0.0.RC2*_</td></tr>
+<tr><td>6/15/12</td><td>remove</td><td>api</td><td></td><td>Removed the content of the .html package</td></tr>
+<tr border="1"><td>6/14/12</td><td colspan="4">_Release *3.0.0.RC1*_</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Added possibility to provide a custom exception handler to handle the generated ParseExceptions</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Added new writer feature "remove unnecessary code" which removes unnecessary statements</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Correctly handling font-face, page and keyframes as child of media rule</td></tr>
+<tr><td>6/15/12</td><td>fix</td><td>tech</td><td></td><td>CSS 3.0 media list is now optional on @media rule</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Added support for "dpi" and "dpcm" CSS units</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Added support for simple CSS 2.1 page rule in model</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>feature</td><td></td><td>Extended CSSWriter with options to format the output (header?, header text, content charset)</td></tr>
+<tr><td>6/15/12</td><td>add</td><td>api</td><td></td><td>Extracted ICSSWriterSettings interface and using it</td></tr>
+<tr><td>6/15/12</td><td>fix</td><td>tech</td><td></td><td>Fixed hack in internal handling of complex pseudo selectors (added class CSSSelectorMemberFunctionLike)</td></tr>
+<tr><td>6/14/12</td><td>change</td><td>api</td><td>*yes*</td><td>Moved all color related elements to a separate subpackage ".color"</td></tr>
+<tr><td>6/14/12</td><td>add</td><td>feature</td><td></td><td>Added support for RGBA, HSL and HSLA values</td></tr>
+<tr><td>6/14/12</td><td>update</td><td>api</td><td>*yes*</td><td>Updated URL visitor API so that the URL is passed in directly</td></tr>
+<tr><td>6/14/12</td><td>update</td><td>api</td><td>*yes*</td><td>Updated visitor API to handle keyframes rules</td></tr>
+<tr><td>6/14/12</td><td>add</td><td>feature</td><td></td><td>Added support for parsing and writing CSS animation rules (CSSKeyframesRule)</td></tr>
+<tr><td>6/14/12</td><td>update</td><td>feature</td><td></td><td>Made parsing of IE filters (progid:...) more flexible by adding whitespace support</td></tr>
+<tr><td>6/13/12</td><td>change</td><td>api</td><td>*yes*</td><td>Moved all HTML relevant things to the new package .html</td></tr>
+<tr><td>6/13/12</td><td>add</td><td>api</td><td></td><td>Added new enum ECSSMediaExpressionFeature</td></tr>
+<tr><td>6/13/12</td><td>add</td><td>feature</td><td></td><td>Added support for parsing and writing CSS 3 media queries. Many thanks to Thomas Draier from jahia.com!!!!!</td></tr>
+<tr><td>6/13/12</td><td>add</td><td>api</td><td></td><td>Added CSSHandler.readFromStream with String charset name</td></tr>
+<tr border="1"><td>6/4/12</td><td colspan="4">_Release *2.7.1*_</td></tr>
+<tr><td>6/4/12</td><td>add</td><td>api</td><td></td><td>Added CSSHandler.isValidCSS method accepting a Reader</td></tr>
+<tr><td>6/4/12</td><td>add</td><td>api</td><td></td><td>Added JavaCharStream constructor</td></tr>
+<tr border="1"><td>5/24/12</td><td colspan="4">_Release *2.7.0*_</td></tr>
+<tr><td>5/24/12</td><td>change</td><td>tech</td><td></td><td>Using a custom CharStream to read CSS files, to ensure that the encoding is used correctly</td></tr>
+<tr><td>5/24/12</td><td>change</td><td>tech</td><td></td><td>Changed some return types from returning unmodifiable objects to return copies instead</td></tr>
+<tr><td>5/22/12</td><td>update</td><td>tech</td><td></td><td>Added support for explicitly reading and writing CSS with a special charset</td></tr>
+<tr border="1"><td>4/23/12</td><td colspan="4">_Release *2.6.5*_</td></tr>
+<tr><td>4/23/12</td><td>update</td><td>tech</td><td>*yes*</td><td>Updated to [http://code.google.com/p/phloc-commons phloc-commons] 3.5.0</td></tr>
+<tr border="1"><td>4/19/12</td><td colspan="4">_Release *2.6.1*_</td></tr>
+<tr><td>4/19/12</td><td>fix</td><td>tech</td><td></td><td>Fixed cloning of CSSProperty implementations</td></tr>
+<tr><td>4/19/12</td><td>add</td><td>tech</td><td></td><td>Enabled compression of simple expression values (like #aabbcc =`>` #abc)</td></tr>
+<tr><td>4/19/12</td><td>add</td><td>api</td><td></td><td>Added modifying methods for CascadingStyleSheet</td></tr>
+<tr><td>4/19/12</td><td>add</td><td>api</td><td></td><td>Added new method isNode in ECSSNodeType for more easier readable code</td></tr>
+<tr border="1"><td>2/2/12</td><td colspan="4">_Release *2.6.0*_</td></tr>
+<tr><td>2/2/12</td><td>fix</td><td>tech</td><td></td><td>Fixed bug in grammar concerning spaces before @charset</td></tr>
+<tr><td>2/2/12</td><td>change</td><td>tech</td><td></td><td>Moved to Google Code as Open Source</td></tr>
+<tr border="1"><td>11/6/11</td><td colspan="4">_Release *2.5.3*_</td></tr>
+<tr><td>10/24/11</td><td>add</td><td>api</td><td></td><td>Added new CSS3 and browser specific CSS properties</td></tr>
+<tr><td>10/23/11</td><td>add</td><td>api</td><td></td><td>Added support for border-radius</td></tr>
+<tr border="1"><td>9/23/11</td><td colspan="4">_Release *2.5.2*_</td></tr>
+<tr><td>9/23/11</td><td>fix</td><td>tech</td><td></td><td>Fixed bug in parser to read "inherit !important"</td></tr>
+<tr><td>9/23/11</td><td>add</td><td>tech</td><td></td><td>Added support for CSSMediaRule in the CSSVisitor</td></tr>
+<tr border="1"><td>8/12/11</td><td colspan="4">_Release *2.5.1*_</td></tr>
+<tr><td>8/11/11</td><td>fix</td><td>tech</td><td></td><td>CSS 3.0 parser can now handle negation, nth-`*` functions, ~ combinator, namespace prefix etc.</td></tr>
+<tr><td>8/11/11</td><td>fix</td><td>tech</td><td></td><td>Fixed CSS parser speed by using LL(1) by default and LL(k) only on demand</td></tr>
+</tbody></table>
