@@ -34,6 +34,8 @@ import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSDeclarationList;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
+import com.phloc.css.handler.DoNothingCSSParseExceptionHandler;
+import com.phloc.css.handler.ICSSParseExceptionHandler;
 
 /**
  * Test class for class {@link CSSReaderDeclarationList}
@@ -75,19 +77,21 @@ public final class CSSReaderDeclarationListTest
   @Test
   public void testRead21 ()
   {
+    final ICSSParseExceptionHandler aHdl = new DoNothingCSSParseExceptionHandler ();
     for (final String sCSS : aValid)
-      assertNotNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS21));
+      assertNotNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS21, aHdl));
     for (final String sCSS : aInvalid)
-      assertNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS21));
+      assertNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS21, aHdl));
   }
 
   @Test
   public void testRead30 ()
   {
+    final ICSSParseExceptionHandler aHdl = new DoNothingCSSParseExceptionHandler ();
     for (final String sCSS : aValid)
-      assertNotNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS30));
+      assertNotNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS30, aHdl));
     for (final String sCSS : aInvalid)
-      assertNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS30));
+      assertNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS30, aHdl));
   }
 
   @Test
