@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
+import com.phloc.css.decl.CSSDeclarationList;
 import com.phloc.css.decl.CSSExpression;
 import com.phloc.css.decl.CSSExpressionMemberFunction;
 import com.phloc.css.decl.CSSExpressionMemberMath;
@@ -725,7 +726,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  public CascadingStyleSheet createFromNode (@Nonnull final CSSNode aNode)
+  public CascadingStyleSheet createCascadingStyleSheetFromNode (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.ROOT);
     final CascadingStyleSheet ret = new CascadingStyleSheet ();
@@ -777,6 +778,17 @@ final class CSSNodeToDomainObject
                                       ": " +
                                       ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
+    return ret;
+  }
+
+  @Nonnull
+  public CSSDeclarationList createDeclarationListFromNode (@Nonnull final CSSNode aNode)
+  {
+    _expectNodeType (aNode, ECSSNodeType.STYLEDECLARATION);
+    final CSSDeclarationList ret = new CSSDeclarationList ();
+    final int nDecls = aNode.jjtGetNumChildren ();
+    for (int nDecl = 0; nDecl < nDecls; ++nDecl)
+      ret.addDeclaration (_createDeclaration (aNode.jjtGetChild (nDecl)));
     return ret;
   }
 }

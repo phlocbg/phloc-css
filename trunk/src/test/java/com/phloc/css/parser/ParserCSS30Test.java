@@ -51,7 +51,7 @@ public final class ParserCSS30Test extends AbstractCSS30Test
     final CSSNode aNode = aParser.styleSheet ();
     assertNotNull (aNode);
 
-    final CascadingStyleSheet aCSS = CSSHandler.readFromNode (ECSSVersion.CSS30, aNode);
+    final CascadingStyleSheet aCSS = CSSHandler.readCascadingStyleSheetFromNode (ECSSVersion.CSS30, aNode);
     assertNotNull (aCSS);
 
     for (final ICSSTopLevelRule aTopLevelRule : aCSS.getAllFontFaceRules ())

@@ -30,16 +30,14 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.FileSystemResource;
-import com.phloc.commons.io.streamprovider.StringInputStreamProvider;
 import com.phloc.commons.io.streams.NonBlockingStringReader;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.css.ECSSVersion;
-import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.decl.CSSDeclarationList;
 import com.phloc.css.handler.CSSHandler;
 import com.phloc.css.handler.DoNothingCSSParseExceptionHandler;
 import com.phloc.css.handler.ICSSParseExceptionHandler;
@@ -47,32 +45,30 @@ import com.phloc.css.parser.CSSNode;
 import com.phloc.css.parser.CharStream;
 import com.phloc.css.parser.JavaCharStream;
 import com.phloc.css.parser.ParseException;
-import com.phloc.css.parser.ParseUtils;
 import com.phloc.css.parser.ParserCSS21;
 import com.phloc.css.parser.ParserCSS21TokenManager;
 import com.phloc.css.parser.ParserCSS30;
 import com.phloc.css.parser.ParserCSS30TokenManager;
-import com.phloc.css.parser.ParserCSSCharsetDetector;
-import com.phloc.css.parser.ParserCSSCharsetDetectorTokenManager;
 
 /**
- * This is the central user class for reading and parsing CSS from different
- * sources. This class reads full CSS declarations only.
+ * This is the central user class for reading and parsing partial CSS from
+ * different sources. This class reads CSS style declarations as used iN HTML
+ * style attributes only.
  * 
  * @author philip
  */
 @Immutable
-public final class CSSReader
+public final class CSSReaderDeclarationList
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSReader.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSReaderDeclarationList.class);
 
-  private CSSReader ()
+  private CSSReaderDeclarationList ()
   {}
 
   @Nullable
-  private static CSSNode _readStyleSheet (@Nonnull final CharStream aStream,
-                                          @Nonnull final ECSSVersion eVersion,
-                                          @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+  private static CSSNode _readStyleDeclaration (@Nonnull final CharStream aStream,
+                                                @Nonnull final ECSSVersion eVersion,
+                                                @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
     switch (eVersion)
     {
@@ -82,14 +78,14 @@ public final class CSSReader
         final ParserCSS21 aParser = new ParserCSS21 (aTokenHdl);
         try
         {
-          return aParser.styleSheet ();
+          return aParser.styleDeclaration ();
         }
         catch (final ParseException ex)
         {
           if (aCustomExceptionHandler != null)
             aCustomExceptionHandler.onException (ex);
           else
-            s_aLogger.error ("Failed to parse CSS 2.1 style sheet: " + ex.getMessage ());
+            s_aLogger.error ("Failed to parse CSS 2.1 style declaration: " + ex.getMessage ());
           return null;
         }
       }
@@ -99,14 +95,14 @@ public final class CSSReader
         final ParserCSS30 aParser = new ParserCSS30 (aTokenHdl);
         try
         {
-          return aParser.styleSheet ();
+          return aParser.styleDeclaration ();
         }
         catch (final ParseException ex)
         {
           if (aCustomExceptionHandler != null)
             aCustomExceptionHandler.onException (ex);
           else
-            s_aLogger.error ("Failed to parse CSS 3.0 style sheet: " + ex.getMessage ());
+            s_aLogger.error ("Failed to parse CSS 3.0 style declaration: " + ex.getMessage ());
           return null;
         }
       }
@@ -280,9 +276,8 @@ public final class CSSReader
   /**
    * Check if the passed String can be resembled to valid CSS content. This is
    * accomplished by fully parsing the CSS file each time the method is called.
-   * This is similar to calling
-   * {@link #readFromString(String, Charset, ECSSVersion)} and checking for a
-   * non-<code>null</code> result.
+   * This is similar to calling {@link #readFromString(String, ECSSVersion)} and
+   * checking for a non-<code>null</code> result.
    * 
    * @param sCSS
    *        The CSS string to scan. May not be <code>null</code>.
@@ -323,7 +318,7 @@ public final class CSSReader
     try
     {
       final JavaCharStream aCharStream = new JavaCharStream (aReader);
-      final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, new DoNothingCSSParseExceptionHandler ());
+      final CSSNode aNode = _readStyleDeclaration (aCharStream, eVersion, new DoNothingCSSParseExceptionHandler ());
       return aNode != null;
     }
     finally
@@ -333,83 +328,58 @@ public final class CSSReader
   }
 
   @Nullable
-  public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
-                                                    @Nonnull final String sCharset,
-                                                    @Nonnull final ECSSVersion eVersion)
+  public static CSSDeclarationList readFromString (@Nonnull final String sCSS, @Nonnull final ECSSVersion eVersion)
   {
-    return readFromString (sCSS, sCharset, eVersion, null);
+    return readFromReader (new NonBlockingStringReader (sCSS), eVersion, null);
   }
 
   @Nullable
-  public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
-                                                    @Nonnull final Charset aCharset,
-                                                    @Nonnull final ECSSVersion eVersion)
+  public static CSSDeclarationList readFromString (@Nonnull final String sCSS,
+                                                   @Nonnull final ECSSVersion eVersion,
+                                                   @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    return readFromString (sCSS, aCharset, eVersion, null);
+    return readFromReader (new NonBlockingStringReader (sCSS), eVersion, aCustomExceptionHandler);
   }
 
   @Nullable
-  public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
-                                                    @Nonnull final String sCharset,
-                                                    @Nonnull final ECSSVersion eVersion,
-                                                    @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
-  {
-    return readFromStream (new StringInputStreamProvider (sCSS, sCharset), sCharset, eVersion, aCustomExceptionHandler);
-  }
-
-  @Nullable
-  public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
-                                                    @Nonnull final Charset aCharset,
-                                                    @Nonnull final ECSSVersion eVersion,
-                                                    @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
-  {
-    return readFromStream (new StringInputStreamProvider (sCSS, aCharset), aCharset, eVersion, aCustomExceptionHandler);
-  }
-
-  @Nullable
-  public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
-                                                  @Nonnull final String sCharset,
-                                                  @Nonnull final ECSSVersion eVersion)
+  public static CSSDeclarationList readFromFile (@Nonnull final File aFile,
+                                                 @Nonnull final String sCharset,
+                                                 @Nonnull final ECSSVersion eVersion)
   {
     return readFromFile (aFile, sCharset, eVersion, null);
   }
 
   @Nullable
-  public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
-                                                  @Nonnull final Charset aCharset,
-                                                  @Nonnull final ECSSVersion eVersion)
+  public static CSSDeclarationList readFromFile (@Nonnull final File aFile,
+                                                 @Nonnull final Charset aCharset,
+                                                 @Nonnull final ECSSVersion eVersion)
   {
     return readFromFile (aFile, aCharset, eVersion, null);
   }
 
   @Nullable
-  public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
-                                                  @Nonnull final String sCharset,
-                                                  @Nonnull final ECSSVersion eVersion,
-                                                  @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+  public static CSSDeclarationList readFromFile (@Nonnull final File aFile,
+                                                 @Nonnull final String sCharset,
+                                                 @Nonnull final ECSSVersion eVersion,
+                                                 @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    return readFromStream (new FileSystemResource (aFile), sCharset, eVersion, aCustomExceptionHandler);
+    return readFromReader (new FileSystemResource (aFile).getReader (sCharset), eVersion, aCustomExceptionHandler);
   }
 
   @Nullable
-  public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
-                                                  @Nonnull final Charset aCharset,
-                                                  @Nonnull final ECSSVersion eVersion,
-                                                  @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+  public static CSSDeclarationList readFromFile (@Nonnull final File aFile,
+                                                 @Nonnull final Charset aCharset,
+                                                 @Nonnull final ECSSVersion eVersion,
+                                                 @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    return readFromStream (new FileSystemResource (aFile), aCharset, eVersion, aCustomExceptionHandler);
+    return readFromReader (new FileSystemResource (aFile).getReader (aCharset), eVersion, aCustomExceptionHandler);
   }
 
   /**
-   * Read the CSS from the passed {@link IInputStreamProvider}. If the CSS
-   * contains an explicit charset, the whole CSS is parsed again, with the
-   * charset found inside the file, so the passed {@link IInputStreamProvider}
-   * must be able to create a new input stream on second invocation!
+   * Read the CSS from the passed {@link IInputStreamProvider}.
    * 
    * @param aISP
-   *        The input stream provider to use. Must be able to create new input
-   *        streams on every invocation, in case an explicit charset node was
-   *        found. May not be <code>null</code>.
+   *        The input stream provider to use. May not be <code>null</code>.
    * @param sCharset
    *        The charset name to be used. May not be <code>null</code>.
    * @param eVersion
@@ -418,23 +388,18 @@ public final class CSSReader
    *         otherwise.
    */
   @Nullable
-  public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
-                                                    @Nonnull final String sCharset,
-                                                    @Nonnull final ECSSVersion eVersion)
+  public static CSSDeclarationList readFromStream (@Nonnull final IInputStreamProvider aISP,
+                                                   @Nonnull final String sCharset,
+                                                   @Nonnull final ECSSVersion eVersion)
   {
     return readFromStream (aISP, sCharset, eVersion, null);
   }
 
   /**
-   * Read the CSS from the passed {@link IInputStreamProvider}. If the CSS
-   * contains an explicit charset, the whole CSS is parsed again, with the
-   * charset found inside the file, so the passed {@link IInputStreamProvider}
-   * must be able to create a new input stream on second invocation!
+   * Read the CSS from the passed {@link IInputStreamProvider}.
    * 
    * @param aISP
-   *        The input stream provider to use. Must be able to create new input
-   *        streams on every invocation, in case an explicit charset node was
-   *        found. May not be <code>null</code>.
+   *        The input stream provider to use. May not be <code>null</code>.
    * @param aCharset
    *        The charset to be used. May not be <code>null</code>.
    * @param eVersion
@@ -443,23 +408,18 @@ public final class CSSReader
    *         otherwise.
    */
   @Nullable
-  public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
-                                                    @Nonnull final Charset aCharset,
-                                                    @Nonnull final ECSSVersion eVersion)
+  public static CSSDeclarationList readFromStream (@Nonnull final IInputStreamProvider aISP,
+                                                   @Nonnull final Charset aCharset,
+                                                   @Nonnull final ECSSVersion eVersion)
   {
     return readFromStream (aISP, aCharset, eVersion, null);
   }
 
   /**
-   * Read the CSS from the passed {@link IInputStreamProvider}. If the CSS
-   * contains an explicit charset, the whole CSS is parsed again, with the
-   * charset found inside the file, so the passed {@link IInputStreamProvider}
-   * must be able to create a new input stream on second invocation!
+   * Read the CSS from the passed {@link IInputStreamProvider}.
    * 
    * @param aISP
-   *        The input stream provider to use. Must be able to create new input
-   *        streams on every invocation, in case an explicit charset node was
-   *        found. May not be <code>null</code>.
+   *        The input stream provider to use. May not be <code>null</code>.
    * @param sCharset
    *        The charset name to be used. May not be <code>null</code>.
    * @param eVersion
@@ -471,72 +431,25 @@ public final class CSSReader
    *         otherwise.
    */
   @Nullable
-  public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
-                                                    @Nonnull final String sCharset,
-                                                    @Nonnull final ECSSVersion eVersion,
-                                                    @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
-  {
-    final Charset aCharset = CharsetManager.getCharsetFromName (sCharset);
-    if (aCharset == null)
-      throw new IllegalArgumentException ("Failed to resolve charset '" + sCharset + "'");
-    return readFromStream (aISP, aCharset, eVersion, aCustomExceptionHandler);
-  }
-
-  /**
-   * Check if the CSS represented by the passed input stream provider has a
-   * custom charset contained
-   * 
-   * @param aISP
-   *        The input stream provider to read from. May not be <code>null</code>
-   *        .
-   * @return <code>null</code> if the CSS does not contain a custom CSS
-   *         declaration, the declared charset otherwise
-   */
-  @Nullable
-  public static Charset getCharsetDeclaredInCSS (@Nonnull final IInputStreamProvider aISP)
+  public static CSSDeclarationList readFromStream (@Nonnull final IInputStreamProvider aISP,
+                                                   @Nonnull final String sCharset,
+                                                   @Nonnull final ECSSVersion eVersion,
+                                                   @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
     if (aISP == null)
       throw new NullPointerException ("inputStreamProvider");
 
-    // Open input stream
     final InputStream aIS = aISP.getInputStream ();
     if (aIS == null)
       return null;
-
-    try
-    {
-      // Always read as ISO-8859-1 as everything contained in the CSS charset
-      // declaration can be handled by this charset
-      final JavaCharStream aCharStream = new JavaCharStream (aIS, CCharset.CHARSET_ISO_8859_1_OBJ);
-      final ParserCSSCharsetDetectorTokenManager aTokenHdl = new ParserCSSCharsetDetectorTokenManager (aCharStream);
-      final ParserCSSCharsetDetector aParser = new ParserCSSCharsetDetector (aTokenHdl);
-      final String sCharsetName = aParser.styleSheetCharset ().getText ();
-      if (sCharsetName == null)
-        return null;
-      // Remove leading and trailing quotes from value
-      return CharsetManager.getCharsetFromName (ParseUtils.extractStringValue (sCharsetName));
-    }
-    catch (final ParseException ex)
-    {
-      // Should never occur, as the parse exception is caught inside!
-      throw new IllegalStateException ("Failed to parse CSS charset definition", ex);
-    }
-    finally
-    {
-      StreamUtils.close (aIS);
-    }
+    return readFromReader (StreamUtils.createReader (aIS, sCharset), eVersion, aCustomExceptionHandler);
   }
 
   /**
-   * Read the CSS from the passed {@link IInputStreamProvider}. If the CSS
-   * contains an explicit charset, the whole CSS is parsed again, with the
-   * charset found inside the file, so the passed {@link IInputStreamProvider}
-   * must be able to create a new input stream on second invocation!
+   * Read the CSS from the passed {@link IInputStreamProvider}.
    * 
    * @param aISP
-   *        The input stream provider to use. Must be able to create new input
-   *        streams on every invocation, in case an explicit charset node was
-   *        found. May not be <code>null</code>.
+   *        The input stream provider to use. May not be <code>null</code>.
    * @param aCharset
    *        The charset to be used. May not be <code>null</code>.
    * @param eVersion
@@ -548,47 +461,75 @@ public final class CSSReader
    *         otherwise.
    */
   @Nullable
-  public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
-                                                    @Nonnull final Charset aCharset,
-                                                    @Nonnull final ECSSVersion eVersion,
-                                                    @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+  public static CSSDeclarationList readFromStream (@Nonnull final IInputStreamProvider aISP,
+                                                   @Nonnull final Charset aCharset,
+                                                   @Nonnull final ECSSVersion eVersion,
+                                                   @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
     if (aISP == null)
       throw new NullPointerException ("inputStreamProvider");
-    if (aCharset == null)
-      throw new NullPointerException ("charset");
-    if (eVersion == null)
-      throw new NullPointerException ("version");
-
-    Charset aCharsetToUse = aCharset;
-
-    // Check if the CSS contains a declared charset
-    final Charset aDeclaredCharset = getCharsetDeclaredInCSS (aISP);
-    if (aDeclaredCharset != null)
-    {
-      s_aLogger.info ("Reading CSS definition again with explicit charset '" + aDeclaredCharset.name () + "'");
-      aCharsetToUse = aDeclaredCharset;
-    }
 
     final InputStream aIS = aISP.getInputStream ();
     if (aIS == null)
       return null;
+    return readFromReader (StreamUtils.createReader (aIS, aCharset), eVersion, aCustomExceptionHandler);
+  }
+
+  /**
+   * Read the CSS from the passed {@link Reader}.
+   * 
+   * @param aReader
+   *        The reader to use. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
+  @Nullable
+  public static CSSDeclarationList readFromReader (@Nonnull @WillClose final Reader aReader,
+                                                   @Nonnull final ECSSVersion eVersion)
+  {
+    return readFromReader (aReader, eVersion, null);
+  }
+
+  /**
+   * Read the CSS from the passed {@link Reader}.
+   * 
+   * @param aReader
+   *        The reader to use. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomExceptionHandler
+   *        An optional custom exception handler that can be used to collect the
+   *        parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
+  @Nullable
+  public static CSSDeclarationList readFromReader (@Nonnull @WillClose final Reader aReader,
+                                                   @Nonnull final ECSSVersion eVersion,
+                                                   @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+  {
+    if (aReader == null)
+      throw new NullPointerException ("reader");
+    if (eVersion == null)
+      throw new NullPointerException ("version");
 
     try
     {
-      final JavaCharStream aCharStream = new JavaCharStream (aIS, aCharsetToUse);
-      final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aCustomExceptionHandler);
+      final JavaCharStream aCharStream = new JavaCharStream (aReader);
+      final CSSNode aNode = _readStyleDeclaration (aCharStream, eVersion, aCustomExceptionHandler);
 
       // Failed to interpret content as CSS?
       if (aNode == null)
         return null;
 
       // Convert the AST to a domain object
-      return CSSHandler.readCascadingStyleSheetFromNode (eVersion, aNode);
+      return CSSHandler.readDeclarationListFromNode (eVersion, aNode);
     }
     finally
     {
-      StreamUtils.close (aIS);
+      StreamUtils.close (aReader);
     }
   }
 }
