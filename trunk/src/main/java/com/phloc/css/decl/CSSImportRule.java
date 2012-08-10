@@ -77,7 +77,7 @@ public final class CSSImportRule implements ICSSWriteable
   }
 
   /**
-   * @return The URL of the CSS file to import.
+   * @return The URL object of the CSS file to import.
    */
   @Nonnull
   public CSSURI getLocation ()
@@ -85,11 +85,25 @@ public final class CSSImportRule implements ICSSWriteable
     return m_aLocation;
   }
 
+  /**
+   * @return The URL of the CSS file to import.
+   */
+  @Nonnull
+  public String getLocationString ()
+  {
+    return m_aLocation.getURI ();
+  }
+
   public void setLocation (@Nonnull final CSSURI aLocation)
   {
     if (aLocation == null)
       throw new NullPointerException ("location");
     m_aLocation = aLocation;
+  }
+
+  public void setLocationString (@Nonnull @Nonempty final String sLocationURI)
+  {
+    m_aLocation.setURI (sLocationURI);
   }
 
   @Nonnull

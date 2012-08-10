@@ -23,6 +23,11 @@
   <release date="2012-08-10" version="3.1.5" />
   <entry date="2012-08-10" category="api" action="add">
     <change>
+      <text locale="en">Added new class AbstractModifyingCSSUrlVisitor</text>
+    </change>
+  </entry>
+  <entry date="2012-08-10" category="api" action="add">
+    <change>
       <text locale="en">Added method IHasCSSDeclarations.getDeclarationAtIndex</text>
     </change>
   </entry>

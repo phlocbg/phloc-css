@@ -54,6 +54,7 @@ public final class CSSURI implements ICSSWriteable
     return m_sURI;
   }
 
+  @Nonnull
   public void setURI (@Nonnull @Nonempty final String sURI)
   {
     if (StringHelper.hasNoText (sURI))

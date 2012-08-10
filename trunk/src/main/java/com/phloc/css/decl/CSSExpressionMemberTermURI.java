@@ -41,13 +41,6 @@ public final class CSSExpressionMemberTermURI implements ICSSExpressionMember
     setURI (aURI);
   }
 
-  public void setURI (@Nonnull final CSSURI aURI)
-  {
-    if (aURI == null)
-      throw new NullPointerException ("URI");
-    m_aURI = aURI;
-  }
-
   @Nonnull
   public CSSURI getURI ()
   {
@@ -59,6 +52,18 @@ public final class CSSExpressionMemberTermURI implements ICSSExpressionMember
   public String getURIString ()
   {
     return m_aURI.getURI ();
+  }
+
+  public void setURI (@Nonnull final CSSURI aURI)
+  {
+    if (aURI == null)
+      throw new NullPointerException ("URI");
+    m_aURI = aURI;
+  }
+
+  public void setURIString (@Nonnull @Nonempty final String sURIString)
+  {
+    m_aURI.setURI (sURIString);
   }
 
   @Nonnull
