@@ -459,8 +459,13 @@ final class CSSNodeToDomainObject
       {
         // OK, we're after the selectors
         bSelectors = false;
-        if (ECSSNodeType.DECLARATION.isNode (aChildNode, m_eVersion))
-          ret.addDeclaration (_createDeclaration (aChildNode));
+        if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
+        {
+          // Read all contained declarations
+          final int nDecls = aChildNode.jjtGetNumChildren ();
+          for (int nDecl = 0; nDecl < nDecls; ++nDecl)
+            ret.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+        }
         else
           if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
             s_aLogger.warn ("Unsupported child of " +
@@ -496,8 +501,13 @@ final class CSSNodeToDomainObject
     {
       final CSSNode aChildNode = aNode.jjtGetChild (nIndex);
 
-      if (ECSSNodeType.DECLARATION.isNode (aChildNode, m_eVersion))
-        ret.addDeclaration (_createDeclaration (aChildNode));
+      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
+      {
+        // Read all contained declarations
+        final int nDecls = aChildNode.jjtGetNumChildren ();
+        for (int nDecl = 0; nDecl < nDecls; ++nDecl)
+          ret.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+      }
       else
         if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
           s_aLogger.warn ("Unsupported page rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
@@ -643,8 +653,13 @@ final class CSSNodeToDomainObject
     final CSSFontFaceRule ret = new CSSFontFaceRule ();
     for (final CSSNode aChildNode : aNode)
     {
-      if (ECSSNodeType.DECLARATION.isNode (aChildNode, m_eVersion))
-        ret.addDeclaration (_createDeclaration (aChildNode));
+      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
+      {
+        // Read all contained declarations
+        final int nDecls = aChildNode.jjtGetNumChildren ();
+        for (int nDecl = 0; nDecl < nDecls; ++nDecl)
+          ret.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+      }
       else
         if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
           s_aLogger.warn ("Unsupported font-face rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
@@ -690,12 +705,19 @@ final class CSSNodeToDomainObject
         ret.addBlock (aBlock);
       }
       else
-      {
-        // Must be a declaration
-        if (aBlock == null)
-          throw new IllegalStateException ("No keyframes block present!");
-        aBlock.addDeclaration (_createDeclaration (aChildNode));
-      }
+        if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
+        {
+          if (aBlock == null)
+            throw new IllegalStateException ("No keyframes block present!");
+
+          // Read all contained declarations
+          final int nDecls = aChildNode.jjtGetNumChildren ();
+          for (int nDecl = 0; nDecl < nDecls; ++nDecl)
+            aBlock.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+        }
+        else
+          if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+            s_aLogger.warn ("Unsupported keyframes rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
 
       ++nIndex;
     }
