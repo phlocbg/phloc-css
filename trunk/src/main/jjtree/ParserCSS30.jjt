@@ -445,7 +445,6 @@ void pageRule() : {}
     ( <S> )*
   )?
   <LBRACE>
-  ( <S> )*
   styleDeclaration()
   <RBRACE>
 }
@@ -470,7 +469,6 @@ void fontfaceRule() : {}
 {
   <FONTFACE_SYM>
   <LBRACE>
-  ( <S> )*
   styleDeclaration()
   <RBRACE>
 }
@@ -504,7 +502,6 @@ void keyframesBlocks() #void : {}
 {
   ( keyframesSelector()
     <LBRACE>
-    ( <S> )*
     styleDeclaration()
     <RBRACE>
     ( <S> )* 
@@ -754,7 +751,6 @@ void styleRule() : {}
     selector()
   )*
   <LBRACE>
-  ( <S> )*
   styleDeclaration()
   <RBRACE>
 }
@@ -785,6 +781,7 @@ void declaration() : {}
 // 
 CSSNode styleDeclaration() #StyleDeclaration : {}
 {
+  ( <S> )*
   ( declaration() )?
   ( <SEMICOLON>
     ( <S> )*
