@@ -219,4 +219,19 @@ public final class CSSVisitor
     // Visit only the URLs of a CSS with a specific CSS visitor
     visitCSS (aCSS, new CSSVisitorForUrl (aVisitor));
   }
+
+  /**
+   * Visit all items that can contain URLs in CSS files.
+   * 
+   * @param aCSS
+   *        The CSS to visit.
+   * @param aVisitor
+   *        The callback to invoke for each found occurrence.
+   */
+  public static void visitAllDeclarationUrls (@Nonnull final IHasCSSDeclarations aCSS,
+                                              @Nonnull final ICSSUrlVisitor aVisitor)
+  {
+    // Visit only the URLs of a CSS with a specific CSS visitor
+    visitAllDeclarations (aCSS, new CSSVisitorForUrl (aVisitor));
+  }
 }
