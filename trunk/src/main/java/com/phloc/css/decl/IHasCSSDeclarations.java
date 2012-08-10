@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.EChange;
@@ -69,6 +70,13 @@ public interface IHasCSSDeclarations extends ICSSWriteable
   @Nonnull
   @ReturnsMutableCopy
   List <CSSDeclaration> getAllDeclarations ();
+
+  /**
+   * @return The declaration at the specified index or <code>null</code> if the
+   *         index is invalid
+   */
+  @Nullable
+  CSSDeclaration getDeclarationAtIndex (@Nonnegative int nIndex);
 
   /**
    * @return The number of contained declarations. Always &ge; 0.

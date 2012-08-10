@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -72,6 +73,12 @@ public class CSSDeclarationList implements IHasCSSDeclarations
   public final List <CSSDeclaration> getAllDeclarations ()
   {
     return ContainerHelper.newList (m_aDeclarations);
+  }
+
+  @Nullable
+  public final CSSDeclaration getDeclarationAtIndex (@Nonnegative final int nIndex)
+  {
+    return ContainerHelper.getSafe (m_aDeclarations, nIndex);
   }
 
   @Nonnegative

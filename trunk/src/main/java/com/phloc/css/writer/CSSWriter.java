@@ -32,6 +32,7 @@ import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.vendor.VendorInfo;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CSSDeclarationList;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSTopLevelRule;
@@ -320,5 +321,53 @@ public final class CSSWriter
   public String getCSSAsString (@Nonnull final CascadingStyleSheet aCSS, @Nullable final String sCSSCharset) throws IOException
   {
     return getCSSAsString (aCSS);
+  }
+
+  /**
+   * Write the CSS content to the passed writer. No specific charset is used.
+   * 
+   * @param aCSS
+   *        The CSS to write. May not be <code>null</code>.
+   * @param aWriter
+   *        The write to write the text to. May not be <code>null</code>. Is
+   *        automatically closed after the writing!
+   * @throws IOException
+   *         In case writing fails.
+   * @throws IllegalStateException
+   *         In case some elements cannot be written in the version supplied in
+   *         the constructor.
+   */
+  public void writeCSS (@Nonnull final CSSDeclarationList aCSS, @Nonnull @WillClose final Writer aWriter) throws IOException
+  {
+    if (aCSS == null)
+      throw new NullPointerException ("css");
+    if (aWriter == null)
+      throw new NullPointerException ("writer");
+
+    try
+    {
+      aWriter.write (aCSS.getAsCSSString (m_aSettings, 0));
+    }
+    finally
+    {
+      StreamUtils.close (aWriter);
+    }
+  }
+
+  /**
+   * Create the CSS without a specific charset.
+   * 
+   * @param aCSS
+   *        The CSS object to be converted to text
+   * @return The text representation of the CSS.
+   * @throws IOException
+   *         If writing fails. Should never happen!
+   */
+  @Nonnull
+  public String getCSSAsString (@Nonnull final CSSDeclarationList aCSS) throws IOException
+  {
+    final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
+    writeCSS (aCSS, aSW);
+    return aSW.getAsString ();
   }
 }
