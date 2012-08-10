@@ -30,6 +30,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CSSDeclarationList;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.parser.CSSNode;
 import com.phloc.css.reader.CSSReader;
@@ -229,7 +230,8 @@ public final class CSSHandler
    * @return Never <code>null</code>.
    */
   @Nonnull
-  public static CascadingStyleSheet readFromNode (@Nonnull final ECSSVersion eVersion, @Nonnull final CSSNode aNode)
+  public static CascadingStyleSheet readCascadingStyleSheetFromNode (@Nonnull final ECSSVersion eVersion,
+                                                                     @Nonnull final CSSNode aNode)
   {
     if (eVersion == null)
       throw new NullPointerException ("version");
@@ -238,6 +240,29 @@ public final class CSSHandler
     if (!ECSSNodeType.ROOT.isNode (aNode, eVersion))
       throw new IllegalArgumentException ("Passed node is not a root node!");
 
-    return new CSSNodeToDomainObject (eVersion).createFromNode (aNode);
+    return new CSSNodeToDomainObject (eVersion).createCascadingStyleSheetFromNode (aNode);
+  }
+
+  /**
+   * Create a {@link CSSDeclarationList} object from a parsed object.
+   * 
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aNode
+   *        The parsed CSS object to read. May not be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  public static CSSDeclarationList readDeclarationListFromNode (@Nonnull final ECSSVersion eVersion,
+                                                                @Nonnull final CSSNode aNode)
+  {
+    if (eVersion == null)
+      throw new NullPointerException ("version");
+    if (aNode == null)
+      throw new NullPointerException ("node");
+    if (!ECSSNodeType.STYLEDECLARATION.isNode (aNode, eVersion))
+      throw new IllegalArgumentException ("Passed node is not a style declaration node!");
+
+    return new CSSNodeToDomainObject (eVersion).createDeclarationListFromNode (aNode);
   }
 }

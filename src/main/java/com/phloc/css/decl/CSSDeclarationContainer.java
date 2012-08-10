@@ -17,68 +17,27 @@
  */
 package com.phloc.css.decl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.state.EChange;
-import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a common container of {@link CSSDeclaration} objects.
+ * Represents a common container of {@link CSSDeclaration} objects. In contrary
+ * to {@link CSSDeclarationList} this class emits block level elements around
+ * the declarations as used in style rules etc.
  * 
  * @author philip
  */
 @NotThreadSafe
-public final class CSSDeclarationContainer implements IHasCSSDeclarations
+public final class CSSDeclarationContainer extends CSSDeclarationList
 {
-  private final List <CSSDeclaration> m_aDeclarations = new ArrayList <CSSDeclaration> ();
-
   public CSSDeclarationContainer ()
   {}
 
-  public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
-  {
-    if (aDeclaration == null)
-      throw new NullPointerException ("declaration");
-    m_aDeclarations.add (aDeclaration);
-  }
-
-  @Nonnull
-  public EChange removeDeclaration (@Nonnull final CSSDeclaration aDeclaration)
-  {
-    return EChange.valueOf (m_aDeclarations.remove (aDeclaration));
-  }
-
-  @Nonnull
-  public EChange removeDeclaration (@Nonnegative final int nDeclarationIndex)
-  {
-    if (nDeclarationIndex < 0 || nDeclarationIndex >= m_aDeclarations.size ())
-      return EChange.UNCHANGED;
-    return EChange.valueOf (m_aDeclarations.remove (nDeclarationIndex) != null);
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <CSSDeclaration> getAllDeclarations ()
-  {
-    return ContainerHelper.newList (m_aDeclarations);
-  }
-
-  @Nonnegative
-  public int getDeclarationCount ()
-  {
-    return m_aDeclarations.size ();
-  }
-
+  @Override
   @Nonnull
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
@@ -86,7 +45,7 @@ public final class CSSDeclarationContainer implements IHasCSSDeclarations
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
     final StringBuilder aSB = new StringBuilder ();
-    final int nDeclCount = m_aDeclarations.size ();
+    final int nDeclCount = getDeclarationCount ();
     if (nDeclCount == 0)
     {
       aSB.append (bOptimizedOutput ? "{}" : " {}");
@@ -97,51 +56,19 @@ public final class CSSDeclarationContainer implements IHasCSSDeclarations
       {
         // A single declaration
         aSB.append (bOptimizedOutput ? "{" : " { ");
-        aSB.append (ContainerHelper.getFirstElement (m_aDeclarations).getAsCSSString (aSettings, nIndentLevel));
+        aSB.append (super.getAsCSSString (aSettings, nIndentLevel));
         aSB.append (bOptimizedOutput ? "}" : " }");
       }
       else
       {
         // More than one declaration
         aSB.append (bOptimizedOutput ? "{" : " {\n");
-        for (final CSSDeclaration aDeclaration : m_aDeclarations)
-        {
-          // Indentation
-          if (!bOptimizedOutput)
-            aSB.append (aSettings.getIndent (nIndentLevel + 1));
-          // Emit the main declaration
-          aSB.append (aDeclaration.getAsCSSString (aSettings, nIndentLevel + 1));
-          if (!bOptimizedOutput)
-            aSB.append ('\n');
-        }
+        aSB.append (super.getAsCSSString (aSettings, nIndentLevel));
         if (!bOptimizedOutput)
           aSB.append (aSettings.getIndent (nIndentLevel));
         aSB.append ('}');
       }
     }
     return aSB.toString ();
-  }
-
-  @Override
-  public boolean equals (final Object o)
-  {
-    if (o == this)
-      return true;
-    if (!(o instanceof CSSDeclarationContainer))
-      return false;
-    final CSSDeclarationContainer rhs = (CSSDeclarationContainer) o;
-    return m_aDeclarations.equals (rhs.m_aDeclarations);
-  }
-
-  @Override
-  public int hashCode ()
-  {
-    return new HashCodeGenerator (this).append (m_aDeclarations).getHashCode ();
-  }
-
-  @Override
-  public String toString ()
-  {
-    return new ToStringGenerator (this).append ("declarations", m_aDeclarations).toString ();
   }
 }
