@@ -574,13 +574,14 @@ void hash() #Hash :
   { jjtThis.setText (t.image); }
 }
 
-void styleDeclaration() #void : {}
+CSSNode styleDeclaration() #StyleDeclaration : {}
 {
   ( declaration() )?
   ( <SEMICOLON>
     ( <S> )*
     ( declaration() )?
   )*
+  { return jjtThis; }
 }
 
 //

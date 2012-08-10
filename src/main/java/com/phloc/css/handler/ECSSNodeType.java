@@ -48,6 +48,7 @@ public enum ECSSNodeType
   FONTFACERULE (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTFONTFACERULE),
   // top level -- style rule
   SELECTOR (ParserCSS21TreeConstants.JJTSELECTOR, ParserCSS30TreeConstants.JJTSELECTOR),
+  STYLEDECLARATION (ParserCSS21TreeConstants.JJTSTYLEDECLARATION, ParserCSS30TreeConstants.JJTSTYLEDECLARATION),
   DECLARATION (ParserCSS21TreeConstants.JJTDECLARATION, ParserCSS30TreeConstants.JJTDECLARATION),
   // style rule -- selector
   NAMESPACEPREFIX (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTNAMESPACEPREFIX),

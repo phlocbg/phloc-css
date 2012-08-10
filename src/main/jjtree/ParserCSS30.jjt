@@ -783,13 +783,14 @@ void declaration() : {}
 //
 // Multiple style declarations together
 // 
-void styleDeclaration() #void : {}
+CSSNode styleDeclaration() #StyleDeclaration : {}
 {
   ( declaration() )?
   ( <SEMICOLON>
     ( <S> )*
     ( declaration() )?
   )*
+  { return jjtThis; }
 }
 
 //
