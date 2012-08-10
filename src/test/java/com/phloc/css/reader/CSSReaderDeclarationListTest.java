@@ -39,14 +39,28 @@ import com.phloc.css.ECSSVersion;
 public final class CSSReaderDeclarationListTest
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSReaderDeclarationListTest.class);
-  private static final List <String> aValid = ContainerHelper.newList ("color:red; background:fixed;",
+  private static final List <String> aValid = ContainerHelper.newList ("",
+                                                                       "    ",
+                                                                       ";",
+                                                                       ";;",
+                                                                       "  ;     ;     ;   ",
+                                                                       "color:red; background:fixed;",
                                                                        "  color:red; background:fixed;  ",
                                                                        "color:red; background:fixed",
                                                                        "color:red; background:fixed !important");
-  private static final List <String> aInvalid = ContainerHelper.newList ("color", " color ");
+  private static final List <String> aInvalid = ContainerHelper.newList ("color", " color ", " color : ");
 
   @Test
-  public void testIsValidCSS ()
+  public void testIsValidCSS21 ()
+  {
+    for (final String sCSS : aValid)
+      assertTrue (sCSS, CSSReaderDeclarationList.isValidCSS (sCSS, ECSSVersion.CSS21));
+    for (final String sCSS : aInvalid)
+      assertFalse (sCSS, CSSReaderDeclarationList.isValidCSS (sCSS, ECSSVersion.CSS21));
+  }
+
+  @Test
+  public void testIsValidCSS30 ()
   {
     for (final String sCSS : aValid)
       assertTrue (sCSS, CSSReaderDeclarationList.isValidCSS (sCSS, ECSSVersion.CSS30));
@@ -55,7 +69,16 @@ public final class CSSReaderDeclarationListTest
   }
 
   @Test
-  public void testRead ()
+  public void testRead21 ()
+  {
+    for (final String sCSS : aValid)
+      assertNotNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS21));
+    for (final String sCSS : aInvalid)
+      assertNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS21));
+  }
+
+  @Test
+  public void testRead30 ()
   {
     for (final String sCSS : aValid)
       assertNotNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS30));
