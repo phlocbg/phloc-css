@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -72,6 +73,18 @@ public final class CSSExpression implements ICSSWriteable
   public List <ICSSExpressionMember> getAllMembers ()
   {
     return ContainerHelper.newList (m_aMembers);
+  }
+
+  @Nullable
+  public ICSSExpressionMember getMemberAtIndex (@Nonnegative final int nIndex)
+  {
+    return ContainerHelper.getSafe (m_aMembers, nIndex);
+  }
+
+  @Nonnegative
+  public int getMemberCount ()
+  {
+    return m_aMembers.size ();
   }
 
   @Nonnull

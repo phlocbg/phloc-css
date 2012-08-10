@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -67,6 +68,12 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
   public List <CSSDeclaration> getAllDeclarations ()
   {
     return m_aDeclarations.getAllDeclarations ();
+  }
+
+  @Nullable
+  public CSSDeclaration getDeclarationAtIndex (@Nonnegative final int nIndex)
+  {
+    return m_aDeclarations.getDeclarationAtIndex (nIndex);
   }
 
   @Nonnegative
