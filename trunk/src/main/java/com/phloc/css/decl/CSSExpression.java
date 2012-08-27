@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -46,11 +47,31 @@ public final class CSSExpression implements ICSSWriteable
   public CSSExpression ()
   {}
 
-  public void addMember (@Nonnull final ICSSExpressionMember aMember)
+  @Nonnull
+  public CSSExpression addMember (@Nonnull final ICSSExpressionMember aMember)
   {
     if (aMember == null)
       throw new NullPointerException ("member");
     m_aMembers.add (aMember);
+    return this;
+  }
+
+  @Nonnull
+  public CSSExpression addTermSimple (@Nonnull @Nonempty final String sValue)
+  {
+    return addMember (new CSSExpressionMemberTermSimple (sValue));
+  }
+
+  @Nonnull
+  public CSSExpression addString (@Nonnull @Nonempty final String sValue)
+  {
+    return addTermSimple ('"' + sValue + "'");
+  }
+
+  @Nonnull
+  public CSSExpression addURI (@Nonnull @Nonempty final String sURI)
+  {
+    return addMember (new CSSExpressionMemberTermURI (new CSSURI (sURI)));
   }
 
   @Nonnull
@@ -137,5 +158,50 @@ public final class CSSExpression implements ICSSWriteable
   public String toString ()
   {
     return new ToStringGenerator (null).append ("members", m_aMembers).toString ();
+  }
+
+  /**
+   * Create a CSS expression only containing a string
+   * 
+   * @param sValue
+   *        The value to be wrapped in a string
+   * @return The CSS expression to be used.
+   */
+  @Nonnull
+  public static CSSExpression createString (@Nonnull @Nonempty final String sValue)
+  {
+    final CSSExpression ret = new CSSExpression ();
+    ret.addString (sValue);
+    return ret;
+  }
+
+  /**
+   * Create a CSS expression only containing a text value
+   * 
+   * @param sValue
+   *        The value to be wrapped in an expression
+   * @return The CSS expression to be used.
+   */
+  @Nonnull
+  public static CSSExpression createSimple (@Nonnull @Nonempty final String sValue)
+  {
+    final CSSExpression ret = new CSSExpression ();
+    ret.addTermSimple (sValue);
+    return ret;
+  }
+
+  /**
+   * Create a CSS expression only containing a URI
+   * 
+   * @param sURI
+   *        The URI to be wrapped in an expression
+   * @return The CSS expression to be used.
+   */
+  @Nonnull
+  public static CSSExpression createURI (@Nonnull @Nonempty final String sURI)
+  {
+    final CSSExpression ret = new CSSExpression ();
+    ret.addURI (sURI);
+    return ret;
   }
 }

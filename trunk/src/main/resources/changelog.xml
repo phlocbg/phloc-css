@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2012-08-27" category="api" action="add">
+    <change>
+      <text locale="en">Extended CSSExpression API so that building declaration values is more fluent</text>
+    </change>
+  </entry>
   <release date="2012-08-10" version="3.1.5" />
   <entry date="2012-08-10" category="api" action="add">
     <change>
