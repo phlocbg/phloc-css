@@ -30,6 +30,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
@@ -65,7 +66,7 @@ public final class CSSExpression implements ICSSWriteable
   @Nonnull
   public CSSExpression addString (@Nonnull @Nonempty final String sValue)
   {
-    return addTermSimple ('"' + sValue + "'");
+    return addTermSimple ('"' + StringHelper.replaceAll (sValue, "\"", "\\\"") + '"');
   }
 
   @Nonnull

@@ -17,18 +17,24 @@
  */
 package com.phloc.css.wiki;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.IOException;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpression;
 import com.phloc.css.decl.CSSExpressionMemberFunction;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.decl.ECSSExpressionOperator;
+import com.phloc.css.reader.CSSReader;
 import com.phloc.css.writer.CSSWriter;
 
 /**
@@ -56,32 +62,37 @@ public final class WikiCreateFontFaceRule
      */
     final CascadingStyleSheet aCSS = new CascadingStyleSheet ();
     final CSSFontFaceRule aFFR = new CSSFontFaceRule ();
-    aFFR.addDeclaration (new CSSDeclaration ("font-family", CSSExpression.createString ("Your typeface"), false));
+    aFFR.addDeclaration (new CSSDeclaration ("font-family", CSSExpression.createString ("Your \"typeface\""), false));
     aFFR.addDeclaration (new CSSDeclaration ("src", CSSExpression.createURI (sPath + sBasename + ".eot"), false));
     final CSSExpression aExpr = new CSSExpression ().addMember (new CSSExpressionMemberFunction ("local",
                                                                                                  CSSExpression.createString ("?")))
-                                                    .addTermSimple (",")
+                                                    .addMember (ECSSExpressionOperator.COMMA)
                                                     .addURI (sPath + sBasename + ".woff")
                                                     .addMember (new CSSExpressionMemberFunction ("format",
                                                                                                  CSSExpression.createString ("woff")))
-                                                    .addTermSimple (",")
+                                                    .addMember (ECSSExpressionOperator.COMMA)
                                                     .addURI (sPath + sBasename + ".otf")
                                                     .addMember (new CSSExpressionMemberFunction ("format",
                                                                                                  CSSExpression.createString ("opentype")))
-                                                    .addTermSimple (",")
+                                                    .addMember (ECSSExpressionOperator.COMMA)
                                                     .addURI (sPath + sBasename + ".svg#" + sBasename)
                                                     .addMember (new CSSExpressionMemberFunction ("format",
                                                                                                  CSSExpression.createString ("svg")));
     aFFR.addDeclaration (new CSSDeclaration ("src", aExpr, false));
 
     aCSS.addRule (aFFR);
-    System.out.println (new CSSWriter (ECSSVersion.CSS30).getCSSAsString (aCSS));
     return aCSS;
   }
 
   @Test
   public void test () throws IOException
   {
-    createFontFace ("folder/", "myfont");
+    final CascadingStyleSheet aCSS = createFontFace ("folder/", "myfont");
+    final String sCSS = new CSSWriter (ECSSVersion.CSS30).getCSSAsString (aCSS);
+    System.out.println (sCSS);
+
+    final CascadingStyleSheet aCSS2 = CSSReader.readFromString (sCSS, CCharset.CHARSET_ISO_8859_1, ECSSVersion.CSS30);
+    assertNotNull (aCSS2);
+    assertEquals (aCSS, aCSS2);
   }
 }
