@@ -36,6 +36,11 @@ public final class CSSExpressionMemberTermURI implements ICSSExpressionMember
 {
   private CSSURI m_aURI;
 
+  public CSSExpressionMemberTermURI (@Nonnull @Nonempty final String sURIString)
+  {
+    this (new CSSURI (sURIString));
+  }
+
   public CSSExpressionMemberTermURI (@Nonnull @Nonempty final CSSURI aURI)
   {
     setURI (aURI);
