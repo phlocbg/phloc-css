@@ -38,6 +38,26 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
   private String m_sValue;
   private String m_sOptimizedValue;
 
+  public CSSExpressionMemberTermSimple (final int nValue)
+  {
+    this (Integer.toString (nValue));
+  }
+
+  public CSSExpressionMemberTermSimple (final long nValue)
+  {
+    this (Long.toString (nValue));
+  }
+
+  public CSSExpressionMemberTermSimple (final float fValue)
+  {
+    this (Float.toString (fValue));
+  }
+
+  public CSSExpressionMemberTermSimple (final double dValue)
+  {
+    this (Double.toString (dValue));
+  }
+
   public CSSExpressionMemberTermSimple (@Nonnull @Nonempty final String sValue)
   {
     setValue (sValue);
