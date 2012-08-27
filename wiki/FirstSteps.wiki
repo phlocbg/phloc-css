@@ -1,0 +1,49 @@
+#summary First steps using phloc-css
+#labels Featured
+
+= Introduction =
+
+phloc-css is a Java library for reading and writing CSS 2 and CSS 3 data structures. It has no logic for applying CSS onto HTML elements.
+This page shows some basic code examples that can be used to use the library. All snippets are free for any use.
+
+Prerequisites: as phloc-css depends on [http://code.google.com/p/phloc-commons phloc-commons], the examples in here also require [http://code.google.com/p/phloc-commons phloc-commons]. Additionally [http://www.slf4j.org/ SLF4J] is required.
+
+= Reading a CSS 3.0 file =
+
+{{{
+import java.io.File;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.reader.CSSReader;
+
+/**
+ * This is example code to read a CSS declaration from a {@link File}.
+ * 
+ * @author philip
+ */
+public final class WikiReadCSS
+{
+  private static final Logger s_aLogger = LoggerFactory.getLogger (WikiReadCSS.class);
+
+  /**
+   * Read a CSS 3.0 declaration from a file using UTF-8 encoding.
+   * 
+   * @param aFile
+   *        The file to be read. May not be <code>null</code>.
+   * @return <code>null</code> if the file has syntax errors.
+   */
+  public static CascadingStyleSheet readCSS30 (final File aFile)
+  {
+    final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, "utf-8", ECSSVersion.CSS30);
+    if (aCSS == null)
+    {
+      // Most probably a syntax error
+      s_aLogger.warn ("Failed to read CSS - please see previous logging entries!");
+      return null;
+    }
+    return aCSS;
+  }
+}
+}}}
