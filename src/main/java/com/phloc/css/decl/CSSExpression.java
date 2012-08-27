@@ -48,6 +48,13 @@ public final class CSSExpression implements ICSSWriteable
   public CSSExpression ()
   {}
 
+  /**
+   * Add an expression member
+   * 
+   * @param aMember
+   *        The member to be added. May not be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public CSSExpression addMember (@Nonnull final ICSSExpressionMember aMember)
   {
@@ -57,55 +64,118 @@ public final class CSSExpression implements ICSSWriteable
     return this;
   }
 
+  /**
+   * Shortcut method to add a simple text value (unquoted)
+   * 
+   * @param sValue
+   *        The value to be added. May neither be <code>null</code> nor empty.
+   * @return this
+   */
   @Nonnull
   public CSSExpression addTermSimple (@Nonnull @Nonempty final String sValue)
   {
     return addMember (new CSSExpressionMemberTermSimple (sValue));
   }
 
+  /**
+   * Shortcut method to add a numeric value
+   * 
+   * @param nValue
+   *        The value to be added.
+   * @return this
+   */
   @Nonnull
   public CSSExpression addNumber (final int nValue)
   {
     return addMember (new CSSExpressionMemberTermSimple (nValue));
   }
 
+  /**
+   * Shortcut method to add a numeric value
+   * 
+   * @param nValue
+   *        The value to be added.
+   * @return this
+   */
   @Nonnull
   public CSSExpression addNumber (final long nValue)
   {
     return addMember (new CSSExpressionMemberTermSimple (nValue));
   }
 
+  /**
+   * Shortcut method to add a numeric value
+   * 
+   * @param fValue
+   *        The value to be added.
+   * @return this
+   */
   @Nonnull
   public CSSExpression addNumber (final float fValue)
   {
     return addMember (new CSSExpressionMemberTermSimple (fValue));
   }
 
+  /**
+   * Shortcut method to add a numeric value
+   * 
+   * @param dValue
+   *        The value to be added.
+   * @return this
+   */
   @Nonnull
   public CSSExpression addNumber (final double dValue)
   {
     return addMember (new CSSExpressionMemberTermSimple (dValue));
   }
 
+  /**
+   * Shortcut method to add a string value that is automatically quoted inside
+   * 
+   * @param sValue
+   *        The value to be quoted and than added. May not be <code>null</code>.
+   * @return this
+   */
   @Nonnull
-  public CSSExpression addString (@Nonnull @Nonempty final String sValue)
+  public CSSExpression addString (@Nonnull final String sValue)
   {
     final String sQuoted = StringHelper.replaceAll (sValue, "\"", "\\\"");
     return addTermSimple ('"' + sQuoted + '"');
   }
 
+  /**
+   * Shortcut method to add a URI value
+   * 
+   * @param sURI
+   *        The value to be added. May neither be <code>null</code> nor empty
+   * @return this
+   */
   @Nonnull
   public CSSExpression addURI (@Nonnull @Nonempty final String sURI)
   {
-    return addMember (new CSSExpressionMemberTermURI (new CSSURI (sURI)));
+    return addMember (new CSSExpressionMemberTermURI (sURI));
   }
 
+  /**
+   * Remove the passed expression member
+   * 
+   * @param aMember
+   *        The member to be removed. May be <code>null</code>.
+   * @return {@link EChange}
+   */
   @Nonnull
-  public EChange removeMember (@Nonnull final ICSSExpressionMember aMember)
+  public EChange removeMember (@Nullable final ICSSExpressionMember aMember)
   {
     return EChange.valueOf (m_aMembers.remove (aMember));
   }
 
+  /**
+   * Remove the expression member at the specified in
+   * 
+   * @param nMemberIndex
+   *        the index of the member to be removed. May not be &lt; 0.
+   * @return {@link EChange}
+   */
   @Nonnull
   public EChange removeMember (@Nonnegative final int nMemberIndex)
   {
@@ -115,6 +185,10 @@ public final class CSSExpression implements ICSSWriteable
     return EChange.CHANGED;
   }
 
+  /**
+   * @return A copy of all contained expression members. Never <code>null</code>
+   *         .
+   */
   @Nonnull
   @ReturnsMutableCopy
   public List <ICSSExpressionMember> getAllMembers ()
@@ -122,18 +196,32 @@ public final class CSSExpression implements ICSSWriteable
     return ContainerHelper.newList (m_aMembers);
   }
 
+  /**
+   * Get the expression member at the specified index.
+   * 
+   * @param nIndex
+   *        The index to be retrieved
+   * @return <code>null</code> if an invalid member index was passed.
+   */
   @Nullable
   public ICSSExpressionMember getMemberAtIndex (@Nonnegative final int nIndex)
   {
     return ContainerHelper.getSafe (m_aMembers, nIndex);
   }
 
+  /**
+   * @return The number of expression members present. Always &ge; 0.
+   */
   @Nonnegative
   public int getMemberCount ()
   {
     return m_aMembers.size ();
   }
 
+  /**
+   * @return A list with all expression members that are of type
+   *         {@link CSSExpressionMemberTermSimple}
+   */
   @Nonnull
   public List <CSSExpressionMemberTermSimple> getAllSimpleMembers ()
   {
@@ -187,21 +275,6 @@ public final class CSSExpression implements ICSSWriteable
   }
 
   /**
-   * Create a CSS expression only containing a string
-   * 
-   * @param sValue
-   *        The value to be wrapped in a string
-   * @return The CSS expression to be used.
-   */
-  @Nonnull
-  public static CSSExpression createString (@Nonnull @Nonempty final String sValue)
-  {
-    final CSSExpression ret = new CSSExpression ();
-    ret.addString (sValue);
-    return ret;
-  }
-
-  /**
    * Create a CSS expression only containing a text value
    * 
    * @param sValue
@@ -211,9 +284,20 @@ public final class CSSExpression implements ICSSWriteable
   @Nonnull
   public static CSSExpression createSimple (@Nonnull @Nonempty final String sValue)
   {
-    final CSSExpression ret = new CSSExpression ();
-    ret.addTermSimple (sValue);
-    return ret;
+    return new CSSExpression ().addTermSimple (sValue);
+  }
+
+  /**
+   * Create a CSS expression only containing a string
+   * 
+   * @param sValue
+   *        The value to be wrapped in a string
+   * @return The CSS expression to be used.
+   */
+  @Nonnull
+  public static CSSExpression createString (@Nonnull @Nonempty final String sValue)
+  {
+    return new CSSExpression ().addString (sValue);
   }
 
   /**
@@ -226,9 +310,7 @@ public final class CSSExpression implements ICSSWriteable
   @Nonnull
   public static CSSExpression createNumber (final int nValue)
   {
-    final CSSExpression ret = new CSSExpression ();
-    ret.addNumber (nValue);
-    return ret;
+    return new CSSExpression ().addNumber (nValue);
   }
 
   /**
@@ -241,9 +323,7 @@ public final class CSSExpression implements ICSSWriteable
   @Nonnull
   public static CSSExpression createNumber (final long nValue)
   {
-    final CSSExpression ret = new CSSExpression ();
-    ret.addNumber (nValue);
-    return ret;
+    return new CSSExpression ().addNumber (nValue);
   }
 
   /**
@@ -256,9 +336,7 @@ public final class CSSExpression implements ICSSWriteable
   @Nonnull
   public static CSSExpression createNumber (final float fValue)
   {
-    final CSSExpression ret = new CSSExpression ();
-    ret.addNumber (fValue);
-    return ret;
+    return new CSSExpression ().addNumber (fValue);
   }
 
   /**
@@ -271,9 +349,7 @@ public final class CSSExpression implements ICSSWriteable
   @Nonnull
   public static CSSExpression createNumber (final double dValue)
   {
-    final CSSExpression ret = new CSSExpression ();
-    ret.addNumber (dValue);
-    return ret;
+    return new CSSExpression ().addNumber (dValue);
   }
 
   /**
@@ -286,8 +362,6 @@ public final class CSSExpression implements ICSSWriteable
   @Nonnull
   public static CSSExpression createURI (@Nonnull @Nonempty final String sURI)
   {
-    final CSSExpression ret = new CSSExpression ();
-    ret.addURI (sURI);
-    return ret;
+    return new CSSExpression ().addURI (sURI);
   }
 }
