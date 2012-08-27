@@ -64,9 +64,34 @@ public final class CSSExpression implements ICSSWriteable
   }
 
   @Nonnull
+  public CSSExpression addNumber (final int nValue)
+  {
+    return addMember (new CSSExpressionMemberTermSimple (nValue));
+  }
+
+  @Nonnull
+  public CSSExpression addNumber (final long nValue)
+  {
+    return addMember (new CSSExpressionMemberTermSimple (nValue));
+  }
+
+  @Nonnull
+  public CSSExpression addNumber (final float fValue)
+  {
+    return addMember (new CSSExpressionMemberTermSimple (fValue));
+  }
+
+  @Nonnull
+  public CSSExpression addNumber (final double dValue)
+  {
+    return addMember (new CSSExpressionMemberTermSimple (dValue));
+  }
+
+  @Nonnull
   public CSSExpression addString (@Nonnull @Nonempty final String sValue)
   {
-    return addTermSimple ('"' + StringHelper.replaceAll (sValue, "\"", "\\\"") + '"');
+    final String sQuoted = StringHelper.replaceAll (sValue, "\"", "\\\"");
+    return addTermSimple ('"' + sQuoted + '"');
   }
 
   @Nonnull
@@ -188,6 +213,66 @@ public final class CSSExpression implements ICSSWriteable
   {
     final CSSExpression ret = new CSSExpression ();
     ret.addTermSimple (sValue);
+    return ret;
+  }
+
+  /**
+   * Create a CSS expression only containing a numeric value
+   * 
+   * @param nValue
+   *        The value to be wrapped in an expression
+   * @return The CSS expression to be used.
+   */
+  @Nonnull
+  public static CSSExpression createNumber (final int nValue)
+  {
+    final CSSExpression ret = new CSSExpression ();
+    ret.addNumber (nValue);
+    return ret;
+  }
+
+  /**
+   * Create a CSS expression only containing a numeric value
+   * 
+   * @param nValue
+   *        The value to be wrapped in an expression
+   * @return The CSS expression to be used.
+   */
+  @Nonnull
+  public static CSSExpression createNumber (final long nValue)
+  {
+    final CSSExpression ret = new CSSExpression ();
+    ret.addNumber (nValue);
+    return ret;
+  }
+
+  /**
+   * Create a CSS expression only containing a numeric value
+   * 
+   * @param fValue
+   *        The value to be wrapped in an expression
+   * @return The CSS expression to be used.
+   */
+  @Nonnull
+  public static CSSExpression createNumber (final float fValue)
+  {
+    final CSSExpression ret = new CSSExpression ();
+    ret.addNumber (fValue);
+    return ret;
+  }
+
+  /**
+   * Create a CSS expression only containing a numeric value
+   * 
+   * @param dValue
+   *        The value to be wrapped in an expression
+   * @return The CSS expression to be used.
+   */
+  @Nonnull
+  public static CSSExpression createNumber (final double dValue)
+  {
+    final CSSExpression ret = new CSSExpression ();
+    ret.addNumber (dValue);
     return ret;
   }
 

@@ -22,11 +22,16 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpression;
@@ -46,40 +51,57 @@ public final class WikiCreateFontFaceRule
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (WikiCreateFontFaceRule.class);
 
-  public CascadingStyleSheet createFontFace (final String sPath, final String sBasename) throws IOException
+  /**
+   * Create a single font-face rule.
+   * 
+   * <pre>
+   *     @font-face {
+   *       font-family: "Your typeface";
+   *       src: url("path/basename.eot");
+   *       src: local("local font name"),
+   *         url("path/basename.woff") format("woff"),
+   *         url("path/basename.otf") format("opentype"),
+   *         url("path/basename.svg#filename") format("svg");
+   *     }
+   * </pre>
+   * 
+   * @param sTypefaceName
+   *        The name of the font-face in CSS. May neither be <code>null</code>
+   *        nor empty.
+   * @param sLocalName
+   *        The name of the local font to be used. May be <code>null</code>.
+   * @param sPath
+   *        The server-relative path, where the font files reside. May not be
+   *        <code>null</code>.
+   * @param sBasename
+   *        the base name of the font-files (without extension). May neither be
+   *        <code>null</code> nor empty
+   */
+  @Nonnull
+  public CascadingStyleSheet createFontFace (@Nonnull @Nonempty final String sTypefaceName,
+                                             @Nullable final String sLocalName,
+                                             @Nonnull final String sPath,
+                                             @Nonnull final String sBasename) throws IOException
   {
-    /**
-     * <pre>
-     *     @font-face {
-     *       font-family: "Your typeface";
-     *       src: url("path/basename.eot");
-     *       src: local("?"),
-     *         url("path/basename.woff") format("woff"),
-     *         url("path/basename.otf") format("opentype"),
-     *         url("path/basename.svg#filename") format("svg");
-     *     }
-     * </pre>
-     */
     final CascadingStyleSheet aCSS = new CascadingStyleSheet ();
     final CSSFontFaceRule aFFR = new CSSFontFaceRule ();
-    aFFR.addDeclaration (new CSSDeclaration ("font-family", CSSExpression.createString ("Your \"typeface\""), false));
+    aFFR.addDeclaration (new CSSDeclaration ("font-family", CSSExpression.createString (sTypefaceName), false));
     aFFR.addDeclaration (new CSSDeclaration ("src", CSSExpression.createURI (sPath + sBasename + ".eot"), false));
-    final CSSExpression aExpr = new CSSExpression ().addMember (new CSSExpressionMemberFunction ("local",
-                                                                                                 CSSExpression.createString ("?")))
-                                                    .addMember (ECSSExpressionOperator.COMMA)
-                                                    .addURI (sPath + sBasename + ".woff")
-                                                    .addMember (new CSSExpressionMemberFunction ("format",
-                                                                                                 CSSExpression.createString ("woff")))
-                                                    .addMember (ECSSExpressionOperator.COMMA)
-                                                    .addURI (sPath + sBasename + ".otf")
-                                                    .addMember (new CSSExpressionMemberFunction ("format",
-                                                                                                 CSSExpression.createString ("opentype")))
-                                                    .addMember (ECSSExpressionOperator.COMMA)
-                                                    .addURI (sPath + sBasename + ".svg#" + sBasename)
-                                                    .addMember (new CSSExpressionMemberFunction ("format",
-                                                                                                 CSSExpression.createString ("svg")));
+    final CSSExpression aExpr = new CSSExpression ();
+    if (StringHelper.hasText (sLocalName))
+      aExpr.addMember (new CSSExpressionMemberFunction ("local", CSSExpression.createString (sLocalName)))
+           .addMember (ECSSExpressionOperator.COMMA);
+    aExpr.addURI (sPath + sBasename + ".woff")
+         .addMember (new CSSExpressionMemberFunction ("format", CSSExpression.createString ("woff")))
+         .addMember (ECSSExpressionOperator.COMMA)
+         .addURI (sPath + sBasename + ".otf")
+         .addMember (new CSSExpressionMemberFunction ("format", CSSExpression.createString ("opentype")))
+         .addMember (ECSSExpressionOperator.COMMA)
+         .addURI (sPath + sBasename + ".svg#" + sBasename)
+         .addMember (new CSSExpressionMemberFunction ("format", CSSExpression.createString ("svg")));
     aFFR.addDeclaration (new CSSDeclaration ("src", aExpr, false));
 
+    // Add the font-face rule to the main CSS
     aCSS.addRule (aFFR);
     return aCSS;
   }
@@ -87,7 +109,7 @@ public final class WikiCreateFontFaceRule
   @Test
   public void test () throws IOException
   {
-    final CascadingStyleSheet aCSS = createFontFace ("folder/", "myfont");
+    final CascadingStyleSheet aCSS = createFontFace ("Your \"typeface\"", "local font name", "folder/", "myfont");
     final String sCSS = new CSSWriter (ECSSVersion.CSS30).getCSSAsString (aCSS);
     System.out.println (sCSS);
 
