@@ -94,6 +94,13 @@
           <goalPrefix>csscompress</goalPrefix>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <tagBase>https://phloc-css.googlecode.com/svn/tags</tagBase>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>
