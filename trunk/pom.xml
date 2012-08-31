@@ -47,7 +47,7 @@
       <url>sftp://www.phloc.com/var/www/html-repo/maven2</url>
     </repository>
   </distributionManagement>
-  
+
   <dependencies>
     <dependency>
       <groupId>com.phloc</groupId>
