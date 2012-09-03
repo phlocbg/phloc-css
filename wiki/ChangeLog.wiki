@@ -2,8 +2,8 @@
 #labels Featured
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>9/1/12</td><td colspan="4">_Release *3.1.7*_</td></tr>
-<tr><td>9/1/12</td><td>fix</td><td>tech</td><td></td><td>Added fix that allows 'to' to be used as an identifier (e.g. in linear-gradient)</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>9/3/12</td><td colspan="4">_Release *3.1.7*_</td></tr>
+<tr><td>9/3/12</td><td>fix</td><td>tech</td><td></td><td>Added fix that allows 'to' to be used as an identifier (e.g. in linear-gradient)</td></tr>
 <tr border="1"><td>8/27/12</td><td colspan="4">_Release *3.1.6*_</td></tr>
 <tr><td>8/27/12</td><td>add</td><td>api</td><td></td><td>Extended CSSExpression API so that building declaration values is more fluent</td></tr>
 <tr border="1"><td>8/10/12</td><td colspan="4">_Release *3.1.5*_</td></tr>
