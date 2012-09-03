@@ -7,12 +7,13 @@
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>phloc-css</artifactId>
-  <version>3.1.8-SNAPSHOT</version>
-  <packaging>bundle</packaging>
-  <name>phloc-css</name>
-  <description>phloc CSS parser an other components</description>
-  <url>http://repo.phloc.com/apidocs/phloc-css/${project.version}</url>
+  <groupId>com.phloc.maven</groupId>
+  <artifactId>csscompress-maven-plugin</artifactId>
+  <version>1.0.10</version>
+  <packaging>maven-plugin</packaging>
+  <name>csscompress-maven-plugin</name>
+  <description>Maven plugin for compressing CSS files at build time</description>
+  <url>http://repo.phloc.com/apidocs/csscompress-maven-plugin/${project.version}</url>  
   
   <licenses>
     <license>
@@ -21,11 +22,11 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
- 
+
   <scm>
-    <url>http://code.google.com/p/phloc-css/source/browse/</url>
-    <connection>scm:svn:http://phloc-css.googlecode.com/svn/trunk</connection>
-    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/trunk</developerConnection>
+    <url>scm:svn:https://phloc-css.googlecode.com/svn/tags/csscompress-maven-plugin-1.0.10</url>
+    <connection>scm:svn:http://phloc-css.googlecode.com/svn/tags/csscompress-maven-plugin-1.0.10</connection>
+    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/tags/csscompress-maven-plugin-1.0.10</developerConnection>
   </scm>
   
   <repositories>
@@ -48,65 +49,69 @@
     </repository>
   </distributionManagement>
 
+  <properties>
+    <maven.version>2.0.1</maven.version>
+  </properties>
+  
   <dependencies>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>${maven.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>${maven.version}</version>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-commons</artifactId>
       <version>3.7.5</version>
     </dependency>
-    
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <scope>test</scope>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-css</artifactId>
+      <version>3.1.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>2.0.5</version>
     </dependency>
   </dependencies>
-
+  
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>javacc-maven-plugin</artifactId>
-        <version>2.6</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <configuration>
+          <goalPrefix>csscompress</goalPrefix>
+        </configuration>
         <executions>
           <execution>
+            <id>mojo-descriptor</id>
             <goals>
-              <goal>jjtree-javacc</goal>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>help-goal</id>
+            <goals>
+              <goal>helpmojo</goal>
             </goals>
           </execution>
         </executions>
-        <configuration>
-          <jdkVersion>1.5</jdkVersion>
-          <javadocFriendlyComments>true</javadocFriendlyComments>
-          <userCharStream>true</userCharStream>
-        </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Export-Package>com.phloc.css.*</Export-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-      <!--  Inheritance of reports does not work with site-plugin 3.0
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
+        <artifactId>maven-release-plugin</artifactId>
         <configuration>
-          <generateSitemap>true</generateSitemap>
-          <reportPlugins>
-            <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>javacc-maven-plugin</artifactId>
-              <version>2.6</version>
-            </plugin>
-          </reportPlugins>
+          <tagBase>https://phloc-css.googlecode.com/svn/tags</tagBase>
         </configuration>
       </plugin>
-      -->    
     </plugins>
   </build>
 </project>
