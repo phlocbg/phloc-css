@@ -6,10 +6,28 @@ The maven plugin offered here can be used to compress CSS files at build time.
 
 = Basic configuration =
 
+  * 1. Define the plugin repository (can be done in a parent POM as well)
+  * 2. Add the main plugin to your project
+
 {{{
+<project ...>
+...
+  <pluginRepositories>
+    <pluginRepository>
+      <id>phloc.com</id>
+      <url>http://repo.phloc.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>  
+...
   <build>
     <plugins>
-      ... other plugins go here ...
+... plugins go here ...
       <plugin>
         <groupId>com.phloc.maven</groupId>
         <artifactId>csscompress-maven-plugin</artifactId>
@@ -30,4 +48,6 @@ The maven plugin offered here can be used to compress CSS files at build time.
       </plugin>
     </plugins>
   </build>
+...
+</project>
 }}}
