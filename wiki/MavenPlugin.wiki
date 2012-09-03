@@ -1,0 +1,33 @@
+#summary How to use the Maven plugin
+
+= Introduction =
+
+The maven plugin offered here can be used to compress CSS files at build time.
+
+= Basic configuration =
+
+{{{
+  <build>
+    <plugins>
+      ... other plugins go here ...
+      <plugin>
+        <groupId>com.phloc.maven</groupId>
+        <artifactId>csscompress-maven-plugin</artifactId>
+        <version>1.0.9</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>csscompress</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <forceCompress>false</forceCompress>
+          <removeUnnecessaryCode>true</removeUnnecessaryCode>
+          <quoteURLs>true</quoteURLs>
+          <verbose>true</verbose>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+}}}
