@@ -37,6 +37,7 @@ import com.phloc.css.utils.CSSURLHelper;
 @NotThreadSafe
 public class CSSWriterSettings implements ICSSWriterSettings
 {
+  public static final boolean DEFAULT_OPTIMIZED_OUTPUT = false;
   public static final boolean DEFAULT_REMOVE_UNNECESSARY_CODE = false;
   public static final String DEFAULT_INDENT = "  ";
   public static final boolean DEFAULT_QUOTE_URLS = CSSURLHelper.DEFAULT_QUOTE_URLS;
@@ -46,7 +47,7 @@ public class CSSWriterSettings implements ICSSWriterSettings
   public static final boolean DEFAULT_WRITE_PAGE_RULES = true;
 
   private final ECSSVersion m_eVersion;
-  private final boolean m_bOptimizedOutput;
+  private boolean m_bOptimizedOutput;
   private boolean m_bRemoveUnnecessaryCode = DEFAULT_REMOVE_UNNECESSARY_CODE;
   private String m_sIndent = DEFAULT_INDENT;
   private boolean m_bQuoteURLs = DEFAULT_QUOTE_URLS;
@@ -54,6 +55,15 @@ public class CSSWriterSettings implements ICSSWriterSettings
   private boolean m_bWriteKeyframesRules = DEFAULT_WRITE_KEYFRAMES_RULES;
   private boolean m_bWriteMediaRules = DEFAULT_WRITE_MEDIA_RULES;
   private boolean m_bWritePageRules = DEFAULT_WRITE_PAGE_RULES;
+
+  /**
+   * @param eVersion
+   *        CSS version to emit
+   */
+  public CSSWriterSettings (@Nonnull final ECSSVersion eVersion)
+  {
+    this (eVersion, DEFAULT_OPTIMIZED_OUTPUT);
+  }
 
   /**
    * @param eVersion
@@ -99,6 +109,13 @@ public class CSSWriterSettings implements ICSSWriterSettings
   public final boolean isOptimizedOutput ()
   {
     return m_bOptimizedOutput;
+  }
+
+  @Nonnull
+  public final CSSWriterSettings setOptimizedOutput (final boolean bOptimizedOutput)
+  {
+    m_bOptimizedOutput = bOptimizedOutput;
+    return this;
   }
 
   public final boolean isRemoveUnnecessaryCode ()
