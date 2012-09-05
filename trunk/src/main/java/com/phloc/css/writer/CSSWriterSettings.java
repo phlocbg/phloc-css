@@ -70,6 +70,26 @@ public class CSSWriterSettings implements ICSSWriterSettings
     m_bOptimizedOutput = bOptimizedOutput;
   }
 
+  /**
+   * Copy constructor.
+   * 
+   * @param aBase
+   *        The base settings to copy everything from.
+   */
+  public CSSWriterSettings (@Nonnull final ICSSWriterSettings aBase)
+  {
+    if (aBase == null)
+      throw new NullPointerException ("base");
+    m_eVersion = aBase.getVersion ();
+    m_bOptimizedOutput = aBase.isOptimizedOutput ();
+    m_sIndent = aBase.getIndent (1);
+    m_bQuoteURLs = aBase.isQuoteURLs ();
+    m_bWriteFontFaceRules = aBase.isWriteFontFaceRules ();
+    m_bWriteKeyframesRules = aBase.isWriteKeyframesRules ();
+    m_bWriteMediaRules = aBase.isWriteMediaRules ();
+    m_bWritePageRules = aBase.isWritePageRules ();
+  }
+
   @Nonnull
   public final ECSSVersion getVersion ()
   {

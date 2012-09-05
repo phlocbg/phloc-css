@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2012-09-05" category="api" action="add">
+    <change>
+      <text locale="en">Added copy-constructor for CSSWriterSettings</text>
+    </change>
+  </entry>
   <release date="2012-09-03" version="3.1.7" />
   <entry date="2012-09-03" category="tech" action="fix">
     <change>
