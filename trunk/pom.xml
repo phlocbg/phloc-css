@@ -41,6 +41,19 @@
     </repository>
   </repositories>
 
+  <pluginRepositories>
+    <pluginRepository>
+      <id>phloc.com</id>
+      <url>http://repo.phloc.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>  
+
   <distributionManagement>
     <repository>
       <id>repo.phloc.public</id>
