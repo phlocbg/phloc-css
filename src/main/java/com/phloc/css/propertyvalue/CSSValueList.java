@@ -43,7 +43,7 @@ import com.phloc.css.property.ICSSProperty;
  */
 public final class CSSValueList implements ICSSMultiValue
 {
-  private final List <CSSValue> m_aValues = new ArrayList <CSSValue> ();
+  private final List <CSSValue> m_aValues;
 
   public CSSValueList (@Nonnull final ICSSProperty [] aProperties,
                        @Nonnull final String [] aValues,
@@ -56,6 +56,7 @@ public final class CSSValueList implements ICSSMultiValue
     if (aProperties.length != aValues.length)
       throw new IllegalArgumentException ("Different number of properties and values passed");
 
+    m_aValues = new ArrayList <CSSValue> (aProperties.length);
     for (int i = 0; i < aProperties.length; ++i)
       m_aValues.add (new CSSValue (aProperties[i], aValues[i], bIsImportant));
   }
