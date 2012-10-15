@@ -37,7 +37,7 @@ import com.phloc.css.property.ICSSProperty;
  * Represents a CSS value that has one property name, but multiple different
  * values. This is e.g. if the property <code>display</code> is used with the
  * value <code>inline-block</code> than the result coding should first emit
- * <code>display:-moz-inline-block;</code> and them
+ * <code>display:-moz-inline-block;</code> and then
  * <code>display:inline-block;</code> for FireFox 2.x specific support.
  * 
  * @author philip
