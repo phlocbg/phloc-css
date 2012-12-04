@@ -136,6 +136,10 @@ public final class CCSSProperties
 
   // borders
   public static final ICSSProperty BORDER = new CSSPropertyFree (ECSSProperty.BORDER);
+  public static final ICSSProperty BORDER_TOP = new CSSPropertyFree (ECSSProperty.BORDER_TOP);
+  public static final ICSSProperty BORDER_RIGHT = new CSSPropertyFree (ECSSProperty.BORDER_RIGHT);
+  public static final ICSSProperty BORDER_BOTTOM = new CSSPropertyFree (ECSSProperty.BORDER_BOTTOM);
+  public static final ICSSProperty BORDER_LEFT = new CSSPropertyFree (ECSSProperty.BORDER_LEFT);
   public static final ICSSProperty BORDER_TOP_WIDTH = new CSSPropertyEnumOrNumber (ECSSProperty.BORDER_TOP_WIDTH,
                                                                                    false,
                                                                                    CCSSValue.THIN,
@@ -256,6 +260,7 @@ public final class CCSSProperties
                                                                         CCSSValue.OUTSET);
 
   // background stuff
+  public static final ICSSProperty BACKGROUND = new CSSPropertyFree (ECSSProperty.BACKGROUND);
   public static final ICSSProperty BACKGROUND_COLOR = new CSSPropertyEnumOrColor (ECSSProperty.BACKGROUND_COLOR,
                                                                                   CCSSValue.TRANSPARENT);
   public static final ICSSProperty BACKGROUND_IMAGE = new CSSPropertyURL (ECSSProperty.BACKGROUND_IMAGE);
