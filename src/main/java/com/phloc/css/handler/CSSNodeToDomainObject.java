@@ -53,6 +53,7 @@ import com.phloc.css.decl.CSSSelectorMemberNot;
 import com.phloc.css.decl.CSSSelectorSimpleMember;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.CSSURI;
+import com.phloc.css.decl.CSSViewportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ECSSAttributeOperator;
 import com.phloc.css.decl.ECSSExpressionOperator;
@@ -541,8 +542,12 @@ final class CSSNodeToDomainObject
               if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
                 ret.addRule (_createKeyframesRule (aChildNode));
               else
-                if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
-                  s_aLogger.warn ("Unsupported media-rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+                if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
+                  ret.addRule (_createViewportRule (aChildNode));
+                else
+                  if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+                    s_aLogger.warn ("Unsupported media-rule child: " +
+                                    ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
   }
@@ -726,6 +731,32 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
+  private CSSViewportRule _createViewportRule (@Nonnull final CSSNode aNode)
+  {
+    _expectNodeType (aNode, ECSSNodeType.VIEWPORTRULE);
+
+    // Get the identifier (e.g. the default "@viewport" or the non-standard
+    // "@-ms-viewport")
+    final String sViewportDeclaration = aNode.getText ();
+
+    final CSSViewportRule ret = new CSSViewportRule (sViewportDeclaration);
+    for (final CSSNode aChildNode : aNode)
+    {
+      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
+      {
+        // Read all contained declarations
+        final int nDecls = aChildNode.jjtGetNumChildren ();
+        for (int nDecl = 0; nDecl < nDecls; ++nDecl)
+          ret.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+      }
+      else
+        if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+          s_aLogger.warn ("Unsupported viewport rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+    }
+    return ret;
+  }
+
+  @Nonnull
   public CascadingStyleSheet createCascadingStyleSheetFromNode (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.ROOT);
@@ -767,16 +798,21 @@ final class CSSNodeToDomainObject
                     ret.addRule (_createKeyframesRule (aChildNode));
                   }
                   else
-                    if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
+                    if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
                     {
-                      // Unknown rule most likely indicates a parsing error
-                      s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);
+                      ret.addRule (_createViewportRule (aChildNode));
                     }
                     else
-                      s_aLogger.warn ("Unsupported child of " +
-                                      ECSSNodeType.getNodeName (aNode, m_eVersion) +
-                                      ": " +
-                                      ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+                      if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
+                      {
+                        // Unknown rule most likely indicates a parsing error
+                        s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);
+                      }
+                      else
+                        s_aLogger.warn ("Unsupported child of " +
+                                        ECSSNodeType.getNodeName (aNode, m_eVersion) +
+                                        ": " +
+                                        ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
   }

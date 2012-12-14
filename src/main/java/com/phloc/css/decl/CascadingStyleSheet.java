@@ -157,6 +157,17 @@ public final class CascadingStyleSheet
     return ret;
   }
 
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSViewportRule> getAllViewportRules ()
+  {
+    final List <CSSViewportRule> ret = new ArrayList <CSSViewportRule> ();
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSViewportRule)
+        ret.add ((CSSViewportRule) aTopLevelRule);
+    return ret;
+  }
+
   @Override
   public boolean equals (final Object o)
   {

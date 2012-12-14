@@ -29,6 +29,7 @@ import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
+import com.phloc.css.decl.CSSViewportRule;
 
 /**
  * Default implementation of the {@link ICSSVisitor} interface. Use as base
@@ -103,6 +104,14 @@ public class DefaultCSSVisitor implements ICSSVisitor
 
   @OverrideOnDemand
   public void onEndKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule)
+  {}
+
+  @OverrideOnDemand
+  public void onBeginViewportRule (@Nonnull final CSSViewportRule aViewportRule)
+  {}
+
+  @OverrideOnDemand
+  public void onEndViewportRule (@Nonnull final CSSViewportRule aViewportRule)
   {}
 
   @OverrideOnDemand

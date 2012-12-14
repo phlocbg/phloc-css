@@ -169,8 +169,10 @@ TOKEN :
 | < MEDIA_SYM: "@media" >
 | < CHARSET_SYM: "@charset" >
 | < FONTFACE_SYM: "@font-face" >
-| < KEYFRAMES_SYM: "@keyframes" 
-                 | "@-" <IDENT> "-keyframes" >
+| < KEYFRAMES_SYM: "@-" <IDENT> "-keyframes" 
+                 | "@keyframes" >
+| < VIEWPORT_SYM: "@-" <IDENT> "-viewport"
+                | "@viewport" >
 | < IMPORTANT_SYM: "!" ( <W> )* "important" >
 
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
@@ -252,7 +254,7 @@ void error_skipto(final int... aKinds)
 // stylesheet
 //  : [ CHARSET_SYM STRING ';' ]?
 //    [S|CDO|CDC]* [ import [S|CDO|CDC]* ]*
-//    [ [ ruleset | media | page ] [S|CDO|CDC]* ]*
+//    [ [ ruleset | media | page | viewport ] [S|CDO|CDC]* ]*
 //  ;
 //
 CSSNode styleSheet() #Root : {}
@@ -275,6 +277,7 @@ CSSNode styleSheet() #Root : {}
     | pageRule()
     | fontfaceRule()
     | keyframesRule()
+    | viewportRule()
     | unknownRule()
     )
     ( <S>
@@ -364,6 +367,7 @@ void mediaRuleList() #void : {}
     | pageRule()
     | fontfaceRule()
     | keyframesRule()
+    | viewportRule()
     | unknownRule()
     )
     ( <S> )*
@@ -526,6 +530,20 @@ void singleKeyframeSelector() :
   )
   ( <S> )*
 }
+
+// ------------ VIEWPORT ------------
+
+void viewportRule() : 
+{ Token t; }
+{
+  t = <VIEWPORT_SYM>
+  { jjtThis.setText (t.image); }    
+  ( <S> )*
+  <LBRACE>
+  styleDeclaration()
+  <RBRACE>
+  ( <S> )* 
+} 
 
 // ------------ SELECTORS ------------
 
