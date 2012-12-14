@@ -89,11 +89,15 @@ public final class CSSMediaQuery implements ICSSWriteable
     return m_sMedium;
   }
 
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <CSSMediaExpression> getMediaExpressions ()
+  public boolean hasMediaExpressions ()
   {
-    return ContainerHelper.newList (m_aMediaExpressions);
+    return !m_aMediaExpressions.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getMediaExpressionCount ()
+  {
+    return m_aMediaExpressions.size ();
   }
 
   public void addMediaExpression (@Nonnull final CSSMediaExpression aMediaExpression)
@@ -110,11 +114,26 @@ public final class CSSMediaQuery implements ICSSWriteable
   }
 
   @Nonnull
-  public EChange removeMediaExpression (@Nonnull final int nIndex)
+  public EChange removeMediaExpression (@Nonnegative final int nExpressionIndex)
   {
-    if (nIndex < 0 || nIndex >= m_aMediaExpressions.size ())
+    if (nExpressionIndex < 0 || nExpressionIndex >= m_aMediaExpressions.size ())
       return EChange.UNCHANGED;
-    return EChange.valueOf (m_aMediaExpressions.remove (nIndex) != null);
+    return EChange.valueOf (m_aMediaExpressions.remove (nExpressionIndex) != null);
+  }
+
+  @Nullable
+  public CSSMediaExpression getMediaExpression (@Nonnegative final int nExpressionIndex)
+  {
+    if (nExpressionIndex < 0 || nExpressionIndex >= m_aMediaExpressions.size ())
+      return null;
+    return m_aMediaExpressions.get (nExpressionIndex);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSMediaExpression> getMediaExpressions ()
+  {
+    return ContainerHelper.newList (m_aMediaExpressions);
   }
 
   @Nonnull

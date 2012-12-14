@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2012-12-14" version="3.2.5" />
+  <entry date="2012-12-14" category="api" action="add">
+    <change>
+      <text locale="en">Added new methods to access list members more comfortable</text>
+    </change>
+  </entry>
   <entry date="2012-12-14" category="feature" action="add">
     <change>
       <text locale="en">Added support for reading and writing CSS @viewport declarations</text>
