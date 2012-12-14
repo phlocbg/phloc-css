@@ -76,6 +76,11 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
     return m_aDeclarations.getDeclarationAtIndex (nIndex);
   }
 
+  public boolean hasDeclarations ()
+  {
+    return m_aDeclarations.hasDeclarations ();
+  }
+
   @Nonnegative
   public int getDeclarationCount ()
   {

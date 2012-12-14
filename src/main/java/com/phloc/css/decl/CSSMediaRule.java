@@ -83,7 +83,7 @@ public final class CSSMediaRule implements ICSSTopLevelRule
   }
 
   @Nullable
-  public CSSMediaQuery getMediaQuery (@Nonnegative final int nMediumIndex)
+  public CSSMediaQuery getMediaQueryAtIndex (@Nonnegative final int nMediumIndex)
   {
     if (nMediumIndex < 0 || nMediumIndex >= m_aMediaQueries.size ())
       return null;

@@ -45,9 +45,14 @@ public final class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarati
   private final String m_sDeclaration;
   private final CSSDeclarationContainer m_aDeclarations = new CSSDeclarationContainer ();
 
+  public static boolean isValidDeclaration (@Nonnull @Nonempty final String sDeclaration)
+  {
+    return StringHelper.startsWith (sDeclaration, '@') && StringHelper.endsWithIgnoreCase (sDeclaration, "viewport");
+  }
+
   public CSSViewportRule (@Nonnull @Nonempty final String sDeclaration)
   {
-    if (StringHelper.hasNoText (sDeclaration))
+    if (!isValidDeclaration (sDeclaration))
       throw new IllegalArgumentException ("declaration");
     m_sDeclaration = sDeclaration;
   }
@@ -80,6 +85,11 @@ public final class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarati
   public CSSDeclaration getDeclarationAtIndex (@Nonnegative final int nIndex)
   {
     return m_aDeclarations.getDeclarationAtIndex (nIndex);
+  }
+
+  public boolean hasDeclarations ()
+  {
+    return m_aDeclarations.hasDeclarations ();
   }
 
   @Nonnegative
@@ -122,18 +132,20 @@ public final class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarati
     if (!(o instanceof CSSViewportRule))
       return false;
     final CSSViewportRule rhs = (CSSViewportRule) o;
-    return m_aDeclarations.equals (rhs.m_aDeclarations);
+    return m_sDeclaration.equals (rhs.m_sDeclaration) && m_aDeclarations.equals (rhs.m_aDeclarations);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_aDeclarations).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sDeclaration).append (m_aDeclarations).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("declarations", m_aDeclarations).toString ();
+    return new ToStringGenerator (this).append ("declaration", m_sDeclaration)
+                                       .append ("declarations", m_aDeclarations)
+                                       .toString ();
   }
 }

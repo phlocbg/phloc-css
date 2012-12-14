@@ -81,6 +81,11 @@ public class CSSDeclarationList implements IHasCSSDeclarations
     return ContainerHelper.getSafe (m_aDeclarations, nIndex);
   }
 
+  public boolean hasDeclarations ()
+  {
+    return !m_aDeclarations.isEmpty ();
+  }
+
   @Nonnegative
   public final int getDeclarationCount ()
   {

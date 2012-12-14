@@ -48,6 +48,17 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
   public CSSStyleRule ()
   {}
 
+  public boolean hasSelectors ()
+  {
+    return !m_aSelectors.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getSelectorCount ()
+  {
+    return m_aSelectors.size ();
+  }
+
   public void addSelector (@Nonnull final CSSSelector aSelector)
   {
     if (aSelector == null)
@@ -68,6 +79,14 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
       return EChange.UNCHANGED;
     m_aSelectors.remove (nSelectorIndex);
     return EChange.CHANGED;
+  }
+
+  @Nullable
+  public CSSSelector getSelectorAtIndex (@Nonnegative final int nSelectorIndex)
+  {
+    if (nSelectorIndex < 0 || nSelectorIndex >= m_aSelectors.size ())
+      return null;
+    return m_aSelectors.get (nSelectorIndex);
   }
 
   @Nonnull
@@ -105,6 +124,11 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
   public CSSDeclaration getDeclarationAtIndex (@Nonnegative final int nIndex)
   {
     return m_aDeclarations.getDeclarationAtIndex (nIndex);
+  }
+
+  public boolean hasDeclarations ()
+  {
+    return m_aDeclarations.hasDeclarations ();
   }
 
   @Nonnegative

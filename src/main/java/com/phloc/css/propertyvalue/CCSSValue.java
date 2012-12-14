@@ -96,6 +96,7 @@ public final class CCSSValue
   public static final String INVERT = "invert";
   public static final String ITALIC = "italic";
   public static final String JUSTIFY = "justify";
+  public static final String LANDSCAPE = "landscape";
   public static final String LARGE = "large";
   public static final String LARGER = "larger";
   public static final String LEFT = "left";
@@ -124,6 +125,7 @@ public final class CCSSValue
   public static final String OUTSIDE = "outside";
   public static final String OVERLINE = "overline";
   public static final String POINTER = "pointer";
+  public static final String PORTRAIT = "portrait";
   public static final String PRE = "pre";
   public static final String PRE_LINE = "pre-line";
   public static final String PRE_WRAP = "pre-wrap";
@@ -180,6 +182,7 @@ public final class CCSSValue
   public static final String X_SMALL = "x-small";
   public static final String XX_LARGE = "xx-large";
   public static final String XX_SMALL = "xx-small";
+  public static final String ZOOM = "zoom";
 
   public static final String PX0 = ECSSUnit.px (0);
   public static final String PERC50 = ECSSUnit.perc (50);

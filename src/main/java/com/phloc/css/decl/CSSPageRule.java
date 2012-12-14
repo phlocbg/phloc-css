@@ -86,6 +86,11 @@ public final class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations,
     return m_aDeclarations.getDeclarationAtIndex (nIndex);
   }
 
+  public boolean hasDeclarations ()
+  {
+    return m_aDeclarations.hasDeclarations ();
+  }
+
   @Nonnegative
   public int getDeclarationCount ()
   {
