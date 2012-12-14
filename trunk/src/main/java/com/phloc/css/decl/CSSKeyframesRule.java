@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -47,9 +48,14 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
   private final String m_sAnimationName;
   private final List <CSSKeyframesBlock> m_aBlocks = new ArrayList <CSSKeyframesBlock> ();
 
+  public static boolean isValidDeclaration (@Nonnull @Nonempty final String sDeclaration)
+  {
+    return StringHelper.startsWith (sDeclaration, '@') && StringHelper.endsWithIgnoreCase (sDeclaration, "keyframes");
+  }
+
   public CSSKeyframesRule (@Nonnull @Nonempty final String sDeclaration, @Nonnull @Nonempty final String sAnimationName)
   {
-    if (StringHelper.hasNoText (sDeclaration))
+    if (!isValidDeclaration (sDeclaration))
       throw new IllegalArgumentException ("declaration");
     m_sDeclaration = sDeclaration;
     m_sAnimationName = sAnimationName;
@@ -67,6 +73,17 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
   public String getAnimationName ()
   {
     return m_sAnimationName;
+  }
+
+  public boolean hasBlocks ()
+  {
+    return !m_aBlocks.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getBlockCount ()
+  {
+    return m_aBlocks.size ();
   }
 
   public void addBlock (@Nonnull final CSSKeyframesBlock aKeyframesBlock)
@@ -88,6 +105,14 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
     if (nBlockIndex < 0 || nBlockIndex >= m_aBlocks.size ())
       return EChange.UNCHANGED;
     return EChange.valueOf (m_aBlocks.remove (nBlockIndex) != null);
+  }
+
+  @Nullable
+  public CSSKeyframesBlock getBlockAtIndex (@Nonnegative final int nBlockIndex)
+  {
+    if (nBlockIndex < 0 || nBlockIndex >= m_aBlocks.size ())
+      return null;
+    return m_aBlocks.get (nBlockIndex);
   }
 
   @Nonnull

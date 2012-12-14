@@ -79,6 +79,12 @@ public interface IHasCSSDeclarations extends ICSSWriteable
   CSSDeclaration getDeclarationAtIndex (@Nonnegative int nIndex);
 
   /**
+   * @return <code>true</code> if at least one declaration is present,
+   *         <code>false</code> if no declaration is present.
+   */
+  boolean hasDeclarations ();
+
+  /**
    * @return The number of contained declarations. Always &ge; 0.
    */
   @Nonnegative
