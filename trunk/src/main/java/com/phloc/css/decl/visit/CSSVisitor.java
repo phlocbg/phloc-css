@@ -29,6 +29,7 @@ import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
+import com.phloc.css.decl.CSSViewportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSTopLevelRule;
 import com.phloc.css.decl.IHasCSSDeclarations;
@@ -142,6 +143,21 @@ public final class CSSVisitor
     }
   }
 
+  public static void visitViewportRule (@Nonnull final CSSViewportRule aViewportRule,
+                                        @Nonnull final ICSSVisitor aVisitor)
+  {
+    aVisitor.onBeginViewportRule (aViewportRule);
+    try
+    {
+      // for all declarations
+      visitAllDeclarations (aViewportRule, aVisitor);
+    }
+    finally
+    {
+      aVisitor.onEndViewportRule (aViewportRule);
+    }
+  }
+
   public static void visitTopLevelRule (@Nonnull final ICSSTopLevelRule aTopLevelRule,
                                         @Nonnull final ICSSVisitor aVisitor)
   {
@@ -170,7 +186,12 @@ public final class CSSVisitor
               visitKeyframesRule ((CSSKeyframesRule) aTopLevelRule, aVisitor);
             }
             else
-              throw new IllegalStateException ("Top level rule " + aTopLevelRule + " is unsupported!");
+              if (aTopLevelRule instanceof CSSViewportRule)
+              {
+                visitViewportRule ((CSSViewportRule) aTopLevelRule, aVisitor);
+              }
+              else
+                throw new IllegalStateException ("Top level rule " + aTopLevelRule + " is unsupported!");
   }
 
   /**

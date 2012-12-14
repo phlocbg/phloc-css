@@ -28,6 +28,7 @@ import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
+import com.phloc.css.decl.CSSViewportRule;
 
 /**
  * Interface for visiting different elements of a CSS domain object.
@@ -86,6 +87,11 @@ public interface ICSSVisitor
   void onEndKeyframesBlock (@Nonnull CSSKeyframesBlock aKeyframesBlock);
 
   void onEndKeyframesRule (@Nonnull CSSKeyframesRule aKeyframesRule);
+
+  // viewport rules
+  void onBeginViewportRule (@Nonnull CSSViewportRule aViewportRule);
+
+  void onEndViewportRule (@Nonnull CSSViewportRule aViewportRule);
 
   /**
    * After visiting is done.

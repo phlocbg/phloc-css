@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -48,6 +49,17 @@ public final class CSSMediaRule implements ICSSTopLevelRule
   public CSSMediaRule ()
   {}
 
+  public boolean hasMediaQueries ()
+  {
+    return !m_aMediaQueries.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getMediaQueryCount ()
+  {
+    return m_aMediaQueries.size ();
+  }
+
   public void addMediaQuery (@Nonnull @Nonempty final CSSMediaQuery aMediaQuery)
   {
     if (aMediaQuery == null)
@@ -70,11 +82,30 @@ public final class CSSMediaRule implements ICSSTopLevelRule
     return EChange.CHANGED;
   }
 
+  @Nullable
+  public CSSMediaQuery getMediaQuery (@Nonnegative final int nMediumIndex)
+  {
+    if (nMediumIndex < 0 || nMediumIndex >= m_aMediaQueries.size ())
+      return null;
+    return m_aMediaQueries.get (nMediumIndex);
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSMediaQuery> getAllMediaQueries ()
   {
     return ContainerHelper.newList (m_aMediaQueries);
+  }
+
+  public boolean hasRules ()
+  {
+    return !m_aRules.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getRuleCount ()
+  {
+    return m_aRules.size ();
   }
 
   public void addRule (@Nonnull final ICSSTopLevelRule aRule)
@@ -97,6 +128,14 @@ public final class CSSMediaRule implements ICSSTopLevelRule
       return EChange.UNCHANGED;
     m_aRules.remove (nRuleIndex);
     return EChange.CHANGED;
+  }
+
+  @Nullable
+  public ICSSTopLevelRule getRule (@Nonnegative final int nRuleIndex)
+  {
+    if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
+      return null;
+    return m_aRules.get (nRuleIndex);
   }
 
   @Nonnull
