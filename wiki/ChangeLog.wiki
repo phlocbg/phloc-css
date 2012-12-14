@@ -2,7 +2,11 @@
 #labels Featured
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>9/21/12</td><td colspan="4">_Release *3.2.1*_</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>12/14/12</td><td colspan="4">_Release *3.2.5*_</td></tr>
+<tr><td>12/14/12</td><td>add</td><td>api</td><td></td><td>Added new methods to access list members more comfortable</td></tr>
+<tr><td>12/14/12</td><td>add</td><td>feature</td><td></td><td>Added support for reading and writing CSS @viewport declarations</td></tr>
+<tr><td>12/4/12</td><td>add</td><td>api</td><td></td><td>Added new constants in CCSSProperties: BORDER`_`(TOP|RIGHT|BOTTOM|LEFT) and BACKGROUND</td></tr>
+<tr border="1"><td>9/21/12</td><td colspan="4">_Release *3.2.1*_</td></tr>
 <tr><td>9/20/12</td><td>update</td><td>performance</td><td></td><td>Performance improvement by using [http://code.google.com/p/phloc-commons phloc-commons] 3.8.4</td></tr>
 <tr><td>9/19/12</td><td>update</td><td>performance</td><td></td><td>Performance improvement by using a cached hash code for DefaultCSSClassProvider objects</td></tr>
 <tr border="1"><td>9/6/12</td><td colspan="4">_Release *3.2.0*_</td></tr>
