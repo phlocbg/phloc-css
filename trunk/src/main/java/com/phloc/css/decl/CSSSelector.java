@@ -43,6 +43,17 @@ public final class CSSSelector implements ICSSWriteable
   public CSSSelector ()
   {}
 
+  public boolean hasMembers ()
+  {
+    return !m_aMembers.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getMemberCount ()
+  {
+    return m_aMembers.size ();
+  }
+
   public void addMember (@Nonnull final ICSSSelectorMember aMember)
   {
     if (aMember == null)
@@ -63,6 +74,14 @@ public final class CSSSelector implements ICSSWriteable
       return EChange.UNCHANGED;
     m_aMembers.remove (nMemberIndex);
     return EChange.CHANGED;
+  }
+
+  @Nonnull
+  public ICSSSelectorMember getMemberAtIndex (@Nonnegative final int nMemberIndex)
+  {
+    if (nMemberIndex < 0 || nMemberIndex >= m_aMembers.size ())
+      return null;
+    return m_aMembers.get (nMemberIndex);
   }
 
   @Nonnull
