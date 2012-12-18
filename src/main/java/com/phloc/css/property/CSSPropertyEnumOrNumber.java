@@ -47,7 +47,7 @@ public class CSSPropertyEnumOrNumber extends CSSPropertyEnum
   @Override
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return super.isValidValue (sValue) || CSSNumberHelper.isNumberWithUnitValue (sValue, m_bWithPercentage);
+    return super.isValidValue (sValue) || CSSNumberHelper.isValueWithUnit (sValue, m_bWithPercentage);
   }
 
   @Override

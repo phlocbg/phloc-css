@@ -75,7 +75,7 @@ public class CSSPropertyEnumOrNumbers extends CSSPropertyEnum
     for (int i = 0; i < aParts.length; ++i)
     {
       aParts[i] = aParts[i].trim ();
-      if (!super.isValidValue (aParts[i]) && !CSSNumberHelper.isNumberWithUnitValue (aParts[i], m_bWithPercentage))
+      if (!super.isValidValue (aParts[i]) && !CSSNumberHelper.isValueWithUnit (aParts[i], m_bWithPercentage))
         return false;
     }
     return true;

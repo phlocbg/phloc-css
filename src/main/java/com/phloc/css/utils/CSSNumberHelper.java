@@ -24,6 +24,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.css.ECSSUnit;
+import com.phloc.css.propertyvalue.CSSSimpleValueWithUnit;
 
 /**
  * Provides number handling sanity methods.
@@ -62,7 +63,33 @@ public final class CSSNumberHelper
     return StringHelper.hasText (sRealValue) && StringParser.isDouble (sRealValue);
   }
 
+  public static boolean isValueWithUnit (@Nullable final String sCSSValue)
+  {
+    return getValueWithUnit (sCSSValue) != null;
+  }
+
+  /**
+   * @deprecated Use {@link #isValueWithUnit(String,boolean)} instead
+   */
+  @Deprecated
   public static boolean isNumberWithUnitValue (@Nullable final String sCSSValue, final boolean bWithPerc)
+  {
+    return isValueWithUnit (sCSSValue, bWithPerc);
+  }
+
+  public static boolean isValueWithUnit (@Nullable final String sCSSValue, final boolean bWithPerc)
+  {
+    return getValueWithUnit (sCSSValue, bWithPerc) != null;
+  }
+
+  @Nullable
+  public static CSSSimpleValueWithUnit getValueWithUnit (@Nullable final String sCSSValue)
+  {
+    return getValueWithUnit (sCSSValue, true);
+  }
+
+  @Nullable
+  public static CSSSimpleValueWithUnit getValueWithUnit (@Nullable final String sCSSValue, final boolean bWithPerc)
   {
     String sRealValue = StringHelper.trim (sCSSValue);
     if (StringHelper.hasText (sRealValue))
@@ -73,9 +100,11 @@ public final class CSSNumberHelper
       {
         // Cut the unit
         sRealValue = sRealValue.substring (0, sRealValue.length () - eUnit.getName ().length ()).trim ();
+        final Double aValue = StringParser.parseDoubleObj (sRealValue);
+        if (aValue != null)
+          return new CSSSimpleValueWithUnit (aValue.doubleValue (), eUnit);
       }
-      return isNumberValue (sRealValue);
     }
-    return false;
+    return null;
   }
 }

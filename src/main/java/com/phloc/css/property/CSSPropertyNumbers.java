@@ -58,7 +58,7 @@ public class CSSPropertyNumbers extends AbstractCSSProperty
 
     // Check if each part is a valid number
     for (int i = 0; i < aParts.length; ++i)
-      if (!CSSNumberHelper.isNumberWithUnitValue (aParts[i].trim (), m_bWithPercentage))
+      if (!CSSNumberHelper.isValueWithUnit (aParts[i].trim (), m_bWithPercentage))
         return false;
     return true;
   }

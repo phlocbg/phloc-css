@@ -17,10 +17,15 @@
  */
 package com.phloc.css.utils;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import com.phloc.css.ECSSUnit;
+import com.phloc.css.propertyvalue.CSSSimpleValueWithUnit;
 
 /**
  * Test class for class {@link CSSNumberHelper}.
@@ -30,28 +35,55 @@ import org.junit.Test;
 public final class CSSNumberHelperTest
 {
   @Test
-  public void testIsNumberWithUnitValue ()
+  public void testIsValueWithUnit ()
   {
-    assertTrue (CSSNumberHelper.isNumberWithUnitValue ("50%", true));
-    assertTrue (CSSNumberHelper.isNumberWithUnitValue ("50mm", true));
-    assertTrue (CSSNumberHelper.isNumberWithUnitValue ("50cm", true));
-    assertTrue (CSSNumberHelper.isNumberWithUnitValue ("50ex", true));
-    assertTrue (CSSNumberHelper.isNumberWithUnitValue (" 50ex ", true));
-    assertTrue (CSSNumberHelper.isNumberWithUnitValue (" 50ex ", false));
-    assertTrue (CSSNumberHelper.isNumberWithUnitValue (" 50 ex ", false));
-    assertTrue (CSSNumberHelper.isNumberWithUnitValue (" 50 s ", false));
-    assertTrue (CSSNumberHelper.isNumberWithUnitValue (" 50 ms ", false));
+    assertTrue (CSSNumberHelper.isValueWithUnit ("50%", true));
+    assertTrue (CSSNumberHelper.isValueWithUnit ("50mm", true));
+    assertTrue (CSSNumberHelper.isValueWithUnit ("50cm", true));
+    assertTrue (CSSNumberHelper.isValueWithUnit ("50ex", true));
+    assertTrue (CSSNumberHelper.isValueWithUnit (" 50ex ", true));
+    assertTrue (CSSNumberHelper.isValueWithUnit (" 50ex ", false));
+    assertTrue (CSSNumberHelper.isValueWithUnit (" 50 ex ", false));
+    assertTrue (CSSNumberHelper.isValueWithUnit (" 50 s ", false));
+    assertTrue (CSSNumberHelper.isValueWithUnit (" 50 ms ", false));
 
-    assertFalse (CSSNumberHelper.isNumberWithUnitValue (" 50 xs ", false));
-    assertFalse (CSSNumberHelper.isNumberWithUnitValue ("50%", false));
-    assertFalse (CSSNumberHelper.isNumberWithUnitValue ("", false));
-    assertFalse (CSSNumberHelper.isNumberWithUnitValue ("", true));
-    assertFalse (CSSNumberHelper.isNumberWithUnitValue (" ", false));
-    assertFalse (CSSNumberHelper.isNumberWithUnitValue (" ", true));
-    assertFalse (CSSNumberHelper.isNumberWithUnitValue (" mm ", true));
-    assertFalse (CSSNumberHelper.isNumberWithUnitValue (" % ", true));
-    assertFalse (CSSNumberHelper.isNumberWithUnitValue (" 50 xyz ", true));
-    assertFalse (CSSNumberHelper.isNumberWithUnitValue (" 50 gd ", true));
-    assertFalse (CSSNumberHelper.isNumberWithUnitValue ("50gd", true));
+    assertFalse (CSSNumberHelper.isValueWithUnit (" 50 xs ", false));
+    assertFalse (CSSNumberHelper.isValueWithUnit ("50%", false));
+    assertFalse (CSSNumberHelper.isValueWithUnit ("", false));
+    assertFalse (CSSNumberHelper.isValueWithUnit ("", true));
+    assertFalse (CSSNumberHelper.isValueWithUnit (" ", false));
+    assertFalse (CSSNumberHelper.isValueWithUnit (" ", true));
+    assertFalse (CSSNumberHelper.isValueWithUnit (" mm ", true));
+    assertFalse (CSSNumberHelper.isValueWithUnit (" % ", true));
+    assertFalse (CSSNumberHelper.isValueWithUnit (" 50 xyz ", true));
+    assertFalse (CSSNumberHelper.isValueWithUnit (" 50 gd ", true));
+    assertFalse (CSSNumberHelper.isValueWithUnit ("50gd", true));
+  }
+
+  @Test
+  public void testGetValueWithUnit ()
+  {
+    assertEquals (new CSSSimpleValueWithUnit (50, ECSSUnit.PERCENTAGE), CSSNumberHelper.getValueWithUnit ("50%", true));
+    assertEquals (new CSSSimpleValueWithUnit (50, ECSSUnit.LENGTH_MM), CSSNumberHelper.getValueWithUnit ("50mm", true));
+    assertEquals (new CSSSimpleValueWithUnit (50, ECSSUnit.LENGTH_CM), CSSNumberHelper.getValueWithUnit ("50cm", true));
+    assertEquals (new CSSSimpleValueWithUnit (50, ECSSUnit.EX), CSSNumberHelper.getValueWithUnit ("50ex", true));
+    assertEquals (new CSSSimpleValueWithUnit (50, ECSSUnit.EX), CSSNumberHelper.getValueWithUnit (" 50ex ", true));
+    assertEquals (new CSSSimpleValueWithUnit (50, ECSSUnit.EX), CSSNumberHelper.getValueWithUnit (" 50ex ", false));
+    assertEquals (new CSSSimpleValueWithUnit (50, ECSSUnit.EX), CSSNumberHelper.getValueWithUnit (" 50 ex ", false));
+    assertEquals (new CSSSimpleValueWithUnit (50, ECSSUnit.TIME_S), CSSNumberHelper.getValueWithUnit (" 50 s ", false));
+    assertEquals (new CSSSimpleValueWithUnit (50, ECSSUnit.TIME_MS),
+                  CSSNumberHelper.getValueWithUnit (" 50 ms ", false));
+
+    assertNull (CSSNumberHelper.getValueWithUnit (" 50 xs ", false));
+    assertNull (CSSNumberHelper.getValueWithUnit ("50%", false));
+    assertNull (CSSNumberHelper.getValueWithUnit ("", false));
+    assertNull (CSSNumberHelper.getValueWithUnit ("", true));
+    assertNull (CSSNumberHelper.getValueWithUnit (" ", false));
+    assertNull (CSSNumberHelper.getValueWithUnit (" ", true));
+    assertNull (CSSNumberHelper.getValueWithUnit (" mm ", true));
+    assertNull (CSSNumberHelper.getValueWithUnit (" % ", true));
+    assertNull (CSSNumberHelper.getValueWithUnit (" 50 xyz ", true));
+    assertNull (CSSNumberHelper.getValueWithUnit (" 50 gd ", true));
+    assertNull (CSSNumberHelper.getValueWithUnit ("50gd", true));
   }
 }
