@@ -141,3 +141,6 @@
 @media tv and (scan: progressive) {  }
 @media handheld and (grid) and (max-width: 15em) {  }
 @media handheld and (grid) and (max-device-height: 7em) {  }
+@media screen, projection and (color) { }
+@media screen, projection { }
+@media screen, projection, handheld { }
