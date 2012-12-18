@@ -1,7 +1,8 @@
 #summary Change log of phloc-css
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>12/14/12</td><td colspan="4">_Release *3.2.5*_</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr><td>12/18/12</td><td>add</td><td>api</td><td></td><td>Added easy way to split a property value like '50%' in the numeric and the unit part (via CSSNumberHelper.getValueWithUnit)</td></tr>
+<tr border="1"><td>12/14/12</td><td colspan="4">_Release *3.2.5*_</td></tr>
 <tr><td>12/14/12</td><td>add</td><td>api</td><td></td><td>Added new methods to access list members more comfortable</td></tr>
 <tr><td>12/14/12</td><td>add</td><td>feature</td><td></td><td>Added support for reading and writing CSS @viewport declarations</td></tr>
 <tr><td>12/4/12</td><td>add</td><td>api</td><td></td><td>Added new constants in CCSSProperties: BORDER`_`(TOP|RIGHT|BOTTOM|LEFT) and BACKGROUND</td></tr>

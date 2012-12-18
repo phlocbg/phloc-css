@@ -60,13 +60,13 @@ public final class CCSS
 
   /**
    * @deprecated Use
-   *             {@link CSSNumberHelper#isNumberWithUnitValue(String, boolean)}
+   *             {@link CSSNumberHelper#isValueWithUnit(String, boolean)}
    *             instead
    */
   @Deprecated
   public static boolean isNumberWithUnitValue (@Nullable final String sValue, final boolean bWithPerc)
   {
-    return CSSNumberHelper.isNumberWithUnitValue (sValue, bWithPerc);
+    return CSSNumberHelper.isValueWithUnit (sValue, bWithPerc);
   }
 
   /**

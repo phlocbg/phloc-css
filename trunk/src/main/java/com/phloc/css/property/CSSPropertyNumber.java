@@ -35,7 +35,7 @@ public class CSSPropertyNumber extends AbstractCSSProperty
 
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return CSSNumberHelper.isNumberWithUnitValue (sValue, m_bWithPercentage);
+    return CSSNumberHelper.isValueWithUnit (sValue, m_bWithPercentage);
   }
 
   @Nonnull
