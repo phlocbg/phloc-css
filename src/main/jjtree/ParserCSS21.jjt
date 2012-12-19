@@ -55,33 +55,34 @@ TOKEN_MGR_DECLS :
   private static final org.slf4j.Logger s_aLogger = org.slf4j.LoggerFactory.getLogger (ParserCSS21TokenManager.class);
 }
 
-<DEFAULT> TOKEN :
+<DEFAULT>
+TOKEN :
 {
-// s        [ \t\r\n\f]+
-// {s}          {return S;}
-    < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
-// w        {s}?
-    | < W: ( <S> )? >
+   < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
+ | < W: ( <S> )? >
 }
 
-<DEFAULT> MORE :
+<DEFAULT>
+MORE :
 {
   < "/*" > : IN_COMMENT
 }
 
-<IN_COMMENT> MORE :
+<IN_COMMENT>
+MORE :
 {
   < ~[] > : IN_COMMENT
 }
 
-<IN_COMMENT> SKIP :
+<IN_COMMENT>
+SKIP :
 {
   < "*/" > : DEFAULT
 }
 
-<DEFAULT> TOKEN :
+<DEFAULT>
+TOKEN :
 {
-// h        [0-9a-f]
   < #H: ["0"-"9","a"-"f"] >
 | < #HNUM: <H> | <H><H> | <H><H><H> | <H><H><H><H> | <H><H><H><H><H> | <H><H><H><H><H><H> >
 
@@ -125,7 +126,7 @@ TOKEN_MGR_DECLS :
 | < IDENT: ("-"|"$"|"*")? <NMSTART> ( <NMCHAR> )* >
 
 | < #NAME: ( <NMCHAR> )+ >
-| < NUM: ( ["0"-"9"] )+ | ( ["0"-"9"] )* "." ( ["0"-"9"] )+ >
+| < #NUM: ( ( ["0"-"9"] )+ | ( ["0"-"9"] )* "." ( ["0"-"9"] )+ ) >
 | < #URL: ["!","#","$","%","&","*"-"[","]"-"~"] | <NONASCII> | <ESCAPE> >
 
 | < CDO: "<!--" >
@@ -137,11 +138,12 @@ TOKEN_MGR_DECLS :
 | < GREATER: ">" >
 | < COMMA: <W> "," >
 | < HASH: "#" <NAME> >
+| < CHARSET_SYM: "@charset" >
 | < IMPORT_SYM: "@import" >
+| < NAMESPACE_SYM: "@namespace" >
 | < PAGE_SYM: "@page" >
 | < MEDIA_SYM: "@media" >
-| < CHARSET_SYM: "@charset" >
-| < IMPORTANT_SYM: "!" ( <W> | <COMMENT> )* "important" >
+| < IMPORTANT_SYM: "!" ( <W> )* "important" >
 
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
 | < EX: <NUM> "ex" >           { matchedToken.image = ParseUtils.splitNumber(image) + "ex"; }
@@ -166,9 +168,6 @@ TOKEN_MGR_DECLS :
 | < URI: "url(" ( <S> )* ( <STRING1> | <STRING2> | ( <URL> )* ) ( <S> )* ")" >
   { matchedToken.image = ParseUtils.trimUrl(image); }
 
-// {ident}"(        {return FUNCTION;}
-// OLD:
-//| < FUNCTION: <IDENT> "(" >
 // Extension for IE filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50); */
 | < FUNCTION: <IDENT> "(" 
             | "progid" ( <S> )* ":" ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
@@ -181,6 +180,7 @@ TOKEN_MGR_DECLS :
 | < SLASH: "/" >
 | < MINUS: "-" >
 | < EQUALS: "=" >
+| < DASH: "|" >
 | < LSQUARE: "[" >
 | < RSQUARE: "]" >
 | < RROUND: ")" >
@@ -210,11 +210,7 @@ void error_skipto(final int... aKinds)
 }
 
 //
-// stylesheet
-//  : [ CHARSET_SYM STRING ';' ]?
-//    [S|CDO|CDC]* [ import [S|CDO|CDC]* ]*
-//    [ [ ruleset | media | page ] [S|CDO|CDC]* ]*
-//  ;
+// whole stylesheet
 //
 CSSNode styleSheet() #Root : {}
 {
@@ -226,6 +222,12 @@ CSSNode styleSheet() #Root : {}
   | <CDC>
   )*
   ( importRule()
+    ( <S>
+    | <CDO>
+    | <CDC>
+    )*
+  )*
+  ( namespaceRule()
     ( <S>
     | <CDO>
     | <CDC>
@@ -252,6 +254,7 @@ void charsetRule() #Charset :
   <CHARSET_SYM>
   <S>
   sStr = string ()
+  ( <S> )*
   <SEMICOLON>
   { jjtThis.setText (sStr); }
 }
@@ -282,6 +285,41 @@ void importRule() #ImportRule :
   ( mediaList() )?
   <SEMICOLON>
 }
+
+// ------------ NAMESPACE ------------
+
+void namespaceRule() : 
+{ 
+  Token t;
+}
+{
+  <NAMESPACE_SYM>
+  ( <S> )*
+  ( namespaceRulePrefix()
+    ( <S> )* 
+  )?
+  namespaceRuleURL()
+  ( <S> )*
+  <SEMICOLON>
+} 
+
+void namespaceRulePrefix() : 
+{ Token t; }
+{
+  t = <IDENT> { jjtThis.setText (t.image); }
+} 
+
+void namespaceRuleURL() : 
+{ 
+  Token t;
+  String s;
+}
+{
+  // URLs are always passed without the quotes!
+  ( t = <URI> { jjtThis.setText ('"' + t.image + '"'); }
+  | s = string() { jjtThis.setText (s); }
+  )
+} 
 
 //
 // media
@@ -349,11 +387,6 @@ void pageRule() : {}
   <RBRACE>
 }
 
-//
-// pseudoPage
-//   : ':' IDENT
-//   ;
-//
 void pseudoPage() #PseudoPage :
 { Token t; }
 {
@@ -362,11 +395,6 @@ void pseudoPage() #PseudoPage :
   { jjtThis.setText (":" + t.image); }
 }
 
-//
-// operator
-//  : '/' S* | COMMA S* | /* empty */
-//  ;
-//
 void operator() #Operator : {}
 {
   ( <SLASH> ( <S> )*  { jjtThis.setText ("/"); }
@@ -376,13 +404,6 @@ void operator() #Operator : {}
   )
 }
 
-//
-// combinator
-//  : PLUS S*
-//  | GREATER S*
-//  | S
-//  ;
-//
 void combinator() #Combinator : {}
 {
   ( LOOKAHEAD(2)
@@ -439,30 +460,22 @@ void styleRule() : {}
   <RBRACE>
 }
 
-//
-// selector
-//   : simple_selector [ combinator simple_selector ]*
-//   ;
-//
+// ------------ SELECTORS ------------
+
 void selector() : {}
 {
-  simpleSelector()
+  simpleSelectorSequence()
   ( LOOKAHEAD(2)
     combinator()
     ( <S> )*
-    simpleSelector()
+    simpleSelectorSequence()
   )*
 }
 
-//
-// simple_selector
-//  : element_name [ HASH | class | attrib | pseudo ]*
-//  | [ HASH | class | attrib | pseudo ]+
-//  ;
-//
-void simpleSelector() #void : {}
+void simpleSelectorSequence() #void : {}
 {
-  ( elementName()
+  LOOKAHEAD(2)
+  ( typeSelector()
     ( hash()
     | _class()
     | attrib()
@@ -476,24 +489,23 @@ void simpleSelector() #void : {}
     )+
 }
 
-//
-// class
-//   : '.' IDENT
-//   ;
-//
-void _class() #Class :
-{ Token t; }
+void typeSelector() #void : {}
 {
-  <DOT>
-  t = <IDENT>
-  { jjtThis.setText ("." + t.image); }
+  ( LOOKAHEAD(2)
+    namespacePrefix()
+  )?
+  elementName()
 }
 
-//
-// element_name
-//   : IDENT | '*'
-//   ;
-//
+void namespacePrefix() #NamespacePrefix : 
+{ Token t; }
+{
+  ( t = <IDENT> { jjtThis.setText (t.image); }
+  | <ASTERISK>  { jjtThis.setText ("*"); }
+  )?    
+  <DASH>        { jjtThis.appendText ("|"); }
+}
+
 void elementName() #ElementName :
 { Token t; }
 {
@@ -502,12 +514,14 @@ void elementName() #ElementName :
   )
 }
 
-//
-// attrib
-//   : '[' S* IDENT S* [ [ '=' | INCLUDES | DASHMATCH ] S*
-//     [ IDENT | STRING ] S* ]? ']'
-//   ;
-//
+void _class() #Class :
+{ Token t; }
+{
+  <DOT>
+  t = <IDENT>
+  { jjtThis.setText ("." + t.image); }
+}
+
 void attrib() #Attrib :
 { Token t; }
 {
@@ -517,23 +531,23 @@ void attrib() #Attrib :
   /* Hack for html[xmlns*=""] */
   ( <ASTERISK> { jjtThis.appendText ("*"); } )?          
   ( <S> )*
-  ( attribOperator()
+  ( __attribOperator()
     ( <S> )*
-    attribValue()
+    __attribValue()
     ( <S> )*
   )?
   <RSQUARE>
 }
 
-void attribOperator() #AttribOperator : {}
+void __attribOperator() #AttribOperator : {}
 {
-  ( <EQUALS>    { jjtThis.setText ("="); }
-  | <INCLUDES>  { jjtThis.setText ("~="); }
-  | <DASHMATCH> { jjtThis.setText ("|="); }
+  ( <EQUALS>         { jjtThis.setText ("="); }
+  | <INCLUDES>       { jjtThis.setText ("~="); }
+  | <DASHMATCH>      { jjtThis.setText ("|="); }
   )
 }
 
-void attribValue() #AttribValue :
+void __attribValue() #AttribValue :
 {
   Token t;
   String sStr;
@@ -544,11 +558,6 @@ void attribValue() #AttribValue :
   )
 }
 
-//
-// pseudo
-//  : ':' [ IDENT | FUNCTION S* IDENT? S* ')' ]
-//  ;
-//
 void pseudo() #Pseudo :
 { Token t; }
 {
@@ -560,7 +569,6 @@ void pseudo() #Pseudo :
     ( <S> )*
     ( expr() )?
     <RROUND>  // do not append because of expression!
-    ( <S> )*
   | t = <IDENT> { jjtThis.appendText (t.image); }
   )
 }
@@ -568,10 +576,12 @@ void pseudo() #Pseudo :
 void hash() #Hash :
 { Token t; }
 {
-  t = <HASH>
-  { jjtThis.setText (t.image); }
+  t = <HASH> { jjtThis.setText (t.image); }
 }
 
+//
+// Multiple style declarations together
+// 
 CSSNode styleDeclaration() #StyleDeclaration : {}
 {
   ( <S> )*
@@ -647,10 +657,6 @@ Token dimension() #void :
 
 //
 // term
-//  : unary_operator?
-//    [ NUMBER S* | PERCENTAGE S* | LENGTH S* | EM S* | EX S* | ANGLE S* | TIME S* | FREQ S* ]
-//  | STRING S* | IDENT S* | URI S* | hexcolor | function | inherit
-//  ;
 //
 void term() #Term :
 {
@@ -660,19 +666,19 @@ void term() #Term :
 }
 {
   ( ( sPrefix = unaryOperator() )?
-    ( t = <NUMBER> ( <S> )*
-    | t = <PERCENTAGE> ( <S> )*
-    | t = dimension() ( <S> )*
-  )
-  | sStr = string() ( <S> )*    { jjtThis.setText (sStr); }
-  | t = <IDENT> ( <S> )*
+    ( t = <NUMBER>
+    | t = <PERCENTAGE>
+    | t = dimension()
+    )
+  | sStr = string()    { jjtThis.setText (sStr); }
+  | t = <IDENT>
   | uri()
-  | sStr = hexcolor()           { jjtThis.setText (sStr); }
+  | sStr = hexcolor()  { jjtThis.setText (sStr); }
   | function()
-  /* extensions */
   | t = <DIMENSION>
-  | t = <INHERIT> ( <S> )*
+  | t = <INHERIT>
   )
+  ( <S> )*
   {
     if (sPrefix != null)
       jjtThis.appendText (sPrefix);
@@ -685,12 +691,11 @@ void uri() #URI :
 { Token t; }
 {
   t = <URI>  { jjtThis.setText (t.image); } 
-  ( <S> )*
 }
 
 //
 // function
-//   : FUNCTION S* expr ')' S*
+//   : FUNCTION S* expr ')'
 //   ;
 //
 void function() #Function :
@@ -698,31 +703,23 @@ void function() #Function :
 {
   t = <FUNCTION>
   ( <S> )*
-  // Original was:
-  // expr ()
-  // Extension to support functions without parameters (e.g. "gray ()")
+  // Support functions without parameters (e.g. "gray ()")
   ( expr() )?
   <RROUND>
-  ( <S> )*
   { jjtThis.setText (t.image + ")"); }
 }
 
 //
 // hexcolor
-//   : HASH S*
-//   ;
 //
 String hexcolor() #void :
 { Token t; }
 {
   t = <HASH>
-  ( <S> )*
   { return t.image; }
 }
 
 
-// string       {string1}|{string2}
-// {string}        {return STRING;}
 String string() #void :
 { Token t; }
 {
