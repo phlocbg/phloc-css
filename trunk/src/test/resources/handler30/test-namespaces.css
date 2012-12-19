@@ -25,31 +25,14 @@ body {
     font-family: Georgia, serif;
 }
 
-div[epub|type="chapter"] {
+/* This makes it 3.0 specific: ^=  ;-) */
+div[epub|type^="chapter"] {
     background-image: url('childrens-book-swans.jpg'),
                       url('childrens-book-flowers.jpg');
     background-position: top right, bottom center;
     background-repeat: no-repeat, repeat-x;
     background-color: #fdefc2;
     padding: 2em;
-}
-
-p:last-child {
-    padding-bottom: 10em;
-}
-
-
-h1 {
-    text-transform: uppercase;
-    font-weight: 200;
-}
-
-p > span {
-    display: block;
-}
-
-p > span:nth-child(even) {
-    text-indent: 1em;
 }
 
 foo|p { color:red; }

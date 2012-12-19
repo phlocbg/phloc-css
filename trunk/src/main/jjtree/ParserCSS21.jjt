@@ -527,6 +527,9 @@ void attrib() #Attrib :
 {
   <LSQUARE>
   ( <S> )*
+  ( LOOKAHEAD(2)
+    namespacePrefix() 
+  )?
   t = <IDENT> { jjtThis.setText (t.image); }
   /* Hack for html[xmlns*=""] */
   ( <ASTERISK> { jjtThis.appendText ("*"); } )?          
