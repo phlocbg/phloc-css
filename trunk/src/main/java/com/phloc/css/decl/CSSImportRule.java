@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -49,13 +50,33 @@ public final class CSSImportRule implements ICSSWriteable
     setLocation (aLocation);
   }
 
-  public void addMediaQuery (@Nonnull @Nonempty final CSSMediaQuery aMediaQuery)
+  public boolean hasMediaQueries ()
   {
+    return !m_aMediaQueries.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getMediaQueryCount ()
+  {
+    return m_aMediaQueries.size ();
+  }
+
+  public void addMediaQuery (@Nonnull final CSSMediaQuery aMediaQuery)
+  {
+    if (aMediaQuery == null)
+      throw new NullPointerException ("mediaQuery");
     m_aMediaQueries.add (aMediaQuery);
   }
 
+  public void addMediaQuery (@Nonnegative final int nIndex, @Nonnull final CSSMediaQuery aMediaQuery)
+  {
+    if (aMediaQuery == null)
+      throw new NullPointerException ("mediaQuery");
+    m_aMediaQueries.add (nIndex, aMediaQuery);
+  }
+
   @Nonnull
-  public EChange removeMediaQuery (@Nonnull final CSSMediaQuery aMediaQuery)
+  public EChange removeMediaQuery (@Nullable final CSSMediaQuery aMediaQuery)
   {
     return EChange.valueOf (m_aMediaQueries.remove (aMediaQuery));
   }
