@@ -149,7 +149,7 @@ public final class JavaCharStream implements CharStream
     }
     catch (final Throwable t)
     {
-      throw new Error (t.getMessage ());
+      throw new Error ("Something went wrong", t);
     }
 
     m_nBufsize += 2048;
