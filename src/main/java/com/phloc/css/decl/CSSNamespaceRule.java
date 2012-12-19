@@ -27,20 +27,16 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
-import com.phloc.css.ECSSVersion;
-import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single namespace rule on top level.<br>
- * Note: this is currently only support by CSS 3.0 even though it is
- * theoretically possible for CSS 2.1 as well!
+ * Represents a single namespace rule on top level.
  * 
  * @author philip
  */
 @NotThreadSafe
-public final class CSSNamespaceRule implements ICSSWriteable, ICSSVersionAware
+public final class CSSNamespaceRule implements ICSSWriteable
 {
   private String m_sPrefix;
   private String m_sURL;
@@ -79,17 +75,9 @@ public final class CSSNamespaceRule implements ICSSWriteable, ICSSVersionAware
   }
 
   @Nonnull
-  public ECSSVersion getMinimumCSSVersion ()
-  {
-    return ECSSVersion.CSS30;
-  }
-
-  @Nonnull
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    aSettings.checkVersionRequirements (this);
-
     // Always ignore namespace rules?
     if (!aSettings.isWriteNamespaceRules ())
       return "";
