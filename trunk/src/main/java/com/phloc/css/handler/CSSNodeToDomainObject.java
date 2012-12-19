@@ -45,6 +45,7 @@ import com.phloc.css.decl.CSSMediaExpression;
 import com.phloc.css.decl.CSSMediaQuery;
 import com.phloc.css.decl.CSSMediaQuery.EModifier;
 import com.phloc.css.decl.CSSMediaRule;
+import com.phloc.css.decl.CSSNamespaceRule;
 import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSSelectorAttribute;
@@ -73,20 +74,17 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * 
  * @author philip
  */
-final class CSSNodeToDomainObject
-{
+final class CSSNodeToDomainObject {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSNodeToDomainObject.class);
   private final ECSSVersion m_eVersion;
 
-  public CSSNodeToDomainObject (@Nonnull final ECSSVersion eVersion)
-  {
+  public CSSNodeToDomainObject (@Nonnull final ECSSVersion eVersion) {
     if (eVersion == null)
       throw new NullPointerException ("version");
     m_eVersion = eVersion;
   }
 
-  private void _expectNodeType (@Nonnull final CSSNode aNode, @Nonnull final ECSSNodeType eExpected)
-  {
+  private void _expectNodeType (@Nonnull final CSSNode aNode, @Nonnull final ECSSNodeType eExpected) {
     if (!eExpected.isNode (aNode, m_eVersion))
       throw new IllegalArgumentException ("Expected a '" +
                                           eExpected.getNodeName (m_eVersion) +
@@ -97,8 +95,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSImportRule _createImportRule (final CSSNode aNode)
-  {
+  private CSSImportRule _createImportRule (final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.IMPORTRULE);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount > 2)
@@ -106,11 +103,9 @@ final class CSSNodeToDomainObject
 
     CSSURI aImportURI = null;
     int nCurrentIndex = 0;
-    if (nChildCount > 0)
-    {
+    if (nChildCount > 0) {
       final CSSNode aURINode = aNode.jjtGetChild (0);
-      if (ECSSNodeType.URI.isNode (aURINode, m_eVersion))
-      {
+      if (ECSSNodeType.URI.isNode (aURINode, m_eVersion)) {
         aImportURI = new CSSURI (aURINode.getText ());
         ++nCurrentIndex;
       }
@@ -120,22 +115,18 @@ final class CSSNodeToDomainObject
                                            ECSSNodeType.getNodeName (aURINode, m_eVersion));
     }
 
-    if (aImportURI == null)
-    {
+    if (aImportURI == null) {
       // No URI child node present, so the location is printed directly
       aImportURI = new CSSURI (ParseUtils.extractStringValue (aNode.getText ()));
     }
 
     // Import rule
     final CSSImportRule ret = new CSSImportRule (aImportURI);
-    if (nChildCount > nCurrentIndex)
-    {
+    if (nChildCount > nCurrentIndex) {
       // We have a media query present!
       final CSSNode aMediaListNode = aNode.jjtGetChild (nCurrentIndex);
-      if (ECSSNodeType.MEDIALIST.isNode (aMediaListNode, m_eVersion))
-      {
-        for (final CSSNode aMediaQueryNode : aMediaListNode)
-        {
+      if (ECSSNodeType.MEDIALIST.isNode (aMediaListNode, m_eVersion)) {
+        for (final CSSNode aMediaQueryNode : aMediaListNode) {
           ret.addMediaQuery (_createMediaQuery (aMediaQueryNode));
         }
       }
@@ -151,12 +142,10 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSSelectorAttribute _createSelectorAttribute (@Nonnull final CSSNode aNode)
-  {
+  private CSSSelectorAttribute _createSelectorAttribute (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.ATTRIB);
     final int nChildren = aNode.jjtGetNumChildren ();
-    if (nChildren == 0)
-    {
+    if (nChildren == 0) {
       // Just check for existence
       return new CSSSelectorAttribute (aNode.getText ());
     }
@@ -171,16 +160,14 @@ final class CSSNodeToDomainObject
   }
 
   @Nullable
-  private ICSSSelectorMember _createSelectorMember (final CSSNode aNode)
-  {
+  private ICSSSelectorMember _createSelectorMember (final CSSNode aNode) {
     final int nChildCount = aNode.jjtGetNumChildren ();
 
     if (ECSSNodeType.NAMESPACEPREFIX.isNode (aNode, m_eVersion) ||
         ECSSNodeType.UNIVERSAL.isNode (aNode, m_eVersion) ||
         ECSSNodeType.ELEMENTNAME.isNode (aNode, m_eVersion) ||
         ECSSNodeType.HASH.isNode (aNode, m_eVersion) ||
-        ECSSNodeType.CLASS.isNode (aNode, m_eVersion))
-    {
+        ECSSNodeType.CLASS.isNode (aNode, m_eVersion)) {
       if (nChildCount != 0)
         s_aLogger.warn ("CSS simple selector member expected 0 children and got " + nChildCount);
       return new CSSSelectorSimpleMember (aNode.getText ());
@@ -189,8 +176,7 @@ final class CSSNodeToDomainObject
     if (ECSSNodeType.ATTRIB.isNode (aNode, m_eVersion))
       return _createSelectorAttribute (aNode);
 
-    if (ECSSNodeType.COMBINATOR.isNode (aNode, m_eVersion))
-    {
+    if (ECSSNodeType.COMBINATOR.isNode (aNode, m_eVersion)) {
       final String sText = aNode.getText ();
       final ECSSSelectorCombinator eCombinator = ECSSSelectorCombinator.getFromNameOrNull (sText);
       if (eCombinator == null)
@@ -198,8 +184,7 @@ final class CSSNodeToDomainObject
       return eCombinator;
     }
 
-    if (ECSSNodeType.NEGATION.isNode (aNode, m_eVersion))
-    {
+    if (ECSSNodeType.NEGATION.isNode (aNode, m_eVersion)) {
       if (nChildCount != 1)
         throw new IllegalArgumentException ("CSS Negation expected 1 child and got " + nChildCount);
 
@@ -208,19 +193,15 @@ final class CSSNodeToDomainObject
       return new CSSSelectorMemberNot (aNestedSelector);
     }
 
-    if (ECSSNodeType.PSEUDO.isNode (aNode, m_eVersion))
-    {
-      if (nChildCount == 0)
-      {
+    if (ECSSNodeType.PSEUDO.isNode (aNode, m_eVersion)) {
+      if (nChildCount == 0) {
         // E.g. ":focus" or ":hover"
         return new CSSSelectorSimpleMember (aNode.getText ());
       }
 
-      if (nChildCount == 1)
-      {
+      if (nChildCount == 1) {
         final CSSNode aChildNode = aNode.jjtGetChild (0);
-        if (ECSSNodeType.NTH.isNode (aChildNode, m_eVersion))
-        {
+        if (ECSSNodeType.NTH.isNode (aChildNode, m_eVersion)) {
           // Handle nth. E.g. ":nth-child(even)" or ":nth-child(3n+1)"
           return new CSSSelectorSimpleMember (aNode.getText () + aChildNode.getText () + ")");
         }
@@ -241,12 +222,10 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSSelector _createSelector (@Nonnull final CSSNode aNode)
-  {
+  private CSSSelector _createSelector (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.SELECTOR);
     final CSSSelector ret = new CSSSelector ();
-    for (final CSSNode aChildNode : aNode)
-    {
+    for (final CSSNode aChildNode : aNode) {
       final ICSSSelectorMember aMember = _createSelectorMember (aChildNode);
       if (aMember != null)
         ret.addMember (aMember);
@@ -255,22 +234,18 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSExpressionMemberMathProduct _createExpressionMathProduct (@Nonnull final CSSNode aNode)
-  {
+  private CSSExpressionMemberMathProduct _createExpressionMathProduct (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.MATH_PRODUCT);
 
     final CSSExpressionMemberMathProduct ret = new CSSExpressionMemberMathProduct ();
 
     // read all sums
-    for (final CSSNode aChildNode : aNode)
-    {
-      if (ECSSNodeType.MATH_UNIT.isNode (aChildNode, m_eVersion))
-      {
+    for (final CSSNode aChildNode : aNode) {
+      if (ECSSNodeType.MATH_UNIT.isNode (aChildNode, m_eVersion)) {
         final int nChildCount = aChildNode.jjtGetNumChildren ();
         if (nChildCount == 0)
           ret.addMember (new CSSExpressionMemberMathUnitSimple (aChildNode.getText ()));
-        else
-        {
+        else {
           if (nChildCount != 1)
             throw new IllegalArgumentException ("CSS math unit expected 1 child and got " + nChildCount);
 
@@ -279,8 +254,7 @@ final class CSSNodeToDomainObject
         }
       }
       else
-        if (ECSSNodeType.MATH_PRODUCTOPERATOR.isNode (aChildNode, m_eVersion))
-        {
+        if (ECSSNodeType.MATH_PRODUCTOPERATOR.isNode (aChildNode, m_eVersion)) {
           final String sText = aChildNode.getText ();
           final ECSSMathOperator eMathOp = ECSSMathOperator.getFromNameOrNull (sText);
           if (eMathOp == null)
@@ -299,22 +273,18 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSExpressionMemberMath _createExpressionMathTerm (@Nonnull final CSSNode aNode)
-  {
+  private CSSExpressionMemberMath _createExpressionMathTerm (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.MATH);
 
     final CSSExpressionMemberMath ret = new CSSExpressionMemberMath ();
 
     // read all sums
-    for (final CSSNode aChildNode : aNode)
-    {
-      if (ECSSNodeType.MATH_PRODUCT.isNode (aChildNode, m_eVersion))
-      {
+    for (final CSSNode aChildNode : aNode) {
+      if (ECSSNodeType.MATH_PRODUCT.isNode (aChildNode, m_eVersion)) {
         ret.addMember (_createExpressionMathProduct (aChildNode));
       }
       else
-        if (ECSSNodeType.MATH_SUMOPERATOR.isNode (aChildNode, m_eVersion))
-        {
+        if (ECSSNodeType.MATH_SUMOPERATOR.isNode (aChildNode, m_eVersion)) {
           final String sText = aChildNode.getText ();
           final ECSSMathOperator eMathOp = ECSSMathOperator.getFromNameOrNull (sText);
           if (eMathOp == null)
@@ -333,8 +303,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private ICSSExpressionMember _createExpressionTerm (@Nonnull final CSSNode aNode)
-  {
+  private ICSSExpressionMember _createExpressionTerm (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.TERM);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount != 0 && nChildCount != 1)
@@ -347,8 +316,7 @@ final class CSSNodeToDomainObject
     final CSSNode aChildNode = aNode.jjtGetChild (0);
     final int nChildChildren = aChildNode.jjtGetNumChildren ();
 
-    if (ECSSNodeType.URI.isNode (aChildNode, m_eVersion))
-    {
+    if (ECSSNodeType.URI.isNode (aChildNode, m_eVersion)) {
       // URI value
       if (nChildChildren > 0)
         throw new IllegalArgumentException ("Expected 0 children but got " + nChildChildren + "!");
@@ -357,15 +325,13 @@ final class CSSNodeToDomainObject
       return new CSSExpressionMemberTermURI (aURI);
     }
     else
-      if (ECSSNodeType.FUNCTION.isNode (aChildNode, m_eVersion))
-      {
+      if (ECSSNodeType.FUNCTION.isNode (aChildNode, m_eVersion)) {
         // function value
         if (nChildChildren > 1)
           throw new IllegalArgumentException ("Expected 0 or 1 children but got " + nChildChildren + "!");
 
         final String sFunctionName = aChildNode.getText ();
-        if (nChildChildren == 1)
-        {
+        if (nChildChildren == 1) {
           // Parameters present
           final CSSExpression aFuncExpr = _createExpression (aChildNode.jjtGetChild (0));
           return new CSSExpressionMemberFunction (sFunctionName, aFuncExpr);
@@ -375,8 +341,7 @@ final class CSSNodeToDomainObject
         return new CSSExpressionMemberFunction (sFunctionName);
       }
       else
-        if (ECSSNodeType.MATH.isNode (aChildNode, m_eVersion))
-        {
+        if (ECSSNodeType.MATH.isNode (aChildNode, m_eVersion)) {
           // Math value
           return _createExpressionMathTerm (aChildNode);
         }
@@ -386,17 +351,14 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSExpression _createExpression (@Nonnull final CSSNode aNode)
-  {
+  private CSSExpression _createExpression (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.EXPR);
     final CSSExpression ret = new CSSExpression ();
-    for (final CSSNode aChildNode : aNode)
-    {
+    for (final CSSNode aChildNode : aNode) {
       if (ECSSNodeType.TERM.isNode (aChildNode, m_eVersion))
         ret.addMember (_createExpressionTerm (aChildNode));
       else
-        if (ECSSNodeType.OPERATOR.isNode (aChildNode, m_eVersion))
-        {
+        if (ECSSNodeType.OPERATOR.isNode (aChildNode, m_eVersion)) {
           final String sText = aChildNode.getText ();
           final ECSSExpressionOperator eOp = ECSSExpressionOperator.getFromNameOrNull (sText);
           if (eOp == null)
@@ -404,8 +366,7 @@ final class CSSNodeToDomainObject
           else
             ret.addMember (eOp);
         }
-        else
-        {
+        else {
           s_aLogger.warn ("Unsupported child of " +
                           ECSSNodeType.getNodeName (aNode, m_eVersion) +
                           ": " +
@@ -416,8 +377,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSDeclaration _createDeclaration (@Nonnull final CSSNode aNode)
-  {
+  private CSSDeclaration _createDeclaration (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.DECLARATION);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount != 2 && nChildCount != 3)
@@ -426,8 +386,7 @@ final class CSSNodeToDomainObject
     final String sProperty = aNode.jjtGetChild (0).getText ();
     final CSSExpression aExpression = _createExpression (aNode.jjtGetChild (1));
     boolean bImportant = false;
-    if (nChildCount == 3)
-    {
+    if (nChildCount == 3) {
       // Must be an "!important" node
       final CSSNode aChildNode = aNode.jjtGetChild (2);
       if (ECSSNodeType.IMPORTANT.isNode (aChildNode, m_eVersion))
@@ -443,26 +402,21 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSStyleRule _createStyleRule (@Nonnull final CSSNode aNode)
-  {
+  private CSSStyleRule _createStyleRule (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.STYLERULE);
     final CSSStyleRule ret = new CSSStyleRule ();
     boolean bSelectors = true;
-    for (final CSSNode aChildNode : aNode)
-    {
-      if (ECSSNodeType.SELECTOR.isNode (aChildNode, m_eVersion))
-      {
+    for (final CSSNode aChildNode : aNode) {
+      if (ECSSNodeType.SELECTOR.isNode (aChildNode, m_eVersion)) {
         if (!bSelectors)
           s_aLogger.error ("Found a selector after a declaration!");
 
         ret.addSelector (_createSelector (aChildNode));
       }
-      else
-      {
+      else {
         // OK, we're after the selectors
         bSelectors = false;
-        if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
-        {
+        if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion)) {
           // Read all contained declarations
           final int nDecls = aChildNode.jjtGetNumChildren ();
           for (int nDecl = 0; nDecl < nDecls; ++nDecl)
@@ -481,30 +435,25 @@ final class CSSNodeToDomainObject
 
   @Nonnull
   @SuppressFBWarnings ("IL_INFINITE_LOOP")
-  private CSSPageRule _createPageRule (@Nonnull final CSSNode aNode)
-  {
+  private CSSPageRule _createPageRule (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.PAGERULE);
 
     final int nChildCount = aNode.jjtGetNumChildren ();
     String sPseudoPage = null;
     int nStartIndex = 0;
-    if (nChildCount > 0)
-    {
+    if (nChildCount > 0) {
       final CSSNode aFirstChild = aNode.jjtGetChild (0);
-      if (ECSSNodeType.PSEUDOPAGE.isNode (aFirstChild, m_eVersion))
-      {
+      if (ECSSNodeType.PSEUDOPAGE.isNode (aFirstChild, m_eVersion)) {
         sPseudoPage = aFirstChild.getText ();
         nStartIndex++;
       }
     }
 
     final CSSPageRule ret = new CSSPageRule (sPseudoPage);
-    for (int nIndex = nStartIndex; nIndex < nChildCount; ++nIndex)
-    {
+    for (int nIndex = nStartIndex; nIndex < nChildCount; ++nIndex) {
       final CSSNode aChildNode = aNode.jjtGetChild (nIndex);
 
-      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
-      {
+      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion)) {
         // Read all contained declarations
         final int nDecls = aChildNode.jjtGetNumChildren ();
         for (int nDecl = 0; nDecl < nDecls; ++nDecl)
@@ -518,14 +467,11 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSMediaRule _createMediaRule (@Nonnull final CSSNode aNode)
-  {
+  private CSSMediaRule _createMediaRule (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.MEDIARULE);
     final CSSMediaRule ret = new CSSMediaRule ();
-    for (final CSSNode aChildNode : aNode)
-    {
-      if (ECSSNodeType.MEDIALIST.isNode (aChildNode, m_eVersion))
-      {
+    for (final CSSNode aChildNode : aNode) {
+      if (ECSSNodeType.MEDIALIST.isNode (aChildNode, m_eVersion)) {
         for (final CSSNode aMediaListChildNode : aChildNode)
           ret.addMediaQuery (_createMediaQuery (aMediaListChildNode));
       }
@@ -554,10 +500,8 @@ final class CSSNodeToDomainObject
 
   @Nonnull
   @SuppressFBWarnings ("IL_INFINITE_LOOP")
-  private CSSMediaQuery _createMediaQuery (@Nonnull final CSSNode aNode)
-  {
-    if (ECSSNodeType.MEDIUM.isNode (aNode, m_eVersion))
-    {
+  private CSSMediaQuery _createMediaQuery (@Nonnull final CSSNode aNode) {
+    if (ECSSNodeType.MEDIUM.isNode (aNode, m_eVersion)) {
       // CSS 2.1 compatibility
       final String sMedium = aNode.getText ();
       if (ECSSMedium.getFromNameOrNull (sMedium) == null)
@@ -573,15 +517,12 @@ final class CSSNodeToDomainObject
     EModifier eModifier = EModifier.NONE;
 
     // Check if a media modifier is present
-    if (nChildCount > 0)
-    {
+    if (nChildCount > 0) {
       final CSSNode aFirstChildNode = aNode.jjtGetChild (0);
-      if (ECSSNodeType.MEDIAMODIFIER.isNode (aFirstChildNode, m_eVersion))
-      {
+      if (ECSSNodeType.MEDIAMODIFIER.isNode (aFirstChildNode, m_eVersion)) {
         final String sMediaModifier = aFirstChildNode.getText ();
         // The "mediaModifier" token might be present, but without text!!!
-        if (sMediaModifier != null)
-        {
+        if (sMediaModifier != null) {
           if ("not".equalsIgnoreCase (sMediaModifier))
             eModifier = EModifier.NOT;
           else
@@ -596,11 +537,9 @@ final class CSSNodeToDomainObject
 
     // Next check if a medium is present
     String sMedium = null;
-    if (nChildCount > nStartIndex)
-    {
+    if (nChildCount > nStartIndex) {
       final CSSNode aNextChild = aNode.jjtGetChild (nStartIndex);
-      if (ECSSNodeType.MEDIUM.isNode (aNextChild, m_eVersion))
-      {
+      if (ECSSNodeType.MEDIUM.isNode (aNextChild, m_eVersion)) {
         sMedium = aNextChild.getText ();
         if (ECSSMedium.getFromNameOrNull (sMedium) == null)
           s_aLogger.warn ("CSS " +
@@ -613,8 +552,7 @@ final class CSSNodeToDomainObject
     }
 
     final CSSMediaQuery ret = new CSSMediaQuery (eModifier, sMedium);
-    for (int i = nStartIndex; i < nChildCount; ++i)
-    {
+    for (int i = nStartIndex; i < nChildCount; ++i) {
       final CSSNode aChildNode = aNode.jjtGetChild (i);
       if (ECSSNodeType.MEDIAEXPR.isNode (aChildNode, m_eVersion))
         ret.addMediaExpression (_createMediaExpr (aChildNode));
@@ -626,8 +564,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSMediaExpression _createMediaExpr (@Nonnull final CSSNode aNode)
-  {
+  private CSSMediaExpression _createMediaExpr (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.MEDIAEXPR);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount != 1 && nChildCount != 2)
@@ -641,8 +578,7 @@ final class CSSNodeToDomainObject
     if (ECSSMediaExpressionFeature.getFromNameOrNull (sFeature) == null)
       s_aLogger.warn ("Media expression uses unsupported feature '" + sFeature + "'");
 
-    if (nChildCount == 1)
-    {
+    if (nChildCount == 1) {
       // Feature only
       return new CSSMediaExpression (sFeature);
     }
@@ -653,14 +589,11 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSFontFaceRule _createFontFaceRule (@Nonnull final CSSNode aNode)
-  {
+  private CSSFontFaceRule _createFontFaceRule (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.FONTFACERULE);
     final CSSFontFaceRule ret = new CSSFontFaceRule ();
-    for (final CSSNode aChildNode : aNode)
-    {
-      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
-      {
+    for (final CSSNode aChildNode : aNode) {
+      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion)) {
         // Read all contained declarations
         final int nDecls = aChildNode.jjtGetNumChildren ();
         for (int nDecl = 0; nDecl < nDecls; ++nDecl)
@@ -674,8 +607,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSKeyframesRule _createKeyframesRule (@Nonnull final CSSNode aNode)
-  {
+  private CSSKeyframesRule _createKeyframesRule (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.KEYFRAMESRULE);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount == 0)
@@ -695,15 +627,12 @@ final class CSSNodeToDomainObject
     // Get the key frame blocks
     int nIndex = 1;
     CSSKeyframesBlock aBlock = null;
-    while (nIndex < nChildCount)
-    {
+    while (nIndex < nChildCount) {
       final CSSNode aChildNode = aNode.jjtGetChild (nIndex);
-      if (ECSSNodeType.KEYFRAMESSELECTOR.isNode (aChildNode, m_eVersion))
-      {
+      if (ECSSNodeType.KEYFRAMESSELECTOR.isNode (aChildNode, m_eVersion)) {
         // Read all single selectors
         final List <String> aKeyframesSelectors = new ArrayList <String> ();
-        for (final CSSNode aSelectorChild : aChildNode)
-        {
+        for (final CSSNode aSelectorChild : aChildNode) {
           _expectNodeType (aSelectorChild, ECSSNodeType.SINGLEKEYFRAMESELECTOR);
           aKeyframesSelectors.add (aSelectorChild.getText ());
         }
@@ -711,8 +640,7 @@ final class CSSNodeToDomainObject
         ret.addBlock (aBlock);
       }
       else
-        if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
-        {
+        if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion)) {
           if (aBlock == null)
             throw new IllegalStateException ("No keyframes block present!");
 
@@ -731,8 +659,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSViewportRule _createViewportRule (@Nonnull final CSSNode aNode)
-  {
+  private CSSViewportRule _createViewportRule (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.VIEWPORTRULE);
 
     // Get the identifier (e.g. the default "@viewport" or the non-standard
@@ -740,10 +667,8 @@ final class CSSNodeToDomainObject
     final String sViewportDeclaration = aNode.getText ();
 
     final CSSViewportRule ret = new CSSViewportRule (sViewportDeclaration);
-    for (final CSSNode aChildNode : aNode)
-    {
-      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
-      {
+    for (final CSSNode aChildNode : aNode) {
+      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion)) {
         // Read all contained declarations
         final int nDecls = aChildNode.jjtGetNumChildren ();
         for (int nDecl = 0; nDecl < nDecls; ++nDecl)
@@ -757,69 +682,85 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  public CascadingStyleSheet createCascadingStyleSheetFromNode (@Nonnull final CSSNode aNode)
-  {
+  private CSSNamespaceRule _createNamespaceRule (@Nonnull final CSSNode aNode) {
+    _expectNodeType (aNode, ECSSNodeType.NAMESPACERULE);
+    final int nChildCount = aNode.jjtGetNumChildren ();
+    if (nChildCount < 1 || nChildCount > 2)
+      throw new IllegalArgumentException ("Expected at least 1 child and at last 2 children but got " +
+                                          nChildCount +
+                                          ": " +
+                                          aNode);
+
+    String sPrefix = null;
+    int nURLIndex = 0;
+    if (ECSSNodeType.NAMESPACERULEPREFIX.isNode (aNode.jjtGetChild (0), m_eVersion)) {
+      sPrefix = aNode.jjtGetChild (0).getText ();
+      nURLIndex++;
+    }
+
+    final CSSNode aURLNode = aNode.jjtGetChild (nURLIndex);
+    _expectNodeType (aURLNode, ECSSNodeType.NAMESPACERULEURL);
+
+    final CSSNamespaceRule ret = new CSSNamespaceRule (sPrefix, aURLNode.getText ());
+    return ret;
+  }
+
+  @Nonnull
+  public CascadingStyleSheet createCascadingStyleSheetFromNode (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.ROOT);
     final CascadingStyleSheet ret = new CascadingStyleSheet ();
-    for (final CSSNode aChildNode : aNode)
-    {
-      if (ECSSNodeType.CHARSET.isNode (aChildNode, m_eVersion))
-      {
+    for (final CSSNode aChildNode : aNode) {
+      if (ECSSNodeType.CHARSET.isNode (aChildNode, m_eVersion)) {
         // Ignore because this was handled when reading!
       }
       else
-        if (ECSSNodeType.IMPORTRULE.isNode (aChildNode, m_eVersion))
-        {
+        if (ECSSNodeType.IMPORTRULE.isNode (aChildNode, m_eVersion)) {
           ret.addImportRule (_createImportRule (aChildNode));
         }
         else
-          if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
-          {
+          if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion)) {
             ret.addRule (_createStyleRule (aChildNode));
           }
           else
-            if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
-            {
+            if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion)) {
               ret.addRule (_createPageRule (aChildNode));
             }
             else
-              if (ECSSNodeType.MEDIARULE.isNode (aChildNode, m_eVersion))
-              {
+              if (ECSSNodeType.MEDIARULE.isNode (aChildNode, m_eVersion)) {
                 ret.addRule (_createMediaRule (aChildNode));
               }
               else
-                if (ECSSNodeType.FONTFACERULE.isNode (aChildNode, m_eVersion))
-                {
+                if (ECSSNodeType.FONTFACERULE.isNode (aChildNode, m_eVersion)) {
                   ret.addRule (_createFontFaceRule (aChildNode));
                 }
                 else
-                  if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
-                  {
+                  if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion)) {
                     ret.addRule (_createKeyframesRule (aChildNode));
                   }
                   else
-                    if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
-                    {
+                    if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion)) {
                       ret.addRule (_createViewportRule (aChildNode));
                     }
                     else
-                      if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
-                      {
-                        // Unknown rule most likely indicates a parsing error
-                        s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);
+                      if (ECSSNodeType.NAMESPACERULE.isNode (aChildNode, m_eVersion)) {
+                        ret.addRule (_createNamespaceRule (aChildNode));
                       }
                       else
-                        s_aLogger.warn ("Unsupported child of " +
-                                        ECSSNodeType.getNodeName (aNode, m_eVersion) +
-                                        ": " +
-                                        ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+                        if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion)) {
+                          // Unknown rule most likely indicates a parsing error
+                          s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);
+                        }
+                        else
+                          s_aLogger.warn ("Unsupported child of " +
+                                          ECSSNodeType.getNodeName (aNode, m_eVersion) +
+                                          ": " +
+                                          ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
   }
 
   @Nonnull
-  public CSSDeclarationList createDeclarationListFromNode (@Nonnull final CSSNode aNode)
-  {
+  public CSSDeclarationList createDeclarationListFromNode (@Nonnull final CSSNode aNode) {
     _expectNodeType (aNode, ECSSNodeType.STYLEDECLARATION);
     final CSSDeclarationList ret = new CSSDeclarationList ();
     final int nDecls = aNode.jjtGetNumChildren ();
