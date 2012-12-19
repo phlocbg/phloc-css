@@ -2,6 +2,7 @@ package com.phloc.css.tools;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CSSMediaQuery;
@@ -17,52 +18,54 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * 
  * @author philip
  */
-public class WrapInMediaQuery
+@Immutable
+public final class MediaQueryTools
 {
-  private final CascadingStyleSheet m_aCSS;
-
-  public WrapInMediaQuery (@Nonnull final CascadingStyleSheet aCSS)
-  {
-    if (aCSS == null)
-      throw new NullPointerException ("CSS");
-    m_aCSS = aCSS;
-  }
+  private MediaQueryTools ()
+  {}
 
   /**
-   * Check if the CSS can be wrapped in an external media rule. It is not
+   * Check if the passed CSS can be wrapped in an external media rule. It is not
    * possible, if a CSS already contains other media rules, as nested media
    * rules are not allowed.
    * 
+   * @param aCSS
+   *        The CSS to be checked for wrapping.
    * @return <code>true</code> if the CSS can be wrapped, <code>false</code> if
    *         it can't be wrapped.
    */
-  public boolean canWrapInMediaQuery ()
+  public static boolean canWrapInMediaQuery (@Nullable final CascadingStyleSheet aCSS)
   {
-    return !m_aCSS.hasMediaRules ();
+    return aCSS != null && !aCSS.hasMediaRules ();
   }
 
   /**
    * Get the CSS wrapped in the specified media query. Note: all existing rule
    * objects are reused, so modifying them also modifies the original CSS!
    * 
+   * @param aCSS
+   *        The CSS to be wrapped. May not be <code>null</code>.
    * @param aMediaQuery
    *        The media query to use.
    * @return <code>null</code> if out CSS cannot be wrapped, the newly created
    *         {@link CascadingStyleSheet} object otherwise.
    */
   @Nullable
-  public CascadingStyleSheet getWrappedInMediaQuery (@Nonnull final CSSMediaQuery aMediaQuery)
+  public static CascadingStyleSheet getWrappedInMediaQuery (@Nonnull final CascadingStyleSheet aCSS,
+                                                            @Nonnull final CSSMediaQuery aMediaQuery)
   {
+    if (aCSS == null)
+      throw new NullPointerException ("CSS");
     if (aMediaQuery == null)
       throw new NullPointerException ("mediaQuery");
 
-    if (!canWrapInMediaQuery ())
+    if (!canWrapInMediaQuery (aCSS))
       return null;
 
     final CascadingStyleSheet ret = new CascadingStyleSheet ();
 
     // Copy all import rules
-    for (final CSSImportRule aImportRule : m_aCSS.getAllImportRules ())
+    for (final CSSImportRule aImportRule : aCSS.getAllImportRules ())
     {
       if (aImportRule.hasMediaQueries ())
       {
@@ -79,14 +82,14 @@ public class WrapInMediaQuery
     }
 
     // Copy all namespace rules
-    for (final CSSNamespaceRule aNamespaceRule : m_aCSS.getAllNamespaceRules ())
+    for (final CSSNamespaceRule aNamespaceRule : aCSS.getAllNamespaceRules ())
       ret.addNamespaceRule (aNamespaceRule);
 
     // Create a single top-level media rule and add the existing top-level rules
     // into this media rule
     final CSSMediaRule aNewMediaRule = new CSSMediaRule ();
     aNewMediaRule.addMediaQuery (aMediaQuery);
-    for (final ICSSTopLevelRule aRule : m_aCSS.getAllRules ())
+    for (final ICSSTopLevelRule aRule : aCSS.getAllRules ())
       aNewMediaRule.addRule (aRule);
     ret.addRule (aNewMediaRule);
 
