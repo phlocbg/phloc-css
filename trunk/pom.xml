@@ -104,22 +104,6 @@
           </instructions>
         </configuration>
       </plugin>
-      <!--  Inheritance of reports does not work with site-plugin 3.0
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <configuration>
-          <generateSitemap>true</generateSitemap>
-          <reportPlugins>
-            <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>javacc-maven-plugin</artifactId>
-              <version>2.6</version>
-            </plugin>
-          </reportPlugins>
-        </configuration>
-      </plugin>
-      -->    
     </plugins>
   </build>
 </project>
