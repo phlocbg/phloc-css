@@ -17,11 +17,15 @@
  */
 package com.phloc.css.decl;
 
+import java.util.List;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
@@ -36,19 +40,26 @@ import com.phloc.css.ICSSWriterSettings;
 @Immutable
 public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersionAware
 {
-  private final ICSSSelectorMember m_aNestedSelectorMember;
+  private final List <ICSSSelectorMember> m_aNestedSelectorMembers;
 
-  public CSSSelectorMemberNot (@Nonnull @Nonempty final ICSSSelectorMember aNestedSelectorMember)
+  public CSSSelectorMemberNot (@Nonnull @Nonempty final List <ICSSSelectorMember> aNestedSelectorMembers)
   {
-    if (aNestedSelectorMember == null)
-      throw new NullPointerException ("nestedSelector");
-    m_aNestedSelectorMember = aNestedSelectorMember;
+    if (ContainerHelper.isEmpty (aNestedSelectorMembers))
+      throw new IllegalArgumentException ("nestedSelectorMembers may not be empty");
+    m_aNestedSelectorMembers = aNestedSelectorMembers;
+  }
+
+  @Nonnegative
+  public int getNestedMemberCount ()
+  {
+    return m_aNestedSelectorMembers.size ();
   }
 
   @Nonnull
-  public ICSSSelectorMember getNestedMember ()
+  @ReturnsMutableCopy
+  public List <ICSSSelectorMember> getNestedMembers ()
   {
-    return m_aNestedSelectorMember;
+    return ContainerHelper.newList (m_aNestedSelectorMembers);
   }
 
   @Nonnull
@@ -56,7 +67,11 @@ public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersi
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
-    return ":not(" + m_aNestedSelectorMember.getAsCSSString (aSettings, nIndentLevel) + ")";
+
+    final StringBuilder aSB = new StringBuilder (":not(");
+    for (final ICSSSelectorMember aSelectorMember : m_aNestedSelectorMembers)
+      aSB.append (aSelectorMember.getAsCSSString (aSettings, nIndentLevel));
+    return aSB.append (')').toString ();
   }
 
   @Nonnull
@@ -73,18 +88,18 @@ public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersi
     if (!(o instanceof CSSSelectorMemberNot))
       return false;
     final CSSSelectorMemberNot rhs = (CSSSelectorMemberNot) o;
-    return m_aNestedSelectorMember.equals (rhs.m_aNestedSelectorMember);
+    return m_aNestedSelectorMembers.equals (rhs.m_aNestedSelectorMembers);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_aNestedSelectorMember).getHashCode ();
+    return new HashCodeGenerator (this).append (m_aNestedSelectorMembers).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (null).append ("nestedSelector", m_aNestedSelectorMember).toString ();
+    return new ToStringGenerator (null).append ("nestedSelectorMembers", m_aNestedSelectorMembers).toString ();
   }
 }
