@@ -35,7 +35,8 @@ import com.phloc.css.parser.ParserCSS30TreeConstants;
  * 
  * @author philip
  */
-public enum ECSSNodeType {
+public enum ECSSNodeType
+{
   ROOT (ParserCSS21TreeConstants.JJTROOT, ParserCSS30TreeConstants.JJTROOT),
   // top level
   CHARSET (ParserCSS21TreeConstants.JJTCHARSET, ParserCSS30TreeConstants.JJTCHARSET),
@@ -104,7 +105,8 @@ public enum ECSSNodeType {
   private final int m_nParserType21;
   private final int m_nParserType30;
 
-  private ECSSNodeType (final int nParserType21, final int nParserType30) {
+  private ECSSNodeType (final int nParserType21, final int nParserType30)
+  {
     m_nParserType21 = nParserType21;
     m_nParserType30 = nParserType30;
   }
@@ -118,8 +120,10 @@ public enum ECSSNodeType {
    *         {@link CGlobal#ILLEGAL_UINT} if this node type is not supported by
    *         the passed version
    */
-  int getParserNodeType (@Nonnull final ECSSVersion eVersion) {
-    switch (eVersion) {
+  int getParserNodeType (@Nonnull final ECSSVersion eVersion)
+  {
+    switch (eVersion)
+    {
       case CSS21:
         return m_nParserType21;
       case CSS30:
@@ -139,13 +143,16 @@ public enum ECSSNodeType {
    * @return <code>true</code> if <code>this</code> is the type of the passed
    *         parser node in the given version
    */
-  public boolean isNode (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion) {
+  public boolean isNode (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
+  {
     return aParserNode.getNodeType () == getParserNodeType (eVersion);
   }
 
   @Nonnull
-  String getNodeName (@Nonnull final ECSSVersion eVersion) {
-    switch (eVersion) {
+  String getNodeName (@Nonnull final ECSSVersion eVersion)
+  {
+    switch (eVersion)
+    {
       case CSS21:
         // Special handling in case a CSS 3.0 node is requested, and this node
         // type is not supported in CSS 2.1
@@ -159,7 +166,8 @@ public enum ECSSNodeType {
   }
 
   @Nullable
-  static ECSSNodeType getNodeType (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion) {
+  static ECSSNodeType getNodeType (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
+  {
     for (final ECSSNodeType eNodeType : values ())
       if (eNodeType.isNode (aParserNode, eVersion))
         return eNodeType;
@@ -167,7 +175,8 @@ public enum ECSSNodeType {
   }
 
   @Nullable
-  static String getNodeName (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion) {
+  static String getNodeName (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
+  {
     final ECSSNodeType eNodeType = getNodeType (aParserNode, eVersion);
     if (eNodeType != null)
       return eNodeType.getNodeName (eVersion);
@@ -178,7 +187,8 @@ public enum ECSSNodeType {
   private static void _dumpRecursive (@Nonnull final CSSNode aParserNode,
                                       @Nonnull final ECSSVersion eVersion,
                                       @Nonnull final StringBuilder aSB,
-                                      @Nonnull final String sPrefix) {
+                                      @Nonnull final String sPrefix)
+  {
     aSB.append (sPrefix).append (getNodeName (aParserNode, eVersion));
     if (aParserNode.hasText ())
       aSB.append ('[').append (aParserNode.getText ()).append (']');
@@ -189,7 +199,8 @@ public enum ECSSNodeType {
 
   @Nonnull
   @Nonempty
-  static String getDump (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion) {
+  static String getDump (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
+  {
     final StringBuilder aSB = new StringBuilder ();
     _dumpRecursive (aParserNode, eVersion, aSB, "");
     return aSB.toString ();

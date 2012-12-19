@@ -41,20 +41,24 @@ public class CSSWriterSettings implements ICSSWriterSettings
   public static final boolean DEFAULT_REMOVE_UNNECESSARY_CODE = false;
   public static final String DEFAULT_INDENT = "  ";
   public static final boolean DEFAULT_QUOTE_URLS = CSSURLHelper.DEFAULT_QUOTE_URLS;
+  public static final boolean DEFAULT_WRITE_NAMESPACE_RULES = true;
   public static final boolean DEFAULT_WRITE_FONT_FACE_RULES = true;
   public static final boolean DEFAULT_WRITE_KEYFRAMES_RULES = true;
   public static final boolean DEFAULT_WRITE_MEDIA_RULES = true;
   public static final boolean DEFAULT_WRITE_PAGE_RULES = true;
+  public static final boolean DEFAULT_WRITE_VIEWPORT_RULES = true;
 
   private final ECSSVersion m_eVersion;
   private boolean m_bOptimizedOutput;
   private boolean m_bRemoveUnnecessaryCode = DEFAULT_REMOVE_UNNECESSARY_CODE;
   private String m_sIndent = DEFAULT_INDENT;
   private boolean m_bQuoteURLs = DEFAULT_QUOTE_URLS;
+  private boolean m_bWriteNamespaceRules = DEFAULT_WRITE_NAMESPACE_RULES;
   private boolean m_bWriteFontFaceRules = DEFAULT_WRITE_FONT_FACE_RULES;
   private boolean m_bWriteKeyframesRules = DEFAULT_WRITE_KEYFRAMES_RULES;
   private boolean m_bWriteMediaRules = DEFAULT_WRITE_MEDIA_RULES;
   private boolean m_bWritePageRules = DEFAULT_WRITE_PAGE_RULES;
+  private boolean m_bWriteViewportRules = DEFAULT_WRITE_VIEWPORT_RULES;
 
   /**
    * @param eVersion
@@ -94,10 +98,12 @@ public class CSSWriterSettings implements ICSSWriterSettings
     m_bOptimizedOutput = aBase.isOptimizedOutput ();
     m_sIndent = aBase.getIndent (1);
     m_bQuoteURLs = aBase.isQuoteURLs ();
+    m_bWriteNamespaceRules = aBase.isWriteNamespaceRules ();
     m_bWriteFontFaceRules = aBase.isWriteFontFaceRules ();
     m_bWriteKeyframesRules = aBase.isWriteKeyframesRules ();
     m_bWriteMediaRules = aBase.isWriteMediaRules ();
     m_bWritePageRules = aBase.isWritePageRules ();
+    m_bWriteViewportRules = aBase.isWriteViewportRules ();
   }
 
   @Nonnull
@@ -157,6 +163,18 @@ public class CSSWriterSettings implements ICSSWriterSettings
     return this;
   }
 
+  public final boolean isWriteNamespaceRules ()
+  {
+    return m_bWriteNamespaceRules;
+  }
+
+  @Nonnull
+  public final CSSWriterSettings setWriteNamespaceRules (final boolean bWriteNamespaceRules)
+  {
+    m_bWriteNamespaceRules = bWriteNamespaceRules;
+    return this;
+  }
+
   public final boolean isWriteFontFaceRules ()
   {
     return m_bWriteFontFaceRules;
@@ -205,6 +223,18 @@ public class CSSWriterSettings implements ICSSWriterSettings
     return this;
   }
 
+  public final boolean isWriteViewportRules ()
+  {
+    return m_bWriteViewportRules;
+  }
+
+  @Nonnull
+  public final CSSWriterSettings setWriteViewportRules (final boolean bWriteViewportRules)
+  {
+    m_bWriteViewportRules = bWriteViewportRules;
+    return this;
+  }
+
   public void checkVersionRequirements (@Nonnull final ICSSVersionAware aCSSObject)
   {
     final ECSSVersion eMinCSSVersion = aCSSObject.getMinimumCSSVersion ();
@@ -228,10 +258,12 @@ public class CSSWriterSettings implements ICSSWriterSettings
            m_bRemoveUnnecessaryCode == rhs.m_bRemoveUnnecessaryCode &&
            m_sIndent.equals (rhs.m_sIndent) &&
            m_bQuoteURLs == rhs.m_bQuoteURLs &&
+           m_bWriteNamespaceRules == rhs.m_bWriteNamespaceRules &&
            m_bWriteFontFaceRules == rhs.m_bWriteFontFaceRules &&
            m_bWriteKeyframesRules == rhs.m_bWriteKeyframesRules &&
            m_bWriteMediaRules == rhs.m_bWriteMediaRules &&
-           m_bWritePageRules == rhs.m_bWritePageRules;
+           m_bWritePageRules == rhs.m_bWritePageRules &&
+           m_bWriteViewportRules == rhs.m_bWriteViewportRules;
   }
 
   @Override
@@ -242,10 +274,12 @@ public class CSSWriterSettings implements ICSSWriterSettings
                                        .append (m_bRemoveUnnecessaryCode)
                                        .append (m_sIndent)
                                        .append (m_bQuoteURLs)
+                                       .append (m_bWriteNamespaceRules)
                                        .append (m_bWriteFontFaceRules)
                                        .append (m_bWriteKeyframesRules)
                                        .append (m_bWriteMediaRules)
                                        .append (m_bWritePageRules)
+                                       .append (m_bWriteViewportRules)
                                        .getHashCode ();
   }
 
@@ -257,10 +291,12 @@ public class CSSWriterSettings implements ICSSWriterSettings
                                        .append ("removeUnnecessaryCode", m_bRemoveUnnecessaryCode)
                                        .append ("indent", m_sIndent)
                                        .append ("quoteURLs", m_bQuoteURLs)
+                                       .append ("writeNamespaceRules", m_bWriteNamespaceRules)
                                        .append ("writeFontFaceRules", m_bWriteFontFaceRules)
                                        .append ("writeKeyframesRules", m_bWriteKeyframesRules)
                                        .append ("writeMediaRules", m_bWriteMediaRules)
                                        .append ("writePageRules", m_bWritePageRules)
+                                       .append ("writeViewportRules", m_bWriteViewportRules)
                                        .toString ();
   }
 }

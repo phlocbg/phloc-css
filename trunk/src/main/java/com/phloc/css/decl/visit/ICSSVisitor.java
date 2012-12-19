@@ -25,6 +25,7 @@ import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CSSKeyframesBlock;
 import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaRule;
+import com.phloc.css.decl.CSSNamespaceRule;
 import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
@@ -50,6 +51,14 @@ public interface ICSSVisitor
    *        Other imported CSS
    */
   void onImport (@Nonnull CSSImportRule aImportRule);
+
+  /**
+   * Called on CSS namespace statement
+   * 
+   * @param aNamespaceRule
+   *        The namespace rule
+   */
+  void onNamespace (@Nonnull CSSNamespaceRule aNamespaceRule);
 
   // style rules:
   void onBeginStyleRule (@Nonnull CSSStyleRule aStyleRule);

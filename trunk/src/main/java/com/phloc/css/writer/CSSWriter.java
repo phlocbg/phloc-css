@@ -34,6 +34,7 @@ import com.phloc.commons.vendor.VendorInfo;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclarationList;
 import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSNamespaceRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSTopLevelRule;
 
@@ -236,6 +237,17 @@ public final class CSSWriter
         for (final CSSImportRule aImportRule : aImportRules)
         {
           aWriter.write (aImportRule.getAsCSSString (m_aSettings, 0));
+          ++nRulesEmitted;
+        }
+      }
+
+      // Namespace rules
+      final List <CSSNamespaceRule> aNamespaceRules = aCSS.getAllNamespaceRules ();
+      if (!aNamespaceRules.isEmpty ())
+      {
+        for (final CSSNamespaceRule aNamespaceRule : aNamespaceRules)
+        {
+          aWriter.write (aNamespaceRule.getAsCSSString (m_aSettings, 0));
           ++nRulesEmitted;
         }
       }

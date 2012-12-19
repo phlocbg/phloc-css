@@ -104,8 +104,8 @@ public final class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarati
   {
     aSettings.checkVersionRequirements (this);
 
-    // Always ignore font-face rules?
-    if (!aSettings.isWriteFontFaceRules ())
+    // Always ignore viewport rules?
+    if (!aSettings.isWriteViewportRules ())
       return "";
 
     if (aSettings.isRemoveUnnecessaryCode () && getDeclarationCount () == 0)

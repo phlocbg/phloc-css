@@ -11,8 +11,11 @@
 @namespace Q "http://example.com/q-markup";
 @namespace lq "http://example.com/q-markup";
 
-@namespace toto "http://toto.example.org";
-@namespace "http://example.com/foo";
+@namespace toto url("http://toto.example.org");
+@namespace url("http://example.com/foo");
+
+@namespace toto2 url(http://toto.example.org);
+@namespace url(http://example.com/foo);
 
 /* Example from issue 3 */
 

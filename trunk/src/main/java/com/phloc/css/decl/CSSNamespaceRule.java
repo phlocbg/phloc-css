@@ -27,29 +27,38 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSVersionAware;
+import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single namespace rule on top level
+ * Represents a single namespace rule on top level.<br>
+ * Note: this is currently only support by CSS 3.0 even though it is
+ * theoretically possible for CSS 2.1 as well!
  * 
  * @author philip
  */
 @NotThreadSafe
-public final class CSSNamespaceRule implements ICSSTopLevelRule {
+public final class CSSNamespaceRule implements ICSSWriteable, ICSSVersionAware
+{
   private String m_sPrefix;
   private String m_sURL;
 
-  public CSSNamespaceRule (@Nullable final String sNamespacePrefix, @Nonnull final String sURL) {
+  public CSSNamespaceRule (@Nullable final String sNamespacePrefix, @Nonnull final String sURL)
+  {
     setNamespacePrefix (sNamespacePrefix);
     setNamespaceURL (sURL);
   }
 
   @Nullable
-  public String getNamespacePrefix () {
+  public String getNamespacePrefix ()
+  {
     return m_sPrefix;
   }
 
-  public void setNamespacePrefix (@Nullable final String sNamespacePrefix) {
+  public void setNamespacePrefix (@Nullable final String sNamespacePrefix)
+  {
     m_sPrefix = sNamespacePrefix;
   }
 
@@ -57,19 +66,34 @@ public final class CSSNamespaceRule implements ICSSTopLevelRule {
    * @return The namespace URL. May not be <code>null</code> but maybe empty!
    */
   @Nonnull
-  public String getNamespaceURL () {
+  public String getNamespaceURL ()
+  {
     return m_sURL;
   }
 
-  public void setNamespaceURL (@Nonnull final String sURL) {
+  public void setNamespaceURL (@Nonnull final String sURL)
+  {
     if (sURL == null)
       throw new NullPointerException ("URL");
     m_sURL = sURL;
   }
 
   @Nonnull
+  public ECSSVersion getMinimumCSSVersion ()
+  {
+    return ECSSVersion.CSS30;
+  }
+
+  @Nonnull
   @Nonempty
-  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel) {
+  public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
+  {
+    aSettings.checkVersionRequirements (this);
+
+    // Always ignore namespace rules?
+    if (!aSettings.isWriteNamespaceRules ())
+      return "";
+
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
     final StringBuilder aSB = new StringBuilder ();
@@ -80,7 +104,8 @@ public final class CSSNamespaceRule implements ICSSTopLevelRule {
   }
 
   @Override
-  public boolean equals (final Object o) {
+  public boolean equals (final Object o)
+  {
     if (o == this)
       return true;
     if (!(o instanceof CSSNamespaceRule))
@@ -90,12 +115,14 @@ public final class CSSNamespaceRule implements ICSSTopLevelRule {
   }
 
   @Override
-  public int hashCode () {
+  public int hashCode ()
+  {
     return new HashCodeGenerator (this).append (m_sPrefix).append (m_sURL).getHashCode ();
   }
 
   @Override
-  public String toString () {
+  public String toString ()
+  {
     return new ToStringGenerator (this).appendIfNotNull ("prefix", m_sPrefix).append ("URL", m_sURL).toString ();
   }
 }

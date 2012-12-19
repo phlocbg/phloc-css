@@ -59,8 +59,7 @@ public final class CCSS
   {}
 
   /**
-   * @deprecated Use
-   *             {@link CSSNumberHelper#isValueWithUnit(String, boolean)}
+   * @deprecated Use {@link CSSNumberHelper#isValueWithUnit(String, boolean)}
    *             instead
    */
   @Deprecated
