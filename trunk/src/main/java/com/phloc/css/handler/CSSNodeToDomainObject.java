@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSDeclarationList;
@@ -97,13 +98,21 @@ final class CSSNodeToDomainObject
                                           aNode);
   }
 
+  private static void _throwUnexpectedChildrenCount (@Nonnull @Nonempty final String sMsg, @Nonnull final CSSNode aNode)
+  {
+    s_aLogger.warn (sMsg);
+    for (int i = 0; i < aNode.jjtGetNumChildren (); ++i)
+      s_aLogger.warn ("  " + aNode.jjtGetChild (i));
+    throw new IllegalArgumentException (sMsg);
+  }
+
   @Nonnull
   private CSSImportRule _createImportRule (final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.IMPORTRULE);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount > 2)
-      throw new IllegalArgumentException ("Expected at last 2 children but got " + nChildCount + "!");
+      _throwUnexpectedChildrenCount ("Expected at last 2 children but got " + nChildCount + "!", aNode);
 
     CSSURI aImportURI = null;
     int nCurrentIndex = 0;
@@ -173,12 +182,10 @@ final class CSSNodeToDomainObject
 
     final int nExpectedChildCount = nOperatorIndex + 2;
     if (nChildren != nExpectedChildCount)
-    {
-      throw new IllegalArgumentException ("Illegal number of children present (" +
-                                          nChildren +
-                                          ") - expected " +
-                                          nExpectedChildCount);
-    }
+      _throwUnexpectedChildrenCount ("Illegal number of children present (" +
+                                     nChildren +
+                                     ") - expected " +
+                                     nExpectedChildCount, aNode);
 
     // With operator and value
     final CSSNode aOperator = aNode.jjtGetChild (nOperatorIndex);
@@ -202,7 +209,7 @@ final class CSSNodeToDomainObject
         ECSSNodeType.CLASS.isNode (aNode, m_eVersion))
     {
       if (nChildCount != 0)
-        s_aLogger.warn ("CSS simple selector member expected 0 children and got " + nChildCount);
+        _throwUnexpectedChildrenCount ("CSS simple selector member expected 0 children and got " + nChildCount, aNode);
       return new CSSSelectorSimpleMember (aNode.getText ());
     }
 
@@ -220,12 +227,16 @@ final class CSSNodeToDomainObject
 
     if (ECSSNodeType.NEGATION.isNode (aNode, m_eVersion))
     {
-      if (nChildCount != 1)
-        throw new IllegalArgumentException ("CSS Negation expected 1 child and got " + nChildCount);
+      if (nChildCount != 1 && nChildCount != 2)
+        _throwUnexpectedChildrenCount ("CSS Negation expected 1 or 2 children and got " + nChildCount, aNode);
 
-      final CSSNode aChildNode = aNode.jjtGetChild (0);
-      final ICSSSelectorMember aNestedSelector = _createSelectorMember (aChildNode);
-      return new CSSSelectorMemberNot (aNestedSelector);
+      final List <ICSSSelectorMember> aNestedSelectors = new ArrayList <ICSSSelectorMember> (nChildCount);
+      for (int i = 0; i < nChildCount; ++i)
+      {
+        final CSSNode aChildNode = aNode.jjtGetChild (i);
+        aNestedSelectors.add (_createSelectorMember (aChildNode));
+      }
+      return new CSSSelectorMemberNot (aNestedSelectors);
     }
 
     if (ECSSNodeType.PSEUDO.isNode (aNode, m_eVersion))
@@ -292,7 +303,7 @@ final class CSSNodeToDomainObject
         else
         {
           if (nChildCount != 1)
-            throw new IllegalArgumentException ("CSS math unit expected 1 child and got " + nChildCount);
+            _throwUnexpectedChildrenCount ("CSS math unit expected 1 child and got " + nChildCount, aChildNode);
 
           final CSSExpressionMemberMathProduct aNestedProduct = _createExpressionMathProduct (aChildNode.jjtGetChild (0));
           ret.addMember (new CSSExpressionMemberMathUnitProduct (aNestedProduct));
@@ -357,8 +368,8 @@ final class CSSNodeToDomainObject
   {
     _expectNodeType (aNode, ECSSNodeType.TERM);
     final int nChildCount = aNode.jjtGetNumChildren ();
-    if (nChildCount != 0 && nChildCount != 1)
-      throw new IllegalArgumentException ("Expected 0 or 1 children but got " + nChildCount + "!");
+    if (nChildCount > 1)
+      _throwUnexpectedChildrenCount ("Expected 0 or 1 children but got " + nChildCount + "!", aNode);
 
     // Simple value
     if (nChildCount == 0)
@@ -371,7 +382,7 @@ final class CSSNodeToDomainObject
     {
       // URI value
       if (nChildChildren > 0)
-        throw new IllegalArgumentException ("Expected 0 children but got " + nChildChildren + "!");
+        _throwUnexpectedChildrenCount ("Expected 0 children but got " + nChildChildren + "!", aChildNode);
 
       final CSSURI aURI = new CSSURI (aChildNode.getText ());
       return new CSSExpressionMemberTermURI (aURI);
@@ -381,7 +392,7 @@ final class CSSNodeToDomainObject
       {
         // function value
         if (nChildChildren > 1)
-          throw new IllegalArgumentException ("Expected 0 or 1 children but got " + nChildChildren + "!");
+          _throwUnexpectedChildrenCount ("Expected 0 or 1 children but got " + nChildChildren + "!", aChildNode);
 
         final String sFunctionName = aChildNode.getText ();
         if (nChildChildren == 1)
@@ -441,7 +452,7 @@ final class CSSNodeToDomainObject
     _expectNodeType (aNode, ECSSNodeType.DECLARATION);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount != 2 && nChildCount != 3)
-      throw new IllegalArgumentException ("Expected 2 or 3 children but got " + nChildCount + ": " + aNode);
+      _throwUnexpectedChildrenCount ("Expected 2 or 3 children but got " + nChildCount + "!", aNode);
 
     final String sProperty = aNode.jjtGetChild (0).getText ();
     final CSSExpression aExpression = _createExpression (aNode.jjtGetChild (1));
@@ -651,7 +662,7 @@ final class CSSNodeToDomainObject
     _expectNodeType (aNode, ECSSNodeType.MEDIAEXPR);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount != 1 && nChildCount != 2)
-      throw new IllegalArgumentException ("Expected 1 or 2 children but got " + nChildCount + ": " + aNode);
+      _throwUnexpectedChildrenCount ("Expected 1 or 2 children but got " + nChildCount + "!", aNode);
 
     final CSSNode aFeatureNode = aNode.jjtGetChild (0);
     if (!ECSSNodeType.MEDIAFEATURE.isNode (aFeatureNode, m_eVersion))
@@ -699,7 +710,7 @@ final class CSSNodeToDomainObject
     _expectNodeType (aNode, ECSSNodeType.KEYFRAMESRULE);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount == 0)
-      throw new IllegalArgumentException ("Expected at least 1 child but got " + nChildCount + ": " + aNode);
+      _throwUnexpectedChildrenCount ("Expected at least 1 child but got " + nChildCount + "!", aNode);
 
     // Get the identifier (e.g. the default "@keyframes" or the non-standard
     // "@-webkit-keyframes")
@@ -782,10 +793,8 @@ final class CSSNodeToDomainObject
     _expectNodeType (aNode, ECSSNodeType.NAMESPACERULE);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount < 1 || nChildCount > 2)
-      throw new IllegalArgumentException ("Expected at least 1 child and at last 2 children but got " +
-                                          nChildCount +
-                                          ": " +
-                                          aNode);
+      _throwUnexpectedChildrenCount ("Expected at least 1 child and at last 2 children but got " + nChildCount + "!",
+                                     aNode);
 
     String sPrefix = null;
     int nURLIndex = 0;
