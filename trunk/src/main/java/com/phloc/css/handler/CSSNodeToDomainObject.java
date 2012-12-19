@@ -227,7 +227,8 @@ final class CSSNodeToDomainObject
 
     if (ECSSNodeType.NEGATION.isNode (aNode, m_eVersion))
     {
-      if (nChildCount != 1 && nChildCount != 2)
+      // Note: no children don't make sense but are syntactically allowed!
+      if (nChildCount > 2)
         _throwUnexpectedChildrenCount ("CSS Negation expected 1 or 2 children and got " + nChildCount, aNode);
 
       final List <ICSSSelectorMember> aNestedSelectors = new ArrayList <ICSSSelectorMember> (nChildCount);

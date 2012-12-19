@@ -669,8 +669,9 @@ void negation() #Negation :
 {
   <NOT> { jjtThis.setText (":not("); }
   ( <S> )*
-  negationArg()
-  ( <S> )*
+  ( negationArg()
+    ( <S> )*
+  )?  
   <RROUND>
 }
 
@@ -682,6 +683,8 @@ void negationArg() #void : {}
   | _class()
   | attrib()
   | pseudo()
+  // negation is syntactically allowed
+  | negation()
   )
 }
 

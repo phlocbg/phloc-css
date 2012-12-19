@@ -42,10 +42,10 @@ public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersi
 {
   private final List <ICSSSelectorMember> m_aNestedSelectorMembers;
 
-  public CSSSelectorMemberNot (@Nonnull @Nonempty final List <ICSSSelectorMember> aNestedSelectorMembers)
+  public CSSSelectorMemberNot (@Nonnull final List <ICSSSelectorMember> aNestedSelectorMembers)
   {
-    if (ContainerHelper.isEmpty (aNestedSelectorMembers))
-      throw new IllegalArgumentException ("nestedSelectorMembers may not be empty");
+    if (aNestedSelectorMembers == null)
+      throw new NullPointerException ("nestedSelectorMembers");
     m_aNestedSelectorMembers = aNestedSelectorMembers;
   }
 
