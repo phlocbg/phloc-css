@@ -252,11 +252,7 @@ void error_skipto(final int... aKinds)
 }
 
 //
-// stylesheet
-//  : [ CHARSET_SYM STRING ';' ]?
-//    [S|CDO|CDC]* [ import [S|CDO|CDC]* ]*
-//    [ [ ruleset | media | page | viewport ] [S|CDO|CDC]* ]*
-//  ;
+// whole stylesheet
 //
 CSSNode styleSheet() #Root : {}
 {
@@ -352,9 +348,10 @@ void namespaceRule() :
 }
 {
   <NAMESPACE_SYM>
-  ( <S> )?
-  ( namespaceRulePrefix() )?
   ( <S> )*
+  ( namespaceRulePrefix()
+    ( <S> )* 
+  )?
   namespaceRuleURL()
   ( <S> )*
   <SEMICOLON>
@@ -584,7 +581,6 @@ void viewportRule() :
   <LBRACE>
   styleDeclaration()
   <RBRACE>
-  ( <S> )* 
 } 
 
 // ------------ SELECTORS ------------
@@ -616,9 +612,8 @@ void combinator() #Combinator : {}
 
 void simpleSelectorSequence() #void : {}
 {
-  ( ( LOOKAHEAD(2)
-      typeSelector()
-    | universal() )
+  LOOKAHEAD(2)
+  ( typeSelector()
     ( hash()
     | _class()
     | attrib()
@@ -639,7 +634,7 @@ void simpleSelectorSequence() #void : {}
 void typeSelector() #void : {}
 {
   ( LOOKAHEAD(2)
-    namespacePrefix() 
+    namespacePrefix()
   )?
   elementName()
 }
@@ -656,13 +651,9 @@ void namespacePrefix() #NamespacePrefix :
 void elementName() #ElementName :
 { Token t; }
 {
-  t = <IDENT> { jjtThis.setText (t.image); }
-}
-
-void universal() #Universal :
-{ Token t; }
-{
-  t = <ASTERISK> { jjtThis.setText ("*"); }
+  ( t = <IDENT> { jjtThis.setText (t.image); }
+  | <ASTERISK>  { jjtThis.setText ("*"); }
+  )
 }
 
 void _class() #Class :
@@ -746,7 +737,8 @@ void __pseudoNth () #nth :
       ( <S> )*
       t = <INTEGER> { jjtThis.appendText (t.image); }
     )?
-  | ( s = unaryOperator() { jjtThis.appendText (s); } )?
+  | LOOKAHEAD(2)
+    ( s = unaryOperator() { jjtThis.appendText (s); } )?
     t = <INTEGER> { jjtThis.appendText (t.image); }
   | t = <EVEN>    { jjtThis.appendText (t.image); }
   | t = <ODD>     { jjtThis.appendText (t.image); }
@@ -768,7 +760,6 @@ void negationArg() #void : {}
 {
   ( LOOKAHEAD(2)
     typeSelector()
-  | universal()
   | hash()
   | _class()
   | attrib()
@@ -922,21 +913,22 @@ void term() #Term :
 }
 {
   ( ( sPrefix = unaryOperator() )?
-    ( t = <NUMBER> ( <S> )*
-    | t = <PERCENTAGE> ( <S> )*
-    | t = dimension() ( <S> )*         
+    ( t = <NUMBER>
+    | t = <PERCENTAGE>
+    | t = dimension()         
     )
-  | sStr = string() ( <S> )*    { jjtThis.setText (sStr); }
-  | t = <IDENT> ( <S> )*
+  | sStr = string()    { jjtThis.setText (sStr); }
+  | t = <IDENT>
  // hack to allow "from" and "to" as identifiers (e.g. in linear-gradient)
-  | t = <FROM_SYM> ( <S> )*
-  | t = <TO_SYM> ( <S> )*
+  | t = <FROM_SYM>
+  | t = <TO_SYM>
   | uri()
-  | sStr = hexcolor()           { jjtThis.setText (sStr); }
+  | sStr = hexcolor()  { jjtThis.setText (sStr); }
   | function()
   | math()
-  | t = <INHERIT> ( <S> )*
+  | t = <INHERIT>
   )
+  ( <S> )*
   {
     if (sPrefix != null)
       jjtThis.appendText (sPrefix);
@@ -949,12 +941,11 @@ void uri() #URI :
 { Token t; }
 {
   t = <URI>  { jjtThis.setText (t.image); } 
-  ( <S> )*
 }
 
 //
 // function
-//   : FUNCTION S* expr ')' S*
+//   : FUNCTION S* expr ')'
 //   ;
 //
 void function() #Function :
@@ -965,7 +956,6 @@ void function() #Function :
   // Support functions without parameters (e.g. "gray ()")
   ( expr() )?
   <RROUND>
-  ( <S> )*
   { jjtThis.setText (t.image + ")"); }
 }
 
@@ -976,7 +966,6 @@ void math() : {}
   sum()
   ( <S> )*
   <RROUND> 
-  ( <S> )*
 }
 
 void sumOperator() : {}
@@ -1039,14 +1028,11 @@ void unit() :
 
 //
 // hexcolor
-//   : HASH S*
-//   ;
 //
 String hexcolor() #void :
 { Token t; }
 {
   t = <HASH>
-  ( <S> )*
   { return t.image; }
 }
 

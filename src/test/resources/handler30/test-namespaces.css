@@ -52,3 +52,19 @@ p > span:nth-child(even) {
     text-indent: 1em;
 }
 
+foo|p { color:red; }
+
+ns|E { color:red; }
+*|E { color:red; }
+|E { color:red; }
+E { color:red; }
+
+ns|* { color:red; }
+*|* { color:red; }
+|* { color:red; }
+* { color:red; }
+
+ns|E[ns|attr] { color:red; }
+ns|E[*|attr] { color:red; }
+ns|E[|attr] { color:red; }
+ns|E[attr] { color:red; }

@@ -57,7 +57,6 @@ public final class FuncTestCSSReader30
       // Write optimized version and compare it
       String sCSS = new CSSWriter (eVersion, true).getCSSAsString (aCSS);
       assertNotNull (sKey, sCSS);
-
       if (false)
         s_aLogger.info (sCSS);
 
@@ -68,6 +67,8 @@ public final class FuncTestCSSReader30
       // Write non-optimized version and compare it
       sCSS = new CSSWriter (eVersion, false).getCSSAsString (aCSS);
       assertNotNull (sKey, sCSS);
+      if (false)
+        s_aLogger.info (sCSS);
       assertEquals (sKey, aCSS, CSSReader.readFromString (sCSS, aCharset, eVersion));
 
       // Write non-optimized and code-removed version and ensure it is not null
