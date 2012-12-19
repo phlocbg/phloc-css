@@ -30,7 +30,6 @@ import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.commons.vendor.VendorInfo;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclarationList;
 import com.phloc.css.decl.CSSImportRule;
@@ -50,7 +49,7 @@ public final class CSSWriter
 
   private final CSSWriterSettings m_aSettings;
   private boolean m_bWriteHeaderText;
-  private String m_sHeaderText = StringHelper.getImploded ("\n", VendorInfo.getFileHeaderLines ());
+  private String m_sHeaderText = "THIS FILE IS GENERATED - DO NOT EDIT";
   private String m_sContentCharset;
 
   /**
