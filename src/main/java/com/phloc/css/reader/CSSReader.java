@@ -180,8 +180,6 @@ public final class CSSReader
                                     @Nonnull final ECSSVersion eVersion)
   {
     final Charset aCharset = CharsetManager.getCharsetFromName (sCharset);
-    if (aCharset == null)
-      throw new IllegalArgumentException ("Illegal charset '" + sCharset + "'");
     return isValidCSS (aRes, aCharset, eVersion);
   }
 
@@ -477,8 +475,6 @@ public final class CSSReader
                                                     @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
     final Charset aCharset = CharsetManager.getCharsetFromName (sCharset);
-    if (aCharset == null)
-      throw new IllegalArgumentException ("Failed to resolve charset '" + sCharset + "'");
     return readFromStream (aISP, aCharset, eVersion, aCustomExceptionHandler);
   }
 

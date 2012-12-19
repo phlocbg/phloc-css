@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -76,7 +77,7 @@ public final class CSSSelector implements ICSSWriteable
     return EChange.CHANGED;
   }
 
-  @Nonnull
+  @Nullable
   public ICSSSelectorMember getMemberAtIndex (@Nonnegative final int nMemberIndex)
   {
     if (nMemberIndex < 0 || nMemberIndex >= m_aMembers.size ())

@@ -176,8 +176,6 @@ public final class CSSReaderDeclarationList
                                     @Nonnull final ECSSVersion eVersion)
   {
     final Charset aCharset = CharsetManager.getCharsetFromName (sCharset);
-    if (aCharset == null)
-      throw new IllegalArgumentException ("Illegal charset '" + sCharset + "'");
     return isValidCSS (aRes, aCharset, eVersion);
   }
 
