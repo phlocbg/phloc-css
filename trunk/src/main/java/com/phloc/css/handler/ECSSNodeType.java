@@ -52,7 +52,6 @@ public enum ECSSNodeType
   DECLARATION (ParserCSS21TreeConstants.JJTDECLARATION, ParserCSS30TreeConstants.JJTDECLARATION),
   // style rule -- selector
   NAMESPACEPREFIX (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTNAMESPACEPREFIX),
-  UNIVERSAL (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTUNIVERSAL),
   ELEMENTNAME (ParserCSS21TreeConstants.JJTELEMENTNAME, ParserCSS30TreeConstants.JJTELEMENTNAME),
   HASH (ParserCSS21TreeConstants.JJTHASH, ParserCSS30TreeConstants.JJTHASH),
   CLASS (ParserCSS21TreeConstants.JJTCLASS, ParserCSS30TreeConstants.JJTCLASS),

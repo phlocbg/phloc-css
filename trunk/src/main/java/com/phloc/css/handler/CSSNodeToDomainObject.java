@@ -197,7 +197,6 @@ final class CSSNodeToDomainObject
     final int nChildCount = aNode.jjtGetNumChildren ();
 
     if (ECSSNodeType.NAMESPACEPREFIX.isNode (aNode, m_eVersion) ||
-        ECSSNodeType.UNIVERSAL.isNode (aNode, m_eVersion) ||
         ECSSNodeType.ELEMENTNAME.isNode (aNode, m_eVersion) ||
         ECSSNodeType.HASH.isNode (aNode, m_eVersion) ||
         ECSSNodeType.CLASS.isNode (aNode, m_eVersion))
