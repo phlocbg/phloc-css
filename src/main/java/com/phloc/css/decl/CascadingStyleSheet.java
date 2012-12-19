@@ -32,7 +32,10 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * This is the main object for a parsed CSS declaration.
+ * This is the main object for a parsed CSS declaration. It has special handling
+ * for import and namespace rules, as these rules must always be on the
+ * beginning of a file. All other rules (all implementing
+ * {@link ICSSTopLevelRule}) are maintained in a combined list.
  * 
  * @author philip
  */
@@ -45,6 +48,17 @@ public final class CascadingStyleSheet
 
   public CascadingStyleSheet ()
   {}
+
+  public boolean hasImportRules ()
+  {
+    return !m_aImportRules.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getImportRuleCount ()
+  {
+    return m_aImportRules.size ();
+  }
 
   public void addImportRule (@Nonnull final CSSImportRule aImportRule)
   {
@@ -73,6 +87,17 @@ public final class CascadingStyleSheet
   public List <CSSImportRule> getAllImportRules ()
   {
     return ContainerHelper.newList (m_aImportRules);
+  }
+
+  public boolean hasNamespaceRules ()
+  {
+    return !m_aNamespaceRules.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getNamespaceRuleCount ()
+  {
+    return m_aNamespaceRules.size ();
   }
 
   public void addNamespaceRule (@Nonnull final CSSNamespaceRule aNamespaceRule)
@@ -104,6 +129,17 @@ public final class CascadingStyleSheet
     return ContainerHelper.newList (m_aNamespaceRules);
   }
 
+  public boolean hasRules ()
+  {
+    return !m_aRules.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getRuleCount ()
+  {
+    return m_aRules.size ();
+  }
+
   public void addRule (@Nonnull final ICSSTopLevelRule aStyleRule)
   {
     if (aStyleRule == null)
@@ -132,6 +168,24 @@ public final class CascadingStyleSheet
     return ContainerHelper.newList (m_aRules);
   }
 
+  public boolean hasStyleRules ()
+  {
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSStyleRule)
+        return true;
+    return false;
+  }
+
+  @Nonnegative
+  public int getStyleRuleCount ()
+  {
+    int ret = 0;
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSStyleRule)
+        ret++;
+    return ret;
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSStyleRule> getAllStyleRules ()
@@ -140,6 +194,24 @@ public final class CascadingStyleSheet
     for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
       if (aTopLevelRule instanceof CSSStyleRule)
         ret.add ((CSSStyleRule) aTopLevelRule);
+    return ret;
+  }
+
+  public boolean hasPageRules ()
+  {
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSPageRule)
+        return true;
+    return false;
+  }
+
+  @Nonnegative
+  public int getPageRuleCount ()
+  {
+    int ret = 0;
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSPageRule)
+        ret++;
     return ret;
   }
 
@@ -154,6 +226,24 @@ public final class CascadingStyleSheet
     return ret;
   }
 
+  public boolean hasMediaRules ()
+  {
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSMediaRule)
+        return true;
+    return false;
+  }
+
+  @Nonnegative
+  public int getMediaRuleCount ()
+  {
+    int ret = 0;
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSMediaRule)
+        ret++;
+    return ret;
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSMediaRule> getAllMediaRules ()
@@ -162,6 +252,24 @@ public final class CascadingStyleSheet
     for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
       if (aTopLevelRule instanceof CSSMediaRule)
         ret.add ((CSSMediaRule) aTopLevelRule);
+    return ret;
+  }
+
+  public boolean hasFontFaceRules ()
+  {
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSFontFaceRule)
+        return true;
+    return false;
+  }
+
+  @Nonnegative
+  public int getFontFaceRuleCount ()
+  {
+    int ret = 0;
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSFontFaceRule)
+        ret++;
     return ret;
   }
 
@@ -176,6 +284,24 @@ public final class CascadingStyleSheet
     return ret;
   }
 
+  public boolean hasKeyframesRules ()
+  {
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSKeyframesRule)
+        return true;
+    return false;
+  }
+
+  @Nonnegative
+  public int getKeyframesRuleCount ()
+  {
+    int ret = 0;
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSKeyframesRule)
+        ret++;
+    return ret;
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSKeyframesRule> getAllKeyframesRules ()
@@ -184,6 +310,24 @@ public final class CascadingStyleSheet
     for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
       if (aTopLevelRule instanceof CSSKeyframesRule)
         ret.add ((CSSKeyframesRule) aTopLevelRule);
+    return ret;
+  }
+
+  public boolean hasViewportRules ()
+  {
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSViewportRule)
+        return true;
+    return false;
+  }
+
+  @Nonnegative
+  public int getViewportRuleCount ()
+  {
+    int ret = 0;
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSViewportRule)
+        ret++;
     return ret;
   }
 
