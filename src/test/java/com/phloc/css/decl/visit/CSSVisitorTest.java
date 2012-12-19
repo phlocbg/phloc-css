@@ -103,9 +103,9 @@ public final class CSSVisitorTest extends AbstractCSS30Test
   }
 
   @Test
-  public void testVisitContent ()
+  public void testVisitContent21 ()
   {
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css"),
+    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css21/good"),
                                                                 new FilenameFilterEndsWith (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
@@ -115,8 +115,12 @@ public final class CSSVisitorTest extends AbstractCSS30Test
       assertNotNull (sKey, aCSS);
       CSSVisitor.visitCSSUrl (aCSS, new MockSysOutVisitor (sKey));
     }
+  }
 
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
+  @Test
+  public void testVisitContent30 ()
+  {
+    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css30/good"),
                                                                 new FilenameFilterEndsWith (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();

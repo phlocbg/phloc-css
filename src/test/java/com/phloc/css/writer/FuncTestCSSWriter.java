@@ -68,7 +68,7 @@ public final class FuncTestCSSWriter
   @Test
   public void testScanTestResourcesHandler21 () throws IOException
   {
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler21"),
+    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css21/good/artificial"),
                                                                 new FilenameFilterEndsWith (".css")))
     {
       _testMe (aFile, ECSSVersion.CSS21);
@@ -78,7 +78,7 @@ public final class FuncTestCSSWriter
   @Test
   public void testScanTestResourcesHandler30 () throws IOException
   {
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
+    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css30/good/artificial"),
                                                                 new FilenameFilterEndsWith (".css")))
     {
       _testMe (aFile, ECSSVersion.CSS30);
@@ -88,7 +88,7 @@ public final class FuncTestCSSWriter
   @Test
   public void testRead30Write21 () throws IOException
   {
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
+    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css30/good/artificial"),
                                                                 new FilenameFilterEndsWith (".css")))
     {
       try
@@ -110,7 +110,7 @@ public final class FuncTestCSSWriter
   @Test
   public void testCompressCSS_Size () throws IOException
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromStream (new ClassPathResource ("/css/phloc/test/content.css"),
+    final CascadingStyleSheet aCSS = CSSReader.readFromStream (new ClassPathResource ("/testfiles/css21/good/phloc/test/content.css"),
                                                                CCharset.CHARSET_UTF_8_OBJ,
                                                                ECSSVersion.CSS21);
     assertNotNull (aCSS);
