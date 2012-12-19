@@ -58,8 +58,8 @@ TOKEN_MGR_DECLS :
 <DEFAULT, IN_NTH>
 TOKEN :
 {
-    < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
-  | < W: ( <S> )? >
+   < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
+ | < W: ( <S> )? >
 }
 
 <DEFAULT>
@@ -164,16 +164,16 @@ TOKEN :
 | < TILDE: "~" >
 | < COMMA: <W> "," >
 | < HASH: "#" <NAME> >
+| < CHARSET_SYM: "@charset" >
 | < IMPORT_SYM: "@import" >
+| < NAMESPACE_SYM: "@namespace" >
 | < PAGE_SYM: "@page" >
 | < MEDIA_SYM: "@media" >
-| < CHARSET_SYM: "@charset" >
 | < FONTFACE_SYM: "@font-face" >
 | < KEYFRAMES_SYM: "@-" <IDENT> "-keyframes" 
                  | "@keyframes" >
 | < VIEWPORT_SYM: "@-" <IDENT> "-viewport"
                 | "@viewport" >
-| < NAMESPACE_SYM: "@namespace" >
 | < IMPORTANT_SYM: "!" ( <W> )* "important" >
 
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
@@ -213,6 +213,7 @@ TOKEN :
                 | "nth-last-child(" 
                 | "nth-of-type(" 
                 | "nth-last-of-type(" > : IN_NTH
+// Extension for IE filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50); */
 | < FUNCTION: <IDENT> "(" 
             | "progid" ( <S> )* ":" ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
   > { matchedToken.image = image.toString (); }
@@ -257,7 +258,7 @@ void error_skipto(final int... aKinds)
 CSSNode styleSheet() #Root : {}
 {
   ( LOOKAHEAD(2)
-    charsetRule() 
+    charsetRule()
   )?
   ( <S>
   | <CDO>
@@ -492,11 +493,6 @@ void pageRule() : {}
   <RBRACE>
 }
 
-//
-// pseudoPage
-//   : ':' IDENT
-//   ;
-//
 void pseudoPage() #PseudoPage :
 { Token t; }
 {
@@ -504,84 +500,6 @@ void pseudoPage() #PseudoPage :
   t = <IDENT>
   { jjtThis.setText (":" + t.image); }
 }
-
-// 
-// @font-face { <font-description> }
-//
-void fontfaceRule() : {}
-{
-  <FONTFACE_SYM>
-  <LBRACE>
-  styleDeclaration()
-  <RBRACE>
-}
-
-// 
-// @keyframes ...
-// http://dev.w3.org/csswg/css3-animations/#keyframes
-//
-void keyframesRule() : 
-{ Token t; }
-{
-  t = <KEYFRAMES_SYM>
-  { jjtThis.setText (t.image); }    
-  <S>
-  keyframesIdentifier()
-  <LBRACE>
-  ( <S> )*
-  keyframesBlocks()
-  <RBRACE>
-}
-
-void keyframesIdentifier() : 
-{ Token t; }
-{
-  t = <IDENT>
-  { jjtThis.setText (t.image); }    
-}
-
-// #void : do not generate a tree node for this 
-void keyframesBlocks() #void : {}
-{
-  ( keyframesSelector()
-    <LBRACE>
-    styleDeclaration()
-    <RBRACE>
-    ( <S> )* 
-  )*
-}
-
-void keyframesSelector() : {}
-{
-  singleKeyframeSelector()
-  ( <COMMA>
-    ( <S> )*
-    singleKeyframeSelector()
-  )*  
-}
-
-void singleKeyframeSelector() :
-{ Token t = null; }
-{
-  ( t = <FROM_SYM>   { jjtThis.setText (t.image); }
-  | t = <TO_SYM>     { jjtThis.setText (t.image); }
-  | t = <PERCENTAGE> { jjtThis.setText (t.image); }  
-  )
-  ( <S> )*
-}
-
-// ------------ VIEWPORT ------------
-
-void viewportRule() : 
-{ Token t; }
-{
-  t = <VIEWPORT_SYM>
-  { jjtThis.setText (t.image); }    
-  ( <S> )*
-  <LBRACE>
-  styleDeclaration()
-  <RBRACE>
-} 
 
 // ------------ SELECTORS ------------
 
@@ -651,8 +569,8 @@ void namespacePrefix() #NamespacePrefix :
 void elementName() #ElementName :
 { Token t; }
 {
-  ( t = <IDENT> { jjtThis.setText (t.image); }
-  | <ASTERISK>  { jjtThis.setText ("*"); }
+  ( t = <IDENT>    { jjtThis.setText (t.image); }
+  | t = <ASTERISK> { jjtThis.setText (t.image); }
   )
 }
 
@@ -697,11 +615,11 @@ void __attribOperator() #AttribOperator : {}
 
 void __attribValue() #AttribValue :
 {
-  Token t; 
+  Token t;
   String sStr;
 }
 {
-  ( t = <IDENT>  { jjtThis.setText (t.image); }
+  ( t = <IDENT>     { jjtThis.setText (t.image); }
   | sStr = string() { jjtThis.setText (sStr); }
   )
 }
@@ -813,6 +731,20 @@ void hash() #Hash :
 }
 
 //
+// Multiple style declarations together
+// 
+CSSNode styleDeclaration() #StyleDeclaration : {}
+{
+  ( <S> )*
+  ( declaration() )?
+  ( <SEMICOLON>
+    ( <S> )*
+    ( declaration() )?
+  )*
+  { return jjtThis; }
+}
+
+//
 // declaration
 //   : property ':' S* expr prio?
 //   |
@@ -825,20 +757,6 @@ void declaration() : {}
   ( <S> )*
   expr()
   ( prio() )?
-}
-
-//
-// Multiple style declarations together
-// 
-CSSNode styleDeclaration() #StyleDeclaration : {}
-{
-  ( <S> )*
-  ( declaration() )?
-  ( <SEMICOLON>
-    ( <S> )*
-    ( declaration() )?
-  )*
-  { return jjtThis; }
 }
 
 //
@@ -865,7 +783,6 @@ void expr() : {}
     term()
   )*
 }
-
 
 Token dimension() #void :
 { Token t; }
@@ -897,13 +814,9 @@ Token dimension() #void :
   )
   { return t; }   
 }
- 
+
 //
 // term
-//  : unary_operator?
-//    [ NUMBER S* | PERCENTAGE S* | LENGTH S* | EM S* | EX S* | ANGLE S* | TIME S* | FREQ S* ... ]
-//  | STRING S* | IDENT S* | URI S* | hexcolor | function | inherit
-//  ;
 //
 void term() #Term :
 {
@@ -915,7 +828,7 @@ void term() #Term :
   ( ( sPrefix = unaryOperator() )?
     ( t = <NUMBER>
     | t = <PERCENTAGE>
-    | t = dimension()         
+    | t = dimension()
     )
   | sStr = string()    { jjtThis.setText (sStr); }
   | t = <IDENT>
@@ -1037,8 +950,6 @@ String hexcolor() #void :
 }
 
 
-// string       {string1}|{string2}
-// {string}        {return STRING;}
 String string() #void :
 { Token t; }
 {
@@ -1055,4 +966,84 @@ void invalid () : {}
   ( <INVALID1>
   | <INVALID2>
   )
+}
+
+// new in CSS 3.0:
+
+// 
+// @font-face { <font-description> }
+//
+void fontfaceRule() : {}
+{
+  <FONTFACE_SYM>
+  <LBRACE>
+  styleDeclaration()
+  <RBRACE>
+}
+
+// 
+// @keyframes ...
+// http://dev.w3.org/csswg/css3-animations/#keyframes
+//
+void keyframesRule() : 
+{ Token t; }
+{
+  t = <KEYFRAMES_SYM>
+  { jjtThis.setText (t.image); }    
+  <S>
+  keyframesIdentifier()
+  <LBRACE>
+  ( <S> )*
+  keyframesBlocks()
+  <RBRACE>
+}
+
+void keyframesIdentifier() : 
+{ Token t; }
+{
+  t = <IDENT>
+  { jjtThis.setText (t.image); }    
+}
+
+// #void : do not generate a tree node for this 
+void keyframesBlocks() #void : {}
+{
+  ( keyframesSelector()
+    <LBRACE>
+    styleDeclaration()
+    <RBRACE>
+    ( <S> )* 
+  )*
+}
+
+void keyframesSelector() : {}
+{
+  singleKeyframeSelector()
+  ( <COMMA>
+    ( <S> )*
+    singleKeyframeSelector()
+  )*  
+}
+
+void singleKeyframeSelector() :
+{ Token t = null; }
+{
+  ( t = <FROM_SYM>   { jjtThis.setText (t.image); }
+  | t = <TO_SYM>     { jjtThis.setText (t.image); }
+  | t = <PERCENTAGE> { jjtThis.setText (t.image); }  
+  )
+  ( <S> )*
+}
+
+// ------------ VIEWPORT ------------
+
+void viewportRule() : 
+{ Token t; }
+{
+  t = <VIEWPORT_SYM>
+  { jjtThis.setText (t.image); }    
+  ( <S> )*
+  <LBRACE>
+  styleDeclaration()
+  <RBRACE>
 }
