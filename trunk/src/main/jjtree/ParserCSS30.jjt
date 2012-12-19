@@ -102,35 +102,48 @@ TOKEN :
 TOKEN :
 {
   < #H: ["0"-"9","a"-"f"] >
-| < #HNUM: <H> | <H><H> | <H><H><H> | <H><H><H><H> | <H><H><H><H><H> | <H><H><H><H><H><H> >
+| < #HNUM: <H> 
+         | <H><H> 
+         | <H><H><H> 
+         | <H><H><H><H> 
+         | <H><H><H><H><H> 
+         | <H><H><H><H><H><H> >
 
-// nonascii [\200-\377]
-// The two occurrences of "\377" represent the highest character number that
-// current versions of Flex can deal with (decimal 255). They should be read as
-// "\4177777" (decimal 1114111), which is the highest possible code point in
-// Unicode/ISO-10646.
-// Limitation: This parser can only handle Unicode characters up to \uFFFF
-// (decimal 65535).
-| < #NONASCII: ["\u0080"-"\uFFFF"] >
+// nonascii  [^\0-\177] - everything except 0x00-0x7f
+| < #NONASCII: ["\u0080"-"\uffff"] >
 
 // unicode      \\{h}{1,6}(\r\n|[ \t\r\n\f])?
-| < #UNICODE: "\\" <HNUM> ( "\r\n" | [" ","\t","\r","\n","\f"] )? >
+| < #UNICODE: "\\" <HNUM> ( "\r\n" 
+                          | [" ","\t","\r","\n","\f"] )? >
 
 // escape       {unicode}|\\[^\r\n\f0-9a-f]
-| < #ESCAPE: <UNICODE> | ( "\\" ~["\r","\n","\f","0"-"9","a"-"f"] ) >
+| < #ESCAPE: <UNICODE> 
+           | ( "\\" ~["\r","\n","\f","0"-"9","a"-"f"] ) >
 
 // nmstart      [_a-z]|{nonascii}|{escape}
 // Extension: added "A"-"Z"
-| < #NMSTART: ["_","a"-"z","A"-"Z"] | <NONASCII> | <ESCAPE> >
+| < #NMSTART: ["_","a"-"z","A"-"Z"] 
+            | <NONASCII> 
+            | <ESCAPE> >
 
 // nmchar       [_a-z0-9-]|{nonascii}|{escape}
 // Extension: added "A"-"Z"
-| < #NMCHAR: ["_","a"-"z","A"-"Z","0"-"9","-"] | <NONASCII> | <ESCAPE> >
+| < #NMCHAR: ["_","a"-"z","A"-"Z","0"-"9","-"] 
+           | <NONASCII> 
+           | <ESCAPE> >
 | < NL: "\n" | "\r\n" | "\r" | "\f" >
-| < STRING1: "\"" ( ~["\n","\r","\f","\\","\""] | "\\" <NL> | <ESCAPE> )* "\"" >
-| < STRING2: "'" ( ~["\n","\r","\f","\\","'"] | "\\" <NL> | <ESCAPE> )* "'" >
-| < INVALID1: "\"" ( ~["\n","\r","\f","\\","\""] | "\\" <NL> | <ESCAPE> )* >
-| < INVALID2: "'" ( ~["\n","\r","\f","\\","'"] | "\\" <NL> | <ESCAPE> )* >
+| < STRING1: "\"" ( ~["\n","\r","\f","\\","\""] 
+                  | "\\" <NL> 
+                  | <ESCAPE> )* "\"" >
+| < STRING2: "'" ( ~["\n","\r","\f","\\","'"] 
+                 | "\\" <NL> 
+                 | <ESCAPE> )* "'" >
+| < INVALID1: "\"" ( ~["\n","\r","\f","\\","\""] 
+                   | "\\" <NL> 
+                   | <ESCAPE> )* >
+| < INVALID2: "'" ( ~["\n","\r","\f","\\","'"] 
+                  | "\\" <NL> 
+                  | <ESCAPE> )* >
 | < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/">
 
 | < NUMBER: <NUM> >

@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,5 +108,16 @@ public final class FuncTestCSSReader30
       assertNotNull (sKey, sCSS);
       assertNotNull (sKey, CSSReader.readFromString (sCSS, aCharset, eVersion));
     }
+  }
+
+  @Ignore
+  @Test
+  public void testReadSpecial ()
+  {
+    final ECSSVersion eVersion = ECSSVersion.CSS30;
+    final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
+    final File aFile = new File ("src/test/resources/testfiles/css30/good_but_failing/w3c/selectors/css3-modsel-175a.css");
+    final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
+    assertNotNull (aCSS);
   }
 }
