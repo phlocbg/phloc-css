@@ -17,14 +17,23 @@
  */
 package com.phloc.css.decl;
 
+import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 import com.phloc.css.ICSSWriteable;
 
 /**
  * Marker interface for all top level CSS elements that can occur in any order
- * (styles, pages and media specific)
+ * <ul>
+ * <li>style rules</li>
+ * <li>page rules</li>
+ * <li>media rules</li>
+ * <li>font face rules</li>
+ * <li>keyframes rules</li>
+ * <li>viewport rules</li>
+ * </ul>
  * 
  * @author philip
  */
+@MustImplementEqualsAndHashcode
 public interface ICSSTopLevelRule extends ICSSWriteable
 {
   /* empty */
