@@ -173,6 +173,7 @@ TOKEN :
                  | "@keyframes" >
 | < VIEWPORT_SYM: "@-" <IDENT> "-viewport"
                 | "@viewport" >
+| < NAMESPACE_SYM: "@namespace" >
 | < IMPORTANT_SYM: "!" ( <W> )* "important" >
 
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
@@ -278,6 +279,7 @@ CSSNode styleSheet() #Root : {}
     | fontfaceRule()
     | keyframesRule()
     | viewportRule()
+    | namespaceRule()
     | unknownRule()
     )
     ( <S>
@@ -296,6 +298,7 @@ void charsetRule() #Charset :
   <CHARSET_SYM>
   <S>
   sStr = string ()
+  ( <S> )*
   <SEMICOLON>
   { jjtThis.setText (sStr); }
 }
@@ -303,7 +306,7 @@ void charsetRule() #Charset :
 void unknownRule() : {}
 {
   <ATKEYWORD>
-  <S> 
+  ( <S> )* 
   <IDENT>
   ( <S> )* 
   <LBRACE>
@@ -544,6 +547,40 @@ void viewportRule() :
   <RBRACE>
   ( <S> )* 
 } 
+
+// ------------ NAMESPACE ------------
+
+void namespaceRule() : 
+{ 
+  Token t;
+}
+{
+  <NAMESPACE_SYM>
+  ( <S> )?
+  ( namespaceRulePrefix() )?
+  namespaceRuleURL()
+  <SEMICOLON>
+} 
+
+void namespaceRulePrefix() : 
+{ Token t; }
+{
+  t = <IDENT> { jjtThis.setText (t.image); }
+  ( <S> )*
+} 
+
+void namespaceRuleURL() : 
+{ 
+  Token t;
+  String s;
+}
+{
+  ( t = <URI> { jjtThis.setText (t.image); }
+  | s = string() { jjtThis.setText (s); }
+  )
+  ( <S> )*
+} 
+
 
 // ------------ SELECTORS ------------
 
@@ -1011,7 +1048,7 @@ String hexcolor() #void :
 
 // string       {string1}|{string2}
 // {string}        {return STRING;}
-String string () #void :
+String string() #void :
 { Token t; }
 {
   ( t = <STRING1>

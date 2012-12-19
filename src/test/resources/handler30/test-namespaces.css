@@ -1,0 +1,51 @@
+
+/* 
+  Source of examples: http://www.w3.org/TR/css3-namespace/
+*/
+@namespace empty "";
+@namespace "";
+
+@namespace     "http://www.w3.org/1999/xhtml";
+@namespace     svg    "http://www.w3.org/2000/svg"    ;
+
+@namespace Q "http://example.com/q-markup";
+@namespace lq "http://example.com/q-markup";
+
+@namespace toto "http://toto.example.org";
+@namespace "http://example.com/foo";
+
+/* Example from issue 3 */
+
+@namespace epub "http://www.idpf.org/2007/ops";
+
+body {
+    font-family: Georgia, serif;
+}
+
+div[epub|type="chapter"] {
+    background-image: url('childrens-book-swans.jpg'),
+                      url('childrens-book-flowers.jpg');
+    background-position: top right, bottom center;
+    background-repeat: no-repeat, repeat-x;
+    background-color: #fdefc2;
+    padding: 2em;
+}
+
+p:last-child {
+    padding-bottom: 10em;
+}
+
+
+h1 {
+    text-transform: uppercase;
+    font-weight: 200;
+}
+
+p > span {
+    display: block;
+}
+
+p > span:nth-child(even) {
+    text-indent: 1em;
+}
+
