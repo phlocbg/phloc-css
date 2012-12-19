@@ -41,11 +41,11 @@ public final class FuncTestCSSReader30
   private static final Logger s_aLogger = LoggerFactory.getLogger (FuncTestCSSReader30.class);
 
   @Test
-  public void testScanTestResourcesHandler30 () throws IOException
+  public void testScanTestResourcesArtifical30 () throws IOException
   {
     final ECSSVersion eVersion = ECSSVersion.CSS30;
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
+    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css30/good/artificial"),
                                                                 new FilenameFilterEndsWith (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
@@ -83,7 +83,7 @@ public final class FuncTestCSSReader30
   {
     final ECSSVersion eVersion = ECSSVersion.CSS30;
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css30"),
+    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css30/good"),
                                                                 new FilenameFilterEndsWith (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
