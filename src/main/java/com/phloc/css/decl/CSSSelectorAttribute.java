@@ -38,32 +38,65 @@ import com.phloc.css.ICSSWriterSettings;
 @Immutable
 public final class CSSSelectorAttribute implements ICSSSelectorMember
 {
+  private final String m_sNamespacePrefix;
   private final String m_sAttrName;
   private final ECSSAttributeOperator m_eOperator;
   private final String m_sAttrValue;
 
+  private static boolean _isValidNamespacePrefix (@Nullable final String sNamespacePrefix)
+  {
+    return StringHelper.hasNoText (sNamespacePrefix) || sNamespacePrefix.endsWith ("|");
+  }
+
+  @Deprecated
   public CSSSelectorAttribute (@Nonnull @Nonempty final String sAttrName)
   {
+    this ((String) null, sAttrName);
+  }
+
+  public CSSSelectorAttribute (@Nullable final String sNamespacePrefix, @Nonnull @Nonempty final String sAttrName)
+  {
+    if (!_isValidNamespacePrefix (sNamespacePrefix))
+      throw new IllegalArgumentException ("namespacePrefix is illegal!");
     if (StringHelper.hasNoText (sAttrName))
       throw new IllegalArgumentException ("attrName");
+    m_sNamespacePrefix = sNamespacePrefix;
     m_sAttrName = sAttrName;
     m_eOperator = null;
     m_sAttrValue = null;
   }
 
+  @Deprecated
   public CSSSelectorAttribute (@Nonnull @Nonempty final String sAttrName,
                                @Nonnull final ECSSAttributeOperator eOperator,
                                @Nonnull final String sAttrValue)
   {
+    this ((String) null, sAttrName, eOperator, sAttrValue);
+  }
+
+  public CSSSelectorAttribute (@Nullable final String sNamespacePrefix,
+                               @Nonnull @Nonempty final String sAttrName,
+                               @Nonnull final ECSSAttributeOperator eOperator,
+                               @Nonnull final String sAttrValue)
+  {
+    if (!_isValidNamespacePrefix (sNamespacePrefix))
+      throw new IllegalArgumentException ("namespacePrefix is illegal!");
     if (StringHelper.hasNoText (sAttrName))
       throw new IllegalArgumentException ("attrName");
     if (eOperator == null)
       throw new NullPointerException ("operator");
     if (sAttrValue == null)
       throw new NullPointerException ("attrValue");
+    m_sNamespacePrefix = sNamespacePrefix;
     m_sAttrName = sAttrName;
     m_eOperator = eOperator;
     m_sAttrValue = sAttrValue;
+  }
+
+  @Nullable
+  public String getNamespacePrefix ()
+  {
+    return m_sNamespacePrefix;
   }
 
   @Nonnull
@@ -89,9 +122,14 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    if (m_eOperator == null)
-      return "[" + m_sAttrName + "]";
-    return "[" + m_sAttrName + m_eOperator.getAsCSSString (aSettings, nIndentLevel) + m_sAttrValue + "]";
+    final StringBuilder aSB = new StringBuilder ();
+    aSB.append ('[');
+    if (StringHelper.hasText (m_sNamespacePrefix))
+      aSB.append (m_sNamespacePrefix);
+    aSB.append (m_sAttrName);
+    if (m_eOperator != null)
+      aSB.append (m_eOperator.getAsCSSString (aSettings, nIndentLevel)).append (m_sAttrValue);
+    return aSB.append (']').toString ();
   }
 
   @Override
@@ -102,7 +140,8 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
     if (!(o instanceof CSSSelectorAttribute))
       return false;
     final CSSSelectorAttribute rhs = (CSSSelectorAttribute) o;
-    return m_sAttrName.equals (rhs.m_sAttrName) &&
+    return EqualsUtils.equals (m_sNamespacePrefix, rhs.m_sNamespacePrefix) &&
+           m_sAttrName.equals (rhs.m_sAttrName) &&
            EqualsUtils.equals (m_eOperator, rhs.m_eOperator) &&
            EqualsUtils.equals (m_sAttrValue, rhs.m_sAttrValue);
   }
@@ -110,13 +149,18 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sAttrName).append (m_eOperator).append (m_sAttrValue).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sNamespacePrefix)
+                                       .append (m_sAttrName)
+                                       .append (m_eOperator)
+                                       .append (m_sAttrValue)
+                                       .getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (null).append ("attrName", m_sAttrName)
+    return new ToStringGenerator (null).appendIfNotNull ("namespacePrefix", m_sNamespacePrefix)
+                                       .append ("attrName", m_sAttrName)
                                        .appendIfNotNull ("operator", m_eOperator)
                                        .appendIfNotNull ("attrValue", m_sAttrValue)
                                        .toString ();

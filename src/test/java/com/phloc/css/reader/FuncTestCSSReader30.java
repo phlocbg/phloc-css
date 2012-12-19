@@ -36,15 +36,18 @@ import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.writer.CSSWriter;
 import com.phloc.css.writer.CSSWriterSettings;
 
-public final class FuncTestCSSReader30 {
+public final class FuncTestCSSReader30
+{
   private static final Logger s_aLogger = LoggerFactory.getLogger (FuncTestCSSReader30.class);
 
   @Test
-  public void testScanTestResourcesHandler30 () throws IOException {
+  public void testScanTestResourcesHandler30 () throws IOException
+  {
     final ECSSVersion eVersion = ECSSVersion.CSS30;
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/handler30"),
-                                                                new FilenameFilterEndsWith (".css"))) {
+                                                                new FilenameFilterEndsWith (".css")))
+    {
       final String sKey = aFile.getAbsolutePath ();
       if (true)
         s_aLogger.info (sKey);
@@ -75,13 +78,15 @@ public final class FuncTestCSSReader30 {
   }
 
   @Test
-  public void testScanTestResourcesCss30 () throws IOException {
+  public void testScanTestResourcesCss30 () throws IOException
+  {
     final ECSSVersion eVersion = ECSSVersion.CSS30;
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/css30"),
-                                                                new FilenameFilterEndsWith (".css"))) {
+                                                                new FilenameFilterEndsWith (".css")))
+    {
       final String sKey = aFile.getAbsolutePath ();
-      if (false)
+      if (true)
         s_aLogger.info (sKey);
       final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
       assertNotNull (sKey, aCSS);

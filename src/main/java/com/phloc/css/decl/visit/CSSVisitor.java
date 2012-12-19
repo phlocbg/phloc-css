@@ -26,6 +26,7 @@ import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CSSKeyframesBlock;
 import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaRule;
+import com.phloc.css.decl.CSSNamespaceRule;
 import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
@@ -158,6 +159,12 @@ public final class CSSVisitor
     }
   }
 
+  public static void visitNamespaceRule (@Nonnull final CSSNamespaceRule aNamespaceRule,
+                                         @Nonnull final ICSSVisitor aVisitor)
+  {
+    aVisitor.onNamespace (aNamespaceRule);
+  }
+
   public static void visitTopLevelRule (@Nonnull final ICSSTopLevelRule aTopLevelRule,
                                         @Nonnull final ICSSVisitor aVisitor)
   {
@@ -216,6 +223,10 @@ public final class CSSVisitor
       // for all imports
       for (final CSSImportRule aImportRule : aCSS.getAllImportRules ())
         aVisitor.onImport (aImportRule);
+
+      // for all namespaces
+      for (final CSSNamespaceRule aNamespaceRule : aCSS.getAllNamespaceRules ())
+        aVisitor.onNamespace (aNamespaceRule);
 
       // for all other top level rules
       for (final ICSSTopLevelRule aTopLevelRule : aCSS.getAllRules ())

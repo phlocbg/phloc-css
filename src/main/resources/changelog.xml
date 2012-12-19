@@ -20,6 +20,21 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2012-12-19" category="api" action="fix">
+    <change>
+      <text locale="en">Added missing setting in ICSSWriterSettings to enable/disable writing of viewport rule</text>
+    </change>
+  </entry>
+  <entry date="2012-12-19" category="api" action="fix">
+    <change>
+      <text locale="en">Fixed interpretation of namespace prefixes in attribute selectors</text>
+    </change>
+  </entry>
+  <entry date="2012-12-19" category="api" action="add">
+    <change>
+      <text locale="en">Added support for parsing @namespace declarations</text>
+    </change>
+  </entry>
   <entry date="2012-12-18" category="api" action="add">
     <change>
       <text locale="en">Added easy way to split a property value like '50%' in the numeric and the unit part (via CSSNumberHelper.getValueWithUnit)</text>

@@ -59,6 +59,12 @@ public interface ICSSWriterSettings
   boolean isQuoteURLs ();
 
   /**
+   * @return <code>true</code> if @namespace rules should be written,
+   *         <code>false</code> if not
+   */
+  boolean isWriteNamespaceRules ();
+
+  /**
    * @return <code>true</code> if @font-face rules should be written,
    *         <code>false</code> if not
    */
@@ -81,6 +87,12 @@ public interface ICSSWriterSettings
    *         <code>false</code> if not
    */
   boolean isWritePageRules ();
+
+  /**
+   * @return <code>true</code> if @viewport rules should be written,
+   *         <code>false</code> if not
+   */
+  boolean isWriteViewportRules ();
 
   /**
    * Check if the passed object matches the version requirements defined be this

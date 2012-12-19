@@ -273,13 +273,18 @@ CSSNode styleSheet() #Root : {}
     | <CDC>
     )*
   )*
+  ( namespaceRule()
+    ( <S>
+    | <CDO>
+    | <CDC>
+    )*
+  )*
   ( ( styleRule()
     | mediaRule()
     | pageRule()
     | fontfaceRule()
     | keyframesRule()
     | viewportRule()
-    | namespaceRule()
     | unknownRule()
     )
     ( <S>
@@ -338,6 +343,40 @@ void importRule() #ImportRule :
   ( mediaList() )?
   <SEMICOLON>
 }
+
+// ------------ NAMESPACE ------------
+
+void namespaceRule() : 
+{ 
+  Token t;
+}
+{
+  <NAMESPACE_SYM>
+  ( <S> )?
+  ( namespaceRulePrefix() )?
+  ( <S> )*
+  namespaceRuleURL()
+  ( <S> )*
+  <SEMICOLON>
+} 
+
+void namespaceRulePrefix() : 
+{ Token t; }
+{
+  t = <IDENT> { jjtThis.setText (t.image); }
+} 
+
+void namespaceRuleURL() : 
+{ 
+  Token t;
+  String s;
+}
+{
+  // URLs are always passed without the quotes!
+  ( t = <URI> { jjtThis.setText ('"' + t.image + '"'); }
+  | s = string() { jjtThis.setText (s); }
+  )
+} 
 
 //
 // media
@@ -548,40 +587,6 @@ void viewportRule() :
   ( <S> )* 
 } 
 
-// ------------ NAMESPACE ------------
-
-void namespaceRule() : 
-{ 
-  Token t;
-}
-{
-  <NAMESPACE_SYM>
-  ( <S> )?
-  ( namespaceRulePrefix() )?
-  namespaceRuleURL()
-  <SEMICOLON>
-} 
-
-void namespaceRulePrefix() : 
-{ Token t; }
-{
-  t = <IDENT> { jjtThis.setText (t.image); }
-  ( <S> )*
-} 
-
-void namespaceRuleURL() : 
-{ 
-  Token t;
-  String s;
-}
-{
-  ( t = <URI> { jjtThis.setText (t.image); }
-  | s = string() { jjtThis.setText (s); }
-  )
-  ( <S> )*
-} 
-
-
 // ------------ SELECTORS ------------
 
 void selector() : {}
@@ -644,8 +649,8 @@ void namespacePrefix() #NamespacePrefix :
 {
   ( t = <IDENT> { jjtThis.setText (t.image); }
   | <ASTERISK>  { jjtThis.setText ("*"); }
-  )?    { jjtThis.appendText ("|"); }
-  <DASH>
+  )?    
+  <DASH>        { jjtThis.appendText ("|"); }
 }
 
 void elementName() #ElementName :

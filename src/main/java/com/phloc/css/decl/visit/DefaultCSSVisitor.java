@@ -26,6 +26,7 @@ import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CSSKeyframesBlock;
 import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaRule;
+import com.phloc.css.decl.CSSNamespaceRule;
 import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
@@ -48,6 +49,10 @@ public class DefaultCSSVisitor implements ICSSVisitor
 
   @OverrideOnDemand
   public void onImport (@Nonnull final CSSImportRule aImportRule)
+  {}
+
+  @OverrideOnDemand
+  public void onNamespace (@Nonnull final CSSNamespaceRule aNamespaceRule)
   {}
 
   @OverrideOnDemand

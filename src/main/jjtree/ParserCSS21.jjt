@@ -723,7 +723,7 @@ String hexcolor() #void :
 
 // string       {string1}|{string2}
 // {string}        {return STRING;}
-String string () #void :
+String string() #void :
 { Token t; }
 {
   ( t = <STRING1>

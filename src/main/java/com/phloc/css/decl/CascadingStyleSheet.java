@@ -37,25 +37,31 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @NotThreadSafe
-public final class CascadingStyleSheet {
+public final class CascadingStyleSheet
+{
   private final List <CSSImportRule> m_aImportRules = new ArrayList <CSSImportRule> ();
+  private final List <CSSNamespaceRule> m_aNamespaceRules = new ArrayList <CSSNamespaceRule> ();
   private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();
 
-  public CascadingStyleSheet () {}
+  public CascadingStyleSheet ()
+  {}
 
-  public void addImportRule (@Nonnull final CSSImportRule aImportRule) {
+  public void addImportRule (@Nonnull final CSSImportRule aImportRule)
+  {
     if (aImportRule == null)
-      throw new NullPointerException ("importRule");
+      throw new NullPointerException ("ImportRule");
     m_aImportRules.add (aImportRule);
   }
 
   @Nonnull
-  public EChange removeImportRule (@Nullable final CSSImportRule aImportRule) {
+  public EChange removeImportRule (@Nullable final CSSImportRule aImportRule)
+  {
     return EChange.valueOf (m_aImportRules.remove (aImportRule));
   }
 
   @Nonnull
-  public EChange removeImportRule (@Nonnegative final int nImportRuleIndex) {
+  public EChange removeImportRule (@Nonnegative final int nImportRuleIndex)
+  {
     if (nImportRuleIndex < 0 || nImportRuleIndex >= m_aImportRules.size ())
       return EChange.UNCHANGED;
     m_aImportRules.remove (nImportRuleIndex);
@@ -64,22 +70,55 @@ public final class CascadingStyleSheet {
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <CSSImportRule> getAllImportRules () {
+  public List <CSSImportRule> getAllImportRules ()
+  {
     return ContainerHelper.newList (m_aImportRules);
   }
 
-  public void addRule (@Nonnull final ICSSTopLevelRule aStyleRule) {
+  public void addNamespaceRule (@Nonnull final CSSNamespaceRule aNamespaceRule)
+  {
+    if (aNamespaceRule == null)
+      throw new NullPointerException ("NamespaceRule");
+    m_aNamespaceRules.add (aNamespaceRule);
+  }
+
+  @Nonnull
+  public EChange removeNamespaceRule (@Nullable final CSSNamespaceRule aNamespaceRule)
+  {
+    return EChange.valueOf (m_aNamespaceRules.remove (aNamespaceRule));
+  }
+
+  @Nonnull
+  public EChange removeNamespaceRule (@Nonnegative final int nNamespaceRuleIndex)
+  {
+    if (nNamespaceRuleIndex < 0 || nNamespaceRuleIndex >= m_aNamespaceRules.size ())
+      return EChange.UNCHANGED;
+    m_aNamespaceRules.remove (nNamespaceRuleIndex);
+    return EChange.CHANGED;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSNamespaceRule> getAllNamespaceRules ()
+  {
+    return ContainerHelper.newList (m_aNamespaceRules);
+  }
+
+  public void addRule (@Nonnull final ICSSTopLevelRule aStyleRule)
+  {
     if (aStyleRule == null)
       throw new NullPointerException ("styleRule");
     m_aRules.add (aStyleRule);
   }
 
   @Nonnull
-  public EChange removeRule (@Nullable final ICSSTopLevelRule aRule) {
+  public EChange removeRule (@Nullable final ICSSTopLevelRule aRule)
+  {
     return EChange.valueOf (m_aRules.remove (aRule));
   }
 
-  public EChange removeRule (@Nonnegative final int nRuleIndex) {
+  public EChange removeRule (@Nonnegative final int nRuleIndex)
+  {
     if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
       return EChange.UNCHANGED;
     m_aRules.remove (nRuleIndex);
@@ -88,13 +127,15 @@ public final class CascadingStyleSheet {
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <ICSSTopLevelRule> getAllRules () {
+  public List <ICSSTopLevelRule> getAllRules ()
+  {
     return ContainerHelper.newList (m_aRules);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <CSSStyleRule> getAllStyleRules () {
+  public List <CSSStyleRule> getAllStyleRules ()
+  {
     final List <CSSStyleRule> ret = new ArrayList <CSSStyleRule> ();
     for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
       if (aTopLevelRule instanceof CSSStyleRule)
@@ -104,7 +145,8 @@ public final class CascadingStyleSheet {
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <CSSPageRule> getAllPageRules () {
+  public List <CSSPageRule> getAllPageRules ()
+  {
     final List <CSSPageRule> ret = new ArrayList <CSSPageRule> ();
     for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
       if (aTopLevelRule instanceof CSSPageRule)
@@ -114,7 +156,8 @@ public final class CascadingStyleSheet {
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <CSSMediaRule> getAllMediaRules () {
+  public List <CSSMediaRule> getAllMediaRules ()
+  {
     final List <CSSMediaRule> ret = new ArrayList <CSSMediaRule> ();
     for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
       if (aTopLevelRule instanceof CSSMediaRule)
@@ -124,7 +167,8 @@ public final class CascadingStyleSheet {
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <CSSFontFaceRule> getAllFontFaceRules () {
+  public List <CSSFontFaceRule> getAllFontFaceRules ()
+  {
     final List <CSSFontFaceRule> ret = new ArrayList <CSSFontFaceRule> ();
     for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
       if (aTopLevelRule instanceof CSSFontFaceRule)
@@ -134,7 +178,8 @@ public final class CascadingStyleSheet {
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <CSSKeyframesRule> getAllKeyframesRules () {
+  public List <CSSKeyframesRule> getAllKeyframesRules ()
+  {
     final List <CSSKeyframesRule> ret = new ArrayList <CSSKeyframesRule> ();
     for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
       if (aTopLevelRule instanceof CSSKeyframesRule)
@@ -144,7 +189,8 @@ public final class CascadingStyleSheet {
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <CSSViewportRule> getAllViewportRules () {
+  public List <CSSViewportRule> getAllViewportRules ()
+  {
     final List <CSSViewportRule> ret = new ArrayList <CSSViewportRule> ();
     for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
       if (aTopLevelRule instanceof CSSViewportRule)
@@ -152,33 +198,34 @@ public final class CascadingStyleSheet {
     return ret;
   }
 
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <CSSNamespaceRule> getAllNamespaceRules () {
-    final List <CSSNamespaceRule> ret = new ArrayList <CSSNamespaceRule> ();
-    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
-      if (aTopLevelRule instanceof CSSNamespaceRule)
-        ret.add ((CSSNamespaceRule) aTopLevelRule);
-    return ret;
-  }
-
   @Override
-  public boolean equals (final Object o) {
+  public boolean equals (final Object o)
+  {
     if (o == this)
       return true;
     if (!(o instanceof CascadingStyleSheet))
       return false;
     final CascadingStyleSheet rhs = (CascadingStyleSheet) o;
-    return m_aImportRules.equals (rhs.m_aImportRules) && m_aRules.equals (rhs.m_aRules);
+    return m_aImportRules.equals (rhs.m_aImportRules) &&
+           m_aNamespaceRules.equals (rhs.m_aNamespaceRules) &&
+           m_aRules.equals (rhs.m_aRules);
   }
 
   @Override
-  public int hashCode () {
-    return new HashCodeGenerator (this).append (m_aImportRules).append (m_aRules).getHashCode ();
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_aImportRules)
+                                       .append (m_aNamespaceRules)
+                                       .append (m_aRules)
+                                       .getHashCode ();
   }
 
   @Override
-  public String toString () {
-    return new ToStringGenerator (this).append ("importRules", m_aImportRules).append ("rules", m_aRules).toString ();
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("importRules", m_aImportRules)
+                                       .append ("namespaceRules", m_aNamespaceRules)
+                                       .append ("rules", m_aRules)
+                                       .toString ();
   }
 }
