@@ -101,7 +101,8 @@ public final class JavaCharStream implements CharStream
     m_nLine = nStartLine;
     m_nColumn = nStartColumn - 1;
 
-    m_nAvailable = m_nBufsize = nBufferSize;
+    m_nAvailable = nBufferSize;
+    m_nBufsize = nBufferSize;
     m_aBuffer = new char [nBufferSize];
     m_aBufLine = new int [nBufferSize];
     m_aBufColumn = new int [nBufferSize];
@@ -151,18 +152,22 @@ public final class JavaCharStream implements CharStream
       throw new Error (t.getMessage ());
     }
 
-    m_nAvailable = (m_nBufsize += 2048);
+    m_nBufsize += 2048;
+    m_nAvailable = m_nBufsize;
     m_nTokenBegin = 0;
   }
 
   private void _fillBuff () throws IOException
   {
-    int i;
     if (m_nMaxNextCharInd == 4096)
-      m_nMaxNextCharInd = m_nNextCharInd = 0;
+    {
+      m_nMaxNextCharInd = 0;
+      m_nNextCharInd = 0;
+    }
 
     try
     {
+      int i;
       if ((i = m_aReader.read (m_aNextCharBuf, m_nMaxNextCharInd, 4096 - m_nMaxNextCharInd)) == -1)
       {
         m_aReader.close ();
@@ -244,7 +249,8 @@ public final class JavaCharStream implements CharStream
     if (m_bPrevCharIsLF)
     {
       m_bPrevCharIsLF = false;
-      m_nLine += (m_nColumn = 1);
+      m_nColumn = 1;
+      m_nLine++;
     }
     else
       if (m_bPrevCharIsCR)
@@ -253,7 +259,10 @@ public final class JavaCharStream implements CharStream
         if (c == '\n')
           m_bPrevCharIsLF = true;
         else
-          m_nLine += (m_nColumn = 1);
+        {
+          m_nColumn = 1;
+          m_nLine++;
+        }
       }
 
     switch (c)
@@ -408,7 +417,8 @@ public final class JavaCharStream implements CharStream
   public void backup (final int nAmount)
   {
     m_nInBuf += nAmount;
-    if ((m_nBufpos -= nAmount) < 0)
+    m_nBufpos -= nAmount;
+    if (m_nBufpos < 0)
       m_nBufpos += m_nBufsize;
   }
 
