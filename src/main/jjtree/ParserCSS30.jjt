@@ -115,20 +115,19 @@ TOKEN :
 // unicode      \\{h}{1,6}(\r\n|[ \t\r\n\f])?
 | < #UNICODE: "\\" <HNUM> ( "\r\n" 
                           | [" ","\t","\r","\n","\f"] )? >
+                            
 
 // escape       {unicode}|\\[^\r\n\f0-9a-f]
-| < #ESCAPE: <UNICODE> 
-           | ( "\\" ~["\r","\n","\f","0"-"9","a"-"f"] ) >
+| < #ESCAPE: <UNICODE>
+           | ( "\\" ~["\r","\n","\f","0"-"9","a"-"f"] ) > 
 
 // nmstart      [_a-z]|{nonascii}|{escape}
-// Extension: added "A"-"Z"
-| < #NMSTART: ["_","a"-"z","A"-"Z"] 
+| < #NMSTART: ["_","a"-"z"] 
             | <NONASCII> 
             | <ESCAPE> >
 
 // nmchar       [_a-z0-9-]|{nonascii}|{escape}
-// Extension: added "A"-"Z"
-| < #NMCHAR: ["_","a"-"z","A"-"Z","0"-"9","-"] 
+| < #NMCHAR: ["_","a"-"z","0"-"9","-"] 
            | <NONASCII> 
            | <ESCAPE> >
 | < NL: "\n" | "\r\n" | "\r" | "\f" >
@@ -162,9 +161,12 @@ TOKEN :
 | < IDENT: ("-"|"$"|"*")? <NMSTART> ( <NMCHAR> )* >
 
 | < #NAME: ( <NMCHAR> )+ >
-| < #NUM: ( ( ["0"-"9"] )+ | ( ["0"-"9"] )* "." ( ["0"-"9"] )+ ) >
-| < #URL: ["!","#","$","%","&","*"-"[","]"-"~"] | <NONASCII> | <ESCAPE> >
-
+| < #NUM: ( ["0"-"9"] )+ 
+          | ( ["0"-"9"] )* "." ( ["0"-"9"] )+ >
+| < #URLCHAR: ["!","#","$","%","&","*"-"[","]"-"~"] 
+            | <NONASCII> 
+            | <ESCAPE> >
+        
 | < CDO: "<!--" >
 | < CDC: "-->" >
 | < INCLUDES: "~=" >
@@ -218,7 +220,10 @@ TOKEN :
 
 // "url("{w}{string}{w}")"  {return URI;}
 // "url("{w}{url}{w}")" {return URI;}
-| < URI: "url(" ( <S> )* ( <STRING1> | <STRING2> | ( <URL> )* ) ( <S> )* ")" >
+| < URI: "url(" ( <S> )* ( <STRING1> 
+                         | <STRING2> 
+                         | ( <URLCHAR> )*  
+                         ) ( <S> )* ")" >
   { matchedToken.image = ParseUtils.trimUrl(image); }
 | < CALC: "calc(" >
 | < NOT: ":not(" >
