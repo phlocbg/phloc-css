@@ -121,7 +121,7 @@ TOKEN :
 // escape       {unicode}|\\[^\r\n\f0-9a-f]
 | < #ESCAPE: <UNICODE>
            | ( "\\" ~["\r","\n","\f","0"-"9","a"-"f"] ) >
-
+           
 // nmstart      [_a-z]|{nonascii}|{escape}
 | < #NMSTART: ["_","a"-"z"]
             | <NONASCII>
@@ -131,21 +131,23 @@ TOKEN :
 | < #NMCHAR: ["_","a"-"z","0"-"9","-"]
            | <NONASCII>
            | <ESCAPE> >
-| < NL: "\n" | "\r\n" | "\r" | "\f" >
+
+// First, inside a string, a backslash followed by a newline is ignored (i.e., the string is deemed not to contain either the backslash or the newline).           
+| < STRING_EOL: "\\" ( "\n" | "\r\n" | "\r" | "\f" ) >  { matchedToken.image = ""; }    
 | < STRING1: "\"" ( ~["\n","\r","\f","\\","\""]
-                  | "\\" <NL>
+                  | <STRING_EOL>
                   | <ESCAPE>
                   )* "\"" >
 | < STRING2: "'" ( ~["\n","\r","\f","\\","'"]
-                 | "\\" <NL>
+                 | <STRING_EOL>
                  | <ESCAPE>
                  )* "'" >
 | < INVALID1: "\"" ( ~["\n","\r","\f","\\","\""]
-                   | "\\" <NL>
+                   | <STRING_EOL>
                    | <ESCAPE>
                    )* >
 | < INVALID2: "'" ( ~["\n","\r","\f","\\","'"]
-                  | "\\" <NL>
+                  | <STRING_EOL>
                   | <ESCAPE>
                   )* >
 | < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/">
