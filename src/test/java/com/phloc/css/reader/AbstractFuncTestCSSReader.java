@@ -55,8 +55,10 @@ public abstract class AbstractFuncTestCSSReader
 
   protected final void testReadGood (final String sBaseDir) throws IOException
   {
-    for (final File aFile : FileSystemRecursiveIterator.create (new File (sBaseDir),
-                                                                new FilenameFilterEndsWith (".css")))
+    final File aBaseDir = new File (sBaseDir);
+    if (!aBaseDir.exists ())
+      throw new IllegalArgumentException (sBaseDir + " does not exist!");
+    for (final File aFile : FileSystemRecursiveIterator.create (aBaseDir, new FilenameFilterEndsWith (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
       if (true)
@@ -90,8 +92,10 @@ public abstract class AbstractFuncTestCSSReader
 
   protected final void testReadBad (final String sBaseDir) throws IOException
   {
-    for (final File aFile : FileSystemRecursiveIterator.create (new File (sBaseDir),
-                                                                new FilenameFilterEndsWith (".css")))
+    final File aBaseDir = new File (sBaseDir);
+    if (!aBaseDir.exists ())
+      throw new IllegalArgumentException (sBaseDir + " does not exist!");
+    for (final File aFile : FileSystemRecursiveIterator.create (aBaseDir, new FilenameFilterEndsWith (".css")))
     {
       final String sKey = aFile.getAbsolutePath ();
       if (true)
