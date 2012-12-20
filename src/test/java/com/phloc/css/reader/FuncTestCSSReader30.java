@@ -57,11 +57,11 @@ public final class FuncTestCSSReader30 extends AbstractFuncTestCSSReader
 
   @Ignore
   @Test
-  public void testReadSpecial ()
+  public void testReadSpecialGood ()
   {
     final ECSSVersion eVersion = ECSSVersion.CSS30;
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
-    final File aFile = new File ("src/test/resources/testfiles/css30/good_but_failing/w3c/selectors/css3-modsel-175a.css");
+    final File aFile = new File ("src/test/resources/testfiles/css30/good/w3c/selectors/css3-modsel-175b.css");
     final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
     assertNotNull (aCSS);
   }

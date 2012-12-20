@@ -110,25 +110,84 @@ public final class ParseUtils
   @Nonnull
   public static String validateIdentifier (@Nonnull final StringBuilder aPattern)
   {
-    final int nLength = aPattern.length ();
-    final char [] aChars = new char [nLength];
-    aPattern.getChars (0, nLength, aChars, 0);
-
-    // Starts with a hack?
-    if (aChars[0] == '-' || aChars[0] == '$' || aChars[0] == '*')
     {
-      if (Character.isDigit (aChars[1]))
-        throw new TokenMgrError ("Identifier may not start with a hyphen and a digit: " + aPattern,
-                                 TokenMgrError.LEXICAL_ERROR);
-    }
-    else
-    {
-      if (Character.isDigit (aChars[0]))
-        throw new TokenMgrError ("Identifier may not start with a digit: " + aPattern, TokenMgrError.LEXICAL_ERROR);
+      final int nLength = aPattern.length ();
+      final char c1 = aPattern.charAt (0);
+      final char c2 = nLength <= 1 ? 0 : aPattern.charAt (1);
+
+      // Starts with a hack?
+      if (c1 == '-' || c1 == '$' || c1 == '*')
+      {
+        if (nLength > 1 && Character.isDigit (c2))
+          throw new TokenMgrError ("Identifier may not start with a hyphen and a digit: " + aPattern,
+                                   TokenMgrError.LEXICAL_ERROR);
+      }
+      else
+      {
+        if (Character.isDigit (c1))
+          throw new TokenMgrError ("Identifier may not start with a digit: " + aPattern, TokenMgrError.LEXICAL_ERROR);
+      }
+
+      if (nLength > 1 && c1 == '-' && c2 == '-')
+        throw new TokenMgrError ("Identifier may not start with two hyphens: " + aPattern, TokenMgrError.LEXICAL_ERROR);
     }
 
-    if (nLength > 1 && aChars[0] == '-' && aChars[1] == '-')
-      throw new TokenMgrError ("Identifier may not start with two hyphens: " + aPattern, TokenMgrError.LEXICAL_ERROR);
+    // Unescape
+    if (false)
+    {
+      int nLastIndex = 0;
+      boolean bModified = false;
+      final String sOld = aPattern.toString ();
+      while (true)
+      {
+        final int nIndex = aPattern.indexOf ("\\", nLastIndex);
+        if (nIndex < 0)
+          break;
+
+        bModified = true;
+
+        final char c1 = aPattern.charAt (nIndex + 1);
+        if (Character.isDigit (c1))
+        {
+          // Search for unicode: \\{h}{1,6}(\r\n|[ \t\r\n\f])?
+          final int nLength = aPattern.length ();
+          int nLastDigitIndex = nIndex + 2;
+          while (nLastDigitIndex <= nIndex + 6 && nLastDigitIndex < nLength)
+          {
+            if (!Character.isDigit (aPattern.charAt (nLastDigitIndex)))
+              break;
+            nLastDigitIndex++;
+          }
+
+          final String sNum = aPattern.substring (nIndex + 1, nLastDigitIndex);
+          final int nNum = Integer.parseInt (sNum);
+          final char cNum = (char) nNum;
+
+          if (nLastDigitIndex < nLength)
+            if (nLastDigitIndex < (nLength - 1) &&
+                aPattern.charAt (nLastDigitIndex) == '\r' &&
+                aPattern.charAt (nLastDigitIndex + 1) == '\n')
+              nLastDigitIndex += 2;
+            else
+              nLastDigitIndex++;
+
+          aPattern.replace (nIndex, nIndex + nLastDigitIndex, Character.toString (cNum));
+        }
+        else
+        {
+          // Search for escape: \\[^\r\n\f0-9a-f]
+          aPattern.replace (nIndex, nIndex + 2, Character.toString (c1));
+        }
+
+        nLastIndex = nIndex + 1;
+      }
+
+      if (bModified)
+      {
+        System.out.println ("  old: " + sOld);
+        System.out.println ("  new: " + aPattern.toString ());
+      }
+    }
 
     return aPattern.toString ();
   }
