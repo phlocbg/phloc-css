@@ -101,6 +101,7 @@ TOKEN :
 <DEFAULT>
 TOKEN :
 {
+// private reg ex come first (no actions possible!)
   < #H: ["0"-"9","a"-"f"] >
 | < #HNUM: <H> 
          | <H><H> 
@@ -158,7 +159,7 @@ TOKEN :
 // ident        -?{nmstart}{nmchar}*
 // Note: "*" hack for IE <= 6
 // Note: "$" hack for IE <= 7
-| < IDENT: ("-"|"$"|"*")? <NMSTART> ( <NMCHAR> )* >
+| < IDENT: ("-"|"$"|"*")? <NMSTART> ( <NMCHAR> )* > { matchedToken.image = ParseUtils.validateIdentifier(image); }
 
 | < #NAME: ( <NMCHAR> )+ >
 | < #NUM: ( ["0"-"9"] )+ 
