@@ -2,7 +2,15 @@
 #labels Featured
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>12/14/12</td><td colspan="4">_Release *3.2.5*_</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>12/20/12</td><td colspan="4">_Release *3.3.0*_</td></tr>
+<tr><td>12/19/12</td><td>fix</td><td>feature</td><td></td><td>Fixed handling of negation (:not) with namespace prefix</td></tr>
+<tr><td>12/19/12</td><td>add</td><td>test</td><td></td><td>Added test files from CSS3 Selectors Test Suite 1.0 final</td></tr>
+<tr><td>12/19/12</td><td>add</td><td>api</td><td></td><td>Extended CascadingStyleSheet with more query methods (has...Rules and get...RuleCount)</td></tr>
+<tr><td>12/19/12</td><td>fix</td><td>api</td><td></td><td>Added missing setting in ICSSWriterSettings to enable/disable writing of viewport rule</td></tr>
+<tr><td>12/19/12</td><td>fix</td><td>api</td><td></td><td>Fixed interpretation of namespace prefixes in attribute selectors</td></tr>
+<tr><td>12/19/12</td><td>add</td><td>api</td><td></td><td>Added support for parsing @namespace declarations in CSS 2.1 and 3.0</td></tr>
+<tr><td>12/18/12</td><td>add</td><td>api</td><td></td><td>Added easy way to split a property value like '50%' in the numeric and the unit part (via CSSNumberHelper.getValueWithUnit)</td></tr>
+<tr border="1"><td>12/14/12</td><td colspan="4">_Release *3.2.5*_</td></tr>
 <tr><td>12/14/12</td><td>add</td><td>api</td><td></td><td>Added new methods to access list members more comfortable</td></tr>
 <tr><td>12/14/12</td><td>add</td><td>feature</td><td></td><td>Added support for reading and writing CSS @viewport declarations</td></tr>
 <tr><td>12/4/12</td><td>add</td><td>api</td><td></td><td>Added new constants in CCSSProperties: BORDER`_`(TOP|RIGHT|BOTTOM|LEFT) and BACKGROUND</td></tr>
