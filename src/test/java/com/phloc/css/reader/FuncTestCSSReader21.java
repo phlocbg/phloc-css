@@ -17,88 +17,39 @@
  */
 package com.phloc.css.reader;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.io.file.filter.FilenameFilterEndsWith;
-import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.css.ECSSVersion;
-import com.phloc.css.decl.CascadingStyleSheet;
-import com.phloc.css.writer.CSSWriter;
-import com.phloc.css.writer.CSSWriterSettings;
 
-public final class FuncTestCSSReader21
+public final class FuncTestCSSReader21 extends AbstractFuncTestCSSReader
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (FuncTestCSSReader21.class);
 
-  @Test
-  public void testScanTestResourcesArtificial21 () throws IOException
+  public FuncTestCSSReader21 ()
   {
-    final ECSSVersion eVersion = ECSSVersion.CSS21;
-    final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css21/good/artificial"),
-                                                                new FilenameFilterEndsWith (".css")))
-    {
-      final String sKey = aFile.getAbsolutePath ();
-      if (false)
-        s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
-      assertNotNull (sKey, aCSS);
-
-      // Write optimized version and compare it
-      String sCSS = new CSSWriter (eVersion, true).getCSSAsString (aCSS);
-      assertNotNull (sKey, sCSS);
-      assertEquals (sKey, aCSS, CSSReader.readFromString (sCSS, aCharset, eVersion));
-
-      // Write non-optimized version and compare it
-      sCSS = new CSSWriter (eVersion, false).getCSSAsString (aCSS);
-      assertNotNull (sKey, sCSS);
-      assertEquals (sKey, aCSS, CSSReader.readFromString (sCSS, aCharset, eVersion));
-
-      // Write non-optimized and code-removed version and ensure it is not null
-      sCSS = new CSSWriter (new CSSWriterSettings (eVersion, false).setRemoveUnnecessaryCode (true)).getCSSAsString (aCSS);
-      assertNotNull (sKey, sCSS);
-      assertNotNull (sKey, CSSReader.readFromString (sCSS, aCharset, eVersion));
-    }
+    super (ECSSVersion.CSS21, CCharset.CHARSET_UTF_8_OBJ, false);
   }
 
   @Test
-  public void testScanTestResourcesCss21 () throws IOException
+  public void testReadAll21GoodArtifical () throws IOException
   {
-    final ECSSVersion eVersion = ECSSVersion.CSS21;
-    final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css21/good"),
-                                                                new FilenameFilterEndsWith (".css")))
-    {
-      final String sKey = aFile.getAbsolutePath ();
-      if (false)
-        s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
-      assertNotNull (sKey, aCSS);
+    testReadGood ("src/test/resources/testfiles/css21/good/artificial");
+  }
 
-      // Write optimized version and compare it
-      String sCSS = new CSSWriter (eVersion, true).getCSSAsString (aCSS);
-      assertNotNull (sKey, sCSS);
-      assertEquals (sKey, aCSS, CSSReader.readFromString (sCSS, aCharset, eVersion));
+  @Test
+  public void testReadAll21Good () throws IOException
+  {
+    testReadGood ("src/test/resources/testfiles/css21/good");
+  }
 
-      // Write non-optimized version and compare it
-      sCSS = new CSSWriter (eVersion, false).getCSSAsString (aCSS);
-      assertNotNull (sKey, sCSS);
-      assertEquals (sKey, aCSS, CSSReader.readFromString (sCSS, aCharset, eVersion));
-
-      // Write non-optimized and code-removed version and ensure it is not null
-      sCSS = new CSSWriter (new CSSWriterSettings (eVersion, false).setRemoveUnnecessaryCode (true)).getCSSAsString (aCSS);
-      assertNotNull (sKey, sCSS);
-      assertNotNull (sKey, CSSReader.readFromString (sCSS, aCharset, eVersion));
-    }
+  @Test
+  public void testReadAll21Bad () throws IOException
+  {
+    testReadBad ("src/test/resources/testfiles/css21/bad");
   }
 }
