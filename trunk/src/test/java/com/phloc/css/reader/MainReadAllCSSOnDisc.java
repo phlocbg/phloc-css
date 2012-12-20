@@ -21,8 +21,6 @@ import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.junit.Ignore;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,14 +35,12 @@ import com.phloc.css.parser.ParseException;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-public final class FuncTestCSSReader
+public final class MainReadAllCSSOnDisc
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (FuncTestCSSReader.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (MainReadAllCSSOnDisc.class);
 
-  @Test
-  @Ignore
   @SuppressFBWarnings ("DMI_HARDCODED_ABSOLUTE_FILENAME")
-  public void testScanDrive ()
+  public static void main (final String [] args)
   {
     int nFilesOK = 0;
     int nFilesError = 0;
@@ -67,7 +63,10 @@ public final class FuncTestCSSReader
                                                                ECSSVersion.CSS30,
                                                                aHdl);
       if (aCSS == null)
+      {
         nFilesError++;
+        s_aLogger.warn ("  " + aFile.getAbsolutePath () + " failed!");
+      }
       else
         nFilesOK++;
     }

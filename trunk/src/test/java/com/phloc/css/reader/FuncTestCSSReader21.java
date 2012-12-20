@@ -36,20 +36,16 @@ public final class FuncTestCSSReader21 extends AbstractFuncTestCSSReader
   }
 
   @Test
-  public void testReadAll21GoodArtifical () throws IOException
-  {
-    testReadGood ("src/test/resources/testfiles/css21/good/artificial");
-  }
-
-  @Test
   public void testReadAll21Good () throws IOException
   {
     testReadGood ("src/test/resources/testfiles/css21/good");
+    testReadGood ("src/test/resources/testfiles/css21/bad_but_succeeding");
   }
 
   @Test
   public void testReadAll21Bad () throws IOException
   {
     testReadBad ("src/test/resources/testfiles/css21/bad");
+    testReadBad ("src/test/resources/testfiles/css21/good_but_failing");
   }
 }
