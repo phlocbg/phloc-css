@@ -93,4 +93,43 @@ public final class ParseUtils
       return m.group (1);
     return "";
   }
+
+  /**
+   * In CSS, identifiers (including element names, classes, and IDs in
+   * selectors) can contain only the characters [a-zA-Z0-9] and ISO 10646
+   * characters U+00A0 and higher, plus the hyphen (-) and the underscore (_);
+   * they cannot start with a digit, two hyphens, or a hyphen followed by a
+   * digit. Identifiers can also contain escaped characters and any ISO 10646
+   * character as a numeric code (see next item). For instance, the identifier
+   * "B&W?" may be written as "B\&W\?" or "B\26 W\3F".
+   * 
+   * @param aPattern
+   *        pattern to check
+   * @return The input string
+   */
+  @Nonnull
+  public static String validateIdentifier (@Nonnull final StringBuilder aPattern)
+  {
+    final int nLength = aPattern.length ();
+    final char [] aChars = new char [nLength];
+    aPattern.getChars (0, nLength, aChars, 0);
+
+    // Starts with a hack?
+    if (aChars[0] == '-' || aChars[0] == '$' || aChars[0] == '*')
+    {
+      if (Character.isDigit (aChars[1]))
+        throw new TokenMgrError ("Identifier may not start with a hyphen and a digit: " + aPattern,
+                                 TokenMgrError.LEXICAL_ERROR);
+    }
+    else
+    {
+      if (Character.isDigit (aChars[0]))
+        throw new TokenMgrError ("Identifier may not start with a digit: " + aPattern, TokenMgrError.LEXICAL_ERROR);
+    }
+
+    if (nLength > 1 && aChars[0] == '-' && aChars[1] == '-')
+      throw new TokenMgrError ("Identifier may not start with two hyphens: " + aPattern, TokenMgrError.LEXICAL_ERROR);
+
+    return aPattern.toString ();
+  }
 }

@@ -39,7 +39,7 @@ import com.phloc.css.writer.CSSWriterSettings;
 
 public abstract class AbstractFuncTestCSSReader
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractFuncTestCSSReader.class);
+  private final Logger m_aLogger = LoggerFactory.getLogger (getClass ());
   private final ECSSVersion m_eVersion;
   private final Charset m_aCharset;
   private final boolean m_bDebug;
@@ -62,7 +62,7 @@ public abstract class AbstractFuncTestCSSReader
     {
       final String sKey = aFile.getAbsolutePath ();
       if (true)
-        s_aLogger.info (sKey);
+        m_aLogger.info (sKey);
       final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion);
       assertNotNull (sKey, aCSS);
 
@@ -70,7 +70,7 @@ public abstract class AbstractFuncTestCSSReader
       String sCSS = new CSSWriter (m_eVersion, true).getCSSAsString (aCSS);
       assertNotNull (sKey, sCSS);
       if (m_bDebug)
-        s_aLogger.info (sCSS);
+        m_aLogger.info (sCSS);
 
       final CascadingStyleSheet aCSSReRead = CSSReader.readFromString (sCSS, m_aCharset, m_eVersion);
       assertNotNull ("Failed to parse:\n" + sCSS, aCSSReRead);
@@ -80,7 +80,7 @@ public abstract class AbstractFuncTestCSSReader
       sCSS = new CSSWriter (m_eVersion, false).getCSSAsString (aCSS);
       assertNotNull (sKey, sCSS);
       if (m_bDebug)
-        s_aLogger.info (sCSS);
+        m_aLogger.info (sCSS);
       assertEquals (sKey, aCSS, CSSReader.readFromString (sCSS, m_aCharset, m_eVersion));
 
       // Write non-optimized and code-removed version and ensure it is not null
@@ -99,7 +99,7 @@ public abstract class AbstractFuncTestCSSReader
     {
       final String sKey = aFile.getAbsolutePath ();
       if (true)
-        s_aLogger.info (sKey);
+        m_aLogger.info (sKey);
       final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion);
       assertNull (sKey, aCSS);
     }
