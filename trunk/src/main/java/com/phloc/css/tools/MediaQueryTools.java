@@ -17,16 +17,21 @@
  */
 package com.phloc.css.tools;
 
+import java.nio.charset.Charset;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.string.StringHelper;
+import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CSSMediaQuery;
 import com.phloc.css.decl.CSSMediaRule;
 import com.phloc.css.decl.CSSNamespaceRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSTopLevelRule;
+import com.phloc.css.reader.CSSReader;
 
 /**
  * A small utility class to wrap an existing {@link CascadingStyleSheet} within
@@ -40,6 +45,22 @@ public final class MediaQueryTools
 {
   private MediaQueryTools ()
   {}
+
+  @Nullable
+  public static CSSMediaQuery parseToMediaQuery (@Nullable final String sMediaQuery,
+                                                 @Nonnull final Charset aCharset,
+                                                 @Nonnull final ECSSVersion eVersion)
+  {
+    if (StringHelper.hasNoText (sMediaQuery))
+      return null;
+
+    final String sCSS = "@media " + sMediaQuery + " {}";
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, aCharset, eVersion);
+    if (aCSS == null)
+      return null;
+
+    return aCSS.getAllMediaRules ().get (0).getMediaQueryAtIndex (0);
+  }
 
   /**
    * Check if the passed CSS can be wrapped in an external media rule. It is not

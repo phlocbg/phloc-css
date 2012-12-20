@@ -825,44 +825,28 @@ final class CSSNodeToDomainObject
       }
       else
         if (ECSSNodeType.IMPORTRULE.isNode (aChildNode, m_eVersion))
-        {
           ret.addImportRule (_createImportRule (aChildNode));
-        }
         else
           if (ECSSNodeType.NAMESPACERULE.isNode (aChildNode, m_eVersion))
-          {
             ret.addNamespaceRule (_createNamespaceRule (aChildNode));
-          }
           else
             if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
-            {
               ret.addRule (_createStyleRule (aChildNode));
-            }
             else
               if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
-              {
                 ret.addRule (_createPageRule (aChildNode));
-              }
               else
                 if (ECSSNodeType.MEDIARULE.isNode (aChildNode, m_eVersion))
-                {
                   ret.addRule (_createMediaRule (aChildNode));
-                }
                 else
                   if (ECSSNodeType.FONTFACERULE.isNode (aChildNode, m_eVersion))
-                  {
                     ret.addRule (_createFontFaceRule (aChildNode));
-                  }
                   else
                     if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
-                    {
                       ret.addRule (_createKeyframesRule (aChildNode));
-                    }
                     else
                       if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
-                      {
                         ret.addRule (_createViewportRule (aChildNode));
-                      }
                       else
                         if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
                         {
@@ -870,10 +854,10 @@ final class CSSNodeToDomainObject
                           s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);
                         }
                         else
-                          s_aLogger.warn ("Unsupported child of " +
-                                          ECSSNodeType.getNodeName (aNode, m_eVersion) +
-                                          ": " +
-                                          ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+                          s_aLogger.error ("Unsupported child of " +
+                                           ECSSNodeType.getNodeName (aNode, m_eVersion) +
+                                           ": " +
+                                           ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
   }
