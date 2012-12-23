@@ -8,6 +8,38 @@ This page shows some basic code examples that can be used to use the library. Al
 
 Prerequisites: as *phloc-css depends* on [http://code.google.com/p/phloc-commons phloc-commons], the following examples also do. Additionally [http://www.slf4j.org/ SLF4J] is required.
 
+= Usage with Maven =
+
+To build phloc-css from source, Maven 3.0.4 is required. Any version below does *NOT* work!
+
+To use phloc-css put the following to your pom.xml:
+{{{
+...
+  <repositories>
+...
+    <repository>
+      <id>phloc.com</id>
+      <url>http://repo.phloc.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+...
+  <dependencies>
+    ...
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-css</artifactId>
+      <version>3.3.0</version>
+    </dependency>
+  </dependencies>
+...
+}}}
+
 = Reading a CSS 3.0 file =
 
 {{{
