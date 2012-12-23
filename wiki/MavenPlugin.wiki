@@ -31,7 +31,7 @@ The maven plugin offered here can be used to compress CSS files at build time.
       <plugin>
         <groupId>com.phloc.maven</groupId>
         <artifactId>csscompress-maven-plugin</artifactId>
-        <version>1.0.11</version>
+        <version>1.0.12</version>
         <executions>
           <execution>
             <goals>
