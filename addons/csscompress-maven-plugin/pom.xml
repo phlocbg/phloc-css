@@ -29,6 +29,28 @@
     <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/addons/csscompress-maven-plugin</developerConnection>
   </scm>
   
+  <organization>
+    <name>phloc systems</name>
+    <url>http://www.phloc.com</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <id>philip</id>
+      <name>Philip Helger</name>
+      <email>ph(at)phloc.com</email>
+      <url>http://www.phloc.com</url>
+      <organization>phloc systems</organization>
+    </developer>
+    <developer>
+      <id>boris</id>
+      <name>Boris Gregorcic</name>
+      <email>bg(at)phloc.com</email>
+      <url>http://www.phloc.com</url>
+      <organization>phloc systems</organization>
+    </developer>
+  </developers>
+  
   <repositories>
     <repository>
       <id>phloc.com</id>
