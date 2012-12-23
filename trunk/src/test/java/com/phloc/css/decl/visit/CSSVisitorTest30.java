@@ -22,8 +22,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 
-import javax.annotation.Nonnull;
-
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +31,7 @@ import com.phloc.commons.io.file.filter.FilenameFilterEndsWith;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.css.AbstractCSS30Test;
 import com.phloc.css.ECSSVersion;
-import com.phloc.css.decl.CSSDeclaration;
-import com.phloc.css.decl.CSSExpressionMemberTermURI;
-import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
-import com.phloc.css.decl.ICSSTopLevelRule;
 import com.phloc.css.reader.CSSReader;
 
 /**
@@ -45,77 +39,9 @@ import com.phloc.css.reader.CSSReader;
  * 
  * @author philip
  */
-public final class CSSVisitorTest extends AbstractCSS30Test
+public final class CSSVisitorTest30 extends AbstractCSS30Test
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSVisitorTest.class);
-
-  private static final class MockSysOutVisitor extends DefaultCSSUrlVisitor
-  {
-    private final String m_sFilename;
-
-    public MockSysOutVisitor (final String sFilename)
-    {
-      m_sFilename = sFilename;
-    }
-
-    @Override
-    public void onImport (final CSSImportRule aImportRule)
-    {
-      assertNotNull (m_sFilename, aImportRule.getLocation ());
-    }
-
-    @Override
-    public void onUrlDeclaration (@Nonnull final ICSSTopLevelRule aTopLevelRule,
-                                  @Nonnull final CSSDeclaration aDeclaration,
-                                  @Nonnull final CSSExpressionMemberTermURI aURITerm)
-    {
-      assertNotNull (m_sFilename, aURITerm.getURI ());
-    }
-  }
-
-  private static final class MockCountingVisitor extends DefaultCSSUrlVisitor
-  {
-    private int m_nCount = 0;
-
-    public MockCountingVisitor ()
-    {}
-
-    @Override
-    public void onImport (final CSSImportRule aImportRule)
-    {
-      assertNotNull (aImportRule.getLocation ());
-      m_nCount++;
-    }
-
-    @Override
-    public void onUrlDeclaration (@Nonnull final ICSSTopLevelRule aTopLevelRule,
-                                  @Nonnull final CSSDeclaration aDeclaration,
-                                  @Nonnull final CSSExpressionMemberTermURI aURITerm)
-    {
-      assertNotNull (aURITerm.getURI ());
-      m_nCount++;
-    }
-
-    public int getCount ()
-    {
-      return m_nCount;
-    }
-  }
-
-  @Test
-  public void testVisitContent21 ()
-  {
-    for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css21/good"),
-                                                                new FilenameFilterEndsWith (".css")))
-    {
-      final String sKey = aFile.getAbsolutePath ();
-      if (false)
-        s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21);
-      assertNotNull (sKey, aCSS);
-      CSSVisitor.visitCSSUrl (aCSS, new MockSysOutVisitor (sKey));
-    }
-  }
+  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSVisitorTest30.class);
 
   @Test
   public void testVisitContent30 ()
@@ -128,7 +54,7 @@ public final class CSSVisitorTest extends AbstractCSS30Test
         s_aLogger.info (sKey);
       final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
       assertNotNull (sKey, aCSS);
-      CSSVisitor.visitCSSUrl (aCSS, new MockSysOutVisitor (sKey));
+      CSSVisitor.visitCSSUrl (aCSS, new MockUrlVisitor (sKey));
     }
   }
 
@@ -138,35 +64,35 @@ public final class CSSVisitorTest extends AbstractCSS30Test
     // CSS 1
     CascadingStyleSheet aCSS = CSSReader.readFromString (CSS1, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
-    MockCountingVisitor aVisitor = new MockCountingVisitor ();
+    MockCountingUrlVisitor aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);
     assertEquals (4, aVisitor.getCount ());
 
     // CSS 2
     aCSS = CSSReader.readFromString (CSS2, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
-    aVisitor = new MockCountingVisitor ();
+    aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);
     assertEquals (18, aVisitor.getCount ());
 
     // CSS 3
     aCSS = CSSReader.readFromString (CSS3, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
-    aVisitor = new MockCountingVisitor ();
+    aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);
     assertEquals (1, aVisitor.getCount ());
 
     // CSS 4
     aCSS = CSSReader.readFromString (CSS4, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
-    aVisitor = new MockCountingVisitor ();
+    aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);
     assertEquals (1, aVisitor.getCount ());
 
     // CSS 5
     aCSS = CSSReader.readFromString (CSS5, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
-    aVisitor = new MockCountingVisitor ();
+    aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);
     assertEquals (0, aVisitor.getCount ());
   }

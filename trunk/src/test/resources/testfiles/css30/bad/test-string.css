@@ -1,0 +1,14 @@
+p {
+  background: url(abc.css);
+  background: url("abc.css");
+  background: url('abc.css');
+}
+
+error {
+  background: url("abc.css);
+  background: url(abc.css");
+  background: url('abc.css);
+  background: url(abc.css');
+  background: url("abc.css');
+  background: url('abc.css");
+}
