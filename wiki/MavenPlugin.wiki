@@ -44,6 +44,7 @@ The maven plugin offered here can be used to compress CSS files at build time.
           <removeUnnecessaryCode>true</removeUnnecessaryCode>
           <quoteURLs>true</quoteURLs>
           <verbose>true</verbose>
+          <sourceDirectory>${basedir}/src/main/resources</sourceDirectory>
         </configuration>
       </plugin>
     </plugins>
