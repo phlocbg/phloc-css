@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2012 phloc systems
+ * Copyright (C) 2006-2013 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
