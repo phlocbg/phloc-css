@@ -84,21 +84,6 @@ public final class CSSURLHelper
    * 
    * @param aURL
    *        URL to be wrapped. May not be <code>null</code>.
-   * @return <code>url(<i>sURL</i>)</code>
-   */
-  @Nonnull
-  @Nonempty
-  @Deprecated
-  public static String getAsCSSURL (@Nonnull final ISimpleURL aURL)
-  {
-    return getAsCSSURL (aURL, DEFAULT_QUOTE_URLS);
-  }
-
-  /**
-   * Surround the passed URL with the CSS "url(...)"
-   * 
-   * @param aURL
-   *        URL to be wrapped. May not be <code>null</code>.
    * @param bQuoteURL
    *        if <code>true</code> single quotes are added around the URL
    * @return <code>url(<i>sURL</i>)</code> or <code>url('<i>sURL</i>')</code>
@@ -110,21 +95,6 @@ public final class CSSURLHelper
     if (aURL == null)
       throw new NullPointerException ("URL");
     return getAsCSSURL (aURL.getAsString (), bQuoteURL);
-  }
-
-  /**
-   * Surround the passed URL with the CSS "url(...)"
-   * 
-   * @param sURL
-   *        URL to be wrapped. May neither be <code>null</code> nor empty.
-   * @return <code>url(<i>sURL</i>)</code>
-   */
-  @Nonnull
-  @Nonempty
-  @Deprecated
-  public static String getAsCSSURL (@Nonnull @Nonempty final String sURL)
-  {
-    return getAsCSSURL (sURL, DEFAULT_QUOTE_URLS);
   }
 
   /**

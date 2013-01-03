@@ -136,17 +136,6 @@ public final class CSSMediaQuery implements ICSSWriteable
     return m_aMediaExpressions.get (nExpressionIndex);
   }
 
-  /**
-   * @deprecated Use {@link #getAllMediaExpressions()} instead
-   */
-  @Deprecated
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <CSSMediaExpression> getMediaExpressions ()
-  {
-    return getAllMediaExpressions ();
-  }
-
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSMediaExpression> getAllMediaExpressions ()

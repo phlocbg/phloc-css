@@ -48,12 +48,6 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
     return StringHelper.hasNoText (sNamespacePrefix) || sNamespacePrefix.endsWith ("|");
   }
 
-  @Deprecated
-  public CSSSelectorAttribute (@Nonnull @Nonempty final String sAttrName)
-  {
-    this ((String) null, sAttrName);
-  }
-
   public CSSSelectorAttribute (@Nullable final String sNamespacePrefix, @Nonnull @Nonempty final String sAttrName)
   {
     if (!_isValidNamespacePrefix (sNamespacePrefix))
@@ -64,14 +58,6 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
     m_sAttrName = sAttrName;
     m_eOperator = null;
     m_sAttrValue = null;
-  }
-
-  @Deprecated
-  public CSSSelectorAttribute (@Nonnull @Nonempty final String sAttrName,
-                               @Nonnull final ECSSAttributeOperator eOperator,
-                               @Nonnull final String sAttrValue)
-  {
-    this ((String) null, sAttrName, eOperator, sAttrValue);
   }
 
   public CSSSelectorAttribute (@Nullable final String sNamespacePrefix,

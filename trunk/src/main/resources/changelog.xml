@@ -20,6 +20,16 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2013-01-03" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed handling of "0" CSS values as numeric values with unit</text>
+    </change>
+  </entry>
+  <entry date="2013-01-03" category="api" action="remove">
+    <change>
+      <text locale="en">Removed all deprecated elements</text>
+    </change>
+  </entry>
   <release date="2012-12-20" version="3.3.0" />
   <entry date="2012-12-19" category="api" action="add">
     <change>
