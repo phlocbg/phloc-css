@@ -2,7 +2,10 @@
 #labels Featured
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
-<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>12/20/12</td><td colspan="4">_Release *3.3.0*_</td></tr>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody><tr border="1"><td>1/3/13</td><td colspan="4">_Release *3.3.1*_</td></tr>
+<tr><td>1/3/13</td><td>fix</td><td>tech</td><td></td><td>Fixed handling of "0" CSS values as numeric values with unit</td></tr>
+<tr><td>1/3/13</td><td>remove</td><td>api</td><td></td><td>Removed all deprecated elements</td></tr>
+<tr border="1"><td>12/20/12</td><td colspan="4">_Release *3.3.0*_</td></tr>
 <tr><td>12/19/12</td><td>add</td><td>api</td><td></td><td>Added new tools class MediaQueryTools for HTML support when referencing a CSS via `<`link`>` element</td></tr>
 <tr><td>12/19/12</td><td>fix</td><td>feature</td><td></td><td>Fixed handling of negation (:not) with namespace prefix</td></tr>
 <tr><td>12/19/12</td><td>add</td><td>test</td><td></td><td>Added test files from CSS3 Selectors Test Suite 1.0 final</td></tr>
