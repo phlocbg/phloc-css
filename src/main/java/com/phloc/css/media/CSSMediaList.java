@@ -96,15 +96,6 @@ public final class CSSMediaList implements Serializable, IHasSize
   }
 
   /**
-   * @deprecated Use {@link #hasAnyMedia()} instead
-   */
-  @Deprecated
-  public boolean hasMedia ()
-  {
-    return hasAnyMedia ();
-  }
-
-  /**
    * @return <code>true</code> if any explicit media is defined
    */
   public boolean hasAnyMedia ()
@@ -150,17 +141,6 @@ public final class CSSMediaList implements Serializable, IHasSize
   {
     // Default is "screen" if none is provided
     return m_aMedia.isEmpty () || containsMediumOrAll (ECSSMedium.SCREEN);
-  }
-
-  /**
-   * @deprecated Use {@link #getAllMedia()} instead
-   */
-  @Deprecated
-  @Nonnull
-  @ReturnsMutableCopy
-  public Set <ECSSMedium> getMedia ()
-  {
-    return getAllMedia ();
   }
 
   /**

@@ -68,15 +68,6 @@ public final class CSSNumberHelper
     return getValueWithUnit (sCSSValue) != null;
   }
 
-  /**
-   * @deprecated Use {@link #isValueWithUnit(String,boolean)} instead
-   */
-  @Deprecated
-  public static boolean isNumberWithUnitValue (@Nullable final String sCSSValue, final boolean bWithPerc)
-  {
-    return isValueWithUnit (sCSSValue, bWithPerc);
-  }
-
   public static boolean isValueWithUnit (@Nullable final String sCSSValue, final boolean bWithPerc)
   {
     return getValueWithUnit (sCSSValue, bWithPerc) != null;
@@ -94,6 +85,10 @@ public final class CSSNumberHelper
     String sRealValue = StringHelper.trim (sCSSValue);
     if (StringHelper.hasText (sRealValue))
     {
+      // Special case for 0!
+      if (sRealValue.equals ("0"))
+        return new CSSSimpleValueWithUnit (0, ECSSUnit.PX);
+
       final ECSSUnit eUnit = bWithPerc ? getMatchingUnitInclPercentage (sRealValue)
                                       : getMatchingUnitExclPercentage (sRealValue);
       if (eUnit != null)

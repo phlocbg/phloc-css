@@ -83,16 +83,6 @@ public final class CSSRectHelper
     return false;
   }
 
-  /**
-   * @deprecated Use {@link #getRectValues(String)} instead
-   */
-  @Deprecated
-  @Nullable
-  public static String [] getRectValue (@Nullable final String sCSSValue)
-  {
-    return getRectValues (sCSSValue);
-  }
-
   @Nullable
   public static String [] getRectValues (@Nullable final String sCSSValue)
   {

@@ -272,32 +272,6 @@ public final class CSSWriter
   }
 
   /**
-   * Write the CSS content to the passed writer. No specific charset is used.
-   * 
-   * @param aCSS
-   *        The CSS to write. May not be <code>null</code>.
-   * @param aWriter
-   *        The write to write the text to. May not be <code>null</code>. Is
-   *        automatically closed after the writing!
-   * @param sCSSCharset
-   *        The charset that is explicitly written to the CSS content. Not the
-   *        encoding of the CSS file! May be <code>null</code>.
-   * @throws IOException
-   *         In case writing fails.
-   * @throws IllegalStateException
-   *         In case some elements cannot be written in the version supplied in
-   *         the constructor.
-   * @deprecated Use {@link #setContentCharset(String)} instead!
-   */
-  @Deprecated
-  public void writeCSS (@Nonnull final CascadingStyleSheet aCSS,
-                        @Nonnull @WillClose final Writer aWriter,
-                        @Nullable final String sCSSCharset) throws IOException
-  {
-    writeCSS (aCSS, aWriter);
-  }
-
-  /**
    * Create the CSS without a specific charset.
    * 
    * @param aCSS
@@ -312,26 +286,6 @@ public final class CSSWriter
     final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
     writeCSS (aCSS, aSW);
     return aSW.getAsString ();
-  }
-
-  /**
-   * Create the CSS with a specific charset.
-   * 
-   * @param aCSS
-   *        The CSS object to be converted to text
-   * @param sCSSCharset
-   *        The charset to be added to the CSS - not the charset to encode the
-   *        CSS content itself! May be <code>null</code>.
-   * @return The text representation of the CSS.
-   * @throws IOException
-   *         If writing fails. Should never happen!
-   * @deprecated Use {@link #setContentCharset(String)} instead!
-   */
-  @Nonnull
-  @Deprecated
-  public String getCSSAsString (@Nonnull final CascadingStyleSheet aCSS, @Nullable final String sCSSCharset) throws IOException
-  {
-    return getCSSAsString (aCSS);
   }
 
   /**
