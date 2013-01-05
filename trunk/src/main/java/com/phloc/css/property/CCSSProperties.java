@@ -398,6 +398,9 @@ public final class CCSSProperties
 
   public static final ICSSProperty OPACITY = new CSSPropertyNumber (ECSSProperty.OPACITY, false);
 
+  // form stuff
+  public static final ICSSProperty CONTENT = new CSSPropertyFree (ECSSProperty.CONTENT);
+
   // Special predefined properties
   public static final ICSSValue DISPLAY_BLOCK = DISPLAY.newValue (CCSSValue.BLOCK);
   public static final ICSSValue DISPLAY_INLINE_BLOCK = DISPLAY.newValue (CCSSValue.INLINE_BLOCK);
