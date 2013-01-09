@@ -19,6 +19,7 @@ package com.phloc.css.property;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.css.ECSSUnit;
 import com.phloc.css.propertyvalue.CCSSValue;
 import com.phloc.css.propertyvalue.ICSSValue;
 
@@ -401,10 +402,19 @@ public final class CCSSProperties
   // form stuff
   public static final ICSSProperty CONTENT = new CSSPropertyFree (ECSSProperty.CONTENT);
 
-  // Special predefined properties
+  // Special predefined properties that are used quite often
   public static final ICSSValue DISPLAY_BLOCK = DISPLAY.newValue (CCSSValue.BLOCK);
+  public static final ICSSValue DISPLAY_INLINE = DISPLAY.newValue (CCSSValue.INLINE);
   public static final ICSSValue DISPLAY_INLINE_BLOCK = DISPLAY.newValue (CCSSValue.INLINE_BLOCK);
   public static final ICSSValue DISPLAY_NONE = DISPLAY.newValue (CCSSValue.NONE);
+  public static final ICSSValue VISIBILITY_VISIBLE = VISIBILITY.newValue (CCSSValue.VISIBLE);
+  public static final ICSSValue VISIBILITY_HIDDEN = VISIBILITY.newValue (CCSSValue.HIDDEN);
+  public static final ICSSValue WIDTH_0 = WIDTH.newValue ("0");
+  public static final ICSSValue WIDTH_100PERC = WIDTH.newValue (ECSSUnit.px (100));
+  public static final ICSSValue HEIGHT_0 = HEIGHT.newValue ("0");
+  public static final ICSSValue HEIGHT_100PERC = HEIGHT.newValue (ECSSUnit.px (100));
+  public static final ICSSValue PADDING_0 = PADDING.newValue ("0");
+  public static final ICSSValue MARGIN_0 = MARGIN.newValue ("0");
 
   private CCSSProperties ()
   {}
