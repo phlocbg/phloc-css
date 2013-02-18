@@ -23,6 +23,11 @@ import javax.annotation.Nullable;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.utils.CSSNumberHelper;
 
+/**
+ * CSS property that is a number (e.g. line-height)
+ * 
+ * @author philip
+ */
 public class CSSPropertyNumber extends AbstractCSSProperty
 {
   private final boolean m_bWithPercentage;

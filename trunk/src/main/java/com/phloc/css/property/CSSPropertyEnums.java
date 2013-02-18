@@ -25,6 +25,11 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * CSS property that is a list of enumeration entries (e.g. border-style)
+ * 
+ * @author philip
+ */
 public class CSSPropertyEnums extends CSSPropertyEnum
 {
   private final int m_nMinNumbers;

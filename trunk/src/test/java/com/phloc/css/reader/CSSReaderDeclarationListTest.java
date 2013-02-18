@@ -26,8 +26,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.css.ECSSVersion;
@@ -44,7 +42,6 @@ import com.phloc.css.handler.ICSSParseExceptionHandler;
  */
 public final class CSSReaderDeclarationListTest
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSReaderDeclarationListTest.class);
   private static final List <String> aValid = ContainerHelper.newList ("",
                                                                        "    ",
                                                                        ";",

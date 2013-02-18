@@ -23,6 +23,12 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.utils.CSSColorHelper;
 
+/**
+ * CSS property that is either an enumeration or a color value (e.g.
+ * background-color)
+ * 
+ * @author philip
+ */
 public class CSSPropertyEnumOrColor extends CSSPropertyEnum
 {
   public CSSPropertyEnumOrColor (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final String... aEnumValues)

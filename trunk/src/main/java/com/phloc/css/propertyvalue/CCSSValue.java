@@ -21,6 +21,8 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.css.ECSSUnit;
 
+//ESCA-JAVA0022:
+// ESCA-JAVA0116:
 /**
  * Contains CSS style constants and utility stuff. Only constants that are part
  * of the CSS specification are contained in this class.<br>

@@ -24,6 +24,12 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.utils.CSSNumberHelper;
 
+/**
+ * CSS property that is either an enumeration or a numeric value (e.g.
+ * font-size)
+ * 
+ * @author philip
+ */
 public class CSSPropertyEnumOrNumber extends CSSPropertyEnum
 {
   private final boolean m_bWithPercentage;

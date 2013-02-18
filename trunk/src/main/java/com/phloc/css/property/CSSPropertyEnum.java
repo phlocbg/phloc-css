@@ -27,6 +27,11 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * CSS property with a predefined list of possible values (e.g. "cursor")
+ * 
+ * @author philip
+ */
 public class CSSPropertyEnum extends AbstractCSSProperty
 {
   protected final Set <String> m_aEnumValues;

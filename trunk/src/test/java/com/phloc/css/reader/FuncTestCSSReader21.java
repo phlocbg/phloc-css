@@ -20,16 +20,17 @@ package com.phloc.css.reader;
 import java.io.IOException;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
 
+/**
+ * Test reading CSS 2.1 files
+ * 
+ * @author philip
+ */
 public final class FuncTestCSSReader21 extends AbstractFuncTestCSSReader
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (FuncTestCSSReader21.class);
-
   public FuncTestCSSReader21 ()
   {
     super (ECSSVersion.CSS21, CCharset.CHARSET_UTF_8_OBJ, false);

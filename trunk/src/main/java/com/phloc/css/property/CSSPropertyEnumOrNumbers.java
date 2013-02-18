@@ -26,6 +26,12 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.utils.CSSNumberHelper;
 
+/**
+ * CSS property that is a list of either an enumeration or a numeric value (e.g.
+ * margin)
+ * 
+ * @author philip
+ */
 public class CSSPropertyEnumOrNumbers extends CSSPropertyEnum
 {
   private final boolean m_bWithPercentage;

@@ -37,6 +37,11 @@ import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.writer.CSSWriter;
 import com.phloc.css.writer.CSSWriterSettings;
 
+/**
+ * Abstract class for reading multiple CSS files
+ * 
+ * @author philip
+ */
 public abstract class AbstractFuncTestCSSReader
 {
   private final Logger m_aLogger = LoggerFactory.getLogger (getClass ());

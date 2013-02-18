@@ -23,6 +23,11 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.utils.CSSRectHelper;
 
+/**
+ * CSS property that is either an enumeration or a rectangle (e.g. clip)
+ * 
+ * @author philip
+ */
 public class CSSPropertyEnumOrRect extends CSSPropertyEnum
 {
   public CSSPropertyEnumOrRect (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final String... aEnumValues)

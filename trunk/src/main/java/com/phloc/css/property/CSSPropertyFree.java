@@ -22,6 +22,11 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.string.StringHelper;
 
+/**
+ * CSS property without any layout constraint, except that it may not be empty.
+ * 
+ * @author philip
+ */
 public class CSSPropertyFree extends AbstractCSSProperty
 {
   public CSSPropertyFree (@Nonnull final ECSSProperty eProp)

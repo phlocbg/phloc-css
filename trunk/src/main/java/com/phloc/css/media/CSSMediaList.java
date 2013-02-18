@@ -41,6 +41,7 @@ import com.phloc.commons.string.ToStringGenerator;
 @NotThreadSafe
 public final class CSSMediaList implements Serializable, IHasSize
 {
+  // ESCA-JAVA0261:
   // Ordered but unique
   private final Set <ECSSMedium> m_aMedia = new LinkedHashSet <ECSSMedium> ();
 

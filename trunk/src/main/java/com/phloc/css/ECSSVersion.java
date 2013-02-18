@@ -34,6 +34,7 @@ public enum ECSSVersion implements IHasVersion
   CSS21 (new Version (2, 1)),
   CSS30 (new Version (3, 0));
 
+  /** Default version is CSS 3.0 */
   @Nonnull
   public static final ECSSVersion LATEST = CSS30;
 

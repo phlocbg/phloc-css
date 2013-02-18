@@ -72,6 +72,8 @@ public interface IHasCSSDeclarations extends ICSSWriteable
   List <CSSDeclaration> getAllDeclarations ();
 
   /**
+   * @param nIndex
+   *        The index to retrieve
    * @return The declaration at the specified index or <code>null</code> if the
    *         index is invalid
    */

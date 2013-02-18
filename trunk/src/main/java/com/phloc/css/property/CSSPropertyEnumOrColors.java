@@ -26,6 +26,12 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.utils.CSSColorHelper;
 
+/**
+ * CSS property that is a list of either an enumeration or a color value (e.g.
+ * border-color)
+ * 
+ * @author philip
+ */
 public class CSSPropertyEnumOrColors extends CSSPropertyEnum
 {
   private final int m_nMinNumbers;

@@ -44,13 +44,21 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @Immutable
 public final class CSSColorHelper
 {
+  /** RGB minimum value */
   public static final int RGB_MIN = 0;
+  /** RGB maximum value */
   public static final int RGB_MAX = 255;
+  /** RGB range (max-min+1) */
   public static final int RGB_RANGE = 256;
+  /** HSL minimum value */
   public static final int HSL_MIN = 0;
+  /** HSL maximum value */
   public static final int HSL_MAX = 359;
+  /** HSL range (max-min+1) */
   public static final int HSL_RANGE = 360;
+  /** Minimum opacity value */
   public static final float OPACITY_MIN = 0f;
+  /** Maximum opacity value */
   public static final float OPACITY_MAX = 1f;
 
   @RegEx
