@@ -23,8 +23,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.utils.CSSColorHelper;
-import com.phloc.css.utils.ECSSColor;
 
 /**
  * Test class for class {@link ECSSColor}.
