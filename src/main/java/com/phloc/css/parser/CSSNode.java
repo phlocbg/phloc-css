@@ -73,7 +73,7 @@ public final class CSSNode implements Node, Iterable <CSSNode>
       if (nIndex >= m_aChildren.length)
       {
         // Does not really occur here
-        final CSSNode aTmpArray[] = new CSSNode [nIndex + 1];
+        final CSSNode [] aTmpArray = new CSSNode [nIndex + 1];
         System.arraycopy (m_aChildren, 0, aTmpArray, 0, m_aChildren.length);
         m_aChildren = aTmpArray;
       }

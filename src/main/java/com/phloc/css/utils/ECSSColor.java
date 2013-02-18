@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
 
+// ESCA-JAVA0076:
 /**
  * CSS basic colors. Source: http://www.w3.org/TR/css3-color/ chapter 4.1 and
  * 4.3

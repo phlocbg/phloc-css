@@ -22,6 +22,11 @@ import javax.annotation.Nullable;
 
 import com.phloc.css.utils.CSSURLHelper;
 
+/**
+ * CSS property that needs to be an URL
+ * 
+ * @author philip
+ */
 public class CSSPropertyURL extends AbstractCSSProperty
 {
   public CSSPropertyURL (@Nonnull final ECSSProperty eProp)

@@ -90,6 +90,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   DPPX ("dppx", ECSSMetaUnit.RESOLUTION, ECSSVersion.CSS30);
 
   // synonyms
+  /** Length in pixel */
   public static final ECSSUnit LENGTH_PX = PX;
 
   private final String m_sName;

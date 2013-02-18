@@ -34,6 +34,11 @@ import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
+/**
+ * keyframes block
+ * 
+ * @author philip
+ */
 @NotThreadSafe
 public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware
 {

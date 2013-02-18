@@ -37,15 +37,25 @@ import com.phloc.css.utils.CSSURLHelper;
 @NotThreadSafe
 public class CSSWriterSettings implements ICSSWriterSettings
 {
+  /** By default no optimized output */
   public static final boolean DEFAULT_OPTIMIZED_OUTPUT = false;
+  /** By default unnecessary code is not removed */
   public static final boolean DEFAULT_REMOVE_UNNECESSARY_CODE = false;
+  /** By default indentation is done by 2 spaces */
   public static final String DEFAULT_INDENT = "  ";
+  /** By default URLs are not quoted */
   public static final boolean DEFAULT_QUOTE_URLS = CSSURLHelper.DEFAULT_QUOTE_URLS;
+  /** By default namespace rules are written */
   public static final boolean DEFAULT_WRITE_NAMESPACE_RULES = true;
+  /** By default font-face rules are written */
   public static final boolean DEFAULT_WRITE_FONT_FACE_RULES = true;
+  /** By default keyframes rules are written */
   public static final boolean DEFAULT_WRITE_KEYFRAMES_RULES = true;
+  /** By default media rules are written */
   public static final boolean DEFAULT_WRITE_MEDIA_RULES = true;
+  /** By default page rules are written */
   public static final boolean DEFAULT_WRITE_PAGE_RULES = true;
+  /** By default viewport rules are written */
   public static final boolean DEFAULT_WRITE_VIEWPORT_RULES = true;
 
   private final ECSSVersion m_eVersion;

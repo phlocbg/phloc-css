@@ -35,6 +35,11 @@ import com.phloc.css.parser.ParseException;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+/**
+ * Crawl the disc for CSS files :)
+ * 
+ * @author philip
+ */
 public final class MainReadAllCSSOnDisc
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MainReadAllCSSOnDisc.class);

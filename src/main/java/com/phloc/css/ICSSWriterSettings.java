@@ -20,6 +20,11 @@ package com.phloc.css;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
+/**
+ * Settings for customizing the serialization of CSS properties etc.
+ * 
+ * @author philip
+ */
 public interface ICSSWriterSettings
 {
   /**

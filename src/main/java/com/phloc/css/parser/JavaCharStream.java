@@ -42,6 +42,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @SuppressFBWarnings ("NM_METHOD_NAMING_CONVENTION")
 public final class JavaCharStream implements CharStream
 {
+  private static final int DEFAULT_BUF_SIZE = 4096;
   private static final int TAB_SIZE = 8;
 
   private final Reader m_aReader;
@@ -65,25 +66,24 @@ public final class JavaCharStream implements CharStream
 
   public JavaCharStream (@Nonnull final InputStream aIS, @Nonnull final String sCharset)
   {
-    this (StreamUtils.createReader (aIS, sCharset), 1, 1, 4096);
+    this (StreamUtils.createReader (aIS, sCharset), 1, 1, DEFAULT_BUF_SIZE);
   }
 
   public JavaCharStream (@Nonnull final InputStream aIS, @Nonnull final Charset aCharset)
   {
-    this (StreamUtils.createReader (aIS, aCharset), 1, 1, 4096);
+    this (StreamUtils.createReader (aIS, aCharset), 1, 1, DEFAULT_BUF_SIZE);
   }
 
   public JavaCharStream (@Nonnull final String sCSS)
   {
-    this (new NonBlockingStringReader (sCSS), 1, 1, 4096);
+    this (new NonBlockingStringReader (sCSS), 1, 1, DEFAULT_BUF_SIZE);
   }
 
   public JavaCharStream (@Nonnull final Reader aReader)
   {
-    this (aReader, 1, 1, 4096);
+    this (aReader, 1, 1, DEFAULT_BUF_SIZE);
   }
 
-  /** Constructor. */
   private JavaCharStream (@Nonnull final Reader aReader,
                           @Nonnegative final int nStartLine,
                           @Nonnegative final int nStartColumn,
@@ -106,7 +106,7 @@ public final class JavaCharStream implements CharStream
     m_aBuffer = new char [nBufferSize];
     m_aBufLine = new int [nBufferSize];
     m_aBufColumn = new int [nBufferSize];
-    m_aNextCharBuf = new char [4096];
+    m_aNextCharBuf = new char [DEFAULT_BUF_SIZE];
   }
 
   private void _expandBuff (final boolean bWrapAround)
@@ -159,7 +159,7 @@ public final class JavaCharStream implements CharStream
 
   private void _fillBuff () throws IOException
   {
-    if (m_nMaxNextCharInd == 4096)
+    if (m_nMaxNextCharInd == DEFAULT_BUF_SIZE)
     {
       m_nMaxNextCharInd = 0;
       m_nNextCharInd = 0;
@@ -168,7 +168,7 @@ public final class JavaCharStream implements CharStream
     try
     {
       int i;
-      if ((i = m_aReader.read (m_aNextCharBuf, m_nMaxNextCharInd, 4096 - m_nMaxNextCharInd)) == -1)
+      if ((i = m_aReader.read (m_aNextCharBuf, m_nMaxNextCharInd, DEFAULT_BUF_SIZE - m_nMaxNextCharInd)) == -1)
       {
         m_aReader.close ();
         throw new IOException ("EOF in JavaCharStream");
@@ -200,7 +200,10 @@ public final class JavaCharStream implements CharStream
     return m_aNextCharBuf[m_nNextCharInd];
   }
 
-  /** @return starting character for token. */
+  /**
+   * @return starting character for token.
+   * @throws IOException
+   */
   public char BeginToken () throws IOException
   {
     if (m_nInBuf > 0)
@@ -293,7 +296,13 @@ public final class JavaCharStream implements CharStream
     return ret;
   }
 
-  /** Read a character. */
+  /**
+   * Read a character.
+   * 
+   * @return The read character
+   * @throws IOException
+   *         if an I/O error occurs
+   */
   public char readChar () throws IOException
   {
     if (m_nInBuf > 0)
@@ -389,13 +398,13 @@ public final class JavaCharStream implements CharStream
     return getEndLine ();
   }
 
-  /** Get end column. */
+  /** @return end column. */
   public int getEndColumn ()
   {
     return m_aBufColumn[m_nBufpos];
   }
 
-  /** Get end line. */
+  /** @return end line. */
   public int getEndLine ()
   {
     return m_aBufLine[m_nBufpos];

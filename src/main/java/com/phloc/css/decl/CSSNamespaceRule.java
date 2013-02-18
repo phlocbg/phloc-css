@@ -82,8 +82,6 @@ public final class CSSNamespaceRule implements ICSSWriteable
     if (!aSettings.isWriteNamespaceRules ())
       return "";
 
-    final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
-
     final StringBuilder aSB = new StringBuilder ();
     aSB.append ("@namespace ");
     if (StringHelper.hasText (m_sPrefix))

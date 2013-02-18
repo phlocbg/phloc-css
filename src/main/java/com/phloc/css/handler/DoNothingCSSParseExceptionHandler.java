@@ -19,6 +19,11 @@ package com.phloc.css.handler;
 
 import com.phloc.css.parser.ParseException;
 
+/**
+ * Ignoring handler :)
+ * 
+ * @author philip
+ */
 public final class DoNothingCSSParseExceptionHandler implements ICSSParseExceptionHandler
 {
   public void onException (final ParseException ex)

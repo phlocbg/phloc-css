@@ -25,6 +25,11 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.utils.CSSNumberHelper;
 
+/**
+ * CSS property with a list of numbers (e.g. padding)
+ * 
+ * @author philip
+ */
 public class CSSPropertyNumbers extends AbstractCSSProperty
 {
   private final boolean m_bWithPercentage;

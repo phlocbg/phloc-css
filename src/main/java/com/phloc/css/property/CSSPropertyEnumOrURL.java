@@ -23,6 +23,12 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.utils.CSSURLHelper;
 
+/**
+ * CSS property that is either an enumeration or a URL value (e.g.
+ * list-style-image)
+ * 
+ * @author philip
+ */
 public class CSSPropertyEnumOrURL extends CSSPropertyEnum
 {
   public CSSPropertyEnumOrURL (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final String... aEnumValues)

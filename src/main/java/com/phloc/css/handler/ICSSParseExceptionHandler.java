@@ -20,6 +20,11 @@ package com.phloc.css.handler;
 import com.phloc.commons.callback.IExceptionHandler;
 import com.phloc.css.parser.ParseException;
 
+/**
+ * Special CSS exception handler
+ * 
+ * @author philip
+ */
 public interface ICSSParseExceptionHandler extends IExceptionHandler <ParseException>
 {
   /* empty */

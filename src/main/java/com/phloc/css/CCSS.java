@@ -32,10 +32,12 @@ public final class CCSS
 {
   /** The separator between a property and a value. (e.g. display:none) */
   public static final char SEPARATOR_PROPERTY_VALUE = ':';
+  /** The separator between a property and a value. (e.g. display:none) */
   public static final String SEPARATOR_PROPERTY_VALUE_STR = Character.toString (SEPARATOR_PROPERTY_VALUE);
 
   /** The character to end a definition. (e.g. display:none;) */
   public static final char DEFINITION_END = ';';
+  /** The character to end a definition. (e.g. display:none;) */
   public static final String DEFINITION_END_STR = Character.toString (DEFINITION_END);
 
   /** Regular CSS file extension */
@@ -44,6 +46,7 @@ public final class CCSS
   /** Minified CSS file extension */
   public static final String FILE_EXTENSION_MIN_CSS = ".min.css";
 
+  /** The "!important" suffix for property values */
   public static final String IMPORTANT_SUFFIX = " !important";
 
   private CCSS ()

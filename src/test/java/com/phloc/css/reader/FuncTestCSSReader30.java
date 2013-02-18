@@ -25,17 +25,18 @@ import java.nio.charset.Charset;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 
+/**
+ * Test reading CSS 3.0 stuff
+ * 
+ * @author philip
+ */
 public final class FuncTestCSSReader30 extends AbstractFuncTestCSSReader
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (FuncTestCSSReader30.class);
-
   public FuncTestCSSReader30 ()
   {
     super (ECSSVersion.CSS30, CCharset.CHARSET_UTF_8_OBJ, false);
