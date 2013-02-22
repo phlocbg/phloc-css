@@ -1,0 +1,21 @@
+<FindBugsFilter>
+  <!-- Docs: http://findbugs.sourceforge.net/manual/filter.html -->
+  <Match>
+    <Class name="com.phloc.css.parser.ParseException" />
+  </Match>
+  <Match>
+    <Class name="~com\.phloc\.css\.parser\.ParserCSS21.*" />
+  </Match>
+  <Match>
+    <Class name="~com\.phloc\.css\.parser\.ParserCSS30.*" />
+  </Match>
+  <Match>
+    <Class name="~com\.phloc\.css\.parser\.ParserCSSCharsetDetector.*" />
+  </Match>
+  <Match>
+    <Class name="com.phloc.css.parser.SimpleNode" />
+  </Match>
+  <Match>
+    <Class name="com.phloc.css.parser.TokenMgrError" />
+  </Match>
+</FindBugsFilter>
