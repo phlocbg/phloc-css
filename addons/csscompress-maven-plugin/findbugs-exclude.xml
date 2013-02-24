@@ -2,6 +2,6 @@
   <!-- Docs: http://findbugs.sourceforge.net/manual/filter.html -->
   <Match>
     <!-- Generated class! -->
-    <Class name="com.phloc.maven.buildinfo.HelpMojo" />
+    <Class name="com.phloc.maven.csscompress.HelpMojo" />
   </Match>
 </FindBugsFilter>
