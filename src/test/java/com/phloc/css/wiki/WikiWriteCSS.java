@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.css.ECSSVersion;
@@ -64,7 +65,7 @@ public final class WikiWriteCSS
       // Convert the CSS to a String
       final String sCSSCode = aWriter.getCSSAsString (aCSS);
       // Finally write the String to a file
-      return SimpleFileIO.writeFile (aFile, sCSSCode, "utf-8");
+      return SimpleFileIO.writeFile (aFile, sCSSCode, CCharset.CHARSET_UTF_8_OBJ);
     }
     catch (final IOException ex)
     {
