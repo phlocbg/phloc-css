@@ -47,7 +47,9 @@ public final class WikiTest
     final String sCSS = new CSSWriter (ECSSVersion.CSS30).getCSSAsString (aCSS);
     System.out.println (sCSS);
 
-    final CascadingStyleSheet aCSS2 = CSSReader.readFromString (sCSS, CCharset.CHARSET_ISO_8859_1, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS2 = CSSReader.readFromString (sCSS,
+                                                                CCharset.CHARSET_ISO_8859_1_OBJ,
+                                                                ECSSVersion.CSS30);
     assertNotNull (aCSS2);
     assertEquals (aCSS, aCSS2);
   }

@@ -234,6 +234,7 @@ public final class CSSReader
    * @return <code>true</code> if the CSS is valid according to the version,
    *         <code>false</code> if not
    */
+  @Deprecated
   public static boolean isValidCSS (@Nonnull @WillClose final InputStream aIS,
                                     @Nonnull final String sCharset,
                                     @Nonnull final ECSSVersion eVersion)
@@ -331,6 +332,7 @@ public final class CSSReader
   }
 
   @Nullable
+  @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
                                                     @Nonnull final String sCharset,
                                                     @Nonnull final ECSSVersion eVersion)
@@ -347,6 +349,7 @@ public final class CSSReader
   }
 
   @Nullable
+  @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
                                                     @Nonnull final String sCharset,
                                                     @Nonnull final ECSSVersion eVersion,
@@ -365,6 +368,7 @@ public final class CSSReader
   }
 
   @Nullable
+  @Deprecated
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
                                                   @Nonnull final String sCharset,
                                                   @Nonnull final ECSSVersion eVersion)
@@ -381,6 +385,7 @@ public final class CSSReader
   }
 
   @Nullable
+  @Deprecated
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
                                                   @Nonnull final String sCharset,
                                                   @Nonnull final ECSSVersion eVersion,
@@ -416,6 +421,7 @@ public final class CSSReader
    *         otherwise.
    */
   @Nullable
+  @Deprecated
   public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
                                                     @Nonnull final String sCharset,
                                                     @Nonnull final ECSSVersion eVersion)
@@ -469,6 +475,7 @@ public final class CSSReader
    *         otherwise.
    */
   @Nullable
+  @Deprecated
   public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
                                                     @Nonnull final String sCharset,
                                                     @Nonnull final ECSSVersion eVersion,

@@ -64,6 +64,7 @@ public final class JavaCharStream implements CharStream
   /** Position in buffer. */
   private int m_nBufpos = -1;
 
+  @Deprecated
   public JavaCharStream (@Nonnull final InputStream aIS, @Nonnull final String sCharset)
   {
     this (StreamUtils.createReader (aIS, sCharset), 1, 1, DEFAULT_BUF_SIZE);

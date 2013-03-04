@@ -22,6 +22,7 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.reader.CSSReader;
@@ -44,7 +45,7 @@ public final class WikiReadCSS
    */
   public static CascadingStyleSheet readCSS30 (final File aFile)
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, "utf-8", ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     if (aCSS == null)
     {
       // Most probably a syntax error

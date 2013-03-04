@@ -230,6 +230,7 @@ public final class CSSReaderDeclarationList
    * @return <code>true</code> if the CSS is valid according to the version,
    *         <code>false</code> if not
    */
+  @Deprecated
   public static boolean isValidCSS (@Nonnull @WillClose final InputStream aIS,
                                     @Nonnull final String sCharset,
                                     @Nonnull final ECSSVersion eVersion)
@@ -356,6 +357,7 @@ public final class CSSReaderDeclarationList
   }
 
   @Nullable
+  @Deprecated
   public static CSSDeclarationList readFromFile (@Nonnull final File aFile,
                                                  @Nonnull final String sCharset,
                                                  @Nonnull final ECSSVersion eVersion,
@@ -429,6 +431,7 @@ public final class CSSReaderDeclarationList
    *         otherwise.
    */
   @Nullable
+  @Deprecated
   public static CSSDeclarationList readFromStream (@Nonnull final IInputStreamProvider aISP,
                                                    @Nonnull final String sCharset,
                                                    @Nonnull final ECSSVersion eVersion,
