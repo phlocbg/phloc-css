@@ -19,6 +19,7 @@ package com.phloc.maven.csscompress;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 
@@ -212,6 +213,8 @@ public final class CSSCompressMojo extends AbstractMojo
 
   public void setSourceEncoding (final String sSourceEncoding)
   {
+    // Throws an exception on an illegal charset
+    CharsetManager.getCharsetFromName (sSourceEncoding);
     sourceEncoding = sSourceEncoding;
   }
 
@@ -262,10 +265,8 @@ public final class CSSCompressMojo extends AbstractMojo
           getLog ().error ("Failed to parse CSS file " + _getRelativePath (aChild), ex);
         }
       };
-      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aChild,
-                                                               CharsetManager.getCharsetFromName (sourceEncoding),
-                                                               ECSSVersion.CSS30,
-                                                               aExHdl);
+      final Charset aSourceEncoding = CharsetManager.getCharsetFromName (sourceEncoding);
+      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aChild, aSourceEncoding, ECSSVersion.CSS30, aExHdl);
       if (aCSS != null)
       {
         // We read it!
@@ -279,7 +280,7 @@ public final class CSSCompressMojo extends AbstractMojo
           aWriterSettings.setWriteKeyframesRules (writeKeyframesRules);
           aWriterSettings.setWriteMediaRules (writeMediaRules);
           aWriterSettings.setWritePageRules (writePageRules);
-          new CSSWriter (aWriterSettings).writeCSS (aCSS, aDestFile.getWriter (sourceEncoding, EAppend.TRUNCATE));
+          new CSSWriter (aWriterSettings).writeCSS (aCSS, aDestFile.getWriter (aSourceEncoding, EAppend.TRUNCATE));
         }
         catch (final IOException ex)
         {
