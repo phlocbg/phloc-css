@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,6 +40,10 @@ public final class CSSNode implements Node, Iterable <CSSNode>
   private CSSNode [] m_aChildren;
   private Object m_aValue;
   private String m_sText;
+  private int m_nBeginLineNumber = -1;
+  private int m_nBeginColumnNumber = -1;
+  private int m_nEndLineNumber = -1;
+  private int m_nEndColumnNumber = -1;
 
   public CSSNode (final int nType)
   {
@@ -131,6 +136,66 @@ public final class CSSNode implements Node, Iterable <CSSNode>
     return m_nType;
   }
 
+  public void setStartPosition (@Nonnull final Token t)
+  {
+    m_nBeginLineNumber = t.beginLine;
+    m_nBeginColumnNumber = t.beginColumn;
+  }
+
+  public void setStartPosition (@Nonnull final CSSNode aNode)
+  {
+    m_nBeginLineNumber = aNode.m_nBeginLineNumber;
+    m_nBeginColumnNumber = aNode.m_nBeginColumnNumber;
+  }
+
+  public void setEndPosition (@Nonnull final Token t)
+  {
+    m_nEndLineNumber = t.endLine;
+    m_nEndColumnNumber = t.endColumn;
+  }
+
+  public void setEndPosition (@Nonnull final CSSNode aNode)
+  {
+    m_nEndLineNumber = aNode.m_nEndLineNumber;
+    m_nEndColumnNumber = aNode.m_nEndColumnNumber;
+  }
+
+  public void setStartAndEndPosition (@Nonnull final Token t)
+  {
+    setStartPosition (t);
+    setEndPosition (t);
+  }
+
+  public void setStartAndEndPosition (@Nonnull final CSSNode aNode)
+  {
+    setStartPosition (aNode);
+    setEndPosition (aNode);
+  }
+
+  @CheckForSigned
+  public int getBeginLineNumber ()
+  {
+    return m_nBeginLineNumber;
+  }
+
+  @CheckForSigned
+  public int getBeginColumnNumber ()
+  {
+    return m_nBeginColumnNumber;
+  }
+
+  @CheckForSigned
+  public int getEndLineNumber ()
+  {
+    return m_nEndLineNumber;
+  }
+
+  @CheckForSigned
+  public int getEndColumnNumber ()
+  {
+    return m_nEndColumnNumber;
+  }
+
   @Nonnull
   public Iterator <CSSNode> iterator ()
   {
@@ -151,6 +216,10 @@ public final class CSSNode implements Node, Iterable <CSSNode>
                                        .appendIfNotNull ("value", m_aValue)
                                        .appendIfNotNull ("text", m_sText)
                                        .appendIfNotNull ("children", m_aChildren)
+                                       .append ("beginLineNumber", m_nBeginLineNumber)
+                                       .append ("beginColumnNumber", m_nBeginColumnNumber)
+                                       .append ("endLineNumber", m_nEndLineNumber)
+                                       .append ("endColumnNumber", m_nEndColumnNumber)
                                        .toString ();
   }
 }
