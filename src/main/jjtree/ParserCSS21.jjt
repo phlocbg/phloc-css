@@ -273,19 +273,18 @@ void charsetRule() #Charset :
 { String sStr; }
 {
   ( <S> )?
-  <CHARSET_SYM>
+  <CHARSET_SYM> { jjtThis.setStartPosition (token); }
   <S>
-  sStr = string ()
+  sStr = string () { jjtThis.setText (sStr); }
   ( <S> )*
-  <SEMICOLON>
-  { jjtThis.setText (sStr); }
+  <SEMICOLON> { jjtThis.setEndPosition (token); }
 }
 
 void unknownRule() : {}
 {
-  <AT_UNKNOWN>
+  <AT_UNKNOWN> { jjtThis.setStartPosition (token); }
   ( <~[";","}"]> )* 
-  <[";","}"]>
+  <[";","}"]> { jjtThis.setEndPosition (token); }
 }
 
 //
@@ -297,17 +296,16 @@ void unknownRule() : {}
 void importRule() #ImportRule :
 {
   String sUrl;
-  Token t;
 }
 {
-  <IMPORT_SYM>
+  <IMPORT_SYM>  { jjtThis.setStartPosition (token); }
   ( <S> )*
   ( sUrl = string() { jjtThis.setText (sUrl); }
   | uri()
   )
   ( <S> )*
   ( mediaList() )?
-  <SEMICOLON>
+  <SEMICOLON>  { jjtThis.setEndPosition (token); }
 }
 
 // ------------ NAMESPACE ------------
@@ -317,14 +315,14 @@ void namespaceRule() :
   Token t;
 }
 {
-  <NAMESPACE_SYM>
+  <NAMESPACE_SYM> { jjtThis.setStartPosition (token); }
   ( <S> )*
   ( namespaceRulePrefix()
     ( <S> )* 
   )?
   namespaceRuleURL()
   ( <S> )*
-  <SEMICOLON>
+  <SEMICOLON> { jjtThis.setEndPosition (token); }
 } 
 
 void namespaceRulePrefix() : 
@@ -339,7 +337,7 @@ void namespaceRuleURL() :
   String s;
 }
 {
-  // URLs are always passed without the quotes!
+  // URI tokens are always passed without the quotes!
   ( t = <URI> { jjtThis.setText ('"' + t.image + '"'); }
   | s = string() { jjtThis.setText (s); }
   )
@@ -352,13 +350,13 @@ void namespaceRuleURL() :
 //
 void mediaRule() : {}
 {
-  <MEDIA_SYM>
+  <MEDIA_SYM> { jjtThis.setStartPosition (token); }
   ( <S> )*
   mediaList()
   <LBRACE>
   ( <S> )*
   ( mediaRuleList() )?
-  <RBRACE>
+  <RBRACE> { jjtThis.setEndPosition (token); }
 }
 
 void mediaList() : {}
@@ -385,12 +383,10 @@ void mediaRuleList() #void : {}
 //   : IDENT S*
 //   ;
 //
-void medium() #Medium :
-{ Token t; }
+void medium() #Medium : {}
 {
-  t = <IDENT>
+  <IDENT> { jjtThis.setText (token.image); jjtThis.setStartAndEndPosition (token); }
   ( <S> )*
-  { jjtThis.setText (t.image); }
 }
 
 //
@@ -401,30 +397,31 @@ void medium() #Medium :
 //
 void pageRule() : {}
 {
-  <PAGE_SYM>
+  <PAGE_SYM> { jjtThis.setStartPosition (token); }
   ( <S> )*
   ( pseudoPage()
     ( <S> )*
   )?
   <LBRACE>
   styleDeclaration()
-  <RBRACE>
+  <RBRACE> { jjtThis.setEndPosition (token); }
 }
 
-void pseudoPage() #PseudoPage :
-{ Token t; }
+void pseudoPage() #PseudoPage : {}
 {
-  <COLON>
-  t = <IDENT>
-  { jjtThis.setText (":" + t.image); }
+  <COLON> { jjtThis.setStartPosition (token); }
+  <IDENT> { jjtThis.setText (":" + token.image); jjtThis.setEndPosition (token); }
 }
 
 void operator() #Operator : {}
 {
-  ( <SLASH> ( <S> )*  { jjtThis.setText ("/"); }
-  | <COMMA> ( <S> )*  { jjtThis.setText (","); }
+  ( <SLASH> { jjtThis.setText ("/"); jjtThis.setStartAndEndPosition (token); }
+     ( <S> )*
+  | <COMMA> { jjtThis.setText (","); jjtThis.setStartAndEndPosition (token); }
+    ( <S> )*
   /* Extension for Microsoft filters (alpha=50) */
-  | <EQUALS> ( <S> )* { jjtThis.setText ("="); }
+  | <EQUALS> { jjtThis.setText ("="); jjtThis.setStartAndEndPosition (token); }
+    ( <S> )*
   )
 }
 
@@ -432,11 +429,11 @@ void combinator() #Combinator : {}
 {
   ( LOOKAHEAD(2)
     ( <S> )? 
-    <PLUS>       { jjtThis.setText ("+"); }
+    <PLUS>       { jjtThis.setText ("+"); jjtThis.setStartAndEndPosition (token); }
   | LOOKAHEAD(2)
     ( <S> )? 
-    <GREATER>    { jjtThis.setText (">"); }
-  | <S>          { jjtThis.setText (" "); }
+    <GREATER>    { jjtThis.setText (">"); jjtThis.setStartAndEndPosition (token); }
+  | <S>          { jjtThis.setText (" "); jjtThis.setStartAndEndPosition (token); }
   )
 }
 
@@ -457,12 +454,10 @@ String unaryOperator() #void : {}
 //   : IDENT S*
 //   ;
 //
-void property() #Property :
-{ Token t; }
+void property() #Property : {}
 {
-  t = <IDENT>
+  <IDENT> { jjtThis.setText (token.image); jjtThis.setStartAndEndPosition (token); } 
   ( <S> )*
-  { jjtThis.setText (t.image); }
 }
 
 //
@@ -481,7 +476,7 @@ void styleRule() : {}
   )*
   <LBRACE>
   styleDeclaration()
-  <RBRACE>
+  <RBRACE> { jjtThis.setEndPosition (token); }
 }
 
 // ------------ SELECTORS ------------
@@ -521,35 +516,31 @@ void typeSelector() #void : {}
   elementName()
 }
 
-void namespacePrefix() #NamespacePrefix : 
-{ Token t; }
+void namespacePrefix() #NamespacePrefix : {}
 {
-  ( t = <IDENT>    { jjtThis.setText (t.image); }
-  | t = <ASTERISK> { jjtThis.setText (t.image); }
+  ( <IDENT>    { jjtThis.setText (token.image); jjtThis.setStartPosition (token); }
+  | <ASTERISK> { jjtThis.setText (token.image); jjtThis.setStartPosition (token); }
   )?    
-  <DASH>        { jjtThis.appendText ("|"); }
+  <DASH>        { jjtThis.appendText ("|"); jjtThis.setEndPosition (token); }
 }
 
-void elementName() #ElementName :
-{ Token t; }
+void elementName() #ElementName : {}
 {
-  ( t = <IDENT>    { jjtThis.setText (t.image); }
-  | t = <ASTERISK> { jjtThis.setText (t.image); }
+  ( <IDENT>    { jjtThis.setText (token.image); jjtThis.setStartAndEndPosition (token); }
+  | <ASTERISK> { jjtThis.setText (token.image); jjtThis.setStartAndEndPosition (token); }
   )
 }
 
-void _class() #Class :
-{ Token t; }
+void _class() #Class : {}
 {
-  <DOT>
-  t = <IDENT>
-  { jjtThis.setText ("." + t.image); }
+  <DOT>   { jjtThis.setStartPosition (token); }
+  <IDENT> { jjtThis.setText ("." + token.image); jjtThis.setEndPosition (token); }
 }
 
 void attrib() #Attrib :
 { Token t; }
 {
-  <LSQUARE>
+  <LSQUARE> { jjtThis.setStartPosition (token); }
   ( <S> )*
   ( LOOKAHEAD(2)
     namespacePrefix() 
@@ -563,47 +554,44 @@ void attrib() #Attrib :
     __attribValue()
     ( <S> )*
   )?
-  <RSQUARE>
+  <RSQUARE> { jjtThis.setEndPosition (token); }
 }
 
 void __attribOperator() #AttribOperator : {}
 {
-  ( <EQUALS>         { jjtThis.setText ("="); }
-  | <INCLUDES>       { jjtThis.setText ("~="); }
-  | <DASHMATCH>      { jjtThis.setText ("|="); }
+  ( <EQUALS>         { jjtThis.setText ("=");  jjtThis.setStartAndEndPosition (token); }
+  | <INCLUDES>       { jjtThis.setText ("~="); jjtThis.setStartAndEndPosition (token); }
+  | <DASHMATCH>      { jjtThis.setText ("|="); jjtThis.setStartAndEndPosition (token); }
   )
 }
 
 void __attribValue() #AttribValue :
 {
-  Token t;
   String sStr;
 }
 {
-  ( t = <IDENT>     { jjtThis.setText (t.image); }
+  ( <IDENT>         { jjtThis.setText (token.image); jjtThis.setStartAndEndPosition (token); }
   | sStr = string() { jjtThis.setText (sStr); }
   )
 }
 
-void pseudo() #Pseudo :
-{ Token t; }
+void pseudo() #Pseudo : {}
 {
-  <COLON> { jjtThis.setText (":"); }
+  <COLON> { jjtThis.setText (":"); jjtThis.setStartPosition (token); }
   /* Extension for "::-moz-selection */
   ( <COLON> { jjtThis.appendText (":"); } ) ?
   ( LOOKAHEAD(2)
-    t = <FUNCTION> { jjtThis.appendText (t.image); }
+    <FUNCTION> { jjtThis.appendText (token.image); }
     ( <S> )*
     ( expr() )?
-    <RROUND>  // do not append because of expression!
-  | t = <IDENT> { jjtThis.appendText (t.image); }
+    <RROUND>  // do not append because of expression! { jjtThis.setEndPosition (token); }
+  | <IDENT> { jjtThis.appendText (token.image); jjtThis.setEndPosition (token); }
   )
 }
 
-void hash() #Hash :
-{ Token t; }
+void hash() #Hash : {}
 {
-  t = <HASH> { jjtThis.setText (t.image); }
+  <HASH> { jjtThis.setText (token.image); jjtThis.setStartAndEndPosition (token); }
 }
 
 //
@@ -639,12 +627,10 @@ void declaration() : {}
 // prio
 //   : IMPORTANT_SYM S*
 //   ;
-void prio() #Important :
-{ Token t; }
+void prio() #Important : {}
 {
-  t = <IMPORTANT_SYM>
+  <IMPORTANT_SYM> { jjtThis.setText (token.image); jjtThis.setStartAndEndPosition (token); }
   ( <S> )*
-  { jjtThis.setText (t.image); }
 }
 
 //
@@ -714,10 +700,9 @@ void term() #Term :
   }
 }
 
-void uri() #URI :
-{ Token t; }
+void uri() #URI : {}
 {
-  t = <URI>  { jjtThis.setText (t.image); } 
+  <URI>  { jjtThis.setText (token.image); jjtThis.setStartAndEndPosition (token); } 
 }
 
 //
@@ -725,25 +710,22 @@ void uri() #URI :
 //   : FUNCTION S* expr ')'
 //   ;
 //
-void function() #Function :
-{ Token t; }
+void function() #Function : {}
 {
-  t = <FUNCTION>
+  <FUNCTION> { jjtThis.setText (token.image + ")"); jjtThis.setStartPosition (token); }
   ( <S> )*
   // Support functions without parameters (e.g. "gray ()")
   ( expr() )?
-  <RROUND>
-  { jjtThis.setText (t.image + ")"); }
+  <RROUND> { jjtThis.setEndPosition (token); }
 }
 
 //
 // hexcolor
 //
-String hexcolor() #void :
-{ Token t; }
+String hexcolor() #void : {}
 {
-  t = <HASH>
-  { return t.image; }
+  <HASH>
+  { return token.image; }
 }
 
 
