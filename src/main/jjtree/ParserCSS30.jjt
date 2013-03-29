@@ -38,6 +38,7 @@ options {
   NODE_CLASS = "com.phloc.css.parser.CSSNode";
   NODE_PREFIX = "";
   // NODE_USES_PARSER = true;
+  TRACK_TOKENS = true;
 }
 
 PARSER_BEGIN(ParserCSS30)
@@ -326,10 +327,9 @@ void charsetRule() #Charset :
   ( <S> )?
   <CHARSET_SYM>
   <S>
-  sStr = string ()
+  sStr = string () { jjtThis.setText (sStr); }
   ( <S> )*
   <SEMICOLON>
-  { jjtThis.setText (sStr); }
 }
 
 void unknownRule() : {}
@@ -348,7 +348,6 @@ void unknownRule() : {}
 void importRule() #ImportRule :
 {
   String sUrl;
-  Token t;
 }
 {
   <IMPORT_SYM>
@@ -363,10 +362,7 @@ void importRule() #ImportRule :
 
 // ------------ NAMESPACE ------------
 
-void namespaceRule() : 
-{ 
-  Token t;
-}
+void namespaceRule() : {}
 {
   <NAMESPACE_SYM>
   ( <S> )*
@@ -378,20 +374,18 @@ void namespaceRule() :
   <SEMICOLON>
 } 
 
-void namespaceRulePrefix() : 
-{ Token t; }
+void namespaceRulePrefix() : {}
 {
-  t = <IDENT> { jjtThis.setText (t.image); }
+  <IDENT> { jjtThis.setText (token.image); }
 } 
 
 void namespaceRuleURL() : 
 { 
-  Token t;
   String s;
 }
 {
-  // URLs are always passed without the quotes!
-  ( t = <URI> { jjtThis.setText ('"' + t.image + '"'); }
+  // URI tokens are always passed without the quotes!
+  ( <URI> { jjtThis.setText ('"' + token.image + '"'); }
   | s = string() { jjtThis.setText (s); }
   )
 } 
@@ -465,12 +459,10 @@ void mediaModifier() :
 //   : IDENT S*
 //   ;
 //
-void medium() #Medium :
-{ Token t; }
+void medium() #Medium : {}
 {
-  t = <IDENT>
+  <IDENT> { jjtThis.setText (token.image); }
   ( <S> )*
-  { jjtThis.setText (t.image); }
 }
 
 void mediaExpr() : {}
@@ -513,12 +505,10 @@ void pageRule() : {}
   <RBRACE>
 }
 
-void pseudoPage() #PseudoPage :
-{ Token t; }
+void pseudoPage() #PseudoPage : {}
 {
   <COLON>
-  t = <IDENT>
-  { jjtThis.setText (":" + t.image); }
+  <IDENT> { jjtThis.setText (":" + token.image); }
 }
 
 // ------------ SELECTORS ------------
@@ -577,29 +567,25 @@ void typeSelector() #void : {}
   elementName()
 }
 
-void namespacePrefix() #NamespacePrefix : 
-{ Token t; }
+void namespacePrefix() #NamespacePrefix : {}
 {
-  ( t = <IDENT>    { jjtThis.setText (t.image); }
-  | t = <ASTERISK> { jjtThis.setText (t.image); }
+  ( <IDENT>    { jjtThis.setText (token.image); }
+  | <ASTERISK> { jjtThis.setText (token.image); }
   )?    
   <DASH>        { jjtThis.appendText ("|"); }
 }
 
-void elementName() #ElementName :
-{ Token t; }
+void elementName() #ElementName : {}
 {
-  ( t = <IDENT>    { jjtThis.setText (t.image); }
-  | t = <ASTERISK> { jjtThis.setText (t.image); }
+  ( <IDENT>    { jjtThis.setText (token.image); }
+  | <ASTERISK> { jjtThis.setText (token.image); }
   )
 }
 
-void _class() #Class :
-{ Token t; }
+void _class() #Class : {}
 {
   <DOT>
-  t = <IDENT>
-  { jjtThis.setText ("." + t.image); }
+  <IDENT> { jjtThis.setText ("." + token.image); }
 }
 
 void attrib() #Attrib :
@@ -624,7 +610,7 @@ void attrib() #Attrib :
 
 void __attribOperator() #AttribOperator : {}
 {
-  ( <EQUALS>         { jjtThis.setText ("="); }
+  ( <EQUALS>         { jjtThis.setText ("=");  }
   | <INCLUDES>       { jjtThis.setText ("~="); }
   | <DASHMATCH>      { jjtThis.setText ("|="); }
   | <PREFIXMATCH>    { jjtThis.setText ("^="); }  /* new in 3.0 */
@@ -635,29 +621,28 @@ void __attribOperator() #AttribOperator : {}
 
 void __attribValue() #AttribValue :
 {
-  Token t;
   String sStr;
 }
 {
-  ( t = <IDENT>     { jjtThis.setText (t.image); }
+  ( <IDENT>         { jjtThis.setText (token.image); }
   | sStr = string() { jjtThis.setText (sStr); }
   )
 }
 
-void pseudo() #Pseudo :
-{ Token t; }
+void pseudo() #Pseudo : {}
 {
   <COLON> { jjtThis.setText (":"); }
   /* Extension for "::-moz-selection */
   ( <COLON> { jjtThis.appendText (":"); } ) ?
-  ( t = <FUNCTION_NTH> { jjtThis.appendText (t.image); }
+  ( <FUNCTION_NTH> { jjtThis.appendText (token.image); }
     __pseudoNth()
     <RROUND>  // do not append because of expression!
-  | t = <FUNCTION> { jjtThis.appendText (t.image); }
+  | LOOKAHEAD(2)
+    <FUNCTION> { jjtThis.appendText (token.image); }
     ( <S> )*
     ( expr() )?
     <RROUND>  // do not append because of expression!
-  | t = <IDENT> { jjtThis.appendText (t.image); }
+  | <IDENT> { jjtThis.appendText (token.image); }
   )
 }
 
@@ -726,12 +711,10 @@ String unaryOperator() #void : {}
   )
 }
 
-void property() #Property :
-{ Token t; }
+void property() #Property : {}
 {
-  t = <IDENT>
+  <IDENT> { jjtThis.setText (token.image); }
   ( <S> )*
-  { jjtThis.setText (t.image); }
 }
 
 void styleRule() : {}
@@ -747,10 +730,9 @@ void styleRule() : {}
   <RBRACE>
 }
 
-void hash() #Hash :
-{ Token t; }
+void hash() #Hash : {}
 {
-  t = <HASH> { jjtThis.setText (t.image); }
+  <HASH> { jjtThis.setText (token.image); }
 }
 
 //
@@ -786,12 +768,10 @@ void declaration() : {}
 // prio
 //   : IMPORTANT_SYM S*
 //   ;
-void prio() #Important :
-{ Token t; }
+void prio() #Important : {}
 {
-  t = <IMPORTANT_SYM>
+  <IMPORTANT_SYM> { jjtThis.setText (token.image); }
   ( <S> )*
-  { jjtThis.setText (t.image); }
 }
 
 //
@@ -859,7 +839,7 @@ void term() #Term :
   | t = <FROM_SYM>
   | t = <TO_SYM>
   | uri()
-  | sStr = hexcolor()  { jjtThis.setText (sStr); }
+  | t = <HASH>
   | function()
   | math()
   | t = <INHERIT>
@@ -873,10 +853,9 @@ void term() #Term :
   }
 }
 
-void uri() #URI :
-{ Token t; }
+void uri() #URI : {}
 {
-  t = <URI>  { jjtThis.setText (t.image); } 
+  <URI>  { jjtThis.setText (token.image); } 
 }
 
 //
@@ -884,15 +863,13 @@ void uri() #URI :
 //   : FUNCTION S* expr ')'
 //   ;
 //
-void function() #Function :
-{ Token t; }
+void function() #Function : {}
 {
-  t = <FUNCTION>
+  <FUNCTION> { jjtThis.setText (token.image + ")"); }
   ( <S> )*
   // Support functions without parameters (e.g. "gray ()")
   ( expr() )?
   <RROUND>
-  { jjtThis.setText (t.image + ")"); }
 }
 
 void math() : {}
@@ -962,17 +939,6 @@ void unit() :
   }
 }
 
-//
-// hexcolor
-//
-String hexcolor() #void :
-{ Token t; }
-{
-  t = <HASH>
-  { return t.image; }
-}
-
-
 String string() #void :
 { Token t; }
 {
@@ -1021,11 +987,9 @@ void keyframesRule() :
   <RBRACE>
 }
 
-void keyframesIdentifier() : 
-{ Token t; }
+void keyframesIdentifier() :  {}
 {
-  t = <IDENT>
-  { jjtThis.setText (t.image); }    
+  <IDENT> { jjtThis.setText (token.image); }    
 }
 
 // #void : do not generate a tree node for this 
@@ -1048,23 +1012,20 @@ void keyframesSelector() : {}
   )*  
 }
 
-void singleKeyframeSelector() :
-{ Token t = null; }
+void singleKeyframeSelector() : {}
 {
-  ( t = <FROM_SYM>   { jjtThis.setText (t.image); }
-  | t = <TO_SYM>     { jjtThis.setText (t.image); }
-  | t = <PERCENTAGE> { jjtThis.setText (t.image); }  
+  ( <FROM_SYM>   { jjtThis.setText (token.image); }
+  | <TO_SYM>     { jjtThis.setText (token.image); }
+  | <PERCENTAGE> { jjtThis.setText (token.image); }  
   )
   ( <S> )*
 }
 
 // ------------ VIEWPORT ------------
 
-void viewportRule() : 
-{ Token t; }
+void viewportRule() : {}
 {
-  t = <VIEWPORT_SYM>
-  { jjtThis.setText (t.image); }    
+  <VIEWPORT_SYM> { jjtThis.setText (token.image); }    
   ( <S> )*
   <LBRACE>
   styleDeclaration()
