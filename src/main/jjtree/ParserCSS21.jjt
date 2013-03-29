@@ -686,7 +686,7 @@ void term() #Term :
   | sStr = string()    { jjtThis.setText (sStr); }
   | t = <IDENT>
   | uri()
-  | sStr = hexcolor()  { jjtThis.setText (sStr); }
+  | t = <HASH>
   | function()
   | t = <DIMENSION>
   | t = <INHERIT>
@@ -718,16 +718,6 @@ void function() #Function : {}
   ( expr() )?
   <RROUND> { jjtThis.setEndPosition (token); }
 }
-
-//
-// hexcolor
-//
-String hexcolor() #void : {}
-{
-  <HASH>
-  { return token.image; }
-}
-
 
 String string() #void :
 { Token t; }
