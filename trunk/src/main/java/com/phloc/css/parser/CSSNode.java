@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,10 +39,8 @@ public final class CSSNode implements Node, Iterable <CSSNode>
   private CSSNode [] m_aChildren;
   private Object m_aValue;
   private String m_sText;
-  private int m_nBeginLineNumber = -1;
-  private int m_nBeginColumnNumber = -1;
-  private int m_nEndLineNumber = -1;
-  private int m_nEndColumnNumber = -1;
+  private Token m_aFirstToken;
+  private Token m_aLastToken;
 
   public CSSNode (final int nType)
   {
@@ -96,6 +93,30 @@ public final class CSSNode implements Node, Iterable <CSSNode>
     return m_aChildren == null ? 0 : m_aChildren.length;
   }
 
+  // The following 4 methods are required for JJTree option TRACK_TOKENS=true
+
+  @Nullable
+  public Token jjtGetFirstToken ()
+  {
+    return m_aFirstToken;
+  }
+
+  public void jjtSetFirstToken (@Nonnull final Token aFirstToken)
+  {
+    m_aFirstToken = aFirstToken;
+  }
+
+  @Nullable
+  public Token jjtGetLastToken ()
+  {
+    return m_aLastToken;
+  }
+
+  public void jjtSetLastToken (@Nonnull final Token aLastToken)
+  {
+    m_aLastToken = aLastToken;
+  }
+
   public void setValue (@Nullable final Object aValue)
   {
     m_aValue = aValue;
@@ -112,7 +133,7 @@ public final class CSSNode implements Node, Iterable <CSSNode>
     m_sText = sText;
   }
 
-  public void appendText (final String sText)
+  public void appendText (@Nonnull final String sText)
   {
     if (m_sText == null)
       m_sText = sText;
@@ -136,66 +157,6 @@ public final class CSSNode implements Node, Iterable <CSSNode>
     return m_nType;
   }
 
-  public void setStartPosition (@Nonnull final Token t)
-  {
-    m_nBeginLineNumber = t.beginLine;
-    m_nBeginColumnNumber = t.beginColumn;
-  }
-
-  public void setStartPosition (@Nonnull final CSSNode aNode)
-  {
-    m_nBeginLineNumber = aNode.m_nBeginLineNumber;
-    m_nBeginColumnNumber = aNode.m_nBeginColumnNumber;
-  }
-
-  public void setEndPosition (@Nonnull final Token t)
-  {
-    m_nEndLineNumber = t.endLine;
-    m_nEndColumnNumber = t.endColumn;
-  }
-
-  public void setEndPosition (@Nonnull final CSSNode aNode)
-  {
-    m_nEndLineNumber = aNode.m_nEndLineNumber;
-    m_nEndColumnNumber = aNode.m_nEndColumnNumber;
-  }
-
-  public void setStartAndEndPosition (@Nonnull final Token t)
-  {
-    setStartPosition (t);
-    setEndPosition (t);
-  }
-
-  public void setStartAndEndPosition (@Nonnull final CSSNode aNode)
-  {
-    setStartPosition (aNode);
-    setEndPosition (aNode);
-  }
-
-  @CheckForSigned
-  public int getBeginLineNumber ()
-  {
-    return m_nBeginLineNumber;
-  }
-
-  @CheckForSigned
-  public int getBeginColumnNumber ()
-  {
-    return m_nBeginColumnNumber;
-  }
-
-  @CheckForSigned
-  public int getEndLineNumber ()
-  {
-    return m_nEndLineNumber;
-  }
-
-  @CheckForSigned
-  public int getEndColumnNumber ()
-  {
-    return m_nEndColumnNumber;
-  }
-
   @Nonnull
   public Iterator <CSSNode> iterator ()
   {
@@ -207,6 +168,18 @@ public final class CSSNode implements Node, Iterable <CSSNode>
     return aChildren.iterator ();
   }
 
+  public void dump (final String prefix)
+  {
+    System.out.println (prefix + toString ());
+    if (m_aChildren != null)
+      for (final CSSNode element : m_aChildren)
+      {
+        final CSSNode n = element;
+        if (n != null)
+          n.dump (prefix + " ");
+      }
+  }
+
   @Override
   public String toString ()
   {
@@ -215,11 +188,9 @@ public final class CSSNode implements Node, Iterable <CSSNode>
                                                          m_aParent == null ? null : Integer.valueOf (m_aParent.m_nType))
                                        .appendIfNotNull ("value", m_aValue)
                                        .appendIfNotNull ("text", m_sText)
-                                       .appendIfNotNull ("children", m_aChildren)
-                                       .append ("beginLineNumber", m_nBeginLineNumber)
-                                       .append ("beginColumnNumber", m_nBeginColumnNumber)
-                                       .append ("endLineNumber", m_nEndLineNumber)
-                                       .append ("endColumnNumber", m_nEndColumnNumber)
+                                       .append ("children#", m_aChildren == null ? 0 : m_aChildren.length)
+                                       .appendIfNotNull ("firstToken", m_aFirstToken)
+                                       .appendIfNotNull ("lastToken", m_aLastToken)
                                        .toString ();
   }
 }
