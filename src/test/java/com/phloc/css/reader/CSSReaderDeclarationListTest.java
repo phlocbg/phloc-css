@@ -42,32 +42,32 @@ import com.phloc.css.handler.ICSSParseExceptionHandler;
  */
 public final class CSSReaderDeclarationListTest
 {
-  private static final List <String> aValid = ContainerHelper.newList ("",
-                                                                       "    ",
-                                                                       ";",
-                                                                       ";;",
-                                                                       "  ;     ;     ;   ",
-                                                                       "color:red; background:fixed;",
-                                                                       "  color:red; background:fixed;  ",
-                                                                       "color:red; background:fixed",
-                                                                       "color:red; background:fixed !important");
-  private static final List <String> aInvalid = ContainerHelper.newList ("color", " color ", " color : ");
+  private static final List <String> VALID = ContainerHelper.newList ("",
+                                                                      "    ",
+                                                                      ";",
+                                                                      ";;",
+                                                                      "  ;     ;     ;   ",
+                                                                      "color:red; background:fixed;",
+                                                                      "  color:red; background:fixed;  ",
+                                                                      "color:red; background:fixed",
+                                                                      "color:red; background:fixed !important");
+  private static final List <String> INVALID = ContainerHelper.newList ("color", " color ", " color : ");
 
   @Test
   public void testIsValidCSS21 ()
   {
-    for (final String sCSS : aValid)
+    for (final String sCSS : VALID)
       assertTrue (sCSS, CSSReaderDeclarationList.isValidCSS (sCSS, ECSSVersion.CSS21));
-    for (final String sCSS : aInvalid)
+    for (final String sCSS : INVALID)
       assertFalse (sCSS, CSSReaderDeclarationList.isValidCSS (sCSS, ECSSVersion.CSS21));
   }
 
   @Test
   public void testIsValidCSS30 ()
   {
-    for (final String sCSS : aValid)
+    for (final String sCSS : VALID)
       assertTrue (sCSS, CSSReaderDeclarationList.isValidCSS (sCSS, ECSSVersion.CSS30));
-    for (final String sCSS : aInvalid)
+    for (final String sCSS : INVALID)
       assertFalse (sCSS, CSSReaderDeclarationList.isValidCSS (sCSS, ECSSVersion.CSS30));
   }
 
@@ -75,9 +75,12 @@ public final class CSSReaderDeclarationListTest
   public void testRead21 ()
   {
     final ICSSParseExceptionHandler aHdl = new DoNothingCSSParseExceptionHandler ();
-    for (final String sCSS : aValid)
-      assertNotNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS21, aHdl));
-    for (final String sCSS : aInvalid)
+    for (final String sCSS : VALID)
+    {
+      final CSSDeclarationList aDL = CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS21, aHdl);
+      System.out.println (aDL);
+    }
+    for (final String sCSS : INVALID)
       assertNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS21, aHdl));
   }
 
@@ -85,9 +88,9 @@ public final class CSSReaderDeclarationListTest
   public void testRead30 ()
   {
     final ICSSParseExceptionHandler aHdl = new DoNothingCSSParseExceptionHandler ();
-    for (final String sCSS : aValid)
+    for (final String sCSS : VALID)
       assertNotNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS30, aHdl));
-    for (final String sCSS : aInvalid)
+    for (final String sCSS : INVALID)
       assertNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS30, aHdl));
   }
 

@@ -32,7 +32,9 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
@@ -42,11 +44,12 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAware
+public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final String m_sDeclaration;
   private final String m_sAnimationName;
   private final List <CSSKeyframesBlock> m_aBlocks = new ArrayList <CSSKeyframesBlock> ();
+  private CSSSourceLocation m_aSourceLocation;
 
   public static boolean isValidDeclaration (@Nonnull @Nonempty final String sDeclaration)
   {
@@ -169,6 +172,17 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
     return ECSSVersion.CSS30;
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -197,6 +211,7 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
     return new ToStringGenerator (this).append ("declaration", m_sDeclaration)
                                        .append ("animationName", m_sAnimationName)
                                        .append ("blocks", m_aBlocks)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }
 }

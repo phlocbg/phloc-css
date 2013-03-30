@@ -29,7 +29,9 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
@@ -39,9 +41,10 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSVersionAware
+public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final CSSDeclarationContainer m_aDeclarations = new CSSDeclarationContainer ();
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSFontFaceRule ()
   {}
@@ -113,6 +116,17 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
     return ECSSVersion.CSS30;
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -133,6 +147,8 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("declarations", m_aDeclarations).toString ();
+    return new ToStringGenerator (this).append ("declarations", m_aDeclarations)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
+                                       .toString ();
   }
 }

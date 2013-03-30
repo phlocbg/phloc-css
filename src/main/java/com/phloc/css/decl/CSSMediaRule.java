@@ -32,6 +32,8 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -41,10 +43,11 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSMediaRule implements ICSSTopLevelRule
+public final class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
 {
   private final List <CSSMediaQuery> m_aMediaQueries = new ArrayList <CSSMediaQuery> ();
   private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSMediaRule ()
   {}
@@ -204,6 +207,17 @@ public final class CSSMediaRule implements ICSSTopLevelRule
     return aSB.toString ();
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -226,6 +240,7 @@ public final class CSSMediaRule implements ICSSTopLevelRule
   {
     return new ToStringGenerator (this).append ("mediaQueries", m_aMediaQueries)
                                        .append ("styleRules", m_aRules)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }
 }

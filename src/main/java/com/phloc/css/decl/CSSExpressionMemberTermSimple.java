@@ -19,12 +19,15 @@ package com.phloc.css.decl;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -33,10 +36,11 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @Immutable
-public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
+public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember, ICSSSourceLocationAware
 {
   private String m_sValue;
   private String m_sOptimizedValue;
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSExpressionMemberTermSimple (final int nValue)
   {
@@ -92,6 +96,17 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
     return aSettings.isOptimizedOutput () ? m_sOptimizedValue : m_sValue;
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -112,6 +127,9 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (null).append ("value", m_sValue).toString ();
+    return new ToStringGenerator (null).append ("value", m_sValue)
+                                       .append ("optimizedValue", m_sOptimizedValue)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
+                                       .toString ();
   }
 }

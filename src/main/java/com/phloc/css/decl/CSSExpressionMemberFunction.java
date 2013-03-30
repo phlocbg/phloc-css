@@ -27,6 +27,8 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -35,10 +37,11 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @Immutable
-public final class CSSExpressionMemberFunction implements ICSSExpressionMember
+public final class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSourceLocationAware
 {
   private final String m_sFunctionName;
   private final CSSExpression m_aExpression;
+  private CSSSourceLocation m_aSourceLocation;
 
   @Nonnull
   private static String _skipBrackets (@Nonnull final String sName)
@@ -100,6 +103,17 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember
     return m_sFunctionName + "(" + m_aExpression.getAsCSSString (aSettings, nIndentLevel) + ")";
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -122,6 +136,7 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember
   {
     return new ToStringGenerator (null).append ("funcName", m_sFunctionName)
                                        .appendIfNotNull ("expression", m_aExpression)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }
 }

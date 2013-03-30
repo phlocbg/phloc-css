@@ -31,6 +31,8 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
@@ -40,10 +42,11 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSImportRule implements ICSSWriteable
+public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
 {
   private CSSURI m_aLocation;
   private final List <CSSMediaQuery> m_aMediaQueries = new ArrayList <CSSMediaQuery> ();
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSImportRule (@Nonnull final CSSURI aLocation)
   {
@@ -151,6 +154,17 @@ public final class CSSImportRule implements ICSSWriteable
     return aSB.append (";\n").toString ();
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -173,6 +187,7 @@ public final class CSSImportRule implements ICSSWriteable
   {
     return new ToStringGenerator (this).append ("location", m_aLocation)
                                        .append ("mediaQueries", m_aMediaQueries)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }
 }

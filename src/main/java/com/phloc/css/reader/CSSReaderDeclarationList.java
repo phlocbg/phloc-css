@@ -52,7 +52,7 @@ import com.phloc.css.parser.ParserCSS30TokenManager;
 
 /**
  * This is the central user class for reading and parsing partial CSS from
- * different sources. This class reads CSS style declarations as used iN HTML
+ * different sources. This class reads CSS style declarations as used in HTML
  * style attributes only.
  * 
  * @author philip

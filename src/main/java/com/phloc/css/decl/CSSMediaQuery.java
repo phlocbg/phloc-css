@@ -31,6 +31,8 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
@@ -39,7 +41,7 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author philip
  */
-public final class CSSMediaQuery implements ICSSWriteable
+public final class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
 {
   public static enum EModifier
   {
@@ -64,6 +66,7 @@ public final class CSSMediaQuery implements ICSSWriteable
   private final EModifier m_eModifier;
   private final String m_sMedium;
   private final List <CSSMediaExpression> m_aMediaExpressions = new ArrayList <CSSMediaExpression> ();
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSMediaQuery (@Nonnull final EModifier eModifier, @Nullable final String sMedium)
   {
@@ -182,6 +185,17 @@ public final class CSSMediaQuery implements ICSSWriteable
     return aSB.toString ();
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -210,6 +224,7 @@ public final class CSSMediaQuery implements ICSSWriteable
     return new ToStringGenerator (this).append ("modifier", m_eModifier)
                                        .append ("medium", m_sMedium)
                                        .append ("expressions", m_aMediaExpressions)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }
 }

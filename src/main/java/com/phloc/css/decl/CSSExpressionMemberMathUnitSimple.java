@@ -26,8 +26,10 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 import com.phloc.css.utils.CSSNumberHelper;
 
@@ -37,10 +39,11 @@ import com.phloc.css.utils.CSSNumberHelper;
  * @author philip
  */
 @Immutable
-public final class CSSExpressionMemberMathUnitSimple implements ICSSExpressionMathMember
+public final class CSSExpressionMemberMathUnitSimple implements ICSSExpressionMathMember, ICSSSourceLocationAware
 {
   private final String m_sText;
   private final ECSSUnit m_eUnit;
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSExpressionMemberMathUnitSimple (@Nonnull @Nonempty final String sText)
   {
@@ -76,6 +79,17 @@ public final class CSSExpressionMemberMathUnitSimple implements ICSSExpressionMa
     return ECSSVersion.CSS30;
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -96,6 +110,9 @@ public final class CSSExpressionMemberMathUnitSimple implements ICSSExpressionMa
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("text", m_sText).append ("unit", m_eUnit).toString ();
+    return new ToStringGenerator (this).append ("text", m_sText)
+                                       .append ("unit", m_eUnit)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
+                                       .toString ();
   }
 }
