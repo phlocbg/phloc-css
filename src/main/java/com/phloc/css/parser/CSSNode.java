@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceArea;
 import com.phloc.css.CSSSourceLocation;
 
 /**
@@ -169,34 +170,24 @@ public final class CSSNode implements Node, Iterable <CSSNode>
     return aChildren.iterator ();
   }
 
+  /**
+   * @return The source location of this node. May be <code>null</code> if
+   *         neither begin token nor end token is present.
+   */
   @Nullable
   public CSSSourceLocation getSourceLocation ()
   {
-    if (m_aFirstToken == null)
-    {
-      if (m_aLastToken == null)
-        return null;
-
-      System.out.println ("LastToken present first last token is not!");
-      return new CSSSourceLocation (m_aLastToken.beginLine,
-                                    m_aLastToken.beginColumn,
-                                    m_aLastToken.endLine,
-                                    m_aLastToken.endColumn);
-    }
-
-    if (m_aLastToken == null)
-    {
-      System.out.println ("FirstToken present but last token is not!");
-      return new CSSSourceLocation (m_aFirstToken.beginLine,
-                                    m_aFirstToken.beginColumn,
-                                    m_aFirstToken.endLine,
-                                    m_aFirstToken.endColumn);
-    }
-
-    return new CSSSourceLocation (m_aFirstToken.beginLine,
-                                  m_aFirstToken.beginColumn,
-                                  m_aLastToken.endLine,
-                                  m_aLastToken.endColumn);
+    final CSSSourceArea aFirstTokenArea = m_aFirstToken == null ? null : new CSSSourceArea (m_aFirstToken.beginLine,
+                                                                                            m_aFirstToken.beginColumn,
+                                                                                            m_aFirstToken.endLine,
+                                                                                            m_aFirstToken.endColumn);
+    final CSSSourceArea aLastTokenArea = m_aLastToken == null ? null : new CSSSourceArea (m_aLastToken.beginLine,
+                                                                                          m_aLastToken.beginColumn,
+                                                                                          m_aLastToken.endLine,
+                                                                                          m_aLastToken.endColumn);
+    if (aFirstTokenArea == null && aLastTokenArea == null)
+      return null;
+    return new CSSSourceLocation (aFirstTokenArea, aLastTokenArea);
   }
 
   public void dump (final String prefix)
