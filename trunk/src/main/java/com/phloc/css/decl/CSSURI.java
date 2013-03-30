@@ -19,12 +19,15 @@ package com.phloc.css.decl;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 import com.phloc.css.utils.CSSURLHelper;
@@ -35,9 +38,10 @@ import com.phloc.css.utils.CSSURLHelper;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSURI implements ICSSWriteable
+public final class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
 {
   private String m_sURI;
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSURI (@Nonnull @Nonempty final String sURI)
   {
@@ -70,6 +74,17 @@ public final class CSSURI implements ICSSWriteable
     return CSSURLHelper.getAsCSSURL (m_sURI, aSettings.isQuoteURLs ());
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -90,6 +105,8 @@ public final class CSSURI implements ICSSWriteable
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("URI", m_sURI).toString ();
+    return new ToStringGenerator (this).append ("URI", m_sURI)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
+                                       .toString ();
   }
 }

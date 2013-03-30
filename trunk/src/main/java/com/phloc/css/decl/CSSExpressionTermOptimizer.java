@@ -21,8 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.propertyvalue.CCSSValue;
 
@@ -31,6 +33,7 @@ import com.phloc.css.propertyvalue.CCSSValue;
  * 
  * @author philip
  */
+@Immutable
 public final class CSSExpressionTermOptimizer
 {
   private static final List <String> s_aUnitValues0 = new ArrayList <String> ();
@@ -41,6 +44,9 @@ public final class CSSExpressionTermOptimizer
     for (final ECSSUnit eUnit : ECSSUnit.values ())
       s_aUnitValues0.add (eUnit.format (0));
   }
+
+  @PresentForCodeCoverage
+  private static final CSSExpressionTermOptimizer s_aInstance = new CSSExpressionTermOptimizer ();
 
   private CSSExpressionTermOptimizer ()
   {}

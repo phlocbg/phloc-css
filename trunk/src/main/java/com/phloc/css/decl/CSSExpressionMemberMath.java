@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -30,7 +31,9 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
@@ -40,9 +43,10 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @Immutable
-public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSSVersionAware
+public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final List <ICSSExpressionMathMember> m_aMembers = new ArrayList <ICSSExpressionMathMember> ();
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSExpressionMemberMath ()
   {}
@@ -93,6 +97,17 @@ public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSS
     return ECSSVersion.CSS30;
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -113,6 +128,8 @@ public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSS
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (null).append ("members", m_aMembers).toString ();
+    return new ToStringGenerator (null).append ("members", m_aMembers)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
+                                       .toString ();
   }
 }

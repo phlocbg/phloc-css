@@ -30,6 +30,8 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -40,10 +42,11 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
+public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSSourceLocationAware
 {
   private final List <CSSSelector> m_aSelectors = new ArrayList <CSSSelector> ();
   private final CSSDeclarationContainer m_aDeclarations = new CSSDeclarationContainer ();
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSStyleRule ()
   {}
@@ -175,6 +178,17 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
     return aSB.toString ();
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -197,6 +211,7 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
   {
     return new ToStringGenerator (this).append ("selectors", m_aSelectors)
                                        .append ("declarations", m_aDeclarations)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }
 }

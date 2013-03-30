@@ -27,6 +27,8 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
@@ -36,10 +38,11 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSNamespaceRule implements ICSSWriteable
+public final class CSSNamespaceRule implements ICSSWriteable, ICSSSourceLocationAware
 {
   private String m_sPrefix;
   private String m_sURL;
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSNamespaceRule (@Nullable final String sNamespacePrefix, @Nonnull final String sURL)
   {
@@ -89,6 +92,17 @@ public final class CSSNamespaceRule implements ICSSWriteable
     return aSB.append (m_sURL).append (";\n").toString ();
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -109,6 +123,9 @@ public final class CSSNamespaceRule implements ICSSWriteable
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).appendIfNotNull ("prefix", m_sPrefix).append ("URL", m_sURL).toString ();
+    return new ToStringGenerator (this).appendIfNotNull ("prefix", m_sPrefix)
+                                       .append ("URL", m_sURL)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
+                                       .toString ();
   }
 }

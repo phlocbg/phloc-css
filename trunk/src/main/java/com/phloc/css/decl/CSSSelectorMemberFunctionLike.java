@@ -19,12 +19,15 @@ package com.phloc.css.decl;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -34,10 +37,11 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @Immutable
-public final class CSSSelectorMemberFunctionLike implements ICSSSelectorMember
+public final class CSSSelectorMemberFunctionLike implements ICSSSelectorMember, ICSSSourceLocationAware
 {
   private final String m_sFuncName;
   private final CSSExpression m_aParamExpr;
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSSelectorMemberFunctionLike (@Nonnull @Nonempty final String sFuncName,
                                         @Nonnull final CSSExpression aParamExpr)
@@ -75,6 +79,17 @@ public final class CSSSelectorMemberFunctionLike implements ICSSSelectorMember
     return m_sFuncName + m_aParamExpr.getAsCSSString (aSettings, nIndentLevel) + ')';
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -97,6 +112,7 @@ public final class CSSSelectorMemberFunctionLike implements ICSSSelectorMember
   {
     return new ToStringGenerator (null).append ("functionName", m_sFuncName)
                                        .append ("paramExpr", m_aParamExpr)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }
 }

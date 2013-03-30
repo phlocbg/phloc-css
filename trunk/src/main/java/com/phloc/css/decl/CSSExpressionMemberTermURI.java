@@ -19,11 +19,14 @@ package com.phloc.css.decl;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -32,7 +35,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @Immutable
-public final class CSSExpressionMemberTermURI implements ICSSExpressionMember
+public final class CSSExpressionMemberTermURI implements ICSSExpressionMember, ICSSSourceLocationAware
 {
   private CSSURI m_aURI;
 
@@ -76,6 +79,12 @@ public final class CSSExpressionMemberTermURI implements ICSSExpressionMember
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     return m_aURI.getAsCSSString (aSettings, nIndentLevel);
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aURI.getSourceLocation ();
   }
 
   @Override

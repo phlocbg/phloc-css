@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -28,7 +29,9 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
@@ -38,9 +41,10 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @Immutable
-public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersionAware
+public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final List <ICSSSelectorMember> m_aNestedSelectorMembers;
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSSelectorMemberNot (@Nonnull final List <ICSSSelectorMember> aNestedSelectorMembers)
   {
@@ -80,6 +84,17 @@ public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersi
     return ECSSVersion.CSS30;
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -100,6 +115,8 @@ public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersi
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (null).append ("nestedSelectorMembers", m_aNestedSelectorMembers).toString ();
+    return new ToStringGenerator (null).append ("nestedSelectorMembers", m_aNestedSelectorMembers)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
+                                       .toString ();
   }
 }

@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
 
 /**
  * This class represents a simple node in the tree built by jjtree.
@@ -166,6 +167,36 @@ public final class CSSNode implements Node, Iterable <CSSNode>
         if (aChildNode != null)
           aChildren.add (aChildNode);
     return aChildren.iterator ();
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    if (m_aFirstToken == null)
+    {
+      if (m_aLastToken == null)
+        return null;
+
+      System.out.println ("LastToken present first last token is not!");
+      return new CSSSourceLocation (m_aLastToken.beginLine,
+                                    m_aLastToken.beginColumn,
+                                    m_aLastToken.endLine,
+                                    m_aLastToken.endColumn);
+    }
+
+    if (m_aLastToken == null)
+    {
+      System.out.println ("FirstToken present but last token is not!");
+      return new CSSSourceLocation (m_aFirstToken.beginLine,
+                                    m_aFirstToken.beginColumn,
+                                    m_aFirstToken.endLine,
+                                    m_aFirstToken.endColumn);
+    }
+
+    return new CSSSourceLocation (m_aFirstToken.beginLine,
+                                  m_aFirstToken.beginColumn,
+                                  m_aLastToken.endLine,
+                                  m_aLastToken.endColumn);
   }
 
   public void dump (final String prefix)

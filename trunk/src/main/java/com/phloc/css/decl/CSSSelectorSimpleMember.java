@@ -19,12 +19,15 @@ package com.phloc.css.decl;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -34,9 +37,10 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @Immutable
-public final class CSSSelectorSimpleMember implements ICSSSelectorMember
+public final class CSSSelectorSimpleMember implements ICSSSelectorMember, ICSSSourceLocationAware
 {
   private final String m_sValue;
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSSelectorSimpleMember (@Nonnull @Nonempty final String sValue)
   {
@@ -91,6 +95,17 @@ public final class CSSSelectorSimpleMember implements ICSSSelectorMember
     return m_sValue;
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -111,6 +126,8 @@ public final class CSSSelectorSimpleMember implements ICSSSelectorMember
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (null).append ("value", m_sValue).toString ();
+    return new ToStringGenerator (null).append ("value", m_sValue)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
+                                       .toString ();
   }
 }

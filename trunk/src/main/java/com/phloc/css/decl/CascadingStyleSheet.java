@@ -30,6 +30,8 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 
 /**
  * This is the main object for a parsed CSS declaration. It has special handling
@@ -40,11 +42,12 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @NotThreadSafe
-public final class CascadingStyleSheet
+public final class CascadingStyleSheet implements ICSSSourceLocationAware
 {
   private final List <CSSImportRule> m_aImportRules = new ArrayList <CSSImportRule> ();
   private final List <CSSNamespaceRule> m_aNamespaceRules = new ArrayList <CSSNamespaceRule> ();
   private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();
+  private CSSSourceLocation m_aSourceLocation;
 
   public CascadingStyleSheet ()
   {}
@@ -557,6 +560,17 @@ public final class CascadingStyleSheet
     return ret;
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -585,6 +599,7 @@ public final class CascadingStyleSheet
     return new ToStringGenerator (this).append ("importRules", m_aImportRules)
                                        .append ("namespaceRules", m_aNamespaceRules)
                                        .append ("rules", m_aRules)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }
 }

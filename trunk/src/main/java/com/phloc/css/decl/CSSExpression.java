@@ -32,6 +32,8 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
@@ -41,9 +43,10 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSExpression implements ICSSWriteable
+public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAware
 {
   private final List <ICSSExpressionMember> m_aMembers = new ArrayList <ICSSExpressionMember> ();
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSExpression ()
   {}
@@ -251,6 +254,17 @@ public final class CSSExpression implements ICSSWriteable
     return aSB.toString ();
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -271,7 +285,9 @@ public final class CSSExpression implements ICSSWriteable
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (null).append ("members", m_aMembers).toString ();
+    return new ToStringGenerator (null).append ("members", m_aMembers)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
+                                       .toString ();
   }
 
   /**

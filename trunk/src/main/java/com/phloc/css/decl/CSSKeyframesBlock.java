@@ -30,7 +30,9 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
@@ -40,10 +42,11 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @NotThreadSafe
-public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware
+public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final List <String> m_aKeyframesSelectors;
   private final CSSDeclarationContainer m_aDeclarations = new CSSDeclarationContainer ();
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSKeyframesBlock (@Nonnull @Nonempty final List <String> aKeyframesSelectors)
   {
@@ -133,6 +136,17 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
     return ECSSVersion.CSS30;
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -155,6 +169,7 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
   {
     return new ToStringGenerator (this).append ("keyframesSelectors", m_aKeyframesSelectors)
                                        .append ("declarations", m_aDeclarations)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }
 }

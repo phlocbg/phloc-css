@@ -19,6 +19,7 @@ package com.phloc.css.decl;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -26,20 +27,24 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single element in a CSS style rule.
+ * Represents a single element in a CSS style rule. (eg. <code>color:red;</code>
+ * or <code>background:uri(a.gif) !important;</code>)
  * 
  * @author philip
  */
 @Immutable
-public final class CSSDeclaration implements ICSSWriteable
+public final class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
 {
   private final String m_sProperty;
   private final CSSExpression m_aExpression;
   private final boolean m_bImportant;
+  private CSSSourceLocation m_aSourceLocation;
 
   public CSSDeclaration (@Nonnull @Nonempty final String sProperty,
                          @Nonnull final CSSExpression aExpression,
@@ -83,6 +88,17 @@ public final class CSSDeclaration implements ICSSWriteable
            CCSS.DEFINITION_END;
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -111,6 +127,7 @@ public final class CSSDeclaration implements ICSSWriteable
     return new ToStringGenerator (this).append ("property", m_sProperty)
                                        .append ("expression", m_aExpression)
                                        .append ("important", m_bImportant)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }
 }

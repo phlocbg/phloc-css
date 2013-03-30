@@ -19,12 +19,15 @@ package com.phloc.css.decl;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -33,7 +36,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @Immutable
-public final class CSSExpressionMemberMathUnitProduct implements ICSSExpressionMathMember
+public final class CSSExpressionMemberMathUnitProduct implements ICSSExpressionMathMember, ICSSSourceLocationAware
 {
   private final CSSExpressionMemberMathProduct m_aProduct;
 
@@ -62,6 +65,12 @@ public final class CSSExpressionMemberMathUnitProduct implements ICSSExpressionM
   public ECSSVersion getMinimumCSSVersion ()
   {
     return ECSSVersion.CSS30;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aProduct.getSourceLocation ();
   }
 
   @Override

@@ -27,6 +27,8 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -36,12 +38,13 @@ import com.phloc.css.ICSSWriterSettings;
  * @author philip
  */
 @Immutable
-public final class CSSSelectorAttribute implements ICSSSelectorMember
+public final class CSSSelectorAttribute implements ICSSSelectorMember, ICSSSourceLocationAware
 {
   private final String m_sNamespacePrefix;
   private final String m_sAttrName;
   private final ECSSAttributeOperator m_eOperator;
   private final String m_sAttrValue;
+  private CSSSourceLocation m_aSourceLocation;
 
   private static boolean _isValidNamespacePrefix (@Nullable final String sNamespacePrefix)
   {
@@ -118,6 +121,17 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
     return aSB.append (']').toString ();
   }
 
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aSourceLocation = aSourceLocation;
+  }
+
+  @Nullable
+  public CSSSourceLocation getSourceLocation ()
+  {
+    return m_aSourceLocation;
+  }
+
   @Override
   public boolean equals (final Object o)
   {
@@ -149,6 +163,7 @@ public final class CSSSelectorAttribute implements ICSSSelectorMember
                                        .append ("attrName", m_sAttrName)
                                        .appendIfNotNull ("operator", m_eOperator)
                                        .appendIfNotNull ("attrValue", m_sAttrValue)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }
 }
