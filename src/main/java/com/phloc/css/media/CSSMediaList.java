@@ -113,13 +113,12 @@ public final class CSSMediaList implements Serializable, IHasSize
   }
 
   /**
-   * @return <code>true</code> if no explicit media is defined or if "only"
+   * @return <code>true</code> if no explicit media is defined or if
    *         {@link ECSSMedium#ALL} is contained.
    */
-  public boolean hasNoMediaExceptAll ()
+  public boolean hasNoMediaOrAll ()
   {
-    final int nSize = size ();
-    return nSize == 0 || (nSize == 1 && containsMedium (ECSSMedium.ALL));
+    return hasNoMedia () || containsMedium (ECSSMedium.ALL);
   }
 
   /**
