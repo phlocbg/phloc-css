@@ -20,12 +20,17 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2013-04-17" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to phloc-commons 4.0.3</text>
+    </change>
+  </entry>
   <entry date="2013-04-04" category="api" action="add">
     <change>
       <text locale="en">Extended CSSMediaList API slightly</text>
     </change>
   </entry>
-    <release date="2013-04-03" version="3.4.0" />
+  <release date="2013-04-03" version="3.4.0" />
   <entry date="2013-03-30" category="feature" action="add">
     <change>
       <text locale="en">Added support for line/column number handling when parsing CSS</text>
