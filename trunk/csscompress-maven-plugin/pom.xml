@@ -25,8 +25,8 @@
 
   <scm>
     <url>http://code.google.com/p/phloc-css/source/browse/</url>
-    <connection>scm:svn:http://phloc-css.googlecode.com/svn/addons/csscompress-maven-plugin</connection>
-    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/addons/csscompress-maven-plugin</developerConnection>
+    <connection>scm:svn:http://phloc-css.googlecode.com/svn/trunk/csscompress-maven-plugin</connection>
+    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/trunk/csscompress-maven-plugin</developerConnection>
   </scm>
   
   <organization>

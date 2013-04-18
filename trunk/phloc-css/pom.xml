@@ -24,8 +24,8 @@
  
   <scm>
     <url>http://code.google.com/p/phloc-css/source/browse/</url>
-    <connection>scm:svn:http://phloc-css.googlecode.com/svn/trunk</connection>
-    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/trunk</developerConnection>
+    <connection>scm:svn:http://phloc-css.googlecode.com/svn/trunk/phloc-css</connection>
+    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/trunk/phloc-css</developerConnection>
   </scm>
   
   <organization>
