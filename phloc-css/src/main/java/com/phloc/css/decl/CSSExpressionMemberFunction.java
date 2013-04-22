@@ -34,7 +34,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a CSS function element
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSourceLocationAware

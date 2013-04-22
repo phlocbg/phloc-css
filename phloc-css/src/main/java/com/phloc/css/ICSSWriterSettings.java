@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 /**
  * Settings for customizing the serialization of CSS properties etc.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ICSSWriterSettings
 {

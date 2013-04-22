@@ -27,7 +27,7 @@ import com.phloc.css.utils.CSSColorHelper;
  * CSS property that is either an enumeration or a color value (e.g.
  * background-color)
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CSSPropertyEnumOrColor extends CSSPropertyEnum
 {

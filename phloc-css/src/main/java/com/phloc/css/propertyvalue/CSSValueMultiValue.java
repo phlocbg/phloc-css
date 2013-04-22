@@ -40,7 +40,7 @@ import com.phloc.css.property.ICSSProperty;
  * <code>display:-moz-inline-block;</code> and then
  * <code>display:inline-block;</code> for FireFox 2.x specific support.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CSSValueMultiValue implements ICSSMultiValue
 {

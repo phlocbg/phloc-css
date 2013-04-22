@@ -39,7 +39,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a single import rule on top level
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware

@@ -36,7 +36,7 @@ import com.phloc.css.utils.CSSNumberHelper;
 /**
  * Represents a CSS calc element
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSExpressionMemberMathUnitSimple implements ICSSExpressionMathMember, ICSSSourceLocationAware

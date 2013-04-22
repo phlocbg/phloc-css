@@ -34,7 +34,7 @@ import com.phloc.css.property.ICSSProperty;
 /**
  * Represents the combination of a single CSS property and it's according value.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSValue implements ICSSValue

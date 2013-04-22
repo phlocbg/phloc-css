@@ -25,7 +25,7 @@ import com.phloc.css.utils.CSSURLHelper;
 /**
  * CSS property that needs to be an URL
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CSSPropertyURL extends AbstractCSSProperty
 {

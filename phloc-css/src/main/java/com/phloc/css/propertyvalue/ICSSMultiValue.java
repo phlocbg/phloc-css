@@ -27,7 +27,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 /**
  * Base interface for a CSS value that contains more than one value
  * 
- * @author philip
+ * @author Philip Helger
  */
 @MustImplementEqualsAndHashcode
 public interface ICSSMultiValue extends ICSSValue

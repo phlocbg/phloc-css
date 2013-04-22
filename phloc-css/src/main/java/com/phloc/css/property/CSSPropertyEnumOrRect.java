@@ -26,7 +26,7 @@ import com.phloc.css.utils.CSSRectHelper;
 /**
  * CSS property that is either an enumeration or a rectangle (e.g. clip)
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CSSPropertyEnumOrRect extends CSSPropertyEnum
 {

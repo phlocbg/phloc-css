@@ -29,7 +29,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * This class is used by the generated parsers to do some common stuff.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class ParseUtils

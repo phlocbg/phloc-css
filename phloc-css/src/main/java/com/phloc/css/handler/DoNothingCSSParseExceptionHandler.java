@@ -22,7 +22,7 @@ import com.phloc.css.parser.ParseException;
 /**
  * Ignoring handler :)
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class DoNothingCSSParseExceptionHandler implements ICSSParseExceptionHandler
 {

@@ -59,7 +59,7 @@ import com.phloc.css.parser.ParserCSSCharsetDetectorTokenManager;
  * This is the central user class for reading and parsing CSS from different
  * sources. This class reads full CSS declarations only.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSReader

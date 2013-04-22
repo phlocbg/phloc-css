@@ -38,7 +38,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a single <code>@font-face</code> rule.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware

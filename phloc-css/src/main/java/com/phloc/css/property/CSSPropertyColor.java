@@ -25,7 +25,7 @@ import com.phloc.css.utils.CSSColorHelper;
 /**
  * Represents a color value
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CSSPropertyColor extends AbstractCSSProperty
 {

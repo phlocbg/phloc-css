@@ -34,7 +34,7 @@ import com.phloc.css.ICSSWriterSettings;
  * Represents a single CSS selector like an element name, a hash value (ID), a
  * class or a pseudo class.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSSelectorSimpleMember implements ICSSSelectorMember, ICSSSourceLocationAware

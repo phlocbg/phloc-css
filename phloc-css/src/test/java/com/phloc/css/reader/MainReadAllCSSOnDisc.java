@@ -38,7 +38,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * Crawl the disc for CSS files :)
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class MainReadAllCSSOnDisc
 {

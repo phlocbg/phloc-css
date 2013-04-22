@@ -20,7 +20,7 @@ package com.phloc.css;
 /**
  * Enumeration containing all predefined CSS meta units.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ECSSMetaUnit
 {

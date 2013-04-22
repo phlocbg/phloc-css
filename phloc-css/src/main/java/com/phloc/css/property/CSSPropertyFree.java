@@ -25,7 +25,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * CSS property without any layout constraint, except that it may not be empty.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CSSPropertyFree extends AbstractCSSProperty
 {

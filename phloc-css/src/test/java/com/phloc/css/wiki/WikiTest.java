@@ -33,7 +33,7 @@ import com.phloc.css.writer.CSSWriter;
 /**
  * This is example code to create a font-face rule from scratch
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class WikiTest
 {

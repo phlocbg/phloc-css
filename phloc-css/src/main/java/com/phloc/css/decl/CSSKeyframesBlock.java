@@ -39,7 +39,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * keyframes block
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware

@@ -64,7 +64,7 @@ import com.phloc.css.annotations.DeprecatedInCSS30;
  * <li>http://www.w3.org/TR/2008/CR-css3-marquee-20081205/#property</li>
  * </ul>
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ECSSProperty implements IHasName, ICSSVersionAware
 {

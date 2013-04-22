@@ -26,7 +26,7 @@ import com.phloc.css.property.ECSSProperty;
 /**
  * Represents a single CSS value.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @MustImplementEqualsAndHashcode
 public interface ICSSValue extends ICSSWriteable

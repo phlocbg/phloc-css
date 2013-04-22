@@ -39,7 +39,7 @@ import com.phloc.css.decl.IHasCSSDeclarations;
  * This class is used to walk a CSS domain object and call the respective
  * {@link ICSSVisitor} and {@link ICSSUrlVisitor} interface methods.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSVisitor

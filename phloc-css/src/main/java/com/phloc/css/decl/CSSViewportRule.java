@@ -39,7 +39,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a single <code>@viewport</code> rule.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware

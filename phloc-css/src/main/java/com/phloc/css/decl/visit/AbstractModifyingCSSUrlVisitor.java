@@ -29,7 +29,7 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * Abstract {@link ICSSUrlVisitor} that modifies all URLs according to an
  * abstract rule
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public abstract class AbstractModifyingCSSUrlVisitor extends DefaultCSSUrlVisitor

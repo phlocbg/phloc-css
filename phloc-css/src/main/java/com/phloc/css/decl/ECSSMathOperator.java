@@ -30,7 +30,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents the different math operators available.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ECSSMathOperator implements ICSSExpressionMathMember, IHasName
 {

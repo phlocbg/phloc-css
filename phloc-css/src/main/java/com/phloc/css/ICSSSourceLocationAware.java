@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 /**
  * Interface for objects that have a source location.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ICSSSourceLocationAware
 {

@@ -30,7 +30,7 @@ import com.phloc.css.utils.ECSSColor;
 /**
  * Test class for class {@link CSSValue}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CSSValueTest
 {

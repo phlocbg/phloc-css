@@ -31,7 +31,7 @@ import com.phloc.css.propertyvalue.CCSSValue;
 /**
  * This class is responsible for expression term optimization
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSExpressionTermOptimizer

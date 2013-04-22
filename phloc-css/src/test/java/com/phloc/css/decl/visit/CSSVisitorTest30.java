@@ -37,7 +37,7 @@ import com.phloc.css.reader.CSSReader;
 /**
  * Test class for class {@link CSSVisitor}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CSSVisitorTest30 extends AbstractCSS30Test
 {

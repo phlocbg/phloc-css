@@ -28,7 +28,7 @@ import com.phloc.css.parser.CSSNode;
 /**
  * This is the central class for reading and parsing CSS from an input stream.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSHandler

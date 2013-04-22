@@ -41,7 +41,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a single @keyframes rule.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAware, ICSSSourceLocationAware

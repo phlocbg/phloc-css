@@ -39,7 +39,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * Provides color handling sanity methods.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSColorHelper

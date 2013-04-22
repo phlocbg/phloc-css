@@ -30,7 +30,7 @@ import com.phloc.css.propertyvalue.CCSSValue;
 /**
  * Provides URL handling sanity methods.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSURLHelper

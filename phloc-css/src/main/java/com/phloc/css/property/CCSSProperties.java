@@ -28,7 +28,7 @@ import com.phloc.css.propertyvalue.ICSSValue;
  * Contains the most commonly used CSS properties plus the available value
  * ranges.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CCSSProperties

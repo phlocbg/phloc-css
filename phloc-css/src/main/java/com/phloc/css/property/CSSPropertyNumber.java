@@ -26,7 +26,7 @@ import com.phloc.css.utils.CSSNumberHelper;
 /**
  * CSS property that is a number (e.g. line-height)
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CSSPropertyNumber extends AbstractCSSProperty
 {

@@ -30,7 +30,7 @@ import com.phloc.css.propertyvalue.CSSSimpleValueWithUnit;
 /**
  * Test class for class {@link CSSNumberHelper}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CSSNumberHelperTest
 {

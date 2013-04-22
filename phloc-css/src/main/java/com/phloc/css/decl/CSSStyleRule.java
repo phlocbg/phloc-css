@@ -39,7 +39,7 @@ import com.phloc.css.ICSSWriterSettings;
  * selectors (determine the element to which the style rule applies) and a
  * number of declarations (the rules to be applied to the selected elements).
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSSourceLocationAware

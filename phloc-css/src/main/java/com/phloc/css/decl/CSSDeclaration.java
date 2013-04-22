@@ -36,7 +36,7 @@ import com.phloc.css.ICSSWriterSettings;
  * Represents a single element in a CSS style rule. (eg. <code>color:red;</code>
  * or <code>background:uri(a.gif) !important;</code>)
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware

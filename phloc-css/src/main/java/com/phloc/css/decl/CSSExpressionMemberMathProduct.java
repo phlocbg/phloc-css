@@ -39,7 +39,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a CSS calc element
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSExpressionMemberMathProduct implements ICSSExpressionMathMember, ICSSSourceLocationAware

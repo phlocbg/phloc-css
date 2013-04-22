@@ -27,7 +27,7 @@ import com.phloc.css.ECSSVersion;
 /**
  * Test reading CSS 2.1 files
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class FuncTestCSSReader21 extends AbstractFuncTestCSSReader
 {

@@ -40,7 +40,7 @@ import com.phloc.css.decl.ICSSTopLevelRule;
 /**
  * Convert CSS domain objects back to a text representation.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSWriter

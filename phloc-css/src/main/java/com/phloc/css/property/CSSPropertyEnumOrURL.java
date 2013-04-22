@@ -27,7 +27,7 @@ import com.phloc.css.utils.CSSURLHelper;
  * CSS property that is either an enumeration or a URL value (e.g.
  * list-style-image)
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CSSPropertyEnumOrURL extends CSSPropertyEnum
 {

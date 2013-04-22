@@ -22,7 +22,7 @@ import com.phloc.css.ICSSWriteable;
 /**
  * Base interface for all CSS expression objects.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ICSSExpressionMember extends ICSSWriteable
 {

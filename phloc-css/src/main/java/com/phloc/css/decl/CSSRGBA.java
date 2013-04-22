@@ -33,7 +33,7 @@ import com.phloc.css.utils.CSSColorHelper;
 /**
  * Represents a single RGBA color value
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSRGBA implements ICSSWriteable

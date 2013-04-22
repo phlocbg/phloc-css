@@ -27,7 +27,7 @@ import com.phloc.css.writer.CSSWriterSettings;
 /**
  * Test class for class {@link CSSRGB}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CSSRGBTest
 {

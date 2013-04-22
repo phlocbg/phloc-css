@@ -32,7 +32,7 @@ import com.phloc.css.CSSSourceLocation;
 /**
  * This class represents a simple node in the tree built by jjtree.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CSSNode implements Node, Iterable <CSSNode>
 {

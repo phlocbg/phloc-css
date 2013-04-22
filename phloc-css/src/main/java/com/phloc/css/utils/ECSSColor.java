@@ -29,7 +29,7 @@ import com.phloc.commons.lang.EnumHelper;
  * CSS basic colors. Source: http://www.w3.org/TR/css3-color/ chapter 4.1 and
  * 4.3
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ECSSColor implements ICSSNamedColor
 {

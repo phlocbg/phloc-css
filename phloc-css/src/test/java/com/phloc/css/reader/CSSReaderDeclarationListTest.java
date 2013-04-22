@@ -38,7 +38,7 @@ import com.phloc.css.handler.ICSSParseExceptionHandler;
 /**
  * Test class for class {@link CSSReaderDeclarationList}
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CSSReaderDeclarationListTest
 {

@@ -39,7 +39,7 @@ import com.phloc.css.ICSSWriterSettings;
  * Represents a list of {@link CSSDeclaration} objects. This class emits all
  * declarations in a row, without any surrounding block elements.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocationAware

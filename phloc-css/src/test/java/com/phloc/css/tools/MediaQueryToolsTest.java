@@ -36,7 +36,7 @@ import com.phloc.css.writer.CSSWriter;
 /**
  * Test class for class {@link MediaQueryTools}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class MediaQueryToolsTest
 {

@@ -73,7 +73,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * This class converts the jjtree node to a domain object
  * 
- * @author philip
+ * @author Philip Helger
  */
 final class CSSNodeToDomainObject
 {

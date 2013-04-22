@@ -32,7 +32,7 @@ import com.phloc.css.propertyvalue.CCSSValue;
 /**
  * Represents a single CSS rectangle
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSRect implements ICSSWriteable

@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 /**
  * Interface for objects that can be written to CSS.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ICSSWriteable
 {

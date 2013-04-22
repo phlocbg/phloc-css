@@ -32,7 +32,7 @@ import com.phloc.css.utils.CSSURLHelper;
 /**
  * This class represents the options required for writing
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public class CSSWriterSettings implements ICSSWriterSettings

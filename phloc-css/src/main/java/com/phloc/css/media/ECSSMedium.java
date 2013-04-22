@@ -30,7 +30,7 @@ import com.phloc.css.annotations.DeprecatedInCSS21;
 /**
  * Defines all default CSS media types.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ECSSMedium implements ICSSVersionAware, IHasName
 {

@@ -28,7 +28,7 @@ import com.phloc.css.ECSSUnit;
 /**
  * This class encapsulates a single numeric value and a unit.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSSimpleValueWithUnit

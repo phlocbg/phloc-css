@@ -36,7 +36,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Manages a set of {@link ECSSMedium} objects.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSMediaList implements Serializable, IHasSize

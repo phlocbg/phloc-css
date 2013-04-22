@@ -30,7 +30,7 @@ import com.phloc.css.reader.CSSReader;
 /**
  * This is example code to read a CSS declaration from a {@link File}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class WikiReadCSS
 {
