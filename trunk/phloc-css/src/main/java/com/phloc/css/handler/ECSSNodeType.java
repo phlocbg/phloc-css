@@ -33,7 +33,7 @@ import com.phloc.css.parser.ParserCSS30TreeConstants;
 /**
  * Maps the different parser tokens between the 2.1 and the 3.0 parser.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ECSSNodeType
 {

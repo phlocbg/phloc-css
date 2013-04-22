@@ -35,7 +35,7 @@ import com.phloc.css.utils.CSSURLHelper;
 /**
  * Represents a single CSS URI
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSURI implements ICSSWriteable, ICSSSourceLocationAware

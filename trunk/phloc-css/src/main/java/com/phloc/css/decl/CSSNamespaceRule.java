@@ -35,7 +35,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a single namespace rule on top level.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSNamespaceRule implements ICSSWriteable, ICSSSourceLocationAware

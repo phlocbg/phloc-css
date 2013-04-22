@@ -33,7 +33,7 @@ import com.phloc.css.utils.ICSSNamedColor;
 /**
  * Abstract base class for implementing {@link ICSSProperty}
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractCSSProperty implements ICSSProperty
 {

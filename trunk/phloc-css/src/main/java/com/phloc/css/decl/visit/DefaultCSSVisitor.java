@@ -36,7 +36,7 @@ import com.phloc.css.decl.CSSViewportRule;
  * Default implementation of the {@link ICSSVisitor} interface. Use as base
  * class for your own implementations since this class does nothin on its own.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class DefaultCSSVisitor implements ICSSVisitor
 {

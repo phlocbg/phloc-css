@@ -30,7 +30,7 @@ import com.phloc.css.utils.CSSColorHelper;
  * CSS property that is a list of either an enumeration or a color value (e.g.
  * border-color)
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CSSPropertyEnumOrColors extends CSSPropertyEnum
 {

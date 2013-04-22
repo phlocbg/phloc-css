@@ -28,7 +28,7 @@ import com.phloc.css.utils.CSSNumberHelper;
  * CSS property that is either an enumeration or a numeric value (e.g.
  * font-size)
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CSSPropertyEnumOrNumber extends CSSPropertyEnum
 {

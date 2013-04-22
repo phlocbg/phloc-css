@@ -40,7 +40,7 @@ import com.phloc.css.writer.CSSWriterSettings;
 /**
  * Abstract class for reading multiple CSS files
  * 
- * @author philip
+ * @author Philip Helger
  */
 public abstract class AbstractFuncTestCSSReader
 {

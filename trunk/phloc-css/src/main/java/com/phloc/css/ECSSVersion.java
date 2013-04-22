@@ -25,7 +25,7 @@ import com.phloc.commons.version.Version;
 /**
  * Contains the different CSS versions that may be of relevance.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ECSSVersion implements IHasVersion
 {

@@ -34,7 +34,7 @@ import com.phloc.css.writer.CSSWriterSettings;
 /**
  * This is example code to write a CSS declaration to a {@link File}.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class WikiWriteCSS
 {

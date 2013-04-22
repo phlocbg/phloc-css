@@ -55,7 +55,7 @@ import com.phloc.css.parser.ParserCSS30TokenManager;
  * different sources. This class reads CSS style declarations as used in HTML
  * style attributes only.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSReaderDeclarationList

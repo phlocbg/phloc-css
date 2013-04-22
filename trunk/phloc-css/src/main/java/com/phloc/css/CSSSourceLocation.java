@@ -32,7 +32,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Defines the source location of an object when reading CSS from a stream.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSSourceLocation

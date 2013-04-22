@@ -30,7 +30,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * CSS property with a predefined list of possible values (e.g. "cursor")
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CSSPropertyEnum extends AbstractCSSProperty
 {

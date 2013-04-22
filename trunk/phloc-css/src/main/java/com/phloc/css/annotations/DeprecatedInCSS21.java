@@ -25,7 +25,7 @@ import java.lang.annotation.RetentionPolicy;
  * Marker annotation that denotes all CSS elements that are marked deprecated in
  * CSS 2.1
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Documented
 @Retention (RetentionPolicy.RUNTIME)

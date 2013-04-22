@@ -40,7 +40,7 @@ import com.phloc.css.property.ICSSProperty;
  * value).<br>
  * For consistency issues,
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CSSValueMultiProperty implements ICSSMultiValue
 {

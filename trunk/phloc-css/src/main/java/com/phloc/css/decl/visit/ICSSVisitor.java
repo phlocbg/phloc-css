@@ -34,7 +34,7 @@ import com.phloc.css.decl.CSSViewportRule;
 /**
  * Interface for visiting different elements of a CSS domain object.
  * 
- * @author philip
+ * @author Philip Helger
  * @see DefaultCSSVisitor
  */
 public interface ICSSVisitor

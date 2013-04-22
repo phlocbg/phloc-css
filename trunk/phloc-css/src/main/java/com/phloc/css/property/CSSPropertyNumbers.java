@@ -28,7 +28,7 @@ import com.phloc.css.utils.CSSNumberHelper;
 /**
  * CSS property with a list of numbers (e.g. padding)
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CSSPropertyNumbers extends AbstractCSSProperty
 {

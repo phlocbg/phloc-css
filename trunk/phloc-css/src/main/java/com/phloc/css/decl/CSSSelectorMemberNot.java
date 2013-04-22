@@ -38,7 +38,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents an inverted CSS selector.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersionAware, ICSSSourceLocationAware

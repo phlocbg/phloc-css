@@ -22,7 +22,7 @@ import com.phloc.commons.name.IHasName;
 /**
  * Base interface for predefined CSS color names
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ICSSNamedColor extends IHasName
 {

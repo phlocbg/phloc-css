@@ -41,7 +41,7 @@ import com.phloc.css.reader.CSSReader;
  * a specific media, if possible. {@link CascadingStyleSheet} can only be
  * wrapped, if they don't contain a media rule themselves.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class MediaQueryTools

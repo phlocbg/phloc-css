@@ -37,7 +37,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * assumed to contain only ASCII characters (with java-like unicode escape
  * processing).
  * 
- * @author philip
+ * @author Philip Helger
  */
 @SuppressFBWarnings ("NM_METHOD_NAMING_CONVENTION")
 public final class JavaCharStream implements CharStream

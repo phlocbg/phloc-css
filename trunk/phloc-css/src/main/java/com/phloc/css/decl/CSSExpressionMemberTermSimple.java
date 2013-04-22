@@ -33,7 +33,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a simple expression member
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember, ICSSSourceLocationAware

@@ -33,7 +33,7 @@ import com.phloc.css.reader.CSSReader;
 /**
  * Utility class to compress CSS content
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSCompressor

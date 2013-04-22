@@ -33,7 +33,7 @@ import com.phloc.css.decl.CascadingStyleSheet;
 /**
  * Test reading CSS 3.0 stuff
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class FuncTestCSSReader30 extends AbstractFuncTestCSSReader
 {

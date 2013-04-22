@@ -23,7 +23,7 @@ import com.phloc.css.parser.ParseException;
 /**
  * Special CSS exception handler
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface ICSSParseExceptionHandler extends IExceptionHandler <ParseException>
 {

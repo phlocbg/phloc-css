@@ -31,7 +31,7 @@ import com.phloc.css.ICSSWriteable;
  * <li>viewport rules</li>
  * </ul>
  * 
- * @author philip
+ * @author Philip Helger
  */
 @MustImplementEqualsAndHashcode
 public interface ICSSTopLevelRule extends ICSSWriteable

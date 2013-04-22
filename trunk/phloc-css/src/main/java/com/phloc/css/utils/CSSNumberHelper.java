@@ -29,7 +29,7 @@ import com.phloc.css.propertyvalue.CSSSimpleValueWithUnit;
 /**
  * Provides number handling sanity methods.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSNumberHelper

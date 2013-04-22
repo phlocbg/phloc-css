@@ -28,7 +28,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Defines the source location of a single token when reading CSS from a stream.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSSourceArea

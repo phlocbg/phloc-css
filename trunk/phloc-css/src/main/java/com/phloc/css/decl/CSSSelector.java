@@ -37,7 +37,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a single selector as the aggregation of selector members.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
 {

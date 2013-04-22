@@ -29,7 +29,7 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * Default implementation of the {@link ICSSUrlVisitor} interface which does
  * nothing. Use as the base class for your implementation.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class DefaultCSSUrlVisitor implements ICSSUrlVisitor
 {

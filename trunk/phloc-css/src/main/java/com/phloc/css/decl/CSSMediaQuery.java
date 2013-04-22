@@ -39,7 +39,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a single media query
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
 {

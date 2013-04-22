@@ -29,7 +29,7 @@ import com.phloc.css.ICSSWriterSettings;
  * to {@link CSSDeclarationList} this class emits block level elements around
  * the declarations as used in style rules etc.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSDeclarationContainer extends CSSDeclarationList

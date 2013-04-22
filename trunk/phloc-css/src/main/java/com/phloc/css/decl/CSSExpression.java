@@ -40,7 +40,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a single expression consisting of several expression members
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAware

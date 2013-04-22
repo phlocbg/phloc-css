@@ -27,7 +27,7 @@ import com.phloc.commons.name.IHasName;
 /**
  * This enum represents the W3C standard media query expression features.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public enum ECSSMediaExpressionFeature implements IHasName
 {

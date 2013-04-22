@@ -28,7 +28,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * CSS property that is a list of enumeration entries (e.g. border-style)
  * 
- * @author philip
+ * @author Philip Helger
  */
 public class CSSPropertyEnums extends CSSPropertyEnum
 {

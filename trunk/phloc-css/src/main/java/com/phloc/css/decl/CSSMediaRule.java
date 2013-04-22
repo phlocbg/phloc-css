@@ -40,7 +40,7 @@ import com.phloc.css.ICSSWriterSettings;
  * Represents a single <code>@media</code> rule: a list of style rules only
  * valid for certain media.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware

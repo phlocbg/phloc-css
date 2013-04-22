@@ -29,7 +29,7 @@ import com.phloc.css.utils.ICSSNamedColor;
  * 
  * @see com.phloc.css.property.CCSSProperties for a list of default CSS
  *      properties
- * @author philip
+ * @author Philip Helger
  */
 public interface ICSSProperty extends ICSSVersionAware
 {

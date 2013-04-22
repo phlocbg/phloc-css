@@ -25,7 +25,7 @@ import javax.annotation.concurrent.Immutable;
  * Units of measurement are based on:
  * http://de.selfhtml.org/css/formate/wertzuweisung.htm<br>
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CCSS

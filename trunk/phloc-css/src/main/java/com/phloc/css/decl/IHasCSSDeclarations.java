@@ -30,7 +30,7 @@ import com.phloc.css.ICSSWriteable;
 /**
  * Sanity interface for all objects having CSS declarations.
  * 
- * @author philip
+ * @author Philip Helger
  */
 public interface IHasCSSDeclarations extends ICSSWriteable
 {

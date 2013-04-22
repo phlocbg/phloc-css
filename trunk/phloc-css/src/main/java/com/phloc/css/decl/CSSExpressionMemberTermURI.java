@@ -32,7 +32,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents an expression member URI
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSExpressionMemberTermURI implements ICSSExpressionMember, ICSSSourceLocationAware

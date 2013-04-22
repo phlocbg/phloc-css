@@ -33,7 +33,7 @@ import com.phloc.css.utils.CSSColorHelper;
 /**
  * Represents a single HSL color value
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSHSL implements ICSSWriteable

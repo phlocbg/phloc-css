@@ -26,7 +26,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * Utility methods to deal with CSS filenames.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSFilenameHelper

@@ -34,7 +34,7 @@ import com.phloc.css.ICSSWriterSettings;
  * Represents a single CSS complex selector pseudo element. Like
  * <code>:lang(fr)</code>
  * 
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSSelectorMemberFunctionLike implements ICSSSelectorMember, ICSSSourceLocationAware

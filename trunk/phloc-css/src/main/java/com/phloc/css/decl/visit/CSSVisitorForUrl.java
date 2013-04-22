@@ -36,7 +36,7 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * A special {@link ICSSVisitor} that is used to extract URLs from the available
  * rules.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CSSVisitorForUrl extends DefaultCSSVisitor

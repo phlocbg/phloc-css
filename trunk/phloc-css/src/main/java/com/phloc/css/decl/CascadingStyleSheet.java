@@ -39,7 +39,7 @@ import com.phloc.css.ICSSSourceLocationAware;
  * beginning of a file. All other rules (all implementing
  * {@link ICSSTopLevelRule}) are maintained in a combined list.
  * 
- * @author philip
+ * @author Philip Helger
  */
 @NotThreadSafe
 public final class CascadingStyleSheet implements ICSSSourceLocationAware

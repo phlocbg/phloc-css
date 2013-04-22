@@ -35,7 +35,7 @@ import com.phloc.css.ICSSWriterSettings;
  * A single CSS selector attribute.
  * 
  * @see ECSSAttributeOperator
- * @author philip
+ * @author Philip Helger
  */
 @Immutable
 public final class CSSSelectorAttribute implements ICSSSelectorMember, ICSSSourceLocationAware
