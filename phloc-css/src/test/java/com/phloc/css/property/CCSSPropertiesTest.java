@@ -54,5 +54,8 @@ public final class CCSSPropertiesTest
     assertFalse (CCSSProperties.COLOR.isValidValue ("#ppp"));
     assertTrue (CCSSProperties.CLIP.isValidValue ("auto"));
     assertTrue (CCSSProperties.CLIP.isValidValue ("rect(5px,10in,33px,456em)"));
+    assertTrue (CCSSProperties.Z_INDEX.isValidValue ("-500"));
+    assertTrue (CCSSProperties.Z_INDEX.isValidValue ("0"));
+    assertTrue (CCSSProperties.Z_INDEX.isValidValue ("1000"));
   }
 }

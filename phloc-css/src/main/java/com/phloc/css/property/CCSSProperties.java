@@ -351,7 +351,7 @@ public final class CCSSProperties
                                                                 CCSSValue.RIGHT,
                                                                 CCSSValue.BOTH,
                                                                 CCSSValue.NONE);
-  public static final ICSSProperty Z_INDEX = new CSSPropertyNumber (ECSSProperty.Z_INDEX, false);
+  public static final ICSSProperty Z_INDEX = new CSSPropertyEnumOrInt (ECSSProperty.Z_INDEX, CCSSValue.AUTO);
   public static final ICSSProperty DISPLAY = new CSSPropertyEnum (ECSSProperty.DISPLAY,
                                                                   CCSSValue.BLOCK,
                                                                   CCSSValue.INLINE,

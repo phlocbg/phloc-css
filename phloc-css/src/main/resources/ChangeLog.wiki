@@ -2,6 +2,7 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr><td>4/25/13</td><td>fix</td><td>tech</td><td></td><td>Fixed validity check for property "z-index"</td></tr>
 <tr><td>4/17/13</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-commons phloc-commons] 4.0.3</td></tr>
 <tr><td>4/4/13</td><td>add</td><td>api</td><td></td><td>Extended CSSMediaList API slightly</td></tr>
 <tr border="1"><td>4/3/13</td><td colspan="4">_Release *3.4.0*_</td></tr>
