@@ -56,15 +56,15 @@ public class DefaultCSSVisitor implements ICSSVisitor
   {}
 
   @OverrideOnDemand
+  public void onDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  {}
+
+  @OverrideOnDemand
   public void onBeginStyleRule (@Nonnull final CSSStyleRule aStyleRule)
   {}
 
   @OverrideOnDemand
   public void onStyleRuleSelector (@Nonnull final CSSSelector aSelector)
-  {}
-
-  @OverrideOnDemand
-  public void onDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {}
 
   @OverrideOnDemand

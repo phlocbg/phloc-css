@@ -20,6 +20,7 @@ package com.phloc.css.decl.visit;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.collections.NonBlockingStack;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpression;
 import com.phloc.css.decl.CSSExpressionMemberTermURI;
@@ -34,15 +35,15 @@ import com.phloc.css.decl.ICSSTopLevelRule;
 
 /**
  * A special {@link ICSSVisitor} that is used to extract URLs from the available
- * rules.
+ * rules and call the {@link ICSSUrlVisitor} visitor.
  * 
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSVisitorForUrl extends DefaultCSSVisitor
+public class CSSVisitorForUrl extends DefaultCSSVisitor
 {
   private final ICSSUrlVisitor m_aVisitor;
-  private ICSSTopLevelRule m_aTopLevelRule;
+  private final NonBlockingStack <ICSSTopLevelRule> m_aTopLevelRule = new NonBlockingStack <ICSSTopLevelRule> ();
 
   public CSSVisitorForUrl (@Nonnull final ICSSUrlVisitor aVisitor)
   {
@@ -71,68 +72,68 @@ public final class CSSVisitorForUrl extends DefaultCSSVisitor
       if (aMember instanceof CSSExpressionMemberTermURI)
       {
         final CSSExpressionMemberTermURI aExprTerm = (CSSExpressionMemberTermURI) aMember;
-        m_aVisitor.onUrlDeclaration (m_aTopLevelRule, aDeclaration, aExprTerm);
+        m_aVisitor.onUrlDeclaration (m_aTopLevelRule.peek (), aDeclaration, aExprTerm);
       }
   }
 
   @Override
   public void onBeginStyleRule (@Nonnull final CSSStyleRule aStyleRule)
   {
-    m_aTopLevelRule = aStyleRule;
+    m_aTopLevelRule.push (aStyleRule);
   }
 
   @Override
   public void onEndStyleRule (@Nonnull final CSSStyleRule aStyleRule)
   {
-    m_aTopLevelRule = null;
+    m_aTopLevelRule.pop ();
   }
 
   @Override
   public void onBeginPageRule (@Nonnull final CSSPageRule aPageRule)
   {
-    m_aTopLevelRule = aPageRule;
+    m_aTopLevelRule.push (aPageRule);
   }
 
   @Override
   public void onEndPageRule (@Nonnull final CSSPageRule aPageRule)
   {
-    m_aTopLevelRule = null;
+    m_aTopLevelRule.pop ();
   }
 
   @Override
   public void onBeginFontFaceRule (@Nonnull final CSSFontFaceRule aFontFaceRule)
   {
-    m_aTopLevelRule = aFontFaceRule;
+    m_aTopLevelRule.push (aFontFaceRule);
   }
 
   @Override
   public void onEndFontFaceRule (@Nonnull final CSSFontFaceRule aFontFaceRule)
   {
-    m_aTopLevelRule = null;
+    m_aTopLevelRule.pop ();
   }
 
   @Override
   public void onBeginMediaRule (@Nonnull final CSSMediaRule aMediaRule)
   {
-    m_aTopLevelRule = aMediaRule;
+    m_aTopLevelRule.push (aMediaRule);
   }
 
   @Override
   public void onEndMediaRule (@Nonnull final CSSMediaRule aMediaRule)
   {
-    m_aTopLevelRule = null;
+    m_aTopLevelRule.pop ();
   }
 
   @Override
   public void onBeginKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule)
   {
-    m_aTopLevelRule = aKeyframesRule;
+    m_aTopLevelRule.push (aKeyframesRule);
   }
 
   @Override
   public void onEndKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule)
   {
-    m_aTopLevelRule = null;
+    m_aTopLevelRule.pop ();
   }
 
   @Override

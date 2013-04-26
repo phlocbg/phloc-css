@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2013-04-26" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed parent element handling in CSSVisitorForUrl</text>
+    </change>
+  </entry>
   <entry date="2013-04-25" category="tech" action="fix">
     <change>
       <text locale="en">Fixed validity check for property "z-index"</text>
