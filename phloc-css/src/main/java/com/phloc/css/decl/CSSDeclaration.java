@@ -59,6 +59,10 @@ public final class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAw
     m_bImportant = bImportant;
   }
 
+  /**
+   * @return The property of this declaration (e.g. "color" or "margin-top").
+   *         Never <code>null</code>.
+   */
   @Nonnull
   @Nonempty
   public String getProperty ()
@@ -66,12 +70,21 @@ public final class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAw
     return m_sProperty;
   }
 
+  /**
+   * @return The expression of this declaration (e.g. "red" or "25px" or
+   *         "25px 10px 25px 9px") as a structured value. Never
+   *         <code>null</code>.
+   */
   @Nonnull
   public CSSExpression getExpression ()
   {
     return m_aExpression;
   }
 
+  /**
+   * @return <code>true</code> if this declaration is important (
+   *         <code>!important</code>) or not.
+   */
   public boolean isImportant ()
   {
     return m_bImportant;

@@ -35,20 +35,22 @@ import com.phloc.css.decl.CSSViewportRule;
  * Interface for visiting different elements of a CSS domain object.
  * 
  * @author Philip Helger
- * @see DefaultCSSVisitor
+ * @see DefaultCSSVisitor DefaultCSSVisitor for an empty default implementation
  */
 public interface ICSSVisitor
 {
   /**
-   * Before visiting starts.
+   * Before visiting starts.<br>
+   * Note: This is only called for complete style sheets, and not when starting
+   * e.g. with a declaration list!
    */
   void begin ();
 
   /**
-   * Called on CSS import statement - rarely used :)
+   * Called on CSS import statement
    * 
    * @param aImportRule
-   *        Other imported CSS
+   *        Other imported CSS. Never <code>null</code>.
    */
   void onImport (@Nonnull CSSImportRule aImportRule);
 
@@ -56,54 +58,153 @@ public interface ICSSVisitor
    * Called on CSS namespace statement
    * 
    * @param aNamespaceRule
-   *        The namespace rule
+   *        The namespace rule. Never <code>null</code>.
    */
   void onNamespace (@Nonnull CSSNamespaceRule aNamespaceRule);
 
-  // style rules:
-  void onBeginStyleRule (@Nonnull CSSStyleRule aStyleRule);
-
-  void onStyleRuleSelector (@Nonnull CSSSelector aSelector);
-
+  /**
+   * Called for each declaration
+   * 
+   * @param aDeclaration
+   *        The declaration. Never <code>null</code>.
+   */
   void onDeclaration (@Nonnull CSSDeclaration aDeclaration);
 
+  // style rules:
+  // contained declarations are handled by onDeclaration
+  /**
+   * Called when a style rule starts.
+   * 
+   * @param aStyleRule
+   *        The style rule. Never <code>null</code>.
+   */
+  void onBeginStyleRule (@Nonnull CSSStyleRule aStyleRule);
+
+  /**
+   * Called for each selector of a style rule
+   * 
+   * @param aSelector
+   *        The style rule selector. Never <code>null</code>.
+   */
+  void onStyleRuleSelector (@Nonnull CSSSelector aSelector);
+
+  /**
+   * Called when a style rule ends.
+   * 
+   * @param aStyleRule
+   *        The style rule. Never <code>null</code>.
+   */
   void onEndStyleRule (@Nonnull CSSStyleRule aStyleRule);
 
   // page rules:
   // contained declarations are handled by onDeclaration
+  /**
+   * Called when a page rule starts.
+   * 
+   * @param aPageRule
+   *        The page rule. Never <code>null</code>.
+   */
   void onBeginPageRule (@Nonnull CSSPageRule aPageRule);
 
+  /**
+   * Called when a page rule ends.
+   * 
+   * @param aPageRule
+   *        The page rule. Never <code>null</code>.
+   */
   void onEndPageRule (@Nonnull CSSPageRule aPageRule);
 
   // font face rules:
   // contained declarations are handled by onDeclaration
+  /**
+   * Called when a font-face rule starts.
+   * 
+   * @param aFontFaceRule
+   *        The font-face rule. Never <code>null</code>.
+   */
   void onBeginFontFaceRule (@Nonnull CSSFontFaceRule aFontFaceRule);
 
+  /**
+   * Called when a font-face rule ends.
+   * 
+   * @param aFontFaceRule
+   *        The font-face rule. Never <code>null</code>.
+   */
   void onEndFontFaceRule (@Nonnull CSSFontFaceRule aFontFaceRule);
 
   // media rules:
   // contained style rules are handled by the on*StyleRule* methods
+  /**
+   * Called when a media rule starts.
+   * 
+   * @param aMediaRule
+   *        The media rule. Never <code>null</code>.
+   */
   void onBeginMediaRule (@Nonnull CSSMediaRule aMediaRule);
 
+  /**
+   * Called when a media rule ends.
+   * 
+   * @param aMediaRule
+   *        The media rule. Never <code>null</code>.
+   */
   void onEndMediaRule (@Nonnull CSSMediaRule aMediaRule);
 
   // keyframes rules:
+  // contained declarations are handled by onDeclaration
+  /**
+   * Called when a keyframes starts.
+   * 
+   * @param aKeyframesRule
+   *        The keyframes rule. Never <code>null</code>.
+   */
   void onBeginKeyframesRule (@Nonnull CSSKeyframesRule aKeyframesRule);
 
-  // contained declarations are handled by onDeclaration
+  /**
+   * Called when a keyframes block starts.
+   * 
+   * @param aKeyframesBlock
+   *        The keyframes rule block. Never <code>null</code>.
+   */
   void onBeginKeyframesBlock (@Nonnull CSSKeyframesBlock aKeyframesBlock);
 
+  /**
+   * Called when a keyframes block ends.
+   * 
+   * @param aKeyframesBlock
+   *        The keyframes rule block. Never <code>null</code>.
+   */
   void onEndKeyframesBlock (@Nonnull CSSKeyframesBlock aKeyframesBlock);
 
+  /**
+   * Called when a keyframes ends.
+   * 
+   * @param aKeyframesRule
+   *        The keyframes rule. Never <code>null</code>.
+   */
   void onEndKeyframesRule (@Nonnull CSSKeyframesRule aKeyframesRule);
 
   // viewport rules
+  /**
+   * Called when a viewport starts.
+   * 
+   * @param aViewportRule
+   *        The viewport rule. Never <code>null</code>.
+   */
   void onBeginViewportRule (@Nonnull CSSViewportRule aViewportRule);
 
+  /**
+   * Called when a viewport ends.
+   * 
+   * @param aViewportRule
+   *        The viewport rule. Never <code>null</code>.
+   */
   void onEndViewportRule (@Nonnull CSSViewportRule aViewportRule);
 
   /**
-   * After visiting is done.
+   * After visiting is done.<br>
+   * Note: This is only called for complete style sheets, and not when starting
+   * e.g. with a declaration list!
    */
   void end ();
 }

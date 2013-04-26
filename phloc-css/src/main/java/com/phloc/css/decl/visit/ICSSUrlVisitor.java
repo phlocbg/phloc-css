@@ -28,7 +28,8 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * Interface for visiting all URLs in a CSS document.
  * 
  * @author Philip Helger
- * @see DefaultCSSUrlVisitor
+ * @see DefaultCSSUrlVisitor DefaultCSSUrlVisitor for a default empty
+ *      implementation
  */
 public interface ICSSUrlVisitor
 {
