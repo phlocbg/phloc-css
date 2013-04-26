@@ -34,7 +34,7 @@ To use phloc-css put the following to your pom.xml:
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-css</artifactId>
-      <version>3.3.1</version>
+      <version>3.4.0</version>
     </dependency>
   </dependencies>
 ...
@@ -172,7 +172,7 @@ import com.phloc.css.decl.ECSSExpressionOperator;
 /**
  * This is example code to create a font-face rule from scratch
  * 
- * @author philip
+ * @author Philip Helger
  */
 public final class WikiCreateFontFaceRule
 {
@@ -230,6 +230,31 @@ public final class WikiCreateFontFaceRule
     // Add the font-face rule to the main CSS
     aCSS.addRule (aFFR);
     return aCSS;
+  }
+}
+}}}
+
+=Read the CSS content of a HTML style attribute=
+The following examples reads the CSS content of "sStyle" as CSS 3.0 and creates a CSSDeclarationList from it:
+{{{
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CSSDeclarationList;
+import com.phloc.css.reader.CSSReaderDeclarationList;
+
+/**
+ * Example how to read the content of a CSS style attribute.
+ * 
+ * @author Philip Helger
+ */
+public final class WikiReadFromHtml
+{
+  public static CSSDeclarationList readFromStyleAttribute ()
+  {
+    final String sStyle = "color:red; background:fixed !important";
+    final CSSDeclarationList aDeclList = CSSReaderDeclarationList.readFromString (sStyle, ECSSVersion.CSS30);
+    if (aDeclList == null)
+      throw new IllegalStateException ("Failed to parse CSS: " + sStyle);
+    return aDeclList;
   }
 }
 }}}
