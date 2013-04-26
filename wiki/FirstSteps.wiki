@@ -258,3 +258,54 @@ public final class WikiReadFromHtml
   }
 }
 }}}
+
+=Visiting all declarations contained in an HTML style attribute=
+Similar to the above example, but visiting all declarations and printing them on stdout.
+The result of this method looks like this:
+{{{
+color: red (not important)
+background: fixed (important)
+}}}
+The example code:
+{{{
+import javax.annotation.Nonnull;
+
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CSSDeclaration;
+import com.phloc.css.decl.CSSDeclarationList;
+import com.phloc.css.decl.visit.CSSVisitor;
+import com.phloc.css.decl.visit.DefaultCSSVisitor;
+import com.phloc.css.decl.visit.ICSSVisitor;
+import com.phloc.css.reader.CSSReaderDeclarationList;
+import com.phloc.css.writer.CSSWriterSettings;
+
+/**
+ * Example how to read the content of a CSS style attribute, and visit all
+ * contained declarations.
+ * 
+ * @author Philip Helger
+ */
+public final class WikiVisitFromHtml
+{
+  public static void readFromStyleAttribute ()
+  {
+    final String sStyle = "color:red; background:fixed !important";
+    final CSSDeclarationList aDeclList = CSSReaderDeclarationList.readFromString (sStyle, ECSSVersion.CSS30);
+    if (aDeclList == null)
+      throw new IllegalStateException ("Failed to parse CSS: " + sStyle);
+    // Create a custom visitor
+    final ICSSVisitor aVisitor = new DefaultCSSVisitor ()
+    {
+      @Override
+      public void onDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+      {
+        System.out.println (aDeclaration.getProperty () +
+                            ": " +
+                            aDeclaration.getExpression ().getAsCSSString (new CSSWriterSettings (ECSSVersion.CSS30), 0) +
+                            (aDeclaration.isImportant () ? " (important)" : " (not important)"));
+      }
+    };
+    CSSVisitor.visitAllDeclarations (aDeclList, aVisitor);
+  }
+}
+}}}
