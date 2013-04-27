@@ -84,6 +84,19 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
     return ContainerHelper.getSafe (m_aDeclarations, nIndex);
   }
 
+  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("index is invalid: " + nIndex);
+    if (aNewDeclaration == null)
+      throw new NullPointerException ("newDeclaration");
+
+    if (nIndex >= getDeclarationCount ())
+      m_aDeclarations.add (aNewDeclaration);
+    else
+      m_aDeclarations.set (nIndex, aNewDeclaration);
+  }
+
   public boolean hasDeclarations ()
   {
     return !m_aDeclarations.isEmpty ();

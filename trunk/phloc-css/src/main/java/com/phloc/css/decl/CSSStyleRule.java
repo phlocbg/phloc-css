@@ -92,6 +92,11 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
     return m_aSelectors.get (nSelectorIndex);
   }
 
+  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  {
+    m_aDeclarations.setDeclarationAtIndex (nIndex, aNewDeclaration);
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSSelector> getAllSelectors ()
