@@ -69,6 +69,11 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
     m_aDeclarations.addDeclaration (aDeclaration);
   }
 
+  public void addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  {
+    m_aDeclarations.addDeclaration (nIndex, aNewDeclaration);
+  }
+
   @Nonnull
   public EChange removeDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {

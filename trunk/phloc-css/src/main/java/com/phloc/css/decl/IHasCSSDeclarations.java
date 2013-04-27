@@ -43,6 +43,18 @@ public interface IHasCSSDeclarations extends ICSSWriteable
   void addDeclaration (@Nonnull CSSDeclaration aDeclaration);
 
   /**
+   * Add a new declaration at the specified index.
+   * 
+   * @param nIndex
+   *        The index to retrieve. Must be &ge; 0. If the index is &ge; than
+   *        <code>getDeclarationCount()</code>, it behaves like
+   *        {@link #addDeclaration(CSSDeclaration)}.
+   * @param aDeclaration
+   *        The declaration to be added. May not be <code>null</code>.
+   */
+  void addDeclaration (@Nonnegative int nIndex, @Nonnull CSSDeclaration aDeclaration);
+
+  /**
    * Remove the given declaration
    * 
    * @param aDeclaration
@@ -81,7 +93,8 @@ public interface IHasCSSDeclarations extends ICSSWriteable
   CSSDeclaration getDeclarationAtIndex (@Nonnegative int nIndex);
 
   /**
-   * Replace the declaration at the specified index with a new one.
+   * Set the declaration at the specified index with a new one. If an existing
+   * declaration is present at that index, it is overwritten.
    * 
    * @param nIndex
    *        The index to retrieve. Must be &ge; 0. If the index is &ge; than

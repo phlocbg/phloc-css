@@ -92,11 +92,6 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
     return m_aSelectors.get (nSelectorIndex);
   }
 
-  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
-  {
-    m_aDeclarations.setDeclarationAtIndex (nIndex, aNewDeclaration);
-  }
-
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSSelector> getAllSelectors ()
@@ -107,6 +102,11 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
   public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     m_aDeclarations.addDeclaration (aDeclaration);
+  }
+
+  public void addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  {
+    m_aDeclarations.addDeclaration (nIndex, aNewDeclaration);
   }
 
   @Nonnull
@@ -132,6 +132,11 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
   public CSSDeclaration getDeclarationAtIndex (@Nonnegative final int nIndex)
   {
     return m_aDeclarations.getDeclarationAtIndex (nIndex);
+  }
+
+  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  {
+    m_aDeclarations.setDeclarationAtIndex (nIndex, aNewDeclaration);
   }
 
   public boolean hasDeclarations ()
