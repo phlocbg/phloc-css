@@ -110,7 +110,7 @@ public final class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarati
     if (!aSettings.isWriteFontFaceRules ())
       return "";
 
-    if (aSettings.isRemoveUnnecessaryCode () && getDeclarationCount () == 0)
+    if (aSettings.isRemoveUnnecessaryCode () && !hasDeclarations ())
       return "";
 
     final StringBuilder aSB = new StringBuilder ("@font-face");

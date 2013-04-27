@@ -121,7 +121,7 @@ public final class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarati
     if (!aSettings.isWriteViewportRules ())
       return "";
 
-    if (aSettings.isRemoveUnnecessaryCode () && getDeclarationCount () == 0)
+    if (aSettings.isRemoveUnnecessaryCode () && !hasDeclarations ())
       return "";
 
     final StringBuilder aSB = new StringBuilder (m_sDeclaration);
