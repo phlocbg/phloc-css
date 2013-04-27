@@ -53,12 +53,19 @@ public final class CSSExpressionMemberMathUnitSimple implements ICSSExpressionMa
     m_eUnit = CSSNumberHelper.getMatchingUnitExclPercentage (m_sText);
   }
 
+  /**
+   * @return The text including the unit.
+   */
   @Nonnull
   public String getText ()
   {
     return m_sText;
   }
 
+  /**
+   * @return The applicable CSS unit. May be <code>null</code> if no unit is
+   *         present.
+   */
   @Nullable
   public ECSSUnit getUnit ()
   {

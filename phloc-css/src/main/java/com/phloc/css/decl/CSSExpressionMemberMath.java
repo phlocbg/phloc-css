@@ -38,7 +38,7 @@ import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a CSS calc element
+ * Represents a CSS calc() element
  * 
  * @author Philip Helger
  */
@@ -56,6 +56,18 @@ public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSS
     if (aMember == null)
       throw new NullPointerException ("member");
     m_aMembers.add (aMember);
+  }
+
+  public void addMember (@Nonnegative final int nIndex, @Nonnull final ICSSExpressionMathMember aMember)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+    if (aMember == null)
+      throw new NullPointerException ("member");
+    if (nIndex >= getMemberCount ())
+      m_aMembers.add (aMember);
+    else
+      m_aMembers.add (nIndex, aMember);
   }
 
   @Nonnull
@@ -78,6 +90,12 @@ public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSS
   public List <ICSSExpressionMathMember> getAllMembers ()
   {
     return ContainerHelper.newList (m_aMembers);
+  }
+
+  @Nonnegative
+  public int getMemberCount ()
+  {
+    return m_aMembers.size ();
   }
 
   @Nonnull

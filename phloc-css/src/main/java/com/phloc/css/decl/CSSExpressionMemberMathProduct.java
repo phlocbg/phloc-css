@@ -57,6 +57,18 @@ public final class CSSExpressionMemberMathProduct implements ICSSExpressionMathM
     m_aMembers.add (aMember);
   }
 
+  public void addMember (@Nonnegative final int nIndex, @Nonnull final ICSSExpressionMathMember aMember)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+    if (aMember == null)
+      throw new NullPointerException ("member");
+    if (nIndex >= getMemberCount ())
+      m_aMembers.add (aMember);
+    else
+      m_aMembers.add (nIndex, aMember);
+  }
+
   @Nonnull
   public EChange removeMember (@Nonnull final ICSSExpressionMathMember aMember)
   {
@@ -77,6 +89,12 @@ public final class CSSExpressionMemberMathProduct implements ICSSExpressionMathM
   public List <ICSSExpressionMathMember> getAllMembers ()
   {
     return ContainerHelper.newList (m_aMembers);
+  }
+
+  @Nonnegative
+  public int getMemberCount ()
+  {
+    return m_aMembers.size ();
   }
 
   @Nonnull

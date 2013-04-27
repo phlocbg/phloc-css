@@ -53,10 +53,10 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
   }
 
   /**
-   * Ctor
+   * Constructor
    * 
    * @param sFunctionName
-   *        Function name
+   *        Function name. May neither be <code>null</code> nor empty.
    */
   public CSSExpressionMemberFunction (@Nonnull @Nonempty final String sFunctionName)
   {
@@ -64,12 +64,12 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
   }
 
   /**
-   * Ctor
+   * Constructor
    * 
    * @param sFunctionName
-   *        Function name
+   *        Function name. May neither be <code>null</code> nor empty.
    * @param aExpression
-   *        Optional parameter expression
+   *        Optional parameter expression. May be <code>null</code>.
    */
   public CSSExpressionMemberFunction (@Nonnull @Nonempty final String sFunctionName,
                                       @Nullable final CSSExpression aExpression)
@@ -81,6 +81,9 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
     m_aExpression = aExpression;
   }
 
+  /**
+   * @return The passed function name. Neither <code>null</code> nor empty.
+   */
   @Nonnull
   @Nonempty
   public String getFunctionName ()
@@ -88,6 +91,9 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
     return m_sFunctionName;
   }
 
+  /**
+   * @return The optional expression parameter. May be <code>null</code>.
+   */
   @Nullable
   public CSSExpression getExpression ()
   {
