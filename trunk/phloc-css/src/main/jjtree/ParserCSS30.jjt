@@ -163,6 +163,7 @@ TOKEN :
 | < MQ_ONLY: "only" >
 | < FROM_SYM: "from" >
 | < TO_SYM: "to" >
+| < OR_SYM: "or" >
 
 // ident        -?{nmstart}{nmchar}*
 // Note: "*" hack for IE <= 6
@@ -198,6 +199,7 @@ TOKEN :
                  | "@keyframes" >
 | < VIEWPORT_SYM: "@-" <IDENT> "-viewport"
                 | "@viewport" >
+| < SUPPORTS_SYM: "@supports" >
 | < IMPORTANT_SYM: "!" ( <W> )* "important" >
 
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
