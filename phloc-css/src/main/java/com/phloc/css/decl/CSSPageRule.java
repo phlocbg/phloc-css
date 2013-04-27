@@ -120,7 +120,7 @@ public final class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations,
     if (!aSettings.isWritePageRules ())
       return "";
 
-    if (aSettings.isRemoveUnnecessaryCode () && getDeclarationCount () == 0)
+    if (aSettings.isRemoveUnnecessaryCode () && !hasDeclarations ())
       return "";
 
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();

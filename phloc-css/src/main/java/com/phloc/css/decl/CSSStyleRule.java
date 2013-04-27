@@ -171,7 +171,7 @@ public final class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations
   @Nonnull
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    if (aSettings.isRemoveUnnecessaryCode () && getDeclarationCount () == 0)
+    if (aSettings.isRemoveUnnecessaryCode () && !hasDeclarations ())
       return "";
 
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();

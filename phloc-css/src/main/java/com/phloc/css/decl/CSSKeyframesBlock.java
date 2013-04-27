@@ -121,7 +121,7 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
   {
     aSettings.checkVersionRequirements (this);
 
-    if (aSettings.isRemoveUnnecessaryCode () && getDeclarationCount () == 0)
+    if (aSettings.isRemoveUnnecessaryCode () && !hasDeclarations ())
       return "";
 
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
