@@ -75,6 +75,9 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
     m_sOptimizedValue = CSSExpressionTermOptimizer.getOptimizedValue (sValue);
   }
 
+  /**
+   * @return The original value. Neither <code>null</code> nor empty.
+   */
   @Nonnull
   @Nonempty
   public String getValue ()
@@ -82,6 +85,11 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
     return m_sValue;
   }
 
+  /**
+   * @return An optimized version of the value. In most cases it is identical to
+   *         the original version.
+   * @see CSSExpressionTermOptimizer#getOptimizedValue(String)
+   */
   @Nonnull
   @Nonempty
   public String getOptimizedValue ()
@@ -115,6 +123,7 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
     if (!(o instanceof CSSExpressionMemberTermSimple))
       return false;
     final CSSExpressionMemberTermSimple rhs = (CSSExpressionMemberTermSimple) o;
+    // Compare the optimized value so that "0em" equals "0px"
     return m_sOptimizedValue.equals (rhs.m_sOptimizedValue);
   }
 

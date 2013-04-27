@@ -32,7 +32,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSDeclarationContainer extends CSSDeclarationList
+public class CSSDeclarationContainer extends CSSDeclarationList
 {
   public CSSDeclarationContainer ()
   {}

@@ -42,11 +42,19 @@ public final class CSSHSL implements ICSSWriteable
   private String m_sSaturation;
   private String m_sLightness;
 
+  /**
+   * Constructor
+   * 
+   * @param nHue
+   *        Hue value. Is cut down to the range
+   * @param nSaturation
+   * @param nLightness
+   */
   public CSSHSL (final int nHue, final int nSaturation, final int nLightness)
   {
-    this (Integer.toString (CSSColorHelper.getRGBValue (nHue)),
-          Integer.toString (CSSColorHelper.getRGBValue (nSaturation)),
-          Integer.toString (CSSColorHelper.getRGBValue (nLightness)));
+    this (Integer.toString (CSSColorHelper.getHSLHueValue (nHue)),
+          Integer.toString (CSSColorHelper.getHSLPercentageValue (nSaturation)),
+          Integer.toString (CSSColorHelper.getHSLPercentageValue (nLightness)));
   }
 
   public CSSHSL (@Nonnull @Nonempty final String sHue,

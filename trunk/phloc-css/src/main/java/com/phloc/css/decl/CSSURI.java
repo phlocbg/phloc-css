@@ -49,7 +49,7 @@ public final class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
   }
 
   /**
-   * @return The URL
+   * @return The URI string
    */
   @Nonnull
   @Nonempty

@@ -60,7 +60,7 @@ public final class CSSExpressionTermOptimizer
       if (sValue.equals (sUnit0))
         return "0";
 
-    // Check for optimized color values
+    // Check for optimized color values (replace #aabbcc with #abc)
     if (sValue.length () == CCSSValue.HEXVALUE_LENGTH &&
         sValue.charAt (0) == CCSSValue.PREFIX_HEX &&
         sValue.charAt (1) == sValue.charAt (2) &&
@@ -71,6 +71,7 @@ public final class CSSExpressionTermOptimizer
       return Character.toString (CCSSValue.PREFIX_HEX) + sValue.charAt (1) + sValue.charAt (3) + sValue.charAt (5);
     }
 
+    // Don't change - return as is
     return sValue;
   }
 }

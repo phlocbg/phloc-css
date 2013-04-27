@@ -68,7 +68,7 @@ public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAwa
   }
 
   /**
-   * Shortcut method to add a simple text value (unquoted)
+   * Shortcut method to add a simple text value.
    * 
    * @param sValue
    *        The value to be added. May neither be <code>null</code> nor empty.

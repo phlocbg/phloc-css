@@ -250,4 +250,40 @@ public final class CSSColorHelperTest
     assertFalse (CSSColorHelper.isHSLAColorValue ("hsla(a,0,0)"));
     assertFalse (CSSColorHelper.isHSLAColorValue ("hsla(0,0,0,5%)"));
   }
+
+  @Test
+  public void testRGBToHSLAndBack ()
+  {
+    for (int nRed = 0; nRed < 256; ++nRed)
+      for (int nGreen = 0; nGreen < 256; ++nGreen)
+        for (int nBlue = 0; nBlue < 256; ++nBlue)
+        {
+          // RGB to HSL
+          final float [] f = CSSColorHelper.getRGBAsHSLValue (nRed, nGreen, nBlue);
+          assertNotNull (f);
+          assertEquals (3, f.length);
+          assertTrue (f[0] >= 0);
+          assertTrue (f[0] < 360);
+          assertTrue (f[1] >= 0);
+          assertTrue (f[1] <= 100);
+          assertTrue (f[2] >= 0);
+          assertTrue (f[2] <= 100);
+
+          // HSL to RGB
+          final int [] aRGB = CSSColorHelper.getHSLAsRGBValue (f[0], f[1], f[2]);
+          assertNotNull (aRGB);
+          assertEquals (3, aRGB.length);
+          assertTrue (aRGB[0] >= 0);
+          assertTrue (aRGB[0] < 256);
+          assertTrue (aRGB[1] >= 0);
+          assertTrue (aRGB[1] < 256);
+          assertTrue (aRGB[2] >= 0);
+          assertTrue (aRGB[2] < 256);
+
+          final String sExpected = CSSColorHelper.getRGBColorValue (nRed, nGreen, nBlue);
+          assertEquals (sExpected, nRed, aRGB[0]);
+          assertEquals (sExpected, nGreen, aRGB[1]);
+          assertEquals (sExpected, nBlue, aRGB[2]);
+        }
+  }
 }

@@ -50,12 +50,16 @@ public final class CSSColorHelper
   public static final int RGB_MAX = 255;
   /** RGB range (max-min+1) */
   public static final int RGB_RANGE = 256;
-  /** HSL minimum value */
+  /** HSL minimum value (for Hue only) */
   public static final int HSL_MIN = 0;
-  /** HSL maximum value */
+  /** HSL maximum value (for Hue only) */
   public static final int HSL_MAX = 359;
-  /** HSL range (max-min+1) */
+  /** HSL range (max-min+1) (for Hue only) */
   public static final int HSL_RANGE = 360;
+  /** Percentage minimum value (for HSL) */
+  public static final int PERCENTAGE_MIN = 0;
+  /** Percentage maximum value (for HSL) */
+  public static final int PERCENTAGE_MAX = 100;
   /** Minimum opacity value */
   public static final float OPACITY_MIN = 0f;
   /** Maximum opacity value */
@@ -225,11 +229,46 @@ public final class CSSColorHelper
   }
 
   @Nonnegative
+  @SuppressFBWarnings ("IL_INFINITE_LOOP")
+  private static float _mod (final float nValue, final int nMod)
+  {
+    // modulo does not work as expected on negative numbers
+    float nPositiveValue = nValue;
+    while (nPositiveValue < 0)
+      nPositiveValue += nMod;
+    return nPositiveValue % nMod;
+  }
+
+  /**
+   * Convert the passed value to a valid RGB value in the range 0-255
+   * 
+   * @param nRGBPart
+   *        The original value
+   * @return The value between 0 and 255.
+   */
+  @Nonnegative
   public static int getRGBValue (final int nRGBPart)
   {
     return _mod (nRGBPart, RGB_RANGE);
   }
 
+  @Nonnegative
+  public static float getOpacityToUse (final float fOpacity)
+  {
+    return fOpacity < OPACITY_MIN ? OPACITY_MIN : fOpacity > OPACITY_MAX ? OPACITY_MAX : fOpacity;
+  }
+
+  /**
+   * Get the passed values as CSS RGB color value
+   * 
+   * @param nRed
+   *        Red - is scaled to 0-255
+   * @param nGreen
+   *        Green - is scaled to 0-255
+   * @param nBlue
+   *        Blue - is scaled to 0-255
+   * @return The CSS string to use
+   */
   @Nonnull
   @Nonempty
   public static String getRGBColorValue (final int nRed, final int nGreen, final int nBlue)
@@ -244,12 +283,19 @@ public final class CSSColorHelper
                                  .toString ();
   }
 
-  @Nonnegative
-  public static float getOpacityToUse (final float fOpacity)
-  {
-    return fOpacity < OPACITY_MIN ? OPACITY_MIN : fOpacity > OPACITY_MAX ? OPACITY_MAX : fOpacity;
-  }
-
+  /**
+   * Get the passed values as CSS RGBA color value
+   * 
+   * @param nRed
+   *        Red - is scaled to 0-255
+   * @param nGreen
+   *        Green - is scaled to 0-255
+   * @param nBlue
+   *        Blue - is scaled to 0-255
+   * @param fOpacity
+   *        Opacity to use - is scaled to 0-1.
+   * @return The CSS string to use
+   */
   @Nonnull
   @Nonempty
   public static String getRGBAColorValue (final int nRed, final int nGreen, final int nBlue, final float fOpacity)
@@ -266,25 +312,133 @@ public final class CSSColorHelper
                                  .toString ();
   }
 
+  /**
+   * @deprecated Use {@link #getHSLHueValue(int)} instead
+   */
+  @Deprecated
+  @Nonnegative
   public static int getHSLValue (final int nHSLPart)
   {
-    return _mod (nHSLPart, RGB_RANGE);
+    return getHSLHueValue (nHSLPart);
   }
 
+  /**
+   * Get the passed value as a valid HSL Hue value in the range of 0-359
+   * 
+   * @param nHSLPart
+   *        Source Hue
+   * @return Hue value in the range of 0-359
+   */
+  @Nonnegative
+  public static int getHSLHueValue (final int nHSLPart)
+  {
+    return _mod (nHSLPart, HSL_RANGE);
+  }
+
+  /**
+   * Get the passed value as a valid HSL Hue value in the range of 0-359
+   * 
+   * @param fHSLPart
+   *        Source Hue
+   * @return Hue value in the range of 0-359
+   */
+  @Nonnegative
+  public static float getHSLHueValue (final float fHSLPart)
+  {
+    return _mod (fHSLPart, HSL_RANGE);
+  }
+
+  /**
+   * Get the passed value as a valid HSL Saturation or Lightness value in the
+   * range of 0-100 (percentage).
+   * 
+   * @param nHSLPart
+   *        Source value
+   * @return Target value in the range of 0-100
+   */
+  @Nonnegative
+  public static int getHSLPercentageValue (final int nHSLPart)
+  {
+    return nHSLPart < PERCENTAGE_MIN ? PERCENTAGE_MIN : nHSLPart > PERCENTAGE_MAX ? PERCENTAGE_MAX : nHSLPart;
+  }
+
+  /**
+   * Get the passed value as a valid HSL Saturation or Lightness value in the
+   * range of 0-100 (percentage).
+   * 
+   * @param nHSLPart
+   *        Source value
+   * @return Target value in the range of 0-100
+   */
+  @Nonnegative
+  public static float getHSLPercentageValue (final float nHSLPart)
+  {
+    return nHSLPart < PERCENTAGE_MIN ? PERCENTAGE_MIN : nHSLPart > PERCENTAGE_MAX ? PERCENTAGE_MAX : nHSLPart;
+  }
+
+  /**
+   * Get the passed values as CSS HSL color value
+   * 
+   * @param nHue
+   *        Hue - is scaled to 0-359
+   * @param nSaturation
+   *        Saturation - is scaled to 0-100
+   * @param nLightness
+   *        Lightness - is scaled to 0-100
+   * @return The CSS string to use
+   */
   @Nonnull
   @Nonempty
   public static String getHSLColorValue (final int nHue, final int nSaturation, final int nLightness)
   {
-    return new StringBuilder (16).append (CCSSValue.PREFIX_HSL_OPEN)
-                                 .append (getHSLValue (nHue))
+    return new StringBuilder (18).append (CCSSValue.PREFIX_HSL_OPEN)
+                                 .append (getHSLHueValue (nHue))
                                  .append (',')
-                                 .append (getHSLValue (nSaturation))
+                                 .append (getHSLPercentageValue (nSaturation))
                                  .append (',')
-                                 .append (getHSLValue (nLightness))
+                                 .append (getHSLPercentageValue (nLightness))
                                  .append (')')
                                  .toString ();
   }
 
+  /**
+   * Get the passed values as CSS HSL color value
+   * 
+   * @param fHue
+   *        Hue - is scaled to 0-359
+   * @param fSaturation
+   *        Saturation - is scaled to 0-100
+   * @param fLightness
+   *        Lightness - is scaled to 0-100
+   * @return The CSS string to use
+   */
+  @Nonnull
+  @Nonempty
+  public static String getHSLColorValue (final float fHue, final float fSaturation, final float fLightness)
+  {
+    return new StringBuilder (18).append (CCSSValue.PREFIX_HSL_OPEN)
+                                 .append (getHSLHueValue (fHue))
+                                 .append (',')
+                                 .append (getHSLPercentageValue (fSaturation))
+                                 .append (',')
+                                 .append (getHSLPercentageValue (fLightness))
+                                 .append (')')
+                                 .toString ();
+  }
+
+  /**
+   * Get the passed values as CSS HSLA color value
+   * 
+   * @param nHue
+   *        Hue - is scaled to 0-359
+   * @param nSaturation
+   *        Saturation - is scaled to 0-100
+   * @param nLightness
+   *        Lightness - is scaled to 0-100
+   * @param fOpacity
+   *        Opacity - is scaled to 0-1
+   * @return The CSS string to use
+   */
   @Nonnull
   @Nonempty
   public static String getHSLAColorValue (final int nHue,
@@ -292,12 +446,44 @@ public final class CSSColorHelper
                                           final int nLightness,
                                           final float fOpacity)
   {
-    return new StringBuilder (24).append (CCSSValue.PREFIX_HSLA_OPEN)
-                                 .append (getHSLValue (nHue))
+    return new StringBuilder (32).append (CCSSValue.PREFIX_HSLA_OPEN)
+                                 .append (getHSLHueValue (nHue))
                                  .append (',')
-                                 .append (getHSLValue (nSaturation))
+                                 .append (getHSLPercentageValue (nSaturation))
                                  .append (',')
-                                 .append (getHSLValue (nLightness))
+                                 .append (getHSLPercentageValue (nLightness))
+                                 .append (',')
+                                 .append (getOpacityToUse (fOpacity))
+                                 .append (')')
+                                 .toString ();
+  }
+
+  /**
+   * Get the passed values as CSS HSLA color value
+   * 
+   * @param fHue
+   *        Hue - is scaled to 0-359
+   * @param fSaturation
+   *        Saturation - is scaled to 0-100
+   * @param fLightness
+   *        Lightness - is scaled to 0-100
+   * @param fOpacity
+   *        Opacity - is scaled to 0-1
+   * @return The CSS string to use
+   */
+  @Nonnull
+  @Nonempty
+  public static String getHSLAColorValue (final float fHue,
+                                          final float fSaturation,
+                                          final float fLightness,
+                                          final float fOpacity)
+  {
+    return new StringBuilder (32).append (CCSSValue.PREFIX_HSLA_OPEN)
+                                 .append (getHSLHueValue (fHue))
+                                 .append (',')
+                                 .append (getHSLPercentageValue (fSaturation))
+                                 .append (',')
+                                 .append (getHSLPercentageValue (fLightness))
                                  .append (',')
                                  .append (getOpacityToUse (fOpacity))
                                  .append (')')
@@ -323,8 +509,8 @@ public final class CSSColorHelper
   }
 
   /**
-   * Get the passed RGB values as HSL values compliant for CSS in the range
-   * 0-359
+   * Get the passed RGB values as HSL values compliant for CSS in the CSS range
+   * (0-359, 0-100, 0-100)
    * 
    * @param nRed
    *        red value
@@ -332,17 +518,40 @@ public final class CSSColorHelper
    *        green value
    * @param nBlue
    *        blue value
-   * @return An array of 3 ints, containing hue, saturation and lightness (in
-   *         this order)
+   * @return An array of 3 floats, containing hue, saturation and lightness (in
+   *         this order). The first value is in the range 0-359, and the
+   *         remaining two values are in the range 0-100 (percentage).
    */
   @Nonnull
   @Nonempty
-  public static int [] getRGBAsHSLValue (final int nRed, final int nGreen, final int nBlue)
+  public static float [] getRGBAsHSLValue (final int nRed, final int nGreen, final int nBlue)
   {
     // Convert RGB to HSB(=HSL) - brightness vs. lightness
     // All returned values in the range 0-1
-    final float [] aHSL = new float [3];
-    Color.RGBtoHSB (nRed, nGreen, nBlue, aHSL);
-    return new int [] { (int) (aHSL[0] * HSL_RANGE), (int) (aHSL[1] * HSL_RANGE), (int) (aHSL[2] * HSL_RANGE) };
+    final float [] aHSL = Color.RGBtoHSB (nRed, nGreen, nBlue, new float [3]);
+    return new float [] { aHSL[0] * HSL_MAX, aHSL[1] * PERCENTAGE_MAX, aHSL[2] * PERCENTAGE_MAX };
+  }
+
+  /**
+   * Get the passed RGB values as HSL values compliant for CSS in the CSS range
+   * (0-359, 0-100, 0-100)
+   * 
+   * @param fHue
+   *        the hue component of the color - in the range 0-359
+   * @param fSaturation
+   *        the saturation of the color - in the range 0-100
+   * @param fLightness
+   *        the lightness of the color - in the range 0-100
+   * @return An array of 3 ints, containing red, green and blue (in this order).
+   *         All values are in the range 0-255.
+   */
+  @Nonnull
+  @Nonempty
+  public static int [] getHSLAsRGBValue (final float fHue, final float fSaturation, final float fLightness)
+  {
+    // Convert RGB to HSB(=HSL) - brightness vs. lightness
+    // All returned values in the range 0-255
+    final int ret = Color.HSBtoRGB (fHue / HSL_MAX, fSaturation / PERCENTAGE_MAX, fLightness / PERCENTAGE_MAX);
+    return new int [] { (ret >> 16) & 0xff, (ret >> 8) & 0xff, ret & 0xff };
   }
 }

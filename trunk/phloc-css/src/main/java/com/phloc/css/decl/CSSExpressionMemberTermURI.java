@@ -44,17 +44,23 @@ public final class CSSExpressionMemberTermURI implements ICSSExpressionMember, I
     this (new CSSURI (sURIString));
   }
 
-  public CSSExpressionMemberTermURI (@Nonnull @Nonempty final CSSURI aURI)
+  public CSSExpressionMemberTermURI (@Nonnull final CSSURI aURI)
   {
     setURI (aURI);
   }
 
+  /**
+   * @return The contained {@link CSSURI} object.
+   */
   @Nonnull
   public CSSURI getURI ()
   {
     return m_aURI;
   }
 
+  /**
+   * @return A sanity shortcut for <code>getURI().getURI()</code>
+   */
   @Nonnull
   @Nonempty
   public String getURIString ()
@@ -62,6 +68,12 @@ public final class CSSExpressionMemberTermURI implements ICSSExpressionMember, I
     return m_aURI.getURI ();
   }
 
+  /**
+   * Set a new URI
+   * 
+   * @param aURI
+   *        The new URI to set. May not be <code>null</code>.
+   */
   public void setURI (@Nonnull final CSSURI aURI)
   {
     if (aURI == null)
@@ -69,6 +81,13 @@ public final class CSSExpressionMemberTermURI implements ICSSExpressionMember, I
     m_aURI = aURI;
   }
 
+  /**
+   * Replace the URI string in the existing {@link CSSURI} object.
+   * 
+   * @param sURIString
+   *        The new URI string to set. May neither be <code>null</code> nor
+   *        empty.
+   */
   public void setURIString (@Nonnull @Nonempty final String sURIString)
   {
     m_aURI.setURI (sURIString);

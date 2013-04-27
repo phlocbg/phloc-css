@@ -185,9 +185,9 @@ public enum ECSSColor implements ICSSNamedColor
   private final int m_nRed;
   private final int m_nGreen;
   private final int m_nBlue;
-  private final int m_nHue;
-  private final int m_nSaturation;
-  private final int m_nLightness;
+  private final float m_fHue;
+  private final float m_fSaturation;
+  private final float m_fLightness;
 
   private ECSSColor (@Nonnull @Nonempty final String sName,
                      @Nonnegative final int nRed,
@@ -206,10 +206,10 @@ public enum ECSSColor implements ICSSNamedColor
     m_nBlue = nBlue;
 
     // Convert RGB to HSL
-    final int [] aHSL = CSSColorHelper.getRGBAsHSLValue (nRed, nGreen, nBlue);
-    m_nHue = aHSL[0];
-    m_nSaturation = aHSL[1];
-    m_nLightness = aHSL[2];
+    final float [] aHSL = CSSColorHelper.getRGBAsHSLValue (nRed, nGreen, nBlue);
+    m_fHue = aHSL[0];
+    m_fSaturation = aHSL[1];
+    m_fLightness = aHSL[2];
   }
 
   @Nonnull
@@ -237,21 +237,21 @@ public enum ECSSColor implements ICSSNamedColor
   }
 
   @Nonnegative
-  public int getHue ()
+  public float getHue ()
   {
-    return m_nHue;
+    return m_fHue;
   }
 
   @Nonnegative
-  public int getSaturation ()
+  public float getSaturation ()
   {
-    return m_nSaturation;
+    return m_fSaturation;
   }
 
   @Nonnegative
-  public int getLightness ()
+  public float getLightness ()
   {
-    return m_nLightness;
+    return m_fLightness;
   }
 
   @Nonnull
@@ -279,14 +279,14 @@ public enum ECSSColor implements ICSSNamedColor
   @Nonempty
   public String getAsHSLColorValue ()
   {
-    return CSSColorHelper.getHSLColorValue (m_nHue, m_nSaturation, m_nLightness);
+    return CSSColorHelper.getHSLColorValue (m_fHue, m_fSaturation, m_fLightness);
   }
 
   @Nonnull
   @Nonempty
   public String getAsHSLAColorValue (@Nonnegative final float fOpacity)
   {
-    return CSSColorHelper.getHSLAColorValue (m_nHue, m_nSaturation, m_nLightness, fOpacity);
+    return CSSColorHelper.getHSLAColorValue (m_fHue, m_fSaturation, m_fLightness, fOpacity);
   }
 
   @Nullable
