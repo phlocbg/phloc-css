@@ -100,42 +100,47 @@ public final class CSSColorHelperTest
   @Test
   public void testParsedHSLColor ()
   {
-    CSSHSL aHSL = CSSColorHelper.getParsedHSLColorValue ("hsl(1,2,3)");
+    CSSHSL aHSL = CSSColorHelper.getParsedHSLColorValue ("hsl(1,2%,3%)");
     assertNotNull (aHSL);
     assertEquals ("1", aHSL.getHue ());
-    assertEquals ("2", aHSL.getSaturation ());
-    assertEquals ("3", aHSL.getLightness ());
+    assertEquals ("2%", aHSL.getSaturation ());
+    assertEquals ("3%", aHSL.getLightness ());
 
-    aHSL = CSSColorHelper.getParsedHSLColorValue (" hsl ( 1 , 2 , 3 ) ");
+    aHSL = CSSColorHelper.getParsedHSLColorValue (" hsl ( 1 , 2% , 3% ) ");
     assertNotNull (aHSL);
     assertEquals ("1", aHSL.getHue ());
-    assertEquals ("2", aHSL.getSaturation ());
-    assertEquals ("3", aHSL.getLightness ());
+    assertEquals ("2%", aHSL.getSaturation ());
+    assertEquals ("3%", aHSL.getLightness ());
 
     assertNull (CSSColorHelper.getParsedHSLColorValue (null));
     assertNull (CSSColorHelper.getParsedHSLColorValue (""));
+    assertNull (CSSColorHelper.getParsedHSLColorValue ("hsl(1,2,3)"));
     assertNull (CSSColorHelper.getParsedHSLColorValue ("hsl(1,2,3"));
   }
 
   @Test
   public void testParsedHSLAColor ()
   {
-    CSSHSLA aHSL = CSSColorHelper.getParsedHSLAColorValue ("hsla(1,2,3,0.4)");
+    CSSHSLA aHSL = CSSColorHelper.getParsedHSLAColorValue ("hsla(1,2%,3%,0.4)");
     assertNotNull (aHSL);
     assertEquals ("1", aHSL.getHue ());
-    assertEquals ("2", aHSL.getSaturation ());
-    assertEquals ("3", aHSL.getLightness ());
+    assertEquals ("2%", aHSL.getSaturation ());
+    assertEquals ("3%", aHSL.getLightness ());
     assertEquals ("0.4", aHSL.getOpacity ());
 
-    aHSL = CSSColorHelper.getParsedHSLAColorValue (" hsla ( 1 , 2 , 3 , 0.4 ) ");
+    aHSL = CSSColorHelper.getParsedHSLAColorValue (" hsla ( 1 , 2% , 3% , 0.4 ) ");
     assertNotNull (aHSL);
     assertEquals ("1", aHSL.getHue ());
-    assertEquals ("2", aHSL.getSaturation ());
-    assertEquals ("3", aHSL.getLightness ());
+    assertEquals ("2%", aHSL.getSaturation ());
+    assertEquals ("3%", aHSL.getLightness ());
     assertEquals ("0.4", aHSL.getOpacity ());
 
     assertNull (CSSColorHelper.getParsedHSLAColorValue (null));
     assertNull (CSSColorHelper.getParsedHSLAColorValue (""));
+    assertNull (CSSColorHelper.getParsedHSLAColorValue ("hsla(1,2,3,4)"));
+    assertNull (CSSColorHelper.getParsedHSLAColorValue ("hsla(1,2,3,4"));
+    assertNull (CSSColorHelper.getParsedHSLAColorValue ("hsla(1,2,3,"));
+    assertNull (CSSColorHelper.getParsedHSLAColorValue ("hsla(1,2,3)"));
     assertNull (CSSColorHelper.getParsedHSLAColorValue ("hsla(1,2,3"));
   }
 
@@ -215,11 +220,11 @@ public final class CSSColorHelperTest
   @Test
   public void testIsHSLColorValue ()
   {
-    final String [] HSL_COLORS = new String [] { "hsl(0,0,0)",
-                                                "hsl(255,0,0)",
-                                                "hsl(300,0,0)",
-                                                "hsl(  300  ,  0  ,  0  )  ",
-                                                "hsl(255,-10,0)",
+    final String [] HSL_COLORS = new String [] { "hsl(0,0%,0%)",
+                                                "hsl(255,0%,0%)",
+                                                "hsl(300,0%,0%)",
+                                                "hsl(  300  ,  0%  ,  0%  )  ",
+                                                "hsl(255,-10%,0%)",
                                                 "hsl(110%, 0%, 0%)",
                                                 "hsl(100%, 0%, 0%)" };
     for (final String sHSLColor : HSL_COLORS)
@@ -227,6 +232,7 @@ public final class CSSColorHelperTest
       assertTrue (sHSLColor, CSSColorHelper.isHSLColorValue (sHSLColor));
       assertTrue (sHSLColor, CSSColorHelper.isColorValue (sHSLColor));
     }
+    assertFalse (CSSColorHelper.isHSLColorValue ("hsl(0,0,1)"));
     assertFalse (CSSColorHelper.isHSLColorValue ("hsl(a,0,0)"));
     assertFalse (CSSColorHelper.isHSLColorValue ("hsl(0,0,0,0)"));
   }
@@ -234,12 +240,15 @@ public final class CSSColorHelperTest
   @Test
   public void testIsHSLAColorValue ()
   {
-    final String [] HSLA_COLORS = new String [] { "hsla(0,0,0,0)",
+    final String [] HSLA_COLORS = new String [] { "hsla(0,0%,0%,0)",
+                                                 "hsla(0,0%,0%,1)",
+                                                 "hsla(0,0,0%,1)",
+                                                 "hsla(0,0%,0,1)",
                                                  "hsla(0,0,0,1)",
-                                                 "hsla(255,0,0, 0.1)",
-                                                 "hsla(255,0,0, 0.875)",
-                                                 "hsla(300,0,0, 0.999999)",
-                                                 "hsla(255,-10,0, 0)",
+                                                 "hsla(255,0%,0%, 0.1)",
+                                                 "hsla(255,0%,0%, 0.875)",
+                                                 "hsla(300,0%,0%, 0.999999)",
+                                                 "hsla(255,-10%,0%, 0)",
                                                  "hsla(110%, 0%, 0%, 1.)",
                                                  "hsla(100%, 0%, 0%, 1.  )" };
     for (final String sHSLAColor : HSLA_COLORS)
@@ -248,6 +257,7 @@ public final class CSSColorHelperTest
       assertTrue (sHSLAColor, CSSColorHelper.isColorValue (sHSLAColor));
     }
     assertFalse (CSSColorHelper.isHSLAColorValue ("hsla(a,0,0)"));
+    assertFalse (CSSColorHelper.isHSLAColorValue ("hsla(0,0,1,0)"));
     assertFalse (CSSColorHelper.isHSLAColorValue ("hsla(0,0,0,5%)"));
   }
 

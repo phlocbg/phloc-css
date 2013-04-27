@@ -1335,3 +1335,26 @@ div {
   color: windowtext;
   color: WINDOWTEXT;
 }
+
+h1#red {color: hsl(0, 100%, 50%) }
+h1#green {color: hsl(120, 100%, 50%) }
+h1#blue {color: hsl(240, 100%, 50%) }
+h1#aqua {color: hsl(180, 100%, 50%) }
+h1#darkgreen {color: hsl(120, 100%, 25%) }
+h1#lightgreen {color: hsl(120, 100%, 75%) }
+h1#pastelgreen {color: hsl(120, 50%, 50%) }
+
+h1#twohundredgreen {color: hsl(120, 200%, 50%) }
+
+h1#grey {color: hsl(120, 0%, 50%) }
+h1#negpercentgrey {color: hsl(120, -100%, 50%) }
+
+h1#threesixtydarkgreen {color: hsl(480, 100%, 25%) }
+
+h1#neghuelightgreen {color: hsl(-240, 100%, 75%) }
+h1#neghuethreesixtylightgreen {color: hsl(-600, 100%, 75%) }
+
+h1#redFloat {color: hsl(0.0, 100%, 50%) }
+h1#greenFloat {color: hsl(120.00, 100%, 50%) }
+h1#blueFloat {color: hsl(240.000, 100%, 50%) }
+h1#blueFloat {color: hsl(240.000, 100.00%, 50.00%) }

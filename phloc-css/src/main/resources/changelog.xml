@@ -20,9 +20,14 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
-  <entry date="2013-04-26" category="api" action="add">
+  <entry date="2013-04-27" category="tech" action="mix">
     <change>
-      <text locale="en">Added methods IHasCSSDeclaration.setDeclarationAtIndex(int, CSSDeclaration) and addDeclaration(int, CSSDeclaration)</text>
+      <text locale="en">Fixed support for HSL/HSLA color value handling - scaling and saturation + lightness must now be percentage values</text>
+    </change>
+  </entry>
+  <entry date="2013-04-27" category="api" action="add">
+    <change>
+      <text locale="en">Added some methods in classes in com.phloc.css.decl package</text>
     </change>
   </entry>
   <entry date="2013-04-26" category="tech" action="fix">

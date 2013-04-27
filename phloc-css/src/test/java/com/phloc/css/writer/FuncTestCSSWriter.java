@@ -100,6 +100,8 @@ public final class FuncTestCSSWriter
         // write to CSS 2.1
         final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
         new CSSWriter (ECSSVersion.CSS21).writeCSS (aCSS, aSW);
+
+        // This should throw an error
         fail (aFile.toString () + ": " + aSW.getAsString ());
       }
       catch (final IllegalStateException ex)

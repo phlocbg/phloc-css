@@ -25,6 +25,8 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 import com.phloc.css.propertyvalue.CCSSValue;
@@ -36,7 +38,7 @@ import com.phloc.css.utils.CSSColorHelper;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSHSL implements ICSSWriteable
+public final class CSSHSL implements ICSSWriteable, ICSSVersionAware
 {
   private String m_sHue;
   private String m_sSaturation;
@@ -46,15 +48,34 @@ public final class CSSHSL implements ICSSWriteable
    * Constructor
    * 
    * @param nHue
-   *        Hue value. Is cut down to the range
+   *        Hue value. Is scaled to the range 0-360
    * @param nSaturation
+   *        Saturation value. Is cut to the range 0-100 (percentage)
    * @param nLightness
+   *        Lightness value. Is cut to the range 0-100 (percentage)
    */
   public CSSHSL (final int nHue, final int nSaturation, final int nLightness)
   {
     this (Integer.toString (CSSColorHelper.getHSLHueValue (nHue)),
-          Integer.toString (CSSColorHelper.getHSLPercentageValue (nSaturation)),
-          Integer.toString (CSSColorHelper.getHSLPercentageValue (nLightness)));
+          Integer.toString (CSSColorHelper.getHSLPercentageValue (nSaturation)) + "%",
+          Integer.toString (CSSColorHelper.getHSLPercentageValue (nLightness)) + "%");
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param fHue
+   *        Hue value. Is scaled to the range 0-360
+   * @param fSaturation
+   *        Saturation value. Is cut to the range 0-100 (percentage)
+   * @param fLightness
+   *        Lightness value. Is cut to the range 0-100 (percentage)
+   */
+  public CSSHSL (final float fHue, final float fSaturation, final float fLightness)
+  {
+    this (Float.toString (CSSColorHelper.getHSLHueValue (fHue)),
+          Float.toString (CSSColorHelper.getHSLPercentageValue (fSaturation)) + "%",
+          Float.toString (CSSColorHelper.getHSLPercentageValue (fLightness)) + "%");
   }
 
   public CSSHSL (@Nonnull @Nonempty final String sHue,
@@ -121,7 +142,14 @@ public final class CSSHSL implements ICSSWriteable
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
+    aSettings.checkVersionRequirements (this);
     return CCSSValue.PREFIX_HSL_OPEN + m_sHue + ',' + m_sSaturation + ',' + m_sLightness + ')';
+  }
+
+  @Nonnull
+  public ECSSVersion getMinimumCSSVersion ()
+  {
+    return ECSSVersion.CSS30;
   }
 
   @Override
