@@ -66,9 +66,11 @@ public final class CSSColorHelper
   public static final float OPACITY_MAX = 1f;
 
   @RegEx
-  private static final String PATTERN_PART_VALUE = "(\\-?[0-9]+%?)";
+  private static final String PATTERN_PART_VALUE = "((?:\\+|\\-)?(?:[0-9]*\\.[0-9]*|[0-9]+)%?)";
   @RegEx
-  private static final String PATTERN_PART_OPACITY = "([0-9]+\\.[0-9]*|[0-9]+)";
+  private static final String PATTERN_PART_PERCENTAGE = "((?:\\+|\\-)?(?:(?:[0-9]*\\.[0-9]*|[0-9]+)%|0))";
+  @RegEx
+  private static final String PATTERN_PART_OPACITY = "([0-9]*\\.[0-9]*|[0-9]+)";
   @RegEx
   private static final String PATTERN_RGB = "^" +
                                             CCSSValue.PREFIX_RGB +
@@ -97,9 +99,9 @@ public final class CSSColorHelper
                                             "\\s*\\(\\s*" +
                                             PATTERN_PART_VALUE +
                                             "\\s*,\\s*" +
-                                            PATTERN_PART_VALUE +
+                                            PATTERN_PART_PERCENTAGE +
                                             "\\s*,\\s*" +
-                                            PATTERN_PART_VALUE +
+                                            PATTERN_PART_PERCENTAGE +
                                             "\\s*\\)$";
   @RegEx
   private static final String PATTERN_HSLA = "^" +
@@ -107,9 +109,9 @@ public final class CSSColorHelper
                                              "\\s*\\(\\s*" +
                                              PATTERN_PART_VALUE +
                                              "\\s*,\\s*" +
-                                             PATTERN_PART_VALUE +
+                                             PATTERN_PART_PERCENTAGE +
                                              "\\s*,\\s*" +
-                                             PATTERN_PART_VALUE +
+                                             PATTERN_PART_PERCENTAGE +
                                              "\\s*,\\s*" +
                                              PATTERN_PART_OPACITY +
                                              "\\s*\\)$";
@@ -395,9 +397,9 @@ public final class CSSColorHelper
                                  .append (getHSLHueValue (nHue))
                                  .append (',')
                                  .append (getHSLPercentageValue (nSaturation))
-                                 .append (',')
+                                 .append ("%,")
                                  .append (getHSLPercentageValue (nLightness))
-                                 .append (')')
+                                 .append ("%)")
                                  .toString ();
   }
 
@@ -420,9 +422,9 @@ public final class CSSColorHelper
                                  .append (getHSLHueValue (fHue))
                                  .append (',')
                                  .append (getHSLPercentageValue (fSaturation))
-                                 .append (',')
+                                 .append ("%,")
                                  .append (getHSLPercentageValue (fLightness))
-                                 .append (')')
+                                 .append ("%)")
                                  .toString ();
   }
 
@@ -450,9 +452,9 @@ public final class CSSColorHelper
                                  .append (getHSLHueValue (nHue))
                                  .append (',')
                                  .append (getHSLPercentageValue (nSaturation))
-                                 .append (',')
+                                 .append ("%,")
                                  .append (getHSLPercentageValue (nLightness))
-                                 .append (',')
+                                 .append ("%,")
                                  .append (getOpacityToUse (fOpacity))
                                  .append (')')
                                  .toString ();
@@ -482,9 +484,9 @@ public final class CSSColorHelper
                                  .append (getHSLHueValue (fHue))
                                  .append (',')
                                  .append (getHSLPercentageValue (fSaturation))
-                                 .append (',')
+                                 .append ("%,")
                                  .append (getHSLPercentageValue (fLightness))
-                                 .append (',')
+                                 .append ("%,")
                                  .append (getOpacityToUse (fOpacity))
                                  .append (')')
                                  .toString ();
