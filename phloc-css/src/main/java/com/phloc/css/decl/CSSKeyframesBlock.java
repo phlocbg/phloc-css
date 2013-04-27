@@ -94,6 +94,11 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
     return m_aDeclarations.getDeclarationAtIndex (nIndex);
   }
 
+  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  {
+    m_aDeclarations.setDeclarationAtIndex (nIndex, aNewDeclaration);
+  }
+
   public boolean hasDeclarations ()
   {
     return m_aDeclarations.hasDeclarations ();
