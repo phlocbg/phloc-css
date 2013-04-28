@@ -30,13 +30,27 @@ import com.phloc.css.writer.CSSWriterSettings;
 
 /**
  * Example how to read the content of a CSS style attribute, and visit all
- * contained declarations.
+ * contained declarations - with the API and with a visitor.
  * 
  * @author Philip Helger
  */
 public final class WikiVisitFromHtml
 {
-  public static void readFromStyleAttribute ()
+  public static void readFromStyleAttributeWithAPI ()
+  {
+    final String sStyle = "color:red; background:fixed !important";
+    final CSSDeclarationList aDeclList = CSSReaderDeclarationList.readFromString (sStyle, ECSSVersion.CSS30);
+    if (aDeclList == null)
+      throw new IllegalStateException ("Failed to parse CSS: " + sStyle);
+    // For all contained declarations
+    for (final CSSDeclaration aDeclaration : aDeclList.getAllDeclarations ())
+      System.out.println (aDeclaration.getProperty () +
+                          ": " +
+                          aDeclaration.getExpression ().getAsCSSString (new CSSWriterSettings (ECSSVersion.CSS30), 0) +
+                          (aDeclaration.isImportant () ? " (important)" : " (not important)"));
+  }
+
+  public static void readFromStyleAttributeWithVisitor ()
   {
     final String sStyle = "color:red; background:fixed !important";
     final CSSDeclarationList aDeclList = CSSReaderDeclarationList.readFromString (sStyle, ECSSVersion.CSS30);

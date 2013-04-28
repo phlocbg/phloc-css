@@ -1,5 +1,2 @@
-@supports (transition-property: color) or
-          (animation-name: foo) and
-          (transform: rotate(10deg)) {
-  div { color:red; }
-}
+@supports () { div { color:red; } }
+@supports not () { div { color:red; } }

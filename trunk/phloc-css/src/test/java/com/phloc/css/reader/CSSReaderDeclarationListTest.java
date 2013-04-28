@@ -78,7 +78,7 @@ public final class CSSReaderDeclarationListTest
     for (final String sCSS : VALID)
     {
       final CSSDeclarationList aDL = CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS21, aHdl);
-      System.out.println (aDL);
+      assertNotNull (aDL);
     }
     for (final String sCSS : INVALID)
       assertNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS21, aHdl));
