@@ -1,0 +1,5 @@
+@supports (transition-property: color) or
+          (animation-name: foo) and
+          (transform: rotate(10deg)) {
+  div { color:red; }
+}

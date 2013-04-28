@@ -158,9 +158,9 @@ TOKEN :
 
 // before ident!
 | < INHERIT: "inherit" >
-| < MQ_AND: "and" >
-| < MQ_NOT: "not" >
-| < MQ_ONLY: "only" >
+| < AND_SYM: "and" >
+| < NOT_SYM: "not" >
+| < ONLY_SYM: "only" >
 | < FROM_SYM: "from" >
 | < TO_SYM: "to" >
 | < OR_SYM: "or" >
@@ -312,6 +312,7 @@ CSSNode styleSheet() #Root : {}
     | fontfaceRule()
     | keyframesRule()
     | viewportRule()
+    | supportsRule()
     | unknownRule()
     )
     ( <S>
@@ -424,6 +425,7 @@ void mediaRuleList() #void : {}
     | fontfaceRule()
     | keyframesRule()
     | viewportRule()
+    | supportsRule()
     | unknownRule()
     )
     ( <S> )*
@@ -434,12 +436,12 @@ void mediaQuery() : {}
 {
   ( mediaModifier()
     medium()
-    ( <MQ_AND>
+    ( <AND_SYM>
       ( <S> )*
       mediaExpr()
     )*
   | mediaExpr()
-    ( <MQ_AND>
+    ( <AND_SYM>
       ( <S> )*
       mediaExpr()
     )*
@@ -449,9 +451,9 @@ void mediaQuery() : {}
 void mediaModifier() :
 { Token t; }
 {
-  ( t = <MQ_ONLY> { jjtThis.setText (t.image); }
+  ( t = <ONLY_SYM> { jjtThis.setText (t.image); }
     <S>
-  | t = <MQ_NOT>  { jjtThis.setText (t.image); } 
+  | t = <NOT_SYM>  { jjtThis.setText (t.image); } 
     <S>
   )?
 }
@@ -1023,7 +1025,10 @@ void singleKeyframeSelector() : {}
   ( <S> )*
 }
 
-// ------------ VIEWPORT ------------
+//
+// @viewport
+// http://dev.w3.org/csswg/css-device-adapt/#the-atviewport-rule
+//
 
 void viewportRule() : {}
 {
@@ -1032,4 +1037,76 @@ void viewportRule() : {}
   <LBRACE>
   styleDeclaration()
   <RBRACE>
+}
+
+//
+// @supports
+// http://www.w3.org/TR/2013/CR-css3-conditional-20130404/#at-supports
+//
+
+void supportsRule() : {}
+{
+  <SUPPORTS_SYM>    
+  ( <S> )*
+  supportsCondition() 
+  ( <S> )*
+  groupRuleBody()
+}
+
+void nestedStatement() #void : {}
+{
+  ( styleRule()
+  | mediaRule()
+  | pageRule()
+  | fontfaceRule()
+  | keyframesRule()
+  | supportsRule()
+  | unknownRule()
+  )
+}
+
+void groupRuleBody() : {}
+{
+  <LBRACE>
+  ( <S> )*
+  ( nestedStatement()
+    ( <S> )*
+  )* 
+  <RBRACE>
+}
+
+void supportsCondition() #void : {}
+{
+  ( supportsNegation()
+  | supportsConditionInParens()
+    ( LOOKAHEAD(2)
+      ( <S> )+
+      ( <AND_SYM>
+      | <OR_SYM>
+      )
+      ( <S> )+
+      supportsConditionInParens()
+    )*
+  )
+}
+
+void supportsNegation() : {}
+{
+  <NOT_SYM>
+  ( <S> )+
+  supportsConditionInParens()
+}
+
+void supportsConditionInParens() : {}
+{
+  "(" 
+  ( <S> )*
+  ( declaration()
+  | supportsCondition()
+    ( <S> )*
+  )  
+  ")"
+/*  
+  | general_enclosed
+*/  
 }
