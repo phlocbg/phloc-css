@@ -46,3 +46,10 @@
            (transform: rotate(10deg))) {
   div { color:red; }
 }
+
+/* This rule is semantically invalid, but syntactically ok for phloc-css :-| */
+@supports (transition-property: color) or
+          (animation-name: foo) and
+          (transform: rotate(10deg)) {
+  div { color:red; }
+}
