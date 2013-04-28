@@ -20,6 +20,7 @@ package com.phloc.css.property;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -51,8 +52,13 @@ public class CSSPropertyNumbers extends AbstractCSSProperty
     m_nMaxNumbers = nMaxNumbers;
   }
 
+  @Override
+  @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
+    if (super.isValidValue (sValue))
+      return true;
+
     if (sValue == null)
       return false;
 

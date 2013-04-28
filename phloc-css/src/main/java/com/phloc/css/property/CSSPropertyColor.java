@@ -19,6 +19,7 @@ package com.phloc.css.property;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.css.utils.CSSColorHelper;
 
@@ -34,9 +35,11 @@ public class CSSPropertyColor extends AbstractCSSProperty
     super (eProp);
   }
 
+  @Override
+  @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return CSSColorHelper.isColorValue (sValue);
+    return super.isValidValue (sValue) || CSSColorHelper.isColorValue (sValue);
   }
 
   @Nonnull

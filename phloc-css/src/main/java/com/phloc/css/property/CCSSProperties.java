@@ -109,26 +109,21 @@ public final class CCSSProperties
   // margin
   public static final ICSSProperty MARGIN_TOP = new CSSPropertyEnumOrNumber (ECSSProperty.MARGIN_TOP,
                                                                              true,
-                                                                             CCSSValue.AUTO,
-                                                                             CCSSValue.INHERIT);
+                                                                             CCSSValue.AUTO);
   public static final ICSSProperty MARGIN_RIGHT = new CSSPropertyEnumOrNumber (ECSSProperty.MARGIN_RIGHT,
                                                                                true,
-                                                                               CCSSValue.AUTO,
-                                                                               CCSSValue.INHERIT);
+                                                                               CCSSValue.AUTO);
   public static final ICSSProperty MARGIN_BOTTOM = new CSSPropertyEnumOrNumber (ECSSProperty.MARGIN_BOTTOM,
                                                                                 true,
-                                                                                CCSSValue.AUTO,
-                                                                                CCSSValue.INHERIT);
+                                                                                CCSSValue.AUTO);
   public static final ICSSProperty MARGIN_LEFT = new CSSPropertyEnumOrNumber (ECSSProperty.MARGIN_LEFT,
                                                                               true,
-                                                                              CCSSValue.AUTO,
-                                                                              CCSSValue.INHERIT);
+                                                                              CCSSValue.AUTO);
   public static final ICSSProperty MARGIN = new CSSPropertyEnumOrNumbers (ECSSProperty.MARGIN,
                                                                           true,
                                                                           1,
                                                                           4,
-                                                                          CCSSValue.AUTO,
-                                                                          CCSSValue.INHERIT);
+                                                                          CCSSValue.AUTO);
   // padding
   public static final ICSSProperty PADDING_TOP = new CSSPropertyNumber (ECSSProperty.PADDING_TOP, true);
   public static final ICSSProperty PADDING_RIGHT = new CSSPropertyNumber (ECSSProperty.PADDING_RIGHT, true);
@@ -374,9 +369,7 @@ public final class CCSSProperties
                                                                      CCSSValue.VISIBLE,
                                                                      CCSSValue.HIDDEN,
                                                                      CCSSValue.COLLAPSE);
-  public static final ICSSProperty CLIP = new CSSPropertyEnumOrRect (ECSSProperty.CLIP,
-                                                                     CCSSValue.AUTO,
-                                                                     CCSSValue.INHERIT);
+  public static final ICSSProperty CLIP = new CSSPropertyEnumOrRect (ECSSProperty.CLIP, CCSSValue.AUTO);
 
   // display window
   public static final ICSSProperty CURSOR = new CSSPropertyEnum (ECSSProperty.CURSOR,
@@ -398,7 +391,7 @@ public final class CCSSProperties
                                                                  CCSSValue.HELP,
                                                                  CCSSValue.PROGRESS);
 
-  public static final ICSSProperty OPACITY = new CSSPropertyNumber (ECSSProperty.OPACITY, false);
+  public static final ICSSProperty OPACITY = new CSSPropertyDouble (ECSSProperty.OPACITY);
 
   // form stuff
   public static final ICSSProperty CONTENT = new CSSPropertyFree (ECSSProperty.CONTENT);

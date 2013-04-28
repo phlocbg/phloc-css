@@ -19,6 +19,7 @@ package com.phloc.css.property;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.utils.CSSNumberHelper;
@@ -38,9 +39,11 @@ public class CSSPropertyNumber extends AbstractCSSProperty
     m_bWithPercentage = bWithPercentage;
   }
 
+  @Override
+  @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return CSSNumberHelper.isValueWithUnit (sValue, m_bWithPercentage);
+    return super.isValidValue (sValue) || CSSNumberHelper.isValueWithUnit (sValue, m_bWithPercentage);
   }
 
   @Nonnull

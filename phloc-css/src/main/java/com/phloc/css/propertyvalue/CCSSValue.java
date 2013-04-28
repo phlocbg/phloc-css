@@ -90,6 +90,7 @@ public final class CCSSValue
   public static final String HIDDEN = "hidden";
   public static final String HIDE = "hide";
   public static final String INHERIT = "inherit";
+  public static final String INITIAL = "initial";
   public static final String INLINE = "inline";
   public static final String INLINE_BLOCK = "inline-block";
   public static final String INLINE_TABLE = "inline-table";

@@ -19,6 +19,7 @@ package com.phloc.css.property;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringParser;
@@ -31,19 +32,18 @@ import com.phloc.commons.string.StringParser;
  */
 public class CSSPropertyEnumOrInt extends CSSPropertyEnum
 {
-  public CSSPropertyEnumOrInt (@Nonnull final ECSSProperty eProp,
-                                             @Nonnull @Nonempty final String... aEnumValues)
+  public CSSPropertyEnumOrInt (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final String... aEnumValues)
   {
     super (eProp, aEnumValues);
   }
 
-  public CSSPropertyEnumOrInt (@Nonnull final ECSSProperty eProp,
-                                             @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  public CSSPropertyEnumOrInt (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final Iterable <String> aEnumValues)
   {
     super (eProp, aEnumValues);
   }
 
   @Override
+  @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
     return super.isValidValue (sValue) || StringParser.parseIntObj (sValue) != null;

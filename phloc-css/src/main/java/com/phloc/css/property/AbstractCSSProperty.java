@@ -18,6 +18,8 @@
 package com.phloc.css.property;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.string.StringParser;
 import com.phloc.commons.string.ToStringGenerator;
@@ -56,6 +58,14 @@ public abstract class AbstractCSSProperty implements ICSSProperty
   public final ECSSProperty getProp ()
   {
     return m_eProp;
+  }
+
+  @Override
+  @OverridingMethodsMustInvokeSuper
+  public boolean isValidValue (@Nullable final String sValue)
+  {
+    // Inherit and initial is valid for all values in CSS 3.0
+    return CCSSValue.INHERIT.equals (sValue) || CCSSValue.INITIAL.equals (sValue);
   }
 
   @Nonnull
