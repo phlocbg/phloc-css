@@ -45,7 +45,7 @@ import com.phloc.css.ICSSWriterSettings;
 @NotThreadSafe
 public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAware
 {
-  private final List <ICSSSupportsConditionMember> m_aConditions = new ArrayList <ICSSSupportsConditionMember> ();
+  private final List <ICSSSupportsConditionMember> m_aConditionMembers = new ArrayList <ICSSSupportsConditionMember> ();
   private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();
   private CSSSourceLocation m_aSourceLocation;
 
@@ -54,50 +54,50 @@ public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocati
 
   public boolean hasSupportConditionMembers ()
   {
-    return !m_aConditions.isEmpty ();
+    return !m_aConditionMembers.isEmpty ();
   }
 
   @Nonnegative
   public int getSupportsConditionMemberCount ()
   {
-    return m_aConditions.size ();
+    return m_aConditionMembers.size ();
   }
 
   public void addSupportConditionMember (@Nonnull final ICSSSupportsConditionMember aMember)
   {
     if (aMember == null)
       throw new NullPointerException ("member");
-    m_aConditions.add (aMember);
+    m_aConditionMembers.add (aMember);
   }
 
   @Nonnull
   public EChange removeSupportsConditionMember (@Nonnull final ICSSSupportsConditionMember aMember)
   {
-    return EChange.valueOf (m_aConditions.remove (aMember));
+    return EChange.valueOf (m_aConditionMembers.remove (aMember));
   }
 
   @Nonnull
   public EChange removeSupportsConditionMember (@Nonnegative final int nIndex)
   {
-    if (nIndex < 0 || nIndex >= m_aConditions.size ())
+    if (nIndex < 0 || nIndex >= m_aConditionMembers.size ())
       return EChange.UNCHANGED;
-    m_aConditions.remove (nIndex);
+    m_aConditionMembers.remove (nIndex);
     return EChange.CHANGED;
   }
 
   @Nullable
   public ICSSSupportsConditionMember getSupportsConditionMemberAtIndex (@Nonnegative final int nIndex)
   {
-    if (nIndex < 0 || nIndex >= m_aConditions.size ())
+    if (nIndex < 0 || nIndex >= m_aConditionMembers.size ())
       return null;
-    return m_aConditions.get (nIndex);
+    return m_aConditionMembers.get (nIndex);
   }
 
   @Nonnull
   @ReturnsMutableCopy
   public List <ICSSSupportsConditionMember> getAllSupportConditionMembers ()
   {
-    return ContainerHelper.newList (m_aConditions);
+    return ContainerHelper.newList (m_aConditionMembers);
   }
 
   public boolean hasRules ()
@@ -164,7 +164,7 @@ public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocati
 
     final StringBuilder aSB = new StringBuilder ("@supports ");
     boolean bFirst = true;
-    for (final ICSSSupportsConditionMember aCondition : m_aConditions)
+    for (final ICSSSupportsConditionMember aCondition : m_aConditionMembers)
     {
       if (bFirst)
         bFirst = false;
@@ -226,19 +226,19 @@ public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocati
     if (!(o instanceof CSSSupportsRule))
       return false;
     final CSSSupportsRule rhs = (CSSSupportsRule) o;
-    return m_aConditions.equals (rhs.m_aConditions) && m_aRules.equals (rhs.m_aRules);
+    return m_aConditionMembers.equals (rhs.m_aConditionMembers) && m_aRules.equals (rhs.m_aRules);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_aConditions).append (m_aRules).getHashCode ();
+    return new HashCodeGenerator (this).append (m_aConditionMembers).append (m_aRules).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("conditions", m_aConditions)
+    return new ToStringGenerator (this).append ("conditionMembers", m_aConditionMembers)
                                        .append ("rules", m_aRules)
                                        .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
