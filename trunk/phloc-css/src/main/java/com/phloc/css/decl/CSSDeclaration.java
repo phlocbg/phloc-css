@@ -97,8 +97,7 @@ public final class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAw
     return m_sProperty +
            CCSS.SEPARATOR_PROPERTY_VALUE +
            m_aExpression.getAsCSSString (aSettings, nIndentLevel) +
-           (m_bImportant ? CCSS.IMPORTANT_SUFFIX : "") +
-           CCSS.DEFINITION_END;
+           (m_bImportant ? CCSS.IMPORTANT_SUFFIX : "");
   }
 
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)

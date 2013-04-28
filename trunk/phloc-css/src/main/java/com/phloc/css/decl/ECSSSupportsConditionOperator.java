@@ -25,10 +25,9 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
 import com.phloc.css.ECSSVersion;
-import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
-public enum ECSSSupportsConditionOperator implements ICSSSupportsConditionMember, ICSSVersionAware, IHasName
+public enum ECSSSupportsConditionOperator implements ICSSSupportsConditionMember, IHasName
 {
   AND ("and"),
   OR ("or");
