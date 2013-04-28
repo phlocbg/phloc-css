@@ -20,6 +20,7 @@ package com.phloc.css.property;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
@@ -66,6 +67,7 @@ public class CSSPropertyEnumOrColors extends CSSPropertyEnum
   }
 
   @Override
+  @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
     if (sValue == null)

@@ -21,39 +21,32 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-import com.phloc.commons.annotations.Nonempty;
-import com.phloc.css.utils.CSSColorHelper;
+import com.phloc.commons.string.StringParser;
 
 /**
- * CSS property that is either an enumeration or a color value (e.g.
- * background-color)
+ * CSS property that is either an enumeration or a decimal value without a unit
+ * (e.g. opacity)
  * 
  * @author Philip Helger
  */
-public class CSSPropertyEnumOrColor extends CSSPropertyEnum
+public class CSSPropertyDouble extends AbstractCSSProperty
 {
-  public CSSPropertyEnumOrColor (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final String... aEnumValues)
+  public CSSPropertyDouble (@Nonnull final ECSSProperty eProp)
   {
-    super (eProp, aEnumValues);
-  }
-
-  public CSSPropertyEnumOrColor (@Nonnull final ECSSProperty eProp,
-                                 @Nonnull @Nonempty final Iterable <String> aEnumValues)
-  {
-    super (eProp, aEnumValues);
+    super (eProp);
   }
 
   @Override
   @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return super.isValidValue (sValue) || CSSColorHelper.isColorValue (sValue);
+    return super.isValidValue (sValue) || StringParser.parseDoubleObj (sValue) != null;
   }
 
   @Override
   @Nonnull
-  public CSSPropertyEnumOrColor getClone (@Nonnull final ECSSProperty eProp)
+  public CSSPropertyDouble getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrColor (eProp, m_aEnumValues);
+    return new CSSPropertyDouble (eProp);
   }
 }

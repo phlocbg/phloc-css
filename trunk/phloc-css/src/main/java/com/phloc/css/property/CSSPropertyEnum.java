@@ -22,6 +22,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
@@ -70,9 +71,11 @@ public class CSSPropertyEnum extends AbstractCSSProperty
     m_aEnumValues = new HashSet <String> (aEnumValues);
   }
 
+  @Override
+  @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return m_aEnumValues.contains (sValue);
+    return super.isValidValue (sValue) || m_aEnumValues.contains (sValue);
   }
 
   @Nonnull

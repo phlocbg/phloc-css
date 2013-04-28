@@ -20,9 +20,24 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
-  <entry date="2013-04-27" category="tech" action="mix">
+  <entry date="2013-04-28" category="tech" action="fix">
     <change>
-      <text locale="en">Fixed support for HSL/HSLA color value handling - scaling and saturation + lightness must now be percentage values</text>
+      <text locale="en">Allowing 'inherit' and 'initial' as valid values for all properties</text>
+    </change>
+  </entry>
+  <entry date="2013-04-28" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed validity check for property "opacity"</text>
+    </change>
+  </entry>
+  <entry date="2013-04-28" category="feature" action="add">
+    <change>
+      <text locale="en">Added support for new CSS 3.0 @supports statement</text>
+    </change>
+  </entry>
+  <entry date="2013-04-27" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed support for HSL/HSLA color value handling - fixed Hue scaling and saturation + lightness must now be percentage values</text>
     </change>
   </entry>
   <entry date="2013-04-27" category="api" action="add">

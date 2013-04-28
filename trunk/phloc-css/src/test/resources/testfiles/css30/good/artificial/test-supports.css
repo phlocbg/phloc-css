@@ -53,3 +53,57 @@
           (transform: rotate(10deg)) {
   div { color:red; }
 }
+
+/* Test with different top-level rules contained */
+@supports (color:red)
+{
+  div { color:blue; }
+  @media screen and (orientation: portrait) {
+    body {
+      background-color: white;
+    }
+  }  
+  div { color:green; }
+  @page {
+    margin: 1in;
+    size: portrait;
+    marks: none;
+  }
+  @font-face {
+    font-family: GentiumTest;
+    src: url(fonts/GenR102.woff) format("woff"),
+         url(fonts/GenR102.ttf) format("truetype");
+  }
+  @keyframes identifier {  
+    0% { top: 0; left: 0; }  
+    30% { top: 50px; }  
+    68%, 72% { left: 50px; }  
+    100% { top: 100px; left: 100%; }  
+  } 
+  @supports (whitespace:no-wrap)
+  {
+    div { color:blue; }
+    @media screen and (orientation: portrait) {
+      body {
+        background-color: white;
+      }
+    }  
+    div { color:green; }
+    @page {
+      margin: 1in;
+      size: portrait;
+      marks: none;
+    }
+    @font-face {
+      font-family: GentiumTest;
+      src: url(fonts/GenR102.woff) format("woff"),
+           url(fonts/GenR102.ttf) format("truetype");
+    }
+    @keyframes identifier {  
+      0% { top: 0; left: 0; }  
+      30% { top: 50px; }  
+      68%, 72% { left: 50px; }  
+      100% { top: 100px; left: 100%; }  
+    } 
+  }
+}

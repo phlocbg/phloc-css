@@ -19,6 +19,7 @@ package com.phloc.css.property;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
@@ -51,6 +52,7 @@ public class CSSPropertyEnumOrNumber extends CSSPropertyEnum
   }
 
   @Override
+  @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
     return super.isValidValue (sValue) || CSSNumberHelper.isValueWithUnit (sValue, m_bWithPercentage);
