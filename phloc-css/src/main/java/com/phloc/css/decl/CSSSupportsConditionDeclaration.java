@@ -25,6 +25,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
@@ -55,7 +56,14 @@ public class CSSSupportsConditionDeclaration implements ICSSSupportsConditionMem
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
+    aSettings.checkVersionRequirements (this);
     return "(" + m_aDeclaration.getAsCSSString (aSettings, nIndentLevel) + ")";
+  }
+
+  @Nonnull
+  public ECSSVersion getMinimumCSSVersion ()
+  {
+    return ECSSVersion.CSS30;
   }
 
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)

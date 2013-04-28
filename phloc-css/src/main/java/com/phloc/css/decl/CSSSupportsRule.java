@@ -33,7 +33,9 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSSourceLocationAware;
+import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -43,7 +45,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAware
+public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAware, ICSSVersionAware
 {
   private final List <ICSSSupportsConditionMember> m_aConditionMembers = new ArrayList <ICSSSupportsConditionMember> ();
   private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();
@@ -152,6 +154,8 @@ public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocati
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
+    aSettings.checkVersionRequirements (this);
+
     // Always ignore SupportsCondition rules?
     if (!aSettings.isWriteSupportsRules ())
       return "";
@@ -169,7 +173,7 @@ public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocati
       if (bFirst)
         bFirst = false;
       else
-        aSB.append (bOptimizedOutput ? "," : ", ");
+        aSB.append (' ');
       aSB.append (aCondition.getAsCSSString (aSettings, nIndentLevel));
     }
 
@@ -205,6 +209,12 @@ public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocati
         aSB.append ('\n');
     }
     return aSB.toString ();
+  }
+
+  @Nonnull
+  public ECSSVersion getMinimumCSSVersion ()
+  {
+    return ECSSVersion.CSS30;
   }
 
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)

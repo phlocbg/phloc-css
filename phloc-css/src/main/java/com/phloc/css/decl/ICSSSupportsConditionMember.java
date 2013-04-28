@@ -17,6 +17,7 @@
  */
 package com.phloc.css.decl;
 
+import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriteable;
 
 /**
@@ -24,7 +25,7 @@ import com.phloc.css.ICSSWriteable;
  * 
  * @author Philip Helger
  */
-public interface ICSSSupportsConditionMember extends ICSSWriteable
+public interface ICSSSupportsConditionMember extends ICSSWriteable, ICSSVersionAware
 {
   /* empty */
 }

@@ -31,6 +31,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.CCSS;
 import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
@@ -133,7 +134,8 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
     if (nDeclCount == 1)
     {
       // A single declaration
-      return ContainerHelper.getFirstElement (m_aDeclarations).getAsCSSString (aSettings, nIndentLevel);
+      return ContainerHelper.getFirstElement (m_aDeclarations).getAsCSSString (aSettings, nIndentLevel) +
+             CCSS.DEFINITION_END;
     }
 
     // More than one declaration
@@ -143,8 +145,8 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
       // Indentation
       if (!bOptimizedOutput)
         aSB.append (aSettings.getIndent (nIndentLevel + 1));
-      // Emit the main declaration
-      aSB.append (aDeclaration.getAsCSSString (aSettings, nIndentLevel + 1));
+      // Emit the main declaration plus the semicolon
+      aSB.append (aDeclaration.getAsCSSString (aSettings, nIndentLevel + 1)).append (CCSS.DEFINITION_END);
       if (!bOptimizedOutput)
         aSB.append ('\n');
     }

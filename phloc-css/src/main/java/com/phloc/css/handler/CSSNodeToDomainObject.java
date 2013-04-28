@@ -56,6 +56,7 @@ import com.phloc.css.decl.CSSSelectorSimpleMember;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.CSSSupportsConditionDeclaration;
 import com.phloc.css.decl.CSSSupportsConditionNegation;
+import com.phloc.css.decl.CSSSupportsConditionNested;
 import com.phloc.css.decl.CSSSupportsRule;
 import com.phloc.css.decl.CSSURI;
 import com.phloc.css.decl.CSSViewportRule;
@@ -928,16 +929,14 @@ final class CSSNodeToDomainObject
 
       if (ECSSNodeType.SUPPORTSCONDITION.isNode (aChildNode, m_eVersion))
       {
-        final List <ICSSSupportsConditionMember> aNestedMembers = new ArrayList <ICSSSupportsConditionMember> ();
+        final CSSSupportsConditionNested ret = new CSSSupportsConditionNested ();
         for (final CSSNode aChildChildNode : aChildNode)
         {
           final ICSSSupportsConditionMember aMember = _createSupportsConditionMemberRecursive (aChildChildNode);
           if (aMember != null)
-            aNestedMembers.add (aMember);
+            ret.addMember (aMember);
         }
-        if (aNestedMembers.size () == 1)
-          System.out.println (aChildNode.getSourceLocation () + " - " + aNestedMembers);
-        return ECSSSupportsConditionOperator.AND;
+        return ret;
       }
 
       s_aLogger.warn ("Unsupported supportsConditionInParents child: " +
