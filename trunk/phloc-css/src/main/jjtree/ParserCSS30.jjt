@@ -1075,13 +1075,15 @@ void groupRuleBody() #void : {}
   <RBRACE>
 }
 
-void supportsCondition() #void : {}
+void supportsCondition() : {}
 {
   ( supportsNegation()
   | supportsConditionInParens()
     ( LOOKAHEAD(2)
       ( <S> )+
-      supportsConditionWithOperator()
+      supportsConditionOperator()
+      ( <S> )+
+      supportsConditionInParens()
     )*
   )
 }
@@ -1090,13 +1092,6 @@ void supportsConditionOperator() : {}
 {
   ( <AND_SYM> { jjtThis.setText (token.image); }  | <OR_SYM>  { jjtThis.setText (token.image); }
   )
-}
-
-void supportsConditionWithOperator() : {}
-{
-  supportsConditionOperator()
-  ( <S> )+
-  supportsConditionInParens()
 }
 
 void supportsNegation() : {}

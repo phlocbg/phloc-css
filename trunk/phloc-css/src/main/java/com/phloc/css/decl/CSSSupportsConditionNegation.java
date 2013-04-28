@@ -29,24 +29,33 @@ import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single supports condition
+ * Represents a single negation supports condition
  * 
  * @author Philip Helger
  */
-public class CSSSupportsCondition implements ICSSSupportsMember, ICSSSourceLocationAware
+public class CSSSupportsConditionNegation implements ICSSSupportsConditionMember, ICSSSourceLocationAware
 {
+  private final ICSSSupportsConditionMember m_aSupportsMember;
   private CSSSourceLocation m_aSourceLocation;
 
-  public CSSSupportsCondition ()
-  {}
+  public CSSSupportsConditionNegation (@Nonnull final ICSSSupportsConditionMember aSupportsMember)
+  {
+    if (aSupportsMember == null)
+      throw new NullPointerException ("SupportsMember");
+    m_aSupportsMember = aSupportsMember;
+  }
+
+  @Nonnull
+  public ICSSSupportsConditionMember getSupportsMember ()
+  {
+    return m_aSupportsMember;
+  }
 
   @Nonnull
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    final StringBuilder aSB = new StringBuilder ();
-
-    return aSB.toString ();
+    return "not " + m_aSupportsMember.getAsCSSString (aSettings, nIndentLevel);
   }
 
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
@@ -65,21 +74,23 @@ public class CSSSupportsCondition implements ICSSSupportsMember, ICSSSourceLocat
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSupportsCondition))
+    if (!(o instanceof CSSSupportsConditionNegation))
       return false;
-    final CSSSupportsCondition rhs = (CSSSupportsCondition) o;
-    return true;
+    final CSSSupportsConditionNegation rhs = (CSSSupportsConditionNegation) o;
+    return m_aSupportsMember.equals (rhs.m_aSupportsMember);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).getHashCode ();
+    return new HashCodeGenerator (this).append (m_aSupportsMember).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).appendIfNotNull ("sourceLocation", m_aSourceLocation).toString ();
+    return new ToStringGenerator (this).append ("supportsMember", m_aSupportsMember)
+                                       .appendIfNotNull ("sourceLocation", m_aSourceLocation)
+                                       .toString ();
   }
 }
