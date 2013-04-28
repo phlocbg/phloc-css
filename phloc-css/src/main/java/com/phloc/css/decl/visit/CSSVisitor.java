@@ -30,6 +30,7 @@ import com.phloc.css.decl.CSSNamespaceRule;
 import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
+import com.phloc.css.decl.CSSSupportsRule;
 import com.phloc.css.decl.CSSViewportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSTopLevelRule;
@@ -107,7 +108,7 @@ public final class CSSVisitor
     aVisitor.onBeginMediaRule (aMediaRule);
     try
     {
-      // for all rules
+      // for all nested rules
       for (final ICSSTopLevelRule aRule : aMediaRule.getAllRules ())
         visitTopLevelRule (aRule, aVisitor);
     }
@@ -159,6 +160,22 @@ public final class CSSVisitor
     }
   }
 
+  public static void visitSupportsRule (@Nonnull final CSSSupportsRule aSupportsRule,
+                                        @Nonnull final ICSSVisitor aVisitor)
+  {
+    aVisitor.onBeginSupportsRule (aSupportsRule);
+    try
+    {
+      // for all nested rules
+      for (final ICSSTopLevelRule aRule : aSupportsRule.getAllRules ())
+        visitTopLevelRule (aRule, aVisitor);
+    }
+    finally
+    {
+      aVisitor.onEndSupportsRule (aSupportsRule);
+    }
+  }
+
   public static void visitNamespaceRule (@Nonnull final CSSNamespaceRule aNamespaceRule,
                                          @Nonnull final ICSSVisitor aVisitor)
   {
@@ -198,7 +215,12 @@ public final class CSSVisitor
                 visitViewportRule ((CSSViewportRule) aTopLevelRule, aVisitor);
               }
               else
-                throw new IllegalStateException ("Top level rule " + aTopLevelRule + " is unsupported!");
+                if (aTopLevelRule instanceof CSSSupportsRule)
+                {
+                  visitSupportsRule ((CSSSupportsRule) aTopLevelRule, aVisitor);
+                }
+                else
+                  throw new IllegalStateException ("Top level rule " + aTopLevelRule + " is unsupported!");
   }
 
   /**

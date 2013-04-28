@@ -29,6 +29,7 @@ import com.phloc.css.decl.CSSNamespaceRule;
 import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
+import com.phloc.css.decl.CSSSupportsRule;
 import com.phloc.css.decl.CSSViewportRule;
 
 /**
@@ -153,7 +154,7 @@ public interface ICSSVisitor
   // keyframes rules:
   // contained declarations are handled by onDeclaration
   /**
-   * Called when a keyframes starts.
+   * Called when a keyframes rule starts.
    * 
    * @param aKeyframesRule
    *        The keyframes rule. Never <code>null</code>.
@@ -177,7 +178,7 @@ public interface ICSSVisitor
   void onEndKeyframesBlock (@Nonnull CSSKeyframesBlock aKeyframesBlock);
 
   /**
-   * Called when a keyframes ends.
+   * Called when a keyframes rule ends.
    * 
    * @param aKeyframesRule
    *        The keyframes rule. Never <code>null</code>.
@@ -186,7 +187,7 @@ public interface ICSSVisitor
 
   // viewport rules
   /**
-   * Called when a viewport starts.
+   * Called when a viewport rule starts.
    * 
    * @param aViewportRule
    *        The viewport rule. Never <code>null</code>.
@@ -194,12 +195,29 @@ public interface ICSSVisitor
   void onBeginViewportRule (@Nonnull CSSViewportRule aViewportRule);
 
   /**
-   * Called when a viewport ends.
+   * Called when a viewport rule ends.
    * 
    * @param aViewportRule
    *        The viewport rule. Never <code>null</code>.
    */
   void onEndViewportRule (@Nonnull CSSViewportRule aViewportRule);
+
+  // supports rules
+  /**
+   * Called when a supports rule starts.
+   * 
+   * @param aSupportsRule
+   *        The supports rule. Never <code>null</code>.
+   */
+  void onBeginSupportsRule (@Nonnull CSSSupportsRule aSupportsRule);
+
+  /**
+   * Called when a supports rule ends.
+   * 
+   * @param aSupportsRule
+   *        The supports rule. Never <code>null</code>.
+   */
+  void onEndSupportsRule (@Nonnull CSSSupportsRule aSupportsRule);
 
   /**
    * After visiting is done.<br>
