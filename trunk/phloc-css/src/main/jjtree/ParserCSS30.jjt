@@ -1065,7 +1065,7 @@ void nestedStatement() #void : {}
   )
 }
 
-void groupRuleBody() : {}
+void groupRuleBody() #void : {}
 {
   <LBRACE>
   ( <S> )*

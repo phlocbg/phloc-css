@@ -54,6 +54,7 @@ import com.phloc.css.decl.CSSSelectorMemberFunctionLike;
 import com.phloc.css.decl.CSSSelectorMemberNot;
 import com.phloc.css.decl.CSSSelectorSimpleMember;
 import com.phloc.css.decl.CSSStyleRule;
+import com.phloc.css.decl.CSSSupportsRule;
 import com.phloc.css.decl.CSSURI;
 import com.phloc.css.decl.CSSViewportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
@@ -628,9 +629,12 @@ final class CSSNodeToDomainObject
                 if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
                   ret.addRule (_createViewportRule (aChildNode));
                 else
-                  if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
-                    s_aLogger.warn ("Unsupported media-rule child: " +
-                                    ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+                  if (ECSSNodeType.SUPPORTSRULE.isNode (aChildNode, m_eVersion))
+                    ret.addRule (_createSupportsRule (aChildNode));
+                  else
+                    if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+                      s_aLogger.warn ("Unsupported media-rule child: " +
+                                      ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
   }
@@ -877,6 +881,45 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
+  private CSSSupportsRule _createSupportsRule (@Nonnull final CSSNode aNode)
+  {
+    _expectNodeType (aNode, ECSSNodeType.SUPPORTSRULE);
+    final CSSSupportsRule ret = new CSSSupportsRule ();
+    ret.setSourceLocation (aNode.getSourceLocation ());
+    for (final CSSNode aChildNode : aNode)
+    {
+      if (ECSSNodeType.MEDIALIST.isNode (aChildNode, m_eVersion))
+      {}
+      else
+        if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
+          ret.addRule (_createStyleRule (aChildNode));
+        else
+          if (ECSSNodeType.MEDIARULE.isNode (aChildNode, m_eVersion))
+            ret.addRule (_createMediaRule (aChildNode));
+          else
+            if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
+              ret.addRule (_createPageRule (aChildNode));
+            else
+              if (ECSSNodeType.FONTFACERULE.isNode (aChildNode, m_eVersion))
+                ret.addRule (_createFontFaceRule (aChildNode));
+              else
+                if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
+                  ret.addRule (_createKeyframesRule (aChildNode));
+                else
+                  if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
+                    ret.addRule (_createViewportRule (aChildNode));
+                  else
+                    if (ECSSNodeType.SUPPORTSRULE.isNode (aChildNode, m_eVersion))
+                      ret.addRule (_createSupportsRule (aChildNode));
+                    else
+                      if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+                        s_aLogger.warn ("Unsupported supports-rule child: " +
+                                        ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+    }
+    return ret;
+  }
+
+  @Nonnull
   public CascadingStyleSheet createCascadingStyleSheetFromNode (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.ROOT);
@@ -913,16 +956,20 @@ final class CSSNodeToDomainObject
                       if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
                         ret.addRule (_createViewportRule (aChildNode));
                       else
-                        if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
-                        {
-                          // Unknown rule most likely indicates a parsing error
-                          s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);
-                        }
+                        if (ECSSNodeType.SUPPORTSRULE.isNode (aChildNode, m_eVersion))
+                          ret.addRule (_createSupportsRule (aChildNode));
                         else
-                          s_aLogger.error ("Unsupported child of " +
-                                           ECSSNodeType.getNodeName (aNode, m_eVersion) +
-                                           ": " +
-                                           ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+                          if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
+                          {
+                            // Unknown rule most likely indicates a parsing
+                            // error
+                            s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);
+                          }
+                          else
+                            s_aLogger.error ("Unsupported child of " +
+                                             ECSSNodeType.getNodeName (aNode, m_eVersion) +
+                                             ": " +
+                                             ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
   }

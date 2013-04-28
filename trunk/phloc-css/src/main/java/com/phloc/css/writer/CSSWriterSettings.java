@@ -57,6 +57,8 @@ public class CSSWriterSettings implements ICSSWriterSettings
   public static final boolean DEFAULT_WRITE_PAGE_RULES = true;
   /** By default viewport rules are written */
   public static final boolean DEFAULT_WRITE_VIEWPORT_RULES = true;
+  /** By default supports rules are written */
+  public static final boolean DEFAULT_WRITE_SUPPORTS_RULES = true;
 
   private final ECSSVersion m_eVersion;
   private boolean m_bOptimizedOutput;
@@ -69,6 +71,7 @@ public class CSSWriterSettings implements ICSSWriterSettings
   private boolean m_bWriteMediaRules = DEFAULT_WRITE_MEDIA_RULES;
   private boolean m_bWritePageRules = DEFAULT_WRITE_PAGE_RULES;
   private boolean m_bWriteViewportRules = DEFAULT_WRITE_VIEWPORT_RULES;
+  private boolean m_bWriteSupportsRules = DEFAULT_WRITE_SUPPORTS_RULES;
 
   /**
    * @param eVersion
@@ -114,6 +117,7 @@ public class CSSWriterSettings implements ICSSWriterSettings
     m_bWriteMediaRules = aBase.isWriteMediaRules ();
     m_bWritePageRules = aBase.isWritePageRules ();
     m_bWriteViewportRules = aBase.isWriteViewportRules ();
+    m_bWriteSupportsRules = aBase.isWriteSupportsRules ();
   }
 
   @Nonnull
@@ -245,6 +249,18 @@ public class CSSWriterSettings implements ICSSWriterSettings
     return this;
   }
 
+  public final boolean isWriteSupportsRules ()
+  {
+    return m_bWriteSupportsRules;
+  }
+
+  @Nonnull
+  public final CSSWriterSettings setWriteSupportsRules (final boolean bWriteSupportsRules)
+  {
+    m_bWriteSupportsRules = bWriteSupportsRules;
+    return this;
+  }
+
   public void checkVersionRequirements (@Nonnull final ICSSVersionAware aCSSObject)
   {
     final ECSSVersion eMinCSSVersion = aCSSObject.getMinimumCSSVersion ();
@@ -273,7 +289,8 @@ public class CSSWriterSettings implements ICSSWriterSettings
            m_bWriteKeyframesRules == rhs.m_bWriteKeyframesRules &&
            m_bWriteMediaRules == rhs.m_bWriteMediaRules &&
            m_bWritePageRules == rhs.m_bWritePageRules &&
-           m_bWriteViewportRules == rhs.m_bWriteViewportRules;
+           m_bWriteViewportRules == rhs.m_bWriteViewportRules &&
+           m_bWriteSupportsRules == rhs.m_bWriteSupportsRules;
   }
 
   @Override
@@ -290,6 +307,7 @@ public class CSSWriterSettings implements ICSSWriterSettings
                                        .append (m_bWriteMediaRules)
                                        .append (m_bWritePageRules)
                                        .append (m_bWriteViewportRules)
+                                       .append (m_bWriteSupportsRules)
                                        .getHashCode ();
   }
 
@@ -307,6 +325,7 @@ public class CSSWriterSettings implements ICSSWriterSettings
                                        .append ("writeMediaRules", m_bWriteMediaRules)
                                        .append ("writePageRules", m_bWritePageRules)
                                        .append ("writeViewportRules", m_bWriteViewportRules)
+                                       .append ("writeSupportsRules", m_bWriteSupportsRules)
                                        .toString ();
   }
 }
