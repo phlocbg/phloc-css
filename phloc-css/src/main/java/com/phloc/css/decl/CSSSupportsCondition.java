@@ -26,7 +26,6 @@ import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ICSSSourceLocationAware;
-import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
@@ -34,7 +33,7 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
-public final class CSSSupportsCondition implements ICSSWriteable, ICSSSourceLocationAware
+public class CSSSupportsCondition implements ICSSSupportsMember, ICSSSourceLocationAware
 {
   private CSSSourceLocation m_aSourceLocation;
 

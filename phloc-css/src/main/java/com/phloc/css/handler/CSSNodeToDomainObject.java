@@ -888,41 +888,70 @@ final class CSSNodeToDomainObject
     ret.setSourceLocation (aNode.getSourceLocation ());
     for (final CSSNode aChildNode : aNode)
     {
-      if (ECSSNodeType.SUPPORTSNEGATION.isNode (aChildNode, m_eVersion))
+      if (ECSSNodeType.SUPPORTSCONDITIONOPERATOR.isNode (aChildNode, m_eVersion))
       {
         // FIXME
+        s_aLogger.info ("Condition Op: " + aChildNode.getText ());
+        if (aChildNode.jjtGetNumChildren () != 0)
+          s_aLogger.error (ECSSNodeType.getNodeName (aChildNode, m_eVersion) + " has unexpected children!");
       }
       else
-        if (ECSSNodeType.SUPPORTSCONDITIONINPARENS.isNode (aChildNode, m_eVersion))
+        if (ECSSNodeType.SUPPORTSCONDITIONWITHOPERATOR.isNode (aChildNode, m_eVersion))
         {
           // FIXME
+          s_aLogger.info ("Condition with Op: " + aChildNode.getSourceLocation ());
+          for (final CSSNode aChildChildNode : aChildNode)
+            s_aLogger.info ("  " +
+                            ECSSNodeType.getNodeName (aChildChildNode, m_eVersion) +
+                            " " +
+                            aChildChildNode.getSourceLocation ());
         }
         else
-          if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
-            ret.addRule (_createStyleRule (aChildNode));
+          if (ECSSNodeType.SUPPORTSNEGATION.isNode (aChildNode, m_eVersion))
+          {
+            // FIXME
+            s_aLogger.info ("Negation: " + aChildNode.getSourceLocation ());
+            for (final CSSNode aChildChildNode : aChildNode)
+              s_aLogger.info ("  " +
+                              ECSSNodeType.getNodeName (aChildChildNode, m_eVersion) +
+                              " " +
+                              aChildChildNode.getSourceLocation ());
+          }
           else
-            if (ECSSNodeType.MEDIARULE.isNode (aChildNode, m_eVersion))
-              ret.addRule (_createMediaRule (aChildNode));
+            if (ECSSNodeType.SUPPORTSCONDITIONINPARENS.isNode (aChildNode, m_eVersion))
+            {
+              // FIXME
+              s_aLogger.info ("Condition: " + aChildNode.getSourceLocation ());
+              for (final CSSNode aChildChildNode : aChildNode)
+                s_aLogger.info ("  " + ECSSNodeType.getNodeName (aChildChildNode, m_eVersion));
+            }
             else
-              if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
-                ret.addRule (_createPageRule (aChildNode));
+              if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
+                ret.addRule (_createStyleRule (aChildNode));
               else
-                if (ECSSNodeType.FONTFACERULE.isNode (aChildNode, m_eVersion))
-                  ret.addRule (_createFontFaceRule (aChildNode));
+                if (ECSSNodeType.MEDIARULE.isNode (aChildNode, m_eVersion))
+                  ret.addRule (_createMediaRule (aChildNode));
                 else
-                  if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
-                    ret.addRule (_createKeyframesRule (aChildNode));
+                  if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
+                    ret.addRule (_createPageRule (aChildNode));
                   else
-                    if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
-                      ret.addRule (_createViewportRule (aChildNode));
+                    if (ECSSNodeType.FONTFACERULE.isNode (aChildNode, m_eVersion))
+                      ret.addRule (_createFontFaceRule (aChildNode));
                     else
-                      if (ECSSNodeType.SUPPORTSRULE.isNode (aChildNode, m_eVersion))
-                        ret.addRule (_createSupportsRule (aChildNode));
+                      if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
+                        ret.addRule (_createKeyframesRule (aChildNode));
                       else
-                        if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
-                          s_aLogger.warn ("Unsupported supports-rule child: " +
-                                          ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+                        if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
+                          ret.addRule (_createViewportRule (aChildNode));
+                        else
+                          if (ECSSNodeType.SUPPORTSRULE.isNode (aChildNode, m_eVersion))
+                            ret.addRule (_createSupportsRule (aChildNode));
+                          else
+                            if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+                              s_aLogger.warn ("Unsupported supports-rule child: " +
+                                              ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
+    s_aLogger.info ("");
     return ret;
   }
 

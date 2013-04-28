@@ -560,6 +560,47 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware
     return ret;
   }
 
+  /**
+   * @return <code>true</code> if at least one <code>@supports</code> rule is
+   *         contained, <code>false</code> otherwise.
+   */
+  public boolean hasSupportsRules ()
+  {
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSSupportsRule)
+        return true;
+    return false;
+  }
+
+  /**
+   * @return The number of contained <code>@supports</code> rules. Always &ge;
+   *         0.
+   */
+  @Nonnegative
+  public int getSupportsRuleCount ()
+  {
+    int ret = 0;
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSSupportsRule)
+        ret++;
+    return ret;
+  }
+
+  /**
+   * @return A copy of all contained <code>@supports</code> rules. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSSupportsRule> getAllSupportsRules ()
+  {
+    final List <CSSSupportsRule> ret = new ArrayList <CSSSupportsRule> ();
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSSupportsRule)
+        ret.add ((CSSSupportsRule) aTopLevelRule);
+    return ret;
+  }
+
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;
