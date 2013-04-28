@@ -100,6 +100,12 @@ public interface ICSSWriterSettings
   boolean isWriteViewportRules ();
 
   /**
+   * @return <code>true</code> if @supports rules should be written,
+   *         <code>false</code> if not
+   */
+  boolean isWriteSupportsRules ();
+
+  /**
    * Check if the passed object matches the version requirements defined be this
    * settings.
    * 
