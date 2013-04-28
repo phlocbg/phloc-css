@@ -1081,13 +1081,22 @@ void supportsCondition() #void : {}
   | supportsConditionInParens()
     ( LOOKAHEAD(2)
       ( <S> )+
-      ( <AND_SYM>
-      | <OR_SYM>
-      )
-      ( <S> )+
-      supportsConditionInParens()
+      supportsConditionWithOperator()
     )*
   )
+}
+
+void supportsConditionOperator() : {}
+{
+  ( <AND_SYM> { jjtThis.setText (token.image); }  | <OR_SYM>  { jjtThis.setText (token.image); }
+  )
+}
+
+void supportsConditionWithOperator() : {}
+{
+  supportsConditionOperator()
+  ( <S> )+
+  supportsConditionInParens()
 }
 
 void supportsNegation() : {}
@@ -1106,7 +1115,5 @@ void supportsConditionInParens() : {}
     ( <S> )*
   )  
   ")"
-/*  
-  | general_enclosed
-*/  
+/* | general_enclosed */  
 }

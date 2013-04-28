@@ -1,9 +1,13 @@
 @supports(column-count: 1) {}
 @supports (column-count: 1) {}
 @supports ( column-count: 1 ) {}
+@supports not  ( column-count: 1 ) {}
+@supports not  ( not  ( column-count: 1 ) ) {}
 @supports (column-count: 1) { div { color:red; } }
 @supports (column-count: 1) or (-moz-column-count: 1) { }
 @supports (column-count: 1) or (-moz-column-count: 1) { div { color:red; }}
+@supports (column-count: 1) and (-moz-column-count: 1) { }
+@supports (column-count: 1) and (-moz-column-count: 1) { div { color:red; }}
 @supports (column-count: 1) and (background-image: linear-gradient(#f00,#00f)) { }
 @supports not (transform: rotate(45deg)) { div { color:red; } }
 @supports ((column-count: 1) or (-moz-column-count: 1)) and (background-image: linear-gradient(#f00,#00f)) { div { color:red; } }
