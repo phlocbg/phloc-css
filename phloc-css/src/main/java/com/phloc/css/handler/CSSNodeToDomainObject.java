@@ -62,6 +62,7 @@ import com.phloc.css.decl.ECSSAttributeOperator;
 import com.phloc.css.decl.ECSSExpressionOperator;
 import com.phloc.css.decl.ECSSMathOperator;
 import com.phloc.css.decl.ECSSSelectorCombinator;
+import com.phloc.css.decl.ECSSSupportsConditionOperator;
 import com.phloc.css.decl.ICSSExpressionMember;
 import com.phloc.css.decl.ICSSSelectorMember;
 import com.phloc.css.media.ECSSMediaExpressionFeature;
@@ -888,23 +889,24 @@ final class CSSNodeToDomainObject
     ret.setSourceLocation (aNode.getSourceLocation ());
     for (final CSSNode aChildNode : aNode)
     {
-      if (ECSSNodeType.SUPPORTSCONDITIONOPERATOR.isNode (aChildNode, m_eVersion))
+      if (ECSSNodeType.SUPPORTSCONDITION.isNode (aChildNode, m_eVersion))
       {
         // FIXME
-        s_aLogger.info ("Condition Op: " + aChildNode.getText ());
-        if (aChildNode.jjtGetNumChildren () != 0)
-          s_aLogger.error (ECSSNodeType.getNodeName (aChildNode, m_eVersion) + " has unexpected children!");
+        s_aLogger.info ("Condition: " + aChildNode.getSourceLocation ());
+        for (final CSSNode aChildChildNode : aChildNode)
+          s_aLogger.info ("  " +
+                          ECSSNodeType.getNodeName (aChildChildNode, m_eVersion) +
+                          " " +
+                          aChildChildNode.getSourceLocation ());
       }
       else
-        if (ECSSNodeType.SUPPORTSCONDITIONWITHOPERATOR.isNode (aChildNode, m_eVersion))
+        if (ECSSNodeType.SUPPORTSCONDITIONOPERATOR.isNode (aChildNode, m_eVersion))
         {
-          // FIXME
-          s_aLogger.info ("Condition with Op: " + aChildNode.getSourceLocation ());
-          for (final CSSNode aChildChildNode : aChildNode)
-            s_aLogger.info ("  " +
-                            ECSSNodeType.getNodeName (aChildChildNode, m_eVersion) +
-                            " " +
-                            aChildChildNode.getSourceLocation ());
+          if (aChildNode.jjtGetNumChildren () != 0)
+            s_aLogger.error (ECSSNodeType.getNodeName (aChildNode, m_eVersion) + " has unexpected children!");
+
+          final ECSSSupportsConditionOperator eOp = ECSSSupportsConditionOperator.getFromNameCaseInsensitiveOrNull (aChildNode.getText ());
+          ret.addSupportConditionMember (eOp);
         }
         else
           if (ECSSNodeType.SUPPORTSNEGATION.isNode (aChildNode, m_eVersion))

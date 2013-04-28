@@ -24,7 +24,7 @@ import com.phloc.css.ICSSWriteable;
  * 
  * @author Philip Helger
  */
-public interface ICSSSupportsMember extends ICSSWriteable
+public interface ICSSSupportsConditionMember extends ICSSWriteable
 {
   /* empty */
 }

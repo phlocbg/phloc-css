@@ -45,57 +45,57 @@ import com.phloc.css.ICSSWriterSettings;
 @NotThreadSafe
 public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAware
 {
-  private final List <CSSSupportsCondition> m_aConditions = new ArrayList <CSSSupportsCondition> ();
+  private final List <ICSSSupportsConditionMember> m_aConditions = new ArrayList <ICSSSupportsConditionMember> ();
   private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();
   private CSSSourceLocation m_aSourceLocation;
 
   public CSSSupportsRule ()
   {}
 
-  public boolean hasMediaQueries ()
+  public boolean hasSupportConditionMembers ()
   {
     return !m_aConditions.isEmpty ();
   }
 
   @Nonnegative
-  public int getSupportsConditionCount ()
+  public int getSupportsConditionMemberCount ()
   {
     return m_aConditions.size ();
   }
 
-  public void addSupportsCondition (@Nonnull @Nonempty final CSSSupportsCondition aSupportsCondition)
+  public void addSupportConditionMember (@Nonnull final ICSSSupportsConditionMember aMember)
   {
-    if (aSupportsCondition == null)
-      throw new NullPointerException ("SupportsCondition");
-    m_aConditions.add (aSupportsCondition);
+    if (aMember == null)
+      throw new NullPointerException ("member");
+    m_aConditions.add (aMember);
   }
 
   @Nonnull
-  public EChange removeSupportsCondition (@Nonnull final CSSSupportsCondition aSupportsCondition)
+  public EChange removeSupportsConditionMember (@Nonnull final ICSSSupportsConditionMember aMember)
   {
-    return EChange.valueOf (m_aConditions.remove (aSupportsCondition));
+    return EChange.valueOf (m_aConditions.remove (aMember));
   }
 
   @Nonnull
-  public EChange removeSupportsCondition (@Nonnegative final int nMediumIndex)
+  public EChange removeSupportsConditionMember (@Nonnegative final int nIndex)
   {
-    if (nMediumIndex < 0 || nMediumIndex >= m_aConditions.size ())
+    if (nIndex < 0 || nIndex >= m_aConditions.size ())
       return EChange.UNCHANGED;
-    m_aConditions.remove (nMediumIndex);
+    m_aConditions.remove (nIndex);
     return EChange.CHANGED;
   }
 
   @Nullable
-  public CSSSupportsCondition getSupportsConditionAtIndex (@Nonnegative final int nMediumIndex)
+  public ICSSSupportsConditionMember getSupportsConditionMemberAtIndex (@Nonnegative final int nIndex)
   {
-    if (nMediumIndex < 0 || nMediumIndex >= m_aConditions.size ())
+    if (nIndex < 0 || nIndex >= m_aConditions.size ())
       return null;
-    return m_aConditions.get (nMediumIndex);
+    return m_aConditions.get (nIndex);
   }
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <CSSSupportsCondition> getAllMediaQueries ()
+  public List <ICSSSupportsConditionMember> getAllSupportConditionMembers ()
   {
     return ContainerHelper.newList (m_aConditions);
   }
@@ -164,7 +164,7 @@ public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocati
 
     final StringBuilder aSB = new StringBuilder ("@supports ");
     boolean bFirst = true;
-    for (final CSSSupportsCondition aCondition : m_aConditions)
+    for (final ICSSSupportsConditionMember aCondition : m_aConditions)
     {
       if (bFirst)
         bFirst = false;
