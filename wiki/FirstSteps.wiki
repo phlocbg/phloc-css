@@ -34,7 +34,7 @@ To use phloc-css put the following to your pom.xml:
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-css</artifactId>
-      <version>3.4.0</version>
+      <version>3.5.0</version>
     </dependency>
   </dependencies>
 ...
