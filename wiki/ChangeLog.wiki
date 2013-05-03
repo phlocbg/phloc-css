@@ -3,6 +3,16 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>5/3/13</td><td colspan="4">_Release *3.5.0*_</td></tr>
+<tr><td>4/28/13</td><td>fix</td><td>tech</td><td></td><td>Allowing 'inherit' and 'initial' as valid values for all properties</td></tr>
+<tr><td>4/28/13</td><td>fix</td><td>tech</td><td></td><td>Fixed validity check for property "opacity"</td></tr>
+<tr><td>4/28/13</td><td>add</td><td>feature</td><td></td><td>Added support for new CSS 3.0 @supports statement</td></tr>
+<tr><td>4/27/13</td><td>fix</td><td>tech</td><td></td><td>Fixed support for HSL/HSLA color value handling - fixed Hue scaling and saturation + lightness must now be percentage values</td></tr>
+<tr><td>4/27/13</td><td>add</td><td>api</td><td></td><td>Added some methods in classes in com.phloc.css.decl package</td></tr>
+<tr><td>4/26/13</td><td>fix</td><td>tech</td><td></td><td>Fixed parent element handling in CSSVisitorForUrl</td></tr>
+<tr><td>4/25/13</td><td>fix</td><td>tech</td><td></td><td>Fixed validity check for property "z-index"</td></tr>
+<tr><td>4/17/13</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-commons phloc-commons] 4.0.3</td></tr>
+<tr><td>4/4/13</td><td>add</td><td>api</td><td></td><td>Extended CSSMediaList API slightly</td></tr>
 <tr border="1"><td>4/3/13</td><td colspan="4">_Release *3.4.0*_</td></tr>
 <tr><td>3/30/13</td><td>add</td><td>feature</td><td></td><td>Added support for line/column number handling when parsing CSS</td></tr>
 <tr border="1"><td>1/3/13</td><td colspan="4">_Release *3.3.1*_</td></tr>
