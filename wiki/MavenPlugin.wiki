@@ -1,4 +1,5 @@
 #summary How to use the Maven plugin
+#labels Featured
 
 = Introduction =
 
@@ -33,7 +34,7 @@ A detailed API description can be found in http://repo.phloc.com/apidocs/csscomp
       <plugin>
         <groupId>com.phloc.maven</groupId>
         <artifactId>csscompress-maven-plugin</artifactId>
-        <version>1.0.12</version>
+        <version>1.0.13</version>
         <executions>
           <execution>
             <goals>
