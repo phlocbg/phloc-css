@@ -29,6 +29,7 @@ import com.phloc.css.ICSSWriteable;
  * <li>font face rules</li>
  * <li>keyframes rules</li>
  * <li>viewport rules</li>
+ * <li>supports rules</li>
  * </ul>
  * 
  * @author Philip Helger
