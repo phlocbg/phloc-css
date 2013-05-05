@@ -45,6 +45,7 @@ public final class CSSVisitorTestDeclarationList
     assertNotNull (aCSS);
     MockCountingUrlVisitor aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitAllDeclarationUrls (aCSS, aVisitor);
+    CSSVisitor.visitAllDeclarations (aCSS, new DefaultCSSVisitor ());
     assertEquals (0, aVisitor.getCount ());
 
     // CSS 2
@@ -52,6 +53,7 @@ public final class CSSVisitorTestDeclarationList
     assertNotNull (aCSS);
     aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitAllDeclarationUrls (aCSS, aVisitor);
+    CSSVisitor.visitAllDeclarations (aCSS, new DefaultCSSVisitor ());
     assertEquals (1, aVisitor.getCount ());
 
     // CSS 3
@@ -59,6 +61,7 @@ public final class CSSVisitorTestDeclarationList
     assertNotNull (aCSS);
     aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitAllDeclarationUrls (aCSS, aVisitor);
+    CSSVisitor.visitAllDeclarations (aCSS, new DefaultCSSVisitor ());
     assertEquals (2, aVisitor.getCount ());
   }
 }
