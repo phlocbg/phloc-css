@@ -67,12 +67,13 @@ public class CSSVisitorForUrl extends DefaultCSSVisitor
   @Override
   public void onDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
+    final ICSSTopLevelRule aTopLevelRule = m_aTopLevelRule.isEmpty () ? null : m_aTopLevelRule.peek ();
     final CSSExpression aExpr = aDeclaration.getExpression ();
     for (final ICSSExpressionMember aMember : aExpr.getAllMembers ())
       if (aMember instanceof CSSExpressionMemberTermURI)
       {
         final CSSExpressionMemberTermURI aExprTerm = (CSSExpressionMemberTermURI) aMember;
-        m_aVisitor.onUrlDeclaration (m_aTopLevelRule.peek (), aDeclaration, aExprTerm);
+        m_aVisitor.onUrlDeclaration (aTopLevelRule, aDeclaration, aExprTerm);
       }
   }
 

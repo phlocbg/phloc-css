@@ -18,6 +18,7 @@
 package com.phloc.css.decl.visit;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpressionMemberTermURI;
@@ -53,13 +54,14 @@ public interface ICSSUrlVisitor
    * block to which the declaration belongs.
    * 
    * @param aTopLevelRule
-   *        Top level rule of the URL. Never <code>null</code>.
+   *        Top level rule of the URL. May be <code>null</code> when a
+   *        declaration list is handled.
    * @param aDeclaration
    *        Declaration of the URL. Never <code>null</code>.
    * @param aURITerm
    *        The URI term from the current expression. Never <code>null</code>.
    */
-  void onUrlDeclaration (@Nonnull ICSSTopLevelRule aTopLevelRule,
+  void onUrlDeclaration (@Nullable ICSSTopLevelRule aTopLevelRule,
                          @Nonnull CSSDeclaration aDeclaration,
                          @Nonnull CSSExpressionMemberTermURI aURITerm);
 
