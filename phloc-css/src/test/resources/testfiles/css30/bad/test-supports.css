@@ -1,2 +1,0 @@
-@supports () { div { color:red; } }
-@supports not () { div { color:red; } }
