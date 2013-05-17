@@ -25,4 +25,32 @@ div /* before bracket */ { /* after bracket */  white-space: normal; /* after va
 /*before*/@media/*here*/print/*here*/,/*here*/media2/*here*/{/*here*/span/*here*/{/*here*/}/*here*/}/*here*/
 /*before*/ @media /*here*/ print /*here*/ , /*here*/ media2 /*here*/ { /*here*/ span /*here*/ { /*here*/ } /*here*/ } /*here*/
 
-.buttonwrapper a.secondary:active /* Needed for IE6 */ { color:blue; }
+/* Comment test for selectors: */
+
+.buttonwrapper /* Comment */ { color:blue; }
+.buttonwrapper/* Comment */{ color:blue; }
+/* Comment */ .buttonwrapper { color:blue; }
+/* Comment */.buttonwrapper{ color:blue; }
+/* Comment */ .buttonwrapper /* Comment */ { color:blue; }
+/* Comment */.buttonwrapper/* Comment */{ color:blue; }
+.buttonwrapper a.secondary:active /* Comment */ { color:blue; }
+
+/* Comment */ div ,  span {}
+div /* Comment */ ,  span {}
+div  , /* Comment */ span {}
+div  , span /* Comment */ {}
+/* Comment */ div /* Comment */ , span {}
+/* Comment */ div , /* Comment */ span {}
+/* Comment */ div , span /* comment */ {}
+div /* Comment */ , /* Comment */ span {}
+div /* Comment */ , span /* comment */ {}
+div , /* Comment */ span /* comment */ {}
+/* Comment */ div /* Comment */ , /* Comment */ span {}
+/* Comment */ div /* Comment */ , span /* comment */ {}
+/* Comment */ div , /* Comment */ span /* comment */ {}
+div /* Comment */ , /* Comment */ span /* comment */ {}
+/* Comment */ div /* Comment */ , /* Comment */ span /* comment */ {}
+
+/* Comment test for selector content: */
+
+.buttonwrapper { /* Comment */ color /* Comment */ : /* Comment */ blue /* Comment */ ; }

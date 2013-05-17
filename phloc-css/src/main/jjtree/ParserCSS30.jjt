@@ -728,6 +728,7 @@ void styleRule() : {}
   ( <COMMA>
     ( <S> )*
     selector()
+    ( <S> )*
   )*
   <LBRACE>
   styleDeclaration()
