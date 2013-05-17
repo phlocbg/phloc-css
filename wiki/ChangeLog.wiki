@@ -4,7 +4,7 @@
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
 <tr border="1"><td>5/17/13</td><td colspan="4">_Release *3.5.2*_</td></tr>
-<tr><td>5/17/13</td><td>fix</td><td>tech</td><td></td><td>Fixed issue 5: comment handling had an error. Example: div, span /`*`Comment`*`/ {}</td></tr>
+<tr><td>5/17/13</td><td>fix</td><td>tech</td><td></td><td>Fixed issue 5: comment parsing had an error. Example: div, span /`*`Comment`*`/ {}</td></tr>
 <tr border="1"><td>5/6/13</td><td colspan="4">_Release *3.5.1*_</td></tr>
 <tr><td>5/6/13</td><td>fix</td><td>tech</td><td></td><td>Fixed NPE when using the CSSVisitorForUrl for CSSDeclarationLists, which actually don't have top-level rules</td></tr>
 <tr border="1"><td>5/3/13</td><td colspan="4">_Release *3.5.0*_</td></tr>
