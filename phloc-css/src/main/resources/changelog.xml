@@ -23,7 +23,7 @@
   <release date="2013-05-17" version="3.5.2" />
   <entry date="2013-05-17" category="tech" action="fix">
     <change>
-      <text locale="en">Fixed issue 5: comment handling had an error. Example: div, span /*Comment*/ {}</text>
+      <text locale="en">Fixed issue 5: comment parsing had an error. Example: div, span /*Comment*/ {}</text>
     </change>
   </entry>
   <release date="2013-05-06" version="3.5.1" />
