@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.phloc.maven</groupId>
   <artifactId>csscompress-maven-plugin</artifactId>
-  <version>1.0.14</version>
+  <version>1.0.15-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <name>csscompress-maven-plugin</name>
   <description>Maven plugin for compressing CSS files at build time</description>
@@ -24,9 +24,9 @@
   </licenses>
 
   <scm>
-    <url>scm:svn:https://phloc-css.googlecode.com/svn/tags/csscompress-maven-plugin-1.0.14</url>
-    <connection>scm:svn:http://phloc-css.googlecode.com/svn/tags/csscompress-maven-plugin-1.0.14</connection>
-    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/tags/csscompress-maven-plugin-1.0.14</developerConnection>
+    <url>http://code.google.com/p/phloc-css/source/browse/</url>
+    <connection>scm:svn:http://phloc-css.googlecode.com/svn/trunk/csscompress-maven-plugin</connection>
+    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/trunk/csscompress-maven-plugin</developerConnection>
   </scm>
   
   <organization>
