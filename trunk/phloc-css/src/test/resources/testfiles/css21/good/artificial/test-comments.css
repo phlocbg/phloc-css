@@ -24,3 +24,5 @@ div /* before bracket */ { /* after bracket */  white-space: normal; /* after va
 /*before*/@media/*here*/print/*here*/{/*here*/span/*here*/{/*here*/}/*here*/}/*here*/
 /*before*/@media/*here*/print/*here*/,/*here*/media2/*here*/{/*here*/span/*here*/{/*here*/}/*here*/}/*here*/
 /*before*/ @media /*here*/ print /*here*/ , /*here*/ media2 /*here*/ { /*here*/ span /*here*/ { /*here*/ } /*here*/ } /*here*/
+
+.buttonwrapper a.secondary:active /* Needed for IE6 */ { color:blue; }
