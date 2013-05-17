@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2013-05-17" version="3.5.2" />
+  <entry date="2013-05-17" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed issue 5: comment handling had an error. Example: div, span /*Comment*/ {}</text>
+    </change>
+  </entry>
   <release date="2013-05-06" version="3.5.1" />
   <entry date="2013-05-06" category="tech" action="fix">
     <change>
