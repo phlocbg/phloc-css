@@ -60,7 +60,6 @@ public abstract class AbstractCSSProperty implements ICSSProperty
     return m_eProp;
   }
 
-  @Override
   @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
