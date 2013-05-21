@@ -7,7 +7,7 @@
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>phloc-commons-jdk5</artifactId>
+  <artifactId>phloc-css-jdk5</artifactId>
   <version>3.5.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-css-jdk5</name>
@@ -86,7 +86,7 @@
   <dependencies>
     <dependency>
       <groupId>com.phloc</groupId>
-      <artifactId>phloc-commons</artifactId>
+      <artifactId>phloc-commons-jdk5</artifactId>
       <version>4.0.7-SNAPSHOT</version>
     </dependency>
     
