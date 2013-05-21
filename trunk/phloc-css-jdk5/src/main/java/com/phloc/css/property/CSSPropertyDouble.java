@@ -43,7 +43,6 @@ public class CSSPropertyDouble extends AbstractCSSProperty
     return super.isValidValue (sValue) || StringParser.parseDoubleObj (sValue) != null;
   }
 
-  @Override
   @Nonnull
   public CSSPropertyDouble getClone (@Nonnull final ECSSProperty eProp)
   {
