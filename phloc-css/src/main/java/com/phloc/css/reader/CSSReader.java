@@ -72,6 +72,7 @@ public final class CSSReader
   @Nullable
   private static CSSNode _readStyleSheet (@Nonnull final CharStream aStream,
                                           @Nonnull final ECSSVersion eVersion,
+                                          @Nullable final ICSSParseErrorHandler aCustomErrorHandler,
                                           @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
     switch (eVersion)
@@ -80,6 +81,7 @@ public final class CSSReader
       {
         final ParserCSS21TokenManager aTokenHdl = new ParserCSS21TokenManager (aStream);
         final ParserCSS21 aParser = new ParserCSS21 (aTokenHdl);
+        aParser.setCustomErrorHandler (aCustomErrorHandler);
         try
         {
           return aParser.styleSheet ();
@@ -97,6 +99,7 @@ public final class CSSReader
       {
         final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (aStream);
         final ParserCSS30 aParser = new ParserCSS30 (aTokenHdl);
+        aParser.setCustomErrorHandler (aCustomErrorHandler);
         try
         {
           return aParser.styleSheet ();
@@ -322,7 +325,10 @@ public final class CSSReader
     try
     {
       final JavaCharStream aCharStream = new JavaCharStream (aReader);
-      final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, new DoNothingCSSParseExceptionHandler ());
+      final CSSNode aNode = _readStyleSheet (aCharStream,
+                                             eVersion,
+                                             ThrowingCSSParseErrorHandler.getInstance (),
+                                             DoNothingCSSParseExceptionHandler.getInstance ());
       return aNode != null;
     }
     finally
@@ -580,7 +586,10 @@ public final class CSSReader
     try
     {
       final JavaCharStream aCharStream = new JavaCharStream (aIS, aCharsetToUse);
-      final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aCustomExceptionHandler);
+      final CSSNode aNode = _readStyleSheet (aCharStream,
+                                             eVersion,
+                                             new LoggingCSSParseErrorHandler (),
+                                             aCustomExceptionHandler);
 
       // Failed to interpret content as CSS?
       if (aNode == null)

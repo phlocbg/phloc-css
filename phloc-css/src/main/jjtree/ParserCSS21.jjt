@@ -47,6 +47,13 @@ package com.phloc.css.parser;
 public class ParserCSS21
 {
   private static final org.slf4j.Logger s_aLogger = org.slf4j.LoggerFactory.getLogger (ParserCSS21.class);
+  
+  private com.phloc.css.reader.ICSSParseErrorHandler m_aCustomErrorHandler;
+  
+  public void setCustomErrorHandler (com.phloc.css.reader.ICSSParseErrorHandler aCustomErrorHandler)
+  {
+    m_aCustomErrorHandler = aCustomErrorHandler;
+  }
 }
 PARSER_END(ParserCSS21)
 
@@ -225,7 +232,10 @@ JAVACODE
 Token error_skipto(final ParseException ex, final int... aKinds)
 {
   // print the exception object
-  s_aLogger.warn(ex.toString());
+  if (m_aCustomErrorHandler != null)
+    m_aCustomErrorHandler.onCSSParseError (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage);
+  else
+    s_aLogger.warn(ex.toString());
   // Skip until (including) the first matching token
   Token t;
   do

@@ -15,18 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css.handler;
+package com.phloc.css.reader;
 
-import com.phloc.commons.callback.IExceptionHandler;
+import javax.annotation.Nonnull;
+
 import com.phloc.css.parser.ParseException;
+import com.phloc.css.parser.Token;
 
 /**
- * Special CSS exception handler. It is called in case of an unrecoverable error
- * while parsing a CSS.
+ * Special CSS handler that is invoked during reading in case of a recoverable
+ * error.
  * 
  * @author Philip Helger
  */
-public interface ICSSParseExceptionHandler extends IExceptionHandler <ParseException>
+public interface ICSSParseErrorHandler
 {
-  /* empty */
+  void onCSSParseError (@Nonnull Token aLastValidToken,
+                        @Nonnull int [][] aExpectedTokenSequencesVal,
+                        @Nonnull String [] aTokenImageVal) throws ParseException;
 }
