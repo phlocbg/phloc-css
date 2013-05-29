@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.parser.Token;
 
 public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
@@ -12,10 +13,19 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggingCSSParseErrorHandler.class);
   private static final int TOKEN_EOF = 0;
 
-  public void onCSSParseError (@Nonnull final Token aLastValidToken,
-                               @Nonnull final int [][] aExpectedTokenSequencesVal,
-                               @Nonnull final String [] aTokenImageVal)
+  @Nonnull
+  @Nonempty
+  public static String createLoggingString (@Nonnull final Token aLastValidToken,
+                                            @Nonnull final int [][] aExpectedTokenSequencesVal,
+                                            @Nonnull final String [] aTokenImageVal)
   {
+    if (aLastValidToken == null)
+      throw new NullPointerException ("LastValidToken");
+    if (aExpectedTokenSequencesVal == null)
+      throw new NullPointerException ("ExpectedTokenSequencesVal");
+    if (aTokenImageVal == null)
+      throw new NullPointerException ("TokenImageVal");
+
     final StringBuilder aExpected = new StringBuilder ();
     int nMaxSize = 0;
     for (final int [] aExpectedTokens : aExpectedTokenSequencesVal)
@@ -52,6 +62,13 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
     retval.append (". ")
           .append (aExpectedTokenSequencesVal.length == 1 ? "Was expecting:" : "Was expecting one of:")
           .append (aExpected);
-    s_aLogger.warn (retval.toString ());
+    return retval.toString ();
+  }
+
+  public void onCSSParseError (@Nonnull final Token aLastValidToken,
+                               @Nonnull final int [][] aExpectedTokenSequencesVal,
+                               @Nonnull final String [] aTokenImageVal)
+  {
+    s_aLogger.warn (createLoggingString (aLastValidToken, aExpectedTokenSequencesVal, aTokenImageVal));
   }
 }
