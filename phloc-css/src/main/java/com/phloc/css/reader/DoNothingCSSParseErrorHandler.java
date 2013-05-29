@@ -24,7 +24,8 @@ public final class DoNothingCSSParseErrorHandler implements ICSSParseErrorHandle
 
   public void onCSSParseError (@Nonnull final Token aLastValidToken,
                                @Nonnull final int [][] aExpectedTokenSequencesVal,
-                               @Nonnull final String [] aTokenImageVal)
+                               @Nonnull final String [] aTokenImageVal,
+                               @Nonnull final Token aLastSkippedToken)
   {
     // ignore
   }
