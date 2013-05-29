@@ -24,6 +24,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.parser.ParseException;
 import com.phloc.css.parser.Token;
 
 /**
@@ -48,14 +50,22 @@ public class CollectingCSSParseErrorHandler implements ICSSParseErrorHandler
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   @GuardedBy ("m_aRWLock")
   private final List <CSSParseError> m_aErrors = new ArrayList <CSSParseError> ();
+  private final ICSSParseErrorHandler m_aNestedErrorHandler;
 
   public CollectingCSSParseErrorHandler ()
-  {}
+  {
+    this (null);
+  }
+
+  public CollectingCSSParseErrorHandler (@Nullable final ICSSParseErrorHandler aNestedErrorHandler)
+  {
+    m_aNestedErrorHandler = aNestedErrorHandler;
+  }
 
   public void onCSSParseError (@Nonnull final Token aLastValidToken,
                                @Nonnull final int [][] aExpectedTokenSequencesVal,
                                @Nonnull final String [] aTokenImageVal,
-                               @Nonnull final Token aLastSkippedToken)
+                               @Nonnull final Token aLastSkippedToken) throws ParseException
   {
     m_aRWLock.writeLock ().lock ();
     try
@@ -66,6 +76,11 @@ public class CollectingCSSParseErrorHandler implements ICSSParseErrorHandler
     {
       m_aRWLock.writeLock ().unlock ();
     }
+    if (m_aNestedErrorHandler != null)
+      m_aNestedErrorHandler.onCSSParseError (aLastValidToken,
+                                             aExpectedTokenSequencesVal,
+                                             aTokenImageVal,
+                                             aLastSkippedToken);
   }
 
   /**
