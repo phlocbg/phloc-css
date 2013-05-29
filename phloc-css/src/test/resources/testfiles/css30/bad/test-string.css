@@ -21,11 +21,57 @@ p {
   background: url('abc.css');
 }
 
-error {
+error-at-start {
   background: url("abc.css);
   background: url(abc.css");
   background: url('abc.css);
   background: url(abc.css');
   background: url("abc.css');
   background: url('abc.css");
+}
+
+error-in-the-middle {
+  color: red;
+  background: url("abc.css);
+  background: url(abc.css");
+  background: url('abc.css);
+  background: url(abc.css');
+  background: url("abc.css');
+  background: url('abc.css");
+}
+
+error-at-the-end {
+  color: red;
+  background: url("abc.css);
+}
+
+error-at-the-end {
+  color: red;
+  background: url(abc.css");
+}
+
+error-at-the-end {
+  color: red;
+  background: url('abc.css);
+}
+
+error-at-the-end {
+  color: red;
+  background: url(abc.css');
+}
+
+error-at-the-end {
+  color: red;
+  background: url("abc.css');
+}
+
+error-at-the-end {
+  color: red;
+  background: url('abc.css");
+}
+
+div {
+  background: url(abc.css);
+  background: url("abc.css");
+  background: url('abc.css');
 }
