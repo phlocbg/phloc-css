@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.parser.Token;
 
 /**
@@ -103,5 +104,11 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
                                @Nonnull final Token aLastSkippedToken)
   {
     s_aLogger.warn (createLoggingString (aLastValidToken, aExpectedTokenSequencesVal, aTokenImageVal, aLastSkippedToken));
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
   }
 }

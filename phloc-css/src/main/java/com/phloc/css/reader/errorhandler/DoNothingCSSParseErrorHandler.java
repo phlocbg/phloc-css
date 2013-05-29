@@ -19,6 +19,7 @@ package com.phloc.css.reader.errorhandler;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.parser.Token;
 
 /**
@@ -45,5 +46,11 @@ public final class DoNothingCSSParseErrorHandler implements ICSSParseErrorHandle
                                @Nonnull final Token aLastSkippedToken)
   {
     // ignore
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
   }
 }
