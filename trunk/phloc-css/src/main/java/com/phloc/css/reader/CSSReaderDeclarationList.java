@@ -317,7 +317,9 @@ public final class CSSReaderDeclarationList
     try
     {
       final JavaCharStream aCharStream = new JavaCharStream (aReader);
-      final CSSNode aNode = _readStyleDeclaration (aCharStream, eVersion, new DoNothingCSSParseExceptionHandler ());
+      final CSSNode aNode = _readStyleDeclaration (aCharStream,
+                                                   eVersion,
+                                                   DoNothingCSSParseExceptionHandler.getInstance ());
       return aNode != null;
     }
     finally
