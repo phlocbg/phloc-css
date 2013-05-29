@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css.wiki;
+package com.phloc.css.supplementary.wiki;
 
 import java.io.IOException;
 
