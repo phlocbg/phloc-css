@@ -553,7 +553,11 @@ final class CSSNodeToDomainObject
           // Read all contained declarations
           final int nDecls = aChildNode.jjtGetNumChildren ();
           for (int nDecl = 0; nDecl < nDecls; ++nDecl)
-            ret.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+          {
+            final CSSNode aChildChildNode = aChildNode.jjtGetChild (nDecl);
+            if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildChildNode, m_eVersion))
+              ret.addDeclaration (_createDeclaration (aChildChildNode));
+          }
         }
         else
           if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))

@@ -125,15 +125,15 @@ TOKEN :
                  | "\\" <NL>
                  | <ESCAPE>
                  )* "'" >
-| < INVALID1: "\"" ( ~["\n","\r","\f","\\","\""]
-                   | "\\" <NL>
-                   | <ESCAPE>
-                   )* >
-| < INVALID2: "'" ( ~["\n","\r","\f","\\","'"]
-                  | "\\" <NL>
-                  | <ESCAPE>
-                  )* >
-| < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/">
+| < INVALID_STRING1: "\"" ( ~["\n","\r","\f","\\","\""]
+                          | "\\" <NL>
+                          | <ESCAPE>
+                          )* >
+| < INVALID_STRING2: "'" ( ~["\n","\r","\f","\\","'"]
+                         | "\\" <NL>
+                         | <ESCAPE>
+                         )* >
+| < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/" >
 
 | < NUMBER: <NUM> >
 
@@ -222,17 +222,21 @@ TOKEN :
 }
 
 JAVACODE
-void error_skipto(final int... aKinds)
+Token error_skipto(final ParseException ex, final int... aKinds)
 {
-  // generate the exception object and print it
-  final ParseException e = generateParseException();
-  s_aLogger.warn(e.toString());
+  // print the exception object
+  s_aLogger.warn(ex.toString());
   // Skip until (including) the first matching token
   Token t;
   do
   {
     t = getNextToken();
+    if (t.kind == EOF)
+      return t;
   } while (!com.phloc.commons.collections.ArrayHelper.contains (aKinds, t.kind));
+  if (s_aLogger.isDebugEnabled ())
+    s_aLogger.debug ("Skipped until token " + t.toString ());
+  return t;
 }
 
 //
@@ -401,9 +405,7 @@ void pageRule() : {}
   ( pseudoPage()
     ( <S> )*
   )?
-  <LBRACE>
-  styleDeclaration()
-  <RBRACE>
+  styleDeclarationBlock()
 }
 
 void pseudoPage() #PseudoPage : {}
@@ -474,9 +476,18 @@ void styleRule() : {}
     selector()
     ( <S> )*
   )*
+  styleDeclarationBlock()
+}
+
+void styleDeclarationBlock() #void : {}
+{
+try{
   <LBRACE>
   styleDeclaration()
   <RBRACE>
+} catch (ParseException ex) {
+  error_skipto (ex, RBRACE);
+}
 }
 
 // ------------ SELECTORS ------------
@@ -732,7 +743,7 @@ String string() #void :
 // {invalid}        {return INVALID; /* unclosed string */}
 void invalid () : {}
 {
-  ( <INVALID1>
-  | <INVALID2>
+  ( <INVALID_STRING1>
+  | <INVALID_STRING2>
   )
 }
