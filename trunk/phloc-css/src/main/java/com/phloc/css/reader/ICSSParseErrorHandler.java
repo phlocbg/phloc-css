@@ -40,10 +40,13 @@ public interface ICSSParseErrorHandler
    *        The expected token.
    * @param aTokenImageVal
    *        The error token image.
+   * @param aLastSkippedToken
+   *        The token until which was skipped (incl.)
    * @throws ParseException
    *         In case the error is fatal and should be propagated.
    */
   void onCSSParseError (@Nonnull Token aLastValidToken,
                         @Nonnull int [][] aExpectedTokenSequencesVal,
-                        @Nonnull String [] aTokenImageVal) throws ParseException;
+                        @Nonnull String [] aTokenImageVal,
+                        @Nonnull Token aLastSkippedToken) throws ParseException;
 }

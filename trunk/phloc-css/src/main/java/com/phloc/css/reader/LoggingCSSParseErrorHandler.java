@@ -17,7 +17,8 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
   @Nonempty
   public static String createLoggingString (@Nonnull final Token aLastValidToken,
                                             @Nonnull final int [][] aExpectedTokenSequencesVal,
-                                            @Nonnull final String [] aTokenImageVal)
+                                            @Nonnull final String [] aTokenImageVal,
+                                            @Nonnull final Token aLastSkippedToken)
   {
     if (aLastValidToken == null)
       throw new NullPointerException ("LastValidToken");
@@ -42,6 +43,10 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
     final StringBuilder retval = new StringBuilder ("[").append (aLastValidToken.next.beginLine)
                                                         .append (':')
                                                         .append (aLastValidToken.next.beginColumn)
+                                                        .append ("]-[")
+                                                        .append (aLastSkippedToken.endLine)
+                                                        .append (':')
+                                                        .append (aLastSkippedToken.endColumn)
                                                         .append ("] Encountered");
     Token aCurToken = aLastValidToken.next;
     for (int i = 0; i < nMaxSize; i++)
@@ -59,7 +64,9 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
             .append ('\'');
       aCurToken = aCurToken.next;
     }
-    retval.append (". ")
+    retval.append (". Skipped until token ")
+          .append (aLastSkippedToken)
+          .append (". ")
           .append (aExpectedTokenSequencesVal.length == 1 ? "Was expecting:" : "Was expecting one of:")
           .append (aExpected);
     return retval.toString ();
@@ -67,8 +74,9 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
 
   public void onCSSParseError (@Nonnull final Token aLastValidToken,
                                @Nonnull final int [][] aExpectedTokenSequencesVal,
-                               @Nonnull final String [] aTokenImageVal)
+                               @Nonnull final String [] aTokenImageVal,
+                               @Nonnull final Token aLastSkippedToken)
   {
-    s_aLogger.warn (createLoggingString (aLastValidToken, aExpectedTokenSequencesVal, aTokenImageVal));
+    s_aLogger.warn (createLoggingString (aLastValidToken, aExpectedTokenSequencesVal, aTokenImageVal, aLastSkippedToken));
   }
 }

@@ -276,12 +276,10 @@ TOKEN :
 }
 
 JAVACODE
-Token error_skipto(final ParseException ex, final int... aKinds)
+private Token error_skipto(final ParseException ex, final int... aKinds) throws ParseException
 {
   // print the exception object
-  if (m_aCustomErrorHandler != null)
-    m_aCustomErrorHandler.onCSSParseError (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage);
-  else
+  if (m_aCustomErrorHandler == null)
     s_aLogger.warn(ex.toString());
   // Skip until (including) the first matching token
   Token t;
@@ -289,10 +287,16 @@ Token error_skipto(final ParseException ex, final int... aKinds)
   {
     t = getNextToken();
     if (t.kind == EOF)
-      return t;
+    {
+      // Encountered EOF while skipping - throw the original exception!
+      throw ex;
+    }  
   } while (!com.phloc.commons.collections.ArrayHelper.contains (aKinds, t.kind));
-  if (s_aLogger.isDebugEnabled ())
-    s_aLogger.debug ("Skipped until token " + t.toString ());
+  if (m_aCustomErrorHandler != null)
+    m_aCustomErrorHandler.onCSSParseError (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage, t);
+  else  
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Skipped until token " + t.toString ());
   return t;
 }
 
