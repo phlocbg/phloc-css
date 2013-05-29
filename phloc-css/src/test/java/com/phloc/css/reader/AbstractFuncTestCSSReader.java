@@ -36,6 +36,7 @@ import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.reader.errorhandler.CollectingCSSParseErrorHandler;
+import com.phloc.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 import com.phloc.css.writer.CSSWriter;
 import com.phloc.css.writer.CSSWriterSettings;
 
@@ -130,7 +131,7 @@ public abstract class AbstractFuncTestCSSReader
         m_aLogger.info (sKey);
 
       // Handle each error as a fatal error!
-      final CollectingCSSParseErrorHandler aErrors = new CollectingCSSParseErrorHandler ();
+      final CollectingCSSParseErrorHandler aErrors = new CollectingCSSParseErrorHandler (new LoggingCSSParseErrorHandler ());
       final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion, aErrors);
       assertNotNull (sKey, aCSS);
       assertTrue (sKey, aErrors.hasParseErrors ());

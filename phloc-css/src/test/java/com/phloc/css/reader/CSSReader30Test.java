@@ -28,6 +28,8 @@ import org.junit.Test;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.reader.errorhandler.CollectingCSSParseErrorHandler;
+import com.phloc.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 
 /**
  * Test reading CSS 3.0 stuff
@@ -68,6 +70,17 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
     final File aFile = new File ("src/test/resources/testfiles/css30/good/artificial/test-supports.css");
     final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
+    assertNotNull (aCSS);
+  }
+
+  @Test
+  public void testReadSpecialBadButRecoverable ()
+  {
+    final CollectingCSSParseErrorHandler aErrors = new CollectingCSSParseErrorHandler (new LoggingCSSParseErrorHandler ());
+    final ECSSVersion eVersion = ECSSVersion.CSS30;
+    final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
+    final File aFile = new File ("src/test/resources/testfiles/css30/bad_but_recoverable/test-string.css");
+    final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion, aErrors);
     assertNotNull (aCSS);
   }
 }
