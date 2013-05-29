@@ -38,7 +38,7 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
 {
   public CSSReader30Test ()
   {
-    super (ECSSVersion.CSS30, CCharset.CHARSET_UTF_8_OBJ, false);
+    super (ECSSVersion.CSS30, CCharset.CHARSET_UTF_8_OBJ, true);
   }
 
   @Test
@@ -53,6 +53,12 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   {
     testReadBad ("src/test/resources/testfiles/css30/bad");
     testReadBad ("src/test/resources/testfiles/css30/good_but_failing");
+  }
+
+  @Test
+  public void testReadAll30BadBadButRecoverable () throws IOException
+  {
+    testReadBadButRecoverable ("src/test/resources/testfiles/css30/bad_but_recoverable");
   }
 
   @Test

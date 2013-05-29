@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.parser.ReadonlyToken;
 import com.phloc.css.parser.Token;
 
@@ -35,8 +35,7 @@ import com.phloc.css.parser.Token;
 public final class CSSParseError
 {
   private final ReadonlyToken m_aLastValidToken;
-  private final int [][] m_aExpectedTokenSequencesVal;
-  private final String [] m_aTokenImageVal;
+  private final String m_sExpectedTokens;
   private final ReadonlyToken m_aFirstSkippedToken;
   private final ReadonlyToken m_aLastSkippedToken;
   private final String m_sErrorMessage;
@@ -56,8 +55,15 @@ public final class CSSParseError
       throw new NullPointerException ("LastSkippedToken");
 
     m_aLastValidToken = new ReadonlyToken (aLastValidToken);
-    m_aExpectedTokenSequencesVal = ArrayHelper.getCopy (aExpectedTokenSequencesVal);
-    m_aTokenImageVal = ArrayHelper.getCopy (aTokenImageVal);
+    final StringBuilder aExpected = new StringBuilder ();
+    for (final int [] aExpectedTokens : aExpectedTokenSequencesVal)
+    {
+      if (aExpected.length () > 0)
+        aExpected.append (",");
+      for (final int nExpectedToken : aExpectedTokens)
+        aExpected.append (' ').append (aTokenImageVal[nExpectedToken]);
+    }
+    m_sExpectedTokens = aExpected.toString ();
     m_aFirstSkippedToken = new ReadonlyToken (aLastValidToken.next);
     m_aLastSkippedToken = new ReadonlyToken (aLastSkippedToken);
     m_sErrorMessage = LoggingCSSParseErrorHandler.createLoggingString (aLastValidToken,
@@ -97,12 +103,22 @@ public final class CSSParseError
 
   /**
    * @return The error message created by {@link LoggingCSSParseErrorHandler} as
-   *         a convience method.
+   *         a convenience method.
    */
   @Nonnull
   @Nonempty
   public String getErrorMessage ()
   {
     return m_sErrorMessage;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("lastValidToken", m_aLastValidToken)
+                                       .append ("expectedTokens", m_sExpectedTokens)
+                                       .append ("firstSkippedToken", m_aFirstSkippedToken)
+                                       .append ("lastSkippedToken", m_aLastSkippedToken)
+                                       .toString ();
   }
 }

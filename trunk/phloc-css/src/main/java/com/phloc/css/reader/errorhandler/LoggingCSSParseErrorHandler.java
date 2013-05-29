@@ -60,10 +60,10 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
       if (nMaxSize < aExpectedTokens.length)
         nMaxSize = aExpectedTokens.length;
 
+      if (aExpected.length () > 0)
+        aExpected.append (",");
       for (final int nExpectedToken : aExpectedTokens)
         aExpected.append (' ').append (aTokenImageVal[nExpectedToken]);
-
-      aExpected.append (",");
     }
 
     final StringBuilder retval = new StringBuilder ("[").append (aLastValidToken.next.beginLine)

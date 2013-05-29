@@ -49,4 +49,10 @@ public final class CSSReader21Test extends AbstractFuncTestCSSReader
     testReadBad ("src/test/resources/testfiles/css21/bad");
     testReadBad ("src/test/resources/testfiles/css21/good_but_failing");
   }
+
+  @Test
+  public void testReadAll21BadButRecoverable () throws IOException
+  {
+    testReadBadButRecoverable ("src/test/resources/testfiles/css21/bad_but_recoverable");
+  }
 }

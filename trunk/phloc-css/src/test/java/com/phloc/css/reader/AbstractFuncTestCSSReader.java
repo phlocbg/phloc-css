@@ -20,6 +20,7 @@ package com.phloc.css.reader;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +35,7 @@ import com.phloc.commons.io.file.filter.FilenameFilterEndsWith;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.reader.errorhandler.CollectingCSSParseErrorHandler;
 import com.phloc.css.writer.CSSWriter;
 import com.phloc.css.writer.CSSWriterSettings;
 
@@ -61,53 +63,90 @@ public abstract class AbstractFuncTestCSSReader
   protected final void testReadGood (final String sBaseDir) throws IOException
   {
     final File aBaseDir = new File (sBaseDir);
-    if (aBaseDir.exists ())
-      for (final File aFile : FileSystemRecursiveIterator.create (aBaseDir, new FilenameFilterEndsWith (".css")))
-      {
-        final String sKey = aFile.getAbsolutePath ();
-        if (false)
-          m_aLogger.info (sKey);
-        final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion);
-        assertNotNull (sKey, aCSS);
+    if (!aBaseDir.exists ())
+      throw new IllegalArgumentException ("BaseDir " + sBaseDir + " does not exist!");
 
-        // Write optimized version and compare it
-        String sCSS = new CSSWriter (m_eVersion, true).getCSSAsString (aCSS);
-        assertNotNull (sKey, sCSS);
-        if (m_bDebug)
-          m_aLogger.info (sCSS);
+    for (final File aFile : FileSystemRecursiveIterator.create (aBaseDir, new FilenameFilterEndsWith (".css")))
+    {
+      final String sKey = aFile.getAbsolutePath ();
+      if (m_bDebug)
+        m_aLogger.info (sKey);
+      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion);
+      assertNotNull (sKey, aCSS);
 
-        final CascadingStyleSheet aCSSReRead = CSSReader.readFromString (sCSS, m_aCharset, m_eVersion);
-        assertNotNull ("Failed to parse:\n" + sCSS, aCSSReRead);
-        assertEquals (sKey, aCSS, aCSSReRead);
+      // Write optimized version and compare it
+      String sCSS = new CSSWriter (m_eVersion, true).getCSSAsString (aCSS);
+      assertNotNull (sKey, sCSS);
+      if (m_bDebug)
+        m_aLogger.info (sCSS);
 
-        // Write non-optimized version and compare it
-        sCSS = new CSSWriter (m_eVersion, false).getCSSAsString (aCSS);
-        assertNotNull (sKey, sCSS);
-        if (m_bDebug)
-          m_aLogger.info (sCSS);
-        assertEquals (sKey, aCSS, CSSReader.readFromString (sCSS, m_aCharset, m_eVersion));
+      final CascadingStyleSheet aCSSReRead = CSSReader.readFromString (sCSS, m_aCharset, m_eVersion);
+      assertNotNull ("Failed to parse:\n" + sCSS, aCSSReRead);
+      assertEquals (sKey, aCSS, aCSSReRead);
 
-        // Write non-optimized and code-removed version and ensure it is not
-        // null
-        sCSS = new CSSWriter (new CSSWriterSettings (m_eVersion, false).setRemoveUnnecessaryCode (true)).getCSSAsString (aCSS);
-        assertNotNull (sKey, sCSS);
-        assertNotNull (sKey, CSSReader.readFromString (sCSS, m_aCharset, m_eVersion));
-      }
+      // Write non-optimized version and compare it
+      sCSS = new CSSWriter (m_eVersion, false).getCSSAsString (aCSS);
+      assertNotNull (sKey, sCSS);
+      if (m_bDebug)
+        m_aLogger.info (sCSS);
+      assertEquals (sKey, aCSS, CSSReader.readFromString (sCSS, m_aCharset, m_eVersion));
+
+      // Write non-optimized and code-removed version and ensure it is not
+      // null
+      sCSS = new CSSWriter (new CSSWriterSettings (m_eVersion, false).setRemoveUnnecessaryCode (true)).getCSSAsString (aCSS);
+      assertNotNull (sKey, sCSS);
+      assertNotNull (sKey, CSSReader.readFromString (sCSS, m_aCharset, m_eVersion));
+    }
   }
 
   protected final void testReadBad (final String sBaseDir) throws IOException
   {
     final File aBaseDir = new File (sBaseDir);
-    if (aBaseDir.exists ())
-      for (final File aFile : FileSystemRecursiveIterator.create (aBaseDir, new FilenameFilterEndsWith (".css")))
-      {
-        final String sKey = aFile.getAbsolutePath ();
-        if (false)
-          m_aLogger.info (sKey);
+    if (!aBaseDir.exists ())
+      throw new IllegalArgumentException ("BaseDir " + sBaseDir + " does not exist!");
 
-        // Handle each error as a fatal error!
-        final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion);
-        assertNull (sKey, aCSS);
-      }
+    for (final File aFile : FileSystemRecursiveIterator.create (aBaseDir, new FilenameFilterEndsWith (".css")))
+    {
+      final String sKey = aFile.getAbsolutePath ();
+      if (m_bDebug)
+        m_aLogger.info (sKey);
+
+      // Handle each error as a fatal error!
+      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion);
+      assertNull (sKey, aCSS);
+    }
+  }
+
+  protected final void testReadBadButRecoverable (final String sBaseDir) throws IOException
+  {
+    final File aBaseDir = new File (sBaseDir);
+    if (!aBaseDir.exists ())
+      throw new IllegalArgumentException ("BaseDir " + sBaseDir + " does not exist!");
+
+    for (final File aFile : FileSystemRecursiveIterator.create (aBaseDir, new FilenameFilterEndsWith (".css")))
+    {
+      final String sKey = aFile.getAbsolutePath ();
+      if (m_bDebug)
+        m_aLogger.info (sKey);
+
+      // Handle each error as a fatal error!
+      final CollectingCSSParseErrorHandler aErrors = new CollectingCSSParseErrorHandler ();
+      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion, aErrors);
+      assertNotNull (sKey, aCSS);
+      assertTrue (sKey, aErrors.hasParseErrors ());
+      assertTrue (sKey, aErrors.getParseErrorCount () > 0);
+      if (m_bDebug)
+        m_aLogger.info (aErrors.getAllParseErrors ().toString ());
+
+      // Write optimized version and re-read it
+      final String sCSS = new CSSWriter (m_eVersion, true).getCSSAsString (aCSS);
+      assertNotNull (sKey, sCSS);
+      if (m_bDebug)
+        m_aLogger.info (sCSS);
+
+      final CascadingStyleSheet aCSSReRead = CSSReader.readFromString (sCSS, m_aCharset, m_eVersion);
+      assertNotNull ("Failed to parse:\n" + sCSS, aCSSReRead);
+      assertEquals (sKey, aCSS, aCSSReRead);
+    }
   }
 }
