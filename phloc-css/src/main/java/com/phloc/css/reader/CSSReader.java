@@ -818,11 +818,10 @@ public final class CSSReader
     try
     {
       final JavaCharStream aCharStream = new JavaCharStream (aIS, aCharsetToUse);
-      final CSSNode aNode = _readStyleSheet (aCharStream,
-                                             eVersion,
-                                             aCustomErrorHandler == null ? new LoggingCSSParseErrorHandler ()
-                                                                        : aCustomErrorHandler,
-                                             aCustomExceptionHandler);
+      // Use the ThrowingCSSParseErrorHandler for maximum backward compatibility
+      final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? ThrowingCSSParseErrorHandler.getInstance ()
+                                                                                 : aCustomErrorHandler;
+      final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aRealErrorHandler, aCustomExceptionHandler);
 
       // Failed to interpret content as CSS?
       if (aNode == null)

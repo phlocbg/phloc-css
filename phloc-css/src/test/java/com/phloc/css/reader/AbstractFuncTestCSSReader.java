@@ -65,7 +65,7 @@ public abstract class AbstractFuncTestCSSReader
       for (final File aFile : FileSystemRecursiveIterator.create (aBaseDir, new FilenameFilterEndsWith (".css")))
       {
         final String sKey = aFile.getAbsolutePath ();
-        if (true)
+        if (false)
           m_aLogger.info (sKey);
         final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion);
         assertNotNull (sKey, aCSS);
@@ -102,14 +102,11 @@ public abstract class AbstractFuncTestCSSReader
       for (final File aFile : FileSystemRecursiveIterator.create (aBaseDir, new FilenameFilterEndsWith (".css")))
       {
         final String sKey = aFile.getAbsolutePath ();
-        if (true)
+        if (false)
           m_aLogger.info (sKey);
 
         // Handle each error as a fatal error!
-        final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile,
-                                                                 m_aCharset,
-                                                                 m_eVersion,
-                                                                 ThrowingCSSParseErrorHandler.getInstance ());
+        final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion);
         assertNull (sKey, aCSS);
       }
   }
