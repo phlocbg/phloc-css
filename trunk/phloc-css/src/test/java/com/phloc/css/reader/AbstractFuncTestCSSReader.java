@@ -104,7 +104,12 @@ public abstract class AbstractFuncTestCSSReader
         final String sKey = aFile.getAbsolutePath ();
         if (true)
           m_aLogger.info (sKey);
-        final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion);
+
+        // Handle each error as a fatal error!
+        final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile,
+                                                                 m_aCharset,
+                                                                 m_eVersion,
+                                                                 ThrowingCSSParseErrorHandler.getInstance ());
         assertNull (sKey, aCSS);
       }
   }
