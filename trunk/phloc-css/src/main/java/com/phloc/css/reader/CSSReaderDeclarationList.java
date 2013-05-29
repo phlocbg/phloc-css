@@ -739,11 +739,10 @@ public final class CSSReaderDeclarationList
     try
     {
       final JavaCharStream aCharStream = new JavaCharStream (aReader);
-      final CSSNode aNode = _readStyleDeclaration (aCharStream,
-                                                   eVersion,
-                                                   aCustomErrorHandler == null ? new LoggingCSSParseErrorHandler ()
-                                                                              : aCustomErrorHandler,
-                                                   aCustomExceptionHandler);
+      // Use the ThrowingCSSParseErrorHandler for maximum backward compatibility
+      final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? ThrowingCSSParseErrorHandler.getInstance ()
+                                                                                 : aCustomErrorHandler;
+      final CSSNode aNode = _readStyleDeclaration (aCharStream, eVersion, aRealErrorHandler, aCustomExceptionHandler);
 
       // Failed to interpret content as CSS?
       if (aNode == null)

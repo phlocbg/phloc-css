@@ -46,7 +46,7 @@ public final class CSSReader21Test extends AbstractFuncTestCSSReader
   @Test
   public void testReadAll21Bad () throws IOException
   {
-    testReadGood ("src/test/resources/testfiles/css21/bad");
-    testReadGood ("src/test/resources/testfiles/css21/good_but_failing");
+    testReadBad ("src/test/resources/testfiles/css21/bad");
+    testReadBad ("src/test/resources/testfiles/css21/good_but_failing");
   }
 }
