@@ -18,12 +18,14 @@
 package com.phloc.css.reader.errorhandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.parser.ParseException;
 import com.phloc.css.parser.Token;
 
 /**
@@ -36,8 +38,17 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggingCSSParseErrorHandler.class);
   private static final int TOKEN_EOF = 0;
 
+  private final ICSSParseErrorHandler m_aNestedErrorHandler;
+
   public LoggingCSSParseErrorHandler ()
-  {}
+  {
+    this (null);
+  }
+
+  public LoggingCSSParseErrorHandler (@Nullable final ICSSParseErrorHandler aNestedErrorHandler)
+  {
+    m_aNestedErrorHandler = aNestedErrorHandler;
+  }
 
   @Nonnull
   @Nonempty
@@ -101,9 +112,15 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
   public void onCSSParseError (@Nonnull final Token aLastValidToken,
                                @Nonnull final int [][] aExpectedTokenSequencesVal,
                                @Nonnull final String [] aTokenImageVal,
-                               @Nonnull final Token aLastSkippedToken)
+                               @Nonnull final Token aLastSkippedToken) throws ParseException
   {
     s_aLogger.warn (createLoggingString (aLastValidToken, aExpectedTokenSequencesVal, aTokenImageVal, aLastSkippedToken));
+
+    if (m_aNestedErrorHandler != null)
+      m_aNestedErrorHandler.onCSSParseError (aLastValidToken,
+                                             aExpectedTokenSequencesVal,
+                                             aTokenImageVal,
+                                             aLastSkippedToken);
   }
 
   @Override
