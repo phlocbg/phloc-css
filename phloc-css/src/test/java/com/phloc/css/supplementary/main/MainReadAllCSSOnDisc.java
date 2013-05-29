@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css.reader;
+package com.phloc.css.supplementary.main;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -32,6 +32,7 @@ import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.handler.ICSSParseExceptionHandler;
 import com.phloc.css.parser.ParseException;
+import com.phloc.css.reader.CSSReader;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
