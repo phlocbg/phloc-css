@@ -24,6 +24,8 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,11 +39,11 @@ import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.reader.CSSReader;
 
-public final class FuncTestCSSWriter
+public final class CSSWriterExtendedTest
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (FuncTestCSSWriter.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSWriterExtendedTest.class);
 
-  private void _testMe (final File aFile, final ECSSVersion eVersion) throws IOException
+  private void _testMe (@Nonnull final File aFile, @Nonnull final ECSSVersion eVersion) throws IOException
   {
     if (false)
       s_aLogger.info (aFile.getAbsolutePath ());

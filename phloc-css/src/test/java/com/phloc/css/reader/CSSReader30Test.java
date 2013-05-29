@@ -34,9 +34,9 @@ import com.phloc.css.decl.CascadingStyleSheet;
  * 
  * @author Philip Helger
  */
-public final class FuncTestCSSReader30 extends AbstractFuncTestCSSReader
+public final class CSSReader30Test extends AbstractFuncTestCSSReader
 {
-  public FuncTestCSSReader30 ()
+  public CSSReader30Test ()
   {
     super (ECSSVersion.CSS30, CCharset.CHARSET_UTF_8_OBJ, false);
   }
