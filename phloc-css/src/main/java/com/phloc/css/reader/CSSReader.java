@@ -54,6 +54,8 @@ import com.phloc.css.parser.ParserCSS30;
 import com.phloc.css.parser.ParserCSS30TokenManager;
 import com.phloc.css.parser.ParserCSSCharsetDetector;
 import com.phloc.css.parser.ParserCSSCharsetDetectorTokenManager;
+import com.phloc.css.reader.errorhandler.ICSSParseErrorHandler;
+import com.phloc.css.reader.errorhandler.ThrowingCSSParseErrorHandler;
 
 /**
  * This is the central user class for reading and parsing CSS from different
