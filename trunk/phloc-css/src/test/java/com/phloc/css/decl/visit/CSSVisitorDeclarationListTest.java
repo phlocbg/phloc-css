@@ -33,9 +33,9 @@ import com.phloc.css.reader.CSSReaderDeclarationList;
  * 
  * @author Philip Helger
  */
-public final class CSSVisitorTestDeclarationList
+public final class CSSVisitorDeclarationListTest
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSVisitorTestDeclarationList.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSVisitorDeclarationListTest.class);
 
   @Test
   public void testVisitConstantCSS ()

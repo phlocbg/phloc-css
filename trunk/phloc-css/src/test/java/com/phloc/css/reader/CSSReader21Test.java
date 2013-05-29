@@ -29,9 +29,9 @@ import com.phloc.css.ECSSVersion;
  * 
  * @author Philip Helger
  */
-public final class FuncTestCSSReader21 extends AbstractFuncTestCSSReader
+public final class CSSReader21Test extends AbstractFuncTestCSSReader
 {
-  public FuncTestCSSReader21 ()
+  public CSSReader21Test ()
   {
     super (ECSSVersion.CSS21, CCharset.CHARSET_UTF_8_OBJ, false);
   }
@@ -46,7 +46,7 @@ public final class FuncTestCSSReader21 extends AbstractFuncTestCSSReader
   @Test
   public void testReadAll21Bad () throws IOException
   {
-    testReadBad ("src/test/resources/testfiles/css21/bad");
-    testReadBad ("src/test/resources/testfiles/css21/good_but_failing");
+    testReadGood ("src/test/resources/testfiles/css21/bad");
+    testReadGood ("src/test/resources/testfiles/css21/good_but_failing");
   }
 }
