@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 options {
-  // JavaCC options
+// JavaCC options
   // LOOKAHEAD = 2;
   CHOICE_AMBIGUITY_CHECK = 5;
   STATIC = false;  // to allow for multiple parser instances
@@ -33,11 +33,15 @@ options {
   FORCE_LA_CHECK = true;
 
 // JJTree options
+  // MULTI = true;
+  // VISITOR = true;
   // BUILD_NODE_FILES = false;
   // NODE_DEFAULT_VOID = true;
   NODE_CLASS = "com.phloc.css.parser.CSSNode";
   NODE_PREFIX = "";
   // NODE_USES_PARSER = true;
+  // TRACK_TOKENS = true;
+  // NODE_SCOPE_HOOK = true;
 }
 
 PARSER_BEGIN(ParserCSSCharsetDetector)

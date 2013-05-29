@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 options {
-  // JavaCC options
+// JavaCC options
   // LOOKAHEAD = 2;
   CHOICE_AMBIGUITY_CHECK = 5;
   STATIC = false;  // to allow for multiple parser instances
@@ -33,12 +33,15 @@ options {
   FORCE_LA_CHECK = true;
 
 // JJTree options
+  // MULTI = true;
+  // VISITOR = true;
   // BUILD_NODE_FILES = false;
   // NODE_DEFAULT_VOID = true;
   NODE_CLASS = "com.phloc.css.parser.CSSNode";
   NODE_PREFIX = "";
   // NODE_USES_PARSER = true;
   TRACK_TOKENS = true;
+  // NODE_SCOPE_HOOK = true;
 }
 
 PARSER_BEGIN(ParserCSS21)
@@ -50,9 +53,23 @@ public class ParserCSS21
   
   private com.phloc.css.reader.errorhandler.ICSSParseErrorHandler m_aCustomErrorHandler;
   
-  public void setCustomErrorHandler (com.phloc.css.reader.errorhandler.ICSSParseErrorHandler aCustomErrorHandler)
+  public void setCustomErrorHandler (final com.phloc.css.reader.errorhandler.ICSSParseErrorHandler aCustomErrorHandler)
   {
     m_aCustomErrorHandler = aCustomErrorHandler;
+  }
+  
+  // Used when NODE_SCOPE_HOOK is true - for debugging only
+  // Package scope to avoid warning when NODE_SCOPE_HOOK is false
+  void jjtreeOpenNodeScope (final Node aNode)
+  {
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Opening scope for " + aNode.toString ());
+  }
+  
+  void jjtreeCloseNodeScope (final Node aNode)
+  {
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Closing scope for " + aNode.toString ());
   }
 }
 PARSER_END(ParserCSS21)
