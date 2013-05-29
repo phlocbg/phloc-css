@@ -74,7 +74,7 @@ public final class CSSReaderDeclarationListTest
   @Test
   public void testRead21 ()
   {
-    final ICSSParseExceptionHandler aHdl = new DoNothingCSSParseExceptionHandler ();
+    final ICSSParseExceptionHandler aHdl = DoNothingCSSParseExceptionHandler.getInstance ();
     for (final String sCSS : VALID)
     {
       final CSSDeclarationList aDL = CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS21, aHdl);
@@ -87,7 +87,7 @@ public final class CSSReaderDeclarationListTest
   @Test
   public void testRead30 ()
   {
-    final ICSSParseExceptionHandler aHdl = new DoNothingCSSParseExceptionHandler ();
+    final ICSSParseExceptionHandler aHdl = DoNothingCSSParseExceptionHandler.getInstance ();
     for (final String sCSS : VALID)
       assertNotNull (sCSS, CSSReaderDeclarationList.readFromString (sCSS, ECSSVersion.CSS30, aHdl));
     for (final String sCSS : INVALID)

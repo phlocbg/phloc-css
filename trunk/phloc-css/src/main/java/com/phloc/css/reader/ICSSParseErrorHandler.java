@@ -30,6 +30,19 @@ import com.phloc.css.parser.Token;
  */
 public interface ICSSParseErrorHandler
 {
+  /**
+   * Called upon a recoverable error. The parameter list is similar to the one
+   * of the {@link com.phloc.css.parser.ParseException}.
+   * 
+   * @param aLastValidToken
+   *        The last valid token.
+   * @param aExpectedTokenSequencesVal
+   *        The expected token.
+   * @param aTokenImageVal
+   *        The error token image.
+   * @throws ParseException
+   *         In case the error is fatal and should be propagated.
+   */
   void onCSSParseError (@Nonnull Token aLastValidToken,
                         @Nonnull int [][] aExpectedTokenSequencesVal,
                         @Nonnull String [] aTokenImageVal) throws ParseException;
