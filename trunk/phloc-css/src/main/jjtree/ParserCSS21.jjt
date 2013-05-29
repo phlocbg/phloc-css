@@ -48,9 +48,9 @@ public class ParserCSS21
 {
   private static final org.slf4j.Logger s_aLogger = org.slf4j.LoggerFactory.getLogger (ParserCSS21.class);
   
-  private com.phloc.css.reader.ICSSParseErrorHandler m_aCustomErrorHandler;
+  private com.phloc.css.reader.errorhandler.ICSSParseErrorHandler m_aCustomErrorHandler;
   
-  public void setCustomErrorHandler (com.phloc.css.reader.ICSSParseErrorHandler aCustomErrorHandler)
+  public void setCustomErrorHandler (com.phloc.css.reader.errorhandler.ICSSParseErrorHandler aCustomErrorHandler)
   {
     m_aCustomErrorHandler = aCustomErrorHandler;
   }

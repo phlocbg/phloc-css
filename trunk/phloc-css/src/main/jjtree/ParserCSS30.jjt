@@ -20,7 +20,7 @@ options {
   // LOOKAHEAD = 2;
   CHOICE_AMBIGUITY_CHECK = 5;
   STATIC = false;  // to allow for multiple parser instances
-  // DEBUG_PARSER = true;
+   DEBUG_PARSER = true;
   // DEBUG_LOOKAHEAD = true;
   // DEBUG_TOKEN_MANAGER = true;
   // ERROR_REPORTING = false;
@@ -48,9 +48,9 @@ public class ParserCSS30
 {
   private static final org.slf4j.Logger s_aLogger = org.slf4j.LoggerFactory.getLogger (ParserCSS30.class);
   
-  private com.phloc.css.reader.ICSSParseErrorHandler m_aCustomErrorHandler;
+  private com.phloc.css.reader.errorhandler.ICSSParseErrorHandler m_aCustomErrorHandler;
   
-  public void setCustomErrorHandler (com.phloc.css.reader.ICSSParseErrorHandler aCustomErrorHandler)
+  public void setCustomErrorHandler (com.phloc.css.reader.errorhandler.ICSSParseErrorHandler aCustomErrorHandler)
   {
     m_aCustomErrorHandler = aCustomErrorHandler;
   }
