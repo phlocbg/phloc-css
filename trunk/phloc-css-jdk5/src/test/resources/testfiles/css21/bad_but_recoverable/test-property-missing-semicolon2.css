@@ -15,5 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@supports () { div { color:red; } }
-@supports not () { div { color:red; } }
+body {
+	padding: 2px;
+	line-height: 1em
+	color: #000000
+}

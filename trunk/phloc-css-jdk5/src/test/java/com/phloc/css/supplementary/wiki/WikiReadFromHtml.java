@@ -15,18 +15,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css.handler;
+package com.phloc.css.supplementary.wiki;
 
-import com.phloc.commons.callback.IExceptionHandler;
-import com.phloc.css.parser.ParseException;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CSSDeclarationList;
+import com.phloc.css.reader.CSSReaderDeclarationList;
 
 /**
- * Special CSS exception handler. It is called in case of an unrecoverable error
- * while parsing a CSS.
+ * Example how to read the content of a CSS style attribute.
  * 
  * @author Philip Helger
  */
-public interface ICSSParseExceptionHandler extends IExceptionHandler <ParseException>
+public final class WikiReadFromHtml
 {
-  /* empty */
+  public static CSSDeclarationList readFromStyleAttribute ()
+  {
+    final String sStyle = "color:red; background:fixed !important";
+    final CSSDeclarationList aDeclList = CSSReaderDeclarationList.readFromString (sStyle, ECSSVersion.CSS30);
+    if (aDeclList == null)
+      throw new IllegalStateException ("Failed to parse CSS: " + sStyle);
+    return aDeclList;
+  }
 }

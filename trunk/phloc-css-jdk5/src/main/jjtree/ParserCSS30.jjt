@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 options {
-  // JavaCC options
+// JavaCC options
   // LOOKAHEAD = 2;
   CHOICE_AMBIGUITY_CHECK = 5;
   STATIC = false;  // to allow for multiple parser instances
@@ -33,12 +33,15 @@ options {
   FORCE_LA_CHECK = true;
 
 // JJTree options
+  // MULTI = true;
+  // VISITOR = true;
   // BUILD_NODE_FILES = false;
   // NODE_DEFAULT_VOID = true;
   NODE_CLASS = "com.phloc.css.parser.CSSNode";
   NODE_PREFIX = "";
   // NODE_USES_PARSER = true;
   TRACK_TOKENS = true;
+  // NODE_SCOPE_HOOK = true;
 }
 
 PARSER_BEGIN(ParserCSS30)
@@ -47,6 +50,27 @@ package com.phloc.css.parser;
 public class ParserCSS30
 {
   private static final org.slf4j.Logger s_aLogger = org.slf4j.LoggerFactory.getLogger (ParserCSS30.class);
+  
+  private com.phloc.css.reader.errorhandler.ICSSParseErrorHandler m_aCustomErrorHandler;
+  
+  public void setCustomErrorHandler (final com.phloc.css.reader.errorhandler.ICSSParseErrorHandler aCustomErrorHandler)
+  {
+    m_aCustomErrorHandler = aCustomErrorHandler;
+  }
+  
+  // Used when NODE_SCOPE_HOOK is true - for debugging only
+  // Package scope to avoid warning when NODE_SCOPE_HOOK is false
+  void jjtreeOpenNodeScope (final Node aNode)
+  {
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Opening scope for " + aNode.toString ());
+  }
+  
+  void jjtreeCloseNodeScope (final Node aNode)
+  {
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Closing scope for " + aNode.toString ());
+  }
 }
 PARSER_END(ParserCSS30)
 
@@ -144,15 +168,15 @@ TOKEN :
                  | <STRING_EOL>
                  | <ESCAPE>
                  )* "'" >
-| < INVALID1: "\"" ( ~["\n","\r","\f","\\","\""]
-                   | <STRING_EOL>
-                   | <ESCAPE>
-                   )* >
-| < INVALID2: "'" ( ~["\n","\r","\f","\\","'"]
-                  | <STRING_EOL>
-                  | <ESCAPE>
-                  )* >
-| < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/">
+| < INVALID_STRING1: "\"" ( ~["\n","\r","\f","\\","\""]
+                          | <STRING_EOL>
+	                      | <ESCAPE>
+	                      )* >
+| < INVALID_STRING2: "'" ( ~["\n","\r","\f","\\","'"]
+                         | <STRING_EOL>
+                         | <ESCAPE>
+                         )* >
+| < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/" >
 
 | < NUMBER: <NUM> >
 
@@ -269,17 +293,28 @@ TOKEN :
 }
 
 JAVACODE
-void error_skipto(final int... aKinds)
+private Token error_skipto(final ParseException ex, final int... aKinds) throws ParseException
 {
-  // generate the exception object and print it
-  final ParseException e = generateParseException();
-  s_aLogger.warn(e.toString());
+  // print the exception object
+  if (m_aCustomErrorHandler == null)
+    s_aLogger.warn(ex.toString());
   // Skip until (including) the first matching token
   Token t;
   do
   {
     t = getNextToken();
+    if (t.kind == EOF)
+    {
+      // Encountered EOF while skipping - throw the original exception!
+      throw ex;
+    }  
   } while (!com.phloc.commons.collections.ArrayHelper.contains (aKinds, t.kind));
+  if (m_aCustomErrorHandler != null)
+    m_aCustomErrorHandler.onCSSParseError (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage, t);
+  else  
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Skipped until token " + t.toString ());
+  return t;
 }
 
 //
@@ -504,9 +539,7 @@ void pageRule() : {}
   ( pseudoPage()
     ( <S> )*
   )?
-  <LBRACE>
-  styleDeclaration()
-  <RBRACE>
+  styleDeclarationBlock()
 }
 
 void pseudoPage() #PseudoPage : {}
@@ -730,9 +763,18 @@ void styleRule() : {}
     selector()
     ( <S> )*
   )*
+  styleDeclarationBlock()
+}
+
+void styleDeclarationBlock() #void : {}
+{
+try{
   <LBRACE>
   styleDeclaration()
   <RBRACE>
+} catch (ParseException ex) {
+  error_skipto (ex, RBRACE);
+}
 }
 
 void hash() #Hash : {}
@@ -957,8 +999,8 @@ String string() #void :
 // {invalid}        {return INVALID; /* unclosed string */}
 void invalid () : {}
 {
-  ( <INVALID1>
-  | <INVALID2>
+  ( <INVALID_STRING1>
+  | <INVALID_STRING2>
   )
 }
 
@@ -970,9 +1012,7 @@ void invalid () : {}
 void fontfaceRule() : {}
 {
   <FONTFACE_SYM>
-  <LBRACE>
-  styleDeclaration()
-  <RBRACE>
+  styleDeclarationBlock()
 }
 
 // 
@@ -1001,9 +1041,7 @@ void keyframesIdentifier() :  {}
 void keyframesBlocks() #void : {}
 {
   ( keyframesSelector()
-    <LBRACE>
-    styleDeclaration()
-    <RBRACE>
+    styleDeclarationBlock()
     ( <S> )* 
   )*
 }
@@ -1035,9 +1073,7 @@ void viewportRule() : {}
 {
   <VIEWPORT_SYM> { jjtThis.setText (token.image); }    
   ( <S> )*
-  <LBRACE>
-  styleDeclaration()
-  <RBRACE>
+  styleDeclarationBlock()
 }
 
 //

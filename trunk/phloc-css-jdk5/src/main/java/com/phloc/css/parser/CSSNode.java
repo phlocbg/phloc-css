@@ -34,7 +34,7 @@ import com.phloc.css.CSSSourceLocation;
  * 
  * @author Philip Helger
  */
-public final class CSSNode implements Node, Iterable <CSSNode>
+public class CSSNode implements Node, Iterable <CSSNode>
 {
   private final int m_nType;
   private CSSNode m_aParent;
@@ -45,6 +45,11 @@ public final class CSSNode implements Node, Iterable <CSSNode>
   private Token m_aLastToken;
 
   public CSSNode (final int nType)
+  {
+    m_nType = nType;
+  }
+
+  public CSSNode (final Object aParser, final int nType)
   {
     m_nType = nType;
   }
