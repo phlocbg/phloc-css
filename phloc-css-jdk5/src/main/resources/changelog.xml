@@ -20,6 +20,27 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2013-06-18" version="3.5.3" />
+  <entry date="2013-06-18" category="data" action="fix">
+    <change>
+      <text locale="en">Fixed invalid color names in ECSSColorName (trailing spaces)</text>
+    </change>
+  </entry>
+  <entry date="2013-05-29" category="api" action="add">
+    <change>
+      <text locale="en">Added support for a custom error handler that handles recoverable errors.</text>
+    </change>
+  </entry>
+  <entry date="2013-05-29" category="feature" action="add">
+    <change>
+      <text locale="en">Started adding support for error recovery when parsing some properties fails.</text>
+    </change>
+  </entry>
+  <entry date="2013-05-29" category="api" action="change">
+    <change>
+      <text locale="en">Deprecated DoNothingCSSParseExceptionHandler constructor and added a static getInstance() method instead</text>
+    </change>
+  </entry>
   <release date="2013-05-17" version="3.5.2" />
   <entry date="2013-05-17" category="tech" action="fix">
     <change>

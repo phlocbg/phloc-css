@@ -17,6 +17,8 @@
  */
 package com.phloc.css.handler;
 
+import javax.annotation.Nonnull;
+
 import com.phloc.css.parser.ParseException;
 
 /**
@@ -26,6 +28,18 @@ import com.phloc.css.parser.ParseException;
  */
 public final class DoNothingCSSParseExceptionHandler implements ICSSParseExceptionHandler
 {
+  private static final DoNothingCSSParseExceptionHandler s_aInstance = new DoNothingCSSParseExceptionHandler ();
+
+  @Deprecated
+  public DoNothingCSSParseExceptionHandler ()
+  {}
+
+  @Nonnull
+  public static DoNothingCSSParseExceptionHandler getInstance ()
+  {
+    return s_aInstance;
+  }
+
   public void onException (final ParseException ex)
   {
     // ignore
