@@ -17,12 +17,18 @@
  */
 package com.phloc.css.reader;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.junit.Test;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.writer.CSSWriter;
 
 /**
  * Test reading CSS 2.1 files
@@ -54,5 +60,18 @@ public final class CSSReader21Test extends AbstractFuncTestCSSReader
   public void testReadAll21BadButRecoverable () throws IOException
   {
     testReadBadButRecoverable ("src/test/resources/testfiles/css21/bad_but_recoverable");
+  }
+
+  @Test
+  public void testReadSpecialGood () throws IOException
+  {
+    final ECSSVersion eVersion = ECSSVersion.CSS30;
+    final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
+    final File aFile = new File ("src/test/resources/testfiles/css21/good/artificial/test-url.css");
+    final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
+    assertNotNull (aCSS);
+
+    final String sCSS = new CSSWriter (eVersion, false).getCSSAsString (aCSS);
+    m_aLogger.info (sCSS);
   }
 }
