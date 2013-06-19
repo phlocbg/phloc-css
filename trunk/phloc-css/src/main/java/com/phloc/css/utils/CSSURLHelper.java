@@ -23,7 +23,6 @@ import javax.annotation.RegEx;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.css.parser.ParseUtils;
@@ -102,8 +101,27 @@ public final class CSSURLHelper
     return getAsCSSURL (aURL.getAsString (), bQuoteURL);
   }
 
+  public static boolean isCSSURLRequiringQuotes (@Nonnull final String sURL)
+  {
+    if (sURL == null)
+      throw new NullPointerException ("passed URL is empty!");
+
+    for (final char c : sURL.toCharArray ())
+      if (c != '!' &&
+          c != '#' &&
+          c != '$' &&
+          c != '%' &&
+          c != '&' &&
+          !(c >= '*' && c <= '[') &&
+          !(c >= ']' && c <= '~') &&
+          !(c >= '\u0080' && c <= '\uffff'))
+        return true;
+    return false;
+  }
+
   /**
-   * Surround the passed URL with the CSS "url(...)"
+   * Surround the passed URL with the CSS "url(...)". When the passed URL
+   * contains characters that require quoting, quotes are automatically added!
    * 
    * @param sURL
    *        URL to be wrapped. May neither be <code>null</code> nor empty.
@@ -118,11 +136,11 @@ public final class CSSURLHelper
     if (StringHelper.hasNoText (sURL))
       throw new IllegalArgumentException ("passed URL is empty!");
 
-    final boolean bAreQuotesRequired = bQuoteURL || !RegExHelper.stringMatchesPattern (REGEX_CSS_URLCHARS, sURL);
+    final boolean bAreQuotesRequired = bQuoteURL || isCSSURLRequiringQuotes (sURL);
 
     if (bAreQuotesRequired)
     {
-      final char cQuote = sURL.indexOf ('\"') >= 0 ? '\'' : '"';
+      final char cQuote = sURL.indexOf ('\'') >= 0 ? '"' : '\'';
       return CCSSValue.PREFIX_URL_OPEN + cQuote + sURL + cQuote + ')';
     }
     return CCSSValue.PREFIX_URL_OPEN + sURL + ')';
