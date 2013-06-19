@@ -158,6 +158,13 @@ TOKEN :
            | <ESCAPE>
            >
 
+| < #NAME: ( <NMCHAR> )+ >
+| < #NUM: ( ["0"-"9"] )+
+        | ( ["0"-"9"] )* "." ( ["0"-"9"] )+ >
+| < #URLCHAR: ["!","#","$","%","&","*"-"[","]"-"~"]
+            | <NONASCII>
+            | <ESCAPE> >
+
 // First, inside a string, a backslash followed by a newline is ignored (i.e., the string is deemed not to contain either the backslash or the newline).           
 | < STRING_EOL: "\\" ( "\n" | "\r\n" | "\r" | "\f" ) >  { matchedToken.image = ""; }    
 | < STRING1: "\"" ( ~["\n","\r","\f","\\","\""]
@@ -177,7 +184,14 @@ TOKEN :
                          | <ESCAPE>
                          )* >
 | < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/" >
-
+| < #URANGE_H: <H> | "?" >
+| < #URANGE_PLACEHOLDER: <URANGE_H>
+                       | <URANGE_H><URANGE_H>
+                       | <URANGE_H><URANGE_H><URANGE_H>
+                       | <URANGE_H><URANGE_H><URANGE_H><URANGE_H>
+                       | <URANGE_H><URANGE_H><URANGE_H><URANGE_H><URANGE_H>
+                       | <URANGE_H><URANGE_H><URANGE_H><URANGE_H><URANGE_H><URANGE_H>
+                       >
 | < NUMBER: <NUM> >
 
 // before ident!
@@ -193,13 +207,6 @@ TOKEN :
 // Note: "*" hack for IE <= 6
 // Note: "$" hack for IE <= 7
 | < IDENT: ("-"|"$"|"*")? <NMSTART> ( <NMCHAR> )* > { matchedToken.image = ParseUtils.validateIdentifier(image); }
-
-| < #NAME: ( <NMCHAR> )+ >
-| < #NUM: ( ["0"-"9"] )+
-        | ( ["0"-"9"] )* "." ( ["0"-"9"] )+ >
-| < #URLCHAR: ["!","#","$","%","&","*"-"[","]"-"~"]
-            | <NONASCII>
-            | <ESCAPE> >
 
 | < CDO: "<!--" >
 | < CDC: "-->" >
@@ -269,8 +276,13 @@ TOKEN :
                 | "nth-last-of-type(" > : IN_NTH
 // Extension for IE filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50); */
 | < FUNCTION: <IDENT> "(" 
-            | "progid" ( <S> )* ":" ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
+            | "progid" ( <S> )* <COLON> ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
   > { matchedToken.image = image.toString (); }
+// Unicode range  
+| < URANGE: "u+" ( <HNUM> 
+                 | <HNUM> "-" <HNUM> 
+                 | <URANGE_PLACEHOLDER> 
+                 ) >  
 | < RBRACE: "}" >
 | < DOT: "." >
 | < SEMICOLON: ";" >
@@ -890,6 +902,7 @@ void term() #Term :
   | function()
   | math()
   | t = <INHERIT>
+  | t = <URANGE>
   )
   ( <S> )*
   {
