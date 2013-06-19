@@ -2,6 +2,8 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>6/19/13</td><td colspan="4">_Release *3.5.4*_</td></tr>
+<tr><td>6/19/13</td><td>fix</td><td>tech</td><td></td><td>Fixed issue 6: parsing of unicode-range</td></tr>
 <tr border="1"><td>6/18/13</td><td colspan="4">_Release *3.5.3*_</td></tr>
 <tr><td>6/18/13</td><td>fix</td><td>data</td><td></td><td>Fixed invalid color names in ECSSColorName (trailing spaces)</td></tr>
 <tr><td>5/29/13</td><td>add</td><td>api</td><td></td><td>Added support for a custom error handler that handles recoverable errors.</td></tr>
