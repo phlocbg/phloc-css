@@ -72,13 +72,14 @@ public final class ParseUtils
    * 
    * @param s
    *        The value to remove the string from.
-   * @return The trimmed value.
+   * @return The trimmed value. Never <code>null</code>.
    */
   @Nonnull
   public static String trimUrl (@Nonnull final CharSequence s)
   {
     // Extract from "url(...)"
     final String s1 = _trimBy (s, 4, 1).trim ();
+    // Remove the trailing quotes (if any)
     return extractStringValue (s1);
   }
 
