@@ -19,9 +19,11 @@ package com.phloc.css.utils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.RegEx;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.css.parser.ParseUtils;
@@ -37,6 +39,9 @@ public final class CSSURLHelper
 {
   /** For compatibility reasons, this is set to false */
   public static final boolean DEFAULT_QUOTE_URLS = false;
+
+  @RegEx
+  public static final String REGEX_CSS_URLCHARS = "[!#\\$%&*-\\[\\]-~\u0080-\uffff]+";
 
   private CSSURLHelper ()
   {}
@@ -112,8 +117,14 @@ public final class CSSURLHelper
   {
     if (StringHelper.hasNoText (sURL))
       throw new IllegalArgumentException ("passed URL is empty!");
-    if (bQuoteURL)
-      return CCSSValue.PREFIX_URL_OPEN + "'" + sURL + "')";
+
+    final boolean bAreQuotesRequired = bQuoteURL || !RegExHelper.stringMatchesPattern (REGEX_CSS_URLCHARS, sURL);
+
+    if (bAreQuotesRequired)
+    {
+      final char cQuote = sURL.indexOf ('\"') >= 0 ? '\'' : '"';
+      return CCSSValue.PREFIX_URL_OPEN + cQuote + sURL + cQuote + ')';
+    }
     return CCSSValue.PREFIX_URL_OPEN + sURL + ')';
   }
 }

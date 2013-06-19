@@ -47,7 +47,7 @@ import com.phloc.css.writer.CSSWriterSettings;
  */
 public abstract class AbstractFuncTestCSSReader
 {
-  private final Logger m_aLogger = LoggerFactory.getLogger (getClass ());
+  protected final Logger m_aLogger = LoggerFactory.getLogger (getClass ());
   private final ECSSVersion m_eVersion;
   private final Charset m_aCharset;
   private final boolean m_bDebug;
