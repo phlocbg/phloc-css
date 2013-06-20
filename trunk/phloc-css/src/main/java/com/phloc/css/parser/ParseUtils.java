@@ -26,6 +26,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.css.propertyvalue.CCSSValue;
 
 /**
  * This class is used by the generated parsers to do some common stuff.
@@ -35,6 +36,9 @@ import com.phloc.commons.string.StringHelper;
 @Immutable
 public final class ParseUtils
 {
+  /** The character used to quote elements in CSS URLs */
+  public static final char URL_ESCAPE_CHAR = '\\';
+
   // Order of the rules in brackets is important!
   @RegEx
   private static final String SPLIT_NUMBER_REGEX = "^([0-9]*\\.[0-9]+|[0-9]+).*$";
@@ -72,6 +76,43 @@ public final class ParseUtils
   }
 
   /**
+   * Unescape all escaped characters in a CSS URL. All characters masked with a
+   * '\\' character replaced.
+   * 
+   * @param sEscapedURL
+   *        The escaped URL. May not be <code>null</code>!
+   * @return The unescaped URL or the original string, if not a single escape
+   *         sequence is found.
+   */
+  @Nonnull
+  public static String unescapeURL (@Nonnull final String sEscapedURL)
+  {
+    int nIndex = sEscapedURL.indexOf (URL_ESCAPE_CHAR);
+    if (nIndex < 0)
+    {
+      // No escape sequence found
+      return sEscapedURL;
+    }
+
+    final StringBuilder aSB = new StringBuilder (sEscapedURL.length ());
+    int nPrevIndex = 0;
+    do
+    {
+      // Append everything before the first quote char
+      aSB.append (sEscapedURL, nPrevIndex, nIndex);
+      // Append the quoted char itself
+      aSB.append (sEscapedURL, nIndex + 1, nIndex + 2);
+      // The new position to start searching
+      nPrevIndex = nIndex + 2;
+      // Search the next escaped char
+      nIndex = sEscapedURL.indexOf (URL_ESCAPE_CHAR, nPrevIndex);
+    } while (nIndex >= 0);
+    // Append the rest
+    aSB.append (sEscapedURL.substring (nPrevIndex));
+    return aSB.toString ();
+  }
+
+  /**
    * Remove the leading "url(" and the trailing ")" from an URL CSS value. No
    * check is performed for the existence of a leading "url("! This method
    * should only be called from within the parser.
@@ -84,9 +125,11 @@ public final class ParseUtils
   public static String trimUrl (@Nonnull final CharSequence s)
   {
     // Extract from "url(...)"
-    final String s1 = _trimBy (s, 4, 1).trim ();
+    final String sTrimmed = _trimBy (s, CCSSValue.PREFIX_URL_OPEN.length (), 1).trim ();
     // Remove the trailing quotes (if any)
-    return extractStringValue (s1);
+    final String sUnquoted = extractStringValue (sTrimmed);
+    // Unescape all escaped chars
+    return unescapeURL (sUnquoted);
   }
 
   @Nonnull
