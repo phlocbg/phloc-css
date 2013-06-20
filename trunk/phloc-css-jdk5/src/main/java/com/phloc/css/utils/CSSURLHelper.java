@@ -70,11 +70,7 @@ public final class CSSURLHelper
   {
     if (isURLValue (sValue))
     {
-      final String sRealValue = sValue.trim ();
-      // Skip leading "url(" and trailing ")"
-      final String sStripped = sRealValue.substring (CCSSValue.PREFIX_URL_OPEN.length (), sRealValue.length () - 1);
-      // Eventually remove leading and trailing '"' or '''
-      return ParseUtils.extractStringValue (sStripped);
+      return ParseUtils.trimUrl (sValue);
     }
     return null;
   }
@@ -98,22 +94,114 @@ public final class CSSURLHelper
   }
 
   /**
-   * Surround the passed URL with the CSS "url(...)"
+   * Check if the passed character is a valid character inside a URL.
+   * 
+   * @param c
+   *        The character to be checked.
+   * @return <code>true</code> if the passed character can be contained inside a
+   *         URL, <code>false</code> otherwise.
+   */
+  public static boolean isValidCSSURLChar (final char c)
+  {
+    return c == '!' ||
+           c == '#' ||
+           c == '$' ||
+           c == '%' ||
+           c == '&' ||
+           (c >= '*' && c <= '[') ||
+           (c >= ']' && c <= '~') ||
+           (c >= '\u0080' && c <= '\uffff');
+  }
+
+  public static boolean isCSSURLRequiringQuotes (@Nonnull final String sURL)
+  {
+    if (sURL == null)
+      throw new NullPointerException ("passed URL is null!");
+
+    for (final char c : sURL.toCharArray ())
+      if (!isValidCSSURLChar (c))
+        return true;
+    return false;
+  }
+
+  /**
+   * Internal method to escape a CSS URL. Because this method is only called for
+   * quoted URLs, only the quote character itself needs to be quoted.
+   * 
+   * @param sURL
+   *        The URL to be escaped. May not be <code>null</code>.
+   * @param cQuoteChar
+   *        The quote char that is used. Either '\'' or '"'
+   * @return The escaped string. Never <code>null</code>.
+   */
+  @Nonnull
+  @Nonempty
+  public static String getEscapedCSSURL (@Nonnull final String sURL, final char cQuoteChar)
+  {
+    if (sURL == null)
+      throw new NullPointerException ("URL");
+
+    int nIndex = sURL.indexOf (cQuoteChar);
+    if (nIndex < 0)
+    {
+      // Found nothing to quote
+      return sURL;
+    }
+
+    final StringBuilder aSB = new StringBuilder (sURL.length () * 2);
+    int nPrevIndex = 0;
+    do
+    {
+      // Append everything before the first quote char
+      aSB.append (sURL, nPrevIndex, nIndex);
+      // Append the escape char itself
+      aSB.append (ParseUtils.URL_ESCAPE_CHAR);
+      // Append the char to be escaped
+      aSB.append (cQuoteChar);
+      // The new position to start searching
+      nPrevIndex = nIndex + 1;
+      // Search the next escaped char
+      nIndex = sURL.indexOf (cQuoteChar, nPrevIndex);
+    } while (nIndex >= 0);
+    // Append the rest
+    aSB.append (sURL.substring (nPrevIndex));
+    return aSB.toString ();
+  }
+
+  /**
+   * Surround the passed URL with the CSS "url(...)". When the passed URL
+   * contains characters that require quoting, quotes are automatically added!
    * 
    * @param sURL
    *        URL to be wrapped. May neither be <code>null</code> nor empty.
-   * @param bQuoteURL
+   * @param bForceQuoteURL
    *        if <code>true</code> single quotes are added around the URL
    * @return <code>url(<i>sURL</i>)</code> or <code>url('<i>sURL</i>')</code>
    */
   @Nonnull
   @Nonempty
-  public static String getAsCSSURL (@Nonnull @Nonempty final String sURL, final boolean bQuoteURL)
+  public static String getAsCSSURL (@Nonnull @Nonempty final String sURL, final boolean bForceQuoteURL)
   {
     if (StringHelper.hasNoText (sURL))
       throw new IllegalArgumentException ("passed URL is empty!");
-    if (bQuoteURL)
-      return CCSSValue.PREFIX_URL_OPEN + "'" + sURL + "')";
-    return CCSSValue.PREFIX_URL_OPEN + sURL + ')';
+
+    final StringBuilder aSB = new StringBuilder (CCSSValue.PREFIX_URL_OPEN);
+    final boolean bAreQuotesRequired = bForceQuoteURL || isCSSURLRequiringQuotes (sURL);
+    if (bAreQuotesRequired)
+    {
+      // Determine the best quote char to use - default to '\'' for backwards
+      // compatibility
+      final int nIndexSingleQuote = sURL.indexOf ('\'');
+      final int nIndexDoubleQuote = sURL.indexOf ('"');
+      final char cQuote = nIndexSingleQuote >= 0 && nIndexDoubleQuote < 0 ? '"' : '\'';
+      // Append the quoted and escaped URL
+      aSB.append (cQuote).append (getEscapedCSSURL (sURL, cQuote)).append (cQuote);
+    }
+    else
+    {
+      // No quotes needed
+      aSB.append (sURL);
+    }
+    return aSB.append (')').toString ();
   }
 }

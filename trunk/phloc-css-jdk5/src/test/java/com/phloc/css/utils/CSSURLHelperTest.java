@@ -40,6 +40,8 @@ public final class CSSURLHelperTest
     assertEquals ("a.gif", CSSURLHelper.getURLValue ("url('a.gif')"));
     assertEquals ("a.gif", CSSURLHelper.getURLValue ("url(\"a.gif\")"));
     assertEquals ("a.gif?x=y", CSSURLHelper.getURLValue ("url(\"a.gif?x=y\")"));
+    // Test quote 'a' character
+    assertEquals ("a.gif", CSSURLHelper.getURLValue ("url(\"\\a.gif\")"));
     // different quote types
     assertEquals ("\"a.gif?x=y'", CSSURLHelper.getURLValue ("url(\"a.gif?x=y')"));
     // missing trailing ")"
@@ -52,7 +54,27 @@ public final class CSSURLHelperTest
   public void testGetAsCSSURL ()
   {
     assertEquals ("url(a.gif)", CSSURLHelper.getAsCSSURL ("a.gif", false));
+    // By default: single quotes
     assertEquals ("url('a.gif')", CSSURLHelper.getAsCSSURL ("a.gif", true));
+    // Force single quotes
+    assertEquals ("url('\"a.gif\"')", CSSURLHelper.getAsCSSURL ("\"a.gif\"", true));
+    // auto-quote
+    assertEquals ("url('\"a.gif\"')", CSSURLHelper.getAsCSSURL ("\"a.gif\"", false));
+    // Force double quotes
+    assertEquals ("url(\"'a.gif'\")", CSSURLHelper.getAsCSSURL ("'a.gif'", true));
+    // auto-quote
+    assertEquals ("url(\"'a.gif'\")", CSSURLHelper.getAsCSSURL ("'a.gif'", false));
+    // Containing char to be escaped
+    assertEquals ("url('\\'a\".gif\\'')", CSSURLHelper.getAsCSSURL ("'a\".gif'", true));
+    // auto-quote
+    assertEquals ("url('\\'a\".gif\\'')", CSSURLHelper.getAsCSSURL ("'a\".gif'", false));
+    // Containing char to be escaped
+    assertEquals ("url('\"a\\'.gif\"')", CSSURLHelper.getAsCSSURL ("\"a'.gif\"", true));
+    // auto-quote
+    assertEquals ("url('\"a\\'.gif\"')", CSSURLHelper.getAsCSSURL ("\"a'.gif\"", false));
+    // Escaped brackets
+    assertEquals ("url('a().gif')", CSSURLHelper.getAsCSSURL ("a().gif", false));
+
     final SimpleURL aURL = new SimpleURL ("a.gif", new SMap ("x", "y"));
     assertEquals ("url(a.gif?x=y)", CSSURLHelper.getAsCSSURL (aURL, false));
     assertEquals ("url('a.gif?x=y')", CSSURLHelper.getAsCSSURL (aURL, true));

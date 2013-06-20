@@ -113,7 +113,7 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
-  private CSSImportRule _createImportRule (final CSSNode aNode)
+  private CSSImportRule _createImportRule (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.IMPORTRULE);
     final int nChildCount = aNode.jjtGetNumChildren ();
@@ -140,6 +140,7 @@ final class CSSNodeToDomainObject
     if (aImportURI == null)
     {
       // No URI child node present, so the location is printed directly
+      // E.g. @import "abc.css"
       aImportURI = new CSSURI (ParseUtils.extractStringValue (aNode.getText ()));
     }
 
@@ -158,7 +159,7 @@ final class CSSNodeToDomainObject
         }
       }
       else
-        throw new IllegalStateException ("Expected an mediaList node but got " +
+        throw new IllegalStateException ("Expected an MEDIALIST node but got " +
                                          ECSSNodeType.getNodeName (aMediaListNode, m_eVersion));
       ++nCurrentIndex;
     }

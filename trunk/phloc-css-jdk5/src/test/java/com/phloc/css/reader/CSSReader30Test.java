@@ -30,6 +30,7 @@ import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.reader.errorhandler.CollectingCSSParseErrorHandler;
 import com.phloc.css.reader.errorhandler.LoggingCSSParseErrorHandler;
+import com.phloc.css.writer.CSSWriter;
 
 /**
  * Test reading CSS 3.0 stuff
@@ -40,7 +41,7 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
 {
   public CSSReader30Test ()
   {
-    super (ECSSVersion.CSS30, CCharset.CHARSET_UTF_8_OBJ, true);
+    super (ECSSVersion.CSS30, CCharset.CHARSET_UTF_8_OBJ, false);
   }
 
   @Test
@@ -64,13 +65,16 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   }
 
   @Test
-  public void testReadSpecialGood ()
+  public void testReadSpecialGood () throws IOException
   {
     final ECSSVersion eVersion = ECSSVersion.CSS30;
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
     final File aFile = new File ("src/test/resources/testfiles/css30/good/artificial/test-fonts.css");
     final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
     assertNotNull (aCSS);
+
+    final String sCSS = new CSSWriter (eVersion, false).getCSSAsString (aCSS);
+    m_aLogger.info (sCSS);
   }
 
   @Test
