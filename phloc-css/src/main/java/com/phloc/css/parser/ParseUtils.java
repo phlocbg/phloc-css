@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.RegEx;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.regex.RegExHelper;
@@ -34,6 +35,10 @@ import com.phloc.commons.string.StringHelper;
 @Immutable
 public final class ParseUtils
 {
+  // Order of the rules in brackets is important!
+  @RegEx
+  private static final String SPLIT_NUMBER_REGEX = "^([0-9]*\\.[0-9]+|[0-9]+).*$";
+
   private ParseUtils ()
   {}
 
@@ -68,7 +73,8 @@ public final class ParseUtils
 
   /**
    * Remove the leading "url(" and the trailing ")" from an URL CSS value. No
-   * check is performed for the existence of a leading "url("!
+   * check is performed for the existence of a leading "url("! This method
+   * should only be called from within the parser.
    * 
    * @param s
    *        The value to remove the string from.
@@ -87,9 +93,7 @@ public final class ParseUtils
   public static String splitNumber (@Nonnull final StringBuilder aPattern)
   {
     // Find the longest matching number within the pattern
-    // Order of the rules in brackets is important!
-    final String sRegEx = "^([0-9]*\\.[0-9]+|[0-9]+).*$";
-    final Matcher m = RegExHelper.getMatcher (sRegEx, aPattern.toString ());
+    final Matcher m = RegExHelper.getMatcher (SPLIT_NUMBER_REGEX, aPattern.toString ());
     if (m.matches ())
       return m.group (1);
     return "";
