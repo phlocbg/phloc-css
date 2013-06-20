@@ -53,4 +53,13 @@ public final class ParseUtilsTest
     assertEquals ("", _split ("any"));
     assertEquals ("", _split (""));
   }
+
+  @Test
+  public void testUnescapeCSSURL ()
+  {
+    assertEquals ("bla.gif", ParseUtils.unescapeURL ("bla.gif"));
+    assertEquals ("/foo/bla.gif", ParseUtils.unescapeURL ("/foo/bla.gif"));
+    assertEquals ("/foo/bla().gif", ParseUtils.unescapeURL ("/foo/bla\\(\\).gif"));
+    assertEquals ("\\\\server\\foo\\bla.gif", ParseUtils.unescapeURL ("\\\\\\\\server\\\\foo\\\\bla.gif"));
+  }
 }
