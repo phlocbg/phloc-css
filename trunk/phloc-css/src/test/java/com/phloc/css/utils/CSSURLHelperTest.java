@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import com.phloc.commons.url.SMap;
 import com.phloc.commons.url.SimpleURL;
+import com.phloc.css.parser.ParseUtils;
 
 /**
  * Test class for class {@link CSSURLHelper}.
@@ -53,6 +54,20 @@ public final class CSSURLHelperTest
   @Test
   public void testGetAsCSSURL ()
   {
+    for (final String sURL : new String [] { "a.gif",
+                                            "\"a.gif\"",
+                                            "b\\a.gif",
+                                            "\\b\\a\\c.gif",
+                                            "'a.gif'",
+                                            "'a\".gif'",
+                                            "\"a'.gif\"",
+                                            "a().gif",
+                                            "a\\(\\).gif" })
+    {
+      final String sEscaped = CSSURLHelper.getAsCSSURL (sURL, false);
+      assertEquals (sURL, ParseUtils.trimUrl (sEscaped));
+    }
+
     assertEquals ("url(a.gif)", CSSURLHelper.getAsCSSURL ("a.gif", false));
     // By default: single quotes
     assertEquals ("url('a.gif')", CSSURLHelper.getAsCSSURL ("a.gif", true));
@@ -60,6 +75,8 @@ public final class CSSURLHelperTest
     assertEquals ("url('\"a.gif\"')", CSSURLHelper.getAsCSSURL ("\"a.gif\"", true));
     // auto-quote
     assertEquals ("url('\"a.gif\"')", CSSURLHelper.getAsCSSURL ("\"a.gif\"", false));
+    // auto-quote
+    assertEquals ("url('b\\\\a.gif')", CSSURLHelper.getAsCSSURL ("b\\a.gif", false));
     // Force double quotes
     assertEquals ("url(\"'a.gif'\")", CSSURLHelper.getAsCSSURL ("'a.gif'", true));
     // auto-quote
