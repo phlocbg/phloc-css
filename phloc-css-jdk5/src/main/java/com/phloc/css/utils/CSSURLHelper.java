@@ -141,30 +141,20 @@ public final class CSSURLHelper
     if (sURL == null)
       throw new NullPointerException ("URL");
 
-    int nIndex = sURL.indexOf (cQuoteChar);
-    if (nIndex < 0)
+    if (sURL.indexOf (cQuoteChar) < 0 && sURL.indexOf (ParseUtils.URL_ESCAPE_CHAR) < 0)
     {
       // Found nothing to quote
       return sURL;
     }
 
     final StringBuilder aSB = new StringBuilder (sURL.length () * 2);
-    int nPrevIndex = 0;
-    do
+    for (final char c : sURL.toCharArray ())
     {
-      // Append everything before the first quote char
-      aSB.append (sURL, nPrevIndex, nIndex);
-      // Append the escape char itself
-      aSB.append (ParseUtils.URL_ESCAPE_CHAR);
-      // Append the char to be escaped
-      aSB.append (cQuoteChar);
-      // The new position to start searching
-      nPrevIndex = nIndex + 1;
-      // Search the next escaped char
-      nIndex = sURL.indexOf (cQuoteChar, nPrevIndex);
-    } while (nIndex >= 0);
-    // Append the rest
-    aSB.append (sURL.substring (nPrevIndex));
+      // Escape the quote char and the escape char itself
+      if (c == cQuoteChar || c == ParseUtils.URL_ESCAPE_CHAR)
+        aSB.append (ParseUtils.URL_ESCAPE_CHAR);
+      aSB.append (c);
+    }
     return aSB.toString ();
   }
 
