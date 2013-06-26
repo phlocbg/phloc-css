@@ -13,6 +13,8 @@
       <excludeFolder url="file://$MODULE_DIR$/target/buildinfo-maven-plugin" />
       <excludeFolder url="file://$MODULE_DIR$/target/checkout" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/target/javacc-1371660552646" />
+      <excludeFolder url="file://$MODULE_DIR$/target/javacc-1371660566079" />
       <excludeFolder url="file://$MODULE_DIR$/target/surefire-reports" />
       <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
     </content>
