@@ -5,7 +5,7 @@
 
 The maven plugin offered here can be used to compress CSS files at build time.
 
-A detailed API description can be found in http://repo.phloc.com/apidocs/csscompress-maven-plugin/ - please the appropriate version.
+A detailed API description can be found in http://repo.phloc.com/apidocs/csscompress-maven-plugin/ - please choose the appropriate version.
 
 = Basic configuration =
 
@@ -34,7 +34,7 @@ A detailed API description can be found in http://repo.phloc.com/apidocs/csscomp
       <plugin>
         <groupId>com.phloc.maven</groupId>
         <artifactId>csscompress-maven-plugin</artifactId>
-        <version>1.0.13</version>
+        <version>1.0.16</version>
         <executions>
           <execution>
             <goals>
