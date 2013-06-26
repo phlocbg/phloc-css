@@ -91,6 +91,12 @@
     </dependency>
     
     <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-jdk5</artifactId>
+      <version>1.0.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <scope>test</scope>
