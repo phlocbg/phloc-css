@@ -1,5 +1,6 @@
 #summary First steps using phloc-css
 #labels Featured
+<wiki:toc />
 
 = Introduction =
 
@@ -50,7 +51,9 @@ For JDK 1.5 use the following dependency (together with the above repository dec
     </dependency>
 }}}
 
-= Reading a CSS 3.0 file =
+= Example code =
+
+== Reading a CSS 3.0 file ==
 
 {{{
 import java.io.File;
@@ -90,7 +93,7 @@ public final class WikiReadCSS
 }
 }}}
 
-= Writing a CSS 3.0 file =
+== Writing a CSS 3.0 file ==
 
 {{{
 import java.io.File;
@@ -151,7 +154,7 @@ public final class WikiWriteCSS
 }
 }}}
 
-= Creating a @font-face rule from scratch =
+== Creating a @font-face rule from scratch ==
 The following code creates a CSS @font-face rule that looks like this:
 {{{
 @font-face {
@@ -244,7 +247,7 @@ public final class WikiCreateFontFaceRule
 }
 }}}
 
-=Read the CSS content of a HTML style attribute=
+== Read the CSS content of a HTML style attribute ==
 The following examples reads the CSS content of "sStyle" as CSS 3.0 and creates a CSSDeclarationList from it:
 {{{
 import com.phloc.css.ECSSVersion;
@@ -269,7 +272,7 @@ public final class WikiReadFromHtml
 }
 }}}
 
-=Visiting all declarations contained in an HTML style attribute=
+==Visiting all declarations contained in an HTML style attribute==
 Similar to the above example, but visiting all declarations and printing them on stdout. Two different approaches are shown: first all declarations are retrieved via the native API, and second a custom visitor is used to determine all declarations.
 The result of this method looks like this:
 {{{
@@ -334,7 +337,7 @@ public final class WikiVisitFromHtml
 }
 }}}
 
-=Visit all URLs contained in a CSS=
+==Visit all URLs contained in a CSS==
 The following example reads a CSS from a String and than extracts all contained URLs. The output looks like this:
 {{{
 Import: foobar.css - source location reaches from [1/1] up to [1/21]
