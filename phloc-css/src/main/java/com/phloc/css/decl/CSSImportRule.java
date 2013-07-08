@@ -37,7 +37,8 @@ import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single import rule on top level
+ * Represents a single import rule on top level. It consists of a mandatory URI
+ * and an optional list of media queries.
  * 
  * @author Philip Helger
  */
@@ -53,17 +54,30 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
     setLocation (aLocation);
   }
 
+  /**
+   * @return <code>true</code> if this import rule has any specific media
+   *         queries, to which it belongs.
+   */
   public boolean hasMediaQueries ()
   {
     return !m_aMediaQueries.isEmpty ();
   }
 
+  /**
+   * @return The number of contained media queries. Always &ge; 0.
+   */
   @Nonnegative
   public int getMediaQueryCount ()
   {
     return m_aMediaQueries.size ();
   }
 
+  /**
+   * Add a media query at the end of the list.
+   * 
+   * @param aMediaQuery
+   *        The media query to be added. May not be <code>null</code>.
+   */
   public void addMediaQuery (@Nonnull final CSSMediaQuery aMediaQuery)
   {
     if (aMediaQuery == null)
@@ -71,6 +85,14 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
     m_aMediaQueries.add (aMediaQuery);
   }
 
+  /**
+   * Add a media query at the specified index of the list.
+   * 
+   * @param nIndex
+   *        The index where to add the media query. Must be &ge; 0.
+   * @param aMediaQuery
+   *        The media query to be added. May not be <code>null</code>.
+   */
   public void addMediaQuery (@Nonnegative final int nIndex, @Nonnull final CSSMediaQuery aMediaQuery)
   {
     if (aMediaQuery == null)
@@ -78,14 +100,28 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
     m_aMediaQueries.add (nIndex, aMediaQuery);
   }
 
+  /**
+   * Remove the specified media query.
+   * 
+   * @param aMediaQuery
+   *        The media query to be removed. May be <code>null</code>.
+   * @return {@link EChange#CHANGED} if removal was successful.
+   */
   @Nonnull
   public EChange removeMediaQuery (@Nullable final CSSMediaQuery aMediaQuery)
   {
     return EChange.valueOf (m_aMediaQueries.remove (aMediaQuery));
   }
 
+  /**
+   * Remove the media query at the specified index.
+   * 
+   * @param nMediumIndex
+   *        The index of the media query to be removed.
+   * @return {@link EChange#CHANGED} if removal was successful.
+   */
   @Nonnull
-  public EChange removeMediaQuery (@Nonnegative final int nMediumIndex)
+  public EChange removeMediaQuery (final int nMediumIndex)
   {
     if (nMediumIndex < 0 || nMediumIndex >= m_aMediaQueries.size ())
       return EChange.UNCHANGED;
@@ -93,6 +129,24 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
     return EChange.CHANGED;
   }
 
+  /**
+   * Remove all contained media queries.
+   * 
+   * @return {@link EChange#CHANGED} if at least one media query was contained.
+   */
+  @Nonnull
+  public EChange removeAllMediaQueries ()
+  {
+    if (m_aMediaQueries.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aMediaQueries.clear ();
+    return EChange.CHANGED;
+  }
+
+  /**
+   * @return A list with all contained media queries. Never <code>null</code>
+   *         and always a copy of the underlying list.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSMediaQuery> getAllMediaQueries ()
@@ -101,7 +155,7 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
   }
 
   /**
-   * @return The URL object of the CSS file to import.
+   * @return The URL object of the CSS file to import. Never <code>null</code>.
    */
   @Nonnull
   public CSSURI getLocation ()
@@ -110,14 +164,22 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
   }
 
   /**
-   * @return The URL of the CSS file to import.
+   * @return The URL of the CSS file to import. Never <code>null</code>. This is
+   *         a shortcut for <code>getLocation().getURI()</code>
    */
   @Nonnull
+  @Nonempty
   public String getLocationString ()
   {
     return m_aLocation.getURI ();
   }
 
+  /**
+   * Set the URI of the file to be imported.
+   * 
+   * @param aLocation
+   *        The location to use. May not be <code>null</code>.
+   */
   public void setLocation (@Nonnull final CSSURI aLocation)
   {
     if (aLocation == null)
@@ -125,6 +187,12 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
     m_aLocation = aLocation;
   }
 
+  /**
+   * Set the URI of the file to be imported.
+   * 
+   * @param sLocationURI
+   *        The location URI to use. May not be <code>null</code>.
+   */
   public void setLocationString (@Nonnull @Nonempty final String sLocationURI)
   {
     m_aLocation.setURI (sLocationURI);
