@@ -20,6 +20,11 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2013-07-08" category="api" action="add">
+    <change>
+      <text locale="en">Added method CSSImportRule.removeAllMediaQueries</text>
+    </change>
+  </entry>
   <entry date="2013-06-25" category="tech" action="fix">
     <change>
       <text locale="en">Fixed issue that the '\' char was not escaped in CSS URLs</text>
