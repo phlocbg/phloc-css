@@ -337,8 +337,9 @@ public final class WikiVisitFromHtml
 =Visit all URLs contained in a CSS=
 The following example reads a CSS from a String and than extracts all contained URLs. The output looks like this:
 {{{
-background - references: a.gif - source location reaches from [1/22] up to [1/31]
-background-image - references: /my/folder/b.gif - source location reaches from [2/25] up to [2/47]
+Import: foobar.css - source location reaches from [1/1] up to [1/21]
+background - references: a.gif - source location reaches from [2/22] up to [2/31]
+background-image - references: /my/folder/b.gif - source location reaches from [3/25] up to [3/47]
 }}}
 And here is the code:
 {{{
@@ -346,9 +347,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.charset.CCharset;
+import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpressionMemberTermURI;
+import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSTopLevelRule;
 import com.phloc.css.decl.visit.CSSVisitor;
@@ -363,13 +366,38 @@ import com.phloc.css.reader.CSSReader;
  */
 public final class WikiVisitUrls
 {
+  public static String getSourceLocationString (@Nonnull final CSSSourceLocation aSourceLoc)
+  {
+    return "source location reaches from [" +
+           aSourceLoc.getFirstTokenBeginLineNumber () +
+           "/" +
+           aSourceLoc.getFirstTokenBeginColumnNumber () +
+           "] up to [" +
+           aSourceLoc.getLastTokenEndLineNumber () +
+           "/" +
+           aSourceLoc.getLastTokenEndColumnNumber () +
+           "]";
+  }
+
   public void readFromStyleAttributeWithAPI ()
   {
-    final String sStyle = "div{background:fixed url(a.gif) !important;}\n"
+    final String sStyle = "@import 'foobar.css';\n"
+                          + "div{background:fixed url(a.gif) !important;}\n"
                           + "span { background-image:url('/my/folder/b.gif');}";
     final CascadingStyleSheet aCSS = CSSReader.readFromString (sStyle, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     CSSVisitor.visitCSSUrl (aCSS, new DefaultCSSUrlVisitor ()
     {
+      // Called for each import
+      @Override
+      public void onImport (@Nonnull final CSSImportRule aImportRule)
+      {
+        System.out.println ("Import: " +
+                            aImportRule.getLocationString () +
+                            " - " +
+                            getSourceLocationString (aImportRule.getSourceLocation ()));
+      }
+
+      // Call for URLs outside of URLs
       @Override
       public void onUrlDeclaration (@Nullable final ICSSTopLevelRule aTopLevelRule,
                                     @Nonnull final CSSDeclaration aDeclaration,
@@ -378,15 +406,8 @@ public final class WikiVisitUrls
         System.out.println (aDeclaration.getProperty () +
                             " - references: " +
                             aURITerm.getURIString () +
-                            " - source location reaches from [" +
-                            aURITerm.getSourceLocation ().getFirstTokenBeginLineNumber () +
-                            "/" +
-                            aURITerm.getSourceLocation ().getFirstTokenBeginColumnNumber () +
-                            "] up to [" +
-                            aURITerm.getSourceLocation ().getLastTokenEndLineNumber () +
-                            "/" +
-                            aURITerm.getSourceLocation ().getLastTokenEndColumnNumber () +
-                            "]");
+                            " - " +
+                            getSourceLocationString (aURITerm.getSourceLocation ()));
       }
     });
   }
