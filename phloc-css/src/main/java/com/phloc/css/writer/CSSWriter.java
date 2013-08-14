@@ -224,7 +224,7 @@ public final class CSSWriter
       // Charset? Must be the first element before the import
       if (StringHelper.hasText (m_sContentCharset))
       {
-        aWriter.write ("@charset \"" + m_sContentCharset + "\"\n");
+        aWriter.write ("@charset \"" + m_sContentCharset + "\";");
         if (!bOptimizedOutput)
           aWriter.write ('\n');
       }
