@@ -21,9 +21,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.charset.CCharset;
+import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpressionMemberTermURI;
+import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSTopLevelRule;
 import com.phloc.css.decl.visit.CSSVisitor;
@@ -38,13 +40,38 @@ import com.phloc.css.reader.CSSReader;
  */
 public final class WikiVisitUrls
 {
+  public static String getSourceLocationString (@Nonnull final CSSSourceLocation aSourceLoc)
+  {
+    return "source location reaches from [" +
+           aSourceLoc.getFirstTokenBeginLineNumber () +
+           "/" +
+           aSourceLoc.getFirstTokenBeginColumnNumber () +
+           "] up to [" +
+           aSourceLoc.getLastTokenEndLineNumber () +
+           "/" +
+           aSourceLoc.getLastTokenEndColumnNumber () +
+           "]";
+  }
+
   public void readFromStyleAttributeWithAPI ()
   {
-    final String sStyle = "div{background:fixed url(a.gif) !important;}\n"
+    final String sStyle = "@import 'foobar.css';\n"
+                          + "div{background:fixed url(a.gif) !important;}\n"
                           + "span { background-image:url('/my/folder/b.gif');}";
     final CascadingStyleSheet aCSS = CSSReader.readFromString (sStyle, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     CSSVisitor.visitCSSUrl (aCSS, new DefaultCSSUrlVisitor ()
     {
+      // Called for each import
+      @Override
+      public void onImport (@Nonnull final CSSImportRule aImportRule)
+      {
+        System.out.println ("Import: " +
+                            aImportRule.getLocationString () +
+                            " - " +
+                            getSourceLocationString (aImportRule.getSourceLocation ()));
+      }
+
+      // Call for URLs outside of URLs
       @Override
       public void onUrlDeclaration (@Nullable final ICSSTopLevelRule aTopLevelRule,
                                     @Nonnull final CSSDeclaration aDeclaration,
@@ -53,15 +80,8 @@ public final class WikiVisitUrls
         System.out.println (aDeclaration.getProperty () +
                             " - references: " +
                             aURITerm.getURIString () +
-                            " - source location reaches from [" +
-                            aURITerm.getSourceLocation ().getFirstTokenBeginLineNumber () +
-                            "/" +
-                            aURITerm.getSourceLocation ().getFirstTokenBeginColumnNumber () +
-                            "] up to [" +
-                            aURITerm.getSourceLocation ().getLastTokenEndLineNumber () +
-                            "/" +
-                            aURITerm.getSourceLocation ().getLastTokenEndColumnNumber () +
-                            "]");
+                            " - " +
+                            getSourceLocationString (aURITerm.getSourceLocation ()));
       }
     });
   }
