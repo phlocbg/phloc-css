@@ -2,6 +2,8 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>8/14/13</td><td colspan="4">_Release *3.5.6*_</td></tr>
+<tr><td>8/14/13</td><td>fix</td><td>tech</td><td></td><td>Fixed the missing semicolon when writing the @charset rule</td></tr>
 <tr><td>7/8/13</td><td>add</td><td>api</td><td></td><td>Added method CSSImportRule.removeAllMediaQueries</td></tr>
 <tr><td>6/25/13</td><td>fix</td><td>tech</td><td></td><td>Fixed issue that the '\' char was not escaped in CSS URLs</td></tr>
 <tr border="1"><td>6/24/13</td><td colspan="4">_Release *3.5.5*_</td></tr>

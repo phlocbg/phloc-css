@@ -104,7 +104,7 @@ public final class CSSWriterExtendedTest
         new CSSWriter (ECSSVersion.CSS21).writeCSS (aCSS, aSW);
 
         // This should throw an error
-        fail (aFile.toString () + ": " + aSW.getAsString ());
+        fail (aFile.toString () + " should have thrown an exception but got: " + aSW.getAsString ());
       }
       catch (final IllegalStateException ex)
       {}
