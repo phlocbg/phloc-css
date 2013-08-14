@@ -1,0 +1,15 @@
+#summary Change log of csscompress-maven-plugin
+= Change log =
+<wiki:comment>This content is generated. Do not modify!</wiki:comment>
+<table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>8/14/13</td><td colspan="4">_Release *1.0.17*_</td></tr>
+<tr><td>8/14/13</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-css phloc-css] 3.5.6</td></tr>
+<tr border="1"><td>6/24/13</td><td colspan="4">_Release *1.0.16*_</td></tr>
+<tr><td>6/24/13</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-css phloc-css] 3.5.5</td></tr>
+<tr border="1"><td>6/19/13</td><td colspan="4">_Release *1.0.15*_</td></tr>
+<tr><td>6/19/13</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-css phloc-css] 3.5.4</td></tr>
+<tr border="1"><td>5/17/13</td><td colspan="4">_Release *1.0.14*_</td></tr>
+<tr><td>5/17/13</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-css phloc-css] 3.5.2</td></tr>
+<tr border="1"><td>5/3/13</td><td colspan="4">_Release *1.0.13*_</td></tr>
+<tr><td>5/3/13</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-css phloc-css] 3.5.0</td></tr>
+</tbody></table>
