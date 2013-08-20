@@ -111,6 +111,9 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     m_eVersion = eVersion;
   }
 
+  /**
+   * @return The name of the unit as it should be used in CSS. E.g. "px"
+   */
   @Nonnull
   @Nonempty
   public String getName ()
@@ -501,5 +504,15 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public static String dppx (final double dValue)
   {
     return DPPX.format (dValue);
+  }
+
+  /**
+   * @return "0" without a unit
+   */
+  @Nonnull
+  @Nonempty
+  public static String zero ()
+  {
+    return "0";
   }
 }
