@@ -17,10 +17,11 @@
  */
 package com.phloc.css.utils;
 
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 /**
- * Provides data URL handling sanity methods.
+ * Provides data URL handling sanity methods (RFC 2397).
  * 
  * @author Philip Helger
  */
@@ -32,4 +33,22 @@ public final class CSSDataURLHelper
 
   private CSSDataURLHelper ()
   {}
+
+  /**
+   * Check if the passed URL is a data URL. It is checked, whether the passed
+   * URL starts with {@value #PREFIX_DATA_URL} (after trimming) and has a comma
+   * (',') inside.
+   * 
+   * @param sURL
+   *        The URL to check. May be <code>null</code>.
+   * @return <code>true</code> if the passed URL is a data URL,
+   *         <code>false</code> if not.
+   */
+  public static boolean isDataURL (@Nullable final String sURL)
+  {
+    if (sURL == null)
+      return false;
+    final String sRealURL = sURL.trim ();
+    return sRealURL.startsWith (PREFIX_DATA_URL) && sRealURL.indexOf (',') > 0;
+  }
 }
