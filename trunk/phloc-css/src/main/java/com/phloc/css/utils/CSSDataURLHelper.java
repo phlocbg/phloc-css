@@ -34,13 +34,15 @@ public final class CSSDataURLHelper
   /** The default prefix for data URLs */
   public static final String PREFIX_DATA_URL = "data:";
 
+  /** The marker for Base64 encoding */
+  public static final String BASE64_MARKER = ";base64";
+
   private CSSDataURLHelper ()
   {}
 
   /**
    * Check if the passed URL is a data URL. It is checked, whether the passed
-   * URL starts with {@value #PREFIX_DATA_URL} (after trimming) and has a comma
-   * (',') inside.
+   * URL starts with {@value #PREFIX_DATA_URL} (after trimming).
    * 
    * @param sURL
    *        The URL to check. May be <code>null</code>.
@@ -52,6 +54,6 @@ public final class CSSDataURLHelper
     if (sURL == null)
       return false;
     final String sRealURL = sURL.trim ();
-    return sRealURL.startsWith (PREFIX_DATA_URL) && sRealURL.indexOf (',') > 0;
+    return sRealURL.startsWith (PREFIX_DATA_URL);
   }
 }
