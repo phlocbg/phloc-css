@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.WorkInProgress;
 import com.phloc.commons.mime.EMimeQuoting;
 import com.phloc.commons.mime.MimeType;
 import com.phloc.commons.mime.MimeTypeParser;
@@ -17,6 +18,7 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author Philip Helger
  */
+@WorkInProgress
 public class CSSDataURL implements Serializable
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSDataURL.class);
