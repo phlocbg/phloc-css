@@ -39,7 +39,7 @@ public final class CSSDataURLHelperTest
                                                         "data:text/xml,<root>code</root>",
                                                         "data:text/xml;param1=abc,<root>code</root>",
                                                         "data:text/xml;param1=abc;param2=ab%2bcd,<root>code</root>",
-                                                        "data: text / xml ; param1 = abc ; param2 = ab%2bcd ,<root>code</root>" };
+                                                        "data: text / xml ; param1 = abc ; param2 = ab%2ccd ,<root>code</root>" };
 
   @Test
   public void testIsDataURL ()

@@ -79,7 +79,7 @@ public class CSSDataURL implements Serializable
     }
 
     final String sMimeType = sRest.substring (0, nMIMETypeEnd).trim ();
-    final MimeType aMimeType = MimeTypeParser.createFromString (sMimeType, EMimeQuoting.URL_ESCAPE);
+    final MimeType aMimeType = MimeTypeParser.parseMimeType (sMimeType, EMimeQuoting.URL_ESCAPE);
     System.out.println ("'" + sMimeType + "' ==> " + aMimeType);
 
     final CSSDataURL ret = new CSSDataURL ();
