@@ -33,11 +33,14 @@ import com.phloc.commons.string.ToStringGenerator;
 @WorkInProgress
 public class CSSDataURL implements Serializable
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSDataURL.class);
-  private static final Charset DEFAULT_CHARSET = CCharset.CHARSET_US_ASCII_OBJ;
-  /** Default MIME type: text/plain;charset=US-ASCII */
-  private static final MimeType DEFAULT_MIME_TYPE = new MimeType (CMimeType.TEXT_PLAIN).addParameter (CMimeType.PARAMETER_NAME_CHARSET,
+  /** The default charset to be used for Data URLs: US-ASCII */
+  public static final Charset DEFAULT_CHARSET = CCharset.CHARSET_US_ASCII_OBJ;
+
+  /** The default MIME type for Data URLs: text/plain;charset=US-ASCII */
+  public static final IMimeType DEFAULT_MIME_TYPE = new MimeType (CMimeType.TEXT_PLAIN).addParameter (CMimeType.PARAMETER_NAME_CHARSET,
                                                                                                       DEFAULT_CHARSET.name ());
+
+  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSDataURL.class);
 
   private final IMimeType m_aMimeType;
   private final boolean m_bBase64Encoded;
@@ -63,6 +66,10 @@ public class CSSDataURL implements Serializable
     m_aContent = ArrayHelper.getCopy (aContent);
   }
 
+  /**
+   * @return The MIME type of the data URL. If none was specified, than the
+   *         default
+   */
   @Nonnull
   public IMimeType getMimeType ()
   {
@@ -176,7 +183,7 @@ public class CSSDataURL implements Serializable
     }
 
     String sMimeType = nMIMETypeEnd < 0 ? null : sRest.substring (0, nMIMETypeEnd).trim ();
-    MimeType aMimeType;
+    IMimeType aMimeType;
     Charset aCharset = null;
     if (StringHelper.hasNoText (sMimeType))
     {
@@ -202,6 +209,7 @@ public class CSSDataURL implements Serializable
         return null;
       }
 
+      // Check if a "charset" MIME type parameter is present
       final MimeTypeParameter aCharsetParam = aMimeType.getParameterWithName (CMimeType.PARAMETER_NAME_CHARSET);
       if (aCharsetParam != null)
       {
@@ -225,12 +233,13 @@ public class CSSDataURL implements Serializable
         aCharset = DEFAULT_CHARSET;
     }
 
-    // Get the main content string
+    // Get the main content data
     final String sContent = nIndexComma < 0 ? "" : sRest.substring (nIndexComma + 1).trim ();
     byte [] aContent = CharsetManager.getAsBytes (sContent, aCharset);
+
     if (bBase64EncodingUsed)
     {
-      // Decode Base64 value
+      // Base64 decode the content data
       aContent = Base64Helper.safeDecode (aContent);
       if (aContent == null)
       {
