@@ -20,12 +20,15 @@ package com.phloc.css.utils;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.WorkInProgress;
+
 /**
  * Provides data URL handling sanity methods (RFC 2397).
  * 
  * @author Philip Helger
  */
 @Immutable
+@WorkInProgress
 public final class CSSDataURLHelper
 {
   /** The default prefix for data URLs */
