@@ -99,7 +99,7 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
    *        The String representation of the content. It must match the byte
    *        array in the specified charset. If this parameter is
    *        <code>null</code> than the String content representation is lazily
-   *        created in {@link #getStringContent()}.
+   *        created in {@link #getContentAsString()}.
    */
   public CSSDataURL (@Nonnull final IMimeType aMimeType,
                      final boolean bBase64Encoded,
@@ -222,7 +222,7 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
    *         object. Never <code>null</code>.
    */
   @Nonnull
-  public String getStringContent ()
+  public String getContentAsString ()
   {
     if (m_sContent == null)
       m_sContent = CharsetManager.getAsString (m_aContent, m_aCharset);
@@ -238,7 +238,7 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
    *         Never <code>null</code>.
    */
   @Nonnull
-  public String getStringContent (@Nonnull final Charset aCharset)
+  public String getContentAsString (@Nonnull final Charset aCharset)
   {
     return CharsetManager.getAsString (m_aContent, aCharset);
   }
@@ -307,7 +307,7 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
       else
       {
         // Append String as is
-        aSB.append (getStringContent ());
+        aSB.append (getContentAsString ());
       }
     }
     return aSB.toString ();
