@@ -107,20 +107,20 @@ public final class CSSDataURLHelperTest
     for (final String sValid : VALID_PLAIN)
     {
       assertTrue (CSSDataURLHelper.isDataURL (sValid));
-      final CSSDataURL aURL = CSSDataURL.parseDataURL (sValid);
+      final CSSDataURL aURL = CSSDataURLHelper.parseDataURL (sValid);
       assertNotNull ("Failed to parse: " + sValid, aURL);
       assertFalse ("Should not be Base64: " + sValid, aURL.isBase64Encoded ());
     }
     for (final String sValid : VALID_BASE64)
     {
       assertTrue (CSSDataURLHelper.isDataURL (sValid));
-      final CSSDataURL aURL = CSSDataURL.parseDataURL (sValid);
+      final CSSDataURL aURL = CSSDataURLHelper.parseDataURL (sValid);
       assertNotNull ("Failed to parse: " + sValid, aURL);
       assertTrue ("Should be Base64: " + sValid, aURL.isBase64Encoded ());
     }
     for (final String sInvalid : INVALID)
     {
-      final CSSDataURL aURL = CSSDataURL.parseDataURL (sInvalid);
+      final CSSDataURL aURL = CSSDataURLHelper.parseDataURL (sInvalid);
       assertNull ("Should not parse: " + sInvalid, aURL);
     }
   }
