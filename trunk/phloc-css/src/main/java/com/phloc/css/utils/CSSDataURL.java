@@ -14,9 +14,13 @@ import org.omg.CORBA_2_3.portable.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.IHasStringRepresentation;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.base64.Base64;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.equals.EqualsUtils;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.mime.IMimeType;
 import com.phloc.commons.mime.MimeType;
@@ -29,7 +33,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class CSSDataURL implements Serializable
+public class CSSDataURL implements IHasStringRepresentation, Serializable
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSDataURL.class);
 
@@ -112,8 +116,8 @@ public class CSSDataURL implements Serializable
 
     // Check if a charset is contained in the MIME type and if it matches the
     // provided charset
-    final String sMimeTypeCharset = MimeTypeUtils.getCharsetNameFromMimeType (aMimeType);
-    if (sMimeTypeCharset == null)
+    final Charset aMimeTypeCharset = MimeTypeUtils.getCharsetFromMimeType (aMimeType);
+    if (aMimeTypeCharset == null)
     {
       // No charset found in MIME type
       if (!aCharset.equals (CSSDataURLHelper.DEFAULT_CHARSET))
@@ -131,11 +135,11 @@ public class CSSDataURL implements Serializable
     else
     {
       // MIME type has a charset - check if it matches the passed one
-      if (!sMimeTypeCharset.equals (aCharset.name ()))
+      if (!aMimeTypeCharset.equals (aCharset))
         throw new IllegalArgumentException ("The provided charset '" +
                                             aCharset.name () +
                                             "' differs from the charset in the MIME type: '" +
-                                            sMimeTypeCharset +
+                                            aMimeTypeCharset.name () +
                                             "'");
       m_aMimeType = aMimeType;
     }
@@ -237,6 +241,100 @@ public class CSSDataURL implements Serializable
   public String getStringContent (@Nonnull final Charset aCharset)
   {
     return CharsetManager.getAsString (m_aContent, aCharset);
+  }
+
+  /**
+   * @return The complete representation of the data URL, starting with "data:".
+   *         All data is emitted, even if it is the default value.
+   */
+  @Nonnull
+  public String getAsString ()
+  {
+    // Return the non-optimized version
+    return getAsString (false);
+  }
+
+  /**
+   * @return The complete representation of the data URL, starting with "data:".
+   *         All data is emitted, even if it is the default value.
+   */
+  @Nonnull
+  public String getAsString (final boolean bOptimizedVersion)
+  {
+    final StringBuilder aSB = new StringBuilder (CSSDataURLHelper.PREFIX_DATA_URL);
+
+    if (bOptimizedVersion)
+    {
+      // Do not emit the default, if it is the optimized version
+      if (!m_aMimeType.equals (CSSDataURLHelper.DEFAULT_MIME_TYPE))
+        if (m_aMimeType.getAsStringWithoutParameters ()
+                       .equals (CSSDataURLHelper.DEFAULT_MIME_TYPE.getAsStringWithoutParameters ()))
+        {
+          // Emit only the parameters
+          aSB.append (m_aMimeType.getParametersAsString (CSSDataURLHelper.MIME_QUOTING));
+        }
+        else
+        {
+          // Non-default MIME type
+          aSB.append (m_aMimeType.getAsString (CSSDataURLHelper.MIME_QUOTING));
+        }
+    }
+    else
+    {
+      // Use URL escaping to quote MIME type parameter values!
+      aSB.append (m_aMimeType.getAsString (CSSDataURLHelper.MIME_QUOTING));
+    }
+
+    // Base64 marker
+    if (m_bBase64Encoded)
+    {
+      // Avoid the ";base64" if the content is empty
+      if (m_aContent.length > 0 || !bOptimizedVersion)
+        aSB.append (CSSDataURLHelper.BASE64_MARKER);
+    }
+
+    // Start content
+    aSB.append (CSSDataURLHelper.SEPARATOR_CONTENT);
+    if (m_aContent.length > 0)
+    {
+      if (m_bBase64Encoded)
+      {
+        // Add Base64 encoded String
+        final byte [] aEncoded = Base64.encodeBytesToBytes (m_aContent);
+        // Print the string in the specified charset
+        aSB.append (CharsetManager.getAsString (aEncoded, m_aCharset));
+      }
+      else
+      {
+        // Append String as is
+        aSB.append (getStringContent ());
+      }
+    }
+    return aSB.toString ();
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final CSSDataURL rhs = (CSSDataURL) o;
+    return m_aMimeType.equals (rhs.m_aMimeType) &&
+           m_bBase64Encoded == rhs.m_bBase64Encoded &&
+           EqualsUtils.equals (m_aContent, rhs.m_aContent) &&
+           m_aCharset.equals (rhs.m_aCharset);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_aMimeType)
+                                       .append (m_bBase64Encoded)
+                                       .append (m_aContent)
+                                       .append (m_aCharset)
+                                       .getHashCode ();
   }
 
   @Override

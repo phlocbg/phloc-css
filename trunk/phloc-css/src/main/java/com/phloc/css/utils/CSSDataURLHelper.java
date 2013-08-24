@@ -57,6 +57,12 @@ public final class CSSDataURLHelper
   /** The marker for Base64 encoding */
   public static final String BASE64_MARKER = ";base64";
 
+  /** The separator that starts the content */
+  public static final char SEPARATOR_CONTENT = ',';
+
+  /** Data URLs should use the URL code to quote values! */
+  public static final EMimeQuoting MIME_QUOTING = EMimeQuoting.URL_ESCAPE;
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSDataURLHelper.class);
 
   private CSSDataURLHelper ()
@@ -109,7 +115,7 @@ public final class CSSDataURLHelper
     }
 
     // comma is a special character and must be quoted in MIME type parameters
-    final int nIndexComma = sRest.indexOf (',');
+    final int nIndexComma = sRest.indexOf (SEPARATOR_CONTENT);
     int nIndexBase64 = sRest.indexOf (CSSDataURLHelper.BASE64_MARKER);
     boolean bBase64EncodingUsed = false;
 

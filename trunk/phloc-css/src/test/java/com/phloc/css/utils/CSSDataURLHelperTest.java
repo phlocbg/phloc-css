@@ -17,12 +17,15 @@
  */
 package com.phloc.css.utils;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import com.phloc.commons.mock.PhlocTestUtils;
 
 /**
  * Test class for class {@link CSSDataURLHelper}.<br>
@@ -48,10 +51,10 @@ public final class CSSDataURLHelperTest
                                                               "data:text/xml;base64=true,<root>code</root>",
                                                               "data:text/xml;param1=abc,<root>code</root>",
                                                               "data:text/xml;param1=abc;base64=true,<root>code</root>",
-                                                              "data:text/xml;param1=abc;param2=ab%2bcd,<root>code</root>",
-                                                              "data:text/xml;param1=abc;param2=ab%2bcd;base64=true,<root>code</root>",
-                                                              "data: text / xml ; param1 = abc ; param2 = ab%2ccd ,<root>code</root>",
-                                                              "data: text / xml ; param1 = abc ; param2 = ab%2ccd ;base64=true ,<root>code</root>",
+                                                              "data:text/xml;param1=abc;param2=ab%20cd,<root>code</root>",
+                                                              "data:text/xml;param1=abc;param2=ab%20cd;base64=true,<root>code</root>",
+                                                              "data: text / xml ; param1 = abc ; param2 = ab%20cd ,<root>code</root>",
+                                                              "data: text / xml ; param1 = abc ; param2 = ab%20cd ;base64=true ,<root>code</root>",
                                                               "data:text/html;charset=utf-8,%3C%21DOCTYPE%20html%3E%0D%0A%3Cht'+\r\n"
                                                                   + "  'ml%20lang%3D%22en%22%3E%0D%0A%3Chead%3E%3Ctitle%3EEmbedded%20Window%3C%2F'+\r\n"
                                                                   + "  'title%3E%3C%2Fhead%3E%0D%0A%3Cbody%3E%3Ch1%3E42%3C%2Fh1%3E%3C%2Fbody%3E%0'+\r\n"
@@ -75,8 +78,8 @@ public final class CSSDataURLHelperTest
                                                                "data:text/xml;base64=true;base64,VGhpcyBpcyBhIHRlc3QK",
                                                                "data:text/xml;param1=abc;base64,VGhpcyBpcyBhIHRlc3QK",
                                                                "data:text/xml;param1=abc;base64=true;base64,VGhpcyBpcyBhIHRlc3QK",
-                                                               "data:text/xml;param1=abc;param2=ab%2bcd;base64,VGhpcyBpcyBhIHRlc3QK",
-                                                               "data:text/xml;param1=abc;param2=ab%2bcd;base64=true;base64,VGhpcyBpcyBhIHRlc3QK",
+                                                               "data:text/xml;param1=abc;param2=ab%20cd;base64,VGhpcyBpcyBhIHRlc3QK",
+                                                               "data:text/xml;param1=abc;param2=ab%20cd;base64=true;base64,VGhpcyBpcyBhIHRlc3QK",
                                                                "data: text / xml ; param1 = abc ; param2 = ab%2ccd ;base64 ,VGhpcyBpcyBhIHRlc3QK",
                                                                "data: text / xml ; param1 = abc ; param2 = ab%2ccd ;base64=true;base64 ,VGhpcyBpcyBhIHRlc3QK",
                                                                "data:image/png;base64,\r\n"
@@ -105,19 +108,61 @@ public final class CSSDataURLHelperTest
     assertTrue (CSSDataURLHelper.isDataURL (" data:any"));
 
     for (final String sValid : VALID_PLAIN)
-    {
       assertTrue (CSSDataURLHelper.isDataURL (sValid));
+
+    for (final String sValid : VALID_BASE64)
+      assertTrue (CSSDataURLHelper.isDataURL (sValid));
+  }
+
+  @Test
+  public void testParseDataURL ()
+  {
+    for (final String sValid : VALID_PLAIN)
+    {
       final CSSDataURL aURL = CSSDataURLHelper.parseDataURL (sValid);
       assertNotNull ("Failed to parse: " + sValid, aURL);
       assertFalse ("Should not be Base64: " + sValid, aURL.isBase64Encoded ());
+
+      // Convert to string and parse again
+      String sAsString = aURL.getAsString ();
+      assertNotNull (sAsString);
+      CSSDataURL aURL2 = CSSDataURLHelper.parseDataURL (sAsString);
+      assertNotNull ("Failed to parse: " + sAsString, aURL2);
+
+      assertEquals (aURL, aURL2);
+      PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aURL, aURL2);
+
+      // Convert to optimized string and parse again
+      sAsString = aURL.getAsString (true);
+      assertNotNull (sAsString);
+      aURL2 = CSSDataURLHelper.parseDataURL (sAsString);
+      assertNotNull ("Failed to parse: " + sAsString, aURL2);
+      // -> not necessarily equals because of optional Base64 marker
     }
+
     for (final String sValid : VALID_BASE64)
     {
-      assertTrue (CSSDataURLHelper.isDataURL (sValid));
       final CSSDataURL aURL = CSSDataURLHelper.parseDataURL (sValid);
       assertNotNull ("Failed to parse: " + sValid, aURL);
       assertTrue ("Should be Base64: " + sValid, aURL.isBase64Encoded ());
+
+      // Convert to string and parse again
+      String sAsString = aURL.getAsString ();
+      assertNotNull (sAsString);
+      CSSDataURL aURL2 = CSSDataURLHelper.parseDataURL (sAsString);
+      assertNotNull ("Failed to parse: " + sAsString, aURL2);
+
+      assertEquals (aURL, aURL2);
+      PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aURL, aURL2);
+
+      // Convert to optimized string and parse again
+      sAsString = aURL.getAsString (true);
+      assertNotNull (sAsString);
+      aURL2 = CSSDataURLHelper.parseDataURL (sAsString);
+      assertNotNull ("Failed to parse: " + sAsString, aURL2);
+      // -> not necessarily equals because of optional Base64 marker
     }
+
     for (final String sInvalid : INVALID)
     {
       final CSSDataURL aURL = CSSDataURLHelper.parseDataURL (sInvalid);
