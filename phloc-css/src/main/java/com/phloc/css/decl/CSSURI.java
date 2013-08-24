@@ -30,6 +30,8 @@ import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
+import com.phloc.css.utils.CSSDataURL;
+import com.phloc.css.utils.CSSDataURLHelper;
 import com.phloc.css.utils.CSSURLHelper;
 
 /**
@@ -49,7 +51,7 @@ public final class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
   }
 
   /**
-   * @return The URI string
+   * @return The URI string (without the leading "url(" and the closing ")")
    */
   @Nonnull
   @Nonempty
@@ -58,13 +60,44 @@ public final class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
     return m_sURI;
   }
 
+  /**
+   * Set the URI string of this object. This may either be a regular URI or a
+   * data URL string (starting with "data:"). The passed string may not start
+   * with the prefix "url(" and end with ")".
+   * 
+   * @param sURI
+   *        The URI to be set. May neither be <code>null</code> nor empty.
+   */
   public void setURI (@Nonnull @Nonempty final String sURI)
   {
     if (StringHelper.hasNoText (sURI))
       throw new IllegalArgumentException ("URI may not be empty");
     if (CSSURLHelper.isURLValue (sURI))
-      throw new IllegalArgumentException ("Only the URI and not the CSS URI value must be passed!");
+      throw new IllegalArgumentException ("Only the URI and not the CSS-URI value must be passed!");
     m_sURI = sURI;
+  }
+
+  /**
+   * Check if this URI is a data URL (starting with "data:")
+   * 
+   * @return <code>true</code> if the URI is a data URL, <code>false</code>
+   *         otherwise.
+   */
+  public boolean isDataURL ()
+  {
+    return CSSDataURLHelper.isDataURL (m_sURI);
+  }
+
+  /**
+   * Try to convert the contained URI to a Data URL object.
+   * 
+   * @return <code>null</code> if conversion to a data URL failed, the
+   *         {@link CSSDataURL} object otherwise.
+   */
+  @Nullable
+  public CSSDataURL getAsDataURL ()
+  {
+    return CSSDataURLHelper.parseDataURL (m_sURI);
   }
 
   @Nonnull
