@@ -1,6 +1,8 @@
 package com.phloc.css.utils;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 
@@ -28,7 +30,9 @@ import com.phloc.commons.mime.MimeTypeUtils;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * This class represents a single CSS data URL (RFC 2397)
+ * This class represents a single CSS data URL (RFC 2397).<br>
+ * Note: manual serialization is required, because {@link Charset} is not
+ * Serializable.
  * 
  * @author Philip Helger
  */
@@ -37,12 +41,20 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSDataURL.class);
 
-  private final IMimeType m_aMimeType;
-  private final boolean m_bBase64Encoded;
-  private final byte [] m_aContent;
-  private final Charset m_aCharset;
+  private IMimeType m_aMimeType;
+  private boolean m_bBase64Encoded;
+  private byte [] m_aContent;
+  private Charset m_aCharset;
   private String m_sContent;
 
+  /**
+   * Determine the charset from the passed MIME type. If no charset was found,
+   * return the default charset.
+   * 
+   * @param aMimeType
+   *        The MIME type to investigate.
+   * @return Never <code>null</code>.
+   */
   @Nonnull
   public static Charset getCharsetFromMimeTypeOrDefault (@Nullable final IMimeType aMimeType)
   {
@@ -147,6 +159,25 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
     m_aContent = ArrayHelper.getCopy (aContent);
     m_aCharset = aCharset;
     m_sContent = sContent;
+  }
+
+  private void writeObject (@Nonnull final ObjectOutputStream out) throws IOException
+  {
+    out.writeObject (m_aMimeType);
+    out.writeBoolean (m_bBase64Encoded);
+    out.writeObject (m_aContent);
+    out.writeUTF (m_aCharset.name ());
+    out.writeObject (m_sContent);
+  }
+
+  private void readObject (@Nonnull final ObjectInputStream in) throws IOException, ClassNotFoundException
+  {
+    m_aMimeType = (IMimeType) in.readObject ();
+    m_bBase64Encoded = in.readBoolean ();
+    m_aContent = (byte []) in.readObject ();
+    final String sCharsetName = in.readUTF ();
+    m_aCharset = CharsetManager.getCharsetFromName (sCharsetName);
+    m_sContent = (String) in.readObject ();
   }
 
   /**

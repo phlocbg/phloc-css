@@ -122,12 +122,14 @@ public final class CSSDataURLHelperTest
       final CSSDataURL aURL = CSSDataURLHelper.parseDataURL (sValid);
       assertNotNull ("Failed to parse: " + sValid, aURL);
       assertFalse ("Should not be Base64: " + sValid, aURL.isBase64Encoded ());
+      PhlocTestUtils.testDefaultSerialization (aURL);
 
       // Convert to string and parse again
       String sAsString = aURL.getAsString ();
       assertNotNull (sAsString);
       CSSDataURL aURL2 = CSSDataURLHelper.parseDataURL (sAsString);
       assertNotNull ("Failed to parse: " + sAsString, aURL2);
+      PhlocTestUtils.testDefaultSerialization (aURL2);
 
       assertEquals (aURL, aURL2);
       PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aURL, aURL2);
@@ -137,6 +139,7 @@ public final class CSSDataURLHelperTest
       assertNotNull (sAsString);
       aURL2 = CSSDataURLHelper.parseDataURL (sAsString);
       assertNotNull ("Failed to parse: " + sAsString, aURL2);
+      PhlocTestUtils.testDefaultSerialization (aURL2);
       // -> not necessarily equals because of optional Base64 marker
     }
 
@@ -145,12 +148,14 @@ public final class CSSDataURLHelperTest
       final CSSDataURL aURL = CSSDataURLHelper.parseDataURL (sValid);
       assertNotNull ("Failed to parse: " + sValid, aURL);
       assertTrue ("Should be Base64: " + sValid, aURL.isBase64Encoded ());
+      PhlocTestUtils.testDefaultSerialization (aURL);
 
       // Convert to string and parse again
       String sAsString = aURL.getAsString ();
       assertNotNull (sAsString);
       CSSDataURL aURL2 = CSSDataURLHelper.parseDataURL (sAsString);
       assertNotNull ("Failed to parse: " + sAsString, aURL2);
+      PhlocTestUtils.testDefaultSerialization (aURL2);
 
       assertEquals (aURL, aURL2);
       PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aURL, aURL2);
@@ -160,6 +165,7 @@ public final class CSSDataURLHelperTest
       assertNotNull (sAsString);
       aURL2 = CSSDataURLHelper.parseDataURL (sAsString);
       assertNotNull ("Failed to parse: " + sAsString, aURL2);
+      PhlocTestUtils.testDefaultSerialization (aURL2);
       // -> not necessarily equals because of optional Base64 marker
     }
 
