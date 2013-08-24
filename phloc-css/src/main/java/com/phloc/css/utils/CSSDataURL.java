@@ -210,11 +210,12 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
   }
 
   /**
-   * @return A copy of the binary data of the data URL
+   * @return A copy of the binary data of the data URL. Neither
+   *         <code>null</code> nor empty.
    */
   @Nonnull
   @ReturnsMutableCopy
-  public byte [] getContent ()
+  public byte [] getContentBytes ()
   {
     return ArrayHelper.getCopy (m_aContent);
   }
@@ -226,7 +227,7 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
    *        The output stream to write to. May not be <code>null</code>.
    * @throws IOException
    */
-  public void writeTo (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
+  public void writeContentBytes (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
   {
     aOS.write (m_aContent, 0, m_aContent.length);
   }
