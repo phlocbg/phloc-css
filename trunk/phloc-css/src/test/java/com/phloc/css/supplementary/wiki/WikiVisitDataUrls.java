@@ -21,43 +21,32 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.charset.CCharset;
-import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpressionMemberTermURI;
 import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSURI;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSTopLevelRule;
 import com.phloc.css.decl.visit.CSSVisitor;
 import com.phloc.css.decl.visit.DefaultCSSUrlVisitor;
 import com.phloc.css.decl.visit.ICSSUrlVisitor;
 import com.phloc.css.reader.CSSReader;
+import com.phloc.css.utils.CSSDataURL;
 
 /**
  * Example how to extract all URLs from a certain CSS file using an
- * {@link ICSSUrlVisitor}.
+ * {@link ICSSUrlVisitor} and handle them as data URLs. This example works with
+ * phloc-css >= 3.5.7
  * 
  * @author Philip Helger
  */
-public final class WikiVisitUrls
+public final class WikiVisitDataUrls
 {
-  public static String getSourceLocationString (@Nonnull final CSSSourceLocation aSourceLoc)
-  {
-    return "source location reaches from [" +
-           aSourceLoc.getFirstTokenBeginLineNumber () +
-           "/" +
-           aSourceLoc.getFirstTokenBeginColumnNumber () +
-           "] up to [" +
-           aSourceLoc.getLastTokenEndLineNumber () +
-           "/" +
-           aSourceLoc.getLastTokenEndColumnNumber () +
-           "]";
-  }
-
   public void readFromStyleAttributeWithAPI ()
   {
-    final String sStyle = "@import 'foobar.css';\n"
-                          + "div{background:fixed url(a.gif) !important;}\n"
+    final String sStyle = "@import '/folder/foobar.css';\n"
+                          + "div{background:fixed url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9EFBAoYMhVvMQIAAAAtSURBVHicY/z//z8DHoBH+v///yy4FDEyMjIwMDDhM3lgpaEuh7gTEzDiDxYA9HEPDF90e5YAAAAASUVORK5CYII=) !important;}\n"
                           + "span { background-image:url('/my/folder/b.gif');}";
     final CascadingStyleSheet aCSS = CSSReader.readFromString (sStyle, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     CSSVisitor.visitCSSUrl (aCSS, new DefaultCSSUrlVisitor ()
@@ -66,10 +55,7 @@ public final class WikiVisitUrls
       @Override
       public void onImport (@Nonnull final CSSImportRule aImportRule)
       {
-        System.out.println ("Import: " +
-                            aImportRule.getLocationString () +
-                            " - " +
-                            getSourceLocationString (aImportRule.getSourceLocation ()));
+        System.out.println ("Import: " + aImportRule.getLocationString ());
       }
 
       // Call for URLs outside of URLs
@@ -78,11 +64,18 @@ public final class WikiVisitUrls
                                     @Nonnull final CSSDeclaration aDeclaration,
                                     @Nonnull final CSSExpressionMemberTermURI aURITerm)
       {
-        System.out.println (aDeclaration.getProperty () +
-                            " - references: " +
-                            aURITerm.getURIString () +
-                            " - " +
-                            getSourceLocationString (aURITerm.getSourceLocation ()));
+        final CSSURI aURI = aURITerm.getURI ();
+
+        if (aURI.isDataURL ())
+        {
+          final CSSDataURL aDataURL = aURI.getAsDataURL ();
+          System.out.println (aDeclaration.getProperty () +
+                              " - references data URL with " +
+                              aDataURL.getContentLength () +
+                              " bytes of content");
+        }
+        else
+          System.out.println (aDeclaration.getProperty () + " - references regular URL: " + aURI.getURI ());
       }
     });
   }
