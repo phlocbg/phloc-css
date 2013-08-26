@@ -18,10 +18,15 @@
 package com.phloc.css.decl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.utils.CSSDataURL;
 import com.phloc.css.writer.CSSWriterSettings;
 
 /**
@@ -40,5 +45,18 @@ public final class CSSURITest
     assertEquals ("url(a.gif)", aURI.getAsCSSString (aSettings, 0));
     aSettings.setQuoteURLs (true);
     assertEquals ("url('a.gif')", aURI.getAsCSSString (aSettings, 0));
+    assertFalse (aURI.isDataURL ());
+    assertNull (aURI.getAsDataURL ());
+  }
+
+  @Test
+  public void testDataURL ()
+  {
+    final CSSURI aURI = new CSSURI ("data:text/plain,foobar");
+    assertEquals ("data:text/plain,foobar", aURI.getURI ());
+    assertTrue (aURI.isDataURL ());
+    final CSSDataURL aDataURL = aURI.getAsDataURL ();
+    assertNotNull (aDataURL);
+    assertEquals ("foobar", aDataURL.getContentAsString ());
   }
 }

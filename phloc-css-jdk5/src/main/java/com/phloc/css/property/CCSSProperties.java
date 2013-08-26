@@ -403,12 +403,12 @@ public final class CCSSProperties
   public static final ICSSValue DISPLAY_NONE = DISPLAY.newValue (CCSSValue.NONE);
   public static final ICSSValue VISIBILITY_VISIBLE = VISIBILITY.newValue (CCSSValue.VISIBLE);
   public static final ICSSValue VISIBILITY_HIDDEN = VISIBILITY.newValue (CCSSValue.HIDDEN);
-  public static final ICSSValue WIDTH_0 = WIDTH.newValue ("0");
-  public static final ICSSValue WIDTH_100PERC = WIDTH.newValue (ECSSUnit.px (100));
-  public static final ICSSValue HEIGHT_0 = HEIGHT.newValue ("0");
-  public static final ICSSValue HEIGHT_100PERC = HEIGHT.newValue (ECSSUnit.px (100));
-  public static final ICSSValue PADDING_0 = PADDING.newValue ("0");
-  public static final ICSSValue MARGIN_0 = MARGIN.newValue ("0");
+  public static final ICSSValue WIDTH_0 = WIDTH.newValue (ECSSUnit.zero ());
+  public static final ICSSValue WIDTH_100PERC = WIDTH.newValue (ECSSUnit.perc (100));
+  public static final ICSSValue HEIGHT_0 = HEIGHT.newValue (ECSSUnit.zero ());
+  public static final ICSSValue HEIGHT_100PERC = HEIGHT.newValue (ECSSUnit.perc (100));
+  public static final ICSSValue PADDING_0 = PADDING.newValue (ECSSUnit.zero ());
+  public static final ICSSValue MARGIN_0 = MARGIN.newValue (ECSSUnit.zero ());
 
   private CCSSProperties ()
   {}
