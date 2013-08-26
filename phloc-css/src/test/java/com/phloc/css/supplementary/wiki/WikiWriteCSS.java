@@ -18,7 +18,6 @@
 package com.phloc.css.supplementary.wiki;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +66,7 @@ public final class WikiWriteCSS
       // Finally write the String to a file
       return SimpleFileIO.writeFile (aFile, sCSSCode, CCharset.CHARSET_UTF_8_OBJ);
     }
-    catch (final IOException ex)
+    catch (final Exception ex)
     {
       s_aLogger.error ("Failed to write the CSS to a file", ex);
       return ESuccess.FAILURE;

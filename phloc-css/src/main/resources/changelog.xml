@@ -20,6 +20,26 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2013-08-26" category="api" action="add">
+    <change>
+      <text locale="en">Extended ECSSColor with methods to create CSSRGB, CSSRGBA, CSSHSL and CSSHSLA objects</text>
+    </change>
+  </entry>
+  <entry date="2013-08-26" category="api" action="change">
+    <change>
+      <text locale="en">CSSWriter.getCSSAsString no longer declares to throw an IOException</text>
+    </change>
+  </entry>
+  <entry date="2013-08-26" category="api" action="change">
+    <change>
+      <text locale="en">Made CSSWriter.writeCSS and getCSSAsString more flexible, so that it takes an arbitrary ICSSWriteable</text>
+    </change>
+  </entry>
+  <entry date="2013-08-26" category="api" action="add">
+    <change>
+      <text locale="en">Added support for file footers in CSSWriter</text>
+    </change>
+  </entry>
   <entry date="2013-08-24" category="api" action="add">
     <change>
       <text locale="en">Added support for CSS data URLs in the class CSSURI</text>

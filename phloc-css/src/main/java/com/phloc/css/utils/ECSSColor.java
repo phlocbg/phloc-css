@@ -23,6 +23,10 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
+import com.phloc.css.decl.CSSHSL;
+import com.phloc.css.decl.CSSHSLA;
+import com.phloc.css.decl.CSSRGB;
+import com.phloc.css.decl.CSSRGBA;
 
 // ESCA-JAVA0076:
 /**
@@ -298,6 +302,16 @@ public enum ECSSColor implements ICSSNamedColor
   }
 
   /**
+   * @return This color as an CSS RGB color object.
+   */
+  @Nonnull
+  @Nonempty
+  public CSSRGB getAsRGB ()
+  {
+    return new CSSRGB (m_nRed, m_nGreen, m_nBlue);
+  }
+
+  /**
    * @param fOpacity
    *        The opacity to be used. Is scaled to 0-1.
    * @return This color as an CSS RGBA color value.
@@ -307,6 +321,18 @@ public enum ECSSColor implements ICSSNamedColor
   public String getAsRGBAColorValue (@Nonnegative final float fOpacity)
   {
     return CSSColorHelper.getRGBAColorValue (m_nRed, m_nGreen, m_nBlue, fOpacity);
+  }
+
+  /**
+   * @param fOpacity
+   *        The opacity to be used. Is scaled to 0-1.
+   * @return This color as an CSS RGBA color object.
+   */
+  @Nonnull
+  @Nonempty
+  public CSSRGBA getAsRGBA (@Nonnegative final float fOpacity)
+  {
+    return new CSSRGBA (m_nRed, m_nGreen, m_nBlue, fOpacity);
   }
 
   /**
@@ -320,6 +346,16 @@ public enum ECSSColor implements ICSSNamedColor
   }
 
   /**
+   * @return This color as an CSS HSL color object.
+   */
+  @Nonnull
+  @Nonempty
+  public CSSHSL getAsHSL ()
+  {
+    return new CSSHSL (m_fHue, m_fSaturation, m_fLightness);
+  }
+
+  /**
    * @param fOpacity
    *        The opacity to be used. Is scaled to 0-1.
    * @return This color as an CSS HSLA color value.
@@ -329,6 +365,18 @@ public enum ECSSColor implements ICSSNamedColor
   public String getAsHSLAColorValue (@Nonnegative final float fOpacity)
   {
     return CSSColorHelper.getHSLAColorValue (m_fHue, m_fSaturation, m_fLightness, fOpacity);
+  }
+
+  /**
+   * @param fOpacity
+   *        The opacity to be used. Is scaled to 0-1.
+   * @return This color as an CSS HSL color object.
+   */
+  @Nonnull
+  @Nonempty
+  public CSSHSLA getAsHSLA (@Nonnegative final float fOpacity)
+  {
+    return new CSSHSLA (m_fHue, m_fSaturation, m_fLightness, fOpacity);
   }
 
   @Nullable
