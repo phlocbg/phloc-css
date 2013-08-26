@@ -46,7 +46,8 @@ public final class CSSURLHelper
    * 
    * @param sValue
    *        The value to be checked.
-   * @return <code>true</code> if the passed value starts with "url("
+   * @return <code>true</code> if the passed value starts with "url(" and ends
+   *         with ")" - <code>false</code> otherwise.
    */
   public static boolean isURLValue (@Nullable final String sValue)
   {
@@ -94,12 +95,14 @@ public final class CSSURLHelper
   }
 
   /**
-   * Check if the passed character is a valid character inside a URL.
+   * Check if the passed character is a valid character inside a URL. Characters
+   * for which this method returns <code>false</code> must be escaped!
    * 
    * @param c
    *        The character to be checked.
-   * @return <code>true</code> if the passed character can be contained inside a
-   *         URL, <code>false</code> otherwise.
+   * @return <code>true</code> if the passed character can be directly contained
+   *         inside a URL, <code>false</code> otherwise if the character needs
+   *         to be escaped.
    */
   public static boolean isValidCSSURLChar (final char c)
   {
@@ -113,6 +116,14 @@ public final class CSSURLHelper
            (c >= '\u0080' && c <= '\uffff');
   }
 
+  /**
+   * Check if any character inside the passed URL needs escaping.
+   * 
+   * @param sURL
+   *        The URL to be checked. May not be <code>null</code>.
+   * @return <code>true</code> if any of the contained characters needs
+   *         escaping, <code>false</code> if the URL can be used as is.
+   */
   public static boolean isCSSURLRequiringQuotes (@Nonnull final String sURL)
   {
     if (sURL == null)
