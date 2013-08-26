@@ -67,6 +67,16 @@ public final class CSSRectHelper
   private CSSRectHelper ()
   {}
 
+  /**
+   * Check if the passed value is CSS rectangle definition or not. It checks
+   * both the current syntax (<code>rect(a,b,c,d)</code>) and the old syntax (
+   * <code>rect(a b c d)</code>).
+   * 
+   * @param sCSSValue
+   *        The value to check. May be <code>null</code>.
+   * @return <code>true</code> if the passed value is a rect value,
+   *         <code>false</code> if not
+   */
   public static boolean isRectValue (@Nullable final String sCSSValue)
   {
     final String sRealValue = StringHelper.trim (sCSSValue);
@@ -83,6 +93,14 @@ public final class CSSRectHelper
     return false;
   }
 
+  /**
+   * Get all the values from within a CSS rectangle definition.
+   * 
+   * @param sCSSValue
+   *        The CSS values to check. May be <code>null</code>.
+   * @return <code>null</code> if the passed String is not a CSS rectangle. An
+   *         array with 4 Strings if the passed value is a CSS rectangle.
+   */
   @Nullable
   public static String [] getRectValues (@Nullable final String sCSSValue)
   {
@@ -97,6 +115,14 @@ public final class CSSRectHelper
     return ret;
   }
 
+  /**
+   * Interpret the passed value as a CSS rectangle and convert it to a
+   * {@link CSSRect}.
+   * 
+   * @param sCSSValue
+   *        The CSS values to check. May be <code>null</code>.
+   * @return <code>null</code> if the passed String is not a CSS rectangle.
+   */
   @Nullable
   public static CSSRect getAsRect (@Nullable final String sCSSValue)
   {

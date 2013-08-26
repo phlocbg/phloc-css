@@ -70,7 +70,12 @@ public enum ECSSColorName implements ICSSNamedColor
     m_sName = sName;
   }
 
+  /**
+   * @return The name of the color as to be used in CSS. Neither
+   *         <code>null</code> nor empty.
+   */
   @Nonnull
+  @Nonempty
   public String getName ()
   {
     return m_sName;
@@ -82,6 +87,14 @@ public enum ECSSColorName implements ICSSNamedColor
     return EnumHelper.getFromNameCaseInsensitiveOrNull (ECSSColorName.class, sName);
   }
 
+  /**
+   * Check if the passed color name is a default color name.
+   * 
+   * @param sName
+   *        The color name to check.
+   * @return <code>true</code> if the passed color name is a default color name,
+   *         <code>false</code> if not.
+   */
   public static boolean isDefaultColorName (@Nullable final String sName)
   {
     return getFromNameCaseInsensitiveOrNull (sName) != null;
