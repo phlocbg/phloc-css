@@ -17,12 +17,16 @@
  */
 package com.phloc.css.utils;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.phloc.commons.string.StringHelper;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.writer.CSSWriter;
 
 /**
  * Test class for class {@link ECSSColor}.
@@ -34,20 +38,36 @@ public final class ECSSColorTest
   @Test
   public void testAll ()
   {
+    final CSSWriter aWriter = new CSSWriter (ECSSVersion.CSS30);
     for (final ECSSColor eColor : ECSSColor.values ())
     {
       assertTrue (StringHelper.hasText (eColor.getName ()));
+
       final String sHex = eColor.getAsHexColorValue ();
       assertTrue (sHex, CSSColorHelper.isHexColorValue (sHex));
+
       final String sRGB = eColor.getAsRGBColorValue ();
       assertTrue (sRGB, CSSColorHelper.isRGBColorValue (sRGB));
+      assertNotNull (eColor.getAsRGB ());
+      assertEquals (sRGB, aWriter.getCSSAsString (eColor.getAsRGB ()));
+
       final String sRGBA = eColor.getAsRGBAColorValue (1f);
       assertTrue (sRGBA, CSSColorHelper.isRGBAColorValue (sRGBA));
+      assertNotNull (eColor.getAsRGBA (1));
+      assertEquals (sRGBA, aWriter.getCSSAsString (eColor.getAsRGBA (1)));
+
       final String sHSL = eColor.getAsHSLColorValue ();
       assertTrue (sHSL, CSSColorHelper.isHSLColorValue (sHSL));
+      assertNotNull (eColor.getAsHSL ());
+      assertEquals (sHSL, aWriter.getCSSAsString (eColor.getAsHSL ()));
+
       final String sHSLA = eColor.getAsHSLAColorValue (1f);
       assertTrue (sHSLA, CSSColorHelper.isHSLAColorValue (sHSLA));
+      assertNotNull (eColor.getAsHSLA (1));
+      assertEquals (sHSLA, aWriter.getCSSAsString (eColor.getAsHSLA (1)));
+
       assertSame (eColor, ECSSColor.getFromNameCaseInsensitiveOrNull (eColor.getName ()));
+      assertTrue (ECSSColor.isDefaultColorName (eColor.getName ()));
     }
   }
 }
