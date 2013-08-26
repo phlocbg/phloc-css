@@ -30,7 +30,7 @@ import com.phloc.jdk5.CreateJava5Version;
  * @author Philip Helger
  */
 // SKIPJDK5
-public class MainCreateJava5Version
+public class MainCreateJava5VersionCSS
 {
   public static void main (final String [] args) throws IOException
   {
