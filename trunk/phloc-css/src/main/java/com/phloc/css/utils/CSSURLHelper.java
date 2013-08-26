@@ -55,7 +55,7 @@ public final class CSSURLHelper
     // 5 = "url(".length () + ")".length
     return StringHelper.getLength (sRealValue) > 5 &&
            sRealValue.startsWith (CCSSValue.PREFIX_URL_OPEN) &&
-           sRealValue.endsWith (")");
+           sRealValue.endsWith (CCSSValue.SUFFIX_URL_CLOSE);
   }
 
   /**
@@ -203,6 +203,6 @@ public final class CSSURLHelper
       // No quotes needed
       aSB.append (sURL);
     }
-    return aSB.append (')').toString ();
+    return aSB.append (CCSSValue.SUFFIX_URL_CLOSE).toString ();
   }
 }

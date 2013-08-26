@@ -125,7 +125,15 @@ public final class CSSRect implements ICSSWriteable
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    return CCSSValue.PREFIX_RECT_OPEN + m_sTop + ' ' + m_sRight + ' ' + m_sBottom + ' ' + m_sLeft + ')';
+    return CCSSValue.PREFIX_RECT_OPEN +
+           m_sTop +
+           ' ' +
+           m_sRight +
+           ' ' +
+           m_sBottom +
+           ' ' +
+           m_sLeft +
+           CCSSValue.SUFFIX_RECT_CLOSE;
   }
 
   @Override
