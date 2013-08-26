@@ -133,6 +133,13 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return m_eVersion;
   }
 
+  /**
+   * Get the passed value formatted with this unit
+   * 
+   * @param nValue
+   *        Value to format
+   * @return <code>value + getName()</code>
+   */
   @Nonnull
   @Nonempty
   public String format (final int nValue)
@@ -140,6 +147,14 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return Integer.toString (nValue) + m_sName;
   }
 
+  /**
+   * Get the passed value formatted with this unit. Always '.' is used as the
+   * separator.
+   * 
+   * @param dValue
+   *        Value to format
+   * @return <code>value + getName()</code>
+   */
   @Nonnull
   @Nonempty
   public String format (final double dValue)
@@ -154,8 +169,19 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return EnumHelper.getFromNameOrNull (ECSSUnit.class, sName);
   }
 
+  @Nullable
+  public static ECSSUnit getFromNameOrDefault (@Nullable final String sName, @Nullable final ECSSUnit eDefault)
+  {
+    return EnumHelper.getFromNameOrDefault (ECSSUnit.class, sName, eDefault);
+  }
+
   // --- [utility methods] ---
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000em</code>
+   */
   @Nonnull
   @Nonempty
   public static String em (final int nValue)
@@ -163,6 +189,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return EM.format (nValue);
   }
 
+  /**
+   * @param dValue
+   *        value to format
+   * @return <code>000em</code>
+   */
   @Nonnull
   @Nonempty
   public static String em (final double dValue)
@@ -170,6 +201,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return EM.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000ex</code>
+   */
   @Nonnull
   @Nonempty
   public static String ex (final int nValue)
@@ -177,6 +213,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return EX.format (nValue);
   }
 
+  /**
+   * @param dValue
+   *        value to format
+   * @return <code>000ex</code>
+   */
   @Nonnull
   @Nonempty
   public static String ex (final double dValue)
@@ -184,6 +225,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return EX.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000px</code>
+   */
   @Nonnull
   @Nonempty
   public static String px (final int nValue)
@@ -191,6 +237,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return PX.format (nValue);
   }
 
+  /**
+   * @param dValue
+   *        value to format
+   * @return <code>000px</code>
+   */
   @Nonnull
   @Nonempty
   public static String px (final double dValue)
@@ -198,6 +249,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return PX.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000rem</code>
+   */
   @Nonnull
   @Nonempty
   public static String rem (final int nValue)
@@ -205,6 +261,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return REM.format (nValue);
   }
 
+  /**
+   * @param dValue
+   *        value to format
+   * @return <code>000rem</code>
+   */
   @Nonnull
   @Nonempty
   public static String rem (final double dValue)
@@ -212,6 +273,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return REM.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000vw</code>
+   */
   @Nonnull
   @Nonempty
   public static String vw (final int nValue)
@@ -219,6 +285,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return VW.format (nValue);
   }
 
+  /**
+   * @param dValue
+   *        value to format
+   * @return <code>000vw</code>
+   */
   @Nonnull
   @Nonempty
   public static String vw (final double dValue)
@@ -226,6 +297,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return VW.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000vh</code>
+   */
   @Nonnull
   @Nonempty
   public static String vh (final int nValue)
@@ -240,6 +316,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return VH.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000vmin</code>
+   */
   @Nonnull
   @Nonempty
   public static String vmin (final int nValue)
@@ -254,6 +335,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return VMIN.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000ch</code>
+   */
   @Nonnull
   @Nonempty
   public static String ch (final int nValue)
@@ -268,6 +354,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return CH.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000in</code>
+   */
   @Nonnull
   @Nonempty
   public static String in (final int nValue)
@@ -282,6 +373,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return LENGTH_IN.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000cm</code>
+   */
   @Nonnull
   @Nonempty
   public static String cm (final int nValue)
@@ -296,6 +392,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return LENGTH_CM.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000mm</code>
+   */
   @Nonnull
   @Nonempty
   public static String mm (final int nValue)
@@ -310,6 +411,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return LENGTH_MM.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000pt</code>
+   */
   @Nonnull
   @Nonempty
   public static String pt (final int nValue)
@@ -324,6 +430,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return LENGTH_PT.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000pc</code>
+   */
   @Nonnull
   @Nonempty
   public static String pc (final int nValue)
@@ -338,6 +449,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return LENGTH_PC.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000%</code>
+   */
   @Nonnull
   @Nonempty
   public static String perc (final int nValue)
@@ -352,6 +468,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return PERCENTAGE.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000deg</code>
+   */
   @Nonnull
   @Nonempty
   public static String deg (final int nValue)
@@ -366,6 +487,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return ANGLE_DEG.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000rad</code>
+   */
   @Nonnull
   @Nonempty
   public static String rad (final int nValue)
@@ -380,6 +506,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return ANGLE_RAD.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000grad</code>
+   */
   @Nonnull
   @Nonempty
   public static String grad (final int nValue)
@@ -394,6 +525,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return ANGLE_GRAD.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000urn</code>
+   */
   @Nonnull
   @Nonempty
   public static String turn (final int nValue)
@@ -408,6 +544,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return ANGLE_TURN.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000ms</code>
+   */
   @Nonnull
   @Nonempty
   public static String ms (final int nValue)
@@ -422,6 +563,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return TIME_MS.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000s</code>
+   */
   @Nonnull
   @Nonempty
   public static String s (final int nValue)
@@ -436,6 +582,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return TIME_S.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000hz</code>
+   */
   @Nonnull
   @Nonempty
   public static String hz (final int nValue)
@@ -450,6 +601,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return FREQ_HZ.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000khz</code>
+   */
   @Nonnull
   @Nonempty
   public static String khz (final int nValue)
@@ -464,6 +620,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return FREQ_KHZ.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000dpi</code>
+   */
   @Nonnull
   @Nonempty
   public static String dpi (final int nValue)
@@ -478,6 +639,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return DPI.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000dpcm</code>
+   */
   @Nonnull
   @Nonempty
   public static String dpcm (final int nValue)
@@ -492,6 +658,11 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return DPCM.format (dValue);
   }
 
+  /**
+   * @param nValue
+   *        value to format
+   * @return <code>000dppx</code>
+   */
   @Nonnull
   @Nonempty
   public static String dppx (final int nValue)
