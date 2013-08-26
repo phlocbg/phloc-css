@@ -113,7 +113,7 @@ public final class CSSRGB implements ICSSWriteable
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    return CCSSValue.PREFIX_RGB_OPEN + m_sRed + ',' + m_sGreen + ',' + m_sBlue + ')';
+    return CCSSValue.PREFIX_RGB_OPEN + m_sRed + ',' + m_sGreen + ',' + m_sBlue + CCSSValue.SUFFIX_RGB_CLOSE;
   }
 
   @Override

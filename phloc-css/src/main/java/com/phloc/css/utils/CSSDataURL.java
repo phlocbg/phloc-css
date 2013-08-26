@@ -102,7 +102,8 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
    *        this to <code>true</code> if you have binary data like images.
    * @param aContent
    *        The content of the data URL as a byte array. May not be
-   *        <code>null</code> but may be empty.
+   *        <code>null</code> but may be empty. This content may not be Base64
+   *        encoded!
    * @param aCharset
    *        The charset to be used to encode the String. May not be
    *        <code>null</code>. The default is
@@ -210,8 +211,11 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
   }
 
   /**
+   * Get a copy of all content bytes. No Base64 encoding is performed in this
+   * method.
+   * 
    * @return A copy of the binary data of the data URL. Neither
-   *         <code>null</code> nor empty.
+   *         <code>null</code> but maybe empty.
    */
   @Nonnull
   @ReturnsMutableCopy
@@ -221,7 +225,8 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
   }
 
   /**
-   * Write all the binary content to the passed output stream.
+   * Write all the binary content to the passed output stream. No Base64
+   * encoding is performed in this method.
    * 
    * @param aOS
    *        The output stream to write to. May not be <code>null</code>.
@@ -248,7 +253,8 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
    * representation was provided in the constructor, than it is lazily created
    * inside this method in which case instances of this class are not
    * thread-safe. If a non-<code>null</code> String was provided in the
-   * constructor, this object is immutable.
+   * constructor, this object is immutable. No Base64 encoding is performed in
+   * this method.
    * 
    * @return The content in a String representation using the charset of this
    *         object. Never <code>null</code>.
@@ -262,7 +268,24 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
   }
 
   /**
+   * Get the content as a Base64 encoded {@link String} in the {@link Charset}
+   * specified by {@link #getCharset()}. The encoding is applied independent of
+   * the {@link #isBase64Encoded()} state.
+   * 
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  public String getContentAsBase64EncodedString ()
+  {
+    // Add Base64 encoded String
+    final byte [] aEncoded = Base64.encodeBytesToBytes (m_aContent);
+    // Print the string in the specified charset
+    return CharsetManager.getAsString (aEncoded, m_aCharset);
+  }
+
+  /**
    * Get the data content of this Data URL as String in the specified charset.
+   * No Base64 encoding is performed in this method.
    * 
    * @param aCharset
    *        The charset to be used. May not be <code>null</code>.
@@ -277,7 +300,8 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
 
   /**
    * @return The complete representation of the data URL, starting with "data:".
-   *         All data is emitted, even if it is the default value.
+   *         All data is emitted, even if it is the default value. Base64
+   *         encoding is performed in this method.
    */
   @Nonnull
   public String getAsString ()
@@ -332,9 +356,7 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
       if (m_bBase64Encoded)
       {
         // Add Base64 encoded String
-        final byte [] aEncoded = Base64.encodeBytesToBytes (m_aContent);
-        // Print the string in the specified charset
-        aSB.append (CharsetManager.getAsString (aEncoded, m_aCharset));
+        aSB.append (getContentAsBase64EncodedString ());
       }
       else
       {

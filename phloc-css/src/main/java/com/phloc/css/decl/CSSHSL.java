@@ -143,7 +143,7 @@ public final class CSSHSL implements ICSSWriteable, ICSSVersionAware
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
-    return CCSSValue.PREFIX_HSL_OPEN + m_sHue + ',' + m_sSaturation + ',' + m_sLightness + ')';
+    return CCSSValue.PREFIX_HSL_OPEN + m_sHue + ',' + m_sSaturation + ',' + m_sLightness + CCSSValue.SUFFIX_HSL_CLOSE;
   }
 
   @Nonnull

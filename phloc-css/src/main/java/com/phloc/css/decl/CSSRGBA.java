@@ -134,7 +134,15 @@ public final class CSSRGBA implements ICSSWriteable
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    return CCSSValue.PREFIX_RGBA_OPEN + m_sRed + ',' + m_sGreen + ',' + m_sBlue + ',' + m_sOpacity + ')';
+    return CCSSValue.PREFIX_RGBA_OPEN +
+           m_sRed +
+           ',' +
+           m_sGreen +
+           ',' +
+           m_sBlue +
+           ',' +
+           m_sOpacity +
+           CCSSValue.SUFFIX_RGBA_CLOSE;
   }
 
   @Override
