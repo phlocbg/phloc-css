@@ -33,139 +33,143 @@ import com.phloc.commons.lang.EnumHelper;
 public enum ECSSSpecification implements IHasID <String>
 {
   /** CSS Color Level 3 */
-  CSS3_COLOR ("css3-color", "http://www.w3.org/TR/2011/REC-css3-color-20110607/"),
+  CSS3_COLOR ("css3-color", ECSSSpecificationStatus.COMPLETED, "http://www.w3.org/TR/2011/REC-css3-color-20110607/"),
   /** CSS Namespaces */
-  CSS3_NAMESPACE ("css3-namespace", "http://www.w3.org/TR/2011/REC-css3-namespace-20110929/"),
+  CSS3_NAMESPACE ("css3-namespace", ECSSSpecificationStatus.COMPLETED, "http://www.w3.org/TR/2011/REC-css3-namespace-20110929/"),
   /** Selectors Level 3 */
-  SELECTORS ("selectors"),
+  SELECTORS ("selectors", ECSSSpecificationStatus.COMPLETED),
   /** CSS Level 2 Revision 1 */
-  CSS2 ("CSS2", "http://www.w3.org/TR/CSS2/"),
+  CSS2 ("CSS2", ECSSSpecificationStatus.COMPLETED, "http://www.w3.org/TR/CSS2/"),
   /** CSS Level 1 */
-  CSS1 ("CSS1", "http://www.w3.org/TR/CSS1/"),
+  CSS1 ("CSS1", ECSSSpecificationStatus.COMPLETED, "http://www.w3.org/TR/CSS1/"),
   /** CSS Print Profile */
-  CSS_PRINT ("css-print"),
+  CSS_PRINT ("css-print", ECSSSpecificationStatus.COMPLETED),
   /** Media Queries */
-  CSS3_MEDIAQUERIES ("css3-mediaqueries", "http://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/"),
+  CSS3_MEDIAQUERIES ("css3-mediaqueries", ECSSSpecificationStatus.COMPLETED, "http://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/"),
   /** CSS Style Attributes */
-  CSS_STYLE_ATTR ("css-style-attr"),
+  CSS_STYLE_ATTR ("css-style-attr", ECSSSpecificationStatus.STABLE),
   /** CSS Backgrounds and Borders Level 3 */
-  CSS3_BACKGROUND ("css3-background", "http://www.w3.org/TR/2012/CR-css3-background-20120724/"),
+  CSS3_BACKGROUND ("css3-background", ECSSSpecificationStatus.TESTING, "http://www.w3.org/TR/2012/CR-css3-background-20120724/"),
   /** CSS Conditional Rules Level 3 */
-  CSS3_CONDITIONAL ("css3-conditional"),
+  CSS3_CONDITIONAL ("css3-conditional", ECSSSpecificationStatus.TESTING),
   /** CSS Image Values and Replaced Content Level 3 */
-  CSS3_IMAGES ("css3-images"),
+  CSS3_IMAGES ("css3-images", ECSSSpecificationStatus.TESTING),
   /** CSS Marquee */
-  CSS3_MARQUEE ("css3-marquee", "http://www.w3.org/TR/2008/CR-css3-marquee-20081205/"),
+  CSS3_MARQUEE ("css3-marquee", ECSSSpecificationStatus.TESTING, "http://www.w3.org/TR/2008/CR-css3-marquee-20081205/"),
   /** CSS Multi-column Layout */
-  CSS3_MULTICOL ("css3-multicol", "http://www.w3.org/TR/2011/CR-css3-multicol-20110412/"),
+  CSS3_MULTICOL ("css3-multicol", ECSSSpecificationStatus.TESTING, "http://www.w3.org/TR/2011/CR-css3-multicol-20110412/"),
   /** CSS Speech */
-  CSS3_SPEECH ("css3-speech", "http://www.w3.org/TR/2012/CR-css3-speech-20120320/"),
+  CSS3_SPEECH ("css3-speech", ECSSSpecificationStatus.TESTING, "http://www.w3.org/TR/2012/CR-css3-speech-20120320/"),
   /** CSS Values and Units Level 3 */
-  CSS3_VALUES ("css3-values"),
+  CSS3_VALUES ("css3-values", ECSSSpecificationStatus.TESTING),
   /** CSS Flexible Box Layout */
-  CSS3_FLEXBOX ("css3-flexbox", "http://www.w3.org/TR/2012/CR-css3-flexbox-20120918/"),
+  CSS3_FLEXBOX ("css3-flexbox", ECSSSpecificationStatus.TESTING, "http://www.w3.org/TR/2012/CR-css3-flexbox-20120918/"),
   /** CSS Text Decoration Module Level 3 */
-  CSS_TEXT_DECOR_3 ("css-text-decor-3"),
+  CSS_TEXT_DECOR_3 ("css-text-decor-3", ECSSSpecificationStatus.TESTING),
   /** CSS Mobile Profile 2.0 */
-  CSS_MOBILE ("css-mobile"),
+  CSS_MOBILE ("css-mobile", ECSSSpecificationStatus.TESTING),
   /** CSS TV Profile 1.0 */
-  CSS_TV ("css-tv"),
+  CSS_TV ("css-tv", ECSSSpecificationStatus.TESTING),
   /** CSS Animations */
-  CSS3_ANIMATIONS ("css3-animations", "http://www.w3.org/TR/2013/WD-css3-animations-20130219/"),
+  CSS3_ANIMATIONS ("css3-animations", ECSSSpecificationStatus.REFINING, "http://www.w3.org/TR/2013/WD-css3-animations-20130219/"),
   /** CSS Fonts Level 3 */
-  CSS3_FONTS ("css3-fonts", "http://www.w3.org/TR/2013/WD-css-fonts-3-20130711/"),
+  CSS3_FONTS ("css3-fonts", ECSSSpecificationStatus.REFINING, "http://www.w3.org/TR/2013/WD-css-fonts-3-20130711/"),
   /** CSS Counter Styles Level 3 */
-  CSS_COUNTER_STYLES_3 ("css-counter-styles-3"),
+  CSS_COUNTER_STYLES_3 ("css-counter-styles-3", ECSSSpecificationStatus.REFINING),
   /** CSS Text Level 3 */
-  CSS3_TEXT ("css3-text"),
+  CSS3_TEXT ("css3-text", ECSSSpecificationStatus.REFINING, "http://www.w3.org/TR/2012/WD-css3-text-20121113/"),
   /** CSS Fragmentation Level 3 */
-  CSS3_BREAK ("css3-break"),
+  CSS3_BREAK ("css3-break", ECSSSpecificationStatus.REFINING, "http://www.w3.org/TR/2012/WD-css3-break-20120823/"),
   /** CSS Transforms */
-  CSS3_TRANSFORMS ("css3-transforms"),
+  CSS3_TRANSFORMS ("css3-transforms", ECSSSpecificationStatus.REFINING, "http://www.w3.org/TR/2012/WD-css3-transforms-20120911/"),
   /** CSS Transitions */
-  CSS3_TRANSITIONS ("css3-transitions"),
+  CSS3_TRANSITIONS ("css3-transitions", ECSSSpecificationStatus.REFINING, "http://www.w3.org/TR/2013/WD-css3-transitions-20130212/"),
   /** Cascading Variables */
-  CSS_VARIABLES ("css-variables"),
+  CSS_VARIABLES ("css-variables", ECSSSpecificationStatus.REFINING),
   /** CSS Writing Modes Level 3 */
-  CSS3_WRITING_MODES ("css3-writing-modes"),
+  CSS3_WRITING_MODES ("css3-writing-modes", ECSSSpecificationStatus.REFINING, "http://www.w3.org/TR/2012/WD-css3-writing-modes-20121115/"),
   /** CSS Cascading and Inheritance Level 3 */
-  CSS3_CASCADE ("css3-cascade"),
+  CSS3_CASCADE ("css3-cascade", ECSSSpecificationStatus.REVISING, "http://www.w3.org/TR/2013/WD-css-cascade-3-20130730/"),
   /** CSS Paged Media Level 3 */
-  CSS3_PAGE ("css3-page"),
+  CSS3_PAGE ("css3-page", ECSSSpecificationStatus.REVISING),
   /** CSS Basic User Interface Level 3 */
-  CSS3_UI ("css3-ui"),
+  CSS3_UI ("css3-ui", ECSSSpecificationStatus.REVISING, "http://www.w3.org/TR/2012/WD-css3-ui-20120117/"),
   /** CSSOM View */
-  CSSOM_VIEW ("cssom-view"),
+  CSSOM_VIEW ("cssom-view", ECSSSpecificationStatus.REVISING),
   /** CSS Box Alignment Module Level 3 */
-  CSS3_ALIGN ("css3-align"),
+  CSS3_ALIGN ("css3-align", ECSSSpecificationStatus.EXPLORING, "http://www.w3.org/TR/2013/WD-css3-align-20130514/"),
   /** CSS Backgrounds and Borders Level 4 */
-  CSS4_BACKGROUND ("css4-background"),
+  CSS4_BACKGROUND ("css4-background", ECSSSpecificationStatus.EXPLORING),
   /** Compositing and Blending */
-  COMPOSITING ("compositing"),
+  COMPOSITING ("compositing", ECSSSpecificationStatus.EXPLORING),
   /** CSS Device Adaptation */
-  CSS_DEVICE_ADAPT ("css-device-adapt"),
+  CSS_DEVICE_ADAPT ("css-device-adapt", ECSSSpecificationStatus.EXPLORING, "http://www.w3.org/TR/2011/WD-css-device-adapt-20110915/"),
   /** CSS Exclusions and Shapes */
-  CSS3_EXCLUSIONS ("css3-exclusions"),
+  CSS3_EXCLUSIONS ("css3-exclusions", ECSSSpecificationStatus.EXPLORING, "http://www.w3.org/TR/2013/WD-css3-exclusions-20130528/"),
   /** Filter Effects */
-  FILTER_EFFECTS ("filter-effects"),
+  FILTER_EFFECTS ("filter-effects", ECSSSpecificationStatus.EXPLORING, "http://www.w3.org/TR/2013/WD-filter-effects-20130523/"),
   /** CSS Generated Content for Paged Media */
-  CSS3_GCPM ("css3-gpcm"),
+  CSS3_GCPM ("css3-gpcm", ECSSSpecificationStatus.EXPLORING, "http://www.w3.org/TR/2011/WD-css3-gcpm-20111129/"),
   /** CSS Grid Layout */
-  CSS3_GRID_LAYOUT ("css3-grid-layout"),
+  CSS3_GRID_LAYOUT ("css3-grid-layout", ECSSSpecificationStatus.EXPLORING, "http://www.w3.org/TR/2013/WD-css3-grid-layout-20130402/"),
   /** CSS (Grid) Template Layout */
-  CSS3_LAYOUT ("css3-layout"),
+  CSS3_LAYOUT ("css3-layout", ECSSSpecificationStatus.EXPLORING),
   /** CSS Intrinsic & Extrinsic Sizing Module Level 3 */
-  CSS3_SIZING ("css3-sizing"),
+  CSS3_SIZING ("css3-sizing", ECSSSpecificationStatus.EXPLORING),
   /** CSS Line Grid */
-  CSS_LINE_GRID ("css-line-grid"),
+  CSS_LINE_GRID ("css-line-grid", ECSSSpecificationStatus.EXPLORING),
   /** CSS Lists Level 3 */
-  CSS3_LISTS ("css3-lists"),
+  CSS3_LISTS ("css3-lists", ECSSSpecificationStatus.EXPLORING, "http://www.w3.org/TR/2011/WD-css3-lists-20110524/"),
   /** CSS Positioned Layout Level 3 */
-  CSS3_POSITIONING ("css3-positioning"),
+  CSS3_POSITIONING ("css3-positioning", ECSSSpecificationStatus.EXPLORING, "http://www.w3.org/TR/2012/WD-css3-positioning-20120207/"),
   /** CSS Presentation Levels */
-  CSS3_PRESLEV ("css3-preslev"),
+  CSS3_PRESLEV ("css3-preslev", ECSSSpecificationStatus.EXPLORING),
   /** CSS Regions */
-  CSS3_REGIONS ("css3-regions"),
+  CSS3_REGIONS ("css3-regions", ECSSSpecificationStatus.EXPLORING, "http://www.w3.org/TR/2013/WD-css3-regions-20130528/"),
   /** CSS Tables Level 3 */
-  CSS3_TABLES ("css3-tables"),
+  CSS3_TABLES ("css3-tables", ECSSSpecificationStatus.EXPLORING),
   /** Selectors Level 4 */
-  SELECTORS4 ("selectors4"),
+  SELECTORS4 ("selectors4", ECSSSpecificationStatus.EXPLORING),
   /** CSS Object Model */
-  CSSOM ("cssom"),
+  CSSOM ("cssom", ECSSSpecificationStatus.EXPLORING),
   /** CSS Masking */
-  CSS_MASKING ("css-masking"),
+  CSS_MASKING ("css-masking", ECSSSpecificationStatus.EXPLORING, "http://www.w3.org/TR/2013/WD-css-masking-20130620/"),
   /** CSS Overflow */
-  CSS_OVERFLOW_3 ("css-overflow-3"),
+  CSS_OVERFLOW_3 ("css-overflow-3", ECSSSpecificationStatus.EXPLORING, "http://www.w3.org/TR/2013/WD-css-overflow-3-20130418/"),
   /** CSS Basic Box Model Level 3 */
-  CSS3_BOX ("css3-box"),
+  CSS3_BOX ("css3-box", ECSSSpecificationStatus.REWRITING),
   /** CSS Generated Content Level 3 */
-  CSS3_CONTENT ("css3-content"),
+  CSS3_CONTENT ("css3-content", ECSSSpecificationStatus.REWRITING, "http://www.w3.org/TR/2003/WD-css3-content-20030514/"),
   /** CSS Line Layout Level 3 */
-  CSS3_LINEBOX ("css3-linebox"),
+  CSS3_LINEBOX ("css3-linebox", ECSSSpecificationStatus.REWRITING, "http://www.w3.org/TR/2002/WD-css3-linebox-20020515/"),
   /** CSS Ruby */
-  CSS3_RUBY ("css3-ruby"),
+  CSS3_RUBY ("css3-ruby", ECSSSpecificationStatus.REWRITING, "http://www.w3.org/TR/2011/WD-css3-ruby-20110630/"),
   /** CSS Syntax Level 3 */
-  CSS3_SYNTAX ("css3-syntax"),
+  CSS3_SYNTAX ("css3-syntax", ECSSSpecificationStatus.REWRITING),
   /** Behavioral Extensions to CSS - Abandoned */
   @Deprecated
-  BECSS ("becss"),
+  BECSS ("becss", ECSSSpecificationStatus.ABANDONED),
   /** CSS Hyperlink Presentation - Abandoned */
   @Deprecated
-  CSS3_HYPERLINKS ("css3-hyperlinks"),
+  CSS3_HYPERLINKS ("css3-hyperlinks", ECSSSpecificationStatus.ABANDONED, "http://www.w3.org/TR/2004/WD-css3-hyperlinks-20040224/"),
   /** CSS Grid Positioning - Abandoned */
   @Deprecated
-  CSS3_GRID ("css3-grid");
+  CSS3_GRID ("css3-grid", ECSSSpecificationStatus.ABANDONED, "http://www.w3.org/TR/2007/WD-css3-grid-20070905/");
 
   private final String m_sID;
+  private final ECSSSpecificationStatus m_eStatus;
 
-  private ECSSSpecification (@Nonnull @Nonempty final String sID)
+  private ECSSSpecification (@Nonnull @Nonempty final String sID, @Nonnull final ECSSSpecificationStatus eStatus)
   {
-    this (sID, null);
+    this (sID, eStatus, null);
   }
 
-  private ECSSSpecification (@Nonnull @Nonempty final String sID, @Nullable final String sHandledURL)
+  private ECSSSpecification (@Nonnull @Nonempty final String sID,
+                             @Nonnull final ECSSSpecificationStatus eStatus,
+                             @Nullable final String sHandledURL)
   {
     m_sID = sID;
+    m_eStatus = eStatus;
   }
 
   @Nonnull
@@ -173,6 +177,12 @@ public enum ECSSSpecification implements IHasID <String>
   public String getID ()
   {
     return m_sID;
+  }
+
+  @Nonnull
+  public ECSSSpecificationStatus getStatus ()
+  {
+    return m_eStatus;
   }
 
   @Nullable
