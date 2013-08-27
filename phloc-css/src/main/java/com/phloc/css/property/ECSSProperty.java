@@ -40,12 +40,12 @@ import com.phloc.css.annotations.DeprecatedInCSS30;
  * CSS 3.0:<br>
  * <ul>
  * <li>http://www.w3.org/TR/2011/REC-css3-color-20110607/#property</li>
- * <li>http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#property-index</li>
+ * <li>http://www.w3.org/TR/2013/WD-css-fonts-3-20130711/#property-index</li>
  * <li>http://www.w3.org/TR/2011/WD-css-device-adapt-20110915/#property-index</li>
- * <li>http://www.w3.org/TR/2011/WD-css3-writing-modes-20110901/#property-index</li>
- * <li>TODO
- * http://www.w3.org/TR/2011/WD-css3-text-20110901/#appendix-h-full-property
- * -index</li>
+ * <li>http://www.w3.org/TR/2012/WD-css3-writing-modes-20121115/#property-index</li>
+ * <li>
+ * http://www.w3.org/TR/2012/WD-css3-text-20121113/#appendix-h-full-property-
+ * index</li>
  * <li>TODO http://www.w3.org/TR/2011/WD-css3-speech-20110818/#property-index</li>
  * <li>http://www.w3.org/TR/2011/WD-css3-ruby-20110630/#properties</li>
  * <li>http://www.w3.org/TR/2011/WD-css3-regions-20110609/#property-index</li>
@@ -54,8 +54,7 @@ import com.phloc.css.annotations.DeprecatedInCSS30;
  * <li>http://www.w3.org/TR/2011/WD-css3-flexbox-20110322/#property</li>
  * <li>http://www.w3.org/TR/2011/CR-css3-background-20110215/#property-index</li>
  * <li>TODO http://www.w3.org/TR/2010/WD-css3-gcpm-20100608/#property-index</li>
- * <li>TODO
- * http://www.w3.org/TR/2009/WD-css3-transitions-20091201/#property-index</li>
+ * <li>http://www.w3.org/TR/css3-transitions/#property-index</li>
  * <li>http://www.w3.org/TR/2009/WD-css3-2d-transforms-20091201/#property-index</li>
  * <li>TODO
  * http://www.w3.org/TR/2009/WD-css3-animations-20090320/#property-index</li>
@@ -165,9 +164,12 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   FONT_VARIANT_NUMERIC ("font-variant-numeric", ECSSVersion.CSS30),
   FONT_VARIANT_POSITION ("font-variant-position", ECSSVersion.CSS30),
   FONT_WEIGHT ("font-weight"),
+  HANGING_PUNCTUATION ("hanging-punctuation", ECSSVersion.CSS30),
   HEIGHT ("height"),
+  HYPHENS ("hyphens", ECSSVersion.CSS30),
   LEFT ("left"),
   LETTER_SPACING ("letter-spacing"),
+  LINE_BREAK ("line-break", ECSSVersion.CSS30),
   LINE_HEIGHT ("line-height"),
   LIST_STYLE ("list-style"),
   LIST_STYLE_IMAGE ("list-style-image"),
@@ -198,6 +200,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   OUTLINE_WIDTH ("outline-width"),
   OVERFLOW ("overflow"),
   OVERFLOW_STYLE ("overflow-style", ECSSVersion.CSS30),
+  OVERFLOW_WRAP ("overflow-wrap", ECSSVersion.CSS30),
   OVERFLOW_X ("overflow-x", ECSSVersion.CSS30),
   OVERFLOW_Y ("overflow-y", ECSSVersion.CSS30),
   PADDING ("padding"),
@@ -236,8 +239,10 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _SCROLLBAR_TRACK_COLOR ("scrollbar-track-color"),
   SPEAK_HEADER ("speak-header"),
   SRC ("src", ECSSVersion.CSS30),
+  TAB_SIZE ("tab-size", ECSSVersion.CSS30),
   TABLE_LAYOUT ("table-layout"),
   TEXT_ALIGN ("text-align"),
+  TEXT_ALIGN_LAST ("text-align-last", ECSSVersion.CSS30),
   TEXT_COMBINE_HORIZONTAL ("text-combine-horizontal", ECSSVersion.CSS30),
   TEXT_COMBINE_MODE ("text-combine-mode", ECSSVersion.CSS30),
   TEXT_DECORATION ("text-decoration"),
@@ -252,6 +257,11 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   TOP ("top"),
   TRANSFORM ("transform", ECSSVersion.CSS30),
   TRANSFORM_ORIGIN ("transform-origin", ECSSVersion.CSS30),
+  TRANSITION ("transition", ECSSVersion.CSS30),
+  TRANSITION_DELAY ("transition-delay", ECSSVersion.CSS30),
+  TRANSITION_DURATION ("transition-duration", ECSSVersion.CSS30),
+  TRANSITION_PROPERTY ("transition-property", ECSSVersion.CSS30),
+  TRANSITION_TIMING_FUNCTION ("transition-timing-function", ECSSVersion.CSS30),
   VERTICAL_ALIGN ("vertical-align"),
   VISIBILITY ("visibility"),
   UNICODE_BIDI ("unicode-bidi", ECSSVersion.CSS30),
@@ -259,6 +269,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   WHITE_SPACE ("white-space"),
   WIDOWS ("widows"),
   WIDTH ("width"),
+  WORD_BREAK ("word-break", ECSSVersion.CSS30),
   WORD_SPACING ("word-spacing"),
   WORD_WRAP ("word-wrap", ECSSVersion.CSS30),
   WRITING_MODE ("writing-mode", ECSSVersion.CSS30),
