@@ -46,9 +46,10 @@ import com.phloc.css.annotations.DeprecatedInCSS30;
  * <li>
  * http://www.w3.org/TR/2012/WD-css3-text-20121113/#appendix-h-full-property-
  * index</li>
- * <li>TODO http://www.w3.org/TR/2011/WD-css3-speech-20110818/#property-index</li>
+ * <li>http://www.w3.org/TR/2012/CR-css3-speech-20120320/#property-index</li>
  * <li>http://www.w3.org/TR/2011/WD-css3-ruby-20110630/#properties</li>
- * <li>http://www.w3.org/TR/2011/WD-css3-regions-20110609/#property-index</li>
+ * <li>http://www.w3.org/TR/2013/WD-css3-regions-20130528/#property-index</li>
+ * -------------------------------------------------
  * <li>http://www.w3.org/TR/2011/WD-css3-lists-20110524/#property-index</li>
  * <li>http://www.w3.org/TR/2011/CR-css3-multicol-20110412/#property-index</li>
  * <li>http://www.w3.org/TR/2011/WD-css3-flexbox-20110322/#property</li>
@@ -122,6 +123,9 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   CLEAR ("clear"),
   CLIP ("clip"),
   COLOR ("color"),
+  COLUMNS ("columns", ECSSVersion.CSS30),
+  COLUMNS_SPAN ("columns-span", ECSSVersion.CSS30),
+  COLUMNS_WIDTH ("columns-width", ECSSVersion.CSS30),
   COLUMN_COUNT ("column-count", ECSSVersion.CSS30),
   COLUMN_FILL ("column-fill", ECSSVersion.CSS30),
   COLUMN_GAP ("column-gap", ECSSVersion.CSS30),
@@ -130,11 +134,11 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   COLUMN_RULE_STYLE ("column-rule-style", ECSSVersion.CSS30),
   COLUMN_RULE_WIDTH ("column-rule-width", ECSSVersion.CSS30),
   COLUMN_WIDTH ("column-width", ECSSVersion.CSS30),
-  COLUMNS ("columns", ECSSVersion.CSS30),
-  COLUMNS_SPAN ("columns-span", ECSSVersion.CSS30),
-  COLUMNS_WIDTH ("columns-width", ECSSVersion.CSS30),
   CONTENT ("content"),
   CONTENT_ORDER ("content-order", ECSSVersion.CSS30),
+  CUE ("cue", ECSSVersion.CSS30),
+  CUE_AFTER ("cue-after", ECSSVersion.CSS30),
+  CUE_BEFORE ("cue-before", ECSSVersion.CSS30),
   CURSOR ("cursor"),
   DIRECTION ("direction"),
   DISPLAY ("display"),
@@ -146,6 +150,8 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   FLEX_PACK ("flex-pack", ECSSVersion.CSS30),
   FLOAT ("float"),
   FLOW ("flow", ECSSVersion.CSS30),
+  FLOW_FROM ("flow-from", ECSSVersion.CSS30),
+  FLOW_INTO ("flow-into", ECSSVersion.CSS30),
   FONT ("font", ECSSVersion.CSS30),
   FONT_FAMILY ("font-family"),
   FONT_FEATURE_SETTINGS ("font-feature-settings", ECSSVersion.CSS30),
@@ -208,39 +214,32 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   PADDING_LEFT ("padding-left"),
   PADDING_RIGHT ("padding-right"),
   PADDING_TOP ("padding-top"),
-  PAGE_BREAK_BEFORE ("page-break-before"),
   PAGE_BREAK_AFTER ("page-break-after"),
+  PAGE_BREAK_BEFORE ("page-break-before"),
   PAGE_BREAK_INSIDE ("page-break-inside"),
+  PAUSE ("pause", ECSSVersion.CSS30),
+  PAUSE_AFTER ("pause-after", ECSSVersion.CSS30),
+  PAUSE_BEFORE ("pause-before", ECSSVersion.CSS30),
   POSITION ("position"),
   QUOTES ("quotes", ECSSVersion.CSS30),
+  REGION_FRAGMENT ("region-fragment", ECSSVersion.CSS30),
   REGION_OVERFLOW ("region-overflow", ECSSVersion.CSS30),
   RESIZE ("resize", ECSSVersion.CSS30),
   RESOLUTION ("resolution", ECSSVersion.CSS30),
+  REST ("rest"),
+  REST_AFTER ("rest-after", ECSSVersion.CSS30),
+  REST_BEFORE ("rest-before", ECSSVersion.CSS30),
   RIGHT ("right"),
   RUBY_ALIGN ("ruby-align", ECSSVersion.CSS30),
   RUBY_OVERHANG ("ruby-overhang", ECSSVersion.CSS30),
   RUBY_POSITION ("ruby-position", ECSSVersion.CSS30),
   RUBY_SPAN ("ruby-span", ECSSVersion.CSS30),
-  @DeprecatedInCSS30
-  _SCROLLBAR_3DLIGHT_COLOR ("scrollbar-3dlight-color"),
-  @DeprecatedInCSS30
-  _SCROLLBAR_ARROW_COLOR ("scrollbar-arrow-color"),
-  @DeprecatedInCSS30
-  _SCROLLBAR_BASE_COLOR ("scrollbar-base-color"),
-  @DeprecatedInCSS30
-  _SCROLLBAR_DARKSHADOW_COLOR ("scrollbar-darkshadow-color"),
-  @DeprecatedInCSS30
-  _SCROLLBAR_FACE_COLOR ("scrollbar-face-color"),
-  @DeprecatedInCSS30
-  _SCROLLBAR_HIGHLIGHT_COLOR ("scrollbar-highlight-color"),
-  @DeprecatedInCSS30
-  _SCROLLBAR_SHADOW_COLOR ("scrollbar-shadow-color"),
-  @DeprecatedInCSS30
-  _SCROLLBAR_TRACK_COLOR ("scrollbar-track-color"),
+  SPEAK ("speak", ECSSVersion.CSS30),
+  SPEAK_AS ("speak-as", ECSSVersion.CSS30),
   SPEAK_HEADER ("speak-header"),
   SRC ("src", ECSSVersion.CSS30),
-  TAB_SIZE ("tab-size", ECSSVersion.CSS30),
   TABLE_LAYOUT ("table-layout"),
+  TAB_SIZE ("tab-size", ECSSVersion.CSS30),
   TEXT_ALIGN ("text-align"),
   TEXT_ALIGN_LAST ("text-align-last", ECSSVersion.CSS30),
   TEXT_COMBINE_HORIZONTAL ("text-combine-horizontal", ECSSVersion.CSS30),
@@ -262,10 +261,18 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   TRANSITION_DURATION ("transition-duration", ECSSVersion.CSS30),
   TRANSITION_PROPERTY ("transition-property", ECSSVersion.CSS30),
   TRANSITION_TIMING_FUNCTION ("transition-timing-function", ECSSVersion.CSS30),
-  VERTICAL_ALIGN ("vertical-align"),
-  VISIBILITY ("visibility"),
   UNICODE_BIDI ("unicode-bidi", ECSSVersion.CSS30),
   USER_ZOOM ("user-zoom", ECSSVersion.CSS30),
+  VERTICAL_ALIGN ("vertical-align"),
+  VISIBILITY ("visibility"),
+  VOICE_BALANCE ("voice-balance", ECSSVersion.CSS30),
+  VOICE_DURATION ("voice-duration", ECSSVersion.CSS30),
+  VOICE_FAMILY ("voice-family", ECSSVersion.CSS30),
+  VOICE_PITCH ("voice-pitch", ECSSVersion.CSS30),
+  VOICE_RANGE ("voice-range", ECSSVersion.CSS30),
+  VOICE_RATE ("voice-rate", ECSSVersion.CSS30),
+  VOICE_STRESS ("voice-stress", ECSSVersion.CSS30),
+  VOICE_VOLUME ("voice-volume", ECSSVersion.CSS30),
   WHITE_SPACE ("white-space"),
   WIDOWS ("widows"),
   WIDTH ("width"),
@@ -273,8 +280,27 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   WORD_SPACING ("word-spacing"),
   WORD_WRAP ("word-wrap", ECSSVersion.CSS30),
   WRITING_MODE ("writing-mode", ECSSVersion.CSS30),
-  Z_INDEX ("z-index"),
   ZOOM ("zoom", ECSSVersion.CSS30),
+  Z_INDEX ("z-index"),
+
+  // Old and deprecated elements
+  @DeprecatedInCSS30
+  _SCROLLBAR_3DLIGHT_COLOR ("scrollbar-3dlight-color"),
+  @DeprecatedInCSS30
+  _SCROLLBAR_ARROW_COLOR ("scrollbar-arrow-color"),
+  @DeprecatedInCSS30
+  _SCROLLBAR_BASE_COLOR ("scrollbar-base-color"),
+  @DeprecatedInCSS30
+  _SCROLLBAR_DARKSHADOW_COLOR ("scrollbar-darkshadow-color"),
+  @DeprecatedInCSS30
+  _SCROLLBAR_FACE_COLOR ("scrollbar-face-color"),
+  @DeprecatedInCSS30
+  _SCROLLBAR_HIGHLIGHT_COLOR ("scrollbar-highlight-color"),
+  @DeprecatedInCSS30
+  _SCROLLBAR_SHADOW_COLOR ("scrollbar-shadow-color"),
+  @DeprecatedInCSS30
+  _SCROLLBAR_TRACK_COLOR ("scrollbar-track-color"),
+
   // Do not use the following manually:
   _KHTML_BORDER_RADIUS ("-khtml-border-radius"),
   _KHTML_BORDER_TOP_LEFT_RADIUS ("-khtml-border-top-left-radius"),
