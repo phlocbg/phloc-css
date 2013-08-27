@@ -30,9 +30,12 @@ import com.phloc.commons.version.Version;
 public enum ECSSVersion implements IHasVersion
 {
   // Sort fields according to the version!
-  HTML4 (new Version (1, 0)),
+  CSS10 (new Version (1, 0)),
   CSS21 (new Version (2, 1)),
   CSS30 (new Version (3, 0));
+
+  @Nonnull
+  public static final ECSSVersion HTML4 = CSS10;
 
   /** Default version is CSS 3.0 */
   @Nonnull
