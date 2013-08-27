@@ -21,6 +21,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
@@ -79,9 +81,9 @@ public abstract class AbstractCSSProperty implements ICSSProperty
   }
 
   @Nonnull
-  private ICSSValue _newValue (@Nonnull final String sValue, final boolean bIsImportant)
+  public ICSSValue newValue (@Nonnull @Nonempty final String sValue, final boolean bIsImportant)
   {
-    if (sValue == null)
+    if (StringHelper.hasNoText (sValue))
       throw new NullPointerException ("value");
 
     // Special handling for browser specific value creation
@@ -152,15 +154,21 @@ public abstract class AbstractCSSProperty implements ICSSProperty
   }
 
   @Nonnull
-  public final ICSSValue newValue (@Nonnull final String sValue)
+  public final ICSSValue newValue (@Nonnull @Nonempty final String sValue)
   {
-    return _newValue (sValue, false);
+    return newValue (sValue, false);
   }
 
   @Nonnull
-  public final ICSSValue newImportantValue (@Nonnull final String sValue)
+  public final ICSSValue newImportantValue (@Nonnull @Nonempty final String sValue)
   {
-    return _newValue (sValue, true);
+    return newValue (sValue, true);
+  }
+
+  @Nonnull
+  public final ICSSValue newValue (@Nonnull final ICSSNamedColor aColor, final boolean bImportant)
+  {
+    return newValue (aColor.getName (), bImportant);
   }
 
   @Nonnull

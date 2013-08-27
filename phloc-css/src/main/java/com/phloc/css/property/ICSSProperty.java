@@ -20,6 +20,7 @@ package com.phloc.css.property;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.propertyvalue.ICSSValue;
 import com.phloc.css.utils.ICSSNamedColor;
@@ -54,25 +55,53 @@ public interface ICSSProperty extends ICSSVersionAware
    * Create a new CSS value with this property and the specified value.
    * 
    * @param sValue
-   *        The CSS String value
+   *        The CSS String value. May neither be <code>null</code> nor empty.
+   * @param bImportant
+   *        <code>true</code> if it is an important value, <code>false</code> if
+   *        not
    * @return Never <code>null</code>.
    */
   @Nonnull
-  ICSSValue newValue (@Nonnull String sValue);
+  ICSSValue newValue (@Nonnull @Nonempty String sValue, boolean bImportant);
+
+  /**
+   * Create a new CSS value with this property and the specified value. This is
+   * a shortcut for <code>newValue (sValue, false)</code>.
+   * 
+   * @param sValue
+   *        The CSS String value. May neither be <code>null</code> nor empty.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  ICSSValue newValue (@Nonnull @Nonempty String sValue);
 
   /**
    * Create a new important CSS value with this property and the specified
-   * value.
+   * value. This is a shortcut for <code>newValue (sValue, true)</code>.
    * 
    * @param sValue
-   *        The CSS String value
+   *        The CSS String value. May neither be <code>null</code> nor empty.
    * @return Never <code>null</code>.
    */
   @Nonnull
-  ICSSValue newImportantValue (@Nonnull String sValue);
+  ICSSValue newImportantValue (@Nonnull @Nonempty String sValue);
 
   /**
    * Create a new CSS value with this property and the specified named color.
+   * 
+   * @param aColor
+   *        The CSS color value
+   * @param bImportant
+   *        <code>true</code> if it is an important value, <code>false</code> if
+   *        not
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  ICSSValue newValue (@Nonnull ICSSNamedColor aColor, boolean bImportant);
+
+  /**
+   * Create a new CSS value with this property and the specified named color.
+   * This is a shortcut for <code>newValue (aColor, false)</code>.
    * 
    * @param aColor
    *        The CSS color value
@@ -83,7 +112,7 @@ public interface ICSSProperty extends ICSSVersionAware
 
   /**
    * Create a new important CSS value with this property and the specified named
-   * color.
+   * color. This is a shortcut for <code>newValue (aColor, true)</code>.
    * 
    * @param aColor
    *        The CSS color value
