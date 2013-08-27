@@ -17,13 +17,18 @@
  */
 package com.phloc.css.property;
 
+import java.util.EnumSet;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.css.ECSSSpecification;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.annotations.DeprecatedInCSS30;
@@ -78,66 +83,66 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   ANIMATION_PLAY_STATE ("animation-play-state", ECSSVersion.CSS30),
   ANIMATION_TIMING_FUNCTION ("animation-timing-function", ECSSVersion.CSS30),
   APPEARANCE ("appearance", ECSSVersion.CSS30),
-  AZIMUTH ("azimuth", ECSSVersion.CSS21),
+  AZIMUTH ("azimuth", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   BACKFACE_VISIBILITY ("backface-visibility", ECSSVersion.CSS30),
-  BACKGROUND ("background", ECSSVersion.CSS10),
-  BACKGROUND_ATTACHMENT ("background-attachment", ECSSVersion.CSS10),
+  BACKGROUND ("background", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BACKGROUND_ATTACHMENT ("background-attachment", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   BACKGROUND_CLIP ("background-clip", ECSSVersion.CSS30),
-  BACKGROUND_COLOR ("background-color", ECSSVersion.CSS10),
-  BACKGROUND_IMAGE ("background-image", ECSSVersion.CSS10),
+  BACKGROUND_COLOR ("background-color", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BACKGROUND_IMAGE ("background-image", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   BACKGROUND_ORIGIN ("background-origin", ECSSVersion.CSS30),
-  BACKGROUND_POSITION ("background-position", ECSSVersion.CSS10),
-  BACKGROUND_REPEAT ("background-repeat", ECSSVersion.CSS10),
+  BACKGROUND_POSITION ("background-position", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BACKGROUND_REPEAT ("background-repeat", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   BACKGROUND_SIZE ("background-size", ECSSVersion.CSS30),
   BLEED ("bleed", ECSSVersion.CSS30),
   BOOKMARK_LABEL ("bookmark-label", ECSSVersion.CSS30),
   BOOKMARK_LEVEL ("bookmark-level", ECSSVersion.CSS30),
   BOOKMARK_STATE ("bookmark-state", ECSSVersion.CSS30),
   BOOKMARK_TARGET ("bookmark-target", ECSSVersion.CSS30),
-  BORDER ("border", ECSSVersion.CSS10),
-  BORDER_BOTTOM ("border-bottom", ECSSVersion.CSS10),
-  BORDER_BOTTOM_COLOR ("border-bottom-color", ECSSVersion.CSS21),
+  BORDER ("border", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BORDER_BOTTOM ("border-bottom", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BORDER_BOTTOM_COLOR ("border-bottom-color", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   BORDER_BOTTOM_LEFT_RADIUS ("border-bottom-left-radius", ECSSVersion.CSS30),
   BORDER_BOTTOM_RIGHT_RADIUS ("border-bottom-right-radius", ECSSVersion.CSS30),
-  BORDER_BOTTOM_STYLE ("border-bottom-style", ECSSVersion.CSS21),
-  BORDER_BOTTOM_WIDTH ("border-bottom-width", ECSSVersion.CSS10),
-  BORDER_COLLAPSE ("border-collapse", ECSSVersion.CSS21),
-  BORDER_COLOR ("border-color", ECSSVersion.CSS10),
+  BORDER_BOTTOM_STYLE ("border-bottom-style", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  BORDER_BOTTOM_WIDTH ("border-bottom-width", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BORDER_COLLAPSE ("border-collapse", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  BORDER_COLOR ("border-color", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   BORDER_IMAGE ("border-image", ECSSVersion.CSS30),
   BORDER_IMAGE_OUTSET ("border-image-outset", ECSSVersion.CSS30),
   BORDER_IMAGE_REPEAT ("border-image-repeat", ECSSVersion.CSS30),
   BORDER_IMAGE_SLICE ("border-image-slice", ECSSVersion.CSS30),
   BORDER_IMAGE_SOURCE ("border-image-source", ECSSVersion.CSS30),
   BORDER_IMAGE_WIDTH ("border-image-width", ECSSVersion.CSS30),
-  BORDER_LEFT ("border-left", ECSSVersion.CSS10),
-  BORDER_LEFT_COLOR ("border-left-color", ECSSVersion.CSS21),
-  BORDER_LEFT_STYLE ("border-left-style", ECSSVersion.CSS21),
-  BORDER_LEFT_WIDTH ("border-left-width", ECSSVersion.CSS10),
+  BORDER_LEFT ("border-left", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BORDER_LEFT_COLOR ("border-left-color", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  BORDER_LEFT_STYLE ("border-left-style", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  BORDER_LEFT_WIDTH ("border-left-width", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   BORDER_RADIUS ("border-radius", ECSSVersion.CSS30),
-  BORDER_RIGHT ("border-right", ECSSVersion.CSS10),
-  BORDER_RIGHT_COLOR ("border-right-color", ECSSVersion.CSS21),
-  BORDER_RIGHT_STYLE ("border-right-style", ECSSVersion.CSS21),
-  BORDER_RIGHT_WIDTH ("border-right-width", ECSSVersion.CSS10),
-  BORDER_SPACING ("border-spacing", ECSSVersion.CSS21),
-  BORDER_STYLE ("border-style", ECSSVersion.CSS10),
-  BORDER_TOP ("border-top", ECSSVersion.CSS10),
-  BORDER_TOP_COLOR ("border-top-color", ECSSVersion.CSS21),
+  BORDER_RIGHT ("border-right", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BORDER_RIGHT_COLOR ("border-right-color", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  BORDER_RIGHT_STYLE ("border-right-style", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  BORDER_RIGHT_WIDTH ("border-right-width", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BORDER_SPACING ("border-spacing", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  BORDER_STYLE ("border-style", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BORDER_TOP ("border-top", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BORDER_TOP_COLOR ("border-top-color", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   BORDER_TOP_LEFT_RADIUS ("border-top-left-radius", ECSSVersion.CSS30),
   BORDER_TOP_RIGHT_RADIUS ("border-top-right-radius", ECSSVersion.CSS30),
-  BORDER_TOP_STYLE ("border-top-style", ECSSVersion.CSS21),
-  BORDER_TOP_WIDTH ("border-top-width", ECSSVersion.CSS10),
-  BORDER_WIDTH ("border-width", ECSSVersion.CSS10),
-  BOTTOM ("bottom", ECSSVersion.CSS21),
+  BORDER_TOP_STYLE ("border-top-style", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  BORDER_TOP_WIDTH ("border-top-width", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BORDER_WIDTH ("border-width", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  BOTTOM ("bottom", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   BOX_DECORATION_BREAK ("box-decoration-break", ECSSVersion.CSS30),
   BOX_SHADOW ("box-shadow", ECSSVersion.CSS30),
   BOX_SIZING ("box-sizing", ECSSVersion.CSS30),
   BREAK_AFTER ("break-after", ECSSVersion.CSS30),
   BREAK_BEFORE ("break-before", ECSSVersion.CSS30),
   BREAK_INSIDE ("break-inside", ECSSVersion.CSS30),
-  CAPTION_SIDE ("caption-side", ECSSVersion.CSS21),
-  CLEAR ("clear", ECSSVersion.CSS10),
-  CLIP ("clip", ECSSVersion.CSS21),
-  COLOR ("color", ECSSVersion.CSS10),
+  CAPTION_SIDE ("caption-side", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  CLEAR ("clear", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  CLIP ("clip", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  COLOR ("color", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   COLUMNS ("columns", ECSSVersion.CSS30),
   COLUMNS_SPAN ("columns-span", ECSSVersion.CSS30),
   COLUMNS_WIDTH ("columns-width", ECSSVersion.CSS30),
@@ -149,18 +154,18 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   COLUMN_RULE_STYLE ("column-rule-style", ECSSVersion.CSS30),
   COLUMN_RULE_WIDTH ("column-rule-width", ECSSVersion.CSS30),
   COLUMN_WIDTH ("column-width", ECSSVersion.CSS30),
-  CONTENT ("content", ECSSVersion.CSS21),
+  CONTENT ("content", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   CONTENT_ORDER ("content-order", ECSSVersion.CSS30),
-  COUNTER_INCREMENT ("counter-increment", ECSSVersion.CSS21),
-  COUNTER_RESET ("counter-reset", ECSSVersion.CSS21),
-  CUE ("cue", ECSSVersion.CSS21),
-  CUE_AFTER ("cue-after", ECSSVersion.CSS21),
-  CUE_BEFORE ("cue-before", ECSSVersion.CSS21),
-  CURSOR ("cursor", ECSSVersion.CSS21),
-  DIRECTION ("direction", ECSSVersion.CSS21),
-  DISPLAY ("display", ECSSVersion.CSS10),
-  ELEVATION ("elevation", ECSSVersion.CSS21),
-  EMPTY_CELLS ("empty-cells", ECSSVersion.CSS21),
+  COUNTER_INCREMENT ("counter-increment", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  COUNTER_RESET ("counter-reset", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  CUE ("cue", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  CUE_AFTER ("cue-after", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  CUE_BEFORE ("cue-before", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  CURSOR ("cursor", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  DIRECTION ("direction", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  DISPLAY ("display", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  ELEVATION ("elevation", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  EMPTY_CELLS ("empty-cells", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   FILTER ("filter", ECSSVersion.CSS30),
   FLEX ("flex", ECSSVersion.CSS30),
   FLEX_BASIS ("flex-basis", ECSSVersion.CSS30),
@@ -169,91 +174,91 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   FLEX_GROW ("flex-grow", ECSSVersion.CSS30),
   FLEX_SHRINK ("flex-shrink", ECSSVersion.CSS30),
   FLEX_WRAP ("flex-wrap", ECSSVersion.CSS30),
-  FLOAT ("float", ECSSVersion.CSS10),
+  FLOAT ("float", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   FLOAT_OFFSET ("float-offset", ECSSVersion.CSS30),
   FLOW ("flow", ECSSVersion.CSS30),
   FLOW_FROM ("flow-from", ECSSVersion.CSS30),
   FLOW_INTO ("flow-into", ECSSVersion.CSS30),
-  FONT ("font", ECSSVersion.CSS10),
-  FONT_FAMILY ("font-family", ECSSVersion.CSS10),
+  FONT ("font", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  FONT_FAMILY ("font-family", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   FONT_FEATURE_SETTINGS ("font-feature-settings", ECSSVersion.CSS30),
   FONT_KERNING ("font-kerning", ECSSVersion.CSS30),
   FONT_LANGUAGE_OVERRIDE ("font-language-override", ECSSVersion.CSS30),
-  FONT_SIZE ("font-size", ECSSVersion.CSS10),
+  FONT_SIZE ("font-size", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   FONT_SIZE_ADJUST ("font-size-adjust", ECSSVersion.CSS30),
   FONT_STRETCH ("font-stretch", ECSSVersion.CSS30),
-  FONT_STYLE ("font-style", ECSSVersion.CSS10),
+  FONT_STYLE ("font-style", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   FONT_SYNTHESIS ("font-synthesis", ECSSVersion.CSS30),
-  FONT_VARIANT ("font-variant", ECSSVersion.CSS10),
+  FONT_VARIANT ("font-variant", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   FONT_VARIANT_ALTERNATES ("font-variant-alternates", ECSSVersion.CSS30),
   FONT_VARIANT_CAPS ("font-variant-caps", ECSSVersion.CSS30),
   FONT_VARIANT_EAST_ASIAN ("font-variant-east-asian", ECSSVersion.CSS30),
   FONT_VARIANT_LIGATURES ("font-variant-ligatures", ECSSVersion.CSS30),
   FONT_VARIANT_NUMERIC ("font-variant-numeric", ECSSVersion.CSS30),
   FONT_VARIANT_POSITION ("font-variant-position", ECSSVersion.CSS30),
-  FONT_WEIGHT ("font-weight", ECSSVersion.CSS10),
+  FONT_WEIGHT ("font-weight", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   GRID_COLUMNS ("grid-columns", ECSSVersion.CSS30),
   GRID_ROWS ("grid-rows", ECSSVersion.CSS30),
   HANGING_PUNCTUATION ("hanging-punctuation", ECSSVersion.CSS30),
-  HEIGHT ("height", ECSSVersion.CSS10),
+  HEIGHT ("height", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   HYPHENS ("hyphens", ECSSVersion.CSS30),
   JUSITFY_CONTENT ("justify-content", ECSSVersion.CSS30),
-  LEFT ("left", ECSSVersion.CSS21),
-  LETTER_SPACING ("letter-spacing", ECSSVersion.CSS10),
+  LEFT ("left", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  LETTER_SPACING ("letter-spacing", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   LINE_BREAK ("line-break", ECSSVersion.CSS30),
-  LINE_HEIGHT ("line-height", ECSSVersion.CSS10),
-  LIST_STYLE ("list-style", ECSSVersion.CSS10),
-  LIST_STYLE_IMAGE ("list-style-image", ECSSVersion.CSS10),
-  LIST_STYLE_POSITION ("list-style-position", ECSSVersion.CSS10),
-  LIST_STYLE_TYPE ("list-style-type", ECSSVersion.CSS10),
-  MARGIN ("margin", ECSSVersion.CSS10),
-  MARGIN_BOTTOM ("margin-bottom", ECSSVersion.CSS10),
-  MARGIN_LEFT ("margin-left", ECSSVersion.CSS10),
-  MARGIN_RIGHT ("margin-right", ECSSVersion.CSS10),
-  MARGIN_TOP ("margin-top", ECSSVersion.CSS10),
+  LINE_HEIGHT ("line-height", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  LIST_STYLE ("list-style", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  LIST_STYLE_IMAGE ("list-style-image", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  LIST_STYLE_POSITION ("list-style-position", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  LIST_STYLE_TYPE ("list-style-type", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  MARGIN ("margin", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  MARGIN_BOTTOM ("margin-bottom", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  MARGIN_LEFT ("margin-left", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  MARGIN_RIGHT ("margin-right", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  MARGIN_TOP ("margin-top", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   MARKS ("marks", ECSSVersion.CSS30),
   MARQUEE_DIRECTION ("marquee-direction", ECSSVersion.CSS30),
   MARQUEE_PLAY_COUNT ("marquee-play-count", ECSSVersion.CSS30),
   MARQUEE_SPEED ("marquee-speed", ECSSVersion.CSS30),
   MARQUEE_STYLE ("marquee-style", ECSSVersion.CSS30),
-  MAX_HEIGHT ("max-height", ECSSVersion.CSS21),
-  MAX_WIDTH ("max-width", ECSSVersion.CSS21),
+  MAX_HEIGHT ("max-height", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  MAX_WIDTH ("max-width", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   MAX_ZOOM ("max-zoom", ECSSVersion.CSS30),
-  MIN_HEIGHT ("min-height", ECSSVersion.CSS21),
-  MIN_WIDTH ("min-width", ECSSVersion.CSS21),
+  MIN_HEIGHT ("min-height", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  MIN_WIDTH ("min-width", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   MIN_ZOOM ("min-zoom", ECSSVersion.CSS30),
   OPACITY ("opacity", ECSSVersion.CSS30),
   ORDER ("order", ECSSVersion.CSS30),
   ORIENTATION ("orientation", ECSSVersion.CSS30),
-  ORPHANS ("orphans", ECSSVersion.CSS21),
-  OUTLINE ("outline", ECSSVersion.CSS21),
-  OUTLINE_COLOR ("outline-color", ECSSVersion.CSS21),
+  ORPHANS ("orphans", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  OUTLINE ("outline", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  OUTLINE_COLOR ("outline-color", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   OUTLINE_OFFSET ("outline-offset", ECSSVersion.CSS30),
-  OUTLINE_STYLE ("outline-style", ECSSVersion.CSS21),
-  OUTLINE_WIDTH ("outline-width", ECSSVersion.CSS21),
-  OVERFLOW ("overflow", ECSSVersion.CSS21),
+  OUTLINE_STYLE ("outline-style", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  OUTLINE_WIDTH ("outline-width", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  OVERFLOW ("overflow", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   OVERFLOW_STYLE ("overflow-style", ECSSVersion.CSS30),
   OVERFLOW_WRAP ("overflow-wrap", ECSSVersion.CSS30),
   OVERFLOW_X ("overflow-x", ECSSVersion.CSS30),
   OVERFLOW_Y ("overflow-y", ECSSVersion.CSS30),
-  PADDING ("padding", ECSSVersion.CSS10),
-  PADDING_BOTTOM ("padding-bottom", ECSSVersion.CSS10),
-  PADDING_LEFT ("padding-left", ECSSVersion.CSS10),
-  PADDING_RIGHT ("padding-right", ECSSVersion.CSS10),
-  PADDING_TOP ("padding-top", ECSSVersion.CSS10),
-  PAGE_BREAK_AFTER ("page-break-after", ECSSVersion.CSS21),
-  PAGE_BREAK_BEFORE ("page-break-before", ECSSVersion.CSS21),
-  PAGE_BREAK_INSIDE ("page-break-inside", ECSSVersion.CSS21),
-  PAUSE ("pause", ECSSVersion.CSS21),
-  PAUSE_AFTER ("pause-after", ECSSVersion.CSS21),
-  PAUSE_BEFORE ("pause-before", ECSSVersion.CSS21),
+  PADDING ("padding", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  PADDING_BOTTOM ("padding-bottom", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  PADDING_LEFT ("padding-left", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  PADDING_RIGHT ("padding-right", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  PADDING_TOP ("padding-top", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  PAGE_BREAK_AFTER ("page-break-after", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  PAGE_BREAK_BEFORE ("page-break-before", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  PAGE_BREAK_INSIDE ("page-break-inside", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  PAUSE ("pause", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  PAUSE_AFTER ("pause-after", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  PAUSE_BEFORE ("pause-before", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   PERSPECTIVE ("perspective", ECSSVersion.CSS30),
   PERSPECTIVE_ORIGIN ("perspective-origin", ECSSVersion.CSS30),
-  PITCH ("pitch", ECSSVersion.CSS21),
-  PITCH_RANGE ("pitch-range", ECSSVersion.CSS21),
-  PLAY_DURING ("play-during", ECSSVersion.CSS21),
-  POSITION ("position", ECSSVersion.CSS21),
-  QUOTES ("quotes", ECSSVersion.CSS21),
+  PITCH ("pitch", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  PITCH_RANGE ("pitch-range", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  PLAY_DURING ("play-during", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  POSITION ("position", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  QUOTES ("quotes", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   REGION_FRAGMENT ("region-fragment", ECSSVersion.CSS30),
   REGION_OVERFLOW ("region-overflow", ECSSVersion.CSS30),
   RESIZE ("resize", ECSSVersion.CSS30),
@@ -261,37 +266,37 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   REST ("rest", ECSSVersion.CSS30),
   REST_AFTER ("rest-after", ECSSVersion.CSS30),
   REST_BEFORE ("rest-before", ECSSVersion.CSS30),
-  RICHNESS ("richness", ECSSVersion.CSS21),
-  RIGHT ("right", ECSSVersion.CSS21),
+  RICHNESS ("richness", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  RIGHT ("right", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   RUBY_ALIGN ("ruby-align", ECSSVersion.CSS30),
   RUBY_OVERHANG ("ruby-overhang", ECSSVersion.CSS30),
   RUBY_POSITION ("ruby-position", ECSSVersion.CSS30),
   RUBY_SPAN ("ruby-span", ECSSVersion.CSS30),
-  SPEAK ("speak", ECSSVersion.CSS21),
+  SPEAK ("speak", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   SPEAK_AS ("speak-as", ECSSVersion.CSS30),
-  SPEAK_HEADER ("speak-header", ECSSVersion.CSS21),
-  SPEAK_NUMERAL ("speak-numeral", ECSSVersion.CSS21),
-  SPEAK_PUNCTUATION ("speak-punctuation", ECSSVersion.CSS21),
-  SPEECH_RATE ("speech-rate", ECSSVersion.CSS21),
+  SPEAK_HEADER ("speak-header", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  SPEAK_NUMERAL ("speak-numeral", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  SPEAK_PUNCTUATION ("speak-punctuation", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  SPEECH_RATE ("speech-rate", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   SRC ("src", ECSSVersion.CSS30),
-  STRESS ("stress", ECSSVersion.CSS21),
+  STRESS ("stress", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   STRING_SET ("string-set", ECSSVersion.CSS30),
-  TABLE_LAYOUT ("table-layout", ECSSVersion.CSS21),
+  TABLE_LAYOUT ("table-layout", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   TAB_SIZE ("tab-size", ECSSVersion.CSS30),
-  TEXT_ALIGN ("text-align", ECSSVersion.CSS10),
+  TEXT_ALIGN ("text-align", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   TEXT_ALIGN_LAST ("text-align-last", ECSSVersion.CSS30),
   TEXT_COMBINE_HORIZONTAL ("text-combine-horizontal", ECSSVersion.CSS30),
   TEXT_COMBINE_MODE ("text-combine-mode", ECSSVersion.CSS30),
-  TEXT_DECORATION ("text-decoration", ECSSVersion.CSS10),
+  TEXT_DECORATION ("text-decoration", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   TEXT_FILL_COLOR ("text-fill-color", ECSSVersion.CSS30),
-  TEXT_INDENT ("text-indent", ECSSVersion.CSS10),
+  TEXT_INDENT ("text-indent", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   TEXT_JUSTIFY ("text-justify", ECSSVersion.CSS30),
   TEXT_ORIENTATION ("text-orientation", ECSSVersion.CSS30),
   TEXT_OVERFLOW ("text-overflow", ECSSVersion.CSS30),
   TEXT_SHADOW ("text-shadow", ECSSVersion.CSS30),
   TEXT_STROKE ("text-stroke", ECSSVersion.CSS30),
-  TEXT_TRANSFORM ("text-transform", ECSSVersion.CSS10),
-  TOP ("top", ECSSVersion.CSS21),
+  TEXT_TRANSFORM ("text-transform", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  TOP ("top", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   TRANSFORM ("transform", ECSSVersion.CSS30),
   TRANSFORM_ORIGIN ("transform-origin", ECSSVersion.CSS30),
   TRANSFORM_STYLE ("transform-style", ECSSVersion.CSS30),
@@ -300,28 +305,28 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   TRANSITION_DURATION ("transition-duration", ECSSVersion.CSS30),
   TRANSITION_PROPERTY ("transition-property", ECSSVersion.CSS30),
   TRANSITION_TIMING_FUNCTION ("transition-timing-function", ECSSVersion.CSS30),
-  UNICODE_BIDI ("unicode-bidi", ECSSVersion.CSS21),
+  UNICODE_BIDI ("unicode-bidi", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   USER_ZOOM ("user-zoom", ECSSVersion.CSS30),
-  VERTICAL_ALIGN ("vertical-align", ECSSVersion.CSS10),
-  VISIBILITY ("visibility", ECSSVersion.CSS21),
+  VERTICAL_ALIGN ("vertical-align", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  VISIBILITY ("visibility", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   VOICE_BALANCE ("voice-balance", ECSSVersion.CSS30),
   VOICE_DURATION ("voice-duration", ECSSVersion.CSS30),
-  VOICE_FAMILY ("voice-family", ECSSVersion.CSS21),
+  VOICE_FAMILY ("voice-family", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   VOICE_PITCH ("voice-pitch", ECSSVersion.CSS30),
   VOICE_RANGE ("voice-range", ECSSVersion.CSS30),
   VOICE_RATE ("voice-rate", ECSSVersion.CSS30),
   VOICE_STRESS ("voice-stress", ECSSVersion.CSS30),
   VOICE_VOLUME ("voice-volume", ECSSVersion.CSS30),
-  VOLUME ("volume", ECSSVersion.CSS21),
-  WHITE_SPACE ("white-space", ECSSVersion.CSS10),
-  WIDOWS ("widows", ECSSVersion.CSS21),
-  WIDTH ("width", ECSSVersion.CSS10),
+  VOLUME ("volume", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  WHITE_SPACE ("white-space", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  WIDOWS ("widows", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  WIDTH ("width", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   WORD_BREAK ("word-break", ECSSVersion.CSS30),
-  WORD_SPACING ("word-spacing", ECSSVersion.CSS10),
+  WORD_SPACING ("word-spacing", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
   WORD_WRAP ("word-wrap", ECSSVersion.CSS30),
   WRITING_MODE ("writing-mode", ECSSVersion.CSS30),
   ZOOM ("zoom", ECSSVersion.CSS30),
-  Z_INDEX ("z-index", ECSSVersion.CSS21),
+  Z_INDEX ("z-index", ECSSVersion.CSS21, ECSSSpecification.CSS2),
 
   // Old and deprecated elements
   @DeprecatedInCSS30
@@ -635,6 +640,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
 
   private final String m_sName;
   private final ECSSVersion m_eVersion;
+  private final EnumSet <ECSSSpecification> m_aSpecifications;
 
   private ECSSProperty (@Nonnull @Nonempty final String sName)
   {
@@ -644,8 +650,16 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
 
   private ECSSProperty (@Nonnull @Nonempty final String sName, @Nonnull final ECSSVersion eVersion)
   {
+    this (sName, eVersion, (ECSSSpecification []) null);
+  }
+
+  private ECSSProperty (@Nonnull @Nonempty final String sName,
+                        @Nonnull final ECSSVersion eVersion,
+                        @Nullable final ECSSSpecification... aSpecifications)
+  {
     m_sName = sName;
     m_eVersion = eVersion;
+    m_aSpecifications = ContainerHelper.newEnumSet (ECSSSpecification.class, aSpecifications);
   }
 
   @Nonnull
@@ -659,6 +673,17 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   public ECSSVersion getMinimumCSSVersion ()
   {
     return m_eVersion;
+  }
+
+  /**
+   * @return A copy with all specifications, where the property is defined.
+   *         Never <code>null</code> but maybe empty.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public EnumSet <ECSSSpecification> getAllSpecifications ()
+  {
+    return ContainerHelper.newEnumSet (ECSSSpecification.class, m_aSpecifications);
   }
 
   public boolean isKHTMLSpecific ()
@@ -698,18 +723,22 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   }
 
   @Nullable
+  public static String getPropertyNameHandlingHacks (@Nullable final String sName)
+  {
+    String sRealName = sName;
+    if (StringHelper.hasText (sRealName))
+    {
+      // IE hacks
+      if (sRealName.startsWith ("*") || sRealName.startsWith ("_") || sRealName.startsWith ("$"))
+        sRealName = sRealName.substring (1);
+    }
+    return sRealName;
+  }
+
+  @Nullable
   public static ECSSProperty getFromNameOrNullHandlingHacks (@Nullable final String sName)
   {
-    if (StringHelper.hasText (sName))
-    {
-      String sRealName;
-      // IE hacks
-      if (sName.startsWith ("*") || sName.startsWith ("_") || sName.startsWith ("$"))
-        sRealName = sName.substring (1);
-      else
-        sRealName = sName;
-      return getFromNameOrNull (sRealName);
-    }
-    return null;
+    final String sRealName = getPropertyNameHandlingHacks (sName);
+    return getFromNameOrNull (sRealName);
   }
 }
