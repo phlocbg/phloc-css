@@ -20,6 +20,16 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2013-08-27" category="api" action="update">
+    <change>
+      <text locale="en">Updated ECSSProperty with the latest properties and add links to the respective specifications for easier handling in the future</text>
+    </change>
+  </entry>
+  <entry date="2013-08-27" category="api" action="add">
+    <change>
+      <text locale="en">Added new enums ECSSSpecification and ECSSSpecificationStatus which lists all W3C CSS specifications</text>
+    </change>
+  </entry>
   <entry date="2013-08-26" category="tech" action="change">
     <change>
       <text locale="en">CSSRect now uses the current syntax to emit rectangles (a,b,c,d) instead of (a b c d)</text>
