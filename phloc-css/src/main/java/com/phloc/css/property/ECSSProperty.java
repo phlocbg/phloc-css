@@ -49,19 +49,15 @@ import com.phloc.css.annotations.DeprecatedInCSS30;
  * <li>http://www.w3.org/TR/2012/CR-css3-speech-20120320/#property-index</li>
  * <li>http://www.w3.org/TR/2011/WD-css3-ruby-20110630/#properties</li>
  * <li>http://www.w3.org/TR/2013/WD-css3-regions-20130528/#property-index</li>
- * -------------------------------------------------
  * <li>http://www.w3.org/TR/2011/WD-css3-lists-20110524/#property-index</li>
  * <li>http://www.w3.org/TR/2011/CR-css3-multicol-20110412/#property-index</li>
- * <li>http://www.w3.org/TR/2011/WD-css3-flexbox-20110322/#property</li>
- * <li>http://www.w3.org/TR/2011/CR-css3-background-20110215/#property-index</li>
- * <li>TODO http://www.w3.org/TR/2010/WD-css3-gcpm-20100608/#property-index</li>
- * <li>http://www.w3.org/TR/css3-transitions/#property-index</li>
- * <li>http://www.w3.org/TR/2009/WD-css3-2d-transforms-20091201/#property-index</li>
- * <li>TODO
- * http://www.w3.org/TR/2009/WD-css3-animations-20090320/#property-index</li>
- * <li>TODO
- * http://www.w3.org/TR/2009/WD-css3-3d-transforms-20090320/#property-index</li>
- * <li>TODO http://www.w3.org/TR/2007/WD-css3-grid-20070905/#property-index</li>
+ * <li>http://www.w3.org/TR/2012/CR-css3-flexbox-20120918/#property</li>
+ * <li>http://www.w3.org/TR/2012/CR-css3-background-20120724/#property-index</li>
+ * <li>http://www.w3.org/TR/2011/WD-css3-gcpm-20111129/#property-index</li>
+ * <li>http://www.w3.org/TR/2013/WD-css3-transitions-20130212/#property-index</li>
+ * <li>http://www.w3.org/TR/2012/WD-css3-transforms-20120911/#property-index</li>
+ * <li>http://www.w3.org/TR/2013/WD-css3-animations-20130219/#property-index</li>
+ * <li>http://www.w3.org/TR/2007/WD-css3-grid-20070905/#property-index</li>
  * <li>http://www.w3.org/TR/2008/CR-css3-marquee-20081205/#property</li>
  * </ul>
  * 
@@ -69,7 +65,20 @@ import com.phloc.css.annotations.DeprecatedInCSS30;
  */
 public enum ECSSProperty implements IHasName, ICSSVersionAware
 {
+  ALIGN_CONTENT ("align-content", ECSSVersion.CSS30),
+  ALIGN_ITEMS ("align-items", ECSSVersion.CSS30),
+  ALIGN_SELF ("align-self", ECSSVersion.CSS30),
+  ANIMATION ("animation", ECSSVersion.CSS30),
+  ANIMATION_DELAY ("animation-delay", ECSSVersion.CSS30),
+  ANIMATION_DIRECTION ("animation-direction", ECSSVersion.CSS30),
+  ANIMATION_DURATION ("animation-duration", ECSSVersion.CSS30),
+  ANIMATION_FILL_MODE ("animation-fill-mode", ECSSVersion.CSS30),
+  ANIMATION_ITERATION_COUNT ("animation-iteration-count", ECSSVersion.CSS30),
+  ANIMATION_NAME ("animation-name", ECSSVersion.CSS30),
+  ANIMATION_PLAY_STATE ("animation-play-state", ECSSVersion.CSS30),
+  ANIMATION_TIMING_FUNCTION ("animation-timing-function", ECSSVersion.CSS30),
   APPEARANCE ("appearance", ECSSVersion.CSS30),
+  BACKFACE_VISIBILITY ("backface-visibility", ECSSVersion.CSS30),
   BACKGROUND ("background"),
   BACKGROUND_ATTACHMENT ("background-attachment"),
   BACKGROUND_CLIP ("background-clip", ECSSVersion.CSS30),
@@ -79,6 +88,11 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   BACKGROUND_POSITION ("background-position"),
   BACKGROUND_REPEAT ("background-repeat"),
   BACKGROUND_SIZE ("background-size", ECSSVersion.CSS30),
+  BLEED ("bleed", ECSSVersion.CSS30),
+  BOOKMARK_LABEL ("bookmark-label", ECSSVersion.CSS30),
+  BOOKMARK_LEVEL ("bookmark-level", ECSSVersion.CSS30),
+  BOOKMARK_STATE ("bookmark-state", ECSSVersion.CSS30),
+  BOOKMARK_TARGET ("bookmark-target", ECSSVersion.CSS30),
   BORDER ("border"),
   BORDER_BOTTOM ("border-bottom"),
   BORDER_BOTTOM_COLOR ("border-bottom-color"),
@@ -144,11 +158,15 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   DISPLAY ("display"),
   EMPTY_CELLS ("empty-cells"),
   FILTER ("filter"),
-  FLEX_ALIGN ("flex-align", ECSSVersion.CSS30),
+  FLEX ("flex", ECSSVersion.CSS30),
+  FLEX_BASIS ("flex-basis", ECSSVersion.CSS30),
   FLEX_DIRECTION ("flex-direction", ECSSVersion.CSS30),
-  FLEX_ORDER ("flex-order", ECSSVersion.CSS30),
-  FLEX_PACK ("flex-pack", ECSSVersion.CSS30),
+  FLEX_FLOW ("flex-flow", ECSSVersion.CSS30),
+  FLEX_GROW ("flex-grow", ECSSVersion.CSS30),
+  FLEX_SHRINK ("flex-shrink", ECSSVersion.CSS30),
+  FLEX_WRAP ("flex-wrap", ECSSVersion.CSS30),
   FLOAT ("float"),
+  FLOAT_OFFSET ("float-offset", ECSSVersion.CSS30),
   FLOW ("flow", ECSSVersion.CSS30),
   FLOW_FROM ("flow-from", ECSSVersion.CSS30),
   FLOW_INTO ("flow-into", ECSSVersion.CSS30),
@@ -170,9 +188,12 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   FONT_VARIANT_NUMERIC ("font-variant-numeric", ECSSVersion.CSS30),
   FONT_VARIANT_POSITION ("font-variant-position", ECSSVersion.CSS30),
   FONT_WEIGHT ("font-weight"),
+  GRID_COLUMNS ("grid-columns", ECSSVersion.CSS30),
+  GRID_ROWS ("grid-rows", ECSSVersion.CSS30),
   HANGING_PUNCTUATION ("hanging-punctuation", ECSSVersion.CSS30),
   HEIGHT ("height"),
   HYPHENS ("hyphens", ECSSVersion.CSS30),
+  JUSITFY_CONTENT ("justify-content", ECSSVersion.CSS30),
   LEFT ("left"),
   LETTER_SPACING ("letter-spacing"),
   LINE_BREAK ("line-break", ECSSVersion.CSS30),
@@ -186,6 +207,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   MARGIN_LEFT ("margin-left"),
   MARGIN_RIGHT ("margin-right"),
   MARGIN_TOP ("margin-top"),
+  MARKS ("marks", ECSSVersion.CSS30),
   MARQUEE_DIRECTION ("marquee-direction", ECSSVersion.CSS30),
   MARQUEE_PLAY_COUNT ("marquee-play-count", ECSSVersion.CSS30),
   MARQUEE_SPEED ("marquee-speed", ECSSVersion.CSS30),
@@ -197,6 +219,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   MIN_WIDTH ("min-width"),
   MIN_ZOOM ("min-zoom", ECSSVersion.CSS30),
   OPACITY ("opacity", ECSSVersion.CSS30),
+  ORDER ("order", ECSSVersion.CSS30),
   ORIENTATION ("orientation", ECSSVersion.CSS30),
   ORPHANS ("orphans"),
   OUTLINE ("outline"),
@@ -220,6 +243,8 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   PAUSE ("pause", ECSSVersion.CSS30),
   PAUSE_AFTER ("pause-after", ECSSVersion.CSS30),
   PAUSE_BEFORE ("pause-before", ECSSVersion.CSS30),
+  PERSPECTIVE ("perspective", ECSSVersion.CSS30),
+  PERSPECTIVE_ORIGIN ("perspective-origin", ECSSVersion.CSS30),
   POSITION ("position"),
   QUOTES ("quotes", ECSSVersion.CSS30),
   REGION_FRAGMENT ("region-fragment", ECSSVersion.CSS30),
@@ -238,6 +263,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   SPEAK_AS ("speak-as", ECSSVersion.CSS30),
   SPEAK_HEADER ("speak-header"),
   SRC ("src", ECSSVersion.CSS30),
+  STRING_SET ("string-set", ECSSVersion.CSS30),
   TABLE_LAYOUT ("table-layout"),
   TAB_SIZE ("tab-size", ECSSVersion.CSS30),
   TEXT_ALIGN ("text-align"),
@@ -256,6 +282,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   TOP ("top"),
   TRANSFORM ("transform", ECSSVersion.CSS30),
   TRANSFORM_ORIGIN ("transform-origin", ECSSVersion.CSS30),
+  TRANSFORM_STYLE ("transform-style", ECSSVersion.CSS30),
   TRANSITION ("transition", ECSSVersion.CSS30),
   TRANSITION_DELAY ("transition-delay", ECSSVersion.CSS30),
   TRANSITION_DURATION ("transition-duration", ECSSVersion.CSS30),
