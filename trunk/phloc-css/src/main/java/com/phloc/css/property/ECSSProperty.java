@@ -741,7 +741,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
 
   public boolean isMicrosoftSpecific ()
   {
-    return m_sName.startsWith ("-ms-");
+    return m_sName.startsWith ("-ms-") || m_sName.startsWith ("scrollbar-");
   }
 
   public boolean isMozillaSpecific ()
@@ -761,7 +761,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
 
   public boolean isBrowserSpecific ()
   {
-    return m_sName.startsWith ("-");
+    return m_sName.startsWith ("-") || m_sName.startsWith ("scrollbar-");
   }
 
   @Nullable
