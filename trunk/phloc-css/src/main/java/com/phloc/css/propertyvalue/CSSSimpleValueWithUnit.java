@@ -36,6 +36,14 @@ public final class CSSSimpleValueWithUnit
   private final double m_dValue;
   private final ECSSUnit m_eUnit;
 
+  /**
+   * Constructor
+   * 
+   * @param dValue
+   *        Numeric value
+   * @param eUnit
+   *        CSS unit to use. May not be <code>null</code>.
+   */
   public CSSSimpleValueWithUnit (final double dValue, @Nonnull final ECSSUnit eUnit)
   {
     if (eUnit == null)
@@ -44,21 +52,35 @@ public final class CSSSimpleValueWithUnit
     m_eUnit = eUnit;
   }
 
+  /**
+   * @return The numeric value as a decimal value
+   */
   public double getValue ()
   {
     return m_dValue;
   }
 
+  /**
+   * @return The numeric value as an int value - no check for validity is
+   *         performed
+   */
   public int getAsIntValue ()
   {
     return (int) m_dValue;
   }
 
+  /**
+   * @return The numeric value as a long value - no check for validity is
+   *         performed
+   */
   public long getAsLongValue ()
   {
     return (long) m_dValue;
   }
 
+  /**
+   * @return The CSS unit of this value. Never <code>null</code>.
+   */
   @Nonnull
   public ECSSUnit getUnit ()
   {

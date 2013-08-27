@@ -70,11 +70,14 @@ public class CSSPropertyEnums extends CSSPropertyEnum
   {
     if (sValue == null)
       return false;
+
+    // Split by whitespaces "  a   b " results in { "a", "b" }
     final String [] aParts = RegExHelper.getSplitToArray (sValue.trim (), "\\s+");
     if (aParts.length < m_nMinNumbers || aParts.length > m_nMaxNumbers)
       return false;
-    for (int i = 0; i < aParts.length; ++i)
-      if (!super.isValidValue (aParts[i].trim ()))
+
+    for (final String sPart : aParts)
+      if (!super.isValidValue (sPart.trim ()))
         return false;
     return true;
   }
@@ -83,7 +86,7 @@ public class CSSPropertyEnums extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnums getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnums (eProp, m_nMinNumbers, m_nMaxNumbers, m_aEnumValues);
+    return new CSSPropertyEnums (eProp, m_nMinNumbers, m_nMaxNumbers, directGetEnumValues ());
   }
 
   @Override

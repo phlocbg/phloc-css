@@ -35,7 +35,7 @@ import com.phloc.commons.string.ToStringGenerator;
  */
 public class CSSPropertyEnum extends AbstractCSSProperty
 {
-  protected final Set <String> m_aEnumValues;
+  private final Set <String> m_aEnumValues;
 
   public CSSPropertyEnum (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final String... aEnumValues)
   {
@@ -69,6 +69,16 @@ public class CSSPropertyEnum extends AbstractCSSProperty
   {
     super (eProp);
     m_aEnumValues = new HashSet <String> (aEnumValues);
+  }
+
+  /**
+   * @return The Set with the enum values - only used for derived classes. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  protected final Set <String> directGetEnumValues ()
+  {
+    return m_aEnumValues;
   }
 
   @Override

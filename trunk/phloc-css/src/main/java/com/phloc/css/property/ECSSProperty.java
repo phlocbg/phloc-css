@@ -43,8 +43,9 @@ import com.phloc.css.annotations.DeprecatedInCSS30;
  * <li>http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#property-index</li>
  * <li>http://www.w3.org/TR/2011/WD-css-device-adapt-20110915/#property-index</li>
  * <li>http://www.w3.org/TR/2011/WD-css3-writing-modes-20110901/#property-index</li>
- * <li>TODO http://www.w3.org/TR/2011/WD-css3-text-20110901/#appendix-h-full-
- * property-index</li>
+ * <li>TODO
+ * http://www.w3.org/TR/2011/WD-css3-text-20110901/#appendix-h-full-property
+ * -index</li>
  * <li>TODO http://www.w3.org/TR/2011/WD-css3-speech-20110818/#property-index</li>
  * <li>http://www.w3.org/TR/2011/WD-css3-ruby-20110630/#properties</li>
  * <li>http://www.w3.org/TR/2011/WD-css3-regions-20110609/#property-index</li>

@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
 import com.phloc.css.ICSSWriterSettings;
@@ -45,6 +46,17 @@ public final class CSSValue implements ICSSValue
   private final String m_sValue;
   private final boolean m_bIsImportant;
 
+  /**
+   * Constructor
+   * 
+   * @param aProperty
+   *        The CSS property. May not be <code>null</code>.
+   * @param sValue
+   *        The String value to use. May be <code>null</code>.
+   * @param bIsImportant
+   *        <code>true</code> if the value should be important,
+   *        <code>false</code> otherwise
+   */
   public CSSValue (@Nonnull final ICSSProperty aProperty, @Nonnull final String sValue, final boolean bIsImportant)
   {
     if (aProperty == null)
@@ -55,29 +67,47 @@ public final class CSSValue implements ICSSValue
                       "' is not valid for property '" +
                       aProperty.getProp ().getName () +
                       "'");
+    if (sValue.contains (CCSS.IMPORTANT_SUFFIX))
+      s_aLogger.warn ("CSS: the value '" +
+                      sValue +
+                      "' should not contain the '" +
+                      CCSS.IMPORTANT_SUFFIX +
+                      "' string! Pass 'true' as important parameter instead.");
 
     m_aProperty = aProperty;
-    m_sValue = sValue + (bIsImportant ? CCSS.IMPORTANT_SUFFIX : "");
+    m_sValue = StringHelper.hasText (sValue) ? sValue + (bIsImportant ? CCSS.IMPORTANT_SUFFIX : "") : null;
     m_bIsImportant = bIsImportant;
   }
 
+  /**
+   * @return The CSS property used. Never <code>null</code>.
+   */
   @Nonnull
   public ICSSProperty getProperty ()
   {
     return m_aProperty;
   }
 
+  /**
+   * @return The CSS base property used. Never <code>null</code>.
+   */
   @Nonnull
   public ECSSProperty getProp ()
   {
     return m_aProperty.getProp ();
   }
 
+  /**
+   * @return The CSS value used. May be <code>null</code>.
+   */
   public String getValue ()
   {
     return m_sValue;
   }
 
+  /**
+   * @return <code>true</code> if it is important, <code>false</code> if not
+   */
   public boolean isImportant ()
   {
     return m_bIsImportant;

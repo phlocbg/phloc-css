@@ -199,12 +199,9 @@ public class CSSNode implements Node, Iterable <CSSNode>
   {
     System.out.println (prefix + toString ());
     if (m_aChildren != null)
-      for (final CSSNode element : m_aChildren)
-      {
-        final CSSNode n = element;
-        if (n != null)
-          n.dump (prefix + " ");
-      }
+      for (final CSSNode aChild : m_aChildren)
+        if (aChild != null)
+          aChild.dump (prefix + " ");
   }
 
   @Override
