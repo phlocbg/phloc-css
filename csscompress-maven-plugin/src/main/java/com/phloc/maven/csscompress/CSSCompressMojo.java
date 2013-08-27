@@ -85,18 +85,26 @@ public final class CSSCompressMojo extends AbstractMojo
   private boolean recursive = true;
 
   /**
-   * Should unnecessary code be removed?
+   * Should unnecessary code be removed (e.g. rules without declarations)
    * 
    * @parameter property="removeUnnecessaryCode" default-value="false"
    */
   private boolean removeUnnecessaryCode = false;
 
   /**
-   * Should URLs be quoted?
+   * Should URLs always be quoted? If false they are only quoted on demand.
    * 
    * @parameter property="quoteURLs" default-value="false"
    */
   private boolean quoteURLs = false;
+
+  /**
+   * Should <code>@namespace</code> rules be written?
+   * 
+   * @parameter property="writeNamespaceRules" default-value="true"
+   * @since 1.0.18
+   */
+  private boolean writeNamespaceRules = true;
 
   /**
    * Should <code>@font-face</code> rules be written?
@@ -125,6 +133,22 @@ public final class CSSCompressMojo extends AbstractMojo
    * @parameter property="writePageRules" default-value="true"
    */
   private boolean writePageRules = true;
+
+  /**
+   * Should <code>@viewport</code> rules be written?
+   * 
+   * @parameter property="writeViewportRules" default-value="true"
+   * @since 1.0.18
+   */
+  private boolean writeViewportRules = true;
+
+  /**
+   * Should <code>@supports</code> rules be written?
+   * 
+   * @parameter property="writeSupportsRules" default-value="true"
+   * @since 1.0.18
+   */
+  private boolean writeSupportsRules = true;
 
   /**
    * Should the CSS files be compressed, even if the timestamp of the compressed
@@ -158,7 +182,6 @@ public final class CSSCompressMojo extends AbstractMojo
   @SuppressFBWarnings ({ "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" })
   public void setSourceDirectory (final File aDir)
   {
-
     sourceDirectory = aDir;
     if (!sourceDirectory.isAbsolute ())
       sourceDirectory = new File (project.getBasedir (), aDir.getPath ());
@@ -181,6 +204,11 @@ public final class CSSCompressMojo extends AbstractMojo
     quoteURLs = bQuoteURLs;
   }
 
+  public void setWriteNamespaceRules (final boolean bWriteNamespaceRules)
+  {
+    writeNamespaceRules = bWriteNamespaceRules;
+  }
+
   public void setWriteFontFaceRules (final boolean bWriteFontFaceRules)
   {
     writeFontFaceRules = bWriteFontFaceRules;
@@ -199,6 +227,16 @@ public final class CSSCompressMojo extends AbstractMojo
   public void setWritePageRules (final boolean bWritePageRules)
   {
     writePageRules = bWritePageRules;
+  }
+
+  public void setWriteViewportRules (final boolean bWriteViewportRules)
+  {
+    writeViewportRules = bWriteViewportRules;
+  }
+
+  public void setWriteSupportsRules (final boolean bWriteSupportsRules)
+  {
+    writeSupportsRules = bWriteSupportsRules;
   }
 
   public void setForceCompress (final boolean bForceCompress)
@@ -276,10 +314,13 @@ public final class CSSCompressMojo extends AbstractMojo
           final CSSWriterSettings aWriterSettings = new CSSWriterSettings (ECSSVersion.CSS30, true);
           aWriterSettings.setRemoveUnnecessaryCode (removeUnnecessaryCode);
           aWriterSettings.setQuoteURLs (quoteURLs);
+          aWriterSettings.setWriteNamespaceRules (writeNamespaceRules);
           aWriterSettings.setWriteFontFaceRules (writeFontFaceRules);
           aWriterSettings.setWriteKeyframesRules (writeKeyframesRules);
           aWriterSettings.setWriteMediaRules (writeMediaRules);
           aWriterSettings.setWritePageRules (writePageRules);
+          aWriterSettings.setWriteViewportRules (writeViewportRules);
+          aWriterSettings.setWriteSupportsRules (writeSupportsRules);
           new CSSWriter (aWriterSettings).writeCSS (aCSS, aDestFile.getWriter (aSourceEncoding, EAppend.TRUNCATE));
         }
         catch (final IOException ex)
