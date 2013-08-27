@@ -143,6 +143,20 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * Get the passed value formatted with this unit
+   * 
+   * @param nValue
+   *        Value to format
+   * @return <code>value + getName()</code>
+   */
+  @Nonnull
+  @Nonempty
+  public String format (final long nValue)
+  {
+    return Long.toString (nValue) + m_sName;
+  }
+
+  /**
    * Get the passed value formatted with this unit. Always '.' is used as the
    * separator.
    * 

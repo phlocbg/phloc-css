@@ -40,7 +40,9 @@ public final class CSSNumberHelperTest
   {
     for (final ECSSUnit eUnit : ECSSUnit.values ())
     {
-      final String sText = eUnit.format (5);
+      String sText = eUnit.format (5);
+      assertSame (sText, eUnit, CSSNumberHelper.getMatchingUnitInclPercentage (sText));
+      sText = eUnit.format (3.14159265);
       assertSame (sText, eUnit, CSSNumberHelper.getMatchingUnitInclPercentage (sText));
     }
   }
@@ -51,7 +53,9 @@ public final class CSSNumberHelperTest
     for (final ECSSUnit eUnit : ECSSUnit.values ())
       if (eUnit != ECSSUnit.PERCENTAGE)
       {
-        final String sText = eUnit.format (5);
+        String sText = eUnit.format (5);
+        assertSame (sText, eUnit, CSSNumberHelper.getMatchingUnitExclPercentage (sText));
+        sText = eUnit.format (3.14159265);
         assertSame (sText, eUnit, CSSNumberHelper.getMatchingUnitExclPercentage (sText));
       }
   }
