@@ -35,49 +35,44 @@ import com.phloc.css.annotations.DeprecatedInCSS21;
 public enum ECSSMedium implements ICSSVersionAware, IHasName
 {
   /** for all media types */
-  ALL ("all"),
+  ALL ("all", ECSSVersion.CSS21),
 
   /**
    * For computer synthesized voice. Deprecated in CSS 2.1. Is "speech" in CSS
    * 3.
    */
   @DeprecatedInCSS21
-  AURAL ("aural"),
+  AURAL ("aural", ECSSVersion.CSS21),
 
   /** for blind people */
-  BRAILLE ("braille"),
+  BRAILLE ("braille", ECSSVersion.CSS21),
 
   /** for blind people */
-  EMBOSSED ("embossed"),
+  EMBOSSED ("embossed", ECSSVersion.CSS21),
 
   /** for PDAs */
-  HANDHELD ("handheld"),
+  HANDHELD ("handheld", ECSSVersion.CSS21),
 
   /** for printing */
-  PRINT ("print", ECSSVersion.HTML4),
+  PRINT ("print", ECSSVersion.CSS10),
 
   /** for projection */
-  PROJECTION ("projection"),
+  PROJECTION ("projection", ECSSVersion.CSS21),
 
   /** for normal screen display */
-  SCREEN ("screen", ECSSVersion.HTML4),
+  SCREEN ("screen", ECSSVersion.CSS10),
 
   /** For computer synthesized voice. */
-  SPEECH ("speech"),
+  SPEECH ("speech", ECSSVersion.CSS21),
 
   /** for text oriented devices */
-  TTY ("tty"),
+  TTY ("tty", ECSSVersion.CSS21),
 
   /** for televisions */
-  TV ("tv");
+  TV ("tv", ECSSVersion.CSS21);
 
   private final String m_sName;
   private final ECSSVersion m_eVersion;
-
-  private ECSSMedium (@Nonnull @Nonempty final String sName)
-  {
-    this (sName, ECSSVersion.CSS21);
-  }
 
   private ECSSMedium (@Nonnull @Nonempty final String sName, @Nonnull final ECSSVersion eVersion)
   {

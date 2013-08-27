@@ -24,7 +24,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * CSS property without any layout constraint, except that it may not be empty.
+ * CSS property without any value constraints, except that it may not be empty.
  * 
  * @author Philip Helger
  */

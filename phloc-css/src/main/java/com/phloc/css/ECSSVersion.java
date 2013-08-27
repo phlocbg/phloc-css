@@ -19,6 +19,7 @@ package com.phloc.css;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.version.IHasVersion;
 import com.phloc.commons.version.Version;
 
@@ -35,6 +36,8 @@ public enum ECSSVersion implements IHasVersion
   CSS30 (new Version (3, 0));
 
   @Nonnull
+  @Deprecated
+  @DevelopersNote ("Use CSS10 instead")
   public static final ECSSVersion HTML4 = CSS10;
 
   /** Default version is CSS 3.0 */

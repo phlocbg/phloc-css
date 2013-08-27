@@ -17,10 +17,15 @@
  */
 package com.phloc.css.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.compare.ComparatorStringLongestFirst;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.StringParser;
 import com.phloc.css.ECSSUnit;
@@ -34,27 +39,37 @@ import com.phloc.css.propertyvalue.CSSSimpleValueWithUnit;
 @Immutable
 public final class CSSNumberHelper
 {
+  // Map from unit name to enum
+  private static final Map <String, ECSSUnit> s_aNameToUnitMap;
+
+  static
+  {
+    final Map <String, ECSSUnit> aNameToUnitMap = new HashMap <String, ECSSUnit> ();
+    for (final ECSSUnit eUnit : ECSSUnit.values ())
+      aNameToUnitMap.put (eUnit.getName (), eUnit);
+    // Now sort, so that the longest matches are upfront so that they are
+    // determined first
+    s_aNameToUnitMap = ContainerHelper.getSortedByKey (aNameToUnitMap, new ComparatorStringLongestFirst ());
+  }
+
   private CSSNumberHelper ()
   {}
 
   @Nullable
   public static ECSSUnit getMatchingUnitInclPercentage (@Nonnull final String sCSSValue)
   {
-    // sValue cannot be null here!
-    for (final ECSSUnit eUnit : ECSSUnit.values ())
-      if (sCSSValue.endsWith (eUnit.getName ()))
-        return eUnit;
+    // Search units, the ones with the longest names come first
+    for (final Map.Entry <String, ECSSUnit> aEntry : s_aNameToUnitMap.entrySet ())
+      if (sCSSValue.endsWith (aEntry.getKey ()))
+        return aEntry.getValue ();
     return null;
   }
 
   @Nullable
   public static ECSSUnit getMatchingUnitExclPercentage (@Nonnull final String sCSSValue)
   {
-    for (final ECSSUnit eUnit : ECSSUnit.values ())
-      if (eUnit != ECSSUnit.PERCENTAGE)
-        if (sCSSValue.endsWith (eUnit.getName ()))
-          return eUnit;
-    return null;
+    final ECSSUnit eUnit = getMatchingUnitInclPercentage (sCSSValue);
+    return eUnit == null || eUnit == ECSSUnit.PERCENTAGE ? null : eUnit;
   }
 
   public static boolean isNumberValue (@Nullable final String sCSSValue)
@@ -93,7 +108,7 @@ public final class CSSNumberHelper
                                       : getMatchingUnitExclPercentage (sRealValue);
       if (eUnit != null)
       {
-        // Cut the unit
+        // Cut the unit off
         sRealValue = sRealValue.substring (0, sRealValue.length () - eUnit.getName ().length ()).trim ();
         final Double aValue = StringParser.parseDoubleObj (sRealValue);
         if (aValue != null)
