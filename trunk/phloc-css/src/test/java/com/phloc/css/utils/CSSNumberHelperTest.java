@@ -20,6 +20,7 @@ package com.phloc.css.utils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -34,6 +35,27 @@ import com.phloc.css.propertyvalue.CSSSimpleValueWithUnit;
  */
 public final class CSSNumberHelperTest
 {
+  @Test
+  public void testGetMatchingUnitInclPercentage ()
+  {
+    for (final ECSSUnit eUnit : ECSSUnit.values ())
+    {
+      final String sText = eUnit.format (5);
+      assertSame (sText, eUnit, CSSNumberHelper.getMatchingUnitInclPercentage (sText));
+    }
+  }
+
+  @Test
+  public void testGetMatchingUnitExclPercentage ()
+  {
+    for (final ECSSUnit eUnit : ECSSUnit.values ())
+      if (eUnit != ECSSUnit.PERCENTAGE)
+      {
+        final String sText = eUnit.format (5);
+        assertSame (sText, eUnit, CSSNumberHelper.getMatchingUnitExclPercentage (sText));
+      }
+  }
+
   @Test
   public void testIsValueWithUnit ()
   {
