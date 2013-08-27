@@ -186,6 +186,7 @@ public final class CCSSValue
   public static final String TOP = "top";
   public static final String TRANSPARENT = "transparent";
   public static final String UNDERLINE = "underline";
+  public static final String UNSET = "unset";
   public static final String UPPER_ALPHA = "upper-alpha";
   public static final String UPPER_LATIN = "upper-latin";
   public static final String UPPER_ROMAN = "upper-roman";
