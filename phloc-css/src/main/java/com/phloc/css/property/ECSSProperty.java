@@ -138,9 +138,8 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   COLUMN_RULE_COLOR ("column-rule-color", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
   COLUMN_RULE_STYLE ("column-rule-style", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
   COLUMN_RULE_WIDTH ("column-rule-width", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
-  COLUMN_WIDTH ("column-width", ECSSVersion.CSS30),
+  COLUMN_WIDTH ("column-width", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
   CONTENT ("content", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_UI),
-  CONTENT_ORDER ("content-order", ECSSVersion.CSS30),
   COUNTER_INCREMENT ("counter-increment", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   COUNTER_RESET ("counter-reset", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   CUE ("cue", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_SPEECH),
@@ -171,7 +170,6 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   FLOAT_OFFSET ("float-offset", ECSSVersion.CSS30, ECSSSpecification.CSS3_GCPM),
   FLOOD_COLOR ("flood-color", ECSSVersion.CSS30, ECSSSpecification.FILTER_EFFECTS),
   FLOOD_OPACITY ("flood-opactiy", ECSSVersion.CSS30, ECSSSpecification.FILTER_EFFECTS),
-  FLOW ("flow", ECSSVersion.CSS30),
   FLOW_FROM ("flow-from", ECSSVersion.CSS30, ECSSSpecification.CSS3_REGIONS),
   FLOW_INTO ("flow-into", ECSSVersion.CSS30, ECSSSpecification.CSS3_REGIONS),
   FONT ("font", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_FONTS),
@@ -301,7 +299,6 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   POSITION ("position", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_POSITIONING),
   QUOTES ("quotes", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   REGION_FRAGMENT ("region-fragment", ECSSVersion.CSS30, ECSSSpecification.CSS3_REGIONS),
-  REGION_OVERFLOW ("region-overflow", ECSSVersion.CSS30),
   RESIZE ("resize", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
   RESOLUTION ("resolution", ECSSVersion.CSS30, ECSSSpecification.CSS_DEVICE_ADAPT),
   REST ("rest", ECSSVersion.CSS30, ECSSSpecification.CSS3_SPEECH),
@@ -319,7 +316,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   SPEAK_NUMERAL ("speak-numeral", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   SPEAK_PUNCTUATION ("speak-punctuation", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   SPEECH_RATE ("speech-rate", ECSSVersion.CSS21, ECSSSpecification.CSS2),
-  SRC ("src", ECSSVersion.CSS30),
+  SRC ("src", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
   STRESS ("stress", ECSSVersion.CSS21, ECSSSpecification.CSS2),
   STRING_SET ("string-set", ECSSVersion.CSS30, ECSSSpecification.CSS3_GCPM),
   TABLE_LAYOUT ("table-layout", ECSSVersion.CSS21, ECSSSpecification.CSS2),
@@ -335,15 +332,12 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   TEXT_ALIGN ("text-align", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_TEXT),
   TEXT_ALIGN_LAST ("text-align-last", ECSSVersion.CSS30, ECSSSpecification.CSS3_TEXT),
   TEXT_COMBINE_HORIZONTAL ("text-combine-horizontal", ECSSVersion.CSS30, ECSSSpecification.CSS3_WRITING_MODES),
-  TEXT_COMBINE_MODE ("text-combine-mode", ECSSVersion.CSS30),
   TEXT_DECORATION ("text-decoration", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
-  TEXT_FILL_COLOR ("text-fill-color", ECSSVersion.CSS30),
   TEXT_HEIGHT ("text-height", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
   TEXT_INDENT ("text-indent", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_TEXT),
   TEXT_JUSTIFY ("text-justify", ECSSVersion.CSS30, ECSSSpecification.CSS3_TEXT),
   TEXT_ORIENTATION ("text-orientation", ECSSVersion.CSS30, ECSSSpecification.CSS3_WRITING_MODES),
   TEXT_OVERFLOW ("text-overflow", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
-  TEXT_STROKE ("text-stroke", ECSSVersion.CSS30),
   TEXT_TRANSFORM ("text-transform", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_TEXT),
   TOP ("top", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_POSITIONING),
   TRANSFORM ("transform", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSFORMS),
@@ -355,6 +349,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   TRANSITION_PROPERTY ("transition-property", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSITIONS),
   TRANSITION_TIMING_FUNCTION ("transition-timing-function", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSITIONS),
   UNICODE_BIDI ("unicode-bidi", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_WRITING_MODES),
+  UNICODE_RANGE ("unicode-range", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
   USER_ZOOM ("user-zoom", ECSSVersion.CSS30, ECSSSpecification.CSS_DEVICE_ADAPT),
   VERTICAL_ALIGN ("vertical-align", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_LINEBOX),
   VISIBILITY ("visibility", ECSSVersion.CSS21, ECSSSpecification.CSS2),
@@ -698,7 +693,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   private ECSSProperty (@Nonnull @Nonempty final String sName)
   {
     // Custom properties are always there
-    this (sName, ECSSVersion.CSS10);
+    this (sName, ECSSVersion.CSS10, (ECSSSpecification []) null);
   }
 
   private ECSSProperty (@Nonnull @Nonempty final String sName, @Nonnull final ECSSVersion eVersion)
