@@ -36,11 +36,11 @@ import com.phloc.commons.name.IHasName;
 public enum ECSSUnit implements IHasName, ICSSVersionAware
 {
   /** font size of the element */
-  EM ("em", ECSSMetaUnit.FONT_RELATIVE_LENGTH),
+  EM ("em", ECSSMetaUnit.FONT_RELATIVE_LENGTH, ECSSVersion.CSS10),
   /** x-height of the element's font */
-  EX ("ex", ECSSMetaUnit.FONT_RELATIVE_LENGTH),
+  EX ("ex", ECSSMetaUnit.FONT_RELATIVE_LENGTH, ECSSVersion.CSS10),
   /** pixels; 1px is equal to 1/96th of 1in */
-  PX ("px", ECSSMetaUnit.ABSOLUTE_LENGTH),
+  PX ("px", ECSSMetaUnit.ABSOLUTE_LENGTH, ECSSVersion.CSS10),
   /** font size of the root element */
   REM ("rem", ECSSMetaUnit.FONT_RELATIVE_LENGTH, ECSSVersion.CSS30),
   /** Equal to 1% of the width of the initial containing block. */
@@ -52,36 +52,36 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   /** width of the "0" glyph in the element's font */
   CH ("ch", ECSSMetaUnit.FONT_RELATIVE_LENGTH, ECSSVersion.CSS30),
   /** inches; 1in is equal to 2.54cm */
-  LENGTH_IN ("in", ECSSMetaUnit.ABSOLUTE_LENGTH),
+  LENGTH_IN ("in", ECSSMetaUnit.ABSOLUTE_LENGTH, ECSSVersion.CSS10),
   /** centimeters */
-  LENGTH_CM ("cm", ECSSMetaUnit.ABSOLUTE_LENGTH),
+  LENGTH_CM ("cm", ECSSMetaUnit.ABSOLUTE_LENGTH, ECSSVersion.CSS10),
   /** millimeters; 10 millimeters = 1 centimeter */
-  LENGTH_MM ("mm", ECSSMetaUnit.ABSOLUTE_LENGTH),
+  LENGTH_MM ("mm", ECSSMetaUnit.ABSOLUTE_LENGTH, ECSSVersion.CSS10),
   /** points; 1pt is equal to 1/72nd of 1in */
-  LENGTH_PT ("pt", ECSSMetaUnit.ABSOLUTE_LENGTH),
+  LENGTH_PT ("pt", ECSSMetaUnit.ABSOLUTE_LENGTH, ECSSVersion.CSS10),
   /** picas; 1pc is equal to 12pt */
-  LENGTH_PC ("pc", ECSSMetaUnit.ABSOLUTE_LENGTH),
+  LENGTH_PC ("pc", ECSSMetaUnit.ABSOLUTE_LENGTH, ECSSVersion.CSS10),
   /** percentage */
-  PERCENTAGE ("%", ECSSMetaUnit.PERCENTAGE),
+  PERCENTAGE ("%", ECSSMetaUnit.PERCENTAGE, ECSSVersion.CSS10),
   /** Degrees. There are 360 degrees in a full circle. */
-  ANGLE_DEG ("deg", ECSSMetaUnit.ANGLE),
+  ANGLE_DEG ("deg", ECSSMetaUnit.ANGLE, ECSSVersion.CSS21),
   /** Radians. There are 2π radians in a full circle. */
-  ANGLE_RAD ("rad", ECSSMetaUnit.ANGLE),
+  ANGLE_RAD ("rad", ECSSMetaUnit.ANGLE, ECSSVersion.CSS21),
   /**
    * Gradians, also known as "gons" or "grades". There are 400 gradians in a
    * full circle.
    */
-  ANGLE_GRAD ("grad", ECSSMetaUnit.ANGLE),
+  ANGLE_GRAD ("grad", ECSSMetaUnit.ANGLE, ECSSVersion.CSS21),
   /** Turns. There is 1 turn in a full circle. */
   ANGLE_TURN ("turn", ECSSMetaUnit.ANGLE, ECSSVersion.CSS30),
   /** Milliseconds. There are 1000 milliseconds in a second. */
-  TIME_MS ("ms", ECSSMetaUnit.TIME),
+  TIME_MS ("ms", ECSSMetaUnit.TIME, ECSSVersion.CSS21),
   /** Seconds. */
-  TIME_S ("s", ECSSMetaUnit.TIME),
+  TIME_S ("s", ECSSMetaUnit.TIME, ECSSVersion.CSS21),
   /** Hertz. It represents the number of occurrences per second. */
-  FREQ_HZ ("hz", ECSSMetaUnit.FREQUENZY),
+  FREQ_HZ ("hz", ECSSMetaUnit.FREQUENZY, ECSSVersion.CSS21),
   /** Kilohertz. A kiloHertz is 1000 Hertz. */
-  FREQ_KHZ ("khz", ECSSMetaUnit.FREQUENZY),
+  FREQ_KHZ ("khz", ECSSMetaUnit.FREQUENZY, ECSSVersion.CSS21),
   /** Dots per CSS inch */
   DPI ("dpi", ECSSMetaUnit.RESOLUTION, ECSSVersion.CSS30),
   /** Dots per CSS centimeter */
@@ -96,11 +96,6 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   private final String m_sName;
   private final ECSSMetaUnit m_eMetaUnit;
   private final ECSSVersion m_eVersion;
-
-  private ECSSUnit (@Nonnull @Nonempty final String sName, @Nonnull final ECSSMetaUnit eMetaUnit)
-  {
-    this (sName, eMetaUnit, ECSSVersion.CSS21);
-  }
 
   private ECSSUnit (@Nonnull @Nonempty final String sName,
                     @Nonnull final ECSSMetaUnit eMetaUnit,
