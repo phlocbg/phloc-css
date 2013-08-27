@@ -35,11 +35,16 @@ public class CSSPropertyURL extends AbstractCSSProperty
     super (eProp);
   }
 
+  public static boolean isValidPropertyValue (@Nullable final String sValue)
+  {
+    return AbstractCSSProperty.isValidPropertyValue (sValue) || CSSURLHelper.isURLValue (sValue);
+  }
+
   @Override
   @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return super.isValidValue (sValue) || CSSURLHelper.isURLValue (sValue);
+    return isValidPropertyValue (sValue);
   }
 
   @Nonnull

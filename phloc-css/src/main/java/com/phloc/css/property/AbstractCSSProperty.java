@@ -41,6 +41,12 @@ public abstract class AbstractCSSProperty implements ICSSProperty
 {
   private final ECSSProperty m_eProp;
 
+  /**
+   * Constructor
+   * 
+   * @param eProp
+   *        The base property to use. May not be <code>null</code>.
+   */
   protected AbstractCSSProperty (@Nonnull final ECSSProperty eProp)
   {
     if (eProp == null)
@@ -60,11 +66,16 @@ public abstract class AbstractCSSProperty implements ICSSProperty
     return m_eProp;
   }
 
+  public static boolean isValidPropertyValue (@Nullable final String sValue)
+  {
+    // "inherit" and "initial" is valid for all values in CSS 3.0
+    return CCSSValue.INHERIT.equals (sValue) || CCSSValue.INITIAL.equals (sValue);
+  }
+
   @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
-    // Inherit and initial is valid for all values in CSS 3.0
-    return CCSSValue.INHERIT.equals (sValue) || CCSSValue.INITIAL.equals (sValue);
+    return isValidPropertyValue (sValue);
   }
 
   @Nonnull

@@ -35,11 +35,16 @@ public class CSSPropertyFree extends AbstractCSSProperty
     super (eProp);
   }
 
+  public static boolean isValidPropertyValue (@Nullable final String sValue)
+  {
+    return AbstractCSSProperty.isValidPropertyValue (sValue) || StringHelper.hasText (sValue);
+  }
+
   @Override
   @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return super.isValidValue (sValue) || StringHelper.hasText (sValue);
+    return isValidPropertyValue (sValue);
   }
 
   @Nonnull

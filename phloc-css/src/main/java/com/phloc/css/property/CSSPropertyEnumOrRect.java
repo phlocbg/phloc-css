@@ -53,6 +53,6 @@ public class CSSPropertyEnumOrRect extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnumOrRect getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrRect (eProp, m_aEnumValues);
+    return new CSSPropertyEnumOrRect (eProp, directGetEnumValues ());
   }
 }

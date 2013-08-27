@@ -54,6 +54,6 @@ public class CSSPropertyEnumOrColor extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnumOrColor getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrColor (eProp, m_aEnumValues);
+    return new CSSPropertyEnumOrColor (eProp, directGetEnumValues ());
   }
 }

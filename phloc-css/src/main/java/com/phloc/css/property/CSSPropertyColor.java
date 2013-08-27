@@ -35,11 +35,16 @@ public class CSSPropertyColor extends AbstractCSSProperty
     super (eProp);
   }
 
+  public static boolean isValidPropertyValue (@Nullable final String sValue)
+  {
+    return AbstractCSSProperty.isValidPropertyValue (sValue) || CSSColorHelper.isColorValue (sValue);
+  }
+
   @Override
   @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return super.isValidValue (sValue) || CSSColorHelper.isColorValue (sValue);
+    return isValidPropertyValue (sValue);
   }
 
   @Nonnull
