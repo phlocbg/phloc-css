@@ -18,8 +18,11 @@
 package com.phloc.css;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.id.IHasID;
+import com.phloc.commons.lang.EnumHelper;
 
 /**
  * Enumeration containing all W3C CSS specifications. Source:
@@ -27,40 +30,40 @@ import com.phloc.commons.annotations.Nonempty;
  * 
  * @author Philip Helger
  */
-public enum ECSSSpecification
+public enum ECSSSpecification implements IHasID <String>
 {
   /** CSS Color Level 3 */
-  CSS3_COLOR ("css3-color"),
+  CSS3_COLOR ("css3-color", "http://www.w3.org/TR/2011/REC-css3-color-20110607/"),
   /** CSS Namespaces */
-  CSS3_NAMESPACE ("css3-namespace"),
+  CSS3_NAMESPACE ("css3-namespace", "http://www.w3.org/TR/2011/REC-css3-namespace-20110929/"),
   /** Selectors Level 3 */
   SELECTORS ("selectors"),
   /** CSS Level 2 Revision 1 */
-  CSS2 ("CSS2"),
+  CSS2 ("CSS2", "http://www.w3.org/TR/CSS2/"),
   /** CSS Level 1 */
-  CSS1 ("CSS"),
+  CSS1 ("CSS1", "http://www.w3.org/TR/CSS1/"),
   /** CSS Print Profile */
   CSS_PRINT ("css-print"),
   /** Media Queries */
-  CSS3_MEDIAQUERIES ("css3-mediaqueries"),
+  CSS3_MEDIAQUERIES ("css3-mediaqueries", "http://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/"),
   /** CSS Style Attributes */
   CSS_STYLE_ATTR ("css-style-attr"),
   /** CSS Backgrounds and Borders Level 3 */
-  CSS3_BACKGROUND ("css3-background"),
+  CSS3_BACKGROUND ("css3-background", "http://www.w3.org/TR/2012/CR-css3-background-20120724/"),
   /** CSS Conditional Rules Level 3 */
   CSS3_CONDITIONAL ("css3-conditional"),
   /** CSS Image Values and Replaced Content Level 3 */
   CSS3_IMAGES ("css3-images"),
   /** CSS Marquee */
-  CSS3_MARQUEE ("css3-marquee"),
+  CSS3_MARQUEE ("css3-marquee", "http://www.w3.org/TR/2008/CR-css3-marquee-20081205/"),
   /** CSS Multi-column Layout */
-  CSS3_MULTICOL ("css3-multicol"),
+  CSS3_MULTICOL ("css3-multicol", "http://www.w3.org/TR/2011/CR-css3-multicol-20110412/"),
   /** CSS Speech */
-  CSS3_SPEECH ("css3-speech"),
+  CSS3_SPEECH ("css3-speech", "http://www.w3.org/TR/2012/CR-css3-speech-20120320/"),
   /** CSS Values and Units Level 3 */
   CSS3_VALUES ("css3-values"),
   /** CSS Flexible Box Layout */
-  CSS3_FLEXBOX ("css3-flexbox"),
+  CSS3_FLEXBOX ("css3-flexbox", "http://www.w3.org/TR/2012/CR-css3-flexbox-20120918/"),
   /** CSS Text Decoration Module Level 3 */
   CSS_TEXT_DECOR_3 ("css-text-decor-3"),
   /** CSS Mobile Profile 2.0 */
@@ -68,9 +71,9 @@ public enum ECSSSpecification
   /** CSS TV Profile 1.0 */
   CSS_TV ("css-tv"),
   /** CSS Animations */
-  CSS3_ANIMATIONS ("css3-animations"),
+  CSS3_ANIMATIONS ("css3-animations", "http://www.w3.org/TR/2013/WD-css3-animations-20130219/"),
   /** CSS Fonts Level 3 */
-  CSS3_FONTS ("css3-fonts"),
+  CSS3_FONTS ("css3-fonts", "http://www.w3.org/TR/2013/WD-css-fonts-3-20130711/"),
   /** CSS Counter Styles Level 3 */
   CSS_COUNTER_STYLES_3 ("css-counter-styles-3"),
   /** CSS Text Level 3 */
@@ -153,10 +156,28 @@ public enum ECSSSpecification
   @Deprecated
   CSS3_GRID ("css3-grid");
 
-  private String m_sID;
+  private final String m_sID;
 
   private ECSSSpecification (@Nonnull @Nonempty final String sID)
   {
+    this (sID, null);
+  }
+
+  private ECSSSpecification (@Nonnull @Nonempty final String sID, @Nullable final String sHandledURL)
+  {
     m_sID = sID;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getID ()
+  {
+    return m_sID;
+  }
+
+  @Nullable
+  public static ECSSSpecification getFromIDOrNull (@Nullable final String sName)
+  {
+    return EnumHelper.getFromIDOrNull (ECSSSpecification.class, sName);
   }
 }
