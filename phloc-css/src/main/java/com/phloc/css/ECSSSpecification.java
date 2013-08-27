@@ -23,10 +23,12 @@ import javax.annotation.Nullable;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;
+import com.phloc.commons.string.StringHelper;
 
 /**
- * Enumeration containing all W3C CSS specifications. Source:
- * http://www.w3.org/Style/CSS/current-work
+ * Enumeration containing all W3C CSS specifications.<br>
+ * Source: http://www.w3.org/Style/CSS/current-work<br>
+ * Last update: 27.8.2013
  * 
  * @author Philip Helger
  */
@@ -158,6 +160,7 @@ public enum ECSSSpecification implements IHasID <String>
 
   private final String m_sID;
   private final ECSSSpecificationStatus m_eStatus;
+  private final String m_sHandledURL;
 
   private ECSSSpecification (@Nonnull @Nonempty final String sID, @Nonnull final ECSSSpecificationStatus eStatus)
   {
@@ -170,6 +173,7 @@ public enum ECSSSpecification implements IHasID <String>
   {
     m_sID = sID;
     m_eStatus = eStatus;
+    m_sHandledURL = sHandledURL;
   }
 
   @Nonnull
@@ -183,6 +187,17 @@ public enum ECSSSpecification implements IHasID <String>
   public ECSSSpecificationStatus getStatus ()
   {
     return m_eStatus;
+  }
+
+  public boolean hasHandledURL ()
+  {
+    return StringHelper.hasText (m_sHandledURL);
+  }
+
+  @Nullable
+  public String getHandledURL ()
+  {
+    return m_sHandledURL;
   }
 
   @Nullable
