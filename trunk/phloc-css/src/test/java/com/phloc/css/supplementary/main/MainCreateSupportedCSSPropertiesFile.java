@@ -164,7 +164,7 @@ public class MainCreateSupportedCSSPropertiesFile
                    + "    See the License for the specific language governing permissions and\r\n"
                    + "    limitations under the License.\r\n"
                    + "\r\n"
-                   + "-->";
+                   + "-->\r\n";
     sHTML += MicroWriter.getNodeAsString (html, new XMLWriterSettings ().setIndent (EXMLSerializeIndent.ALIGN_ONLY));
 
     SimpleFileIO.writeFile (new File ("src/main/resources/supported-css-properties.html"),
