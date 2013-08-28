@@ -35,6 +35,14 @@ import com.phloc.css.property.ECSSProperty;
 
 public class MainCreateSupportedCSSPropertiesFile
 {
+  private static void _boolean (final IMicroElement td, final boolean bSet)
+  {
+    if (bSet)
+      td.setAttribute ("class", "center").appendText ("X");
+    else
+      td.appendText ("");
+  }
+
   public static void main (final String [] args)
   {
     final IMicroElement html = new MicroElement ("html");
@@ -75,9 +83,9 @@ public class MainCreateSupportedCSSPropertiesFile
         if ((nIndex & 1) == 1)
           tr.setAttribute ("class", "odd");
         tr.appendElement ("td").appendText (eProperty.getName ());
-        tr.appendElement ("td").setAttribute ("class", "center").appendText (bCSS10 ? "X" : "");
-        tr.appendElement ("td").setAttribute ("class", "center").appendText (bCSS21 ? "X" : "");
-        tr.appendElement ("td").setAttribute ("class", "center").appendText (bCSS30 ? "X" : "");
+        _boolean (tr.appendElement ("td"), bCSS10);
+        _boolean (tr.appendElement ("td"), bCSS21);
+        _boolean (tr.appendElement ("td"), bCSS30);
 
         final IMicroElement td = tr.appendElement ("td");
         for (final ECSSSpecification eSpecs : eProperty.getAllSpecifications ())
@@ -119,18 +127,38 @@ public class MainCreateSupportedCSSPropertiesFile
         if ((nIndex & 1) == 1)
           tr.setAttribute ("class", "odd");
         tr.appendElement ("td").appendText (eProperty.getName ());
-        tr.appendElement ("td").setAttribute ("class", "center").appendText (bKHTML ? "X" : "");
-        tr.appendElement ("td").setAttribute ("class", "center").appendText (bMS ? "X" : "");
-        tr.appendElement ("td").setAttribute ("class", "center").appendText (bMoz ? "X" : "");
-        tr.appendElement ("td").setAttribute ("class", "center").appendText (bOpera ? "X" : "");
-        tr.appendElement ("td").setAttribute ("class", "center").appendText (bWebkit ? "X" : "");
+        _boolean (tr.appendElement ("td"), bKHTML);
+        _boolean (tr.appendElement ("td"), bMS);
+        _boolean (tr.appendElement ("td"), bMoz);
+        _boolean (tr.appendElement ("td"), bOpera);
+        _boolean (tr.appendElement ("td"), bWebkit);
 
         ++nIndex;
       }
 
+    String sHTML = "<!--\r\n"
+                   + "\r\n"
+                   + "    Copyright (C) 2006-2013 phloc systems\r\n"
+                   + "    http://www.phloc.com\r\n"
+                   + "    office[at]phloc[dot]com\r\n"
+                   + "\r\n"
+                   + "    Licensed under the Apache License, Version 2.0 (the \"License\");\r\n"
+                   + "    you may not use this file except in compliance with the License.\r\n"
+                   + "    You may obtain a copy of the License at\r\n"
+                   + "\r\n"
+                   + "            http://www.apache.org/licenses/LICENSE-2.0\r\n"
+                   + "\r\n"
+                   + "    Unless required by applicable law or agreed to in writing, software\r\n"
+                   + "    distributed under the License is distributed on an \"AS IS\" BASIS,\r\n"
+                   + "    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n"
+                   + "    See the License for the specific language governing permissions and\r\n"
+                   + "    limitations under the License.\r\n"
+                   + "\r\n"
+                   + "-->";
+    sHTML += MicroWriter.getNodeAsString (html, new XMLWriterSettings ().setIndent (EXMLSerializeIndent.ALIGN_ONLY));
+
     SimpleFileIO.writeFile (new File ("src/main/resources/supported-css-properties.html"),
-                            MicroWriter.getNodeAsString (html,
-                                                         new XMLWriterSettings ().setIndent (EXMLSerializeIndent.NONE)),
+                            sHTML,
                             CCharset.CHARSET_UTF_8_OBJ);
   }
 }
