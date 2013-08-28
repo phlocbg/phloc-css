@@ -17,6 +17,9 @@
  */
 package com.phloc.css.propertyvalue;
 
+import java.io.Serializable;
+
+import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
@@ -31,7 +34,7 @@ import com.phloc.css.ECSSUnit;
  * @author Philip Helger
  */
 @Immutable
-public final class CSSSimpleValueWithUnit
+public final class CSSSimpleValueWithUnit implements Serializable
 {
   private final double m_dValue;
   private final ECSSUnit m_eUnit;
@@ -85,6 +88,62 @@ public final class CSSSimpleValueWithUnit
   public ECSSUnit getUnit ()
   {
     return m_eUnit;
+  }
+
+  /**
+   * Get a new object with the same unit but an added value.
+   * 
+   * @param dDelta
+   *        The delta to be added.
+   * @return A new object. Never <code>null</code>.
+   */
+  @Nonnull
+  @CheckReturnValue
+  public CSSSimpleValueWithUnit add (final double dDelta)
+  {
+    return new CSSSimpleValueWithUnit (m_dValue + dDelta, m_eUnit);
+  }
+
+  /**
+   * Get a new object with the same unit but a subtracted value.
+   * 
+   * @param dDelta
+   *        The delta to be subtracted.
+   * @return A new object. Never <code>null</code>.
+   */
+  @Nonnull
+  @CheckReturnValue
+  public CSSSimpleValueWithUnit substract (final double dDelta)
+  {
+    return new CSSSimpleValueWithUnit (m_dValue - dDelta, m_eUnit);
+  }
+
+  /**
+   * Get a new object with the same unit but a multiplied value.
+   * 
+   * @param dValue
+   *        The value to be multiply with this value.
+   * @return A new object. Never <code>null</code>.
+   */
+  @Nonnull
+  @CheckReturnValue
+  public CSSSimpleValueWithUnit multiply (final double dValue)
+  {
+    return new CSSSimpleValueWithUnit (m_dValue * dValue, m_eUnit);
+  }
+
+  /**
+   * Get a new object with the same unit but an divided value.
+   * 
+   * @param dDivisor
+   *        The divisor to use.
+   * @return A new object. Never <code>null</code>.
+   */
+  @Nonnull
+  @CheckReturnValue
+  public CSSSimpleValueWithUnit divide (final double dDivisor)
+  {
+    return new CSSSimpleValueWithUnit (m_dValue / dDivisor, m_eUnit);
   }
 
   @Override
