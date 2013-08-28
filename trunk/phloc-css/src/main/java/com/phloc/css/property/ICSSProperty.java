@@ -17,6 +17,8 @@
  */
 package com.phloc.css.property;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -32,7 +34,7 @@ import com.phloc.css.utils.ICSSNamedColor;
  *      default CSS properties
  * @author Philip Helger
  */
-public interface ICSSProperty extends ICSSVersionAware
+public interface ICSSProperty extends ICSSVersionAware, Serializable
 {
   /**
    * @return The underlying base property. Never <code>null</code>.

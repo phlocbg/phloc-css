@@ -36,7 +36,7 @@ import com.phloc.css.utils.CSSColorHelper;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSRGB implements ICSSWriteable
+public class CSSRGB implements ICSSWriteable
 {
   private String m_sRed;
   private String m_sGreen;

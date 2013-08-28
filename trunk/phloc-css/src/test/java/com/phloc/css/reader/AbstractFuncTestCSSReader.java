@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.io.file.filter.FilenameFilterEndsWith;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
+import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.reader.errorhandler.CollectingCSSParseErrorHandler;
@@ -74,6 +75,7 @@ public abstract class AbstractFuncTestCSSReader
         m_aLogger.info (sKey);
       final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion);
       assertNotNull (sKey, aCSS);
+      PhlocTestUtils.testDefaultSerialization (aCSS);
 
       // Write optimized version and compare it
       String sCSS = new CSSWriter (m_eVersion, true).getCSSAsString (aCSS);
