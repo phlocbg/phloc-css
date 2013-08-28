@@ -19,13 +19,16 @@ package com.phloc.css.supplementary.main;
 
 import java.io.File;
 import java.util.Date;
+import java.util.Locale;
 
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.impl.MicroElement;
 import com.phloc.commons.microdom.serialize.MicroWriter;
+import com.phloc.commons.name.ComparatorHasName;
 import com.phloc.commons.version.Version;
 import com.phloc.commons.xml.serialize.EXMLSerializeIndent;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
@@ -45,6 +48,8 @@ public class MainCreateSupportedCSSPropertiesFile
 
   public static void main (final String [] args)
   {
+    final Locale aLocale = Locale.US;
+
     final IMicroElement html = new MicroElement ("html");
     final IMicroElement head = html.appendElement ("head");
     head.appendElement ("title").appendText ("Supported CSS properties in phloc-css");
@@ -71,7 +76,8 @@ public class MainCreateSupportedCSSPropertiesFile
 
     IMicroElement tbody = table.appendElement ("tbody");
     int nIndex = 0;
-    for (final ECSSProperty eProperty : ECSSProperty.values ())
+    for (final ECSSProperty eProperty : ContainerHelper.getSorted (ECSSProperty.values (),
+                                                                   new ComparatorHasName <ECSSProperty> (aLocale)))
       if (!eProperty.isBrowserSpecific ())
       {
         final Version eMinVersion = eProperty.getMinimumCSSVersion ().getVersion ();
@@ -110,17 +116,20 @@ public class MainCreateSupportedCSSPropertiesFile
     tr.appendElement ("th").appendText ("Microsoft");
     tr.appendElement ("th").appendText ("Mozilla");
     tr.appendElement ("th").appendText ("Opera");
+    tr.appendElement ("th").appendText ("EPub");
     tr.appendElement ("th").appendText ("Webkit");
 
     tbody = table.appendElement ("tbody");
     nIndex = 0;
-    for (final ECSSProperty eProperty : ECSSProperty.values ())
+    for (final ECSSProperty eProperty : ContainerHelper.getSorted (ECSSProperty.values (),
+                                                                   new ComparatorHasName <ECSSProperty> (aLocale)))
       if (eProperty.isBrowserSpecific ())
       {
         final boolean bKHTML = eProperty.isKHTMLSpecific ();
         final boolean bMS = eProperty.isMicrosoftSpecific ();
         final boolean bMoz = eProperty.isMozillaSpecific ();
         final boolean bOpera = eProperty.isOperaSpecific ();
+        final boolean bEPub = eProperty.isEPubSpecific ();
         final boolean bWebkit = eProperty.isWebkitSpecific ();
 
         tr = tbody.appendElement ("tr");
@@ -131,6 +140,7 @@ public class MainCreateSupportedCSSPropertiesFile
         _boolean (tr.appendElement ("td"), bMS);
         _boolean (tr.appendElement ("td"), bMoz);
         _boolean (tr.appendElement ("td"), bOpera);
+        _boolean (tr.appendElement ("td"), bEPub);
         _boolean (tr.appendElement ("td"), bWebkit);
 
         ++nIndex;
