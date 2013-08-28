@@ -28,6 +28,12 @@ import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
+/**
+ * This enum contains all the selector combinators. E.g. used in
+ * <code>div <b>&gt;</b> span</code>
+ * 
+ * @author Philip Helger
+ */
 public enum ECSSSelectorCombinator implements ICSSSelectorMember, ICSSVersionAware, IHasName
 {
   PLUS ("+"),

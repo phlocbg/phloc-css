@@ -21,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.writer.CSSWriterSettings;
 
@@ -37,5 +38,12 @@ public final class CSSHSLATest
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
     final CSSHSLA aColor = new CSSHSLA (1, 2, 3, 0.5f);
     assertEquals ("hsla(1,2%,3%,0.5)", aColor.getAsCSSString (aSettings, 0));
+
+    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aColor, new CSSHSLA (aColor));
+    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aColor, new CSSHSLA (1, 2, 3, 0.5f));
+    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aColor, new CSSHSLA (0, 2, 3, 0.5f));
+    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aColor, new CSSHSLA (1, 0, 3, 0.5f));
+    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aColor, new CSSHSLA (1, 2, 0, 0.5f));
+    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aColor, new CSSHSLA (1, 2, 3, 0f));
   }
 }

@@ -21,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.writer.CSSWriterSettings;
 
@@ -37,5 +38,12 @@ public final class CSSRGBATest
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
     final CSSRGBA aColor = new CSSRGBA (1, 2, 3, 0.5f);
     assertEquals ("rgba(1,2,3,0.5)", aColor.getAsCSSString (aSettings, 0));
+
+    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aColor, new CSSRGBA (aColor));
+    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aColor, new CSSRGBA (1, 2, 3, 0.5f));
+    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aColor, new CSSRGBA (0, 2, 3, 0.5f));
+    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aColor, new CSSRGBA (1, 0, 3, 0.5f));
+    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aColor, new CSSRGBA (1, 2, 0, 0.5f));
+    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aColor, new CSSRGBA (1, 2, 3, 0f));
   }
 }

@@ -25,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.utils.CSSDataURL;
 import com.phloc.css.writer.CSSWriterSettings;
@@ -47,6 +48,9 @@ public final class CSSURITest
     assertEquals ("url('a.gif')", aURI.getAsCSSString (aSettings, 0));
     assertFalse (aURI.isDataURL ());
     assertNull (aURI.getAsDataURL ());
+
+    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aURI, new CSSURI ("a.gif"));
+    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aURI, new CSSURI ("b.gif"));
   }
 
   @Test

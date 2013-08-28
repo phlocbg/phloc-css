@@ -27,6 +27,12 @@ import com.phloc.commons.name.IHasName;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSWriterSettings;
 
+/**
+ * Contains the binary operators for the @supports rule as in
+ * <code>@supports (transition-property: color) <b>or</b> (animation-name: foo)</code>
+ * 
+ * @author Philip Helger
+ */
 public enum ECSSSupportsConditionOperator implements ICSSSupportsConditionMember, IHasName
 {
   AND ("and"),
