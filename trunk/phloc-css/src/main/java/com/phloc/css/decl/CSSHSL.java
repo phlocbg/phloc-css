@@ -45,6 +45,17 @@ public final class CSSHSL implements ICSSWriteable, ICSSVersionAware
   private String m_sLightness;
 
   /**
+   * Copy constructor
+   * 
+   * @param aOther
+   *        The object to copy the data from. May not be <code>null</code>.
+   */
+  public CSSHSL (@Nonnull final CSSHSL aOther)
+  {
+    this (aOther.getHue (), aOther.getSaturation (), aOther.getLightness ());
+  }
+
+  /**
    * Constructor
    * 
    * @param nHue

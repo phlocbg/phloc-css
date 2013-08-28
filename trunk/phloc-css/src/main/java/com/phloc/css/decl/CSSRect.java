@@ -43,6 +43,17 @@ public final class CSSRect implements ICSSWriteable
   private String m_sLeft;
 
   /**
+   * Copy constructor
+   * 
+   * @param aOther
+   *        The object to copy the data from. May not be <code>null</code>.
+   */
+  public CSSRect (@Nonnull final CSSRect aOther)
+  {
+    this (aOther.getTop (), aOther.getRight (), aOther.getBottom (), aOther.getLeft ());
+  }
+
+  /**
    * Constructor
    * 
    * @param sTop
