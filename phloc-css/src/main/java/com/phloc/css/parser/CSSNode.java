@@ -17,6 +17,7 @@
  */
 package com.phloc.css.parser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +35,7 @@ import com.phloc.css.CSSSourceLocation;
  * 
  * @author Philip Helger
  */
-public class CSSNode implements Node, Iterable <CSSNode>
+public class CSSNode implements Node, Iterable <CSSNode>, Serializable
 {
   private final int m_nType;
   private CSSNode m_aParent;

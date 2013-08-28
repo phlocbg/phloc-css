@@ -17,6 +17,7 @@
  */
 package com.phloc.css.decl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ import com.phloc.css.ICSSSourceLocationAware;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CascadingStyleSheet implements ICSSSourceLocationAware
+public final class CascadingStyleSheet implements ICSSSourceLocationAware, Serializable
 {
   private final List <CSSImportRule> m_aImportRules = new ArrayList <CSSImportRule> ();
   private final List <CSSNamespaceRule> m_aNamespaceRules = new ArrayList <CSSNamespaceRule> ();

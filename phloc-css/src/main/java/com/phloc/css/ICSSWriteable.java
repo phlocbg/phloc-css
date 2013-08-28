@@ -17,6 +17,8 @@
  */
 package com.phloc.css;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
@@ -25,7 +27,7 @@ import javax.annotation.Nonnull;
  * 
  * @author Philip Helger
  */
-public interface ICSSWriteable
+public interface ICSSWriteable extends Serializable
 {
   /**
    * @param aSettings

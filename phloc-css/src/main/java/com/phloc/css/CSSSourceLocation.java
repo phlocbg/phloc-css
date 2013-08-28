@@ -17,6 +17,8 @@
  */
 package com.phloc.css;
 
+import java.io.Serializable;
+
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,7 +37,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class CSSSourceLocation
+public final class CSSSourceLocation implements Serializable
 {
   private final CSSSourceArea m_aFirstTokenArea;
   private final CSSSourceArea m_aLastTokenArea;

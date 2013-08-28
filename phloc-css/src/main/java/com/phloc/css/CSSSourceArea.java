@@ -17,6 +17,8 @@
  */
 package com.phloc.css;
 
+import java.io.Serializable;
+
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -31,7 +33,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class CSSSourceArea
+public final class CSSSourceArea implements Serializable
 {
   private final int m_nBeginLineNumber;
   private final int m_nBeginColumnNumber;
@@ -91,7 +93,7 @@ public final class CSSSourceArea
 
   /**
    * @return The location of the token as a simple string. Never
-   *         <code>null</code>.
+   *         <code>null</code>. Example: <code>(1:2/3:4)</code>
    */
   @Nonnull
   @Nonempty
