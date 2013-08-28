@@ -42,6 +42,7 @@ public final class CSSRectTest
     assertEquals ("4", aRect.getLeft ());
     assertEquals ("rect(1,2,3,4)", aRect.getAsCSSString (new CSSWriterSettings (ECSSVersion.CSS30), 0));
 
+    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aRect, new CSSRect (aRect));
     PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aRect, new CSSRect ("1", "2", "3", "4"));
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aRect, new CSSRect ("0", "2", "3", "4"));
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aRect, new CSSRect ("1", "0", "3", "4"));

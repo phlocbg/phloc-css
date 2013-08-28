@@ -48,7 +48,6 @@ import com.phloc.css.annotations.DeprecatedInCSS30;
  */
 public enum ECSSProperty implements IHasName, ICSSVersionAware
 {
-  _STAR ("*", ECSSVersion.CSS10, ECSSSpecification.CSS1),
   ALIGN_CONTENT ("align-content", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX, ECSSSpecification.CSS3_ALIGN),
   ALIGN_ITEMS ("align-items", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX, ECSSSpecification.CSS3_ALIGN),
   ALIGN_SELF ("align-self", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX, ECSSSpecification.CSS3_ALIGN),
