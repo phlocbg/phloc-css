@@ -46,6 +46,17 @@ public final class CSSHSLA implements ICSSWriteable, ICSSVersionAware
   private String m_sOpacity;
 
   /**
+   * Copy constructor
+   * 
+   * @param aOther
+   *        The object to copy the data from. May not be <code>null</code>.
+   */
+  public CSSHSLA (@Nonnull final CSSHSLA aOther)
+  {
+    this (aOther.getHue (), aOther.getSaturation (), aOther.getLightness (), aOther.getOpacity ());
+  }
+
+  /**
    * Constructor
    * 
    * @param nHue

@@ -42,6 +42,17 @@ public final class CSSRGB implements ICSSWriteable
   private String m_sGreen;
   private String m_sBlue;
 
+  /**
+   * Copy constructor
+   * 
+   * @param aOther
+   *        The object to copy the data from. May not be <code>null</code>.
+   */
+  public CSSRGB (@Nonnull final CSSRGB aOther)
+  {
+    this (aOther.getRed (), aOther.getGreen (), aOther.getBlue ());
+  }
+
   public CSSRGB (final int nRed, final int nGreen, final int nBlue)
   {
     this (Integer.toString (CSSColorHelper.getRGBValue (nRed)),
