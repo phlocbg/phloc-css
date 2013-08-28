@@ -39,7 +39,7 @@ public class MainFetchW3C_CSSTests
   public static void main (final String [] args) throws MalformedURLException
   {
     _fetch ("http://www.w3.org/Style/CSS/Test/CSS3/Selectors/current/xml/full/flat/",
-            "src\\test\\resources\\css30\\w3c\\selectors");
+            "src\\test\\resources\\testfiles\\css30\\w3c\\selectors");
   }
 
   private static void _fetch (final String sURL, final String sDestDir) throws MalformedURLException
