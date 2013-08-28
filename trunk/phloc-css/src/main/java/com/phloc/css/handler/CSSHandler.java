@@ -20,6 +20,7 @@ package com.phloc.css.handler;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclarationList;
 import com.phloc.css.decl.CascadingStyleSheet;
@@ -33,6 +34,9 @@ import com.phloc.css.parser.CSSNode;
 @Immutable
 public final class CSSHandler
 {
+  @PresentForCodeCoverage
+  private static final CSSHandler s_aInstance = new CSSHandler ();
+
   private CSSHandler ()
   {}
 

@@ -19,6 +19,8 @@ package com.phloc.css;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
+
 /**
  * Contains CSS style constants and utility stuff. Only constants that are part
  * of the CSS specification are contained in this class.<br>
@@ -48,6 +50,9 @@ public final class CCSS
 
   /** The "!important" suffix for property values */
   public static final String IMPORTANT_SUFFIX = " !important";
+
+  @PresentForCodeCoverage
+  private static final CCSS s_aInstance = new CCSS ();
 
   private CCSS ()
   {}
