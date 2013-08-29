@@ -124,3 +124,8 @@
     } 
   }
 }
+
+/* A trailing ‘!important’ on a declaration being tested is allowed, though it won't change the validity of the declaration. */
+@supports (display: flexbox !important) {
+  div { color:green; }
+}

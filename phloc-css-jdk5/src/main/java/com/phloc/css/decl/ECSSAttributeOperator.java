@@ -29,22 +29,23 @@ import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
+/**
+ * Enumeration with selector attribute operations as in
+ * <code>[foo<b>^=</b>"bar"]</code>
+ * 
+ * @author Philip Helger
+ */
 public enum ECSSAttributeOperator implements ICSSVersionAware, ICSSWriteable, IHasName
 {
-  EQUALS ("="),
-  INCLUDES ("~="),
-  DASHMATCH ("|="),
+  EQUALS ("=", ECSSVersion.CSS21),
+  INCLUDES ("~=", ECSSVersion.CSS21),
+  DASHMATCH ("|=", ECSSVersion.CSS21),
   BEGINMATCH ("^=", ECSSVersion.CSS30),
   ENDMATCH ("$=", ECSSVersion.CSS30),
-  CONTAINSMATCH ("*=");
+  CONTAINSMATCH ("*=", ECSSVersion.CSS21);
 
   private final String m_sName;
   private final ECSSVersion m_eVersion;
-
-  private ECSSAttributeOperator (@Nonnull @Nonempty final String sName)
-  {
-    this (sName, ECSSVersion.CSS21);
-  }
 
   private ECSSAttributeOperator (@Nonnull @Nonempty final String sName, @Nonnull final ECSSVersion eVersion)
   {

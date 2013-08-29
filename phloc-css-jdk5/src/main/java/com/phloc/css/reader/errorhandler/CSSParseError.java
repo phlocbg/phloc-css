@@ -73,7 +73,7 @@ public final class CSSParseError
   }
 
   /**
-   * @return The last valid token read.
+   * @return The last valid token read. Never <code>null</code>.
    */
   @Nonnull
   public ReadonlyToken getLastValidToken ()
@@ -83,7 +83,7 @@ public final class CSSParseError
 
   /**
    * @return The first token that was skipped. That can be used to identify the
-   *         start position of the error.
+   *         start position of the error. Never <code>null</code>.
    */
   @Nonnull
   public ReadonlyToken getFirstSkippedToken ()
@@ -93,7 +93,7 @@ public final class CSSParseError
 
   /**
    * @return The last token that was skipped. That can be used to identify the
-   *         end position of the error.
+   *         end position of the error. Never <code>null</code>.
    */
   @Nonnull
   public ReadonlyToken getLastSkippedToken ()
@@ -103,7 +103,7 @@ public final class CSSParseError
 
   /**
    * @return The error message created by {@link LoggingCSSParseErrorHandler} as
-   *         a convenience method.
+   *         a convenience method. Neither <code>null</code> nor empty.
    */
   @Nonnull
   @Nonempty

@@ -77,13 +77,16 @@ public class CSSPropertyEnumOrNumbers extends CSSPropertyEnum
   {
     if (sValue == null)
       return false;
+
+    // Split by whitespaces "  a   b " results in { "a", "b" }
     final String [] aParts = RegExHelper.getSplitToArray (sValue.trim (), "\\s+");
     if (aParts.length < m_nMinNumbers || aParts.length > m_nMaxNumbers)
       return false;
-    for (int i = 0; i < aParts.length; ++i)
+
+    for (final String aPart : aParts)
     {
-      aParts[i] = aParts[i].trim ();
-      if (!super.isValidValue (aParts[i]) && !CSSNumberHelper.isValueWithUnit (aParts[i], m_bWithPercentage))
+      final String sTrimmedPart = aPart.trim ();
+      if (!super.isValidValue (sTrimmedPart) && !CSSNumberHelper.isValueWithUnit (sTrimmedPart, m_bWithPercentage))
         return false;
     }
     return true;
@@ -93,7 +96,7 @@ public class CSSPropertyEnumOrNumbers extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnumOrNumbers getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrNumbers (eProp, m_bWithPercentage, m_nMinNumbers, m_nMaxNumbers, m_aEnumValues);
+    return new CSSPropertyEnumOrNumbers (eProp, m_bWithPercentage, m_nMinNumbers, m_nMaxNumbers, directGetEnumValues ());
   }
 
   @Override

@@ -19,6 +19,7 @@ package com.phloc.css.utils;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -33,6 +34,19 @@ public final class CSSRectHelperTest
   @Test
   public void testIsRectValue ()
   {
+    // Invalid string
+    assertFalse (CSSRectHelper.isRectValue (null));
+    assertFalse (CSSRectHelper.isRectValue (""));
+    assertFalse (CSSRectHelper.isRectValue ("    "));
+    assertFalse (CSSRectHelper.isRectValue ("  rect  "));
+    assertFalse (CSSRectHelper.isRectValue ("  rect(  "));
+    assertFalse (CSSRectHelper.isRectValue ("  rect (  "));
+    assertFalse (CSSRectHelper.isRectValue ("  rect ( 5 "));
+    assertFalse (CSSRectHelper.isRectValue ("  rect ( 5 6 7 8 ))"));
+    assertFalse (CSSRectHelper.isRectValue ("  rect (( 5 6 7 8 )"));
+    assertFalse (CSSRectHelper.isRectValue ("  rect ( 5, 6, 7, 8 ))"));
+    assertFalse (CSSRectHelper.isRectValue ("  rect (( 5, 6, 7, 8 )"));
+
     // OK, current syntax
     assertTrue (CSSRectHelper.isRectValue ("rect(0,0,100,50)"));
     assertTrue (CSSRectHelper.isRectValue ("rect( 0 , 0 , 100 , 50 ) "));
@@ -84,13 +98,27 @@ public final class CSSRectHelperTest
   @Test
   public void testGetRectValue ()
   {
+    // Invalid string
+    assertNull (CSSRectHelper.getRectValues (null));
+    assertNull (CSSRectHelper.getRectValues (""));
+    assertNull (CSSRectHelper.getRectValues ("    "));
+    assertNull (CSSRectHelper.getRectValues ("  rect  "));
+    assertNull (CSSRectHelper.getRectValues ("  rect(  "));
+    assertNull (CSSRectHelper.getRectValues ("  rect (  "));
+    assertNull (CSSRectHelper.getRectValues ("  rect ( 5 "));
+    assertNull (CSSRectHelper.getRectValues ("  rect ( 5 6 7 8 ))"));
+    assertNull (CSSRectHelper.getRectValues ("  rect (( 5 6 7 8 )"));
+    assertNull (CSSRectHelper.getRectValues ("  rect ( 5, 6, 7, 8 ))"));
+    assertNull (CSSRectHelper.getRectValues ("  rect (( 5, 6, 7, 8 )"));
+
     // OK, current syntax
     assertArrayEquals (new String [] { "0in", "0pt", "100ex", "50em" },
                        CSSRectHelper.getRectValues ("rect(0in,0pt,100ex,50em)"));
     assertArrayEquals (new String [] { "0", "0", "100", "50" }, CSSRectHelper.getRectValues ("rect(0,0,100,50)"));
     assertArrayEquals (new String [] { "0", "0", "100", "50" },
                        CSSRectHelper.getRectValues ("rect( 0 , 0 , 100 , 50 ) "));
-    assertArrayEquals (new String [] { "0%", "0%", "100%", "50%" }, CSSRectHelper.getRectValues ("rect(0%,0%,100%,50%)"));
+    assertArrayEquals (new String [] { "0%", "0%", "100%", "50%" },
+                       CSSRectHelper.getRectValues ("rect(0%,0%,100%,50%)"));
     assertArrayEquals (new String [] { "0%", "0%", "100%", "50%" },
                        CSSRectHelper.getRectValues ("rect( 0% , 0% , 100% , 50% )"));
     assertArrayEquals (new String [] { "0in", "0px", "10em", "50pt" },
@@ -104,7 +132,8 @@ public final class CSSRectHelperTest
     assertArrayEquals (new String [] { "0", "0", "100", "50" }, CSSRectHelper.getRectValues ("rect(0 0 100 50)"));
     assertArrayEquals (new String [] { "0", "0", "100", "50" },
                        CSSRectHelper.getRectValues ("rect( 0   0   100   50 ) "));
-    assertArrayEquals (new String [] { "0%", "0%", "100%", "50%" }, CSSRectHelper.getRectValues ("rect(0% 0% 100% 50%)"));
+    assertArrayEquals (new String [] { "0%", "0%", "100%", "50%" },
+                       CSSRectHelper.getRectValues ("rect(0% 0% 100% 50%)"));
     assertArrayEquals (new String [] { "0%", "0%", "100%", "50%" },
                        CSSRectHelper.getRectValues ("rect( 0%   0%   100%   50% )"));
     assertArrayEquals (new String [] { "0in", "0px", "10em", "50pt" },

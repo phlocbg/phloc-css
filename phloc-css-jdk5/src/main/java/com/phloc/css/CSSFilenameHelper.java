@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.string.StringHelper;
 
 /**
@@ -31,6 +32,9 @@ import com.phloc.commons.string.StringHelper;
 @Immutable
 public final class CSSFilenameHelper
 {
+  @PresentForCodeCoverage
+  private static final CSSFilenameHelper s_aInstance = new CSSFilenameHelper ();
+
   private CSSFilenameHelper ()
   {}
 

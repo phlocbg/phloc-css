@@ -36,11 +36,16 @@ public class CSSPropertyDouble extends AbstractCSSProperty
     super (eProp);
   }
 
+  public static boolean isValidPropertyValue (@Nullable final String sValue)
+  {
+    return AbstractCSSProperty.isValidPropertyValue (sValue) || StringParser.parseDoubleObj (sValue) != null;
+  }
+
   @Override
   @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return super.isValidValue (sValue) || StringParser.parseDoubleObj (sValue) != null;
+    return isValidPropertyValue (sValue);
   }
 
   @Nonnull

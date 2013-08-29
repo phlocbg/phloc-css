@@ -24,7 +24,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * CSS property without any layout constraint, except that it may not be empty.
+ * CSS property without any value constraints, except that it may not be empty.
  * 
  * @author Philip Helger
  */
@@ -35,11 +35,16 @@ public class CSSPropertyFree extends AbstractCSSProperty
     super (eProp);
   }
 
+  public static boolean isValidPropertyValue (@Nullable final String sValue)
+  {
+    return AbstractCSSProperty.isValidPropertyValue (sValue) || StringHelper.hasText (sValue);
+  }
+
   @Override
   @OverridingMethodsMustInvokeSuper
   public boolean isValidValue (@Nullable final String sValue)
   {
-    return super.isValidValue (sValue) || StringHelper.hasText (sValue);
+    return isValidPropertyValue (sValue);
   }
 
   @Nonnull

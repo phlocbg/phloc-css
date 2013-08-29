@@ -26,6 +26,12 @@ import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
 import com.phloc.css.ICSSWriterSettings;
 
+/**
+ * Enumeration with expression operators. E.g. used in
+ * <code>rgb(1<b>,</b>2<b>,</b>3)</code>
+ * 
+ * @author Philip Helger
+ */
 public enum ECSSExpressionOperator implements ICSSExpressionMember, IHasName
 {
   SLASH ("/"),

@@ -17,13 +17,18 @@
  */
 package com.phloc.css.property;
 
+import java.util.EnumSet;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.css.ECSSSpecification;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.annotations.DeprecatedInCSS30;
@@ -32,191 +37,350 @@ import com.phloc.css.annotations.DeprecatedInCSS30;
  * Contains a list of most CSS property names.<br>
  * Source of Webkit property names:
  * http://trac.webkit.org/export/0/trunk/Source/WebCore/css/CSSPropertyNames.in<br>
+ * <br>
  * MS specific property names:
- * http://msdn.microsoft.com/en-us/library/ms531207(v=vs.85).aspx<br>
+ * http://msdn.microsoft.com/en-us/library/ie/hh772373%28v=vs.85%29.aspx<br>
+ * http://blogs.msdn.com/b/ie/archive/2008/09/08/microsoft-css-vendor-extensions
+ * .aspx<br>
+ * <br>
  * Mozilla specific property names:
  * https://developer.mozilla.org/en/CSS_Reference/Mozilla_Extensions<br>
  * <br>
- * CSS 3.0:<br>
- * <ul>
- * <li>http://www.w3.org/TR/2011/REC-css3-color-20110607/#property</li>
- * <li>http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#property-index</li>
- * <li>http://www.w3.org/TR/2011/WD-css-device-adapt-20110915/#property-index</li>
- * <li>http://www.w3.org/TR/2011/WD-css3-writing-modes-20110901/#property-index</li>
- * <li>TODO http://www.w3.org/TR/2011/WD-css3-text-20110901/#appendix-h-full-
- * property-index</li>
- * <li>TODO http://www.w3.org/TR/2011/WD-css3-speech-20110818/#property-index</li>
- * <li>http://www.w3.org/TR/2011/WD-css3-ruby-20110630/#properties</li>
- * <li>http://www.w3.org/TR/2011/WD-css3-regions-20110609/#property-index</li>
- * <li>http://www.w3.org/TR/2011/WD-css3-lists-20110524/#property-index</li>
- * <li>http://www.w3.org/TR/2011/CR-css3-multicol-20110412/#property-index</li>
- * <li>http://www.w3.org/TR/2011/WD-css3-flexbox-20110322/#property</li>
- * <li>http://www.w3.org/TR/2011/CR-css3-background-20110215/#property-index</li>
- * <li>TODO http://www.w3.org/TR/2010/WD-css3-gcpm-20100608/#property-index</li>
- * <li>TODO
- * http://www.w3.org/TR/2009/WD-css3-transitions-20091201/#property-index</li>
- * <li>http://www.w3.org/TR/2009/WD-css3-2d-transforms-20091201/#property-index</li>
- * <li>TODO
- * http://www.w3.org/TR/2009/WD-css3-animations-20090320/#property-index</li>
- * <li>TODO
- * http://www.w3.org/TR/2009/WD-css3-3d-transforms-20090320/#property-index</li>
- * <li>TODO http://www.w3.org/TR/2007/WD-css3-grid-20070905/#property-index</li>
- * <li>http://www.w3.org/TR/2008/CR-css3-marquee-20081205/#property</li>
- * </ul>
+ * CSS 3.0: see {@link ECSSSpecification}
  * 
  * @author Philip Helger
  */
 public enum ECSSProperty implements IHasName, ICSSVersionAware
 {
-  APPEARANCE ("appearance", ECSSVersion.CSS30),
-  BACKGROUND ("background"),
-  BACKGROUND_ATTACHMENT ("background-attachment"),
-  BACKGROUND_CLIP ("background-clip", ECSSVersion.CSS30),
-  BACKGROUND_COLOR ("background-color"),
-  BACKGROUND_IMAGE ("background-image"),
-  BACKGROUND_ORIGIN ("background-origin", ECSSVersion.CSS30),
-  BACKGROUND_POSITION ("background-position"),
-  BACKGROUND_REPEAT ("background-repeat"),
-  BACKGROUND_SIZE ("background-size", ECSSVersion.CSS30),
-  BORDER ("border"),
-  BORDER_BOTTOM ("border-bottom"),
-  BORDER_BOTTOM_COLOR ("border-bottom-color"),
-  BORDER_BOTTOM_LEFT_RADIUS ("border-bottom-left-radius", ECSSVersion.CSS30),
-  BORDER_BOTTOM_RIGHT_RADIUS ("border-bottom-right-radius", ECSSVersion.CSS30),
-  BORDER_BOTTOM_STYLE ("border-bottom-style"),
-  BORDER_BOTTOM_WIDTH ("border-bottom-width"),
-  BORDER_COLLAPSE ("border-collapse"),
-  BORDER_COLOR ("border-color"),
-  BORDER_IMAGE ("border-image", ECSSVersion.CSS30),
-  BORDER_IMAGE_OUTSET ("border-image-outset", ECSSVersion.CSS30),
-  BORDER_IMAGE_REPEAT ("border-image-repeat", ECSSVersion.CSS30),
-  BORDER_IMAGE_SLICE ("border-image-slice", ECSSVersion.CSS30),
-  BORDER_IMAGE_SOURCE ("border-image-source", ECSSVersion.CSS30),
-  BORDER_IMAGE_WIDTH ("border-image-width", ECSSVersion.CSS30),
-  BORDER_LEFT ("border-left"),
-  BORDER_LEFT_COLOR ("border-left-color"),
-  BORDER_LEFT_STYLE ("border-left-style"),
-  BORDER_LEFT_WIDTH ("border-left-width"),
-  BORDER_RADIUS ("border-radius", ECSSVersion.CSS30),
-  BORDER_RIGHT ("border-right"),
-  BORDER_RIGHT_COLOR ("border-right-color"),
-  BORDER_RIGHT_STYLE ("border-right-style"),
-  BORDER_RIGHT_WIDTH ("border-right-width"),
-  BORDER_SPACING ("border-spacing"),
-  BORDER_STYLE ("border-style"),
-  BORDER_TOP ("border-top"),
-  BORDER_TOP_COLOR ("border-top-color"),
-  BORDER_TOP_LEFT_RADIUS ("border-top-left-radius", ECSSVersion.CSS30),
-  BORDER_TOP_RIGHT_RADIUS ("border-top-right-radius", ECSSVersion.CSS30),
-  BORDER_TOP_STYLE ("border-top-style"),
-  BORDER_TOP_WIDTH ("border-top-width"),
-  BORDER_WIDTH ("border-width"),
-  BOTTOM ("bottom"),
-  BOX_DECORATION_BREAK ("box-decoration-break", ECSSVersion.CSS30),
-  BOX_SHADOW ("box-shadow", ECSSVersion.CSS30),
-  BOX_SIZING ("box-sizing", ECSSVersion.CSS30),
-  BREAK_AFTER ("break-after", ECSSVersion.CSS30),
-  BREAK_BEFORE ("break-before", ECSSVersion.CSS30),
-  BREAK_INSIDE ("break-inside", ECSSVersion.CSS30),
-  CAPTION_SIDE ("caption-side"),
-  CLEAR ("clear"),
-  CLIP ("clip"),
-  COLOR ("color"),
-  COLUMN_COUNT ("column-count", ECSSVersion.CSS30),
-  COLUMN_FILL ("column-fill", ECSSVersion.CSS30),
-  COLUMN_GAP ("column-gap", ECSSVersion.CSS30),
-  COLUMN_RULE ("column-rule", ECSSVersion.CSS30),
-  COLUMN_RULE_COLOR ("column-rule-color", ECSSVersion.CSS30),
-  COLUMN_RULE_STYLE ("column-rule-style", ECSSVersion.CSS30),
-  COLUMN_RULE_WIDTH ("column-rule-width", ECSSVersion.CSS30),
-  COLUMN_WIDTH ("column-width", ECSSVersion.CSS30),
-  COLUMNS ("columns", ECSSVersion.CSS30),
-  COLUMNS_SPAN ("columns-span", ECSSVersion.CSS30),
-  COLUMNS_WIDTH ("columns-width", ECSSVersion.CSS30),
-  CONTENT ("content"),
-  CONTENT_ORDER ("content-order", ECSSVersion.CSS30),
-  CURSOR ("cursor"),
-  DIRECTION ("direction"),
-  DISPLAY ("display"),
-  EMPTY_CELLS ("empty-cells"),
-  FILTER ("filter"),
-  FLEX_ALIGN ("flex-align", ECSSVersion.CSS30),
-  FLEX_DIRECTION ("flex-direction", ECSSVersion.CSS30),
-  FLEX_ORDER ("flex-order", ECSSVersion.CSS30),
-  FLEX_PACK ("flex-pack", ECSSVersion.CSS30),
-  FLOAT ("float"),
-  FLOW ("flow", ECSSVersion.CSS30),
-  FONT ("font", ECSSVersion.CSS30),
-  FONT_FAMILY ("font-family"),
-  FONT_FEATURE_SETTINGS ("font-feature-settings", ECSSVersion.CSS30),
-  FONT_KERNING ("font-kerning", ECSSVersion.CSS30),
-  FONT_LANGUAGE_OVERRIDE ("font-language-override", ECSSVersion.CSS30),
-  FONT_SIZE ("font-size"),
-  FONT_SIZE_ADJUST ("font-size-adjust", ECSSVersion.CSS30),
-  FONT_STRETCH ("font-stretch", ECSSVersion.CSS30),
-  FONT_STYLE ("font-style"),
-  FONT_SYNTHESIS ("font-synthesis", ECSSVersion.CSS30),
-  FONT_VARIANT ("font-variant"),
-  FONT_VARIANT_ALTERNATES ("font-variant-alternates", ECSSVersion.CSS30),
-  FONT_VARIANT_CAPS ("font-variant-caps", ECSSVersion.CSS30),
-  FONT_VARIANT_EAST_ASIAN ("font-variant-east-asian", ECSSVersion.CSS30),
-  FONT_VARIANT_LIGATURES ("font-variant-ligatures", ECSSVersion.CSS30),
-  FONT_VARIANT_NUMERIC ("font-variant-numeric", ECSSVersion.CSS30),
-  FONT_VARIANT_POSITION ("font-variant-position", ECSSVersion.CSS30),
-  FONT_WEIGHT ("font-weight"),
-  HEIGHT ("height"),
-  LEFT ("left"),
-  LETTER_SPACING ("letter-spacing"),
-  LINE_HEIGHT ("line-height"),
-  LIST_STYLE ("list-style"),
-  LIST_STYLE_IMAGE ("list-style-image"),
-  LIST_STYLE_POSITION ("list-style-position"),
-  LIST_STYLE_TYPE ("list-style-type"),
-  MARGIN ("margin"),
-  MARGIN_BOTTOM ("margin-bottom"),
-  MARGIN_LEFT ("margin-left"),
-  MARGIN_RIGHT ("margin-right"),
-  MARGIN_TOP ("margin-top"),
-  MARQUEE_DIRECTION ("marquee-direction", ECSSVersion.CSS30),
-  MARQUEE_PLAY_COUNT ("marquee-play-count", ECSSVersion.CSS30),
-  MARQUEE_SPEED ("marquee-speed", ECSSVersion.CSS30),
-  MARQUEE_STYLE ("marquee-style", ECSSVersion.CSS30),
-  MAX_HEIGHT ("max-height"),
-  MAX_WIDTH ("max-width"),
-  MAX_ZOOM ("max-zoom", ECSSVersion.CSS30),
-  MIN_HEIGHT ("min-height"),
-  MIN_WIDTH ("min-width"),
-  MIN_ZOOM ("min-zoom", ECSSVersion.CSS30),
-  OPACITY ("opacity", ECSSVersion.CSS30),
-  ORIENTATION ("orientation", ECSSVersion.CSS30),
-  ORPHANS ("orphans"),
-  OUTLINE ("outline"),
-  OUTLINE_COLOR ("outline-color"),
-  OUTLINE_OFFSET ("outline-offset", ECSSVersion.CSS30),
-  OUTLINE_STYLE ("outline-style"),
-  OUTLINE_WIDTH ("outline-width"),
-  OVERFLOW ("overflow"),
-  OVERFLOW_STYLE ("overflow-style", ECSSVersion.CSS30),
-  OVERFLOW_X ("overflow-x", ECSSVersion.CSS30),
-  OVERFLOW_Y ("overflow-y", ECSSVersion.CSS30),
-  PADDING ("padding"),
-  PADDING_BOTTOM ("padding-bottom"),
-  PADDING_LEFT ("padding-left"),
-  PADDING_RIGHT ("padding-right"),
-  PADDING_TOP ("padding-top"),
-  PAGE_BREAK_BEFORE ("page-break-before"),
-  PAGE_BREAK_AFTER ("page-break-after"),
-  PAGE_BREAK_INSIDE ("page-break-inside"),
-  POSITION ("position"),
-  QUOTES ("quotes", ECSSVersion.CSS30),
-  REGION_OVERFLOW ("region-overflow", ECSSVersion.CSS30),
-  RESIZE ("resize", ECSSVersion.CSS30),
-  RESOLUTION ("resolution", ECSSVersion.CSS30),
-  RIGHT ("right"),
-  RUBY_ALIGN ("ruby-align", ECSSVersion.CSS30),
-  RUBY_OVERHANG ("ruby-overhang", ECSSVersion.CSS30),
-  RUBY_POSITION ("ruby-position", ECSSVersion.CSS30),
-  RUBY_SPAN ("ruby-span", ECSSVersion.CSS30),
+  ALIGN_CONTENT ("align-content", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX, ECSSSpecification.CSS3_ALIGN),
+  ALIGN_ITEMS ("align-items", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX, ECSSSpecification.CSS3_ALIGN),
+  ALIGN_SELF ("align-self", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX, ECSSSpecification.CSS3_ALIGN),
+  ALIGNMENT_ADJUST ("alignment-adjust", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  ALIGNMENT_BASELINE ("alignment-baseline", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  ALL ("all", ECSSVersion.CSS30, ECSSSpecification.CSS3_CASCADE),
+  ANIMATION ("animation", ECSSVersion.CSS30, ECSSSpecification.CSS3_ANIMATIONS),
+  ANIMATION_DELAY ("animation-delay", ECSSVersion.CSS30, ECSSSpecification.CSS3_ANIMATIONS),
+  ANIMATION_DIRECTION ("animation-direction", ECSSVersion.CSS30, ECSSSpecification.CSS3_ANIMATIONS),
+  ANIMATION_DURATION ("animation-duration", ECSSVersion.CSS30, ECSSSpecification.CSS3_ANIMATIONS),
+  ANIMATION_FILL_MODE ("animation-fill-mode", ECSSVersion.CSS30, ECSSSpecification.CSS3_ANIMATIONS),
+  ANIMATION_ITERATION_COUNT ("animation-iteration-count", ECSSVersion.CSS30, ECSSSpecification.CSS3_ANIMATIONS),
+  ANIMATION_NAME ("animation-name", ECSSVersion.CSS30, ECSSSpecification.CSS3_ANIMATIONS),
+  ANIMATION_PLAY_STATE ("animation-play-state", ECSSVersion.CSS30, ECSSSpecification.CSS3_ANIMATIONS),
+  ANIMATION_TIMING_FUNCTION ("animation-timing-function", ECSSVersion.CSS30, ECSSSpecification.CSS3_ANIMATIONS),
+  AZIMUTH ("azimuth", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  BACKFACE_VISIBILITY ("backface-visibility", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSFORMS),
+  BACKGROUND ("background", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BACKGROUND_ATTACHMENT ("background-attachment", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BACKGROUND_CLIP ("background-clip", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BACKGROUND_COLOR ("background-color", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BACKGROUND_IMAGE ("background-image", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BACKGROUND_ORIGIN ("background-origin", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BACKGROUND_POSITION ("background-position", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BACKGROUND_REPEAT ("background-repeat", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BACKGROUND_SIZE ("background-size", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BASELINE_SHIFT ("baseline-shift", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  BLEED ("bleed", ECSSVersion.CSS30, ECSSSpecification.CSS3_GCPM),
+  BOOKMARK_LABEL ("bookmark-label", ECSSVersion.CSS30, ECSSSpecification.CSS3_GCPM),
+  BOOKMARK_LEVEL ("bookmark-level", ECSSVersion.CSS30, ECSSSpecification.CSS3_GCPM),
+  BOOKMARK_STATE ("bookmark-state", ECSSVersion.CSS30, ECSSSpecification.CSS3_GCPM),
+  BOOKMARK_TARGET ("bookmark-target", ECSSVersion.CSS30, ECSSSpecification.CSS3_GCPM),
+  BORDER ("border", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_BOTTOM ("border-bottom", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_BOTTOM_COLOR ("border-bottom-color", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_BOTTOM_LEFT_RADIUS ("border-bottom-left-radius", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_BOTTOM_RIGHT_RADIUS ("border-bottom-right-radius", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_BOTTOM_STYLE ("border-bottom-style", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_BOTTOM_WIDTH ("border-bottom-width", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_COLLAPSE ("border-collapse", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  BORDER_COLOR ("border-color", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_IMAGE ("border-image", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_IMAGE_OUTSET ("border-image-outset", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_IMAGE_REPEAT ("border-image-repeat", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_IMAGE_SLICE ("border-image-slice", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_IMAGE_SOURCE ("border-image-source", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_IMAGE_WIDTH ("border-image-width", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_LEFT ("border-left", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_LEFT_COLOR ("border-left-color", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_LEFT_STYLE ("border-left-style", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_LEFT_WIDTH ("border-left-width", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_RADIUS ("border-radius", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_RIGHT ("border-right", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_RIGHT_COLOR ("border-right-color", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_RIGHT_STYLE ("border-right-style", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_RIGHT_WIDTH ("border-right-width", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_SPACING ("border-spacing", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  BORDER_STYLE ("border-style", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_TOP ("border-top", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_TOP_COLOR ("border-top-color", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_TOP_LEFT_RADIUS ("border-top-left-radius", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_TOP_RIGHT_RADIUS ("border-top-right-radius", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_TOP_STYLE ("border-top-style", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_TOP_WIDTH ("border-top-width", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BORDER_WIDTH ("border-width", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BACKGROUND),
+  BOTTOM ("bottom", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_POSITIONING),
+  BOX_DECORATION_BREAK ("box-decoration-break", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BOX_SHADOW ("box-shadow", ECSSVersion.CSS30, ECSSSpecification.CSS3_BACKGROUND),
+  BOX_SIZING ("box-sizing", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
+  BREAK_AFTER ("break-after", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL, ECSSSpecification.CSS3_BREAK, ECSSSpecification.CSS3_REGIONS),
+  BREAK_BEFORE ("break-before", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL, ECSSSpecification.CSS3_BREAK, ECSSSpecification.CSS3_REGIONS),
+  BREAK_INSIDE ("break-inside", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL, ECSSSpecification.CSS3_BREAK, ECSSSpecification.CSS3_REGIONS),
+  CAPTION_SIDE ("caption-side", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  CLEAR ("clear", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  CLIP ("clip", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_POSITIONING, ECSSSpecification.CSS_MASKING),
+  CLIPPATH ("clipPath", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  CLIP_PATH ("clip-path", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  CLIP_RULE ("clip-rule", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  COLOR ("color", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_COLOR),
+  COLOR_INTERPOLATION_FILTERS ("color-interpolation-filters", ECSSVersion.CSS30, ECSSSpecification.FILTER_EFFECTS),
+  COLUMNS ("columns", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
+  COLUMNS_SPAN ("columns-span", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
+  COLUMNS_WIDTH ("columns-width", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
+  COLUMN_COUNT ("column-count", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
+  COLUMN_FILL ("column-fill", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
+  COLUMN_GAP ("column-gap", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
+  COLUMN_RULE ("column-rule", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
+  COLUMN_RULE_COLOR ("column-rule-color", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
+  COLUMN_RULE_STYLE ("column-rule-style", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
+  COLUMN_RULE_WIDTH ("column-rule-width", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
+  COLUMN_WIDTH ("column-width", ECSSVersion.CSS30, ECSSSpecification.CSS3_MULTICOL),
+  CONTENT ("content", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_UI),
+  COUNTER_INCREMENT ("counter-increment", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  COUNTER_RESET ("counter-reset", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  CUE ("cue", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_SPEECH),
+  CUE_AFTER ("cue-after", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_SPEECH),
+  CUE_BEFORE ("cue-before", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_SPEECH),
+  CURSOR ("cursor", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_UI),
+  DIRECTION ("direction", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_WRITING_MODES),
+  DISPLAY ("display", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_FLEXBOX, ECSSSpecification.CSS3_LISTS),
+  DOMINANT_BASELINE ("dominant-baseline", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  DROP_INITIAL_AFTER_ADJUST ("drop-initial-after-adjust", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  DROP_INITIAL_AFTER_ALIGN ("drop-initial-after-align", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  DROP_INITIAL_BEFORE_ADJUST ("drop-initial-before-adjust", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  DROP_INITIAL_BEFORE_ALIGN ("drop-initial-before-align", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  DROP_INITIAL_SIZE ("drop-initial-size", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  DROP_INITIAL_VALUE ("drop-initial-value", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  ELEVATION ("elevation", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  EMPTY_CELLS ("empty-cells", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  ENABLE_BACKGROUND ("enable-background", ECSSVersion.CSS30, ECSSSpecification.FILTER_EFFECTS),
+  FILTER ("filter", ECSSVersion.CSS30, ECSSSpecification.FILTER_EFFECTS),
+  FLEX ("flex", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX),
+  FLEX_BASIS ("flex-basis", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX),
+  FLEX_DIRECTION ("flex-direction", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX),
+  FLEX_FLOW ("flex-flow", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX),
+  FLEX_GROW ("flex-grow", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX),
+  FLEX_SHRINK ("flex-shrink", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX),
+  FLEX_WRAP ("flex-wrap", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX),
+  FLOAT ("float", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  FLOAT_OFFSET ("float-offset", ECSSVersion.CSS30, ECSSSpecification.CSS3_GCPM),
+  FLOOD_COLOR ("flood-color", ECSSVersion.CSS30, ECSSSpecification.FILTER_EFFECTS),
+  FLOOD_OPACITY ("flood-opactiy", ECSSVersion.CSS30, ECSSSpecification.FILTER_EFFECTS),
+  FLOW_FROM ("flow-from", ECSSVersion.CSS30, ECSSSpecification.CSS3_REGIONS),
+  FLOW_INTO ("flow-into", ECSSVersion.CSS30, ECSSSpecification.CSS3_REGIONS),
+  FONT ("font", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_FONTS),
+  FONT_FAMILY ("font-family", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_FONTS),
+  FONT_FEATURE_SETTINGS ("font-feature-settings", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  FONT_KERNING ("font-kerning", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  FONT_LANGUAGE_OVERRIDE ("font-language-override", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  FONT_SIZE ("font-size", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_FONTS),
+  FONT_SIZE_ADJUST ("font-size-adjust", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  FONT_STRETCH ("font-stretch", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  FONT_STYLE ("font-style", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_FONTS),
+  FONT_SYNTHESIS ("font-synthesis", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  FONT_VARIANT ("font-variant", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_FONTS),
+  FONT_VARIANT_ALTERNATES ("font-variant-alternates", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  FONT_VARIANT_CAPS ("font-variant-caps", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  FONT_VARIANT_EAST_ASIAN ("font-variant-east-asian", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  FONT_VARIANT_LIGATURES ("font-variant-ligatures", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  FONT_VARIANT_NUMERIC ("font-variant-numeric", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  FONT_VARIANT_POSITION ("font-variant-position", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  FONT_WEIGHT ("font-weight", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_FONTS),
+  GRID_AFTER ("grid-after", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  GRID_AREA ("grid-area", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  GRID_AUTO_COLUMNS ("grid-auto-columns", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  GRID_AUTO_FLOW ("grid-auto-flow", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  GRID_AUTO_ROWS ("grid-auto-rows", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  GRID_BEFORE ("grid-before", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  GRID_COLUMN ("grid-column", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  @Deprecated
+  GRID_COLUMNS ("grid-columns", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID),
+  GRID_DEFINITION_COLUMNS ("grid-definition-columns", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  GRID_DEFINITION_ROWS ("grid-definition-rows", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  GRID_END ("grid-end", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  GRID_ROW ("grid-row", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  @Deprecated
+  GRID_ROWS ("grid-rows", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID),
+  GRID_START ("grid-start", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  GRID_TEMPLATE ("grid-template", ECSSVersion.CSS30, ECSSSpecification.CSS3_GRID_LAYOUT),
+  HANGING_PUNCTUATION ("hanging-punctuation", ECSSVersion.CSS30, ECSSSpecification.CSS3_TEXT),
+  HEIGHT ("height", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS_DEVICE_ADAPT),
+  HYPHENS ("hyphens", ECSSVersion.CSS30, ECSSSpecification.CSS3_TEXT),
+  ICON ("icon", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
+  IME_MODE ("ime-mode", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
+  INLINE_BOX_ALIGN ("inline-box-align", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  JUSITFY_CONTENT ("justify-content", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX, ECSSSpecification.CSS3_ALIGN),
+  JUSITFY_ITEMS ("justify-items", ECSSVersion.CSS30, ECSSSpecification.CSS3_ALIGN),
+  JUSITFY_SELF ("justify-self", ECSSVersion.CSS30, ECSSSpecification.CSS3_ALIGN),
+  LEFT ("left", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_POSITIONING),
+  LETTER_SPACING ("letter-spacing", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_TEXT),
+  LIGHTING_COLOR ("lighting-color", ECSSVersion.CSS30, ECSSSpecification.FILTER_EFFECTS),
+  LINE_BREAK ("line-break", ECSSVersion.CSS30, ECSSSpecification.CSS3_TEXT),
+  LINE_HEIGHT ("line-height", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_LINEBOX),
+  LINE_STACKING ("line-stacking", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  LINE_STACKING_RUBY ("line-stacking-ruby", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  LINE_STACKING_SHIFT ("line-stacking-shift", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  LINE_STACKING_STRATEGY ("line-stacking-strategy", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  LIST_STYLE ("list-style", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_LISTS),
+  LIST_STYLE_IMAGE ("list-style-image", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_LISTS),
+  LIST_STYLE_POSITION ("list-style-position", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_LISTS),
+  LIST_STYLE_TYPE ("list-style-type", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_LISTS),
+  MARGIN ("margin", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  MARGIN_BOTTOM ("margin-bottom", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  MARGIN_LEFT ("margin-left", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  MARGIN_RIGHT ("margin-right", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  MARGIN_TOP ("margin-top", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  MARKS ("marks", ECSSVersion.CSS30, ECSSSpecification.CSS3_GCPM),
+  MARQUEE_DIRECTION ("marquee-direction", ECSSVersion.CSS30, ECSSSpecification.CSS3_MARQUEE),
+  MARQUEE_PLAY_COUNT ("marquee-play-count", ECSSVersion.CSS30, ECSSSpecification.CSS3_MARQUEE),
+  MARQUEE_SPEED ("marquee-speed", ECSSVersion.CSS30, ECSSSpecification.CSS3_MARQUEE),
+  MARQUEE_STYLE ("marquee-style", ECSSVersion.CSS30, ECSSSpecification.CSS3_MARQUEE),
+  MASK ("mask", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_BOX_IMAGE ("mask-box-image", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_BOX_IMAGE_OUTSET ("mask-box-image-outset", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_BOX_IMAGE_REPEAT ("mask-box-image-repeat", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_BOX_IMAGE_SLICE ("mask-box-image-slice", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_BOX_IMAGE_SOURCE ("mask-box-image-source", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_BOX_IMAGE_WIDTH ("mask-box-image-width", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_CLIP ("mask-clip", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_IMAGE ("mask-image", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_ORIGIN ("mask-origin", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_POSITION ("mask-position", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_REPEAT ("mask-repeat", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_SIZE ("mask-size", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_SOURCE_TYPE ("mask-source-type", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MASK_TYPE ("mask-type", ECSSVersion.CSS30, ECSSSpecification.CSS_MASKING),
+  MAX_HEIGHT ("max-height", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS_DEVICE_ADAPT),
+  MAX_LINES ("max-lines", ECSSVersion.CSS30, ECSSSpecification.CSS_OVERFLOW_3),
+  MAX_WIDTH ("max-width", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS_DEVICE_ADAPT),
+  MAX_ZOOM ("max-zoom", ECSSVersion.CSS30, ECSSSpecification.CSS_DEVICE_ADAPT),
+  MIN_HEIGHT ("min-height", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_FLEXBOX, ECSSSpecification.CSS_DEVICE_ADAPT),
+  MIN_WIDTH ("min-width", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_FLEXBOX, ECSSSpecification.CSS_DEVICE_ADAPT),
+  MIN_ZOOM ("min-zoom", ECSSVersion.CSS30, ECSSSpecification.CSS_DEVICE_ADAPT),
+  NAV_DOWN ("nav-down", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
+  NAV_INDEX ("nav-index", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
+  NAV_LEFT ("nav-left", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
+  NAV_RIGHT ("nav-right", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
+  NAV_UP ("nav-up", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
+  OPACITY ("opacity", ECSSVersion.CSS30, ECSSSpecification.CSS3_COLOR),
+  ORDER ("order", ECSSVersion.CSS30, ECSSSpecification.CSS3_FLEXBOX),
+  ORIENTATION ("orientation", ECSSVersion.CSS30, ECSSSpecification.CSS_DEVICE_ADAPT),
+  ORPHANS ("orphans", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BREAK),
+  OUTLINE ("outline", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_UI),
+  OUTLINE_COLOR ("outline-color", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_UI),
+  OUTLINE_OFFSET ("outline-offset", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
+  OUTLINE_STYLE ("outline-style", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_UI),
+  OUTLINE_WIDTH ("outline-width", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_UI),
+  OVERFLOW ("overflow", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS_OVERFLOW_3),
+  OVERFLOW_STYLE ("overflow-style", ECSSVersion.CSS30, ECSSSpecification.CSS3_MARQUEE),
+  OVERFLOW_WRAP ("overflow-wrap", ECSSVersion.CSS30, ECSSSpecification.CSS3_TEXT),
+  OVERFLOW_X ("overflow-x", ECSSVersion.CSS30, ECSSSpecification.CSS_OVERFLOW_3),
+  OVERFLOW_Y ("overflow-y", ECSSVersion.CSS30, ECSSSpecification.CSS_OVERFLOW_3),
+  PADDING ("padding", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  PADDING_BOTTOM ("padding-bottom", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  PADDING_LEFT ("padding-left", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  PADDING_RIGHT ("padding-right", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  PADDING_TOP ("padding-top", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  PAGE_BREAK_AFTER ("page-break-after", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  PAGE_BREAK_BEFORE ("page-break-before", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  PAGE_BREAK_INSIDE ("page-break-inside", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  PAUSE ("pause", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_SPEECH),
+  PAUSE_AFTER ("pause-after", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_SPEECH),
+  PAUSE_BEFORE ("pause-before", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_SPEECH),
+  PERSPECTIVE ("perspective", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSFORMS),
+  PERSPECTIVE_ORIGIN ("perspective-origin", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSFORMS),
+  PITCH ("pitch", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  PITCH_RANGE ("pitch-range", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  PLAY_DURING ("play-during", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  POSITION ("position", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_POSITIONING),
+  QUOTES ("quotes", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  REGION_FRAGMENT ("region-fragment", ECSSVersion.CSS30, ECSSSpecification.CSS3_REGIONS),
+  RESIZE ("resize", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
+  RESOLUTION ("resolution", ECSSVersion.CSS30, ECSSSpecification.CSS_DEVICE_ADAPT),
+  REST ("rest", ECSSVersion.CSS30, ECSSSpecification.CSS3_SPEECH),
+  REST_AFTER ("rest-after", ECSSVersion.CSS30, ECSSSpecification.CSS3_SPEECH),
+  REST_BEFORE ("rest-before", ECSSVersion.CSS30, ECSSSpecification.CSS3_SPEECH),
+  RICHNESS ("richness", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  RIGHT ("right", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_POSITIONING),
+  RUBY_ALIGN ("ruby-align", ECSSVersion.CSS30, ECSSSpecification.CSS3_RUBY),
+  RUBY_OVERHANG ("ruby-overhang", ECSSVersion.CSS30, ECSSSpecification.CSS3_RUBY),
+  RUBY_POSITION ("ruby-position", ECSSVersion.CSS30, ECSSSpecification.CSS3_RUBY),
+  RUBY_SPAN ("ruby-span", ECSSVersion.CSS30, ECSSSpecification.CSS3_RUBY),
+  SPEAK ("speak", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_SPEECH),
+  SPEAK_AS ("speak-as", ECSSVersion.CSS30, ECSSSpecification.CSS3_SPEECH),
+  SPEAK_HEADER ("speak-header", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  SPEAK_NUMERAL ("speak-numeral", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  SPEAK_PUNCTUATION ("speak-punctuation", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  SPEECH_RATE ("speech-rate", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  SRC ("src", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  STRESS ("stress", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  STRING_SET ("string-set", ECSSVersion.CSS30, ECSSSpecification.CSS3_GCPM),
+  TABLE_LAYOUT ("table-layout", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  TAB_SIZE ("tab-size", ECSSVersion.CSS30, ECSSSpecification.CSS3_TEXT),
+  @Deprecated
+  TARGET ("target", ECSSVersion.CSS30, ECSSSpecification.CSS3_HYPERLINKS),
+  @Deprecated
+  TARGET_NAME ("target-name", ECSSVersion.CSS30, ECSSSpecification.CSS3_HYPERLINKS),
+  @Deprecated
+  TARGET_NEW ("target-new", ECSSVersion.CSS30, ECSSSpecification.CSS3_HYPERLINKS),
+  @Deprecated
+  TARGET_POSITION ("target-position", ECSSVersion.CSS30, ECSSSpecification.CSS3_HYPERLINKS),
+  TEXT_ALIGN ("text-align", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_TEXT),
+  TEXT_ALIGN_LAST ("text-align-last", ECSSVersion.CSS30, ECSSSpecification.CSS3_TEXT),
+  TEXT_COMBINE_HORIZONTAL ("text-combine-horizontal", ECSSVersion.CSS30, ECSSSpecification.CSS3_WRITING_MODES),
+  TEXT_DECORATION ("text-decoration", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2),
+  TEXT_HEIGHT ("text-height", ECSSVersion.CSS30, ECSSSpecification.CSS3_LINEBOX),
+  TEXT_INDENT ("text-indent", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_TEXT),
+  TEXT_JUSTIFY ("text-justify", ECSSVersion.CSS30, ECSSSpecification.CSS3_TEXT),
+  TEXT_ORIENTATION ("text-orientation", ECSSVersion.CSS30, ECSSSpecification.CSS3_WRITING_MODES),
+  TEXT_OVERFLOW ("text-overflow", ECSSVersion.CSS30, ECSSSpecification.CSS3_UI),
+  TEXT_TRANSFORM ("text-transform", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_TEXT),
+  TOP ("top", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_POSITIONING),
+  TRANSFORM ("transform", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSFORMS),
+  TRANSFORM_ORIGIN ("transform-origin", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSFORMS),
+  TRANSFORM_STYLE ("transform-style", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSFORMS),
+  TRANSITION ("transition", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSITIONS),
+  TRANSITION_DELAY ("transition-delay", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSITIONS),
+  TRANSITION_DURATION ("transition-duration", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSITIONS),
+  TRANSITION_PROPERTY ("transition-property", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSITIONS),
+  TRANSITION_TIMING_FUNCTION ("transition-timing-function", ECSSVersion.CSS30, ECSSSpecification.CSS3_TRANSITIONS),
+  UNICODE_BIDI ("unicode-bidi", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_WRITING_MODES),
+  UNICODE_RANGE ("unicode-range", ECSSVersion.CSS30, ECSSSpecification.CSS3_FONTS),
+  USER_ZOOM ("user-zoom", ECSSVersion.CSS30, ECSSSpecification.CSS_DEVICE_ADAPT),
+  VERTICAL_ALIGN ("vertical-align", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_LINEBOX),
+  VISIBILITY ("visibility", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  VOICE_BALANCE ("voice-balance", ECSSVersion.CSS30, ECSSSpecification.CSS3_SPEECH),
+  VOICE_DURATION ("voice-duration", ECSSVersion.CSS30, ECSSSpecification.CSS3_SPEECH),
+  VOICE_FAMILY ("voice-family", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_SPEECH),
+  VOICE_PITCH ("voice-pitch", ECSSVersion.CSS30, ECSSSpecification.CSS3_SPEECH),
+  VOICE_RANGE ("voice-range", ECSSVersion.CSS30, ECSSSpecification.CSS3_SPEECH),
+  VOICE_RATE ("voice-rate", ECSSVersion.CSS30, ECSSSpecification.CSS3_SPEECH),
+  VOICE_STRESS ("voice-stress", ECSSVersion.CSS30, ECSSSpecification.CSS3_SPEECH),
+  VOICE_VOLUME ("voice-volume", ECSSVersion.CSS30, ECSSSpecification.CSS3_SPEECH),
+  VOLUME ("volume", ECSSVersion.CSS21, ECSSSpecification.CSS2),
+  WHITE_SPACE ("white-space", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_TEXT),
+  WIDOWS ("widows", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_BREAK),
+  WIDTH ("width", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS_DEVICE_ADAPT),
+  WORD_BREAK ("word-break", ECSSVersion.CSS30, ECSSSpecification.CSS3_TEXT),
+  WORD_SPACING ("word-spacing", ECSSVersion.CSS10, ECSSSpecification.CSS1, ECSSSpecification.CSS2, ECSSSpecification.CSS3_TEXT),
+  // For legacy reasons, UAs must treat ‘word-wrap’ as an alternate name for the
+  // ‘overflow-wrap’ property, as if it were a shorthand of ‘overflow-wrap’.
+  WORD_WRAP ("word-wrap", ECSSVersion.CSS30, ECSSSpecification.CSS3_TEXT),
+  WRAP_FLOW ("wrap-flow", ECSSVersion.CSS30, ECSSSpecification.CSS3_EXCLUSIONS),
+  WRAP_THROUGH ("wrap-through", ECSSVersion.CSS30, ECSSSpecification.CSS3_EXCLUSIONS),
+  WRITING_MODE ("writing-mode", ECSSVersion.CSS30, ECSSSpecification.CSS3_WRITING_MODES),
+  ZOOM ("zoom", ECSSVersion.CSS30, ECSSSpecification.CSS_DEVICE_ADAPT),
+  Z_INDEX ("z-index", ECSSVersion.CSS21, ECSSSpecification.CSS2, ECSSSpecification.CSS3_POSITIONING),
+
+  // Old and deprecated elements
   @DeprecatedInCSS30
   _SCROLLBAR_3DLIGHT_COLOR ("scrollbar-3dlight-color"),
   @DeprecatedInCSS30
@@ -233,36 +397,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _SCROLLBAR_SHADOW_COLOR ("scrollbar-shadow-color"),
   @DeprecatedInCSS30
   _SCROLLBAR_TRACK_COLOR ("scrollbar-track-color"),
-  SPEAK_HEADER ("speak-header"),
-  SRC ("src", ECSSVersion.CSS30),
-  TABLE_LAYOUT ("table-layout"),
-  TEXT_ALIGN ("text-align"),
-  TEXT_COMBINE_HORIZONTAL ("text-combine-horizontal", ECSSVersion.CSS30),
-  TEXT_COMBINE_MODE ("text-combine-mode", ECSSVersion.CSS30),
-  TEXT_DECORATION ("text-decoration"),
-  TEXT_FILL_COLOR ("text-fill-color", ECSSVersion.CSS30),
-  TEXT_INDENT ("text-indent"),
-  TEXT_JUSTIFY ("text-justify", ECSSVersion.CSS30),
-  TEXT_ORIENTATION ("text-orientation", ECSSVersion.CSS30),
-  TEXT_OVERFLOW ("text-overflow", ECSSVersion.CSS30),
-  TEXT_SHADOW ("text-shadow", ECSSVersion.CSS30),
-  TEXT_STROKE ("text-stroke", ECSSVersion.CSS30),
-  TEXT_TRANSFORM ("text-transform"),
-  TOP ("top"),
-  TRANSFORM ("transform", ECSSVersion.CSS30),
-  TRANSFORM_ORIGIN ("transform-origin", ECSSVersion.CSS30),
-  VERTICAL_ALIGN ("vertical-align"),
-  VISIBILITY ("visibility"),
-  UNICODE_BIDI ("unicode-bidi", ECSSVersion.CSS30),
-  USER_ZOOM ("user-zoom", ECSSVersion.CSS30),
-  WHITE_SPACE ("white-space"),
-  WIDOWS ("widows"),
-  WIDTH ("width"),
-  WORD_SPACING ("word-spacing"),
-  WORD_WRAP ("word-wrap", ECSSVersion.CSS30),
-  WRITING_MODE ("writing-mode", ECSSVersion.CSS30),
-  Z_INDEX ("z-index"),
-  ZOOM ("zoom", ECSSVersion.CSS30),
+
   // Do not use the following manually:
   _KHTML_BORDER_RADIUS ("-khtml-border-radius"),
   _KHTML_BORDER_TOP_LEFT_RADIUS ("-khtml-border-top-left-radius"),
@@ -349,11 +484,16 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _MOZ_USER_MODIFY ("-moz-user-modify"),
   _MOZ_USER_SELECT ("-moz-user-select"),
   _MOZ_WINDOW_SHADOW ("-moz-window-shadow"),
+
+  _MS_ACCELERATOR ("-ms-accelerator"),
   _MS_BACKGROUND_POSITION_X ("-ms-background-position-x"),
   _MS_BACKGROUND_POSITION_Y ("-ms-background-position-y"),
+  _MS_BEHAVIOR ("-ms-behavior"),
+  _MS_BLOCK_PROGRESSION ("-ms-block-progression"),
   _MS_BOX_SHADOW ("-ms-box-shadow"),
   _MS_BOX_SIZING ("-ms-box-sizing"),
   _MS_FILTER ("-ms-filter"),
+  _MS_FULLSCREEN ("-ms-fullscreen"),
   _MS_IME_MODE ("-ms-ime-mode"),
   _MS_INTERPOLATION_MODE ("-ms-interpolation-mode"),
   _MS_LAYOUT_FLOW ("-ms-layout-flow"),
@@ -362,6 +502,8 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _MS_LAYOUT_GRID_LINE ("-ms-layout-grid-line"),
   _MS_LAYOUT_GRID_MODE ("-ms-layout-grid-mode"),
   _MS_LAYOUT_GRID_TYPE ("-ms-layout-grid-type"),
+  _MS_LINE_BREAK ("-ms-line-break"),
+  _MS_LINE_GRID_MODE ("-ms-line-grid-mode"),
   _MS_OVERFLOW_X ("-ms-overflow-x"),
   _MS_OVERFLOW_Y ("-ms-overflow-y"),
   _MS_SCROLLBAR_3DLIGHT_COLOR ("-ms-scrollbar-3dlight-color"),
@@ -371,6 +513,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _MS_SCROLLBAR_FACE_COLOR ("-ms-scrollbar-face-color"),
   _MS_SCROLLBAR_HIGHLIGHT_COLOR ("-ms-scrollbar-highlight-color"),
   _MS_SCROLLBAR_SHADOW_COLOR ("-ms-scrollbar-shadow-color"),
+  _MS_SCROLLBAR_TRACK_COLOR ("-ms-scrollbar-track-color"),
   _MS_TEXT_ALIGN_LAST ("-ms-text-align-last"),
   _MS_TEXT_AUTOSPACE ("-ms-text-autospace"),
   _MS_TEXT_JUSTIFY ("-ms-text-justify"),
@@ -382,8 +525,24 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _MS_WORD_WRAP ("-ms-word-wrap"),
   _MS_WRITING_MODE ("-ms-writing-mode"),
   _MS_ZOOM ("-ms-zoom"),
+
   _O_BOX_SHADOW ("-o-box-shadow"),
   _O_BOX_SIZING ("-o-box-sizing"),
+
+  _EPUB_CAPTION_SIDE ("-epub-caption-side"),
+  _EPUB_HYPHENS ("-epub-hyphens"),
+  _EPUB_TEXT_COMBINE ("-epub-text-combine"),
+  _EPUB_TEXT_EMPHASIS ("-epub-text-emphasis"),
+  _EPUB_TEXT_EMPHASIS_COLOR ("-epub-text-emphasis-color"),
+  _EPUB_TEXT_EMPHASIS_STYLE ("-epub-text-emphasis-style"),
+  _EPUB_TEXT_ORIENTATION ("-epub-text-orientation"),
+  _EPUB_TEXT_TRANSFORM ("-epub-text-transform"),
+  _EPUB_WORD_BREAK ("-epub-word-break"),
+  _EPUB_WRITING_MODE ("-epub-writing-mode"),
+
+  _WEBKIT_ALIGN_CONTENT ("-webkit-align-content"),
+  _WEBKIT_ALIGN_ITEMS ("-webkit-align-items"),
+  _WEBKIT_ALIGN_SELF ("-webkit-align-self"),
   _WEBKIT_ANIMATION ("-webkit-animation"),
   _WEBKIT_ANIMATION_DELAY ("-webkit-animation-delay"),
   _WEBKIT_ANIMATION_DIRECTION ("-webkit-animation-direction"),
@@ -394,11 +553,15 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _WEBKIT_ANIMATION_PLAY_STATE ("-webkit-animation-play-state"),
   _WEBKIT_ANIMATION_TIMING_FUNCTION ("-webkit-animation-timing-function"),
   _WEBKIT_APPEARANCE ("-webkit-appearance"),
+  _WEBKIT_APP_REGION ("-webkit-app-region"),
+  _WEBKIT_ASPECT_RATIO ("-webkit-aspect-ratio"),
   _WEBKIT_BACKFACE_VISIBILITY ("-webkit-backface-visibility"),
+  _WEBKIT_BACKGROUND_BLEND_MODE ("-webkit-background-blend-mode"),
   _WEBKIT_BACKGROUND_CLIP ("-webkit-background-clip"),
   _WEBKIT_BACKGROUND_COMPOSITE ("-webkit-background-composite"),
   _WEBKIT_BACKGROUND_ORIGIN ("-webkit-background-origin"),
   _WEBKIT_BACKGROUND_SIZE ("-webkit-background-size"),
+  _WEBKIT_BLEND_MODE ("-webkit-blend-mode"),
   _WEBKIT_BORDER_AFTER ("-webkit-border-after"),
   _WEBKIT_BORDER_AFTER_COLOR ("-webkit-border-after-color"),
   _WEBKIT_BORDER_AFTER_STYLE ("-webkit-border-after-style"),
@@ -425,6 +588,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _WEBKIT_BORDER_TOP_RIGHT_RADIUS ("-webkit-border-top-right-radius"),
   _WEBKIT_BORDER_VERTICAL_SPACING ("-webkit-border-vertical-spacing"),
   _WEBKIT_BOX_ALIGN ("-webkit-box-align"),
+  _WEBKIT_BOX_DECORATION_BREAK ("-webkit-box-decoration-break"),
   _WEBKIT_BOX_DIRECTION ("-webkit-box-direction"),
   _WEBKIT_BOX_FLEX ("-webkit-box-flex"),
   _WEBKIT_BOX_FLEX_GROUP ("-webkit-box-flex-group"),
@@ -435,38 +599,63 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _WEBKIT_BOX_REFLECT ("-webkit-box-reflect"),
   _WEBKIT_BOX_SHADOW ("-webkit-box-shadow"),
   _WEBKIT_BOX_SIZING ("-webkit-box-sizing"),
+  _WEBKIT_CLIP_PATH ("-webkit-clip-path"),
   _WEBKIT_COLOR_CORRECTION ("-webkit-color-correction"),
   _WEBKIT_COLUMNS ("-webkit-columns"),
+  _WEBKIT_COLUMN_AXIS ("-webkit-column-axis"),
   _WEBKIT_COLUMN_BREAK_AFTER ("-webkit-column-break-after"),
   _WEBKIT_COLUMN_BREAK_BEFORE ("-webkit-column-break-before"),
   _WEBKIT_COLUMN_BREAK_INSIDE ("-webkit-column-break-inside"),
   _WEBKIT_COLUMN_COUNT ("-webkit-column-count"),
   _WEBKIT_COLUMN_GAP ("-webkit-column-gap"),
+  _WEBKIT_COLUMN_PROGRESSION ("-webkit-column-progression"),
   _WEBKIT_COLUMN_RULE ("-webkit-column-rule"),
   _WEBKIT_COLUMN_RULE_COLOR ("-webkit-column-rule-color"),
   _WEBKIT_COLUMN_RULE_STYLE ("-webkit-column-rule-style"),
   _WEBKIT_COLUMN_RULE_WIDTH ("-webkit-column-rule-width"),
   _WEBKIT_COLUMN_SPAN ("-webkit-column-span"),
   _WEBKIT_COLUMN_WIDTH ("-webkit-column-width"),
+  _WEBKIT_CURSOR_VISIBILITY ("-webkit-cursor-visibility"),
+  _WEBKIT_DASHBOARD_REGION ("-webkit-dashboard-region"),
   _WEBKIT_FILTER ("-webkit-filter"),
-  _WEBKIT_FLEX_ALIGN ("-webkit-flex-align"),
+  _WEBKIT_FLEX ("-webkit-flex"),
+  _WEBKIT_FLEX_BASIS ("-webkit-flex-basis"),
+  _WEBKIT_FLEX_DIRECTION ("-webkit-flex-direction"),
   _WEBKIT_FLEX_FLOW ("-webkit-flex-flow"),
-  _WEBKIT_FLEX_ORDER ("-webkit-flex-order"),
-  _WEBKIT_FLEX_PACK ("-webkit-flex-pack"),
+  _WEBKIT_FLEX_GROW ("-webkit-flex-grow"),
+  _WEBKIT_FLEX_SHRINK ("-webkit-flex-shrink"),
+  _WEBKIT_FLEX_WRAP ("-webkit-flex-wrap"),
   _WEBKIT_FLOW_FROM ("-webkit-flow-from"),
   _WEBKIT_FLOW_INTO ("-webkit-flow-into"),
   _WEBKIT_FONT_FEATURE_SETTINGS ("-webkit-font-feature-settings"),
+  _WEBKIT_FONT_KERNING ("-webkit-font-kerning"),
   _WEBKIT_FONT_SIZE_DELTA ("-webkit-font-size-delta"),
   _WEBKIT_FONT_SMOOTHING ("-webkit-font-smoothing"),
+  _WEBKIT_FONT_VARIANT_LIGATURES ("-webkit-font-variant-ligatures"),
+  _WEBKIT_GRID_AUTO_COLUMNS ("-webkit-grid-auto-columns"),
+  _WEBKIT_GRID_AUTO_FLOW ("-webkit-grid-auto-flow"),
+  _WEBKIT_GRID_AUTO_ROWS ("-webkit-grid-auto-rows"),
+  _WEBKIT_GRID_COLUMN ("-webkit-grid-column"),
+  _WEBKIT_GRID_COLUMN_END ("-webkit-grid-column-end"),
+  _WEBKIT_GRID_COLUMN_START ("-webkit-grid-column-start"),
+  _WEBKIT_GRID_DEFINITION_COLUMNS ("-webkit-grid-definition-columns"),
+  _WEBKIT_GRID_DEFINITION_ROWS ("-webkit-grid-definition-rows"),
+  _WEBKIT_GRID_ROW ("-webkit-grid-row"),
+  _WEBKIT_GRID_ROW_END ("-webkit-grid-row-end"),
+  _WEBKIT_GRID_ROW_START ("-webkit-grid-row-start"),
   _WEBKIT_HIGHLIGHT ("-webkit-highlight"),
   _WEBKIT_HYPHENATE_CHARACTER ("-webkit-hyphenate-character"),
   _WEBKIT_HYPHENATE_LIMIT_AFTER ("-webkit-hyphenate-limit-after"),
   _WEBKIT_HYPHENATE_LIMIT_BEFORE ("-webkit-hyphenate-limit-before"),
   _WEBKIT_HYPHENATE_LIMIT_LINES ("-webkit-hyphenate-limit-lines"),
   _WEBKIT_HYPHENS ("-webkit-hyphens"),
+  _WEBKIT_JUSTIFY_CONTENT ("-webkit-justify-content"),
+  _WEBKIT_LINE_ALIGN ("-webkit-line-align"),
   _WEBKIT_LINE_BOX_CONTAIN ("-webkit-line-box-contain"),
   _WEBKIT_LINE_BREAK ("-webkit-line-break"),
   _WEBKIT_LINE_CLAMP ("-webkit-line-clamp"),
+  _WEBKIT_LINE_GRID ("-webkit-line-grid"),
+  _WEBKIT_LINE_SNAP ("-webkit-line-snap"),
   _WEBKIT_LOCALE ("-webkit-locale"),
   _WEBKIT_LOGICAL_HEIGHT ("-webkit-logical-height"),
   _WEBKIT_LOGICAL_WIDTH ("-webkit-logical-width"),
@@ -486,7 +675,6 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _WEBKIT_MARQUEE_SPEED ("-webkit-marquee-speed"),
   _WEBKIT_MARQUEE_STYLE ("-webkit-marquee-style"),
   _WEBKIT_MASK ("-webkit-mask"),
-  _WEBKIT_MASK_ATTACHMENT ("-webkit-mask-attachment"),
   _WEBKIT_MASK_BOX_IMAGE ("-webkit-mask-box-image"),
   _WEBKIT_MASK_BOX_IMAGE_OUTSET ("-webkit-mask-box-image-outset"),
   _WEBKIT_MASK_BOX_IMAGE_REPEAT ("-webkit-mask-box-image-repeat"),
@@ -504,13 +692,15 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _WEBKIT_MASK_REPEAT_X ("-webkit-mask-repeat-x"),
   _WEBKIT_MASK_REPEAT_Y ("-webkit-mask-repeat-y"),
   _WEBKIT_MASK_SIZE ("-webkit-mask-size"),
-  _WEBKIT_MATCH_NEAREST_MAIL_BLOCKQUOTE_COLOR ("-webkit-match-nearest-mail-blockquote-color"),
+  _WEBKIT_MASK_SOURCE_TYPE ("-webkit-mask-source-type"),
   _WEBKIT_MAX_LOGICAL_HEIGHT ("-webkit-max-logical-height"),
   _WEBKIT_MAX_LOGICAL_WIDTH ("-webkit-max-logical-width"),
   _WEBKIT_MIN_LOGICAL_HEIGHT ("-webkit-min-logical-height"),
   _WEBKIT_MIN_LOGICAL_WIDTH ("-webkit-min-logical-width"),
   _WEBKIT_NBSP_MODE ("-webkit-nbsp-mode"),
   _WEBKIT_OPACITY ("-webkit-opacity"),
+  _WEBKIT_ORDER ("-webkit-order"),
+  _WEBKIT_OVERFLOW_SCROLLING ("-webkit-overflow-scrolling"),
   _WEBKIT_PADDING_AFTER ("-webkit-padding-after"),
   _WEBKIT_PADDING_BEFORE ("-webkit-padding-before"),
   _WEBKIT_PADDING_END ("-webkit-padding-end"),
@@ -519,25 +709,37 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _WEBKIT_PERSPECTIVE_ORIGIN ("-webkit-perspective-origin"),
   _WEBKIT_PERSPECTIVE_ORIGIN_X ("-webkit-perspective-origin-x"),
   _WEBKIT_PERSPECTIVE_ORIGIN_Y ("-webkit-perspective-origin-y"),
+  _WEBKIT_PRINT_COLOR_ADJUST ("-webkit-print-color-adjust"),
   _WEBKIT_REGION_BREAK_AFTER ("-webkit-region-break-after"),
   _WEBKIT_REGION_BREAK_BEFORE ("-webkit-region-break-before"),
   _WEBKIT_REGION_BREAK_INSIDE ("-webkit-region-break-inside"),
-  _WEBKIT_REGION_OVERFLOW ("-webkit-region-overflow"),
+  _WEBKIT_REGION_FRAGMENT ("-webkit-region-fragment"),
   _WEBKIT_RTL_ORDERING ("-webkit-rtl-ordering"),
+  _WEBKIT_RUBY_POSITION ("-webkit-ruby-position"),
+  _WEBKIT_SHAPE_INSIDE ("-webkit-shape-inside"),
+  _WEBKIT_SHAPE_MARGIN ("-webkit-shape-margin"),
+  _WEBKIT_SHAPE_OUTSIDE ("-webkit-shape-outside"),
+  _WEBKIT_SHAPE_PADDING ("-webkit-shape-padding"),
   _WEBKIT_TAP_HIGHLIGHT_COLOR ("-webkit-tap-highlight-color"),
+  _WEBKIT_TEXT_ALIGN_LAST ("-webkit-text-align-last"),
   _WEBKIT_TEXT_COMBINE ("-webkit-text-combine"),
+  _WEBKIT_TEXT_DECORATION ("-webkit-text-decoration"),
   _WEBKIT_TEXT_DECORATIONS_IN_EFFECT ("-webkit-text-decorations-in-effect"),
+  _WEBKIT_TEXT_DECORATION_COLOR ("-webkit-text-decoration-color"),
+  _WEBKIT_TEXT_DECORATION_LINE ("-webkit-text-decoration-line"),
+  _WEBKIT_TEXT_DECORATION_STYLE ("-webkit-text-decoration-style"),
   _WEBKIT_TEXT_EMPHASIS ("-webkit-text-emphasis"),
   _WEBKIT_TEXT_EMPHASIS_COLOR ("-webkit-text-emphasis-color"),
   _WEBKIT_TEXT_EMPHASIS_POSITION ("-webkit-text-emphasis-position"),
   _WEBKIT_TEXT_EMPHASIS_STYLE ("-webkit-text-emphasis-style"),
   _WEBKIT_TEXT_FILL_COLOR ("-webkit-text-fill-color"),
+  _WEBKIT_TEXT_JUSTIFY ("-webkit-text-justify"),
   _WEBKIT_TEXT_ORIENTATION ("-webkit-text-orientation"),
   _WEBKIT_TEXT_SECURITY ("-webkit-text-security"),
-  _WEBKIT_TEXT_SIZE_ADJUST ("-webkit-text-size-adjust"),
   _WEBKIT_TEXT_STROKE ("-webkit-text-stroke"),
   _WEBKIT_TEXT_STROKE_COLOR ("-webkit-text-stroke-color"),
   _WEBKIT_TEXT_STROKE_WIDTH ("-webkit-text-stroke-width"),
+  _WEBKIT_TEXT_UNDERLINE_POSITION ("-webkit-text-underline-position"),
   _WEBKIT_TRANSFORM ("-webkit-transform"),
   _WEBKIT_TRANSFORM_ORIGIN ("-webkit-transform-origin"),
   _WEBKIT_TRANSFORM_ORIGIN_X ("-webkit-transform-origin-x"),
@@ -552,21 +754,32 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   _WEBKIT_USER_DRAG ("-webkit-user-drag"),
   _WEBKIT_USER_MODIFY ("-webkit-user-modify"),
   _WEBKIT_USER_SELECT ("-webkit-user-select"),
-  _WEBKIT_WRAP_SHAPE ("-webkit-wrap-shape"),
+  _WEBKIT_WRAP_FLOW ("-webkit-wrap-flow"),
+  _WEBKIT_WRAP_THROUGH ("-webkit-wrap-through"),
   _WEBKIT_WRITING_MODE ("-webkit-writing-mode");
 
   private final String m_sName;
   private final ECSSVersion m_eVersion;
+  private final EnumSet <ECSSSpecification> m_aSpecifications;
 
   private ECSSProperty (@Nonnull @Nonempty final String sName)
   {
-    this (sName, ECSSVersion.CSS21);
+    // Custom properties are always there
+    this (sName, ECSSVersion.CSS10, (ECSSSpecification []) null);
   }
 
   private ECSSProperty (@Nonnull @Nonempty final String sName, @Nonnull final ECSSVersion eVersion)
   {
+    this (sName, eVersion, (ECSSSpecification []) null);
+  }
+
+  private ECSSProperty (@Nonnull @Nonempty final String sName,
+                        @Nonnull final ECSSVersion eVersion,
+                        @Nullable final ECSSSpecification... aSpecifications)
+  {
     m_sName = sName;
     m_eVersion = eVersion;
+    m_aSpecifications = ContainerHelper.newEnumSet (ECSSSpecification.class, aSpecifications);
   }
 
   @Nonnull
@@ -582,6 +795,17 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
     return m_eVersion;
   }
 
+  /**
+   * @return A copy with all specifications, where the property is defined.
+   *         Never <code>null</code> but maybe empty.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public EnumSet <ECSSSpecification> getAllSpecifications ()
+  {
+    return ContainerHelper.newEnumSet (ECSSSpecification.class, m_aSpecifications);
+  }
+
   public boolean isKHTMLSpecific ()
   {
     return m_sName.startsWith ("-khtml-");
@@ -589,7 +813,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
 
   public boolean isMicrosoftSpecific ()
   {
-    return m_sName.startsWith ("-ms-");
+    return m_sName.startsWith ("-ms-") || m_sName.startsWith ("scrollbar-");
   }
 
   public boolean isMozillaSpecific ()
@@ -602,6 +826,11 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
     return m_sName.startsWith ("-o-");
   }
 
+  public boolean isEPubSpecific ()
+  {
+    return m_sName.startsWith ("-epub-");
+  }
+
   public boolean isWebkitSpecific ()
   {
     return m_sName.startsWith ("-webkit-");
@@ -609,7 +838,7 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
 
   public boolean isBrowserSpecific ()
   {
-    return m_sName.startsWith ("-");
+    return m_sName.startsWith ("-") || m_sName.startsWith ("scrollbar-");
   }
 
   @Nullable
@@ -619,18 +848,22 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
   }
 
   @Nullable
+  public static String getPropertyNameHandlingHacks (@Nullable final String sName)
+  {
+    String sRealName = sName;
+    if (StringHelper.hasText (sRealName))
+    {
+      // IE hacks
+      if (sRealName.startsWith ("*") || sRealName.startsWith ("_") || sRealName.startsWith ("$"))
+        sRealName = sRealName.substring (1);
+    }
+    return sRealName;
+  }
+
+  @Nullable
   public static ECSSProperty getFromNameOrNullHandlingHacks (@Nullable final String sName)
   {
-    if (StringHelper.hasText (sName))
-    {
-      String sRealName;
-      // IE hacks
-      if (sName.startsWith ("*") || sName.startsWith ("_") || sName.startsWith ("$"))
-        sRealName = sName.substring (1);
-      else
-        sRealName = sName;
-      return getFromNameOrNull (sRealName);
-    }
-    return null;
+    final String sRealName = getPropertyNameHandlingHacks (sName);
+    return getFromNameOrNull (sRealName);
   }
 }

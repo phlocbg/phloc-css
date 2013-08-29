@@ -17,26 +17,21 @@
  */
 package com.phloc.css;
 
-import java.io.Serializable;
-
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
 
 /**
- * Interface for objects that can be written to CSS.
+ * Enumeration containing all W3C CSS specifications status. Source:
+ * http://www.w3.org/Style/CSS/current-work
  * 
  * @author Philip Helger
  */
-public interface ICSSWriteable extends Serializable
+public enum ECSSSpecificationStatus
 {
-  /**
-   * @param aSettings
-   *        The settings to be used to format the output. May not be
-   *        <code>null</code>.
-   * @param nIndentLevel
-   *        The current indentation level
-   * @return The content of this object as CSS string.
-   */
-  @Nonnull
-  String getAsCSSString (@Nonnull ICSSWriterSettings aSettings, @Nonnegative int nIndentLevel);
+  COMPLETED,
+  STABLE,
+  TESTING,
+  REFINING,
+  REVISING,
+  EXPLORING,
+  REWRITING,
+  ABANDONED;
 }

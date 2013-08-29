@@ -31,7 +31,7 @@ import com.phloc.commons.io.streams.NonBlockingStringWriter;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.ECSSVersion;
-import com.phloc.css.decl.CSSDeclarationList;
+import com.phloc.css.ICSSWriteable;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.CSSNamespaceRule;
 import com.phloc.css.decl.CascadingStyleSheet;
@@ -51,6 +51,8 @@ public final class CSSWriter
   private final CSSWriterSettings m_aSettings;
   private boolean m_bWriteHeaderText;
   private String m_sHeaderText = "THIS FILE IS GENERATED - DO NOT EDIT";
+  private boolean m_bWriteFooterText;
+  private String m_sFooterText;
   private String m_sContentCharset;
 
   /**
@@ -90,6 +92,7 @@ public final class CSSWriter
       throw new NullPointerException ("settings");
     m_aSettings = aSettings;
     m_bWriteHeaderText = !aSettings.isOptimizedOutput ();
+    m_bWriteFooterText = !aSettings.isOptimizedOutput ();
   }
 
   /**
@@ -142,6 +145,59 @@ public final class CSSWriter
   public CSSWriter setHeaderText (@Nullable final String sHeaderText)
   {
     m_sHeaderText = sHeaderText;
+    return this;
+  }
+
+  /**
+   * Check if the footer text should be emitted. By default it is enabled, if
+   * non-optimized output is desired.
+   * 
+   * @return <code>true</code> if the footer text should be emitted,
+   *         <code>false</code> if not.
+   */
+  public boolean isWriteFooterText ()
+  {
+    return m_bWriteFooterText;
+  }
+
+  /**
+   * Determine whether the file footer should be written or not. By default it
+   * is enabled, if non-optimized output is desired.
+   * 
+   * @param bWriteFooterText
+   *        If <code>true</code> the footer text will be written, if
+   *        <code>false</code> the text will not be written.
+   * @return this
+   */
+  @Nonnull
+  public CSSWriter setWriteFooterText (final boolean bWriteFooterText)
+  {
+    m_bWriteFooterText = bWriteFooterText;
+    return this;
+  }
+
+  /**
+   * @return The currently defined footer text. May be <code>null</code>.
+   */
+  @Nullable
+  public String getFooterText ()
+  {
+    return m_sFooterText;
+  }
+
+  /**
+   * Set a custom footer text that should be emitted. This text may be multi
+   * line separated by the '\n' character. It will emitted if
+   * {@link #isWriteFooterText()} returns <code>true</code>.
+   * 
+   * @param sFooterText
+   *        The footer text to be emitted. May be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public CSSWriter setFooterText (@Nullable final String sFooterText)
+  {
+    m_sFooterText = sFooterText;
     return this;
   }
 
@@ -200,6 +256,7 @@ public final class CSSWriter
    * @throws IllegalStateException
    *         In case some elements cannot be written in the version supplied in
    *         the constructor.
+   * @see #getCSSAsString(CascadingStyleSheet)
    */
   public void writeCSS (@Nonnull final CascadingStyleSheet aCSS, @Nonnull @WillClose final Writer aWriter) throws IOException
   {
@@ -265,6 +322,15 @@ public final class CSSWriter
           ++nRulesEmitted;
         }
       }
+
+      // Write file footer
+      if (m_bWriteFooterText && StringHelper.hasText (m_sFooterText))
+      {
+        aWriter.write ("/*\n");
+        for (final String sLine : StringHelper.getExploded ("\n", m_sFooterText))
+          aWriter.write (" * " + sLine + "\n");
+        aWriter.write (" */\n");
+      }
     }
     finally
     {
@@ -276,16 +342,25 @@ public final class CSSWriter
    * Create the CSS without a specific charset.
    * 
    * @param aCSS
-   *        The CSS object to be converted to text
+   *        The CSS object to be converted to text. May not be <code>null</code>
+   *        .
    * @return The text representation of the CSS.
-   * @throws IOException
-   *         If writing fails. Should never happen!
+   * @see #writeCSS(CascadingStyleSheet, Writer)
    */
   @Nonnull
-  public String getCSSAsString (@Nonnull final CascadingStyleSheet aCSS) throws IOException
+  public String getCSSAsString (@Nonnull final CascadingStyleSheet aCSS)
   {
     final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
-    writeCSS (aCSS, aSW);
+    try
+    {
+      writeCSS (aCSS, aSW);
+    }
+    catch (final IOException ex)
+    {
+      // Should never occur since NonBlockingStringWriter does not throw such an
+      // exception
+      throw new IllegalStateException ("Totally unexpected", ex);
+    }
     return aSW.getAsString ();
   }
 
@@ -302,8 +377,9 @@ public final class CSSWriter
    * @throws IllegalStateException
    *         In case some elements cannot be written in the version supplied in
    *         the constructor.
+   * @see #getCSSAsString(ICSSWriteable)
    */
-  public void writeCSS (@Nonnull final CSSDeclarationList aCSS, @Nonnull @WillClose final Writer aWriter) throws IOException
+  public void writeCSS (@Nonnull final ICSSWriteable aCSS, @Nonnull @WillClose final Writer aWriter) throws IOException
   {
     if (aCSS == null)
       throw new NullPointerException ("css");
@@ -321,19 +397,29 @@ public final class CSSWriter
   }
 
   /**
-   * Create the CSS without a specific charset.
+   * Get the string representation of the passed CSS object. It can be any
+   * object that implements {@link ICSSWriteable}.
    * 
    * @param aCSS
-   *        The CSS object to be converted to text
+   *        The CSS object to be converted to text. May not be <code>null</code>
+   *        .
    * @return The text representation of the CSS.
-   * @throws IOException
-   *         If writing fails. Should never happen!
+   * @see #writeCSS(ICSSWriteable, Writer)
    */
   @Nonnull
-  public String getCSSAsString (@Nonnull final CSSDeclarationList aCSS) throws IOException
+  public String getCSSAsString (@Nonnull final ICSSWriteable aCSS)
   {
     final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
-    writeCSS (aCSS, aSW);
+    try
+    {
+      writeCSS (aCSS, aSW);
+    }
+    catch (final IOException ex)
+    {
+      // Should never occur since NonBlockingStringWriter does not throw such an
+      // exception
+      throw new IllegalStateException ("Totally unexpected", ex);
+    }
     return aSW.getAsString ();
   }
 }

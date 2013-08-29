@@ -23,6 +23,10 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
+import com.phloc.css.decl.CSSHSL;
+import com.phloc.css.decl.CSSHSLA;
+import com.phloc.css.decl.CSSRGB;
+import com.phloc.css.decl.CSSRGBA;
 
 // ESCA-JAVA0076:
 /**
@@ -212,48 +216,74 @@ public enum ECSSColor implements ICSSNamedColor
     m_fLightness = aHSL[2];
   }
 
+  /**
+   * @return The name of the color as to be used in CSS. Neither
+   *         <code>null</code> nor empty.
+   */
   @Nonnull
+  @Nonempty
   public String getName ()
   {
     return m_sName;
   }
 
+  /**
+   * @return The Red part of the RGB value. Is within the range 0-255.
+   */
   @Nonnegative
   public int getRed ()
   {
     return m_nRed;
   }
 
+  /**
+   * @return The Green part of the RGB value. Is within the range 0-255.
+   */
   @Nonnegative
   public int getGreen ()
   {
     return m_nGreen;
   }
 
+  /**
+   * @return The Blue part of the RGB value. Is within the range 0-255.
+   */
   @Nonnegative
   public int getBlue ()
   {
     return m_nBlue;
   }
 
+  /**
+   * @return The Hue part of the HSL value. Is within the range 0-359.
+   */
   @Nonnegative
   public float getHue ()
   {
     return m_fHue;
   }
 
+  /**
+   * @return The Saturation part of the HSL value. Is within the range 0-100.
+   */
   @Nonnegative
   public float getSaturation ()
   {
     return m_fSaturation;
   }
 
+  /**
+   * @return The Lightness part of the HSL value. Is within the range 0-100.
+   */
   @Nonnegative
   public float getLightness ()
   {
     return m_fLightness;
   }
 
+  /**
+   * @return The CSS hex color representation of this color (e.g. #ff0000)
+   */
   @Nonnull
   @Nonempty
   public String getAsHexColorValue ()
@@ -261,6 +291,9 @@ public enum ECSSColor implements ICSSNamedColor
     return CSSColorHelper.getHexColorValue (m_nRed, m_nGreen, m_nBlue);
   }
 
+  /**
+   * @return This color as an CSS RGB color value.
+   */
   @Nonnull
   @Nonempty
   public String getAsRGBColorValue ()
@@ -268,6 +301,21 @@ public enum ECSSColor implements ICSSNamedColor
     return CSSColorHelper.getRGBColorValue (m_nRed, m_nGreen, m_nBlue);
   }
 
+  /**
+   * @return This color as an CSS RGB color object.
+   */
+  @Nonnull
+  @Nonempty
+  public CSSRGB getAsRGB ()
+  {
+    return new CSSRGB (m_nRed, m_nGreen, m_nBlue);
+  }
+
+  /**
+   * @param fOpacity
+   *        The opacity to be used. Is scaled to 0-1.
+   * @return This color as an CSS RGBA color value.
+   */
   @Nonnull
   @Nonempty
   public String getAsRGBAColorValue (@Nonnegative final float fOpacity)
@@ -275,6 +323,21 @@ public enum ECSSColor implements ICSSNamedColor
     return CSSColorHelper.getRGBAColorValue (m_nRed, m_nGreen, m_nBlue, fOpacity);
   }
 
+  /**
+   * @param fOpacity
+   *        The opacity to be used. Is scaled to 0-1.
+   * @return This color as an CSS RGBA color object.
+   */
+  @Nonnull
+  @Nonempty
+  public CSSRGBA getAsRGBA (@Nonnegative final float fOpacity)
+  {
+    return new CSSRGBA (m_nRed, m_nGreen, m_nBlue, fOpacity);
+  }
+
+  /**
+   * @return This color as an CSS HSL color value.
+   */
   @Nonnull
   @Nonempty
   public String getAsHSLColorValue ()
@@ -282,11 +345,38 @@ public enum ECSSColor implements ICSSNamedColor
     return CSSColorHelper.getHSLColorValue (m_fHue, m_fSaturation, m_fLightness);
   }
 
+  /**
+   * @return This color as an CSS HSL color object.
+   */
+  @Nonnull
+  @Nonempty
+  public CSSHSL getAsHSL ()
+  {
+    return new CSSHSL (m_fHue, m_fSaturation, m_fLightness);
+  }
+
+  /**
+   * @param fOpacity
+   *        The opacity to be used. Is scaled to 0-1.
+   * @return This color as an CSS HSLA color value.
+   */
   @Nonnull
   @Nonempty
   public String getAsHSLAColorValue (@Nonnegative final float fOpacity)
   {
     return CSSColorHelper.getHSLAColorValue (m_fHue, m_fSaturation, m_fLightness, fOpacity);
+  }
+
+  /**
+   * @param fOpacity
+   *        The opacity to be used. Is scaled to 0-1.
+   * @return This color as an CSS HSL color object.
+   */
+  @Nonnull
+  @Nonempty
+  public CSSHSLA getAsHSLA (@Nonnegative final float fOpacity)
+  {
+    return new CSSHSLA (m_fHue, m_fSaturation, m_fLightness, fOpacity);
   }
 
   @Nullable
@@ -295,6 +385,14 @@ public enum ECSSColor implements ICSSNamedColor
     return EnumHelper.getFromNameCaseInsensitiveOrNull (ECSSColor.class, sName);
   }
 
+  /**
+   * Check if the passed color name is a default color name.
+   * 
+   * @param sName
+   *        The color name to check.
+   * @return <code>true</code> if the passed color name is a default color name,
+   *         <code>false</code> if not.
+   */
   public static boolean isDefaultColorName (@Nullable final String sName)
   {
     return getFromNameCaseInsensitiveOrNull (sName) != null;

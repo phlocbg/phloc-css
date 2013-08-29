@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.ECSSVersion;
@@ -46,6 +47,9 @@ import com.phloc.css.reader.CSSReader;
 @Immutable
 public final class MediaQueryTools
 {
+  @PresentForCodeCoverage
+  private static final MediaQueryTools s_aInstance = new MediaQueryTools ();
+
   private MediaQueryTools ()
   {}
 

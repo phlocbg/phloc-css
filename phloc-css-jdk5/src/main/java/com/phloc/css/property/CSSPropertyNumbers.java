@@ -68,8 +68,8 @@ public class CSSPropertyNumbers extends AbstractCSSProperty
       return false;
 
     // Check if each part is a valid number
-    for (int i = 0; i < aParts.length; ++i)
-      if (!CSSNumberHelper.isValueWithUnit (aParts[i].trim (), m_bWithPercentage))
+    for (final String sPart : aParts)
+      if (!CSSNumberHelper.isValueWithUnit (sPart.trim (), m_bWithPercentage))
         return false;
     return true;
   }

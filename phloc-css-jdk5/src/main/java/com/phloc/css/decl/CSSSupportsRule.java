@@ -33,6 +33,7 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ECSSSpecification;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSVersionAware;
@@ -40,7 +41,7 @@ import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a single <code>@supports/code> rule: a list of style rules only
- * valid when a certain declaration is available.
+ * valid when a certain declaration is available. See {@link ECSSSpecification#CSS3_CONDITIONAL}
  * 
  * @author Philip Helger
  */

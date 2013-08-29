@@ -19,13 +19,21 @@ package com.phloc.css.decl.visit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSDeclarationList;
+import com.phloc.css.decl.CSSExpressionMemberTermURI;
+import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.ICSSTopLevelRule;
 import com.phloc.css.reader.CSSReaderDeclarationList;
 
 /**
@@ -45,6 +53,7 @@ public final class CSSVisitorDeclarationListTest
     assertNotNull (aCSS);
     MockCountingUrlVisitor aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitAllDeclarationUrls (aCSS, aVisitor);
+    CSSVisitor.visitAllDeclarationUrls (aCSS, new DefaultCSSUrlVisitor ());
     CSSVisitor.visitAllDeclarations (aCSS, new DefaultCSSVisitor ());
     assertEquals (0, aVisitor.getCount ());
 
@@ -53,6 +62,7 @@ public final class CSSVisitorDeclarationListTest
     assertNotNull (aCSS);
     aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitAllDeclarationUrls (aCSS, aVisitor);
+    CSSVisitor.visitAllDeclarationUrls (aCSS, new DefaultCSSUrlVisitor ());
     CSSVisitor.visitAllDeclarations (aCSS, new DefaultCSSVisitor ());
     assertEquals (1, aVisitor.getCount ());
 
@@ -61,7 +71,34 @@ public final class CSSVisitorDeclarationListTest
     assertNotNull (aCSS);
     aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitAllDeclarationUrls (aCSS, aVisitor);
+    CSSVisitor.visitAllDeclarationUrls (aCSS, new DefaultCSSUrlVisitor ());
     CSSVisitor.visitAllDeclarations (aCSS, new DefaultCSSVisitor ());
     assertEquals (2, aVisitor.getCount ());
+  }
+
+  @Test
+  public void testModifyingCSSUrlVisitor ()
+  {
+    final CSSDeclarationList aCSS = CSSReaderDeclarationList.readFromString ("background:url(a.gif);background:url(b.gif);",
+                                                                             ECSSVersion.CSS30);
+    assertNotNull (aCSS);
+    final MockModifyingCSSUrlVisitor aVisitor2 = new MockModifyingCSSUrlVisitor ();
+    CSSVisitor.visitAllDeclarationUrls (aCSS, aVisitor2);
+    CSSVisitor.visitAllDeclarationUrls (aCSS, new DefaultCSSUrlVisitor ()
+    {
+      @Override
+      public void onImport (@Nonnull final CSSImportRule aImportRule)
+      {
+        assertTrue (aImportRule.getLocationString ().endsWith (".modified"));
+      }
+
+      @Override
+      public void onUrlDeclaration (@Nullable final ICSSTopLevelRule aTopLevelRule,
+                                    @Nonnull final CSSDeclaration aDeclaration,
+                                    @Nonnull final CSSExpressionMemberTermURI aURITerm)
+      {
+        assertTrue (aURITerm.getURIString ().endsWith (".modified"));
+      }
+    });
   }
 }

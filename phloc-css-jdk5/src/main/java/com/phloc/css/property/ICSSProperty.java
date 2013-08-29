@@ -17,9 +17,12 @@
  */
 package com.phloc.css.property;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.propertyvalue.ICSSValue;
 import com.phloc.css.utils.ICSSNamedColor;
@@ -27,29 +30,106 @@ import com.phloc.css.utils.ICSSNamedColor;
 /**
  * Base interface for a single CSS property.
  * 
- * @see com.phloc.css.property.CCSSProperties for a list of default CSS
- *      properties
+ * @see com.phloc.css.property.CCSSProperties CCSSProperties for a list of
+ *      default CSS properties
  * @author Philip Helger
  */
-public interface ICSSProperty extends ICSSVersionAware
+public interface ICSSProperty extends ICSSVersionAware, Serializable
 {
+  /**
+   * @return The underlying base property. Never <code>null</code>.
+   */
   @Nonnull
   ECSSProperty getProp ();
 
+  /**
+   * Check if the passed value is valid for this property according to the
+   * defined rule.
+   * 
+   * @param sValue
+   *        The value to check. May be <code>null</code>.
+   * @return <code>true</code> if the value is valid, <code>false</code>
+   *         otherwise
+   */
   boolean isValidValue (@Nullable String sValue);
 
+  /**
+   * Create a new CSS value with this property and the specified value.
+   * 
+   * @param sValue
+   *        The CSS String value. May neither be <code>null</code> nor empty.
+   * @param bImportant
+   *        <code>true</code> if it is an important value, <code>false</code> if
+   *        not
+   * @return Never <code>null</code>.
+   */
   @Nonnull
-  ICSSValue newValue (@Nonnull String sValue);
+  ICSSValue newValue (@Nonnull @Nonempty String sValue, boolean bImportant);
 
+  /**
+   * Create a new CSS value with this property and the specified value. This is
+   * a shortcut for <code>newValue (sValue, false)</code>.
+   * 
+   * @param sValue
+   *        The CSS String value. May neither be <code>null</code> nor empty.
+   * @return Never <code>null</code>.
+   */
   @Nonnull
-  ICSSValue newImportantValue (@Nonnull String sValue);
+  ICSSValue newValue (@Nonnull @Nonempty String sValue);
 
+  /**
+   * Create a new important CSS value with this property and the specified
+   * value. This is a shortcut for <code>newValue (sValue, true)</code>.
+   * 
+   * @param sValue
+   *        The CSS String value. May neither be <code>null</code> nor empty.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  ICSSValue newImportantValue (@Nonnull @Nonempty String sValue);
+
+  /**
+   * Create a new CSS value with this property and the specified named color.
+   * 
+   * @param aColor
+   *        The CSS color value
+   * @param bImportant
+   *        <code>true</code> if it is an important value, <code>false</code> if
+   *        not
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  ICSSValue newValue (@Nonnull ICSSNamedColor aColor, boolean bImportant);
+
+  /**
+   * Create a new CSS value with this property and the specified named color.
+   * This is a shortcut for <code>newValue (aColor, false)</code>.
+   * 
+   * @param aColor
+   *        The CSS color value
+   * @return Never <code>null</code>.
+   */
   @Nonnull
   ICSSValue newValue (@Nonnull ICSSNamedColor aColor);
 
+  /**
+   * Create a new important CSS value with this property and the specified named
+   * color. This is a shortcut for <code>newValue (aColor, true)</code>.
+   * 
+   * @param aColor
+   *        The CSS color value
+   * @return Never <code>null</code>.
+   */
   @Nonnull
   ICSSValue newImportantValue (@Nonnull ICSSNamedColor aColor);
 
+  /**
+   * Get a clone of this property with another (or the same) base property.
+   * 
+   * @param eProp
+   *        The base property to use. May not be <code>null</code>.
+   * @return Never <code>null</code>
+   */
   @Nonnull
   ICSSProperty getClone (@Nonnull ECSSProperty eProp);
 }
