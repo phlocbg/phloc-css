@@ -43,6 +43,17 @@ public final class CSSRGBA implements ICSSWriteable
   private String m_sBlue;
   private String m_sOpacity;
 
+  /**
+   * Copy constructor
+   * 
+   * @param aOther
+   *        The object to copy the data from. May not be <code>null</code>.
+   */
+  public CSSRGBA (@Nonnull final CSSRGBA aOther)
+  {
+    this (aOther.getRed (), aOther.getGreen (), aOther.getBlue (), aOther.getOpacity ());
+  }
+
   public CSSRGBA (final int nRed, final int nGreen, final int nBlue, final float fOpacity)
   {
     this (Integer.toString (CSSColorHelper.getRGBValue (nRed)),
@@ -134,7 +145,15 @@ public final class CSSRGBA implements ICSSWriteable
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    return CCSSValue.PREFIX_RGBA_OPEN + m_sRed + ',' + m_sGreen + ',' + m_sBlue + ',' + m_sOpacity + ')';
+    return CCSSValue.PREFIX_RGBA_OPEN +
+           m_sRed +
+           ',' +
+           m_sGreen +
+           ',' +
+           m_sBlue +
+           ',' +
+           m_sOpacity +
+           CCSSValue.SUFFIX_RGBA_CLOSE;
   }
 
   @Override

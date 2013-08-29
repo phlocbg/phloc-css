@@ -72,13 +72,17 @@ public class CSSPropertyEnumOrColors extends CSSPropertyEnum
   {
     if (sValue == null)
       return false;
+
+    // Split by whitespaces "  a   b " results in { "a", "b" }
     final String [] aParts = RegExHelper.getSplitToArray (sValue.trim (), "\\s+");
     if (aParts.length < m_nMinNumbers || aParts.length > m_nMaxNumbers)
       return false;
-    for (int i = 0; i < aParts.length; ++i)
+
+    // Check each value
+    for (final String aPart : aParts)
     {
-      aParts[i] = aParts[i].trim ();
-      if (!super.isValidValue (aParts[i]) && !CSSColorHelper.isColorValue (aParts[i]))
+      final String sTrimmedPart = aPart.trim ();
+      if (!super.isValidValue (sTrimmedPart) && !CSSColorHelper.isColorValue (sTrimmedPart))
         return false;
     }
     return true;
@@ -88,7 +92,7 @@ public class CSSPropertyEnumOrColors extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnumOrColors getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrColors (eProp, m_nMinNumbers, m_nMaxNumbers, m_aEnumValues);
+    return new CSSPropertyEnumOrColors (eProp, m_nMinNumbers, m_nMaxNumbers, directGetEnumValues ());
   }
 
   @Override

@@ -81,6 +81,16 @@ public enum ECSSMediaExpressionFeature implements IHasName
     return m_sName;
   }
 
+  public boolean isWebkitSpecific ()
+  {
+    return m_sName.startsWith ("-webkit-");
+  }
+
+  public boolean isBrowserSpecific ()
+  {
+    return m_sName.startsWith ("-");
+  }
+
   @Nullable
   public static ECSSMediaExpressionFeature getFromNameOrNull (@Nullable final String sName)
   {

@@ -53,6 +53,6 @@ public class CSSPropertyEnumOrInt extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnumOrInt getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrInt (eProp, m_aEnumValues);
+    return new CSSPropertyEnumOrInt (eProp, directGetEnumValues ());
   }
 }

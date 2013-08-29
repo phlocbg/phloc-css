@@ -15,28 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css;
+package com.phloc.css.decl.visit;
 
-import java.io.Serializable;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
-
-/**
- * Interface for objects that can be written to CSS.
- * 
- * @author Philip Helger
- */
-public interface ICSSWriteable extends Serializable
+final class MockModifyingCSSUrlVisitor extends AbstractModifyingCSSUrlVisitor
 {
-  /**
-   * @param aSettings
-   *        The settings to be used to format the output. May not be
-   *        <code>null</code>.
-   * @param nIndentLevel
-   *        The current indentation level
-   * @return The content of this object as CSS string.
-   */
-  @Nonnull
-  String getAsCSSString (@Nonnull ICSSWriterSettings aSettings, @Nonnegative int nIndentLevel);
+  @Override
+  protected String getModifiedURI (final String sURI)
+  {
+    return sURI + ".modified";
+  }
 }

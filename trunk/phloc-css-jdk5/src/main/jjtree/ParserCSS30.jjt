@@ -468,6 +468,7 @@ void mediaList() : {}
 void mediaRuleList() #void : {}
 {
   ( ( styleRule()
+    | mediaRule()
     | pageRule()
     | fontfaceRule()
     | keyframesRule()

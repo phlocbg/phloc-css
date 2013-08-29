@@ -36,11 +36,22 @@ import com.phloc.css.utils.CSSColorHelper;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSRGB implements ICSSWriteable
+public class CSSRGB implements ICSSWriteable
 {
   private String m_sRed;
   private String m_sGreen;
   private String m_sBlue;
+
+  /**
+   * Copy constructor
+   * 
+   * @param aOther
+   *        The object to copy the data from. May not be <code>null</code>.
+   */
+  public CSSRGB (@Nonnull final CSSRGB aOther)
+  {
+    this (aOther.getRed (), aOther.getGreen (), aOther.getBlue ());
+  }
 
   public CSSRGB (final int nRed, final int nGreen, final int nBlue)
   {
@@ -113,7 +124,7 @@ public final class CSSRGB implements ICSSWriteable
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    return CCSSValue.PREFIX_RGB_OPEN + m_sRed + ',' + m_sGreen + ',' + m_sBlue + ')';
+    return CCSSValue.PREFIX_RGB_OPEN + m_sRed + ',' + m_sGreen + ',' + m_sBlue + CCSSValue.SUFFIX_RGB_CLOSE;
   }
 
   @Override

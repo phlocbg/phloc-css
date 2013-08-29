@@ -20,6 +20,67 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2013-08-29" version="3.6.0" />
+  <entry date="2013-08-28" category="api" action="add">
+    <change>
+      <text locale="en">Extended CSSSimpleValueWithUnit API to perform some basic math</text>
+    </change>
+  </entry>
+  <entry date="2013-08-28" category="feature" action="add">
+    <change>
+      <text locale="en">Added support for nested @media rules</text>
+    </change>
+  </entry>
+  <entry date="2013-08-28" category="tech" action="add">
+    <change>
+      <text locale="en">Made CascadingStyleSheet and all contained classes Serializable</text>
+    </change>
+  </entry>
+  <entry date="2013-08-27" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed error in determining the unit of String like "5rem" which was determined as "5em"</text>
+    </change>
+  </entry>
+  <entry date="2013-08-27" category="api" action="add">
+    <change>
+      <text locale="en">Added new methods in ICSSProperty to specify the important flag explicitly</text>
+    </change>
+  </entry>
+  <entry date="2013-08-27" category="api" action="update">
+    <change>
+      <text locale="en">Updated ECSSProperty with the latest properties and add links to the respective specifications for easier handling in the future</text>
+    </change>
+  </entry>
+  <entry date="2013-08-27" category="api" action="add">
+    <change>
+      <text locale="en">Added new enums ECSSSpecification and ECSSSpecificationStatus which lists all W3C CSS specifications</text>
+    </change>
+  </entry>
+  <entry date="2013-08-26" category="tech" action="change">
+    <change>
+      <text locale="en">CSSRect now uses the current syntax to emit rectangles (a,b,c,d) instead of (a b c d)</text>
+    </change>
+  </entry>
+  <entry date="2013-08-26" category="api" action="add">
+    <change>
+      <text locale="en">Extended ECSSColor with methods to create CSSRGB, CSSRGBA, CSSHSL and CSSHSLA objects</text>
+    </change>
+  </entry>
+  <entry date="2013-08-26" category="api" action="change">
+    <change>
+      <text locale="en">CSSWriter.getCSSAsString no longer declares to throw an IOException</text>
+    </change>
+  </entry>
+  <entry date="2013-08-26" category="api" action="change">
+    <change>
+      <text locale="en">Made CSSWriter.writeCSS and getCSSAsString more flexible, so that it takes an arbitrary ICSSWriteable</text>
+    </change>
+  </entry>
+  <entry date="2013-08-26" category="api" action="add">
+    <change>
+      <text locale="en">Added support for file footers in CSSWriter</text>
+    </change>
+  </entry>
   <entry date="2013-08-24" category="api" action="add">
     <change>
       <text locale="en">Added support for CSS data URLs in the class CSSURI</text>

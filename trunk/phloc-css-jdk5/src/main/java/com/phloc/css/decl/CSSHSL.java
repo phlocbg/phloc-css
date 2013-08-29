@@ -45,6 +45,17 @@ public final class CSSHSL implements ICSSWriteable, ICSSVersionAware
   private String m_sLightness;
 
   /**
+   * Copy constructor
+   * 
+   * @param aOther
+   *        The object to copy the data from. May not be <code>null</code>.
+   */
+  public CSSHSL (@Nonnull final CSSHSL aOther)
+  {
+    this (aOther.getHue (), aOther.getSaturation (), aOther.getLightness ());
+  }
+
+  /**
    * Constructor
    * 
    * @param nHue
@@ -143,7 +154,7 @@ public final class CSSHSL implements ICSSWriteable, ICSSVersionAware
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (this);
-    return CCSSValue.PREFIX_HSL_OPEN + m_sHue + ',' + m_sSaturation + ',' + m_sLightness + ')';
+    return CCSSValue.PREFIX_HSL_OPEN + m_sHue + ',' + m_sSaturation + ',' + m_sLightness + CCSSValue.SUFFIX_HSL_CLOSE;
   }
 
   @Nonnull

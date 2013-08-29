@@ -17,7 +17,6 @@
  */
 package com.phloc.css.writer;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
@@ -122,7 +121,7 @@ public final class CSSCompressor
       {
         return new CSSWriter (aSettings).getCSSAsString (aCSS);
       }
-      catch (final IOException ex)
+      catch (final Exception ex)
       {
         s_aLogger.warn ("Failed to write optimized CSS!", ex);
       }

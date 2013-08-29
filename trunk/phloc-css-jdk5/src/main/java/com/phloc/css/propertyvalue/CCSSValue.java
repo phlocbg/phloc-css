@@ -36,16 +36,28 @@ public final class CCSSValue
 {
   public static final String PREFIX_RECT = "rect";
   public static final String PREFIX_RECT_OPEN = PREFIX_RECT + '(';
+  public static final String SUFFIX_RECT_CLOSE = ")";
+
   public static final String PREFIX_URL = "url";
   public static final String PREFIX_URL_OPEN = PREFIX_URL + '(';
+  public static final String SUFFIX_URL_CLOSE = ")";
+
   public static final String PREFIX_RGB = "rgb";
   public static final String PREFIX_RGB_OPEN = PREFIX_RGB + '(';
+  public static final String SUFFIX_RGB_CLOSE = ")";
+
   public static final String PREFIX_RGBA = "rgba";
   public static final String PREFIX_RGBA_OPEN = PREFIX_RGBA + '(';
+  public static final String SUFFIX_RGBA_CLOSE = ")";
+
   public static final String PREFIX_HSL = "hsl";
   public static final String PREFIX_HSL_OPEN = PREFIX_HSL + '(';
+  public static final String SUFFIX_HSL_CLOSE = ")";
+
   public static final String PREFIX_HSLA = "hsla";
   public static final String PREFIX_HSLA_OPEN = PREFIX_HSLA + '(';
+  public static final String SUFFIX_HSLA_CLOSE = ")";
+
   public static final int HEXVALUE_LENGTH = 7;
   public static final char PREFIX_HEX = '#';
 
@@ -174,6 +186,7 @@ public final class CCSSValue
   public static final String TOP = "top";
   public static final String TRANSPARENT = "transparent";
   public static final String UNDERLINE = "underline";
+  public static final String UNSET = "unset";
   public static final String UPPER_ALPHA = "upper-alpha";
   public static final String UPPER_LATIN = "upper-latin";
   public static final String UPPER_ROMAN = "upper-roman";
@@ -187,6 +200,7 @@ public final class CCSSValue
   public static final String XX_SMALL = "xx-small";
   public static final String ZOOM = "zoom";
 
+  @Deprecated
   public static final String PX0 = ECSSUnit.px (0);
   public static final String PERC50 = ECSSUnit.perc (50);
   public static final String PERC100 = ECSSUnit.perc (100);

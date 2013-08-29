@@ -144,3 +144,13 @@
 @media screen, projection and (color) { }
 @media screen, projection { }
 @media screen, projection, handheld { }
+
+/* nested media */
+@media print { 
+  /* hide navigation controls when printing */
+  #navigation { display: none }
+  @media (max-width: 12cm) {
+    /* keep notes in flow when printing to narrow pages */
+    .note { float: none }
+  }
+}

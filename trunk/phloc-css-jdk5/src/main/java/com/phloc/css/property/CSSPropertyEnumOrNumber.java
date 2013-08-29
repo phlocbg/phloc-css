@@ -62,7 +62,7 @@ public class CSSPropertyEnumOrNumber extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnumOrNumber getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrNumber (eProp, m_bWithPercentage, m_aEnumValues);
+    return new CSSPropertyEnumOrNumber (eProp, m_bWithPercentage, directGetEnumValues ());
   }
 
   @Override

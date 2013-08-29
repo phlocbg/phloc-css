@@ -121,6 +121,22 @@ public final class CSSColorHelper
   private CSSColorHelper ()
   {}
 
+  /**
+   * Check if the passed string is any color value.
+   * 
+   * @param sValue
+   *        The value to check. May be <code>null</code>.
+   * @return <code>true</code> if the passed value is not <code>null</code>, not
+   *         empty and a valid CSS color value.
+   * @see #isRGBColorValue(String)
+   * @see #isRGBAColorValue(String)
+   * @see #isHSLColorValue(String)
+   * @see #isHSLAColorValue(String)
+   * @see #isHexColorValue(String)
+   * @see ECSSColor#isDefaultColorName(String)
+   * @see ECSSColorName#isDefaultColorName(String)
+   * @see CCSSValue#CURRENTCOLOR
+   */
   public static boolean isColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
@@ -137,12 +153,30 @@ public final class CSSColorHelper
            sRealValue.equals (CCSSValue.CURRENTCOLOR);
   }
 
+  /**
+   * Check if the passed String is valid CSS RGB color value. Example value:
+   * <code>rgb(255,0,0)</code>
+   * 
+   * @param sValue
+   *        The value to check. May be <code>null</code>.
+   * @return <code>true</code> if it is a CSS RGB color value,
+   *         <code>false</code> if not
+   */
   public static boolean isRGBColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
     return StringHelper.hasText (sRealValue) && RegExHelper.stringMatchesPattern (PATTERN_RGB, sRealValue);
   }
 
+  /**
+   * Extract the CSS RGB color value from the passed String. Example value:
+   * <code>rgb(255,0,0)</code>
+   * 
+   * @param sValue
+   *        The value to extract the value from. May be <code>null</code>.
+   * @return <code>null</code> if the passed value is not a valid CSS RGB color
+   *         value.
+   */
   @Nullable
   public static CSSRGB getParsedRGBColorValue (@Nullable final String sValue)
   {
@@ -156,6 +190,15 @@ public final class CSSColorHelper
     return null;
   }
 
+  /**
+   * Check if the passed String is valid CSS RGBA color value. Example value:
+   * <code>rgba(255,0,0, 0.1)</code>
+   * 
+   * @param sValue
+   *        The value to check. May be <code>null</code>.
+   * @return <code>true</code> if it is a CSS RGBA color value,
+   *         <code>false</code> if not
+   */
   public static boolean isRGBAColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
@@ -175,6 +218,15 @@ public final class CSSColorHelper
     return null;
   }
 
+  /**
+   * Check if the passed String is valid CSS HSL color value. Example value:
+   * <code>hsl(255,0%,0%)</code>
+   * 
+   * @param sValue
+   *        The value to check. May be <code>null</code>.
+   * @return <code>true</code> if it is a CSS HSL color value,
+   *         <code>false</code> if not
+   */
   public static boolean isHSLColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
@@ -194,6 +246,15 @@ public final class CSSColorHelper
     return null;
   }
 
+  /**
+   * Check if the passed String is valid CSS HSLA color value. Example value:
+   * <code>hsla(255,0%,0%, 0.1)</code>
+   * 
+   * @param sValue
+   *        The value to check. May be <code>null</code>.
+   * @return <code>true</code> if it is a CSS HSLA color value,
+   *         <code>false</code> if not
+   */
   public static boolean isHSLAColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
@@ -213,6 +274,15 @@ public final class CSSColorHelper
     return null;
   }
 
+  /**
+   * Check if the passed String is valid CSS hex color value. Example value:
+   * <code>#ff0000</code>
+   * 
+   * @param sValue
+   *        The value to check. May be <code>null</code>.
+   * @return <code>true</code> if it is a CSS hex color value,
+   *         <code>false</code> if not
+   */
   public static boolean isHexColorValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
@@ -242,7 +312,7 @@ public final class CSSColorHelper
   }
 
   /**
-   * Convert the passed value to a valid RGB value in the range 0-255
+   * Convert the passed value to a valid RGB value in the range 0-255.
    * 
    * @param nRGBPart
    *        The original value
@@ -254,6 +324,14 @@ public final class CSSColorHelper
     return _mod (nRGBPart, RGB_RANGE);
   }
 
+  /**
+   * Ensure that the passed opacity value is in the range {@link #OPACITY_MIN}
+   * and {@link #OPACITY_MAX}.
+   * 
+   * @param fOpacity
+   *        The original opacity
+   * @return The opacity in the correct range.
+   */
   @Nonnegative
   public static float getOpacityToUse (final float fOpacity)
   {
@@ -281,7 +359,7 @@ public final class CSSColorHelper
                                  .append (getRGBValue (nGreen))
                                  .append (',')
                                  .append (getRGBValue (nBlue))
-                                 .append (')')
+                                 .append (CCSSValue.SUFFIX_RGB_CLOSE)
                                  .toString ();
   }
 
@@ -310,7 +388,7 @@ public final class CSSColorHelper
                                  .append (getRGBValue (nBlue))
                                  .append (',')
                                  .append (getOpacityToUse (fOpacity))
-                                 .append (')')
+                                 .append (CCSSValue.SUFFIX_RGBA_CLOSE)
                                  .toString ();
   }
 
@@ -325,11 +403,12 @@ public final class CSSColorHelper
   }
 
   /**
-   * Get the passed value as a valid HSL Hue value in the range of 0-359
+   * Get the passed value as a valid HSL Hue value in the range of
+   * {@value #HSL_MIN}-{@value #HSL_MAX}
    * 
    * @param nHSLPart
    *        Source Hue
-   * @return Hue value in the range of 0-359
+   * @return Hue value in the range of {@value #HSL_MIN}-{@value #HSL_MAX}
    */
   @Nonnegative
   public static int getHSLHueValue (final int nHSLPart)
@@ -338,11 +417,12 @@ public final class CSSColorHelper
   }
 
   /**
-   * Get the passed value as a valid HSL Hue value in the range of 0-359
+   * Get the passed value as a valid HSL Hue value in the range of
+   * {@value #HSL_MIN}-{@value #HSL_MAX}
    * 
    * @param fHSLPart
    *        Source Hue
-   * @return Hue value in the range of 0-359
+   * @return Hue value in the range of {@value #HSL_MIN}-{@value #HSL_MAX}
    */
   @Nonnegative
   public static float getHSLHueValue (final float fHSLPart)
@@ -352,11 +432,12 @@ public final class CSSColorHelper
 
   /**
    * Get the passed value as a valid HSL Saturation or Lightness value in the
-   * range of 0-100 (percentage).
+   * range of {@value #PERCENTAGE_MIN}-{@value #PERCENTAGE_MAX} (percentage).
    * 
    * @param nHSLPart
    *        Source value
-   * @return Target value in the range of 0-100
+   * @return Target value in the range of {@value #PERCENTAGE_MIN}-
+   *         {@value #PERCENTAGE_MAX}
    */
   @Nonnegative
   public static int getHSLPercentageValue (final int nHSLPart)
@@ -366,11 +447,12 @@ public final class CSSColorHelper
 
   /**
    * Get the passed value as a valid HSL Saturation or Lightness value in the
-   * range of 0-100 (percentage).
+   * range of {@link #PERCENTAGE_MIN}-{@link #PERCENTAGE_MAX} (percentage).
    * 
    * @param nHSLPart
    *        Source value
-   * @return Target value in the range of 0-100
+   * @return Target value in the range of {@value #PERCENTAGE_MIN}-
+   *         {@value #PERCENTAGE_MAX}
    */
   @Nonnegative
   public static float getHSLPercentageValue (final float nHSLPart)
@@ -399,7 +481,8 @@ public final class CSSColorHelper
                                  .append (getHSLPercentageValue (nSaturation))
                                  .append ("%,")
                                  .append (getHSLPercentageValue (nLightness))
-                                 .append ("%)")
+                                 .append ("%")
+                                 .append (CCSSValue.SUFFIX_HSL_CLOSE)
                                  .toString ();
   }
 
@@ -424,7 +507,8 @@ public final class CSSColorHelper
                                  .append (getHSLPercentageValue (fSaturation))
                                  .append ("%,")
                                  .append (getHSLPercentageValue (fLightness))
-                                 .append ("%)")
+                                 .append ("%")
+                                 .append (CCSSValue.SUFFIX_HSL_CLOSE)
                                  .toString ();
   }
 
@@ -456,7 +540,7 @@ public final class CSSColorHelper
                                  .append (getHSLPercentageValue (nLightness))
                                  .append ("%,")
                                  .append (getOpacityToUse (fOpacity))
-                                 .append (')')
+                                 .append (CCSSValue.SUFFIX_HSLA_CLOSE)
                                  .toString ();
   }
 
@@ -488,7 +572,7 @@ public final class CSSColorHelper
                                  .append (getHSLPercentageValue (fLightness))
                                  .append ("%,")
                                  .append (getOpacityToUse (fOpacity))
-                                 .append (')')
+                                 .append (CCSSValue.SUFFIX_HSLA_CLOSE)
                                  .toString ();
   }
 

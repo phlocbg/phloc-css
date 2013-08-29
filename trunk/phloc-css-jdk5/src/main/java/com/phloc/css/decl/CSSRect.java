@@ -42,6 +42,29 @@ public final class CSSRect implements ICSSWriteable
   private String m_sBottom;
   private String m_sLeft;
 
+  /**
+   * Copy constructor
+   * 
+   * @param aOther
+   *        The object to copy the data from. May not be <code>null</code>.
+   */
+  public CSSRect (@Nonnull final CSSRect aOther)
+  {
+    this (aOther.getTop (), aOther.getRight (), aOther.getBottom (), aOther.getLeft ());
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param sTop
+   *        Top coordinate. May neither be <code>null</code> nor empty.
+   * @param sRight
+   *        Tight coordinate. May neither be <code>null</code> nor empty.
+   * @param sBottom
+   *        Bottom coordinate. May neither be <code>null</code> nor empty.
+   * @param sLeft
+   *        Left coordinate. May neither be <code>null</code> nor empty.
+   */
   public CSSRect (@Nonnull @Nonempty final String sTop,
                   @Nonnull @Nonempty final String sRight,
                   @Nonnull @Nonempty final String sBottom,
@@ -54,7 +77,7 @@ public final class CSSRect implements ICSSWriteable
   }
 
   /**
-   * @return top part
+   * @return top part. Neither <code>null</code> nor empty.
    */
   @Nonnull
   @Nonempty
@@ -63,6 +86,12 @@ public final class CSSRect implements ICSSWriteable
     return m_sTop;
   }
 
+  /**
+   * Set the top coordinate.
+   * 
+   * @param sTop
+   *        May neither be <code>null</code> nor empty.
+   */
   public void setTop (@Nonnull @Nonempty final String sTop)
   {
     if (StringHelper.hasNoText (sTop))
@@ -71,7 +100,7 @@ public final class CSSRect implements ICSSWriteable
   }
 
   /**
-   * @return right part
+   * @return right part. Neither <code>null</code> nor empty.
    */
   @Nonnull
   @Nonempty
@@ -80,6 +109,12 @@ public final class CSSRect implements ICSSWriteable
     return m_sRight;
   }
 
+  /**
+   * Set the right coordinate.
+   * 
+   * @param sRight
+   *        May neither be <code>null</code> nor empty.
+   */
   public void setRight (@Nonnull @Nonempty final String sRight)
   {
     if (StringHelper.hasNoText (sRight))
@@ -88,7 +123,7 @@ public final class CSSRect implements ICSSWriteable
   }
 
   /**
-   * @return bottom part
+   * @return bottom part. Neither <code>null</code> nor empty.
    */
   @Nonnull
   @Nonempty
@@ -97,6 +132,12 @@ public final class CSSRect implements ICSSWriteable
     return m_sBottom;
   }
 
+  /**
+   * Set the bottom coordinate.
+   * 
+   * @param sBottom
+   *        May neither be <code>null</code> nor empty.
+   */
   public void setBottom (@Nonnull @Nonempty final String sBottom)
   {
     if (StringHelper.hasNoText (sBottom))
@@ -105,7 +146,7 @@ public final class CSSRect implements ICSSWriteable
   }
 
   /**
-   * @return left part
+   * @return left part. Neither <code>null</code> nor empty.
    */
   @Nonnull
   @Nonempty
@@ -114,6 +155,12 @@ public final class CSSRect implements ICSSWriteable
     return m_sLeft;
   }
 
+  /**
+   * Set the left coordinate.
+   * 
+   * @param sLeft
+   *        May neither be <code>null</code> nor empty.
+   */
   public void setLeft (@Nonnull @Nonempty final String sLeft)
   {
     if (StringHelper.hasNoText (sLeft))
@@ -125,7 +172,15 @@ public final class CSSRect implements ICSSWriteable
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    return CCSSValue.PREFIX_RECT_OPEN + m_sTop + ' ' + m_sRight + ' ' + m_sBottom + ' ' + m_sLeft + ')';
+    return CCSSValue.PREFIX_RECT_OPEN +
+           m_sTop +
+           ',' +
+           m_sRight +
+           ',' +
+           m_sBottom +
+           ',' +
+           m_sLeft +
+           CCSSValue.SUFFIX_RECT_CLOSE;
   }
 
   @Override
