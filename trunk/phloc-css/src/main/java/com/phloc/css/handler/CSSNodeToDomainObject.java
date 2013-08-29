@@ -627,24 +627,30 @@ final class CSSNodeToDomainObject
         if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
           ret.addRule (_createStyleRule (aChildNode));
         else
-          if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
-            ret.addRule (_createPageRule (aChildNode));
+          if (ECSSNodeType.MEDIARULE.isNode (aChildNode, m_eVersion))
+          {
+            // Nested media rules are OK!
+            ret.addRule (_createMediaRule (aChildNode));
+          }
           else
-            if (ECSSNodeType.FONTFACERULE.isNode (aChildNode, m_eVersion))
-              ret.addRule (_createFontFaceRule (aChildNode));
+            if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
+              ret.addRule (_createPageRule (aChildNode));
             else
-              if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
-                ret.addRule (_createKeyframesRule (aChildNode));
+              if (ECSSNodeType.FONTFACERULE.isNode (aChildNode, m_eVersion))
+                ret.addRule (_createFontFaceRule (aChildNode));
               else
-                if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
-                  ret.addRule (_createViewportRule (aChildNode));
+                if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
+                  ret.addRule (_createKeyframesRule (aChildNode));
                 else
-                  if (ECSSNodeType.SUPPORTSRULE.isNode (aChildNode, m_eVersion))
-                    ret.addRule (_createSupportsRule (aChildNode));
+                  if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
+                    ret.addRule (_createViewportRule (aChildNode));
                   else
-                    if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
-                      s_aLogger.warn ("Unsupported media-rule child: " +
-                                      ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+                    if (ECSSNodeType.SUPPORTSRULE.isNode (aChildNode, m_eVersion))
+                      ret.addRule (_createSupportsRule (aChildNode));
+                    else
+                      if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+                        s_aLogger.error ("Unsupported media-rule child: " +
+                                         ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
   }

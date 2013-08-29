@@ -809,7 +809,8 @@ public final class CSSReader
     final Charset aDeclaredCharset = getCharsetDeclaredInCSS (aISP);
     if (aDeclaredCharset != null)
     {
-      s_aLogger.info ("Reading CSS definition again with explicit charset '" + aDeclaredCharset.name () + "'");
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Reading CSS definition again with explicit charset '" + aDeclaredCharset.name () + "'");
       aCharsetToUse = aDeclaredCharset;
     }
 
