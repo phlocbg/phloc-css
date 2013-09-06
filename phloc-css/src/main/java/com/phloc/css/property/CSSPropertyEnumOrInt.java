@@ -23,6 +23,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringParser;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 
 /**
  * CSS property that is either an enumeration or a numeric value without a unit
@@ -37,9 +38,23 @@ public class CSSPropertyEnumOrInt extends CSSPropertyEnum
     super (eProp, aEnumValues);
   }
 
+  public CSSPropertyEnumOrInt (@Nonnull final ECSSProperty eProp,
+                               @Nullable final ICSSPropertyCustomizer aCustomizer,
+                               @Nonnull @Nonempty final String... aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
+  }
+
   public CSSPropertyEnumOrInt (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final Iterable <String> aEnumValues)
   {
     super (eProp, aEnumValues);
+  }
+
+  public CSSPropertyEnumOrInt (@Nonnull final ECSSProperty eProp,
+                               @Nullable final ICSSPropertyCustomizer aCustomizer,
+                               @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
   }
 
   @Override
@@ -53,6 +68,6 @@ public class CSSPropertyEnumOrInt extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnumOrInt getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrInt (eProp, directGetEnumValues ());
+    return new CSSPropertyEnumOrInt (eProp, getCustomizer (), directGetEnumValues ());
   }
 }

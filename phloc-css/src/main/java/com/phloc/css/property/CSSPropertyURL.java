@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 import com.phloc.css.utils.CSSURLHelper;
 
 /**
@@ -32,7 +33,12 @@ public class CSSPropertyURL extends AbstractCSSProperty
 {
   public CSSPropertyURL (@Nonnull final ECSSProperty eProp)
   {
-    super (eProp);
+    this (eProp, null);
+  }
+
+  public CSSPropertyURL (@Nonnull final ECSSProperty eProp, @Nullable final ICSSPropertyCustomizer aCustomizer)
+  {
+    super (eProp, aCustomizer);
   }
 
   public static boolean isValidPropertyValue (@Nullable final String sValue)
@@ -50,6 +56,6 @@ public class CSSPropertyURL extends AbstractCSSProperty
   @Nonnull
   public CSSPropertyURL getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyURL (eProp);
+    return new CSSPropertyURL (eProp, getCustomizer ());
   }
 }

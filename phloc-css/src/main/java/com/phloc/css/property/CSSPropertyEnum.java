@@ -27,6 +27,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 
 /**
  * CSS property with a predefined list of possible values (e.g. "cursor")
@@ -39,7 +40,14 @@ public class CSSPropertyEnum extends AbstractCSSProperty
 
   public CSSPropertyEnum (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final String... aEnumValues)
   {
-    super (eProp);
+    this (eProp, null, aEnumValues);
+  }
+
+  public CSSPropertyEnum (@Nonnull final ECSSProperty eProp,
+                          @Nullable final ICSSPropertyCustomizer aCustomizer,
+                          @Nonnull @Nonempty final String... aEnumValues)
+  {
+    super (eProp, aCustomizer);
     m_aEnumValues = new HashSet <String> (aEnumValues.length);
     for (final String sPotentialValue : aEnumValues)
     {
@@ -53,7 +61,14 @@ public class CSSPropertyEnum extends AbstractCSSProperty
 
   public CSSPropertyEnum (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final Iterable <String> aEnumValues)
   {
-    super (eProp);
+    this (eProp, null, aEnumValues);
+  }
+
+  public CSSPropertyEnum (@Nonnull final ECSSProperty eProp,
+                          @Nullable final ICSSPropertyCustomizer aCustomizer,
+                          @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  {
+    super (eProp, aCustomizer);
     m_aEnumValues = new HashSet <String> ();
     for (final String sPotentialValue : aEnumValues)
     {
@@ -65,9 +80,11 @@ public class CSSPropertyEnum extends AbstractCSSProperty
       throw new IllegalArgumentException ("At least one enumeration value needs to be passed!");
   }
 
-  private CSSPropertyEnum (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final Set <String> aEnumValues)
+  private CSSPropertyEnum (@Nonnull final ECSSProperty eProp,
+                           @Nullable final ICSSPropertyCustomizer aCustomizer,
+                           @Nonnull @Nonempty final Set <String> aEnumValues)
   {
-    super (eProp);
+    super (eProp, aCustomizer);
     m_aEnumValues = new HashSet <String> (aEnumValues);
   }
 
@@ -91,7 +108,7 @@ public class CSSPropertyEnum extends AbstractCSSProperty
   @Nonnull
   public CSSPropertyEnum getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnum (eProp, m_aEnumValues);
+    return new CSSPropertyEnum (eProp, getCustomizer (), m_aEnumValues);
   }
 
   @Override
