@@ -20,6 +20,13 @@ package com.phloc.css.property;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.css.ECSSUnit;
+import com.phloc.css.property.customizer.CSSPropertyCustomizerBorderBottomLeftRadius;
+import com.phloc.css.property.customizer.CSSPropertyCustomizerBorderBottomRightRadius;
+import com.phloc.css.property.customizer.CSSPropertyCustomizerBorderRadius;
+import com.phloc.css.property.customizer.CSSPropertyCustomizerBorderTopLeftRadius;
+import com.phloc.css.property.customizer.CSSPropertyCustomizerBorderTopRightRadius;
+import com.phloc.css.property.customizer.CSSPropertyCustomizerDisplay;
+import com.phloc.css.property.customizer.CSSPropertyCustomizerOpacity;
 import com.phloc.css.propertyvalue.CCSSValue;
 import com.phloc.css.propertyvalue.ICSSValue;
 
@@ -233,11 +240,16 @@ public final class CCSSProperties
                                                                         CCSSValue.RIDGE,
                                                                         CCSSValue.INSET,
                                                                         CCSSValue.OUTSET);
-  public static final ICSSProperty BORDER_RADIUS = new CSSPropertyFree (ECSSProperty.BORDER_RADIUS);
-  public static final ICSSProperty BORDER_TOP_LEFT_RADIUS = new CSSPropertyFree (ECSSProperty.BORDER_TOP_LEFT_RADIUS);
-  public static final ICSSProperty BORDER_TOP_RIGHT_RADIUS = new CSSPropertyFree (ECSSProperty.BORDER_TOP_RIGHT_RADIUS);
-  public static final ICSSProperty BORDER_BOTTOM_LEFT_RADIUS = new CSSPropertyFree (ECSSProperty.BORDER_BOTTOM_LEFT_RADIUS);
-  public static final ICSSProperty BORDER_BOTTOM_RIGHT_RADIUS = new CSSPropertyFree (ECSSProperty.BORDER_BOTTOM_RIGHT_RADIUS);
+  public static final ICSSProperty BORDER_RADIUS = new CSSPropertyFree (ECSSProperty.BORDER_RADIUS,
+                                                                        new CSSPropertyCustomizerBorderRadius ());
+  public static final ICSSProperty BORDER_TOP_LEFT_RADIUS = new CSSPropertyFree (ECSSProperty.BORDER_TOP_LEFT_RADIUS,
+                                                                                 new CSSPropertyCustomizerBorderTopLeftRadius ());
+  public static final ICSSProperty BORDER_TOP_RIGHT_RADIUS = new CSSPropertyFree (ECSSProperty.BORDER_TOP_RIGHT_RADIUS,
+                                                                                  new CSSPropertyCustomizerBorderTopRightRadius ());
+  public static final ICSSProperty BORDER_BOTTOM_LEFT_RADIUS = new CSSPropertyFree (ECSSProperty.BORDER_BOTTOM_LEFT_RADIUS,
+                                                                                    new CSSPropertyCustomizerBorderBottomLeftRadius ());
+  public static final ICSSProperty BORDER_BOTTOM_RIGHT_RADIUS = new CSSPropertyFree (ECSSProperty.BORDER_BOTTOM_RIGHT_RADIUS,
+                                                                                     new CSSPropertyCustomizerBorderBottomRightRadius ());
   public static final ICSSProperty OUTLINE_WIDTH = new CSSPropertyEnum (ECSSProperty.OUTLINE_WIDTH,
                                                                         CCSSValue.THIN,
                                                                         CCSSValue.MEDIUM,
@@ -348,6 +360,7 @@ public final class CCSSProperties
                                                                 CCSSValue.NONE);
   public static final ICSSProperty Z_INDEX = new CSSPropertyEnumOrInt (ECSSProperty.Z_INDEX, CCSSValue.AUTO);
   public static final ICSSProperty DISPLAY = new CSSPropertyEnum (ECSSProperty.DISPLAY,
+                                                                  new CSSPropertyCustomizerDisplay (),
                                                                   CCSSValue.BLOCK,
                                                                   CCSSValue.INLINE,
                                                                   CCSSValue.INLINE_BLOCK,
@@ -391,7 +404,8 @@ public final class CCSSProperties
                                                                  CCSSValue.HELP,
                                                                  CCSSValue.PROGRESS);
 
-  public static final ICSSProperty OPACITY = new CSSPropertyDouble (ECSSProperty.OPACITY);
+  public static final ICSSProperty OPACITY = new CSSPropertyDouble (ECSSProperty.OPACITY,
+                                                                    new CSSPropertyCustomizerOpacity ());
 
   // Unspecified stuff (created by MainAddMissingParameters)
   public static final ICSSProperty ALIGN_CONTENT = new CSSPropertyFree (ECSSProperty.ALIGN_CONTENT);

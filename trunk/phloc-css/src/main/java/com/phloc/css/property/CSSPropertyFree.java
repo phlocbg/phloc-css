@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.string.StringHelper;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 
 /**
  * CSS property without any value constraints, except that it may not be empty.
@@ -32,7 +33,12 @@ public class CSSPropertyFree extends AbstractCSSProperty
 {
   public CSSPropertyFree (@Nonnull final ECSSProperty eProp)
   {
-    super (eProp);
+    this (eProp, null);
+  }
+
+  public CSSPropertyFree (@Nonnull final ECSSProperty eProp, @Nullable final ICSSPropertyCustomizer aCustomizer)
+  {
+    super (eProp, aCustomizer);
   }
 
   public static boolean isValidPropertyValue (@Nullable final String sValue)
@@ -50,6 +56,6 @@ public class CSSPropertyFree extends AbstractCSSProperty
   @Nonnull
   public CSSPropertyFree getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyFree (eProp);
+    return new CSSPropertyFree (eProp, getCustomizer ());
   }
 }

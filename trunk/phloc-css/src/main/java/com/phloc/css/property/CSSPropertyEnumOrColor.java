@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 import com.phloc.css.utils.CSSColorHelper;
 
 /**
@@ -38,9 +39,23 @@ public class CSSPropertyEnumOrColor extends CSSPropertyEnum
   }
 
   public CSSPropertyEnumOrColor (@Nonnull final ECSSProperty eProp,
+                                 @Nullable final ICSSPropertyCustomizer aCustomizer,
+                                 @Nonnull @Nonempty final String... aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
+  }
+
+  public CSSPropertyEnumOrColor (@Nonnull final ECSSProperty eProp,
                                  @Nonnull @Nonempty final Iterable <String> aEnumValues)
   {
     super (eProp, aEnumValues);
+  }
+
+  public CSSPropertyEnumOrColor (@Nonnull final ECSSProperty eProp,
+                                 @Nullable final ICSSPropertyCustomizer aCustomizer,
+                                 @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
   }
 
   @Override
@@ -54,6 +69,6 @@ public class CSSPropertyEnumOrColor extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnumOrColor getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrColor (eProp, directGetEnumValues ());
+    return new CSSPropertyEnumOrColor (eProp, getCustomizer (), directGetEnumValues ());
   }
 }

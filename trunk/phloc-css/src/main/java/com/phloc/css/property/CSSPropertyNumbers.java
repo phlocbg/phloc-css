@@ -24,6 +24,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 import com.phloc.css.utils.CSSNumberHelper;
 
 /**
@@ -42,7 +43,16 @@ public class CSSPropertyNumbers extends AbstractCSSProperty
                              @Nonnegative final int nMinNumbers,
                              @Nonnegative final int nMaxNumbers)
   {
-    super (eProp);
+    this (eProp, null, bWithPercentage, nMinNumbers, nMaxNumbers);
+  }
+
+  public CSSPropertyNumbers (@Nonnull final ECSSProperty eProp,
+                             @Nullable final ICSSPropertyCustomizer aCustomizer,
+                             final boolean bWithPercentage,
+                             @Nonnegative final int nMinNumbers,
+                             @Nonnegative final int nMaxNumbers)
+  {
+    super (eProp, aCustomizer);
     if (nMinNumbers < 0)
       throw new IllegalArgumentException ("minNumbers: " + nMinNumbers);
     if (nMaxNumbers < 0 || nMaxNumbers < nMinNumbers)
@@ -77,7 +87,7 @@ public class CSSPropertyNumbers extends AbstractCSSProperty
   @Nonnull
   public CSSPropertyNumbers getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyNumbers (eProp, m_bWithPercentage, m_nMinNumbers, m_nMaxNumbers);
+    return new CSSPropertyNumbers (eProp, getCustomizer (), m_bWithPercentage, m_nMinNumbers, m_nMaxNumbers);
   }
 
   @Override

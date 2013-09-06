@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.string.StringParser;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 
 /**
  * CSS property that is either an enumeration or a decimal value without a unit
@@ -33,7 +34,12 @@ public class CSSPropertyDouble extends AbstractCSSProperty
 {
   public CSSPropertyDouble (@Nonnull final ECSSProperty eProp)
   {
-    super (eProp);
+    this (eProp, null);
+  }
+
+  public CSSPropertyDouble (@Nonnull final ECSSProperty eProp, @Nullable final ICSSPropertyCustomizer aCustomizer)
+  {
+    super (eProp, aCustomizer);
   }
 
   public static boolean isValidPropertyValue (@Nullable final String sValue)
@@ -51,6 +57,6 @@ public class CSSPropertyDouble extends AbstractCSSProperty
   @Nonnull
   public CSSPropertyDouble getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyDouble (eProp);
+    return new CSSPropertyDouble (eProp, getCustomizer ());
   }
 }
