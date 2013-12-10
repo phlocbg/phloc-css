@@ -23,6 +23,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 import com.phloc.css.utils.CSSNumberHelper;
 
 /**
@@ -39,7 +40,15 @@ public class CSSPropertyEnumOrNumber extends CSSPropertyEnum
                                   final boolean bWithPercentage,
                                   @Nonnull @Nonempty final String... aEnumValues)
   {
-    super (eProp, aEnumValues);
+    this (eProp, null, bWithPercentage, aEnumValues);
+  }
+
+  public CSSPropertyEnumOrNumber (@Nonnull final ECSSProperty eProp,
+                                  @Nullable final ICSSPropertyCustomizer aCustomizer,
+                                  final boolean bWithPercentage,
+                                  @Nonnull @Nonempty final String... aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
     m_bWithPercentage = bWithPercentage;
   }
 
@@ -47,7 +56,15 @@ public class CSSPropertyEnumOrNumber extends CSSPropertyEnum
                                   final boolean bWithPercentage,
                                   @Nonnull @Nonempty final Iterable <String> aEnumValues)
   {
-    super (eProp, aEnumValues);
+    this (eProp, null, bWithPercentage, aEnumValues);
+  }
+
+  public CSSPropertyEnumOrNumber (@Nonnull final ECSSProperty eProp,
+                                  @Nullable final ICSSPropertyCustomizer aCustomizer,
+                                  final boolean bWithPercentage,
+                                  @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
     m_bWithPercentage = bWithPercentage;
   }
 
@@ -62,7 +79,7 @@ public class CSSPropertyEnumOrNumber extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnumOrNumber getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrNumber (eProp, m_bWithPercentage, directGetEnumValues ());
+    return new CSSPropertyEnumOrNumber (eProp, getCustomizer (), m_bWithPercentage, directGetEnumValues ());
   }
 
   @Override

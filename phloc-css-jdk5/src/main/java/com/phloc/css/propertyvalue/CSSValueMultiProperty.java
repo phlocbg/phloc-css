@@ -69,7 +69,7 @@ public final class CSSValueMultiProperty implements ICSSMultiValue
   @Nonnull
   public ECSSProperty getProp ()
   {
-    // ... not necessarily right
+    // ... not necessarily correct
     return m_aValues.get (0).getProp ();
   }
 

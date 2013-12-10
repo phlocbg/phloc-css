@@ -25,6 +25,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 import com.phloc.css.utils.CSSColorHelper;
 
 /**
@@ -43,7 +44,16 @@ public class CSSPropertyEnumOrColors extends CSSPropertyEnum
                                   @Nonnegative final int nMaxNumbers,
                                   @Nonnull @Nonempty final String... aEnumValues)
   {
-    super (eProp, aEnumValues);
+    this (eProp, null, nMinNumbers, nMaxNumbers, aEnumValues);
+  }
+
+  public CSSPropertyEnumOrColors (@Nonnull final ECSSProperty eProp,
+                                  @Nullable final ICSSPropertyCustomizer aCustomizer,
+                                  @Nonnegative final int nMinNumbers,
+                                  @Nonnegative final int nMaxNumbers,
+                                  @Nonnull @Nonempty final String... aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
     if (nMinNumbers < 0)
       throw new IllegalArgumentException ("minNumbers: " + nMinNumbers);
     if (nMaxNumbers < 0 || nMaxNumbers < nMinNumbers)
@@ -57,7 +67,16 @@ public class CSSPropertyEnumOrColors extends CSSPropertyEnum
                                   @Nonnegative final int nMaxNumbers,
                                   @Nonnull @Nonempty final Iterable <String> aEnumValues)
   {
-    super (eProp, aEnumValues);
+    this (eProp, null, nMinNumbers, nMaxNumbers, aEnumValues);
+  }
+
+  public CSSPropertyEnumOrColors (@Nonnull final ECSSProperty eProp,
+                                  @Nullable final ICSSPropertyCustomizer aCustomizer,
+                                  @Nonnegative final int nMinNumbers,
+                                  @Nonnegative final int nMaxNumbers,
+                                  @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
     if (nMinNumbers < 0)
       throw new IllegalArgumentException ("minNumbers: " + nMinNumbers);
     if (nMaxNumbers < 0 || nMaxNumbers < nMinNumbers)
@@ -92,7 +111,7 @@ public class CSSPropertyEnumOrColors extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnumOrColors getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrColors (eProp, m_nMinNumbers, m_nMaxNumbers, directGetEnumValues ());
+    return new CSSPropertyEnumOrColors (eProp, getCustomizer (), m_nMinNumbers, m_nMaxNumbers, directGetEnumValues ());
   }
 
   @Override

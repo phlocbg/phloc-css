@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 import com.phloc.css.utils.CSSNumberHelper;
 
 /**
@@ -35,7 +36,14 @@ public class CSSPropertyNumber extends AbstractCSSProperty
 
   public CSSPropertyNumber (@Nonnull final ECSSProperty eProp, final boolean bWithPercentage)
   {
-    super (eProp);
+    this (eProp, null, bWithPercentage);
+  }
+
+  public CSSPropertyNumber (@Nonnull final ECSSProperty eProp,
+                            @Nullable final ICSSPropertyCustomizer aCustomizer,
+                            final boolean bWithPercentage)
+  {
+    super (eProp, aCustomizer);
     m_bWithPercentage = bWithPercentage;
   }
 
@@ -49,7 +57,7 @@ public class CSSPropertyNumber extends AbstractCSSProperty
   @Nonnull
   public CSSPropertyNumber getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyNumber (eProp, m_bWithPercentage);
+    return new CSSPropertyNumber (eProp, getCustomizer (), m_bWithPercentage);
   }
 
   @Override
