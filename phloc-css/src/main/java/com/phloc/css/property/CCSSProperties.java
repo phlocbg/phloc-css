@@ -502,23 +502,26 @@ public final class CCSSProperties
   public static final ICSSProperty FONT_VARIANT_LIGATURES = new CSSPropertyFree (ECSSProperty.FONT_VARIANT_LIGATURES);
   public static final ICSSProperty FONT_VARIANT_NUMERIC = new CSSPropertyFree (ECSSProperty.FONT_VARIANT_NUMERIC);
   public static final ICSSProperty FONT_VARIANT_POSITION = new CSSPropertyFree (ECSSProperty.FONT_VARIANT_POSITION);
-  public static final ICSSProperty GRID_AFTER = new CSSPropertyFree (ECSSProperty.GRID_AFTER);
+  public static final ICSSProperty GRID = new CSSPropertyFree (ECSSProperty.GRID);
   public static final ICSSProperty GRID_AREA = new CSSPropertyFree (ECSSProperty.GRID_AREA);
   public static final ICSSProperty GRID_AUTO_COLUMNS = new CSSPropertyFree (ECSSProperty.GRID_AUTO_COLUMNS);
   public static final ICSSProperty GRID_AUTO_FLOW = new CSSPropertyFree (ECSSProperty.GRID_AUTO_FLOW);
+  public static final ICSSProperty GRID_AUTO_POSITION = new CSSPropertyFree (ECSSProperty.GRID_AUTO_POSITION);
   public static final ICSSProperty GRID_AUTO_ROWS = new CSSPropertyFree (ECSSProperty.GRID_AUTO_ROWS);
-  public static final ICSSProperty GRID_BEFORE = new CSSPropertyFree (ECSSProperty.GRID_BEFORE);
   public static final ICSSProperty GRID_COLUMN = new CSSPropertyFree (ECSSProperty.GRID_COLUMN);
+  public static final ICSSProperty GRID_COLUMN_END = new CSSPropertyFree (ECSSProperty.GRID_COLUMN_END);
+  public static final ICSSProperty GRID_COLUMN_START = new CSSPropertyFree (ECSSProperty.GRID_COLUMN_START);
   @Deprecated
   public static final ICSSProperty GRID_COLUMNS = new CSSPropertyFree (ECSSProperty.GRID_COLUMNS);
-  public static final ICSSProperty GRID_DEFINITION_COLUMNS = new CSSPropertyFree (ECSSProperty.GRID_DEFINITION_COLUMNS);
-  public static final ICSSProperty GRID_DEFINITION_ROWS = new CSSPropertyFree (ECSSProperty.GRID_DEFINITION_ROWS);
-  public static final ICSSProperty GRID_END = new CSSPropertyFree (ECSSProperty.GRID_END);
   public static final ICSSProperty GRID_ROW = new CSSPropertyFree (ECSSProperty.GRID_ROW);
+  public static final ICSSProperty GRID_ROW_END = new CSSPropertyFree (ECSSProperty.GRID_ROW_END);
+  public static final ICSSProperty GRID_ROW_START = new CSSPropertyFree (ECSSProperty.GRID_ROW_START);
   @Deprecated
   public static final ICSSProperty GRID_ROWS = new CSSPropertyFree (ECSSProperty.GRID_ROWS);
-  public static final ICSSProperty GRID_START = new CSSPropertyFree (ECSSProperty.GRID_START);
   public static final ICSSProperty GRID_TEMPLATE = new CSSPropertyFree (ECSSProperty.GRID_TEMPLATE);
+  public static final ICSSProperty GRID_TEMPLATE_AREAS = new CSSPropertyFree (ECSSProperty.GRID_TEMPLATE_AREAS);
+  public static final ICSSProperty GRID_TEMPLATE_COLUMNS = new CSSPropertyFree (ECSSProperty.GRID_TEMPLATE_COLUMNS);
+  public static final ICSSProperty GRID_TEMPLATE_ROWS = new CSSPropertyFree (ECSSProperty.GRID_TEMPLATE_ROWS);
   public static final ICSSProperty HANGING_PUNCTUATION = new CSSPropertyFree (ECSSProperty.HANGING_PUNCTUATION);
   public static final ICSSProperty HYPHENS = new CSSPropertyFree (ECSSProperty.HYPHENS);
   public static final ICSSProperty ICON = new CSSPropertyFree (ECSSProperty.ICON);
