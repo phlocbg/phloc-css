@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>com.phloc</groupId>
+    <artifactId>parent-pom</artifactId>
+    <version>22.6</version>
+    <relativePath>../phloc-parent-pom/pom.xml</relativePath>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>phloc-css</artifactId>
+  <version>3.6.1</version>
+  <packaging>bundle</packaging>
+  <name>phloc-css</name>
+  <description>phloc CSS parser an other components</description>
+  <url>http://repo.phloc.com/apidocs/phloc-css/${project.version}</url>
+  
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+ 
+  <scm>
+    <url>http://code.google.com/p/phloc-css/source/browse/tags/phloc-css-3.6.1</url>
+    <connection>scm:svn:http://phloc-css.googlecode.com/svn/tags/phloc-css-3.6.1</connection>
+    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/tags/phloc-css-3.6.1</developerConnection>
+  </scm>
+  
+  <organization>
+    <name>phloc systems</name>
+    <url>http://www.phloc.com</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <id>philip</id>
+      <name>Philip Helger</name>
+      <email>ph(at)phloc.com</email>
+      <url>http://www.phloc.com</url>
+      <organization>phloc systems</organization>
+    </developer>
+    <developer>
+      <id>boris</id>
+      <name>Boris Gregorcic</name>
+      <email>bg(at)phloc.com</email>
+      <url>http://www.phloc.com</url>
+      <organization>phloc systems</organization>
+    </developer>
+  </developers>
+  
+  <repositories>
+    <repository>
+      <id>phloc.com</id>
+      <url>http://repo.phloc.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>phloc.com</id>
+      <url>http://repo.phloc.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>  
+
+  <distributionManagement>
+    <repository>
+      <id>repo.phloc.public</id>
+      <url>sftp://www.phloc.com/var/www/html-repo/maven2</url>
+    </repository>
+  </distributionManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-commons</artifactId>
+      <version>4.0.12</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-jdk5</artifactId>
+      <version>1.0.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>javacc-maven-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>jjtree-javacc</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <jdkVersion>1.5</jdkVersion>
+          <javadocFriendlyComments>true</javadocFriendlyComments>
+          <userCharStream>true</userCharStream>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package>com.phloc.css.*</Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>src/test/resources/css/**</exclude>
+            <exclude>src/test/resources/css30/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
