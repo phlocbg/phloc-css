@@ -25,6 +25,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 
 /**
  * CSS property that is a list of enumeration entries (e.g. border-style)
@@ -41,7 +42,16 @@ public class CSSPropertyEnums extends CSSPropertyEnum
                            @Nonnegative final int nMaxNumbers,
                            @Nonnull @Nonempty final String... aEnumValues)
   {
-    super (eProp, aEnumValues);
+    this (eProp, null, nMinNumbers, nMaxNumbers, aEnumValues);
+  }
+
+  public CSSPropertyEnums (@Nonnull final ECSSProperty eProp,
+                           @Nullable final ICSSPropertyCustomizer aCustomizer,
+                           @Nonnegative final int nMinNumbers,
+                           @Nonnegative final int nMaxNumbers,
+                           @Nonnull @Nonempty final String... aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
     if (nMinNumbers < 0)
       throw new IllegalArgumentException ("minNumbers: " + nMinNumbers);
     if (nMaxNumbers < 0 || nMaxNumbers < nMinNumbers)
@@ -55,7 +65,16 @@ public class CSSPropertyEnums extends CSSPropertyEnum
                            @Nonnegative final int nMaxNumbers,
                            @Nonnull @Nonempty final Iterable <String> aEnumValues)
   {
-    super (eProp, aEnumValues);
+    this (eProp, null, nMinNumbers, nMaxNumbers, aEnumValues);
+  }
+
+  public CSSPropertyEnums (@Nonnull final ECSSProperty eProp,
+                           @Nullable final ICSSPropertyCustomizer aCustomizer,
+                           @Nonnegative final int nMinNumbers,
+                           @Nonnegative final int nMaxNumbers,
+                           @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
     if (nMinNumbers < 0)
       throw new IllegalArgumentException ("minNumbers: " + nMinNumbers);
     if (nMaxNumbers < 0 || nMaxNumbers < nMinNumbers)
@@ -86,7 +105,7 @@ public class CSSPropertyEnums extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnums getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnums (eProp, m_nMinNumbers, m_nMaxNumbers, directGetEnumValues ());
+    return new CSSPropertyEnums (eProp, getCustomizer (), m_nMinNumbers, m_nMaxNumbers, directGetEnumValues ());
   }
 
   @Override

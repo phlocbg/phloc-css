@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 import com.phloc.css.utils.CSSURLHelper;
 
 /**
@@ -37,9 +38,23 @@ public class CSSPropertyEnumOrURL extends CSSPropertyEnum
     super (eProp, aEnumValues);
   }
 
+  public CSSPropertyEnumOrURL (@Nonnull final ECSSProperty eProp,
+                               @Nullable final ICSSPropertyCustomizer aCustomizer,
+                               @Nonnull @Nonempty final String... aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
+  }
+
   public CSSPropertyEnumOrURL (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final Iterable <String> aEnumValues)
   {
     super (eProp, aEnumValues);
+  }
+
+  public CSSPropertyEnumOrURL (@Nonnull final ECSSProperty eProp,
+                               @Nullable final ICSSPropertyCustomizer aCustomizer,
+                               @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
   }
 
   @Override
@@ -53,6 +68,6 @@ public class CSSPropertyEnumOrURL extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnumOrURL getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrURL (eProp, directGetEnumValues ());
+    return new CSSPropertyEnumOrURL (eProp, getCustomizer (), directGetEnumValues ());
   }
 }

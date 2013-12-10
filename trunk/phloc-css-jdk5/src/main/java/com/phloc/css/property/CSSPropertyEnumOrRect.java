@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 import com.phloc.css.utils.CSSRectHelper;
 
 /**
@@ -37,9 +38,23 @@ public class CSSPropertyEnumOrRect extends CSSPropertyEnum
   }
 
   public CSSPropertyEnumOrRect (@Nonnull final ECSSProperty eProp,
+                                @Nullable final ICSSPropertyCustomizer aCustomizer,
+                                @Nonnull @Nonempty final String... aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
+  }
+
+  public CSSPropertyEnumOrRect (@Nonnull final ECSSProperty eProp,
                                 @Nonnull @Nonempty final Iterable <String> aEnumValues)
   {
     super (eProp, aEnumValues);
+  }
+
+  public CSSPropertyEnumOrRect (@Nonnull final ECSSProperty eProp,
+                                @Nullable final ICSSPropertyCustomizer aCustomizer,
+                                @Nonnull @Nonempty final Iterable <String> aEnumValues)
+  {
+    super (eProp, aCustomizer, aEnumValues);
   }
 
   @Override
@@ -53,6 +68,6 @@ public class CSSPropertyEnumOrRect extends CSSPropertyEnum
   @Nonnull
   public CSSPropertyEnumOrRect getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyEnumOrRect (eProp, directGetEnumValues ());
+    return new CSSPropertyEnumOrRect (eProp, getCustomizer (), directGetEnumValues ());
   }
 }

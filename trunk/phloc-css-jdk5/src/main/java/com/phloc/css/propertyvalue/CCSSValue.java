@@ -58,6 +58,10 @@ public final class CCSSValue
   public static final String PREFIX_HSLA_OPEN = PREFIX_HSLA + '(';
   public static final String SUFFIX_HSLA_CLOSE = ")";
 
+  public static final String PREFIX_VAR = "var";
+  public static final String PREFIX_VAR_OPEN = PREFIX_VAR + '(';
+  public static final String SUFFIX_VAR_CLOSE = ")";
+
   public static final int HEXVALUE_LENGTH = 7;
   public static final char PREFIX_HEX = '#';
 

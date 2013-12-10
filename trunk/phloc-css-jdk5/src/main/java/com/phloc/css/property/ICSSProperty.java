@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.ICSSVersionAware;
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 import com.phloc.css.propertyvalue.ICSSValue;
 import com.phloc.css.utils.ICSSNamedColor;
 
@@ -41,6 +42,13 @@ public interface ICSSProperty extends ICSSVersionAware, Serializable
    */
   @Nonnull
   ECSSProperty getProp ();
+
+  /**
+   * @return The CSS customizer assigned to this property. May be
+   *         <code>null</code>.
+   */
+  @Nullable
+  ICSSPropertyCustomizer getCustomizer ();
 
   /**
    * Check if the passed value is valid for this property according to the

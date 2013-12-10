@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 import com.phloc.css.utils.CSSColorHelper;
 
 /**
@@ -32,7 +33,12 @@ public class CSSPropertyColor extends AbstractCSSProperty
 {
   public CSSPropertyColor (@Nonnull final ECSSProperty eProp)
   {
-    super (eProp);
+    this (eProp, null);
+  }
+
+  public CSSPropertyColor (@Nonnull final ECSSProperty eProp, @Nullable final ICSSPropertyCustomizer aCustomizer)
+  {
+    super (eProp, aCustomizer);
   }
 
   public static boolean isValidPropertyValue (@Nullable final String sValue)
@@ -50,6 +56,6 @@ public class CSSPropertyColor extends AbstractCSSProperty
   @Nonnull
   public CSSPropertyColor getClone (@Nonnull final ECSSProperty eProp)
   {
-    return new CSSPropertyColor (eProp);
+    return new CSSPropertyColor (eProp, getCustomizer ());
   }
 }
