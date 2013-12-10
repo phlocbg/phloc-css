@@ -446,7 +446,6 @@ public final class CCSSProperties
   public static final ICSSProperty BREAK_AFTER = new CSSPropertyFree (ECSSProperty.BREAK_AFTER);
   public static final ICSSProperty BREAK_BEFORE = new CSSPropertyFree (ECSSProperty.BREAK_BEFORE);
   public static final ICSSProperty BREAK_INSIDE = new CSSPropertyFree (ECSSProperty.BREAK_INSIDE);
-  public static final ICSSProperty CLIPPATH = new CSSPropertyFree (ECSSProperty.CLIPPATH);
   public static final ICSSProperty CLIP_PATH = new CSSPropertyFree (ECSSProperty.CLIP_PATH);
   public static final ICSSProperty CLIP_RULE = new CSSPropertyFree (ECSSProperty.CLIP_RULE);
   public static final ICSSProperty COLOR_INTERPOLATION_FILTERS = new CSSPropertyFree (ECSSProperty.COLOR_INTERPOLATION_FILTERS);
@@ -597,6 +596,9 @@ public final class CCSSProperties
   public static final ICSSProperty RUBY_OVERHANG = new CSSPropertyFree (ECSSProperty.RUBY_OVERHANG);
   public static final ICSSProperty RUBY_POSITION = new CSSPropertyFree (ECSSProperty.RUBY_POSITION);
   public static final ICSSProperty RUBY_SPAN = new CSSPropertyFree (ECSSProperty.RUBY_SPAN);
+  public static final ICSSProperty SHAPE_OUTSIDE = new CSSPropertyFree (ECSSProperty.SHAPE_OUTSIDE);
+  public static final ICSSProperty SHAPE_IMAGE_THRESHOLD = new CSSPropertyFree (ECSSProperty.SHAPE_IMAGE_THRESHOLD);
+  public static final ICSSProperty SHAPE_MARGIN = new CSSPropertyFree (ECSSProperty.SHAPE_MARGIN);
   public static final ICSSProperty SPEAK = new CSSPropertyFree (ECSSProperty.SPEAK);
   public static final ICSSProperty SPEAK_AS = new CSSPropertyFree (ECSSProperty.SPEAK_AS);
   public static final ICSSProperty SPEAK_NUMERAL = new CSSPropertyFree (ECSSProperty.SPEAK_NUMERAL);
