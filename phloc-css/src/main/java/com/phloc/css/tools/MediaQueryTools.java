@@ -71,18 +71,42 @@ public final class MediaQueryTools
   }
 
   /**
-   * Check if the passed CSS can be wrapped in an external media rule. It is not
-   * possible, if a CSS already contains other media rules, as nested media
-   * rules are not allowed.
+   * Check if the passed CSS can be wrapped in an external media rule. This
+   * method is now deprecated because nested media queries are now allowed.
    * 
    * @param aCSS
-   *        The CSS to be checked for wrapping.
+   *        The CSS to be checked for wrapping. May be <code>null</code>.
    * @return <code>true</code> if the CSS can be wrapped, <code>false</code> if
    *         it can't be wrapped.
    */
+  @Deprecated
   public static boolean canWrapInMediaQuery (@Nullable final CascadingStyleSheet aCSS)
   {
-    return aCSS != null && !aCSS.hasMediaRules ();
+    // false was the previous handling
+    return canWrapInMediaQuery (aCSS, false);
+  }
+
+  /**
+   * Check if the passed CSS can be wrapped in an external media rule.
+   * 
+   * @param aCSS
+   *        The CSS to be checked for wrapping. May be <code>null</code>.
+   * @param bAllowNestedMediaQueries
+   *        if <code>true</code> nested media queries are allowed,
+   *        <code>false</code> if they are prohibited.
+   * @return <code>true</code> if the CSS can be wrapped, <code>false</code> if
+   *         it can't be wrapped.
+   */
+  public static boolean canWrapInMediaQuery (@Nullable final CascadingStyleSheet aCSS,
+                                             final boolean bAllowNestedMediaQueries)
+  {
+    if (aCSS == null)
+      return false;
+    if (bAllowNestedMediaQueries)
+      return true;
+    // Nested media queries are not allowed, therefore wrapping can only take
+    // place if no other media queries are present
+    return !aCSS.hasMediaRules ();
   }
 
   /**
@@ -97,10 +121,34 @@ public final class MediaQueryTools
    *         {@link CascadingStyleSheet} object otherwise.
    */
   @Nullable
+  @Deprecated
   public static CascadingStyleSheet getWrappedInMediaQuery (@Nonnull final CascadingStyleSheet aCSS,
                                                             @Nonnull final CSSMediaQuery aMediaQuery)
   {
-    return getWrappedInMediaQuery (aCSS, ContainerHelper.newList (aMediaQuery));
+    // false was the old default value
+    return getWrappedInMediaQuery (aCSS, aMediaQuery, false);
+  }
+
+  /**
+   * Get the CSS wrapped in the specified media query. Note: all existing rule
+   * objects are reused, so modifying them also modifies the original CSS!
+   * 
+   * @param aCSS
+   *        The CSS to be wrapped. May not be <code>null</code>.
+   * @param aMediaQuery
+   *        The media query to use.
+   * @param bAllowNestedMediaQueries
+   *        if <code>true</code> nested media queries are allowed,
+   *        <code>false</code> if they are prohibited.
+   * @return <code>null</code> if out CSS cannot be wrapped, the newly created
+   *         {@link CascadingStyleSheet} object otherwise.
+   */
+  @Nullable
+  public static CascadingStyleSheet getWrappedInMediaQuery (@Nonnull final CascadingStyleSheet aCSS,
+                                                            @Nonnull final CSSMediaQuery aMediaQuery,
+                                                            final boolean bAllowNestedMediaQueries)
+  {
+    return getWrappedInMediaQuery (aCSS, ContainerHelper.newList (aMediaQuery), bAllowNestedMediaQueries);
   }
 
   /**
@@ -116,15 +164,40 @@ public final class MediaQueryTools
    *         {@link CascadingStyleSheet} object otherwise.
    */
   @Nullable
+  @Deprecated
   public static CascadingStyleSheet getWrappedInMediaQuery (@Nonnull final CascadingStyleSheet aCSS,
                                                             @Nonnull @Nonempty final List <CSSMediaQuery> aMediaQueries)
+  {
+    // false was the old default value
+    return getWrappedInMediaQuery (aCSS, aMediaQueries, false);
+  }
+
+  /**
+   * Get the CSS wrapped in the specified media query. Note: all existing rule
+   * objects are reused, so modifying them also modifies the original CSS!
+   * 
+   * @param aCSS
+   *        The CSS to be wrapped. May not be <code>null</code>.
+   * @param aMediaQueries
+   *        The media queries to use. May neither be <code>null</code> nor empty
+   *        nor may it contain <code>null</code> elements.
+   * @param bAllowNestedMediaQueries
+   *        if <code>true</code> nested media queries are allowed,
+   *        <code>false</code> if they are prohibited.
+   * @return <code>null</code> if out CSS cannot be wrapped, the newly created
+   *         {@link CascadingStyleSheet} object otherwise.
+   */
+  @Nullable
+  public static CascadingStyleSheet getWrappedInMediaQuery (@Nonnull final CascadingStyleSheet aCSS,
+                                                            @Nonnull @Nonempty final Iterable <? extends CSSMediaQuery> aMediaQueries,
+                                                            final boolean bAllowNestedMediaQueries)
   {
     if (aCSS == null)
       throw new NullPointerException ("CSS");
     if (ContainerHelper.isEmpty (aMediaQueries))
       throw new IllegalArgumentException ("no mediaQueries present");
 
-    if (!canWrapInMediaQuery (aCSS))
+    if (!canWrapInMediaQuery (aCSS, bAllowNestedMediaQueries))
       return null;
 
     final CascadingStyleSheet ret = new CascadingStyleSheet ();
@@ -151,13 +224,16 @@ public final class MediaQueryTools
     for (final CSSNamespaceRule aNamespaceRule : aCSS.getAllNamespaceRules ())
       ret.addNamespaceRule (aNamespaceRule);
 
-    // Create a single top-level media rule and add the existing top-level rules
+    // Create a single top-level media rule ...
     // into this media rule
     final CSSMediaRule aNewMediaRule = new CSSMediaRule ();
     for (final CSSMediaQuery aMediaQuery : aMediaQueries)
       aNewMediaRule.addMediaQuery (aMediaQuery);
+    // ... and add the existing top-level rules into this media rule
     for (final ICSSTopLevelRule aRule : aCSS.getAllRules ())
       aNewMediaRule.addRule (aRule);
+
+    // Finally add the resulting media rule into the new CSS
     ret.addRule (aNewMediaRule);
 
     return ret;

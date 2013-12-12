@@ -56,7 +56,7 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
 
   /**
    * @return <code>true</code> if this import rule has any specific media
-   *         queries, to which it belongs.
+   *         queries, to which it belongs, <code>false</code> if not.
    */
   public boolean hasMediaQueries ()
   {
