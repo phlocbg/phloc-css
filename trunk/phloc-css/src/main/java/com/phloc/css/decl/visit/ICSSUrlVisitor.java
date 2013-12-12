@@ -40,8 +40,8 @@ public interface ICSSUrlVisitor
   void begin ();
 
   /**
-   * Called on CSS import statement - rarely used :). Use
-   * <code>aImportRule.getLocation()</code> to retrieve the imported URL.
+   * Called on CSS import statement. Use <code>aImportRule.getLocation()</code>
+   * to retrieve the imported URL.
    * 
    * @param aImportRule
    *        Other imported CSS. Never <code>null</code>.

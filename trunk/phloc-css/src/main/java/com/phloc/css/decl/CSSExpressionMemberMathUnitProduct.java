@@ -31,7 +31,7 @@ import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a CSS calc element
+ * Part of a CSS calc element
  * 
  * @author Philip Helger
  */

@@ -72,7 +72,8 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
-   * Add a new <code>@import</code> rule at the end.
+   * Add a new <code>@import</code> rule at the end of the <code>@import</code>
+   * rule list.
    * 
    * @param aImportRule
    *        The import rule to add. May not be <code>null</code>.
@@ -85,10 +86,11 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
-   * Add a new <code>@import</code> rule at a specified index.
+   * Add a new <code>@import</code> rule at a specified index of the
+   * <code>@import</code> rule list.
    * 
    * @param nIndex
-   *        The index where the rule should be added.
+   *        The index where the rule should be added. Must be &ge; 0.
    * @param aImportRule
    *        The import rule to add. May not be <code>null</code>.
    * @throws ArrayIndexOutOfBoundsException
@@ -106,7 +108,8 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
    * 
    * @param aImportRule
    *        The import rule to be removed. May be <code>null</code>.
-   * @return {@link EChange#CHANGED} if removal was successful.
+   * @return {@link EChange#CHANGED} if removal was successful,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
    */
   @Nonnull
   public EChange removeImportRule (@Nullable final CSSImportRule aImportRule)
@@ -118,8 +121,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
    * Remove the <code>@import</code> rule at the specified index.
    * 
    * @param nImportRuleIndex
-   *        The index to be removed.
-   * @return {@link EChange#CHANGED} if removal was successful.
+   *        The index to be removed. Should be &ge; 0.
+   * @return {@link EChange#CHANGED} if removal was successful,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
    */
   @Nonnull
   public EChange removeImportRule (@Nonnegative final int nImportRuleIndex)
@@ -161,7 +165,8 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
-   * Add a new <code>@namespace</code> rule at the end.
+   * Add a new <code>@namespace</code> rule at the end of the
+   * <code>@namespace</code> rule list.
    * 
    * @param aNamespaceRule
    *        The namespace rule to be added. May not be <code>null</code>.
@@ -174,7 +179,8 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
-   * Add a new <code>@namespace</code> rule at the specified index.
+   * Add a new <code>@namespace</code> rule at the specified index of the
+   * <code>@namespace</code> rule list.
    * 
    * @param nIndex
    *        The index where the rule should be added.
@@ -194,7 +200,8 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
    * @param aNamespaceRule
    *        The namespace rule to be removed. May be <code>null</code>.
    * @return {@link EChange#CHANGED} if the namespace rule was successfully
-   *         removed
+   *         removed, {@link EChange#UNCHANGED} otherwise. Never
+   *         <code>null</code>.
    */
   @Nonnull
   public EChange removeNamespaceRule (@Nullable final CSSNamespaceRule aNamespaceRule)
@@ -206,9 +213,10 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
    * Remove the <code>@namespace</code> rule at the specified index.
    * 
    * @param nNamespaceRuleIndex
-   *        The index to be removed.
+   *        The index to be removed. Should be &ge; 0.
    * @return {@link EChange#CHANGED} if the namespace rule was successfully
-   *         removed
+   *         removed, {@link EChange#UNCHANGED} otherwise. Never
+   *         <code>null</code>.
    */
   @Nonnull
   public EChange removeNamespaceRule (@Nonnegative final int nNamespaceRuleIndex)
@@ -231,8 +239,8 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
-   * Check if any top-level rule is present. This method only considers
-   * top-level rules and not import and namespace rules!
+   * Check if any top-level rule. This method only considers top-level rules and
+   * not <code>@import</code> and <code>@namespace</code> rules!
    * 
    * @return <code>true</code> if at least one top-level rule is present,
    *         <code>false</code> if otherwise.
@@ -243,6 +251,10 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get the number of total contained top-level rules. This method only
+   * considers top-level rules and not <code>@import</code> and
+   * <code>@namespace</code> rules!
+   * 
    * @return The number of total contained top-level rules. Always &ge; 0.
    */
   @Nonnegative
@@ -252,7 +264,8 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
-   * Add a new top-level rule at the end.
+   * Add a new top-level rule at the end. This method only considers top-level
+   * rules and not <code>@import</code> and <code>@namespace</code> rules!
    * 
    * @param aRule
    *        The rule to be added. May not be <code>null</code>.
@@ -265,7 +278,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
-   * Add a new top-level rule at the specified index.
+   * Add a new top-level rule at the specified index. This method only considers
+   * top-level rules and not <code>@import</code> and <code>@namespace</code>
+   * rules!
    * 
    * @param nIndex
    *        The index where the top-level rule should be added. Must be &ge; 0.
@@ -280,11 +295,13 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
-   * Remove the specified top-level rule.
+   * Remove the specified top-level rule. This method only considers top-level
+   * rules and not <code>@import</code> and <code>@namespace</code> rules!
    * 
    * @param aRule
    *        The rule to be removed. May be <code>null</code>.
-   * @return {@link EChange#CHANGED} if the rule was successfully removed.
+   * @return {@link EChange#CHANGED} if the rule was successfully removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
    */
   @Nonnull
   public EChange removeRule (@Nullable final ICSSTopLevelRule aRule)
@@ -293,12 +310,15 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
-   * Remove the rule at the specified index.
+   * Remove the rule at the specified index. This method only considers
+   * top-level rules and not <code>@import</code> and <code>@namespace</code>
+   * rules!
    * 
    * @param nRuleIndex
-   *        The index of the rule to be removed.
+   *        The index of the rule to be removed. Should be &ge; 0.
    * @return {@link EChange#CHANGED} if the rule at the specified index was
-   *         successfully removed
+   *         successfully removed, {@link EChange#UNCHANGED} otherwise. Never
+   *         <code>null</code>.
    */
   @Nonnull
   public EChange removeRule (@Nonnegative final int nRuleIndex)
@@ -310,6 +330,10 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get a copy of all contained top-level rules. This method only considers
+   * top-level rules and not <code>@import</code> and <code>@namespace</code>
+   * rules!
+   * 
    * @return A copy of all contained top-level rules. Never <code>null</code>.
    */
   @Nonnull
@@ -320,6 +344,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Check if at least one of the top-level rules is a style rule (implementing
+   * {@link CSSStyleRule}).
+   * 
    * @return <code>true</code> if at least one style rule is contained,
    *         <code>false</code> otherwise.
    */
@@ -332,6 +359,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get the number of top-level rules that are style rules (implementing
+   * {@link CSSStyleRule}).
+   * 
    * @return The number of contained style rules. Always &ge; 0.
    */
   @Nonnegative
@@ -345,6 +375,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get a list of all top-level rules that are style rules (implementing
+   * {@link CSSStyleRule}).
+   * 
    * @return A copy of all contained style rules. Never <code>null</code>.
    */
   @Nonnull
@@ -359,6 +392,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Check if at least one of the top-level rules is a page rule (implementing
+   * {@link CSSPageRule}).
+   * 
    * @return <code>true</code> if at least one <code>@page</code> rule is
    *         contained, <code>false</code> otherwise.
    */
@@ -371,6 +407,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get the number of top-level rules that are page rules (implementing
+   * {@link CSSPageRule}).
+   * 
    * @return The number of contained <code>@page</code> rules. Always &ge; 0.
    */
   @Nonnegative
@@ -384,6 +423,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get a list of all top-level rules that are page rules (implementing
+   * {@link CSSPageRule}).
+   * 
    * @return A copy of all contained <code>@page</code> rules. Never
    *         <code>null</code>.
    */
@@ -399,6 +441,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Check if at least one of the top-level rules is a media rule (implementing
+   * {@link CSSMediaRule}).
+   * 
    * @return <code>true</code> if at least one <code>@media</code> rule is
    *         contained, <code>false</code> otherwise.
    */
@@ -411,6 +456,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get the number of top-level rules that are media rules (implementing
+   * {@link CSSMediaRule}).
+   * 
    * @return The number of contained <code>@media</code> rules. Always &ge; 0.
    */
   @Nonnegative
@@ -424,6 +472,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get a list of all top-level rules that are media rules (implementing
+   * {@link CSSMediaRule}).
+   * 
    * @return A copy of all contained <code>@media</code> rules. Never
    *         <code>null</code>.
    */
@@ -439,6 +490,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Check if at least one of the top-level rules is a font-face rule
+   * (implementing {@link CSSFontFaceRule}).
+   * 
    * @return <code>true</code> if at least one <code>@font-face</code> rule is
    *         contained, <code>false</code> otherwise.
    */
@@ -451,6 +505,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get the number of top-level rules that are font-face rules (implementing
+   * {@link CSSFontFaceRule}).
+   * 
    * @return The number of contained <code>@font-face</code> rules. Always &ge;
    *         0.
    */
@@ -465,6 +522,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get a list of all top-level rules that are font-face rules (implementing
+   * {@link CSSFontFaceRule}).
+   * 
    * @return A copy of all contained <code>@font-face</code> rules. Never
    *         <code>null</code>.
    */
@@ -480,6 +540,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Check if at least one of the top-level rules is a keyframes rule
+   * (implementing {@link CSSKeyframesRule}).
+   * 
    * @return <code>true</code> if at least one <code>@keyframes</code> rule is
    *         contained, <code>false</code> otherwise.
    */
@@ -492,6 +555,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get the number of top-level rules that are keyframes rules (implementing
+   * {@link CSSKeyframesRule}).
+   * 
    * @return The number of contained <code>@keyframes</code> rules. Always &ge;
    *         0.
    */
@@ -506,6 +572,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get a list of all top-level rules that are keyframes rules (implementing
+   * {@link CSSKeyframesRule}).
+   * 
    * @return A copy of all contained <code>@keyframes</code> rules. Never
    *         <code>null</code>.
    */
@@ -521,6 +590,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Check if at least one of the top-level rules is a viewport rule
+   * (implementing {@link CSSViewportRule}).
+   * 
    * @return <code>true</code> if at least one <code>@viewport</code> rule is
    *         contained, <code>false</code> otherwise.
    */
@@ -533,6 +605,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get the number of top-level rules that are viewport rules (implementing
+   * {@link CSSViewportRule}).
+   * 
    * @return The number of contained <code>@viewport</code> rules. Always &ge;
    *         0.
    */
@@ -547,6 +622,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get a list of all top-level rules that are viewport rules (implementing
+   * {@link CSSViewportRule}).
+   * 
    * @return A copy of all contained <code>@viewport</code> rules. Never
    *         <code>null</code>.
    */
@@ -562,6 +640,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Check if at least one of the top-level rules is a supports rule
+   * (implementing {@link CSSSupportsRule}).
+   * 
    * @return <code>true</code> if at least one <code>@supports</code> rule is
    *         contained, <code>false</code> otherwise.
    */
@@ -574,6 +655,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get the number of top-level rules that are support rules (implementing
+   * {@link CSSSupportsRule}).
+   * 
    * @return The number of contained <code>@supports</code> rules. Always &ge;
    *         0.
    */
@@ -588,6 +672,9 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Get a list of all top-level rules that are support rules (implementing
+   * {@link CSSSupportsRule}).
+   * 
    * @return A copy of all contained <code>@supports</code> rules. Never
    *         <code>null</code>.
    */
@@ -602,6 +689,12 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
     return ret;
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

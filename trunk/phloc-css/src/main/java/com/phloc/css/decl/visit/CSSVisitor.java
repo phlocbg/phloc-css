@@ -48,6 +48,42 @@ public final class CSSVisitor
   private CSSVisitor ()
   {}
 
+  /**
+   * Visit all elements of a single import rule.
+   * 
+   * @param aImportRule
+   *        The import rule to visit. May not be <code>null</code>.
+   * @param aVisitor
+   *        The visitor to use. May not be <code>null</code>.
+   */
+  public static void visitImportRule (@Nonnull final CSSImportRule aImportRule, @Nonnull final ICSSVisitor aVisitor)
+  {
+    aVisitor.onImport (aImportRule);
+  }
+
+  /**
+   * Visit all elements of a single namespace rule.
+   * 
+   * @param aNamespaceRule
+   *        The namespace rule to visit. May not be <code>null</code>.
+   * @param aVisitor
+   *        The visitor to use. May not be <code>null</code>.
+   */
+  public static void visitNamespaceRule (@Nonnull final CSSNamespaceRule aNamespaceRule,
+                                         @Nonnull final ICSSVisitor aVisitor)
+  {
+    aVisitor.onNamespace (aNamespaceRule);
+  }
+
+  /**
+   * Visit all declarations contained in the passed declaration container.
+   * 
+   * @param aHasDeclarations
+   *        The declarations to be visited. May not be <code>null</code>.
+   * @param aVisitor
+   *        The visitor to be invoked on each declaration. May not be
+   *        <code>null</code>.
+   */
   public static void visitAllDeclarations (@Nonnull final IHasCSSDeclarations aHasDeclarations,
                                            @Nonnull final ICSSVisitor aVisitor)
   {
@@ -56,6 +92,14 @@ public final class CSSVisitor
       aVisitor.onDeclaration (aDeclaration);
   }
 
+  /**
+   * Visit all elements of a single style rule.
+   * 
+   * @param aStyleRule
+   *        The style rule to visit. May not be <code>null</code>.
+   * @param aVisitor
+   *        The visitor to use. May not be <code>null</code>.
+   */
   public static void visitStyleRule (@Nonnull final CSSStyleRule aStyleRule, @Nonnull final ICSSVisitor aVisitor)
   {
     aVisitor.onBeginStyleRule (aStyleRule);
@@ -74,6 +118,14 @@ public final class CSSVisitor
     }
   }
 
+  /**
+   * Visit all elements of a single page rule.
+   * 
+   * @param aPageRule
+   *        The page rule to visit. May not be <code>null</code>.
+   * @param aVisitor
+   *        The visitor to use. May not be <code>null</code>.
+   */
   public static void visitPageRule (@Nonnull final CSSPageRule aPageRule, @Nonnull final ICSSVisitor aVisitor)
   {
     aVisitor.onBeginPageRule (aPageRule);
@@ -88,6 +140,14 @@ public final class CSSVisitor
     }
   }
 
+  /**
+   * Visit all elements of a single font-face rule.
+   * 
+   * @param aFontFaceRule
+   *        The font-face rule to visit. May not be <code>null</code>.
+   * @param aVisitor
+   *        The visitor to use. May not be <code>null</code>.
+   */
   public static void visitFontFaceRule (@Nonnull final CSSFontFaceRule aFontFaceRule,
                                         @Nonnull final ICSSVisitor aVisitor)
   {
@@ -103,6 +163,14 @@ public final class CSSVisitor
     }
   }
 
+  /**
+   * Visit all elements of a single media rule.
+   * 
+   * @param aMediaRule
+   *        The media rule to visit. May not be <code>null</code>.
+   * @param aVisitor
+   *        The visitor to use. May not be <code>null</code>.
+   */
   public static void visitMediaRule (@Nonnull final CSSMediaRule aMediaRule, @Nonnull final ICSSVisitor aVisitor)
   {
     aVisitor.onBeginMediaRule (aMediaRule);
@@ -118,6 +186,14 @@ public final class CSSVisitor
     }
   }
 
+  /**
+   * Visit all elements of a single keyframes rule.
+   * 
+   * @param aKeyframesRule
+   *        The keyframes rule to visit. May not be <code>null</code>.
+   * @param aVisitor
+   *        The visitor to use. May not be <code>null</code>.
+   */
   public static void visitKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule,
                                          @Nonnull final ICSSVisitor aVisitor)
   {
@@ -145,6 +221,14 @@ public final class CSSVisitor
     }
   }
 
+  /**
+   * Visit all elements of a single viewport rule.
+   * 
+   * @param aViewportRule
+   *        The viewport rule to visit. May not be <code>null</code>.
+   * @param aVisitor
+   *        The visitor to use. May not be <code>null</code>.
+   */
   public static void visitViewportRule (@Nonnull final CSSViewportRule aViewportRule,
                                         @Nonnull final ICSSVisitor aVisitor)
   {
@@ -160,6 +244,14 @@ public final class CSSVisitor
     }
   }
 
+  /**
+   * Visit all elements of a single supports rule.
+   * 
+   * @param aSupportsRule
+   *        The supports rule to visit. May not be <code>null</code>.
+   * @param aVisitor
+   *        The visitor to use. May not be <code>null</code>.
+   */
   public static void visitSupportsRule (@Nonnull final CSSSupportsRule aSupportsRule,
                                         @Nonnull final ICSSVisitor aVisitor)
   {
@@ -176,12 +268,15 @@ public final class CSSVisitor
     }
   }
 
-  public static void visitNamespaceRule (@Nonnull final CSSNamespaceRule aNamespaceRule,
-                                         @Nonnull final ICSSVisitor aVisitor)
-  {
-    aVisitor.onNamespace (aNamespaceRule);
-  }
-
+  /**
+   * Visit all elements of a single top-level rule. This includes all rules
+   * except <code>@import</code> and <code>@namespace</code> rules.
+   * 
+   * @param aTopLevelRule
+   *        The top-level rule to visit. May not be <code>null</code>.
+   * @param aVisitor
+   *        The visitor to use. May not be <code>null</code>.
+   */
   public static void visitTopLevelRule (@Nonnull final ICSSTopLevelRule aTopLevelRule,
                                         @Nonnull final ICSSVisitor aVisitor)
   {
@@ -224,7 +319,9 @@ public final class CSSVisitor
   }
 
   /**
-   * Visit CSS elements in the order of their declaration.
+   * Visit all CSS elements in the order of their declaration. import rules come
+   * first, namespace rules come next and all other top-level rules in the order
+   * of their declration.
    * 
    * @param aCSS
    *        The CSS to visit. May not be <code>null</code>.
@@ -244,11 +341,11 @@ public final class CSSVisitor
     {
       // for all imports
       for (final CSSImportRule aImportRule : aCSS.getAllImportRules ())
-        aVisitor.onImport (aImportRule);
+        visitImportRule (aImportRule, aVisitor);
 
       // for all namespaces
       for (final CSSNamespaceRule aNamespaceRule : aCSS.getAllNamespaceRules ())
-        aVisitor.onNamespace (aNamespaceRule);
+        visitNamespaceRule (aNamespaceRule, aVisitor);
 
       // for all other top level rules
       for (final ICSSTopLevelRule aTopLevelRule : aCSS.getAllRules ())
@@ -261,12 +358,15 @@ public final class CSSVisitor
   }
 
   /**
-   * Visit all items that can contain URLs in CSS files.
+   * Visit all items that can contain URLs in CSS files. Therefore the special
+   * visitor class {@link CSSVisitorForUrl} is used.
    * 
    * @param aCSS
-   *        The CSS to visit.
+   *        The CSS to visit. May not be <code>null</code>.
    * @param aVisitor
-   *        The callback to invoke for each found occurrence.
+   *        The callback to invoke for each found occurrence. May not be
+   *        <code>null</code>.
+   * @see CSSVisitorForUrl
    */
   public static void visitCSSUrl (@Nonnull final CascadingStyleSheet aCSS, @Nonnull final ICSSUrlVisitor aVisitor)
   {
@@ -275,12 +375,14 @@ public final class CSSVisitor
   }
 
   /**
-   * Visit all items that can contain URLs in CSS files.
+   * Visit all items that can contain URLs in CSS files. Therefore the special
+   * visitor class {@link CSSVisitorForUrl} is used.
    * 
    * @param aCSS
-   *        The CSS to visit.
+   *        The CSS to visit. May not be <code>null</code>.
    * @param aVisitor
-   *        The callback to invoke for each found occurrence.
+   *        The callback to invoke for each found occurrence. May not be
+   *        <code>null</code>.
    */
   public static void visitAllDeclarationUrls (@Nonnull final IHasCSSDeclarations aCSS,
                                               @Nonnull final ICSSUrlVisitor aVisitor)

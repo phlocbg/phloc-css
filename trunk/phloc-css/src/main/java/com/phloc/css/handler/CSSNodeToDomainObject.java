@@ -77,7 +77,7 @@ import com.phloc.css.parser.ParseUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
- * This class converts the jjtree node to a domain object
+ * This class converts the jjtree node to a domain object.
  * 
  * @author Philip Helger
  */

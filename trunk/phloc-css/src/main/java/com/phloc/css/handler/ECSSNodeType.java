@@ -110,6 +110,16 @@ public enum ECSSNodeType
   private final int m_nParserType21;
   private final int m_nParserType30;
 
+  /**
+   * Constructor
+   * 
+   * @param nParserType21
+   *        The ID of the node in the 2.1 parser or {@link CGlobal#ILLEGAL_UINT}
+   *        if this node is not present in CSS 2.1.
+   * @param nParserType30
+   *        The ID of the node in the 3.0 parser or {@link CGlobal#ILLEGAL_UINT}
+   *        if this node is not present in CSS 3.0.
+   */
   private ECSSNodeType (final int nParserType21, final int nParserType30)
   {
     m_nParserType21 = nParserType21;
@@ -204,7 +214,7 @@ public enum ECSSNodeType
 
   @Nonnull
   @Nonempty
-  static String getDump (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
+  public static String getDump (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
   {
     final StringBuilder aSB = new StringBuilder ();
     _dumpRecursive (aParserNode, eVersion, aSB, "");
