@@ -94,7 +94,7 @@ public final class MediaQueryToolsTest
     final List <CSSMediaQuery> aMQs = MediaQueryTools.parseToMediaQuery ("screen", s_aCharset, s_eVersion);
     assertNotNull (aMQs);
 
-    final CascadingStyleSheet aWrappedCSS = MediaQueryTools.getWrappedInMediaQuery (aBaseCSS, aMQs);
+    final CascadingStyleSheet aWrappedCSS = MediaQueryTools.getWrappedInMediaQuery (aBaseCSS, aMQs, false);
     assertNotNull (aWrappedCSS);
     assertEquals ("@media screen{p{color:red;}}", new CSSWriter (s_eVersion, true).getCSSAsString (aWrappedCSS));
   }
