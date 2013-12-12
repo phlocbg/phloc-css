@@ -37,7 +37,7 @@ import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a CSS calc element
+ * Part of a CSS calc element
  * 
  * @author Philip Helger
  */
@@ -114,6 +114,12 @@ public final class CSSExpressionMemberMathProduct implements ICSSExpressionMathM
     return ECSSVersion.CSS30;
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

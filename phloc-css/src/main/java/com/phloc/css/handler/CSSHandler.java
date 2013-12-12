@@ -27,7 +27,8 @@ import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.parser.CSSNode;
 
 /**
- * This is the central class for reading and parsing CSS from an input stream.
+ * This class is the entry point for converting AST nodes from the parser to
+ * domain objects.
  * 
  * @author Philip Helger
  */

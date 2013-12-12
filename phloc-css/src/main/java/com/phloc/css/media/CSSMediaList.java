@@ -71,7 +71,7 @@ public final class CSSMediaList implements Serializable, IHasSize
    * Add a new medium to the list
    * 
    * @param eMedium
-   *        The medium to be added.
+   *        The medium to be added. MAy not be <code>null</code>.
    * @return <code>this</code>
    */
   @Nonnull
@@ -88,7 +88,7 @@ public final class CSSMediaList implements Serializable, IHasSize
    * 
    * @param eMedium
    *        The medium to be removed. May be <code>null</code>.
-   * @return {@link EChange}
+   * @return {@link EChange} and never <code>null</code>.
    */
   @Nonnull
   public EChange removeMedium (@Nullable final ECSSMedium eMedium)
@@ -97,7 +97,8 @@ public final class CSSMediaList implements Serializable, IHasSize
   }
 
   /**
-   * @return <code>true</code> if any explicit media is defined
+   * @return <code>true</code> if any explicit media is defined,
+   *         <code>false</code> if not.
    */
   public boolean hasAnyMedia ()
   {
@@ -105,7 +106,8 @@ public final class CSSMediaList implements Serializable, IHasSize
   }
 
   /**
-   * @return <code>true</code> if no explicit media is defined
+   * @return <code>true</code> if no explicit media is defined,
+   *         <code>false</code> if a media is defined.
    */
   public boolean hasNoMedia ()
   {
