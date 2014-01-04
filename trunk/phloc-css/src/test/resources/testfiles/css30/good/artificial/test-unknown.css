@@ -16,6 +16,9 @@
  * limitations under the License.
  */
 
+/* Ensure this is truly a 3.0 CSS :) */
+E ~ F {}
+
 @-moz-document { 
   #header-buttons ul ul{margin:1px 0 0 0 0 }
 }
