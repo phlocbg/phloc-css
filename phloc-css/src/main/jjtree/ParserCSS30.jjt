@@ -658,7 +658,15 @@ void elementName() #ElementName : {}
 void _class() #Class : {}
 {
   <DOT>
-  <IDENT> { jjtThis.setText ("." + token.image); }
+  ( <IDENT>    { jjtThis.setText ("." + token.image); }
+  | <INHERIT>  { jjtThis.setText ("." + token.image); }
+  | <AND_SYM>  { jjtThis.setText ("." + token.image); }
+  | <NOT_SYM>  { jjtThis.setText ("." + token.image); }
+  | <ONLY_SYM> { jjtThis.setText ("." + token.image); }
+  | <FROM_SYM> { jjtThis.setText ("." + token.image); }
+  | <TO_SYM>   { jjtThis.setText ("." + token.image); }
+  | <OR_SYM>   { jjtThis.setText ("." + token.image); }
+  )
 }
 
 void attrib() #Attrib :
@@ -942,7 +950,7 @@ void uri() #URI : {}
 }
 
 JAVACODE
-String javaSkipToClosingParantheses() {
+String javaSkipToClosingParantheses() #void {
   final StringBuilder aSB = new StringBuilder ();
   int nNesting = 1;
   while (true) {
@@ -976,7 +984,7 @@ void function() #Function :
   | <FUNCTION_EXPRESSION> { jjtThis.setText (token.image); }
     // get content of all skipped chars 
     sPlain = javaSkipToClosingParantheses() { jjtThis.appendText (sPlain); }
-  )  
+  )
 }
 
 void math() : {}

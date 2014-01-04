@@ -447,7 +447,8 @@ final class CSSNodeToDomainObject
         if (nChildChildren == 1)
         {
           // Parameters present
-          final CSSExpression aFuncExpr = _createExpression (aChildNode.jjtGetChild (0));
+          final CSSNode aFirstChild = aChildNode.jjtGetChild (0);
+          final CSSExpression aFuncExpr = _createExpression (aFirstChild);
           aFunc = new CSSExpressionMemberFunction (sFunctionName, aFuncExpr);
         }
         else

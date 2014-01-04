@@ -218,7 +218,10 @@ TOKEN :
                          ) ( <S> )* ")" >
   { matchedToken.image = ParseUtils.trimUrl(image); }
 
-// Extension for IE filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50); */
+// Expressions were abandoned after IE8                
+| < FUNCTION_EXPRESSION: "expression(" >
+// Extension for IE 
+//   filter: progid:DXImageTransform.Microsoft.Alpha(opacity=50);
 | < FUNCTION: <IDENT> "(" 
             | "progid" ( <S> )* ":" ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
   > { matchedToken.image = image.toString (); }
@@ -233,6 +236,7 @@ TOKEN :
 | < DASH: "|" >
 | < LSQUARE: "[" >
 | < RSQUARE: "]" >
+| < LROUND: "(" >
 | < RROUND: ")" >
 | < AT_UNKNOWN: "@" <IDENT> >
 }
@@ -576,7 +580,9 @@ void elementName() #ElementName : {}
 void _class() #Class : {}
 {
   <DOT>
-  <IDENT> { jjtThis.setText ("." + token.image); }
+  ( <IDENT>    { jjtThis.setText ("." + token.image); }
+  | <INHERIT>  { jjtThis.setText ("." + token.image); }
+  )
 }
 
 void attrib() #Attrib :
@@ -747,18 +753,42 @@ void uri() #URI : {}
   <URI>  { jjtThis.setText (token.image); } 
 }
 
+JAVACODE
+String javaSkipToClosingParantheses() #void {
+  final StringBuilder aSB = new StringBuilder ();
+  int nNesting = 1;
+  while (true) {
+    final Token tok = getNextToken();
+    aSB.append (tok.image);
+    if (tok.kind == LROUND) 
+      nNesting++;
+    else
+      if (tok.kind == RROUND) {
+        nNesting--;
+        if (nNesting == 0)
+          break;
+      }
+  }
+  return aSB.toString ();
+}
+
 //
 // function
 //   : FUNCTION S* expr ')'
 //   ;
 //
-void function() #Function : {}
+void function() #Function : 
+{ String sPlain; }
 {
-  <FUNCTION> { jjtThis.setText (token.image + ")"); }
-  ( <S> )*
-  // Support functions without parameters (e.g. "gray ()")
-  ( expr() )?
-  <RROUND>
+  ( <FUNCTION> { jjtThis.setText (token.image + ")"); }
+    ( <S> )*
+    // Support functions without parameters (e.g. "gray ()")
+    ( expr() )?
+    <RROUND>
+  | <FUNCTION_EXPRESSION> { jjtThis.setText (token.image); }
+    // get content of all skipped chars 
+    sPlain = javaSkipToClosingParantheses() { jjtThis.appendText (sPlain); }
+  )
 }
 
 String string() #void :

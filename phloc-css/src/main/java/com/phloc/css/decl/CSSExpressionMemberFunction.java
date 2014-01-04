@@ -105,7 +105,15 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     if (m_aExpression == null)
+    {
+      // No parameter expressions
+      if (m_sFunctionName.endsWith (")"))
+      {
+        // E.g. for special IE expression functions!
+        return m_sFunctionName;
+      }
       return m_sFunctionName + "()";
+    }
     return m_sFunctionName + "(" + m_aExpression.getAsCSSString (aSettings, nIndentLevel) + ")";
   }
 
