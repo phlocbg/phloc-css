@@ -1,0 +1,19 @@
+.ie6-expression
+  {
+  color: expression();
+  *zoom: expression(this.runtimeStyle [ 'zoom' ] = '1', this.innerHTML = ' - ' +
+     this.innerHTML);
+}
+
+.opacity
+{
+  /* opacity: always set all 3 values for cross-browser compatibility*/
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+  filter: alpha(opacity=70);
+  opacity: 0.70;
+}
+
+.color
+{
+  color: red();
+}

@@ -15,11 +15,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+@-moz-document { 
+  #header-buttons ul ul{margin:1px 0 0 0 0 }
+}
+
+@-moz-document anything else or whatever 4711 { 
+  #header-buttons ul ul{margin:1px 0 0 0 0 }
+}
+
+@-moz-document url-prefix(){ 
+  #header-buttons ul ul{margin:1px 0 0 0 0 }
+}
+
+@-moz-document expression(content is ignored){ 
+  #header-buttons ul ul{margin:1px 0 0 0 0 }
+}
+ 
 @three-dee {
-  @background-lighting {
+	@background-lighting {
+/* 
     azimuth: 30deg;
     elevation: 190deg;
+*/
   }
   h1 { color: red }
 }
 h1 { color: blue }
+
