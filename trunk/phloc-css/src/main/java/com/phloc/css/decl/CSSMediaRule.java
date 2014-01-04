@@ -43,7 +43,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
+public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
 {
   private final List <CSSMediaQuery> m_aMediaQueries = new ArrayList <CSSMediaQuery> ();
   private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();

@@ -690,6 +690,56 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   }
 
   /**
+   * Check if at least one of the top-level rules is an unknown rule
+   * (implementing {@link CSSUnknownRule}).
+   * 
+   * @return <code>true</code> if at least one unknown <code>@</code> rule is
+   *         contained, <code>false</code> otherwise.
+   */
+  public boolean hasUnknownRules ()
+  {
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSUnknownRule)
+        return true;
+    return false;
+  }
+
+  /**
+   * Get the number of top-level rules that are unknown rules (implementing
+   * {@link CSSUnknownRule}).
+   * 
+   * @return The number of contained unknown <code>@</code> rules. Always &ge;
+   *         0.
+   */
+  @Nonnegative
+  public int getUnknownRuleCount ()
+  {
+    int ret = 0;
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSUnknownRule)
+        ret++;
+    return ret;
+  }
+
+  /**
+   * Get a list of all top-level rules that are unknown rules (implementing
+   * {@link CSSUnknownRule}).
+   * 
+   * @return A copy of all contained unknown <code>@</code> rules. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSUnknownRule> getAllUnknownRules ()
+  {
+    final List <CSSUnknownRule> ret = new ArrayList <CSSUnknownRule> ();
+    for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+      if (aTopLevelRule instanceof CSSUnknownRule)
+        ret.add ((CSSUnknownRule) aTopLevelRule);
+    return ret;
+  }
+
+  /**
    * Set the source location of the object, determined while parsing.
    * 
    * @param aSourceLocation

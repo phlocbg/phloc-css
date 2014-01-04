@@ -106,6 +106,12 @@ public interface ICSSWriterSettings
   boolean isWriteSupportsRules ();
 
   /**
+   * @return <code>true</code> if unknown @ rules should be written,
+   *         <code>false</code> if not
+   */
+  boolean isWriteUnknownRules ();
+
+  /**
    * Check if the passed object matches the version requirements defined be this
    * settings.
    * 

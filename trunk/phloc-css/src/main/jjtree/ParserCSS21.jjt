@@ -238,7 +238,8 @@ TOKEN :
 | < RSQUARE: "]" >
 | < LROUND: "(" >
 | < RROUND: ")" >
-| < AT_UNKNOWN: "@" <IDENT> >
+| < AT_UNKNOWN: "@" <IDENT>
+              | "@-" <IDENT> >
 }
 
 <*> TOKEN:
@@ -323,11 +324,40 @@ void charsetRule() #Charset :
   <SEMICOLON>
 }
 
+String anyIdentifier() #void : {}
+{
+  ( <IDENT>    { return token.image; }
+  | <INHERIT>  { return token.image; }
+  )
+}
+
+void unknownRuleParameter() : 
+{ String sIdentifier; }
+{
+  ( function() 
+  | sIdentifier = anyIdentifier() { jjtThis.setText (sIdentifier); }
+  | <NUMBER>                      { jjtThis.setText (token.image); }
+  )
+  ( <S> )*
+}
+
+// Any unsupported rule - contains some heuristics what is allowed and what not
 void unknownRule() : {}
 {
-  <AT_UNKNOWN>
-  ( <~[";","}"]> )* 
-  <[";","}"]>
+  <AT_UNKNOWN> { jjtThis.setText (token.image); }
+  ( <S> )*
+  ( unknownRuleParameter() )*  
+  <LBRACE>
+  ( <S> )*
+  ( ( styleRule()
+    | mediaRule()
+    | pageRule()
+    | unknownRule()
+    | styleDeclarationBlock()
+    )
+    ( <S> )*
+  )*
+  <RBRACE>
 }
 
 //
@@ -577,12 +607,11 @@ void elementName() #ElementName : {}
   )
 }
 
-void _class() #Class : {}
+void _class() #Class : 
+{ String sIdentifier; }
 {
   <DOT>
-  ( <IDENT>    { jjtThis.setText ("." + token.image); }
-  | <INHERIT>  { jjtThis.setText ("." + token.image); }
-  )
+  sIdentifier = anyIdentifier() { jjtThis.setText ("." + sIdentifier); }
 }
 
 void attrib() #Attrib :

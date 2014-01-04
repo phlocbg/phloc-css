@@ -17,124 +17,61 @@
  */
 package com.phloc.css.decl;
 
-import java.util.List;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
-import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSSourceLocationAware;
-import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single <code>@viewport</code> rule.
+ * Represents a single <code>@</code> rule that is non-standard and/or
+ * unhandled.
  * 
  * @author Philip Helger
  */
 @NotThreadSafe
-public class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware
+public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
 {
   private final String m_sDeclaration;
-  private final CSSDeclarationContainer m_aDeclarations = new CSSDeclarationContainer ();
   private CSSSourceLocation m_aSourceLocation;
 
   public static boolean isValidDeclaration (@Nonnull @Nonempty final String sDeclaration)
   {
-    return StringHelper.startsWith (sDeclaration, '@') && StringHelper.endsWithIgnoreCase (sDeclaration, "viewport");
+    return StringHelper.startsWith (sDeclaration, '@');
   }
 
-  public CSSViewportRule (@Nonnull @Nonempty final String sDeclaration)
+  public CSSUnknownRule (@Nonnull @Nonempty final String sDeclaration)
   {
     if (!isValidDeclaration (sDeclaration))
       throw new IllegalArgumentException ("declaration");
     m_sDeclaration = sDeclaration;
   }
 
-  public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
-  {
-    m_aDeclarations.addDeclaration (aDeclaration);
-  }
-
-  public void addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
-  {
-    m_aDeclarations.addDeclaration (nIndex, aNewDeclaration);
-  }
-
-  @Nonnull
-  public EChange removeDeclaration (@Nonnull final CSSDeclaration aDeclaration)
-  {
-    return m_aDeclarations.removeDeclaration (aDeclaration);
-  }
-
-  @Nonnull
-  public EChange removeDeclaration (@Nonnegative final int nDeclarationIndex)
-  {
-    return m_aDeclarations.removeDeclaration (nDeclarationIndex);
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <CSSDeclaration> getAllDeclarations ()
-  {
-    return m_aDeclarations.getAllDeclarations ();
-  }
-
-  @Nullable
-  public CSSDeclaration getDeclarationAtIndex (@Nonnegative final int nIndex)
-  {
-    return m_aDeclarations.getDeclarationAtIndex (nIndex);
-  }
-
-  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
-  {
-    m_aDeclarations.setDeclarationAtIndex (nIndex, aNewDeclaration);
-  }
-
-  public boolean hasDeclarations ()
-  {
-    return m_aDeclarations.hasDeclarations ();
-  }
-
-  @Nonnegative
-  public int getDeclarationCount ()
-  {
-    return m_aDeclarations.getDeclarationCount ();
-  }
-
   @Nonnull
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
-    aSettings.checkVersionRequirements (this);
-
-    // Always ignore viewport rules?
-    if (!aSettings.isWriteViewportRules ())
+    // Always ignore unknown rules?
+    if (!aSettings.isWriteUnknownRules ())
       return "";
 
-    if (aSettings.isRemoveUnnecessaryCode () && !hasDeclarations ())
-      return "";
+    final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
 
     final StringBuilder aSB = new StringBuilder (m_sDeclaration);
-    aSB.append (m_aDeclarations.getAsCSSString (aSettings, nIndentLevel));
+    // TODO
+    aSB.append (bOptimizedOutput ? "{" : " {\n");
+    // TODO
+    aSB.append ('}');
     if (!aSettings.isOptimizedOutput ())
       aSB.append ('\n');
     return aSB.toString ();
-  }
-
-  @Nonnull
-  public ECSSVersion getMinimumCSSVersion ()
-  {
-    return ECSSVersion.CSS30;
   }
 
   /**
@@ -159,23 +96,22 @@ public class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSViewportRule))
+    if (!(o instanceof CSSUnknownRule))
       return false;
-    final CSSViewportRule rhs = (CSSViewportRule) o;
-    return m_sDeclaration.equals (rhs.m_sDeclaration) && m_aDeclarations.equals (rhs.m_aDeclarations);
+    final CSSUnknownRule rhs = (CSSUnknownRule) o;
+    return m_sDeclaration.equals (rhs.m_sDeclaration);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sDeclaration).append (m_aDeclarations).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sDeclaration).getHashCode ();
   }
 
   @Override
   public String toString ()
   {
     return new ToStringGenerator (this).append ("declaration", m_sDeclaration)
-                                       .append ("declarations", m_aDeclarations)
                                        .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }

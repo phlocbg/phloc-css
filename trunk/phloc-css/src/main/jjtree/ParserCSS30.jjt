@@ -412,7 +412,7 @@ void unknownRuleParameter() :
 // Any unsupported rule - contains some heuristics what is allowed and what not
 void unknownRule() : {}
 {
-  <AT_UNKNOWN>
+  <AT_UNKNOWN> { jjtThis.setText (token.image); }
   ( <S> )*
   ( unknownRuleParameter() )*  
   <LBRACE>
@@ -1152,7 +1152,7 @@ void singleKeyframeSelector() : {}
 
 void viewportRule() : {}
 {
-  <VIEWPORT_SYM> { jjtThis.setText (token.image); }    
+  <VIEWPORT_SYM> { jjtThis.setText (token.image); }
   ( <S> )*
   styleDeclarationBlock()
 }

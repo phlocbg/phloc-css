@@ -59,6 +59,7 @@ import com.phloc.css.decl.CSSSupportsConditionNegation;
 import com.phloc.css.decl.CSSSupportsConditionNested;
 import com.phloc.css.decl.CSSSupportsRule;
 import com.phloc.css.decl.CSSURI;
+import com.phloc.css.decl.CSSUnknownRule;
 import com.phloc.css.decl.CSSViewportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ECSSAttributeOperator;
@@ -1009,6 +1010,26 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
+  private CSSUnknownRule _createUnknownRule (@Nonnull final CSSNode aNode)
+  {
+    _expectNodeType (aNode, ECSSNodeType.UNKNOWNRULE);
+
+    // Get the name of the rule
+    final String sRuleDeclaration = aNode.getText ();
+
+    final CSSUnknownRule ret = new CSSUnknownRule (sRuleDeclaration);
+    ret.setSourceLocation (aNode.getSourceLocation ());
+
+    for (final CSSNode aChildNode : aNode)
+    {
+      // FIXME
+      if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+        s_aLogger.error ("Unsupported unknown-rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+    }
+    return ret;
+  }
+
+  @Nonnull
   public CascadingStyleSheet createCascadingStyleSheetFromNode (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.ROOT);
@@ -1053,7 +1074,7 @@ final class CSSNodeToDomainObject
                             // Unknown rule indicates either
                             // 1. a parsing error
                             // 2. a non-standard rule
-                            s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);
+                            ret.addRule (_createUnknownRule (aChildNode));
                           }
                           else
                             s_aLogger.error ("Unsupported child of " +

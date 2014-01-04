@@ -42,7 +42,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware
+public class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final String m_sPseudoPage;
   private final CSSDeclarationContainer m_aDeclarations = new CSSDeclarationContainer ();
