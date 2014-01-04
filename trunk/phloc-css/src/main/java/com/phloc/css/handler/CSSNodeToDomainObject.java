@@ -1050,8 +1050,9 @@ final class CSSNodeToDomainObject
                         else
                           if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
                           {
-                            // Unknown rule most likely indicates a parsing
-                            // error
+                            // Unknown rule indicates either
+                            // 1. a parsing error
+                            // 2. a non-standard rule
                             s_aLogger.warn ("Unknown rule object is currently ignored: " + aChildNode);
                           }
                           else

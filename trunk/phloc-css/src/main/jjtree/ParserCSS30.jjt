@@ -386,16 +386,35 @@ void charsetRule() #Charset :
   <SEMICOLON>
 }
 
+String anyIdentifier() #void : {}
+{
+  ( <IDENT>    { return token.image; }
+  | <INHERIT>  { return token.image; }
+  | <AND_SYM>  { return token.image; }
+  | <NOT_SYM>  { return token.image; }
+  | <ONLY_SYM> { return token.image; }
+  | <FROM_SYM> { return token.image; }
+  | <TO_SYM>   { return token.image; }
+  | <OR_SYM>   { return token.image; }
+  )
+}
+
+void unknownRuleParameter() : 
+{ String sIdentifier; }
+{
+  ( function() 
+  | sIdentifier = anyIdentifier() { jjtThis.setText (sIdentifier); }
+  | <NUMBER>                      { jjtThis.setText (token.image); }
+  )
+  ( <S> )*
+}
+
 // Any unsupported rule - contains some heuristics what is allowed and what not
 void unknownRule() : {}
 {
   <AT_UNKNOWN>
   ( <S> )*
-  ( ( function() 
-    | <IDENT>
-    )
-    ( <S> )*   
-  )*
+  ( unknownRuleParameter() )*  
   <LBRACE>
   ( <S> )*
   ( ( styleRule()
@@ -406,6 +425,7 @@ void unknownRule() : {}
     | viewportRule()
     | supportsRule()
     | unknownRule()
+    | styleDeclarationBlock()
     )
     ( <S> )*
   )*
@@ -655,18 +675,11 @@ void elementName() #ElementName : {}
   )
 }
 
-void _class() #Class : {}
+void _class() #Class : 
+{ String sIdentifier; }
 {
   <DOT>
-  ( <IDENT>    { jjtThis.setText ("." + token.image); }
-  | <INHERIT>  { jjtThis.setText ("." + token.image); }
-  | <AND_SYM>  { jjtThis.setText ("." + token.image); }
-  | <NOT_SYM>  { jjtThis.setText ("." + token.image); }
-  | <ONLY_SYM> { jjtThis.setText ("." + token.image); }
-  | <FROM_SYM> { jjtThis.setText ("." + token.image); }
-  | <TO_SYM>   { jjtThis.setText ("." + token.image); }
-  | <OR_SYM>   { jjtThis.setText ("." + token.image); }
-  )
+  sIdentifier = anyIdentifier() { jjtThis.setText ("." + sIdentifier); }
 }
 
 void attrib() #Attrib :
