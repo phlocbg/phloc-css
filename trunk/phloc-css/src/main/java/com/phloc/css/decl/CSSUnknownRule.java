@@ -60,6 +60,17 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     m_sDeclaration = sDeclaration;
   }
 
+  /**
+   * @return The rule declaration string used in the CSS. Neither
+   *         <code>null</code> nor empty. Always starting with <code>@</code>.
+   */
+  @Nonnull
+  @Nonempty
+  public String getDeclaration ()
+  {
+    return m_sDeclaration;
+  }
+
   public boolean hasRules ()
   {
     return !m_aRules.isEmpty ();

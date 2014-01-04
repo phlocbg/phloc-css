@@ -64,6 +64,11 @@ public class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAware, ICS
     m_sAnimationName = sAnimationName;
   }
 
+  /**
+   * @return The rule declaration string used in the CSS. Neither
+   *         <code>null</code> nor empty. Always starting with <code>@</code>
+   *         and ending with <code>keyframes</code>.
+   */
   @Nonnull
   @Nonempty
   public String getDeclaration ()

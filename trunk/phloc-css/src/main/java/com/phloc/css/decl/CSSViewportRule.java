@@ -60,6 +60,18 @@ public class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
     m_sDeclaration = sDeclaration;
   }
 
+  /**
+   * @return The rule declaration string used in the CSS. Neither
+   *         <code>null</code> nor empty. Always starting with <code>@</code>
+   *         and ending with <code>viewport</code>.
+   */
+  @Nonnull
+  @Nonempty
+  public String getDeclaration ()
+  {
+    return m_sDeclaration;
+  }
+
   public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     m_aDeclarations.addDeclaration (aDeclaration);
