@@ -1022,9 +1022,45 @@ final class CSSNodeToDomainObject
 
     for (final CSSNode aChildNode : aNode)
     {
-      // FIXME
-      if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
-        s_aLogger.error ("Unsupported unknown-rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
+      if (ECSSNodeType.UNKNOWNRULEPARAMETER.isNode (aChildNode, m_eVersion))
+      {
+        // FIXME
+        if (aChildNode.jjtGetNumChildren () == 0)
+          s_aLogger.warn ("Unsupported unknown-rule child-child: " + aChildNode.getText ());
+        else
+          for (final CSSNode a : aChildNode)
+          {
+            s_aLogger.warn ("Unsupported unknown-rule child-child: " + ECSSNodeType.getNodeName (a, m_eVersion));
+          }
+      }
+      else
+        if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
+          ret.addRule (_createStyleRule (aChildNode));
+        else
+          if (ECSSNodeType.MEDIARULE.isNode (aChildNode, m_eVersion))
+            ret.addRule (_createMediaRule (aChildNode));
+          else
+            if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
+              ret.addRule (_createPageRule (aChildNode));
+            else
+              if (ECSSNodeType.FONTFACERULE.isNode (aChildNode, m_eVersion))
+                ret.addRule (_createFontFaceRule (aChildNode));
+              else
+                if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
+                  ret.addRule (_createKeyframesRule (aChildNode));
+                else
+                  if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
+                    ret.addRule (_createViewportRule (aChildNode));
+                  else
+                    if (ECSSNodeType.SUPPORTSRULE.isNode (aChildNode, m_eVersion))
+                      ret.addRule (_createSupportsRule (aChildNode));
+                    else
+                      if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
+                        ret.addRule (_createUnknownRule (aChildNode));
+                      else
+                        if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+                          s_aLogger.error ("Unsupported unknown-rule child: " +
+                                           ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
   }

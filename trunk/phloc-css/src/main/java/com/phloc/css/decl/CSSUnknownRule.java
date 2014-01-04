@@ -17,13 +17,19 @@
  */
 package com.phloc.css.decl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
@@ -31,8 +37,7 @@ import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single <code>@</code> rule that is non-standard and/or
- * unhandled.
+ * Represents a single <code>@</code> rule that is non-standard and/or unknown.
  * 
  * @author Philip Helger
  */
@@ -41,6 +46,7 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
 {
   private final String m_sDeclaration;
   private CSSSourceLocation m_aSourceLocation;
+  private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();
 
   public static boolean isValidDeclaration (@Nonnull @Nonempty final String sDeclaration)
   {
@@ -54,6 +60,54 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     m_sDeclaration = sDeclaration;
   }
 
+  public boolean hasRules ()
+  {
+    return !m_aRules.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getRuleCount ()
+  {
+    return m_aRules.size ();
+  }
+
+  public void addRule (@Nonnull final ICSSTopLevelRule aRule)
+  {
+    if (aRule == null)
+      throw new NullPointerException ("rule");
+    m_aRules.add (aRule);
+  }
+
+  @Nonnull
+  public EChange removeRule (@Nonnull final ICSSTopLevelRule aRule)
+  {
+    return EChange.valueOf (m_aRules.remove (aRule));
+  }
+
+  @Nonnull
+  public EChange removeRule (@Nonnegative final int nRuleIndex)
+  {
+    if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
+      return EChange.UNCHANGED;
+    m_aRules.remove (nRuleIndex);
+    return EChange.CHANGED;
+  }
+
+  @Nullable
+  public ICSSTopLevelRule getRule (@Nonnegative final int nRuleIndex)
+  {
+    if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
+      return null;
+    return m_aRules.get (nRuleIndex);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <ICSSTopLevelRule> getAllRules ()
+  {
+    return ContainerHelper.newList (m_aRules);
+  }
+
   @Nonnull
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
@@ -63,14 +117,41 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
       return "";
 
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
+    final int nRuleCount = m_aRules.size ();
 
     final StringBuilder aSB = new StringBuilder (m_sDeclaration);
-    // TODO
-    aSB.append (bOptimizedOutput ? "{" : " {\n");
-    // TODO
-    aSB.append ('}');
-    if (!aSettings.isOptimizedOutput ())
-      aSB.append ('\n');
+    // TODO parameters
+    if (nRuleCount == 0)
+    {
+      aSB.append (bOptimizedOutput ? "{}" : " {}\n");
+    }
+    else
+    {
+      // At least one rule present
+      aSB.append (bOptimizedOutput ? "{" : " {\n");
+      boolean bFirst = true;
+      for (final ICSSTopLevelRule aRule : m_aRules)
+      {
+        final String sRuleCSS = aRule.getAsCSSString (aSettings, nIndentLevel + 1);
+        if (StringHelper.hasText (sRuleCSS))
+        {
+          if (bFirst)
+            bFirst = false;
+          else
+            if (!bOptimizedOutput)
+              aSB.append ('\n');
+
+          if (!bOptimizedOutput)
+            aSB.append (aSettings.getIndent (nIndentLevel + 1));
+          aSB.append (sRuleCSS);
+        }
+      }
+      if (!bOptimizedOutput)
+        aSB.append (aSettings.getIndent (nIndentLevel));
+      aSB.append ('}');
+      if (!bOptimizedOutput)
+        aSB.append ('\n');
+    }
     return aSB.toString ();
   }
 
