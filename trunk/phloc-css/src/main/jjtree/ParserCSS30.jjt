@@ -82,8 +82,8 @@ TOKEN_MGR_DECLS :
 <DEFAULT, IN_NTH>
 TOKEN :
 {
-   < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
- | < W: ( <S> )? >
+  < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
+| < W: ( <S> )? >
 }
 
 <DEFAULT>
@@ -231,7 +231,7 @@ TOKEN :
 | < VIEWPORT_SYM: "@-" <IDENT> "-viewport"
                 | "@viewport" >
 | < SUPPORTS_SYM: "@supports" >
-| < IMPORTANT_SYM: "!" ( <W> )* "important" >
+| < IMPORTANT_SYM: "!" ( <S> )* "important" >
 
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
 | < EX: <NUM> "ex" >           { matchedToken.image = ParseUtils.splitNumber(image) + "ex"; }
@@ -274,7 +274,10 @@ TOKEN :
                 | "nth-last-child(" 
                 | "nth-of-type(" 
                 | "nth-last-of-type(" > : IN_NTH
-// Extension for IE filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50); */
+// Expressions were abandoned after IE8                
+| < FUNCTION_EXPRESSION: "expression(" >
+// Extension for IE 
+//   filter: progid:DXImageTransform.Microsoft.Alpha(opacity=50);
 | < FUNCTION: <IDENT> "(" 
             | "progid" ( <S> )* <COLON> ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
   > { matchedToken.image = image.toString (); }
@@ -293,7 +296,8 @@ TOKEN :
 | < DASH: "|" >
 | < LSQUARE: "[" >
 | < RSQUARE: "]" >
-| < AT_UNKNOWN: "@" <IDENT> >
+| < AT_UNKNOWN: "@" <IDENT>
+              | "@-" <IDENT> >
 }
 
 <*> TOKEN:
@@ -382,11 +386,30 @@ void charsetRule() #Charset :
   <SEMICOLON>
 }
 
+// Any unsupported rule - contains some heuristics what is allowed and what not
 void unknownRule() : {}
 {
   <AT_UNKNOWN>
-  ( <~[";","}"]> )* 
-  <[";","}"]>
+  ( <S> )*
+  ( ( function() 
+    | <IDENT>
+    )
+    ( <S> )*   
+  )*
+  <LBRACE>
+  ( <S> )*
+  ( ( styleRule()
+    | mediaRule()
+    | pageRule()
+    | fontfaceRule()
+    | keyframesRule()
+    | viewportRule()
+    | supportsRule()
+    | unknownRule()
+    )
+    ( <S> )*
+  )*
+  <RBRACE>
 }
 
 //
@@ -885,7 +908,6 @@ void term() #Term :
 {
   String sPrefix = null;
   Token t = null;
-  String sStr;
 }
 {
   ( ( sPrefix = unaryOperator() )?
@@ -893,9 +915,9 @@ void term() #Term :
     | t = <PERCENTAGE>
     | t = dimension()
     )
-  | sStr = string()    { jjtThis.setText (sStr); }
+  | sPrefix = string()
   | t = <IDENT>
- // hack to allow "from" and "to" as identifiers (e.g. in linear-gradient)
+// Hack to allow "from" and "to" as identifiers (e.g. in linear-gradient)
   | t = <FROM_SYM>
   | t = <TO_SYM>
   | uri()
@@ -919,18 +941,42 @@ void uri() #URI : {}
   <URI>  { jjtThis.setText (token.image); } 
 }
 
+JAVACODE
+String javaSkipToClosingParantheses() {
+  final StringBuilder aSB = new StringBuilder ();
+  int nNesting = 1;
+  while (true) {
+    final Token tok = getNextToken();
+    aSB.append (tok.image);
+    if (tok.kind == LROUND) 
+      nNesting++;
+    else
+      if (tok.kind == RROUND) {
+        nNesting--;
+        if (nNesting == 0)
+          break;
+      }
+  }
+  return aSB.toString ();
+}
+
 //
 // function
 //   : FUNCTION S* expr ')'
 //   ;
 //
-void function() #Function : {}
+void function() #Function : 
+{ String sPlain; }
 {
-  <FUNCTION> { jjtThis.setText (token.image + ")"); }
-  ( <S> )*
-  // Support functions without parameters (e.g. "gray ()")
-  ( expr() )?
-  <RROUND>
+  ( <FUNCTION> { jjtThis.setText (token.image + ")"); }
+    ( <S> )*
+    // Support functions without parameters (e.g. "gray ()")
+    ( expr() )?
+    <RROUND>
+  | <FUNCTION_EXPRESSION> { jjtThis.setText (token.image); }
+    // get content of all skipped chars 
+    sPlain = javaSkipToClosingParantheses() { jjtThis.appendText (sPlain); }
+  )  
 }
 
 void math() : {}
