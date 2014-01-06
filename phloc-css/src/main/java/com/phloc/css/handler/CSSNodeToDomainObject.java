@@ -1026,7 +1026,7 @@ final class CSSNodeToDomainObject
       {
         // FIXME
         if (aChildNode.jjtGetNumChildren () == 0)
-          s_aLogger.warn ("Unsupported unknown-rule child-child: " + aChildNode.getText ());
+          ret.addParameter (aChildNode.getText ());
         else
           for (final CSSNode a : aChildNode)
           {
