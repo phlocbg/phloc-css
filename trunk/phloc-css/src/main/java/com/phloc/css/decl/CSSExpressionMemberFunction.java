@@ -44,7 +44,7 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
   private CSSSourceLocation m_aSourceLocation;
 
   @Nonnull
-  private static String _skipBrackets (@Nonnull final String sName)
+  private static String _skipBracketsAtEnd (@Nonnull final String sName)
   {
     final String sRealName = sName.trim ();
     if (sRealName.length () > 2 && sRealName.endsWith ("()"))
@@ -77,7 +77,7 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
     if (StringHelper.hasNoText (sFunctionName))
       throw new IllegalArgumentException ("Empty function name is not allowed");
     // expression may be null
-    m_sFunctionName = _skipBrackets (sFunctionName);
+    m_sFunctionName = _skipBracketsAtEnd (sFunctionName);
     m_aExpression = aExpression;
   }
 
@@ -89,6 +89,16 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
   public String getFunctionName ()
   {
     return m_sFunctionName;
+  }
+
+  /**
+   * @return <code>true</code> if this is a special IE "expression" function.
+   *         This makes a difference, because in case of IE expression
+   *         functions, no parameter splitting takes place!
+   */
+  public boolean isExpressionFunction ()
+  {
+    return m_sFunctionName.startsWith ("expression(") || m_sFunctionName.equals ("expression");
   }
 
   /**

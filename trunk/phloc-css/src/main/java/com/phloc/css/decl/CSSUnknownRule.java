@@ -46,6 +46,7 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
 {
   private final String m_sDeclaration;
   private CSSSourceLocation m_aSourceLocation;
+  private final List <Object> m_aParameters = new ArrayList <Object> ();
   private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();
 
   public static boolean isValidDeclaration (@Nonnull @Nonempty final String sDeclaration)
@@ -69,6 +70,67 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
   public String getDeclaration ()
   {
     return m_sDeclaration;
+  }
+
+  public boolean hasParameters ()
+  {
+    return !m_aParameters.isEmpty ();
+  }
+
+  @Nonnegative
+  public int getParameterCount ()
+  {
+    return m_aParameters.size ();
+  }
+
+  public void addParameter (@Nonnull final String sParameter)
+  {
+    if (sParameter == null)
+      throw new NullPointerException ("Parameter");
+    m_aParameters.add (sParameter);
+  }
+
+  public void addParameter (@Nonnull final ICSSExpressionMember aParameter)
+  {
+    if (aParameter == null)
+      throw new NullPointerException ("Parameter");
+    m_aParameters.add (aParameter);
+  }
+
+  @Nonnull
+  public EChange removeParameter (@Nonnull final String sParameter)
+  {
+    return EChange.valueOf (m_aParameters.remove (sParameter));
+  }
+
+  @Nonnull
+  public EChange removeParameter (@Nonnull final ICSSExpressionMember aParameter)
+  {
+    return EChange.valueOf (m_aParameters.remove (aParameter));
+  }
+
+  @Nonnull
+  public EChange removeParameter (@Nonnegative final int nParameterIndex)
+  {
+    if (nParameterIndex < 0 || nParameterIndex >= m_aParameters.size ())
+      return EChange.UNCHANGED;
+    m_aParameters.remove (nParameterIndex);
+    return EChange.CHANGED;
+  }
+
+  @Nullable
+  public Object getParameter (@Nonnegative final int nParameterIndex)
+  {
+    if (nParameterIndex < 0 || nParameterIndex >= m_aParameters.size ())
+      return null;
+    return m_aParameters.get (nParameterIndex);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <Object> getAllParameters ()
+  {
+    return ContainerHelper.newList (m_aParameters);
   }
 
   public boolean hasRules ()
