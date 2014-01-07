@@ -31,6 +31,7 @@ import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.CSSSupportsRule;
+import com.phloc.css.decl.CSSUnknownRule;
 import com.phloc.css.decl.CSSViewportRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSTopLevelRule;
@@ -269,6 +270,29 @@ public final class CSSVisitor
   }
 
   /**
+   * Visit all elements of a single unknown @ rule.
+   * 
+   * @param aUnknownRule
+   *        The unknown rule to visit. May not be <code>null</code>.
+   * @param aVisitor
+   *        The visitor to use. May not be <code>null</code>.
+   */
+  public static void visitUnknownRule (@Nonnull final CSSUnknownRule aUnknownRule, @Nonnull final ICSSVisitor aVisitor)
+  {
+    aVisitor.onBeginUnknownRule (aUnknownRule);
+    try
+    {
+      // for all nested rules
+      for (final ICSSTopLevelRule aRule : aUnknownRule.getAllRules ())
+        visitTopLevelRule (aRule, aVisitor);
+    }
+    finally
+    {
+      aVisitor.onEndUnknownRule (aUnknownRule);
+    }
+  }
+
+  /**
    * Visit all elements of a single top-level rule. This includes all rules
    * except <code>@import</code> and <code>@namespace</code> rules.
    * 
@@ -315,7 +339,12 @@ public final class CSSVisitor
                   visitSupportsRule ((CSSSupportsRule) aTopLevelRule, aVisitor);
                 }
                 else
-                  throw new IllegalStateException ("Top level rule " + aTopLevelRule + " is unsupported!");
+                  if (aTopLevelRule instanceof CSSUnknownRule)
+                  {
+                    visitUnknownRule ((CSSUnknownRule) aTopLevelRule, aVisitor);
+                  }
+                  else
+                    throw new IllegalStateException ("Top level rule " + aTopLevelRule + " is unsupported!");
   }
 
   /**

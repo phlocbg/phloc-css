@@ -372,6 +372,33 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
+  private CSSExpressionMemberFunction _createExpressionFunction (@Nonnull final CSSNode aNode)
+  {
+    _expectNodeType (aNode, ECSSNodeType.FUNCTION);
+
+    final int nChildCount = aNode.jjtGetNumChildren ();
+    if (nChildCount > 1)
+      _throwUnexpectedChildrenCount ("Expected 0 or 1 children but got " + nChildCount + "!", aNode);
+
+    final String sFunctionName = aNode.getText ();
+    CSSExpressionMemberFunction aFunc;
+    if (nChildCount == 1)
+    {
+      // Parameters present
+      final CSSNode aFirstChild = aNode.jjtGetChild (0);
+      final CSSExpression aFuncExpr = _createExpression (aFirstChild);
+      aFunc = new CSSExpressionMemberFunction (sFunctionName, aFuncExpr);
+    }
+    else
+    {
+      // No parameters
+      aFunc = new CSSExpressionMemberFunction (sFunctionName);
+    }
+    aFunc.setSourceLocation (aNode.getSourceLocation ());
+    return aFunc;
+  }
+
+  @Nonnull
   private CSSExpressionMemberMath _createExpressionMathTerm (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.MATH);
@@ -440,25 +467,7 @@ final class CSSNodeToDomainObject
       if (ECSSNodeType.FUNCTION.isNode (aChildNode, m_eVersion))
       {
         // function value
-        if (nChildChildren > 1)
-          _throwUnexpectedChildrenCount ("Expected 0 or 1 children but got " + nChildChildren + "!", aChildNode);
-
-        final String sFunctionName = aChildNode.getText ();
-        CSSExpressionMemberFunction aFunc;
-        if (nChildChildren == 1)
-        {
-          // Parameters present
-          final CSSNode aFirstChild = aChildNode.jjtGetChild (0);
-          final CSSExpression aFuncExpr = _createExpression (aFirstChild);
-          aFunc = new CSSExpressionMemberFunction (sFunctionName, aFuncExpr);
-        }
-        else
-        {
-          // No parameters
-          aFunc = new CSSExpressionMemberFunction (sFunctionName);
-        }
-        aFunc.setSourceLocation (aChildNode.getSourceLocation ());
-        return aFunc;
+        return _createExpressionFunction (aChildNode);
       }
       else
         if (ECSSNodeType.MATH.isNode (aChildNode, m_eVersion))
@@ -1028,9 +1037,12 @@ final class CSSNodeToDomainObject
         if (aChildNode.jjtGetNumChildren () == 0)
           ret.addParameter (aChildNode.getText ());
         else
-          for (final CSSNode a : aChildNode)
+          for (final CSSNode aChildChildNode : aChildNode)
           {
-            s_aLogger.warn ("Unsupported unknown-rule child-child: " + ECSSNodeType.getNodeName (a, m_eVersion));
+            if (ECSSNodeType.FUNCTION.isNode (aChildChildNode, m_eVersion))
+              ret.addParameter (_createExpressionFunction (aChildChildNode));
+            else
+              s_aLogger.warn ("Unsupported unknown-rule child-child: " + ECSSNodeType.getNodeName (aChildChildNode, m_eVersion));
           }
       }
       else

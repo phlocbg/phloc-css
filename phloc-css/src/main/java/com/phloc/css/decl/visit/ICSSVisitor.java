@@ -30,6 +30,7 @@ import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.CSSSupportsRule;
+import com.phloc.css.decl.CSSUnknownRule;
 import com.phloc.css.decl.CSSViewportRule;
 
 /**
@@ -218,6 +219,23 @@ public interface ICSSVisitor
    *        The supports rule. Never <code>null</code>.
    */
   void onEndSupportsRule (@Nonnull CSSSupportsRule aSupportsRule);
+
+  // unknown rules
+  /**
+   * Called when an unknown rule starts.
+   * 
+   * @param aUnknownRule
+   *        The unknown rule. Never <code>null</code>.
+   */
+  void onBeginUnknownRule (@Nonnull CSSUnknownRule aUnknownRule);
+
+  /**
+   * Called when an unknown rule ends.
+   * 
+   * @param aUnknownRule
+   *        The unknown rule. Never <code>null</code>.
+   */
+  void onEndUnknownRule (@Nonnull CSSUnknownRule aUnknownRule);
 
   /**
    * After visiting is done.<br>
