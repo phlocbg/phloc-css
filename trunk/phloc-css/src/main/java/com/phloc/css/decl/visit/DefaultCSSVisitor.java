@@ -31,6 +31,7 @@ import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.CSSSupportsRule;
+import com.phloc.css.decl.CSSUnknownRule;
 import com.phloc.css.decl.CSSViewportRule;
 
 /**
@@ -126,6 +127,14 @@ public class DefaultCSSVisitor implements ICSSVisitor
 
   @OverrideOnDemand
   public void onEndSupportsRule (@Nonnull final CSSSupportsRule aSupportsRule)
+  {}
+
+  @OverrideOnDemand
+  public void onBeginUnknownRule (@Nonnull final CSSUnknownRule aUnknownRule)
+  {}
+
+  @OverrideOnDemand
+  public void onEndUnknownRule (@Nonnull final CSSUnknownRule aUnknownRule)
   {}
 
   @OverrideOnDemand
