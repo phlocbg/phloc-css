@@ -70,7 +70,7 @@ public enum ECSSNodeType
   EXPR (ParserCSS21TreeConstants.JJTEXPR, ParserCSS30TreeConstants.JJTEXPR),
   TERM (ParserCSS21TreeConstants.JJTTERM, ParserCSS30TreeConstants.JJTTERM),
   OPERATOR (ParserCSS21TreeConstants.JJTOPERATOR, ParserCSS30TreeConstants.JJTOPERATOR),
-  URI (ParserCSS21TreeConstants.JJTURI, ParserCSS30TreeConstants.JJTURI),
+  URL (ParserCSS21TreeConstants.JJTURL, ParserCSS30TreeConstants.JJTURL),
   FUNCTION (ParserCSS21TreeConstants.JJTFUNCTION, ParserCSS30TreeConstants.JJTFUNCTION),
   MATH (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTMATH),
   MATH_SUMOPERATOR (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTSUMOPERATOR),

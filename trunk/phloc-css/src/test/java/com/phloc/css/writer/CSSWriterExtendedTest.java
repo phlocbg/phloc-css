@@ -93,18 +93,19 @@ public final class CSSWriterExtendedTest
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css30/good/artificial"),
                                                                 new FilenameFilterEndsWith (".css")))
     {
+      final String sKey = aFile.getAbsolutePath ();
       try
       {
         // read and interpret CSS 3.0
         final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
-        assertNotNull (aCSS);
+        assertNotNull (sKey, aCSS);
 
         // write to CSS 2.1
         final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
         new CSSWriter (ECSSVersion.CSS21).writeCSS (aCSS, aSW);
 
         // This should throw an error
-        fail (aFile.toString () + " should have thrown an exception but got: " + aSW.getAsString ());
+        fail (sKey + " should have thrown an exception but got: " + aSW.getAsString ());
       }
       catch (final IllegalStateException ex)
       {}

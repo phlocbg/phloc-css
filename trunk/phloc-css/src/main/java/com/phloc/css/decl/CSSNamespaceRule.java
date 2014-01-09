@@ -31,6 +31,7 @@ import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
+import com.phloc.css.utils.CSSURLHelper;
 
 /**
  * Represents a single namespace rule on top level.
@@ -89,7 +90,11 @@ public final class CSSNamespaceRule implements ICSSWriteable, ICSSSourceLocation
     aSB.append ("@namespace ");
     if (StringHelper.hasText (m_sPrefix))
       aSB.append (m_sPrefix).append (' ');
-    return aSB.append (m_sURL).append (";\n").toString ();
+    if (StringHelper.hasText (m_sURL))
+      aSB.append (CSSURLHelper.getAsCSSURL (m_sURL, false));
+    else
+      aSB.append ("\"\"");
+    return aSB.append (";\n").toString ();
   }
 
   /**

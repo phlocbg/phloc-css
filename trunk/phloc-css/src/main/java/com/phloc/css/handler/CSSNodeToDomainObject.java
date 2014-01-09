@@ -127,7 +127,7 @@ final class CSSNodeToDomainObject
     if (nChildCount > 0)
     {
       final CSSNode aURINode = aNode.jjtGetChild (0);
-      if (ECSSNodeType.URI.isNode (aURINode, m_eVersion))
+      if (ECSSNodeType.URL.isNode (aURINode, m_eVersion))
       {
         aImportURI = new CSSURI (aURINode.getText ());
         aImportURI.setSourceLocation (aURINode.getSourceLocation ());
@@ -372,6 +372,20 @@ final class CSSNodeToDomainObject
   }
 
   @Nonnull
+  private CSSExpressionMemberTermURI _createExpressionURL (@Nonnull final CSSNode aNode)
+  {
+    _expectNodeType (aNode, ECSSNodeType.URL);
+
+    final int nChildCount = aNode.jjtGetNumChildren ();
+    if (nChildCount > 0)
+      _throwUnexpectedChildrenCount ("Expected 0 children but got " + nChildCount + "!", aNode);
+
+    final CSSURI aURI = new CSSURI (aNode.getText ());
+    aURI.setSourceLocation (aNode.getSourceLocation ());
+    return new CSSExpressionMemberTermURI (aURI);
+  }
+
+  @Nonnull
   private CSSExpressionMemberFunction _createExpressionFunction (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.FUNCTION);
@@ -452,16 +466,10 @@ final class CSSNodeToDomainObject
     final CSSNode aChildNode = aNode.jjtGetChild (0);
     final int nChildChildren = aChildNode.jjtGetNumChildren ();
 
-    if (ECSSNodeType.URI.isNode (aChildNode, m_eVersion))
+    if (ECSSNodeType.URL.isNode (aChildNode, m_eVersion))
     {
       // URI value
-      if (nChildChildren > 0)
-        _throwUnexpectedChildrenCount ("Expected 0 children but got " + nChildChildren + "!", aChildNode);
-
-      final CSSURI aURI = new CSSURI (aChildNode.getText ());
-      aURI.setSourceLocation (aChildNode.getSourceLocation ());
-      return new CSSExpressionMemberTermURI (aURI);
-      // Source location is taken from URI!
+      return _createExpressionURL (aChildNode);
     }
     else
       if (ECSSNodeType.FUNCTION.isNode (aChildNode, m_eVersion))
@@ -901,8 +909,9 @@ final class CSSNodeToDomainObject
 
     final CSSNode aURLNode = aNode.jjtGetChild (nURLIndex);
     _expectNodeType (aURLNode, ECSSNodeType.NAMESPACERULEURL);
+    final String sURL = ParseUtils.extractStringValue (aURLNode.getText ());
 
-    final CSSNamespaceRule ret = new CSSNamespaceRule (sPrefix, aURLNode.getText ());
+    final CSSNamespaceRule ret = new CSSNamespaceRule (sPrefix, sURL);
     ret.setSourceLocation (aNode.getSourceLocation ());
     return ret;
   }
@@ -1033,16 +1042,22 @@ final class CSSNodeToDomainObject
     {
       if (ECSSNodeType.UNKNOWNRULEPARAMETER.isNode (aChildNode, m_eVersion))
       {
-        // FIXME
         if (aChildNode.jjtGetNumChildren () == 0)
+        {
+          // String parameter
           ret.addParameter (aChildNode.getText ());
+        }
         else
           for (final CSSNode aChildChildNode : aChildNode)
           {
             if (ECSSNodeType.FUNCTION.isNode (aChildChildNode, m_eVersion))
               ret.addParameter (_createExpressionFunction (aChildChildNode));
             else
-              s_aLogger.warn ("Unsupported unknown-rule child-child: " + ECSSNodeType.getNodeName (aChildChildNode, m_eVersion));
+              if (ECSSNodeType.URL.isNode (aChildChildNode, m_eVersion))
+                ret.addParameter (_createExpressionURL (aChildChildNode));
+              else
+                s_aLogger.warn ("Unsupported unknown-rule child-child: " +
+                                ECSSNodeType.getNodeName (aChildChildNode, m_eVersion));
           }
       }
       else
