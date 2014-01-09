@@ -130,11 +130,7 @@ public class DefaultCSSVisitor implements ICSSVisitor
   {}
 
   @OverrideOnDemand
-  public void onBeginUnknownRule (@Nonnull final CSSUnknownRule aUnknownRule)
-  {}
-
-  @OverrideOnDemand
-  public void onEndUnknownRule (@Nonnull final CSSUnknownRule aUnknownRule)
+  public void onUnknownRule (@Nonnull final CSSUnknownRule aUnknownRule)
   {}
 
   @OverrideOnDemand

@@ -1032,63 +1032,23 @@ final class CSSNodeToDomainObject
   {
     _expectNodeType (aNode, ECSSNodeType.UNKNOWNRULE);
 
+    final int nChildCount = aNode.jjtGetNumChildren ();
+    if (nChildCount != 2)
+      _throwUnexpectedChildrenCount ("Expected 2 children but got " + nChildCount + "!", aNode);
+
+    final CSSNode aParameterList = aNode.jjtGetChild (0);
+    _expectNodeType (aParameterList, ECSSNodeType.UNKNOWNRULEPARAMETERLIST);
+
+    final CSSNode aBody = aNode.jjtGetChild (1);
+    _expectNodeType (aBody, ECSSNodeType.UNKNOWNRULEBODY);
+
     // Get the name of the rule
     final String sRuleDeclaration = aNode.getText ();
 
     final CSSUnknownRule ret = new CSSUnknownRule (sRuleDeclaration);
     ret.setSourceLocation (aNode.getSourceLocation ());
-
-    for (final CSSNode aChildNode : aNode)
-    {
-      if (ECSSNodeType.UNKNOWNRULEPARAMETER.isNode (aChildNode, m_eVersion))
-      {
-        if (aChildNode.jjtGetNumChildren () == 0)
-        {
-          // String parameter
-          ret.addParameter (aChildNode.getText ());
-        }
-        else
-          for (final CSSNode aChildChildNode : aChildNode)
-          {
-            if (ECSSNodeType.FUNCTION.isNode (aChildChildNode, m_eVersion))
-              ret.addParameter (_createExpressionFunction (aChildChildNode));
-            else
-              if (ECSSNodeType.URL.isNode (aChildChildNode, m_eVersion))
-                ret.addParameter (_createExpressionURL (aChildChildNode));
-              else
-                s_aLogger.warn ("Unsupported unknown-rule child-child: " +
-                                ECSSNodeType.getNodeName (aChildChildNode, m_eVersion));
-          }
-      }
-      else
-        if (ECSSNodeType.STYLERULE.isNode (aChildNode, m_eVersion))
-          ret.addRule (_createStyleRule (aChildNode));
-        else
-          if (ECSSNodeType.MEDIARULE.isNode (aChildNode, m_eVersion))
-            ret.addRule (_createMediaRule (aChildNode));
-          else
-            if (ECSSNodeType.PAGERULE.isNode (aChildNode, m_eVersion))
-              ret.addRule (_createPageRule (aChildNode));
-            else
-              if (ECSSNodeType.FONTFACERULE.isNode (aChildNode, m_eVersion))
-                ret.addRule (_createFontFaceRule (aChildNode));
-              else
-                if (ECSSNodeType.KEYFRAMESRULE.isNode (aChildNode, m_eVersion))
-                  ret.addRule (_createKeyframesRule (aChildNode));
-                else
-                  if (ECSSNodeType.VIEWPORTRULE.isNode (aChildNode, m_eVersion))
-                    ret.addRule (_createViewportRule (aChildNode));
-                  else
-                    if (ECSSNodeType.SUPPORTSRULE.isNode (aChildNode, m_eVersion))
-                      ret.addRule (_createSupportsRule (aChildNode));
-                    else
-                      if (ECSSNodeType.UNKNOWNRULE.isNode (aChildNode, m_eVersion))
-                        ret.addRule (_createUnknownRule (aChildNode));
-                      else
-                        if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
-                          s_aLogger.error ("Unsupported unknown-rule child: " +
-                                           ECSSNodeType.getNodeName (aChildNode, m_eVersion));
-    }
+    ret.setParameterList (aParameterList.getText ());
+    ret.setBody (aBody.getText ());
     return ret;
   }
 

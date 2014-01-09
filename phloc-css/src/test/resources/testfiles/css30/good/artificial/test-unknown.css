@@ -56,8 +56,8 @@ E ~ F {}
 }
 
 @document url(http://www.w3.org/),
-               url-prefix("http://www.w3.org/Style/"),
-               domain("mozilla.org"),
+               url-prefix(http://www.w3.org/Style/),
+               domain(mozilla.org),
                regexp("https:.*")
 {
   /* CSS rules here apply to:
@@ -73,10 +73,8 @@ E ~ F {}
  
 @three-dee {
 	@background-lighting {
-/*	
     azimuth: 30deg;
     elevation: 190deg;
-*/    
   }
   h1 { color: red }
 }

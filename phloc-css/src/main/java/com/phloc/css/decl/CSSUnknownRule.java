@@ -17,19 +17,14 @@
  */
 package com.phloc.css.decl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
@@ -45,9 +40,9 @@ import com.phloc.css.ICSSWriterSettings;
 public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
 {
   private final String m_sDeclaration;
+  private String m_sParameterList;
+  private String m_sBody;
   private CSSSourceLocation m_aSourceLocation;
-  private final List <Object> m_aParameters = new ArrayList <Object> ();
-  private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();
 
   public static boolean isValidDeclaration (@Nonnull @Nonempty final String sDeclaration)
   {
@@ -72,113 +67,26 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     return m_sDeclaration;
   }
 
-  public boolean hasParameters ()
+  public void setParameterList (@Nullable final String sParameterList)
   {
-    return !m_aParameters.isEmpty ();
-  }
-
-  @Nonnegative
-  public int getParameterCount ()
-  {
-    return m_aParameters.size ();
-  }
-
-  public void addParameter (@Nonnull final String sParameter)
-  {
-    if (sParameter == null)
-      throw new NullPointerException ("Parameter");
-    m_aParameters.add (sParameter);
-  }
-
-  public void addParameter (@Nonnull final ICSSExpressionMember aParameter)
-  {
-    if (aParameter == null)
-      throw new NullPointerException ("Parameter");
-    m_aParameters.add (aParameter);
-  }
-
-  @Nonnull
-  public EChange removeParameter (@Nonnull final String sParameter)
-  {
-    return EChange.valueOf (m_aParameters.remove (sParameter));
-  }
-
-  @Nonnull
-  public EChange removeParameter (@Nonnull final ICSSExpressionMember aParameter)
-  {
-    return EChange.valueOf (m_aParameters.remove (aParameter));
-  }
-
-  @Nonnull
-  public EChange removeParameter (@Nonnegative final int nParameterIndex)
-  {
-    if (nParameterIndex < 0 || nParameterIndex >= m_aParameters.size ())
-      return EChange.UNCHANGED;
-    m_aParameters.remove (nParameterIndex);
-    return EChange.CHANGED;
+    m_sParameterList = StringHelper.trim (sParameterList);
   }
 
   @Nullable
-  public Object getParameter (@Nonnegative final int nParameterIndex)
+  public String getParameterList ()
   {
-    if (nParameterIndex < 0 || nParameterIndex >= m_aParameters.size ())
-      return null;
-    return m_aParameters.get (nParameterIndex);
+    return m_sParameterList;
   }
 
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <Object> getAllParameters ()
+  public void setBody (@Nullable final String sBody)
   {
-    return ContainerHelper.newList (m_aParameters);
-  }
-
-  public boolean hasRules ()
-  {
-    return !m_aRules.isEmpty ();
-  }
-
-  @Nonnegative
-  public int getRuleCount ()
-  {
-    return m_aRules.size ();
-  }
-
-  public void addRule (@Nonnull final ICSSTopLevelRule aRule)
-  {
-    if (aRule == null)
-      throw new NullPointerException ("rule");
-    m_aRules.add (aRule);
-  }
-
-  @Nonnull
-  public EChange removeRule (@Nonnull final ICSSTopLevelRule aRule)
-  {
-    return EChange.valueOf (m_aRules.remove (aRule));
-  }
-
-  @Nonnull
-  public EChange removeRule (@Nonnegative final int nRuleIndex)
-  {
-    if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
-      return EChange.UNCHANGED;
-    m_aRules.remove (nRuleIndex);
-    return EChange.CHANGED;
+    m_sBody = StringHelper.trim (sBody);
   }
 
   @Nullable
-  public ICSSTopLevelRule getRule (@Nonnegative final int nRuleIndex)
+  public String getBody ()
   {
-    if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
-      return null;
-    return m_aRules.get (nRuleIndex);
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  public List <ICSSTopLevelRule> getAllRules ()
-  {
-    return ContainerHelper.newList (m_aRules);
+    return m_sBody;
   }
 
   @Nonnull
@@ -190,11 +98,13 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
       return "";
 
     final boolean bOptimizedOutput = aSettings.isOptimizedOutput ();
-    final int nRuleCount = m_aRules.size ();
 
     final StringBuilder aSB = new StringBuilder (m_sDeclaration);
-    // TODO parameters
-    if (nRuleCount == 0)
+
+    if (StringHelper.hasText (m_sParameterList))
+      aSB.append (' ').append (m_sParameterList);
+
+    if (StringHelper.hasNoText (m_sBody))
     {
       aSB.append (bOptimizedOutput ? "{}" : " {}\n");
     }
@@ -202,23 +112,9 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     {
       // At least one rule present
       aSB.append (bOptimizedOutput ? "{" : " {\n");
-      boolean bFirst = true;
-      for (final ICSSTopLevelRule aRule : m_aRules)
-      {
-        final String sRuleCSS = aRule.getAsCSSString (aSettings, nIndentLevel + 1);
-        if (StringHelper.hasText (sRuleCSS))
-        {
-          if (bFirst)
-            bFirst = false;
-          else
-            if (!bOptimizedOutput)
-              aSB.append ('\n');
-
-          if (!bOptimizedOutput)
-            aSB.append (aSettings.getIndent (nIndentLevel + 1));
-          aSB.append (sRuleCSS);
-        }
-      }
+      if (!bOptimizedOutput)
+        aSB.append (aSettings.getIndent (nIndentLevel));
+      aSB.append (m_sBody);
       if (!bOptimizedOutput)
         aSB.append (aSettings.getIndent (nIndentLevel));
       aSB.append ('}');
@@ -253,19 +149,26 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     if (!(o instanceof CSSUnknownRule))
       return false;
     final CSSUnknownRule rhs = (CSSUnknownRule) o;
-    return m_sDeclaration.equals (rhs.m_sDeclaration);
+    return m_sDeclaration.equals (rhs.m_sDeclaration) &&
+           EqualsUtils.equals (m_sParameterList, rhs.m_sParameterList) &&
+           EqualsUtils.equals (m_sBody, rhs.m_sBody);
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_sDeclaration).getHashCode ();
+    return new HashCodeGenerator (this).append (m_sDeclaration)
+                                       .append (m_sParameterList)
+                                       .append (m_sBody)
+                                       .getHashCode ();
   }
 
   @Override
   public String toString ()
   {
     return new ToStringGenerator (this).append ("declaration", m_sDeclaration)
+                                       .appendIfNotNull ("parameterList", m_sParameterList)
+                                       .appendIfNotNull ("body", m_sBody)
                                        .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }

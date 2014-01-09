@@ -195,6 +195,42 @@ TOKEN :
                        >
 | < NUMBER: <NUM> >
 
+| < LBRACE: <W> "{" >
+| < RBRACE: "}" >
+| < GREATER: ">" >
+| < DOT: "." >
+| < COMMA: <W> "," >
+| < SEMICOLON: ";" >
+| < COLON: ":" >
+| < ASTERISK: "*" >
+| < SLASH: "/" >
+| < EQUALS: "=" >
+| < DASH: "|" >
+| < LSQUARE: "[" >
+| < RSQUARE: "]" >
+| < TILDE: "~" >
+| < INCLUDES: "~=" >
+| < DASHMATCH: "|=" >
+| < PREFIXMATCH: "^=" >
+| < SUBFIXMATCH: "$=" >
+| < SUBSTRINGMATCH: "*=" >
+| < CDO: "<!--" >
+| < CDC: "-->" >
+| < HASH: "#" <NAME> >
+| < CHARSET_SYM: "@charset" >
+| < IMPORT_SYM: "@import" >
+| < NAMESPACE_SYM: "@namespace" >
+| < PAGE_SYM: "@page" >
+| < MEDIA_SYM: "@media" >
+| < FONTFACE_SYM: "@font-face" >
+| < KEYFRAMES_SYM: "@-" <IDENT> "-keyframes" 
+                 | "@keyframes" >
+| < VIEWPORT_SYM: "@-" <IDENT> "-viewport"
+                | "@viewport" >
+| < SUPPORTS_SYM: "@supports" >
+| < AT_UNKNOWN: "@" <IDENT> >
+| < IMPORTANT_SYM: "!" ( <S> )* "important" >
+
 // before ident!
 | < INHERIT: "inherit" >
 | < AND_SYM: "and" >
@@ -213,30 +249,6 @@ TOKEN :
            <NMSTART> 
            ( <NMCHAR> )* > { matchedToken.image = ParseUtils.validateIdentifier(image); }
 
-| < CDO: "<!--" >
-| < CDC: "-->" >
-| < INCLUDES: "~=" >
-| < DASHMATCH: "|=" >
-| < PREFIXMATCH: "^=" >
-| < SUBFIXMATCH: "$=" >
-| < SUBSTRINGMATCH: "*=" >
-| < LBRACE: <W> "{" >
-| < GREATER: ">" >
-| < TILDE: "~" >
-| < COMMA: <W> "," >
-| < HASH: "#" <NAME> >
-| < CHARSET_SYM: "@charset" >
-| < IMPORT_SYM: "@import" >
-| < NAMESPACE_SYM: "@namespace" >
-| < PAGE_SYM: "@page" >
-| < MEDIA_SYM: "@media" >
-| < FONTFACE_SYM: "@font-face" >
-| < KEYFRAMES_SYM: "@-" <IDENT> "-keyframes" 
-                 | "@keyframes" >
-| < VIEWPORT_SYM: "@-" <IDENT> "-viewport"
-                | "@viewport" >
-| < SUPPORTS_SYM: "@supports" >
-| < IMPORTANT_SYM: "!" ( <S> )* "important" >
 
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
 | < EX: <NUM> "ex" >           { matchedToken.image = ParseUtils.splitNumber(image) + "ex"; }
@@ -289,18 +301,6 @@ TOKEN :
                  | <HNUM> "-" <HNUM> 
                  | <URANGE_PLACEHOLDER> 
                  ) >  
-| < RBRACE: "}" >
-| < DOT: "." >
-| < SEMICOLON: ";" >
-| < COLON: ":" >
-| < ASTERISK: "*" >
-| < SLASH: "/" >
-| < EQUALS: "=" >
-| < DASH: "|" >
-| < LSQUARE: "[" >
-| < RSQUARE: "]" >
-| < AT_UNKNOWN: "@" <IDENT>
-              | "@-" <IDENT> >
 }
 
 <*> TOKEN:
@@ -334,6 +334,57 @@ private Token error_skipto(final ParseException ex, final int... aKinds) throws 
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("Skipped until token " + t.toString ());
   return t;
+}
+
+JAVACODE
+String javaSkipToClosingParantheses() #void {
+  final StringBuilder aSB = new StringBuilder ();
+  int nNesting = 1;
+  while (true) {
+    final Token tok = getNextToken();
+    aSB.append (tok.image);
+    if (tok.kind == LROUND) 
+      nNesting++;
+    else
+      if (tok.kind == RROUND) {
+        nNesting--;
+        if (nNesting == 0)
+          break;
+      }
+  }
+  return aSB.toString ();
+}
+
+JAVACODE
+String javaSkipToOpeningBrace() #void {
+  final StringBuilder aSB = new StringBuilder ();
+  Token tok;
+  while (true) {
+    tok = getNextToken();
+    if (tok.kind == LBRACE)
+      break;
+    aSB.append (tok.image);
+  }
+  return aSB.toString ();
+}
+
+JAVACODE
+String javaSkipToClosingBrace() #void {
+  final StringBuilder aSB = new StringBuilder ();
+  int nNesting = 1;
+  while (true) {
+    final Token tok = getNextToken();
+    if (tok.kind == LBRACE) 
+      nNesting++;
+    else
+      if (tok.kind == RBRACE) {
+        nNesting--;
+        if (nNesting == 0)
+          break;
+      }
+    aSB.append (tok.image);
+  }
+  return aSB.toString ();
 }
 
 //
@@ -402,46 +453,24 @@ String anyIdentifier() #void : {}
   )
 }
 
-void unknownRuleParameter() : 
-{ String sIdentifier; }
+void unknownRuleParameterList() : 
+{ String s; }
 {
-  ( function()
-  | url() 
-  | sIdentifier = anyIdentifier() { jjtThis.setText (sIdentifier); }
-  | <NUMBER>                      { jjtThis.setText (token.image); }
-  | <COMMA>                       { jjtThis.setText (token.image); }
-  )
-}
-
-void unknownRuleParameterList() #void : {}
-{
-  unknownRuleParameter()
-  ( <S> )*
-  ( unknownRuleParameter()
-    ( <S> )*
-  )*
+  s = javaSkipToOpeningBrace() { jjtThis.setText (s); }
 }  
 
-// Any unsupported rule - contains some heuristics what is allowed and what not
+void unknownRuleBody() : 
+{ String s; }
+{
+  s = javaSkipToClosingBrace() { jjtThis.setText (s); }
+}  
+
+// Any unsupported rule
 void unknownRule() : {}
 {
   <AT_UNKNOWN> { jjtThis.setText (token.image); }
-  ( <S> )*
-  ( unknownRuleParameterList() )? 
-  <LBRACE>
-  ( <S> )*
-  ( ( styleRule()
-    | mediaRule()
-    | pageRule()
-    | fontfaceRule()
-    | keyframesRule()
-    | viewportRule()
-    | supportsRule()
-    | unknownRule()
-    )
-    ( <S> )*
-  )*
-  <RBRACE>
+  unknownRuleParameterList()
+  unknownRuleBody()
 }
 
 void importRule() #ImportRule :
@@ -941,25 +970,6 @@ void term() #Term :
 void url() #URL : {}
 {
   <URL>  { jjtThis.setText (token.image); } 
-}
-
-JAVACODE
-String javaSkipToClosingParantheses() #void {
-  final StringBuilder aSB = new StringBuilder ();
-  int nNesting = 1;
-  while (true) {
-    final Token tok = getNextToken();
-    aSB.append (tok.image);
-    if (tok.kind == LROUND) 
-      nNesting++;
-    else
-      if (tok.kind == RROUND) {
-        nNesting--;
-        if (nNesting == 0)
-          break;
-      }
-  }
-  return aSB.toString ();
 }
 
 void function() #Function : 
