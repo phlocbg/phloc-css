@@ -279,17 +279,7 @@ public final class CSSVisitor
    */
   public static void visitUnknownRule (@Nonnull final CSSUnknownRule aUnknownRule, @Nonnull final ICSSVisitor aVisitor)
   {
-    aVisitor.onBeginUnknownRule (aUnknownRule);
-    try
-    {
-      // for all nested rules
-      for (final ICSSTopLevelRule aRule : aUnknownRule.getAllRules ())
-        visitTopLevelRule (aRule, aVisitor);
-    }
-    finally
-    {
-      aVisitor.onEndUnknownRule (aUnknownRule);
-    }
+    aVisitor.onUnknownRule (aUnknownRule);
   }
 
   /**

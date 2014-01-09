@@ -222,20 +222,12 @@ public interface ICSSVisitor
 
   // unknown rules
   /**
-   * Called when an unknown rule starts.
+   * Called when an unknown rule is encountered.
    * 
    * @param aUnknownRule
    *        The unknown rule. Never <code>null</code>.
    */
-  void onBeginUnknownRule (@Nonnull CSSUnknownRule aUnknownRule);
-
-  /**
-   * Called when an unknown rule ends.
-   * 
-   * @param aUnknownRule
-   *        The unknown rule. Never <code>null</code>.
-   */
-  void onEndUnknownRule (@Nonnull CSSUnknownRule aUnknownRule);
+  void onUnknownRule (@Nonnull CSSUnknownRule aUnknownRule);
 
   /**
    * After visiting is done.<br>
