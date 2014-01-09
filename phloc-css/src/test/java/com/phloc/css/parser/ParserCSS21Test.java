@@ -23,6 +23,11 @@ import org.junit.Test;
 
 import com.phloc.css.AbstractCSS21Test;
 
+/**
+ * Test class for class {@link ParserCSS21}.
+ * 
+ * @author Philip Helger
+ */
 public final class ParserCSS21Test extends AbstractCSS21Test
 {
   @Test

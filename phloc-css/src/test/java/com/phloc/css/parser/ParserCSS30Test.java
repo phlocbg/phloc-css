@@ -28,6 +28,11 @@ import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSTopLevelRule;
 import com.phloc.css.handler.CSSHandler;
 
+/**
+ * Test class for class {@link ParserCSS30}.
+ * 
+ * @author Philip Helger
+ */
 public final class ParserCSS30Test extends AbstractCSS30Test
 {
   @Test

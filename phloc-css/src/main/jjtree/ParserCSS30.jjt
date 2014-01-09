@@ -82,8 +82,8 @@ TOKEN_MGR_DECLS :
 <DEFAULT, IN_NTH>
 TOKEN :
 {
-  < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
-| < W: ( <S> )? >
+  < S: (" "|"\t"|"\r"|"\n"|"\f")+ >
+| < W: ( <S> )? >  
 }
 
 <DEFAULT>
@@ -184,7 +184,8 @@ TOKEN :
                          | <ESCAPE>
                          )* >
 | < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/" >
-| < #URANGE_H: <H> | "?" >
+| < #URANGE_H: <H> 
+             | "?" >
 | < #URANGE_PLACEHOLDER: <URANGE_H>
                        | <URANGE_H><URANGE_H>
                        | <URANGE_H><URANGE_H><URANGE_H>
@@ -206,7 +207,11 @@ TOKEN :
 // ident        -?{nmstart}{nmchar}*
 // Note: "*" hack for IE <= 6
 // Note: "$" hack for IE <= 7
-| < IDENT: ("-"|"$"|"*")? <NMSTART> ( <NMCHAR> )* > { matchedToken.image = ParseUtils.validateIdentifier(image); }
+| < IDENT: ( "-"
+           | "$" ( <S> )*
+           | "*" ( <S> )* )? 
+           <NMSTART> 
+           ( <NMCHAR> )* > { matchedToken.image = ParseUtils.validateIdentifier(image); }
 
 | < CDO: "<!--" >
 | < CDC: "-->" >
@@ -260,16 +265,14 @@ TOKEN :
 | < PERCENTAGE: <NUM> "%" >    { matchedToken.image = ParseUtils.splitNumber(image) + "%"; }
 // | < DIMENSION: <NUM> <IDENT> >
 
-// "url("{w}{string}{w}")"  {return URI;}
-// "url("{w}{url}{w}")" {return URI;}
-| < URI: "url(" ( <S> )* ( <STRING1>
-                         | <STRING2>
-                         | ( <URLCHAR> )*
-                         ) ( <S> )* ")" >
-  { matchedToken.image = ParseUtils.trimUrl(image); }
+| < #URL_CONTENT: ( <S> )* ( <STRING1>
+                           | <STRING2>
+                           | ( <URLCHAR> )*
+                           ) ( <S> )* >
+| < URL: "url(" <URL_CONTENT> ")" >   { matchedToken.image = ParseUtils.trimUrl(image); }
 
-| < CALC: "calc(" >
-| < NOT: ":not(" >
+| < FUNCTION_CALC: "calc(" >
+| < FUNCTION_NOT: ":not(" >
 | < FUNCTION_NTH: "nth-child(" 
                 | "nth-last-child(" 
                 | "nth-of-type(" 
@@ -402,19 +405,29 @@ String anyIdentifier() #void : {}
 void unknownRuleParameter() : 
 { String sIdentifier; }
 {
-  ( function() 
+  ( function()
+  | url() 
   | sIdentifier = anyIdentifier() { jjtThis.setText (sIdentifier); }
   | <NUMBER>                      { jjtThis.setText (token.image); }
+  | <COMMA>                       { jjtThis.setText (token.image); }
   )
-  ( <S> )*
 }
+
+void unknownRuleParameterList() #void : {}
+{
+  unknownRuleParameter()
+  ( <S> )*
+  ( unknownRuleParameter()
+    ( <S> )*
+  )*
+}  
 
 // Any unsupported rule - contains some heuristics what is allowed and what not
 void unknownRule() : {}
 {
   <AT_UNKNOWN> { jjtThis.setText (token.image); }
   ( <S> )*
-  ( unknownRuleParameter() )*  
+  ( unknownRuleParameterList() )? 
   <LBRACE>
   ( <S> )*
   ( ( styleRule()
@@ -425,19 +438,12 @@ void unknownRule() : {}
     | viewportRule()
     | supportsRule()
     | unknownRule()
-    | styleDeclarationBlock()
     )
     ( <S> )*
   )*
   <RBRACE>
 }
 
-//
-// import
-//  : IMPORT_SYM S*
-//    [STRING|URI] S* [ medium [ COMMA S* medium]* ]? ';' S*
-//  ;
-//
 void importRule() #ImportRule :
 {
   String sUrl;
@@ -446,7 +452,7 @@ void importRule() #ImportRule :
   <IMPORT_SYM>
   ( <S> )*
   ( sUrl = string() { jjtThis.setText (sUrl); }
-  | uri()
+  | url()
   )
   ( <S> )*
   ( mediaList() )?
@@ -454,6 +460,20 @@ void importRule() #ImportRule :
 }
 
 // ------------ NAMESPACE ------------
+
+void namespaceRulePrefix() : {}
+{
+  <IDENT> { jjtThis.setText (token.image); }
+} 
+
+void namespaceRuleURL() : 
+{ String s; }
+{
+  // URL tokens are always passed without the quotes!
+  ( <URL>        { jjtThis.setText (token.image); }
+  | s = string() { jjtThis.setText (ParseUtils.unescapeURL (s)); }
+  )
+} 
 
 void namespaceRule() : {}
 {
@@ -467,27 +487,6 @@ void namespaceRule() : {}
   <SEMICOLON>
 } 
 
-void namespaceRulePrefix() : {}
-{
-  <IDENT> { jjtThis.setText (token.image); }
-} 
-
-void namespaceRuleURL() : 
-{ 
-  String s;
-}
-{
-  // URI tokens are always passed without the quotes!
-  ( <URI> { jjtThis.setText ('"' + token.image + '"'); }
-  | s = string() { jjtThis.setText (s); }
-  )
-} 
-
-//
-// media
-//  : MEDIA_SYM S* medium [ COMMA S* medium ]* LBRACE S* ruleset* '}' S*
-//  ;
-//
 void mediaRule() : {}
 {
   <MEDIA_SYM>
@@ -527,6 +526,7 @@ void mediaQuery() : {}
 {
   ( mediaModifier()
     medium()
+    ( <S> )*
     ( <AND_SYM>
       ( <S> )*
       mediaExpr()
@@ -539,25 +539,18 @@ void mediaQuery() : {}
   )  
 }
 
-void mediaModifier() :
-{ Token t; }
+void mediaModifier() : {}
 {
-  ( t = <ONLY_SYM> { jjtThis.setText (t.image); }
+  ( <ONLY_SYM> { jjtThis.setText (token.image); }
     <S>
-  | t = <NOT_SYM>  { jjtThis.setText (t.image); } 
+  | <NOT_SYM>  { jjtThis.setText (token.image); } 
     <S>
   )?
 }
 
-//
-// medium
-//   : IDENT S*
-//   ;
-//
 void medium() #Medium : {}
 {
   <IDENT> { jjtThis.setText (token.image); }
-  ( <S> )*
 }
 
 void mediaExpr() : {}
@@ -565,8 +558,8 @@ void mediaExpr() : {}
   <LROUND>
   ( <S> )*
   mediaFeature()
-  (
-    <COLON>
+  ( <S> )*
+  ( <COLON>
     ( <S> )*
     expr()
   )?
@@ -574,20 +567,11 @@ void mediaExpr() : {}
   ( <S> )*
 }
 
-void mediaFeature() #MediaFeature :
-{ Token t; }
+void mediaFeature() #MediaFeature : {}
 {
-  t = <IDENT>
-  ( <S> )*
-  { jjtThis.setText (t.image); }
+  <IDENT>  { jjtThis.setText (token.image); }
 }
 
-//
-// page
-//  : PAGE_SYM S* pseudo_page? S*
-//    LBRACE S* declaration [ ';' S* declaration ]* '}' S*
-//  ;
-//
 void pageRule() : {}
 {
   <PAGE_SYM>
@@ -609,6 +593,7 @@ void pseudoPage() #PseudoPage : {}
 void selector() : {}
 {
   simpleSelectorSequence()
+// LA3: <S> <PLUS> <LBRACE> simpleSelectorSequence()   
   ( LOOKAHEAD(2)
     combinator()
     ( <S> )*
@@ -618,6 +603,7 @@ void selector() : {}
 
 void combinator() #Combinator : {}
 {
+// IMPORTANT to use ( <S> )? here and not ( <S> )+ because of comment handling!  
   ( LOOKAHEAD(2)
     ( <S> )? 
     <PLUS>       { jjtThis.setText ("+"); }
@@ -625,7 +611,7 @@ void combinator() #Combinator : {}
     ( <S> )? 
     <GREATER>    { jjtThis.setText (">"); }
   | LOOKAHEAD(2)
-    ( <S> )? 
+    ( <S> )?
     <TILDE>      { jjtThis.setText ("~"); }
   | <S>          { jjtThis.setText (" "); }
   )
@@ -766,7 +752,7 @@ void __pseudoNth () #nth :
 void negation() #Negation :
 { Token t; }
 {
-  <NOT> { jjtThis.setText (":not("); }
+  <FUNCTION_NOT> { jjtThis.setText (":not("); }
   ( <S> )*
   ( negationArg()
     ( <S> )*
@@ -878,11 +864,6 @@ void prio() #Important : {}
   ( <S> )*
 }
 
-//
-// expr
-//   : term [ operator term ]*
-//   ;
-//
 void expr() : {}
 {
   term()
@@ -941,7 +922,7 @@ void term() #Term :
 // Hack to allow "from" and "to" as identifiers (e.g. in linear-gradient)
   | t = <FROM_SYM>
   | t = <TO_SYM>
-  | uri()
+  | url()
   | t = <HASH>
   | function()
   | math()
@@ -957,9 +938,9 @@ void term() #Term :
   }
 }
 
-void uri() #URI : {}
+void url() #URL : {}
 {
-  <URI>  { jjtThis.setText (token.image); } 
+  <URL>  { jjtThis.setText (token.image); } 
 }
 
 JAVACODE
@@ -981,11 +962,6 @@ String javaSkipToClosingParantheses() #void {
   return aSB.toString ();
 }
 
-//
-// function
-//   : FUNCTION S* expr ')'
-//   ;
-//
 void function() #Function : 
 { String sPlain; }
 {
@@ -1002,7 +978,7 @@ void function() #Function :
 
 void math() : {}
 {
-  <CALC>
+  <FUNCTION_CALC>
   ( <S> )*
   sum()
   ( <S> )*
@@ -1118,31 +1094,32 @@ void keyframesIdentifier() :  {}
   <IDENT> { jjtThis.setText (token.image); }    
 }
 
-// #void : do not generate a tree node for this 
-void keyframesBlocks() #void : {}
-{
-  ( keyframesSelector()
-    styleDeclarationBlock()
-    ( <S> )* 
-  )*
-}
-
-void keyframesSelector() : {}
-{
-  singleKeyframeSelector()
-  ( <COMMA>
-    ( <S> )*
-    singleKeyframeSelector()
-  )*  
-}
-
 void singleKeyframeSelector() : {}
 {
   ( <FROM_SYM>   { jjtThis.setText (token.image); }
   | <TO_SYM>     { jjtThis.setText (token.image); }
   | <PERCENTAGE> { jjtThis.setText (token.image); }  
   )
+}
+
+void keyframesSelector() : {}
+{
+  singleKeyframeSelector()
   ( <S> )*
+  ( <COMMA>
+    ( <S> )*
+    singleKeyframeSelector()
+    ( <S> )*
+  )*  
+}
+
+// #void : do not generate a tree node for this 
+void keyframesBlocks() #void : {}
+{
+  ( keyframesSelector()
+    styleDeclarationBlock()
+    ( <S> )*
+  )*
 }
 
 //

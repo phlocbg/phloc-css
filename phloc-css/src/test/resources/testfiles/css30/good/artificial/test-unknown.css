@@ -34,13 +34,49 @@ E ~ F {}
 @-moz-document expression(content is ignored){ 
   #header-buttons ul ul{margin:1px 0 0 0 0 }
 }
+
+@-moz-document url-prefix() {
+  .fl { float:left; margin:12px 4px 0 0; padding:0; font-size:65px;  line-height:62%;  color:#ba1820; }
+  .fs { float:left; margin:12px 4px 10px 0; padding:0; font-size:65px; line-height:62%; color:#ba1820; }
+}
+
+@-moz-document url(http://www.w3.org/),
+                   url-prefix("http://www.w3.org/Style/"),
+                   domain("mozilla.org")
+    {
+      /* CSS rules here apply to:
+         + The page "http://www.w3.org/".
+         + Any page whose URL begins with "http://www.w3.org/Style/"
+         + Any page whose URL's host is "mozilla.org" or ends with
+           ".mozilla.org"
+       */
+
+      /* make the above-mentioned pages really ugly */
+      body { color: purple; background: yellow; }
+}
+
+@document url(http://www.w3.org/),
+               url-prefix("http://www.w3.org/Style/"),
+               domain("mozilla.org"),
+               regexp("https:.*")
+{
+  /* CSS rules here apply to:
+     + The page "http://www.w3.org/".
+     + Any page whose URL begins with "http://www.w3.org/Style/"
+     + Any page whose URL's host is "mozilla.org" or ends with
+       ".mozilla.org"
+     + Any page whose URL starts with "https:" */
+
+  /* make the above-mentioned pages really ugly */
+  body { color: purple; background: yellow; }
+}
  
 @three-dee {
 	@background-lighting {
-/* 
+/*	
     azimuth: 30deg;
     elevation: 190deg;
-*/
+*/    
   }
   h1 { color: red }
 }
