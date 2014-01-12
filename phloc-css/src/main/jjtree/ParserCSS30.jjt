@@ -83,7 +83,7 @@ TOKEN_MGR_DECLS :
 TOKEN :
 {
   < S: (" "|"\t"|"\r"|"\n"|"\f")+ >
-| < W: ( <S> )? >  
+| < W: ( <S> )? >
 }
 
 <DEFAULT>
@@ -143,32 +143,21 @@ TOKEN :
                                  )? >
 | < #ESCAPE_OTHER: "\\" ~["\r","\n","\f","0"-"9","a"-"f"] >
 | < #ESCAPE: <ESCAPE_UNICODE>
-           | <ESCAPE_OTHER>
-           >
-           
+           | <ESCAPE_OTHER> >
 // nmstart      [_a-z]|{nonascii}|{escape}
 | < #NMSTART: ["_","a"-"z"]
             | <NONASCII>
             | <ESCAPE>
             >
-
 // nmchar       [_a-z0-9-]|{nonascii}|{escape}
 | < #NMCHAR: ["_","a"-"z","0"-"9","-"]
            | <NONASCII>
            | <ESCAPE>
            >
-
-| < #NAME: ( <NMCHAR> )+ >
-| < #NUM: ( ["0"-"9"] )+
-        | ( ["0"-"9"] )* "." ( ["0"-"9"] )+ >
-| < #URLCHAR: ["!","#","$","%","&","*"-"[","]"-"~"]
-            | <NONASCII>
-            | <ESCAPE> >
-
 // First, inside a string, a backslash followed by a newline is ignored (i.e., the string is deemed not to contain either the backslash or the newline).           
-| < STRING_EOL: "\\" ( "\n" 
-                     | "\r\n" 
-                     | "\r" 
+| < STRING_EOL: "\\" ( "\n"
+                     | "\r\n"
+                     | "\r"
                      | "\f" ) >  { matchedToken.image = ""; }    
 | < STRING1: "\"" ( ~["\n","\r","\f","\\","\""]
                   | <STRING_EOL>
@@ -186,6 +175,12 @@ TOKEN :
                          | <STRING_EOL>
                          | <ESCAPE>
                          )* >
+| < #NAME: ( <NMCHAR> )+ >
+| < #NUM: ( ["0"-"9"] )+
+        | ( ["0"-"9"] )* "." ( ["0"-"9"] )+ >
+| < #URLCHAR: ["!","#","$","%","&","*"-"[","]"-"~"]
+            | <NONASCII>
+            | <ESCAPE> >
 | < #URANGE_H: <H> 
              | "?" >
 | < #URANGE_PLACEHOLDER: <URANGE_H>
@@ -199,7 +194,8 @@ TOKEN :
 
 | < LBRACE: <W> "{" >
 | < RBRACE: "}" >
-| < GREATER: ">" >
+| < LSQUARE: "[" >
+| < RSQUARE: "]" >
 | < DOT: "." >
 | < COMMA: <W> "," >
 | < SEMICOLON: ";" >
@@ -208,9 +204,9 @@ TOKEN :
 | < SLASH: "/" >
 | < EQUALS: "=" >
 | < DASH: "|" >
-| < LSQUARE: "[" >
-| < RSQUARE: "]" >
+| < GREATER: ">" >
 | < TILDE: "~" >
+| < HASH: "#" <NAME> >
 | < INCLUDES: "~=" >
 | < DASHMATCH: "|=" >
 | < PREFIXMATCH: "^=" >
@@ -218,7 +214,6 @@ TOKEN :
 | < SUBSTRINGMATCH: "*=" >
 | < CDO: "<!--" >
 | < CDC: "-->" >
-| < HASH: "#" <NAME> >
 | < CHARSET_SYM: "@charset" >
 | < IMPORT_SYM: "@import" >
 | < NAMESPACE_SYM: "@namespace" >
@@ -283,7 +278,7 @@ TOKEN :
                            | <STRING2>
                            | ( <URLCHAR> )*
                            ) ( <S> )* >
-| < URL: "url(" <URL_CONTENT> ")" >   { matchedToken.image = ParseUtils.trimUrl(image); }
+| < URL: "url(" <URL_CONTENT> ")" >  { matchedToken.image = ParseUtils.trimUrl(image); }
 
 | < FUNCTION_CALC: "calc(" >
 | < FUNCTION_NOT: ":not(" >
@@ -291,13 +286,13 @@ TOKEN :
                 | "nth-last-child(" 
                 | "nth-of-type(" 
                 | "nth-last-of-type(" > : IN_NTH
-// Expressions were abandoned after IE8                
+// Expressions were abandoned after IE8
 | < FUNCTION_EXPRESSION: "expression(" >
-// Extension for IE 
+// Extension for IE
 //   filter: progid:DXImageTransform.Microsoft.Alpha(opacity=50);
 | < FUNCTION: <IDENT> "(" 
             | "progid" ( <S> )* <COLON> ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
-  > { matchedToken.image = image.toString (); }
+            > { matchedToken.image = image.toString (); }
 // Unicode range  
 | < URANGE: "u+" ( <HNUM> 
                  | <HNUM> "-" <HNUM> 
@@ -744,15 +739,14 @@ void attribValue() :
   )
 }
 
-void attrib() :
-{ Token t; }
+void attrib() : {}
 {
   <LSQUARE>
   ( <S> )*
   ( LOOKAHEAD(2)
     namespacePrefix() 
   )?
-  t = <IDENT> { jjtThis.setText (t.image); }
+  <IDENT> { jjtThis.setText (token.image); }
   /* Hack for html[xmlns*=""] */
   ( <ASTERISK> { jjtThis.appendText ("*"); } )?          
   ( <S> )*
@@ -850,7 +844,7 @@ void simpleSelectorSequence() #void : {}
 
 void selectorCombinator() : {}
 {
-// IMPORTANT to use ( <S> )? here and not ( <S> )+ because of comment handling!  
+// IMPORTANT to use ( <S> )? here and not ( <S> )+ because of comment handling!
   ( LOOKAHEAD(2)
     ( <S> )? 
     <PLUS>       { jjtThis.setText ("+"); }
@@ -867,7 +861,6 @@ void selectorCombinator() : {}
 void selector() : {}
 {
   simpleSelectorSequence()
-// LA3: <S> <PLUS> <LBRACE> simpleSelectorSequence()   
   ( LOOKAHEAD(2)
     selectorCombinator()
     ( <S> )*

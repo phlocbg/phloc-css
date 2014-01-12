@@ -120,60 +120,43 @@ TOKEN :
 // nonascii  [^\0-\177] - everything except 0x00-0x7f
 | < #NONASCII: ["\u0080"-"\uffff"] >
 
-// unicode      \\{h}{1,6}(\r\n|[ \t\r\n\f])?
-| < #UNICODE: "\\" <HNUM> ( "\r\n"
-                          | [" ","\t","\r","\n","\f"]
-                          )? >
-
-// escape       {unicode}|\\[^\r\n\f0-9a-f]
-| < #ESCAPE: <UNICODE>
-           | ( "\\" ~["\r","\n","\f","0"-"9","a"-"f"] ) >
-
+| < #ESCAPE_UNICODE: "\\" <HNUM> ( "\r\n"
+                                 | [" ","\t","\r","\n","\f"]
+                                 )? >
+| < #ESCAPE_OTHER: "\\" ~["\r","\n","\f","0"-"9","a"-"f"] >
+| < #ESCAPE: <ESCAPE_UNICODE>
+           | <ESCAPE_OTHER> >
 // nmstart      [_a-z]|{nonascii}|{escape}
 | < #NMSTART: ["_","a"-"z"]
             | <NONASCII>
             | <ESCAPE>
             >
-
 // nmchar       [_a-z0-9-]|{nonascii}|{escape}
 | < #NMCHAR: ["_","a"-"z","0"-"9","-"]
            | <NONASCII>
            | <ESCAPE>
            >
-| < STRING_EOL: "\n" 
-              | "\r\n" 
-              | "\r" 
-              | "\f" > { matchedToken.image = ""; }
+// First, inside a string, a backslash followed by a newline is ignored (i.e., the string is deemed not to contain either the backslash or the newline).           
+| < STRING_EOL: "\\" ( "\n"
+                     | "\r\n"
+                     | "\r"
+                     | "\f" ) >  { matchedToken.image = ""; }    
 | < STRING1: "\"" ( ~["\n","\r","\f","\\","\""]
-                  | "\\" <STRING_EOL>
+                  | <STRING_EOL>
                   | <ESCAPE>
                   )* "\"" >
 | < STRING2: "'" ( ~["\n","\r","\f","\\","'"]
-                 | "\\" <STRING_EOL>
+                 | <STRING_EOL>
                  | <ESCAPE>
                  )* "'" >
 | < INVALID_STRING1: "\"" ( ~["\n","\r","\f","\\","\""]
-                          | "\\" <STRING_EOL>
+                          | <STRING_EOL>
                           | <ESCAPE>
                           )* >
 | < INVALID_STRING2: "'" ( ~["\n","\r","\f","\\","'"]
-                         | "\\" <STRING_EOL>
+                         | <STRING_EOL>
                          | <ESCAPE>
                          )* >
-
-| < NUMBER: <NUM> >
-
-// before ident!
-| < INHERIT: "inherit" >
-
-// ident        -?{nmstart}{nmchar}*
-// Note: "*" hack for IE <= 6
-// Note: "$" hack for IE <= 7
-| < IDENT: ( "-"
-           | "$" ( <S> )*
-           | "*" ( <S> )* )? 
-           <NMSTART> 
-           ( <NMCHAR> )* > { matchedToken.image = ParseUtils.validateIdentifier(image); }
 
 | < #NAME: ( <NMCHAR> )+ >
 | < #NUM: ( ["0"-"9"] )+
@@ -181,6 +164,8 @@ TOKEN :
 | < #URLCHAR: ["!","#","$","%","&","*"-"[","]"-"~"]
             | <NONASCII>
             | <ESCAPE> >
+
+| < NUMBER: <NUM> >
 
 | < LBRACE: <W> "{" >
 | < RBRACE: "}" >
@@ -212,6 +197,18 @@ TOKEN :
 | < AT_UNKNOWN: "@" <IDENT> >
 | < IMPORTANT_SYM: "!" ( <S> )* "important" >
 
+// before ident!
+| < INHERIT: "inherit" >
+
+// ident        -?{nmstart}{nmchar}*
+// Note: "*" hack for IE <= 6
+// Note: "$" hack for IE <= 7
+| < IDENT: ( "-"
+           | "$" ( <S> )*
+           | "*" ( <S> )* )? 
+           <NMSTART> 
+           ( <NMCHAR> )* > { matchedToken.image = ParseUtils.validateIdentifier(image); }
+
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
 | < EX: <NUM> "ex" >           { matchedToken.image = ParseUtils.splitNumber(image) + "ex"; }
 | < PX: <NUM> "px" >           { matchedToken.image = ParseUtils.splitNumber(image) + "px"; }
@@ -236,12 +233,12 @@ TOKEN :
                            ) ( <S> )* >
 | < URL: "url(" <URL_CONTENT> ")" >  { matchedToken.image = ParseUtils.trimUrl(image); }
 
-// Expressions were abandoned after IE8                
+// Expressions were abandoned after IE8
 | < FUNCTION_EXPRESSION: "expression(" >
-// Extension for IE 
+// Extension for IE
 //   filter: progid:DXImageTransform.Microsoft.Alpha(opacity=50);
 | < FUNCTION: <IDENT> "(" 
-            | "progid" ( <S> )* ":" ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
+            | "progid" ( <S> )* <COLON> ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
             > { matchedToken.image = image.toString (); }
 }
 
@@ -436,7 +433,6 @@ void exprTerm() :
 {
   String sPrefix = null;
   Token t = null;
-  String sStr;
 }
 {
   ( ( sPrefix = unaryOperator() )?
@@ -444,7 +440,7 @@ void exprTerm() :
     | t = <PERCENTAGE>
     | t = dimension()
     )
-  | sStr = string()    { jjtThis.setText (sStr); }
+  | sPrefix = string()
   | t = <IDENT>
   | url()
   | t = <HASH>
@@ -496,9 +492,7 @@ void charsetRule() :
 // Import rule
 //
 void importRule() :
-{
-  String sUrl;
-}
+{ String sUrl; }
 {
   <IMPORT_SYM>
   ( <S> )*
@@ -646,6 +640,7 @@ void simpleSelectorSequence() #void : {}
 
 void selectorCombinator() : {}
 {
+// IMPORTANT to use ( <S> )? here and not ( <S> )+ because of comment handling!
   ( LOOKAHEAD(2)
     ( <S> )? 
     <PLUS>       { jjtThis.setText ("+"); }
@@ -687,7 +682,6 @@ void styleDeclaration() : {}
   ( important() )?
 }
 
-// Multiple style declarations together
 CSSNode styleDeclarationList() : {}
 {
   ( <S> )*
@@ -765,7 +759,7 @@ void mediaRule() : {}
 //
 // Page rule
 //
-void pseudoPage() #PseudoPage : {}
+void pseudoPage() : {}
 {
   <COLON>
   <IDENT> { jjtThis.setText (":" + token.image); }
@@ -780,7 +774,6 @@ void pageRule() : {}
   )?
   styleDeclarationBlock()
 }
-
 
 //
 // Unknown rule
