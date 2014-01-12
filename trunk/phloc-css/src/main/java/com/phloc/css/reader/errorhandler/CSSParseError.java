@@ -32,7 +32,7 @@ import com.phloc.css.parser.Token;
  * @author Philip Helger
  */
 @Immutable
-public final class CSSParseError
+public class CSSParseError
 {
   private final ReadonlyToken m_aLastValidToken;
   private final String m_sExpectedTokens;

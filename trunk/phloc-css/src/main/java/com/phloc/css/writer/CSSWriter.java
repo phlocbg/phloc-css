@@ -43,7 +43,7 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * @author Philip Helger
  */
 @Immutable
-public final class CSSWriter
+public class CSSWriter
 {
   /** By default optimized output is disabled */
   public static final boolean DEFAULT_OPTIMIZED_OUTPUT = CSSWriterSettings.DEFAULT_OPTIMIZED_OUTPUT;

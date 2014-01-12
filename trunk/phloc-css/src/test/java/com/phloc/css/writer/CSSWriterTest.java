@@ -20,8 +20,6 @@ package com.phloc.css.writer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
 import com.phloc.commons.charset.CCharset;
@@ -38,7 +36,7 @@ import com.phloc.css.reader.CSSReader;
 public final class CSSWriterTest extends AbstractCSS30Test
 {
   @Test
-  public void testIndentation () throws IOException
+  public void testIndentation ()
   {
     final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS3, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
@@ -146,7 +144,7 @@ public final class CSSWriterTest extends AbstractCSS30Test
   }
 
   @Test
-  public void testIndentationNested () throws IOException
+  public void testIndentationNested ()
   {
     final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS4, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
@@ -190,7 +188,7 @@ public final class CSSWriterTest extends AbstractCSS30Test
   }
 
   @Test
-  public void testRemoveUnnecessaryCode1 () throws IOException
+  public void testRemoveUnnecessaryCode1 ()
   {
     final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS3, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
@@ -238,7 +236,7 @@ public final class CSSWriterTest extends AbstractCSS30Test
   }
 
   @Test
-  public void testRemoveUnnecessaryCode2 () throws IOException
+  public void testRemoveUnnecessaryCode2 ()
   {
     final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS4, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
@@ -277,7 +275,7 @@ public final class CSSWriterTest extends AbstractCSS30Test
   }
 
   @Test
-  public void testHeaderText () throws IOException
+  public void testHeaderText ()
   {
     final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS5, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     assertNotNull (aCSS);
@@ -304,7 +302,7 @@ public final class CSSWriterTest extends AbstractCSS30Test
   }
 
   @Test
-  public void testWriteCertainRules () throws IOException
+  public void testWriteCertainRules ()
   {
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, true);
     aSettings.setWriteFontFaceRules (false);

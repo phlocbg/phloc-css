@@ -52,6 +52,9 @@ public final class CSSNumberHelper
     s_aNameToUnitMap = ContainerHelper.getSortedByKey (aNameToUnitMap, new ComparatorStringLongestFirst ());
   }
 
+  @SuppressWarnings ("unused")
+  private static final CSSNumberHelper s_aInstance = new CSSNumberHelper ();
+
   private CSSNumberHelper ()
   {}
 

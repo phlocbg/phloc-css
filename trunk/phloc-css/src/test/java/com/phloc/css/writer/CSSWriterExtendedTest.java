@@ -43,7 +43,7 @@ public final class CSSWriterExtendedTest
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSWriterExtendedTest.class);
 
-  private void _testMe (@Nonnull final File aFile, @Nonnull final ECSSVersion eVersion) throws IOException
+  private void _testMe (@Nonnull final File aFile, @Nonnull final ECSSVersion eVersion)
   {
     if (false)
       s_aLogger.info (aFile.getAbsolutePath ());
@@ -68,7 +68,7 @@ public final class CSSWriterExtendedTest
   }
 
   @Test
-  public void testScanTestResourcesHandler21 () throws IOException
+  public void testScanTestResourcesHandler21 ()
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css21/good/artificial"),
                                                                 new FilenameFilterEndsWith (".css")))
@@ -78,7 +78,7 @@ public final class CSSWriterExtendedTest
   }
 
   @Test
-  public void testScanTestResourcesHandler30 () throws IOException
+  public void testScanTestResourcesHandler30 ()
   {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/test/resources/testfiles/css30/good/artificial"),
                                                                 new FilenameFilterEndsWith (".css")))
@@ -113,14 +113,14 @@ public final class CSSWriterExtendedTest
   }
 
   @Test
-  public void testCompressCSS_Size () throws IOException
+  public void testCompressCSS_Size ()
   {
     final CascadingStyleSheet aCSS = CSSReader.readFromStream (new ClassPathResource ("/testfiles/css21/good/phloc/test/content.css"),
                                                                CCharset.CHARSET_UTF_8_OBJ,
                                                                ECSSVersion.CSS21);
     assertNotNull (aCSS);
 
-    // Only whitespace optimisation
+    // Only whitespace optimization
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS21, true);
     String sContent = new CSSWriter (aSettings).getCSSAsString (aCSS);
     assertEquals (2873, sContent.length ());

@@ -19,6 +19,7 @@ package com.phloc.css.propertyvalue;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.css.ECSSUnit;
 
 //ESCA-JAVA0022:
@@ -217,6 +218,10 @@ public final class CCSSValue
   public static final String FONT_TAHOMA = "Tahoma";
   public static final String FONT_VERDANA = "Verdana";
   public static final String FONT_MONOSPACE = FONT_COURIER_NEW;
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final CCSSValue s_aInstance = new CCSSValue ();
 
   private CCSSValue ()
   {}

@@ -20,6 +20,7 @@ package com.phloc.css.decl.visit;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
@@ -46,6 +47,10 @@ import com.phloc.css.decl.IHasCSSDeclarations;
 @Immutable
 public final class CSSVisitor
 {
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final CSSVisitor s_aInstance = new CSSVisitor ();
+
   private CSSVisitor ()
   {}
 
