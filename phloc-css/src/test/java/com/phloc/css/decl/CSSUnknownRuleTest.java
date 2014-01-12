@@ -19,6 +19,7 @@ package com.phloc.css.decl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import javax.annotation.Nonnull;
 
@@ -36,10 +37,11 @@ import com.phloc.css.reader.CSSReader;
 public final class CSSUnknownRuleTest
 {
   @Nonnull
-  private static CSSUnknownRule _parse (final String sCSS)
+  private static CSSUnknownRule _parse (@Nonnull final String sCSS)
   {
     final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.LATEST);
     assertNotNull (sCSS, aCSS);
+    assertTrue (aCSS.hasUnknownRules ());
     assertEquals (1, aCSS.getUnknownRuleCount ());
     final CSSUnknownRule ret = aCSS.getAllUnknownRules ().get (0);
     assertNotNull (ret);
@@ -49,36 +51,36 @@ public final class CSSUnknownRuleTest
   @Test
   public void testRead ()
   {
-    CSSUnknownRule aNSR;
-    aNSR = _parse ("@-moz-document {}");
-    assertEquals ("@-moz-document", aNSR.getDeclaration ());
-    assertEquals ("", aNSR.getParameterList ());
-    assertEquals ("", aNSR.getBody ());
+    CSSUnknownRule aUR;
+    aUR = _parse ("@-moz-document {}");
+    assertEquals ("@-moz-document", aUR.getDeclaration ());
+    assertEquals ("", aUR.getParameterList ());
+    assertEquals ("", aUR.getBody ());
 
-    aNSR = _parse ("@-moz-document    anything else or whatever 4711    {   }");
-    assertEquals ("@-moz-document", aNSR.getDeclaration ());
-    assertEquals ("anything else or whatever 4711", aNSR.getParameterList ());
-    assertEquals ("", aNSR.getBody ());
+    aUR = _parse ("@-moz-document    anything else or whatever 4711    {   }");
+    assertEquals ("@-moz-document", aUR.getDeclaration ());
+    assertEquals ("anything else or whatever 4711", aUR.getParameterList ());
+    assertEquals ("", aUR.getBody ());
 
-    aNSR = _parse ("@-moz-document { color: red; }");
-    assertEquals ("@-moz-document", aNSR.getDeclaration ());
-    assertEquals ("", aNSR.getParameterList ());
-    assertEquals ("color: red;", aNSR.getBody ());
+    aUR = _parse ("@-moz-document { color: red; }");
+    assertEquals ("@-moz-document", aUR.getDeclaration ());
+    assertEquals ("", aUR.getParameterList ());
+    assertEquals ("color: red;", aUR.getBody ());
 
-    aNSR = _parse ("@three-dee {\n"
-                   + "  @background-lighting {\n"
-                   + "    azimuth: 30deg;\n"
-                   + "    elevation: 190deg;\n"
-                   + "  }\n"
-                   + "  h1 { color: red }\n"
-                   + "}");
-    assertEquals ("@three-dee", aNSR.getDeclaration ());
-    assertEquals ("", aNSR.getParameterList ());
+    aUR = _parse ("@three-dee {\n"
+                  + "  @background-lighting {\n"
+                  + "    azimuth: 30deg;\n"
+                  + "    elevation: 190deg;\n"
+                  + "  }\n"
+                  + "  h1 { color: red }\n"
+                  + "}");
+    assertEquals ("@three-dee", aUR.getDeclaration ());
+    assertEquals ("", aUR.getParameterList ());
     assertEquals ("@background-lighting {\n"
                   + "    azimuth: 30deg;\n"
                   + "    elevation: 190deg;\n"
                   + "  }\n"
-                  + "  h1 { color: red }", aNSR.getBody ());
+                  + "  h1 { color: red }", aUR.getBody ());
 
   }
 }

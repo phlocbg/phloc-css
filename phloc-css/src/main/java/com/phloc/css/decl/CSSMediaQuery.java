@@ -68,6 +68,11 @@ public final class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAwa
   private final List <CSSMediaExpression> m_aMediaExpressions = new ArrayList <CSSMediaExpression> ();
   private CSSSourceLocation m_aSourceLocation;
 
+  public CSSMediaQuery (@Nullable final String sMedium)
+  {
+    this (EModifier.NONE, sMedium);
+  }
+
   public CSSMediaQuery (@Nonnull final EModifier eModifier, @Nullable final String sMedium)
   {
     if (eModifier == null)
