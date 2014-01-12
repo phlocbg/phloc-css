@@ -30,7 +30,7 @@ import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single negation supports condition
+ * Represents a single negation supports condition. E.g. "not (color: blue)"
  * 
  * @author Philip Helger
  */
@@ -46,6 +46,9 @@ public class CSSSupportsConditionNegation implements ICSSSupportsConditionMember
     m_aSupportsMember = aSupportsMember;
   }
 
+  /**
+   * @return The contained supports condition member. Never <code>null</code>.
+   */
   @Nonnull
   public ICSSSupportsConditionMember getSupportsMember ()
   {

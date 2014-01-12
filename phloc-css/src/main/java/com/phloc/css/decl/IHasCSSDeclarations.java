@@ -39,8 +39,10 @@ public interface IHasCSSDeclarations extends ICSSWriteable
    * 
    * @param aDeclaration
    *        The declaration to be added. May not be <code>null</code>.
+   * @return this
    */
-  void addDeclaration (@Nonnull CSSDeclaration aDeclaration);
+  @Nonnull
+  IHasCSSDeclarations addDeclaration (@Nonnull CSSDeclaration aDeclaration);
 
   /**
    * Add a new declaration at the specified index.
@@ -51,8 +53,10 @@ public interface IHasCSSDeclarations extends ICSSWriteable
    *        {@link #addDeclaration(CSSDeclaration)}.
    * @param aDeclaration
    *        The declaration to be added. May not be <code>null</code>.
+   * @return this
    */
-  void addDeclaration (@Nonnegative int nIndex, @Nonnull CSSDeclaration aDeclaration);
+  @Nonnull
+  IHasCSSDeclarations addDeclaration (@Nonnegative int nIndex, @Nonnull CSSDeclaration aDeclaration);
 
   /**
    * Remove the given declaration
@@ -102,8 +106,10 @@ public interface IHasCSSDeclarations extends ICSSWriteable
    *        {@link #addDeclaration(CSSDeclaration)}.
    * @param aNewDeclaration
    *        The new declaration to be set.
+   * @return this
    */
-  void setDeclarationAtIndex (@Nonnegative int nIndex, @Nonnull CSSDeclaration aNewDeclaration);
+  @Nonnull
+  IHasCSSDeclarations setDeclarationAtIndex (@Nonnegative int nIndex, @Nonnull CSSDeclaration aNewDeclaration);
 
   /**
    * @return <code>true</code> if at least one declaration is present,

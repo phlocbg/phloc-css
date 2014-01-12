@@ -66,11 +66,13 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
     return m_aConditionMembers.size ();
   }
 
-  public void addSupportConditionMember (@Nonnull final ICSSSupportsConditionMember aMember)
+  @Nonnull
+  public CSSSupportsRule addSupportConditionMember (@Nonnull final ICSSSupportsConditionMember aMember)
   {
     if (aMember == null)
       throw new NullPointerException ("member");
     m_aConditionMembers.add (aMember);
+    return this;
   }
 
   @Nonnull
@@ -114,11 +116,13 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
     return m_aRules.size ();
   }
 
-  public void addRule (@Nonnull final ICSSTopLevelRule aRule)
+  @Nonnull
+  public CSSSupportsRule addRule (@Nonnull final ICSSTopLevelRule aRule)
   {
     if (aRule == null)
       throw new NullPointerException ("rule");
     m_aRules.add (aRule);
+    return this;
   }
 
   @Nonnull

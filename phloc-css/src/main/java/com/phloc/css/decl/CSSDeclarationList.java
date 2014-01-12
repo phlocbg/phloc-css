@@ -51,14 +51,17 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   public CSSDeclarationList ()
   {}
 
-  public final void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  @Nonnull
+  public final CSSDeclarationList addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     if (aDeclaration == null)
       throw new NullPointerException ("declaration");
     m_aDeclarations.add (aDeclaration);
+    return this;
   }
 
-  public void addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSDeclarationList addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
     if (nIndex < 0)
       throw new IllegalArgumentException ("index is invalid: " + nIndex);
@@ -69,6 +72,7 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
       m_aDeclarations.add (aNewDeclaration);
     else
       m_aDeclarations.add (nIndex, aNewDeclaration);
+    return this;
   }
 
   @Nonnull
@@ -98,7 +102,9 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
     return ContainerHelper.getSafe (m_aDeclarations, nIndex);
   }
 
-  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSDeclarationList setDeclarationAtIndex (@Nonnegative final int nIndex,
+                                                   @Nonnull final CSSDeclaration aNewDeclaration)
   {
     if (nIndex < 0)
       throw new IllegalArgumentException ("index is invalid: " + nIndex);
@@ -109,6 +115,7 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
       m_aDeclarations.add (aNewDeclaration);
     else
       m_aDeclarations.set (nIndex, aNewDeclaration);
+    return this;
   }
 
   public boolean hasDeclarations ()

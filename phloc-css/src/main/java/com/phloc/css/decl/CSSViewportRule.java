@@ -72,14 +72,18 @@ public class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
     return m_sDeclaration;
   }
 
-  public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  @Nonnull
+  public CSSViewportRule addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     m_aDeclarations.addDeclaration (aDeclaration);
+    return this;
   }
 
-  public void addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSViewportRule addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.addDeclaration (nIndex, aNewDeclaration);
+    return this;
   }
 
   @Nonnull
@@ -107,9 +111,12 @@ public class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
     return m_aDeclarations.getDeclarationAtIndex (nIndex);
   }
 
-  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSViewportRule setDeclarationAtIndex (@Nonnegative final int nIndex,
+                                                @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.setDeclarationAtIndex (nIndex, aNewDeclaration);
+    return this;
   }
 
   public boolean hasDeclarations ()
