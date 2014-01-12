@@ -23,6 +23,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.EChange;
 import com.phloc.css.ICSSWriteable;
@@ -43,6 +44,23 @@ public interface IHasCSSDeclarations extends ICSSWriteable
    */
   @Nonnull
   IHasCSSDeclarations addDeclaration (@Nonnull CSSDeclaration aDeclaration);
+
+  /**
+   * Add a new declaration.
+   * 
+   * @param sProperty
+   *        The name of the property. E.g. "color". May neither be
+   *        <code>null</code> nor empty.
+   * @param aExpression
+   *        The value of the property. May not be <code>null</code>.
+   * @param bImportant
+   *        <code>true</code> if it is important, <code>false</code> if not.
+   * @return this
+   */
+  @Nonnull
+  IHasCSSDeclarations addDeclaration (@Nonnull @Nonempty final String sProperty,
+                                      @Nonnull final CSSExpression aExpression,
+                                      final boolean bImportant);
 
   /**
    * Add a new declaration at the specified index.

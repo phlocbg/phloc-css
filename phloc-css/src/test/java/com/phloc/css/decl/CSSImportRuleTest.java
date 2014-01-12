@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import org.junit.Test;
 
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.reader.CSSReader;
 import com.phloc.css.writer.CSSWriterSettings;
@@ -68,13 +69,17 @@ public final class CSSImportRuleTest
     assertEquals (new CSSMediaQuery ("print"), aIR.getAllMediaQueries ().get (0));
     assertEquals (new CSSMediaQuery ("screen"), aIR.getAllMediaQueries ().get (1));
     assertEquals ("a.gif", aIR.getLocationString ());
+
+    // Create the same rule by application
+    final CSSImportRule aCreated = new CSSImportRule ("a.gif");
+    aCreated.addMediaQuery (new CSSMediaQuery ("print")).addMediaQuery (new CSSMediaQuery ("screen"));
+    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aIR, aCreated);
   }
 
   @Test
   public void testCreate ()
   {
-    final CSSURI aURI = new CSSURI ("a.gif");
-    final CSSImportRule aImportRule = new CSSImportRule (aURI);
+    final CSSImportRule aImportRule = new CSSImportRule ("a.gif");
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
     assertEquals ("@import url(a.gif);\n", aImportRule.getAsCSSString (aSettings, 0));
     aSettings.setQuoteURLs (true);

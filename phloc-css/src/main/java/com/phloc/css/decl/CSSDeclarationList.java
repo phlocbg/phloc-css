@@ -62,6 +62,14 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   }
 
   @Nonnull
+  public final CSSDeclarationList addDeclaration (@Nonnull @Nonempty final String sProperty,
+                                                  @Nonnull final CSSExpression aExpression,
+                                                  final boolean bImportant)
+  {
+    return addDeclaration (new CSSDeclaration (sProperty, aExpression, bImportant));
+  }
+
+  @Nonnull
   public CSSDeclarationList addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
     if (nIndex < 0)

@@ -42,6 +42,12 @@ public class CSSSupportsConditionDeclaration implements ICSSSupportsConditionMem
   private final CSSDeclaration m_aDeclaration;
   private CSSSourceLocation m_aSourceLocation;
 
+  public CSSSupportsConditionDeclaration (@Nonnull @Nonempty final String sProperty,
+                                          @Nonnull final CSSExpression aExpression)
+  {
+    this (new CSSDeclaration (sProperty, aExpression));
+  }
+
   public CSSSupportsConditionDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     if (aDeclaration == null)

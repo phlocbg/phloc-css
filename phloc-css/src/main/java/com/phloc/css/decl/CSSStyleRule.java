@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -139,6 +140,15 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
   public CSSStyleRule addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     m_aDeclarations.addDeclaration (aDeclaration);
+    return this;
+  }
+
+  @Nonnull
+  public CSSStyleRule addDeclaration (@Nonnull @Nonempty final String sProperty,
+                                      @Nonnull final CSSExpression aExpression,
+                                      final boolean bImportant)
+  {
+    m_aDeclarations.addDeclaration (sProperty, aExpression, bImportant);
     return this;
   }
 
