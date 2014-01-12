@@ -814,6 +814,7 @@ public final class CSSReader
       aCharsetToUse = aDeclaredCharset;
     }
 
+    // Try to open input stream
     final InputStream aIS = aISP.getInputStream ();
     if (aIS == null)
       return null;

@@ -151,6 +151,14 @@ public final class CSSCompressMojo extends AbstractMojo
   private boolean writeSupportsRules = true;
 
   /**
+   * Should unknown <code>@</code> rules be written?
+   * 
+   * @parameter property="writeUnknownRules" default-value="true"
+   * @since 1.1.0
+   */
+  private boolean writeUnknownRules = true;
+
+  /**
    * Should the CSS files be compressed, even if the timestamp of the compressed
    * file is newer than the timestamp of the original CSS file?
    * 
@@ -239,6 +247,11 @@ public final class CSSCompressMojo extends AbstractMojo
     writeSupportsRules = bWriteSupportsRules;
   }
 
+  public void setWriteUnknownRules (final boolean bWriteUnknownRules)
+  {
+    writeUnknownRules = bWriteUnknownRules;
+  }
+
   public void setForceCompress (final boolean bForceCompress)
   {
     forceCompress = bForceCompress;
@@ -311,7 +324,8 @@ public final class CSSCompressMojo extends AbstractMojo
         final FileSystemResource aDestFile = new FileSystemResource (aCompressed);
         try
         {
-          final CSSWriterSettings aWriterSettings = new CSSWriterSettings (ECSSVersion.CSS30, true);
+          final CSSWriterSettings aWriterSettings = new CSSWriterSettings (ECSSVersion.CSS30);
+          aWriterSettings.setOptimizedOutput (true);
           aWriterSettings.setRemoveUnnecessaryCode (removeUnnecessaryCode);
           aWriterSettings.setQuoteURLs (quoteURLs);
           aWriterSettings.setWriteNamespaceRules (writeNamespaceRules);
@@ -321,6 +335,7 @@ public final class CSSCompressMojo extends AbstractMojo
           aWriterSettings.setWritePageRules (writePageRules);
           aWriterSettings.setWriteViewportRules (writeViewportRules);
           aWriterSettings.setWriteSupportsRules (writeSupportsRules);
+          aWriterSettings.setWriteUnknownRules (writeUnknownRules);
           new CSSWriter (aWriterSettings).writeCSS (aCSS, aDestFile.getWriter (aSourceEncoding, EAppend.TRUNCATE));
         }
         catch (final IOException ex)

@@ -29,7 +29,7 @@ import com.phloc.css.parser.Token;
  * 
  * @author Philip Helger
  */
-public final class ThrowingCSSParseErrorHandler implements ICSSParseErrorHandler
+public class ThrowingCSSParseErrorHandler implements ICSSParseErrorHandler
 {
   private static final ThrowingCSSParseErrorHandler s_aInstance = new ThrowingCSSParseErrorHandler ();
 
