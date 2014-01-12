@@ -562,4 +562,60 @@ public final class CascadingStyleSheetTest
     assertEquals (1, aCSS.getUnknownRuleCount ());
     assertNotNull (aCSS.getAllUnknownRules ().get (0));
   }
+
+  @Test
+  public void testReadOneOfAll ()
+  {
+    CascadingStyleSheet aCSS;
+    aCSS = _parse ("@import url(a.gif);\n"
+                   + "@namespace toto2 url(http://toto.example.org);\n"
+                   + "div { color: red; }\n"
+                   + "@page { size: 8.5in 11in; }\n"
+                   + "@media ( min-width :450px) and (max-width:950px) { }\n"
+                   + "@font-face { font-family: JapaneseWithGentium; src: local(MSMincho); }\n"
+                   + "@keyframes travel { from { } to { left: 640px; } }\n"
+                   + "@viewport { width: device-width; }\n"
+                   + "@supports (column-count: 1) and (background-image: linear-gradient(#f00,#00f)) { }\n"
+                   + "@document    anything else or whatever 4711    {   }\n");
+
+    assertTrue (aCSS.hasImportRules ());
+    assertEquals (1, aCSS.getImportRuleCount ());
+    assertNotNull (aCSS.getAllImportRules ().get (0));
+
+    assertTrue (aCSS.hasNamespaceRules ());
+    assertEquals (1, aCSS.getNamespaceRuleCount ());
+    assertNotNull (aCSS.getAllNamespaceRules ().get (0));
+
+    assertTrue (aCSS.hasStyleRules ());
+    assertEquals (1, aCSS.getStyleRuleCount ());
+    assertNotNull (aCSS.getAllStyleRules ().get (0));
+
+    assertTrue (aCSS.hasPageRules ());
+    assertEquals (1, aCSS.getPageRuleCount ());
+    assertNotNull (aCSS.getAllPageRules ().get (0));
+
+    assertTrue (aCSS.hasMediaRules ());
+    assertEquals (1, aCSS.getMediaRuleCount ());
+    assertNotNull (aCSS.getAllMediaRules ().get (0));
+
+    assertTrue (aCSS.hasFontFaceRules ());
+    assertEquals (1, aCSS.getFontFaceRuleCount ());
+    assertNotNull (aCSS.getAllFontFaceRules ().get (0));
+
+    assertTrue (aCSS.hasKeyframesRules ());
+    assertEquals (1, aCSS.getKeyframesRuleCount ());
+    assertNotNull (aCSS.getAllKeyframesRules ().get (0));
+
+    assertTrue (aCSS.hasViewportRules ());
+    assertEquals (1, aCSS.getViewportRuleCount ());
+    assertNotNull (aCSS.getAllViewportRules ().get (0));
+
+    assertTrue (aCSS.hasSupportsRules ());
+    assertEquals (1, aCSS.getSupportsRuleCount ());
+    assertNotNull (aCSS.getAllSupportsRules ().get (0));
+
+    assertTrue (aCSS.hasUnknownRules ());
+    assertEquals (1, aCSS.getUnknownRuleCount ());
+    assertNotNull (aCSS.getAllUnknownRules ().get (0));
+  }
 }
