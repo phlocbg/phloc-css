@@ -33,7 +33,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class CSSSourceArea implements Serializable
+public class CSSSourceArea implements Serializable
 {
   private final int m_nBeginLineNumber;
   private final int m_nBeginColumnNumber;

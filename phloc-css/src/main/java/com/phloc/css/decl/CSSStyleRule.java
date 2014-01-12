@@ -75,7 +75,31 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
   {
     if (aSelector == null)
       throw new NullPointerException ("selector");
+
     m_aSelectors.add (aSelector);
+    return this;
+  }
+
+  @Nonnull
+  public CSSStyleRule addSelector (@Nonnegative final int nIndex,
+                                   @Nonnull final ICSSSelectorMember aSingleSelectorMember)
+  {
+    if (aSingleSelectorMember == null)
+      throw new NullPointerException ("SingleSelectorMember");
+
+    return addSelector (nIndex, new CSSSelector ().addMember (aSingleSelectorMember));
+  }
+
+  @Nonnull
+  public CSSStyleRule addSelector (@Nonnegative final int nIndex, @Nonnull final CSSSelector aSelector)
+  {
+    if (aSelector == null)
+      throw new NullPointerException ("selector");
+
+    if (nIndex >= getSelectorCount ())
+      m_aSelectors.add (aSelector);
+    else
+      m_aSelectors.add (nIndex, aSelector);
     return this;
   }
 

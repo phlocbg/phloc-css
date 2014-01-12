@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -40,6 +41,7 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
+@NotThreadSafe
 public class CSSSupportsConditionNested implements ICSSSupportsConditionMember, ICSSSourceLocationAware
 {
   private final List <ICSSSupportsConditionMember> m_aMembers = new ArrayList <ICSSSupportsConditionMember> ();
@@ -53,8 +55,18 @@ public class CSSSupportsConditionNested implements ICSSSupportsConditionMember, 
     return !m_aMembers.isEmpty ();
   }
 
+  /**
+   * @deprecated Use {@link #getMemberCount()} instead
+   */
+  @Deprecated
   @Nonnegative
   public int getSupportsMemberCount ()
+  {
+    return getMemberCount ();
+  }
+
+  @Nonnegative
+  public int getMemberCount ()
   {
     return m_aMembers.size ();
   }
@@ -64,18 +76,53 @@ public class CSSSupportsConditionNested implements ICSSSupportsConditionMember, 
   {
     if (aMember == null)
       throw new NullPointerException ("member");
+
     m_aMembers.add (aMember);
     return this;
   }
 
   @Nonnull
+  public CSSSupportsConditionNested addMember (@Nonnegative final int nIndex,
+                                               @Nonnull final ICSSSupportsConditionMember aMember)
+  {
+    if (aMember == null)
+      throw new NullPointerException ("member");
+
+    if (nIndex >= getMemberCount ())
+      m_aMembers.add (aMember);
+    else
+      m_aMembers.add (nIndex, aMember);
+    return this;
+  }
+
+  /**
+   * @deprecated Use {@link #removeMember(ICSSSupportsConditionMember)} instead
+   */
+  @Deprecated
+  @Nonnull
   public EChange removeSupportsMember (@Nonnull final ICSSSupportsConditionMember aMember)
+  {
+    return removeMember (aMember);
+  }
+
+  @Nonnull
+  public EChange removeMember (@Nonnull final ICSSSupportsConditionMember aMember)
   {
     return EChange.valueOf (m_aMembers.remove (aMember));
   }
 
+  /**
+   * @deprecated Use {@link #removeMember(int)} instead
+   */
+  @Deprecated
   @Nonnull
   public EChange removeSupportsMember (@Nonnegative final int nIndex)
+  {
+    return removeMember (nIndex);
+  }
+
+  @Nonnull
+  public EChange removeMember (@Nonnegative final int nIndex)
   {
     if (nIndex < 0 || nIndex >= m_aMembers.size ())
       return EChange.UNCHANGED;
@@ -83,8 +130,18 @@ public class CSSSupportsConditionNested implements ICSSSupportsConditionMember, 
     return EChange.CHANGED;
   }
 
+  /**
+   * @deprecated Use {@link #getMemberAtIndex(int)} instead
+   */
+  @Deprecated
   @Nullable
   public ICSSSupportsConditionMember getSupportsMemberAtIndex (@Nonnegative final int nIndex)
+  {
+    return getMemberAtIndex (nIndex);
+  }
+
+  @Nullable
+  public ICSSSupportsConditionMember getMemberAtIndex (@Nonnegative final int nIndex)
   {
     if (nIndex < 0 || nIndex >= m_aMembers.size ())
       return null;

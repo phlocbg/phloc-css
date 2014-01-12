@@ -20,7 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -36,8 +36,8 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CSSSelectorSimpleMember implements ICSSSelectorMember, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSSelectorSimpleMember implements ICSSSelectorMember, ICSSSourceLocationAware
 {
   private final String m_sValue;
   private CSSSourceLocation m_aSourceLocation;

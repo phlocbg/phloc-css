@@ -67,9 +67,11 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     return m_sDeclaration;
   }
 
-  public void setParameterList (@Nullable final String sParameterList)
+  @Nonnull
+  public CSSUnknownRule setParameterList (@Nullable final String sParameterList)
   {
     m_sParameterList = StringHelper.trim (sParameterList);
+    return this;
   }
 
   /**
@@ -82,9 +84,11 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     return m_sParameterList;
   }
 
-  public void setBody (@Nullable final String sBody)
+  @Nonnull
+  public CSSUnknownRule setBody (@Nullable final String sBody)
   {
     m_sBody = StringHelper.trim (sBody);
+    return this;
   }
 
   /**

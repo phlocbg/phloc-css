@@ -63,11 +63,27 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     return m_aMediaQueries.size ();
   }
 
-  public void addMediaQuery (@Nonnull @Nonempty final CSSMediaQuery aMediaQuery)
+  @Nonnull
+  public CSSMediaRule addMediaQuery (@Nonnull @Nonempty final CSSMediaQuery aMediaQuery)
   {
     if (aMediaQuery == null)
       throw new NullPointerException ("mediaQuery");
+
     m_aMediaQueries.add (aMediaQuery);
+    return this;
+  }
+
+  @Nonnull
+  public CSSMediaRule addMediaQuery (@Nonnegative final int nIndex, @Nonnull @Nonempty final CSSMediaQuery aMediaQuery)
+  {
+    if (aMediaQuery == null)
+      throw new NullPointerException ("mediaQuery");
+
+    if (nIndex >= getMediaQueryCount ())
+      m_aMediaQueries.add (aMediaQuery);
+    else
+      m_aMediaQueries.add (nIndex, aMediaQuery);
+    return this;
   }
 
   @Nonnull
@@ -111,11 +127,27 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     return m_aRules.size ();
   }
 
-  public void addRule (@Nonnull final ICSSTopLevelRule aRule)
+  @Nonnull
+  public CSSMediaRule addRule (@Nonnull final ICSSTopLevelRule aRule)
   {
     if (aRule == null)
       throw new NullPointerException ("rule");
+
     m_aRules.add (aRule);
+    return this;
+  }
+
+  @Nonnull
+  public CSSMediaRule addRule (@Nonnegative final int nIndex, @Nonnull final ICSSTopLevelRule aRule)
+  {
+    if (aRule == null)
+      throw new NullPointerException ("rule");
+
+    if (nIndex >= getRuleCount ())
+      m_aRules.add (aRule);
+    else
+      m_aRules.add (nIndex, aRule);
+    return this;
   }
 
   @Nonnull

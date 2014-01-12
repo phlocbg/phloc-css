@@ -45,6 +45,7 @@ public final class CSSExpressionTermOptimizer
       s_aUnitValues0.add (eUnit.format (0));
   }
 
+  @SuppressWarnings ("unused")
   @PresentForCodeCoverage
   private static final CSSExpressionTermOptimizer s_aInstance = new CSSExpressionTermOptimizer ();
 

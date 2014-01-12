@@ -22,7 +22,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -40,17 +40,29 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersionAware, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final List <ICSSSelectorMember> m_aNestedSelectorMembers;
   private CSSSourceLocation m_aSourceLocation;
+
+  public CSSSelectorMemberNot (@Nonnull final ICSSSelectorMember... aNestedSelectorMembers)
+  {
+    if (aNestedSelectorMembers == null)
+      throw new NullPointerException ("nestedSelectorMembers");
+    m_aNestedSelectorMembers = ContainerHelper.newList (aNestedSelectorMembers);
+  }
 
   public CSSSelectorMemberNot (@Nonnull final List <ICSSSelectorMember> aNestedSelectorMembers)
   {
     if (aNestedSelectorMembers == null)
       throw new NullPointerException ("nestedSelectorMembers");
-    m_aNestedSelectorMembers = aNestedSelectorMembers;
+    m_aNestedSelectorMembers = ContainerHelper.newList (aNestedSelectorMembers);
+  }
+
+  public boolean hasNestedMembers ()
+  {
+    return !m_aNestedSelectorMembers.isEmpty ();
   }
 
   @Nonnegative

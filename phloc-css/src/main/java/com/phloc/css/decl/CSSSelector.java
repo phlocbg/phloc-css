@@ -63,7 +63,21 @@ public class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
   {
     if (aMember == null)
       throw new NullPointerException ("member");
+
     m_aMembers.add (aMember);
+    return this;
+  }
+
+  @Nonnull
+  public CSSSelector addMember (@Nonnegative final int nIndex, @Nonnull final ICSSSelectorMember aMember)
+  {
+    if (aMember == null)
+      throw new NullPointerException ("member");
+
+    if (nIndex >= getMemberCount ())
+      m_aMembers.add (aMember);
+    else
+      m_aMembers.add (nIndex, aMember);
     return this;
   }
 

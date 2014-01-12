@@ -50,23 +50,29 @@ public final class CSSExpressionMemberMathProduct implements ICSSExpressionMathM
   public CSSExpressionMemberMathProduct ()
   {}
 
-  public void addMember (@Nonnull final ICSSExpressionMathMember aMember)
+  @Nonnull
+  public CSSExpressionMemberMathProduct addMember (@Nonnull final ICSSExpressionMathMember aMember)
   {
     if (aMember == null)
       throw new NullPointerException ("member");
     m_aMembers.add (aMember);
+    return this;
   }
 
-  public void addMember (@Nonnegative final int nIndex, @Nonnull final ICSSExpressionMathMember aMember)
+  @Nonnull
+  public CSSExpressionMemberMathProduct addMember (@Nonnegative final int nIndex,
+                                                   @Nonnull final ICSSExpressionMathMember aMember)
   {
     if (nIndex < 0)
       throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aMember == null)
       throw new NullPointerException ("member");
+
     if (nIndex >= getMemberCount ())
       m_aMembers.add (aMember);
     else
       m_aMembers.add (nIndex, aMember);
+    return this;
   }
 
   @Nonnull

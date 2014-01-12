@@ -71,7 +71,22 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
   {
     if (aMember == null)
       throw new NullPointerException ("member");
+
     m_aConditionMembers.add (aMember);
+    return this;
+  }
+
+  @Nonnull
+  public CSSSupportsRule addSupportConditionMember (@Nonnegative final int nIndex,
+                                                    @Nonnull final ICSSSupportsConditionMember aMember)
+  {
+    if (aMember == null)
+      throw new NullPointerException ("member");
+
+    if (nIndex >= getSupportsConditionMemberCount ())
+      m_aConditionMembers.add (aMember);
+    else
+      m_aConditionMembers.add (nIndex, aMember);
     return this;
   }
 
@@ -121,7 +136,21 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
   {
     if (aRule == null)
       throw new NullPointerException ("rule");
+
     m_aRules.add (aRule);
+    return this;
+  }
+
+  @Nonnull
+  public CSSSupportsRule addRule (@Nonnegative final int nIndex, @Nonnull final ICSSTopLevelRule aRule)
+  {
+    if (aRule == null)
+      throw new NullPointerException ("rule");
+
+    if (nIndex >= getRuleCount ())
+      m_aRules.add (aRule);
+    else
+      m_aRules.add (nIndex, aRule);
     return this;
   }
 

@@ -67,14 +67,18 @@ public final class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
    * 
    * @param sURI
    *        The URI to be set. May neither be <code>null</code> nor empty.
+   * @return this
    */
-  public void setURI (@Nonnull @Nonempty final String sURI)
+  @Nonnull
+  public CSSURI setURI (@Nonnull @Nonempty final String sURI)
   {
     if (StringHelper.hasNoText (sURI))
       throw new IllegalArgumentException ("URI may not be empty");
     if (CSSURLHelper.isURLValue (sURI))
       throw new IllegalArgumentException ("Only the URI and not the CSS-URI value must be passed!");
+
     m_sURI = sURI;
+    return this;
   }
 
   /**
