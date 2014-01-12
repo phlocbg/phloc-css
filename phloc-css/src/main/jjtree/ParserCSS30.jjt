@@ -658,29 +658,9 @@ void importRule() :
   <SEMICOLON>
 }
 
-
-void unknownRuleParameterList() : 
-{ String s; }
-{
-  s = javaSkipToOpeningBrace() { jjtThis.setText (s); }
-}  
-
-void unknownRuleBody() : 
-{ String s; }
-{
-  s = javaSkipToClosingBrace() { jjtThis.setText (s); }
-}  
-
-// Any unsupported rule
-void unknownRule() : {}
-{
-  <AT_UNKNOWN> { jjtThis.setText (token.image); }
-  unknownRuleParameterList()
-  unknownRuleBody()
-}
-
-// ------------ NAMESPACE ------------
-
+//
+// Namespace rule
+//
 void namespaceRulePrefix() : {}
 {
   <IDENT> { jjtThis.setText (token.image); }
@@ -707,15 +687,300 @@ void namespaceRule() : {}
   <SEMICOLON>
 } 
 
-void mediaRule() : {}
+//
+// Style rule
+//
+void namespacePrefix() : {}
 {
-  <MEDIA_SYM>
+  ( <IDENT>    { jjtThis.setText (token.image); }
+  | <ASTERISK> { jjtThis.setText (token.image); }
+  )?    
+  <DASH>        { jjtThis.appendText ("|"); }
+}
+
+void elementName() : {}
+{
+  ( <IDENT>    { jjtThis.setText (token.image); }
+  | <ASTERISK> { jjtThis.setText (token.image); }
+  )
+}
+
+void typeSelector() #void : {}
+{
+  ( LOOKAHEAD(2)
+    namespacePrefix()
+  )?
+  elementName()
+}
+
+void hash() : {}
+{
+  <HASH> { jjtThis.setText (token.image); }
+}
+
+void _class() #Class : 
+{ String sIdentifier; }
+{
+  <DOT>
+  sIdentifier = anyIdentifier() { jjtThis.setText ("." + sIdentifier); }
+}
+
+void attribOperator() : {}
+{
+  ( <EQUALS>         { jjtThis.setText ("=");  }
+  | <INCLUDES>       { jjtThis.setText ("~="); }
+  | <DASHMATCH>      { jjtThis.setText ("|="); }
+  | <PREFIXMATCH>    { jjtThis.setText ("^="); }  /* new in 3.0 */
+  | <SUBFIXMATCH>    { jjtThis.setText ("$="); }  /* new in 3.0 */
+  | <SUBSTRINGMATCH> { jjtThis.setText ("*="); }  /* new in 3.0 */
+  )
+}
+
+void attribValue() :
+{ String sStr; }
+{
+  ( <IDENT>         { jjtThis.setText (token.image); }
+  | sStr = string() { jjtThis.setText (sStr); }
+  )
+}
+
+void attrib() :
+{ Token t; }
+{
+  <LSQUARE>
   ( <S> )*
-  ( mediaList() )?
+  ( LOOKAHEAD(2)
+    namespacePrefix() 
+  )?
+  t = <IDENT> { jjtThis.setText (t.image); }
+  /* Hack for html[xmlns*=""] */
+  ( <ASTERISK> { jjtThis.appendText ("*"); } )?          
+  ( <S> )*
+  ( attribOperator()
+    ( <S> )*
+    attribValue()
+    ( <S> )*
+  )?
+  <RSQUARE>
+}
+
+void pseudoNth () #nth : 
+{ Token t; String s; }
+{
+  ( <S> )*
+  ( LOOKAHEAD(3)
+    ( s = unaryOperator() { jjtThis.appendText (s); } )?
+    ( t = <INTEGER> { jjtThis.appendText (t.image); } )? 
+    t = <N>        { jjtThis.appendText ("n"); }
+    ( LOOKAHEAD(2)
+      ( <S> )*
+      s = unaryOperator() { jjtThis.appendText (s); }
+      ( <S> )*
+      t = <INTEGER> { jjtThis.appendText (t.image); }
+    )?
+  | LOOKAHEAD(2)
+    ( s = unaryOperator() { jjtThis.appendText (s); } )?
+    t = <INTEGER> { jjtThis.appendText (t.image); }
+  | t = <EVEN>    { jjtThis.appendText (t.image); }
+  | t = <ODD>     { jjtThis.appendText (t.image); }
+  )
+  ( <S> )* 
+}
+
+void pseudo() : {}
+{
+  <COLON> { jjtThis.setText (":"); }
+  /* Extension for "::-moz-selection */
+  ( <COLON> { jjtThis.appendText (":"); } ) ?
+  ( <FUNCTION_NTH> { jjtThis.appendText (token.image); }
+    pseudoNth()
+    <RROUND>  // do not append because of expression!
+  | LOOKAHEAD(2)
+    <FUNCTION> { jjtThis.appendText (token.image); }
+    ( <S> )*
+    ( expr() )?
+    <RROUND>  // do not append because of expression!
+  | <IDENT> { jjtThis.appendText (token.image); }
+  )
+}
+
+void negationArg() #void : {}
+{
+  ( LOOKAHEAD(2)
+    typeSelector()
+  | hash()
+  | _class()
+  | attrib()
+  | pseudo()
+  // negation is syntactically allowed
+  | negation()
+  )
+}
+
+void negation() : {}
+{
+  <FUNCTION_NOT> { jjtThis.setText (":not("); }
+  ( <S> )*
+  ( negationArg()
+    ( <S> )*
+  )?  
+  <RROUND>
+}
+
+void simpleSelectorSequence() #void : {}
+{
+  LOOKAHEAD(2)
+  ( typeSelector()
+    ( hash()
+    | _class()
+    | attrib()
+    | pseudo()
+    | negation()
+    )*
+  )
+  | ( hash()
+    | _class()
+    | attrib()
+    | pseudo()
+    | negation()
+    )+
+// Extension for CSS animations (e.g. 50%)
+  | <PERCENTAGE>  
+}
+
+void selectorCombinator() : {}
+{
+// IMPORTANT to use ( <S> )? here and not ( <S> )+ because of comment handling!  
+  ( LOOKAHEAD(2)
+    ( <S> )? 
+    <PLUS>       { jjtThis.setText ("+"); }
+  | LOOKAHEAD(2)
+    ( <S> )? 
+    <GREATER>    { jjtThis.setText (">"); }
+  | LOOKAHEAD(2)
+    ( <S> )?
+    <TILDE>      { jjtThis.setText ("~"); }
+  | <S>          { jjtThis.setText (" "); }
+  )
+}
+
+void selector() : {}
+{
+  simpleSelectorSequence()
+// LA3: <S> <PLUS> <LBRACE> simpleSelectorSequence()   
+  ( LOOKAHEAD(2)
+    selectorCombinator()
+    ( <S> )*
+    simpleSelectorSequence()
+  )*
+}
+
+void property() : {}
+{
+  <IDENT> { jjtThis.setText (token.image); }
+  ( <S> )*
+}
+
+void important() : {}
+{
+  <IMPORTANT_SYM> { jjtThis.setText (token.image); }
+  ( <S> )*
+}
+
+void styleDeclaration() : {}
+{
+  property()
+  <COLON>
+  ( <S> )*
+  expr()
+  ( important() )?
+}
+
+CSSNode styleDeclarationList() : {}
+{
+  ( <S> )*
+  ( styleDeclaration() )?
+  ( <SEMICOLON>
+    ( <S> )*
+    ( styleDeclaration() )?
+  )*
+  { return jjtThis; }
+}
+
+void styleDeclarationBlock() #void : {}
+{
+try{
   <LBRACE>
-  ( <S> )*
-  ( mediaRuleList() )?
+  styleDeclarationList()
   <RBRACE>
+} catch (ParseException ex) {
+  error_skipto (ex, RBRACE);
+}
+}
+
+void styleRule() : {}
+{
+  selector ()
+  ( <S> )*
+  ( <COMMA>
+    ( <S> )*
+    selector()
+    ( <S> )*
+  )*
+  styleDeclarationBlock()
+}
+
+//
+// Media rule
+//
+void mediaModifier() : {}
+{
+  ( <ONLY_SYM> { jjtThis.setText (token.image); }
+    <S>
+  | <NOT_SYM>  { jjtThis.setText (token.image); } 
+    <S>
+  )?
+}
+
+void medium() : {}
+{
+  <IDENT> { jjtThis.setText (token.image); }
+}
+
+void mediaFeature() : {}
+{
+  <IDENT>  { jjtThis.setText (token.image); }
+}
+
+void mediaExpr() : {}
+{
+  <LROUND>
+  ( <S> )*
+  mediaFeature()
+  ( <S> )*
+  ( <COLON>
+    ( <S> )*
+    expr()
+  )?
+  <RROUND>
+  ( <S> )*
+}
+
+void mediaQuery() : {}
+{
+  ( mediaModifier()
+    medium()
+    ( <S> )*
+    ( <AND_SYM>
+      ( <S> )*
+      mediaExpr()
+    )*
+  | mediaExpr()
+    ( <AND_SYM>
+      ( <S> )*
+      mediaExpr()
+    )*
+  )  
 }
 
 void mediaList() : {}
@@ -742,54 +1007,25 @@ void mediaRuleList() #void : {}
   )+
 }
 
-void mediaQuery() : {}
+void mediaRule() : {}
 {
-  ( mediaModifier()
-    medium()
-    ( <S> )*
-    ( <AND_SYM>
-      ( <S> )*
-      mediaExpr()
-    )*
-  | mediaExpr()
-    ( <AND_SYM>
-      ( <S> )*
-      mediaExpr()
-    )*
-  )  
-}
-
-void mediaModifier() : {}
-{
-  ( <ONLY_SYM> { jjtThis.setText (token.image); }
-    <S>
-  | <NOT_SYM>  { jjtThis.setText (token.image); } 
-    <S>
-  )?
-}
-
-void medium() : {}
-{
-  <IDENT> { jjtThis.setText (token.image); }
-}
-
-void mediaExpr() : {}
-{
-  <LROUND>
+  <MEDIA_SYM>
   ( <S> )*
-  mediaFeature()
+  ( mediaList() )?
+  <LBRACE>
   ( <S> )*
-  ( <COLON>
-    ( <S> )*
-    expr()
-  )?
-  <RROUND>
-  ( <S> )*
+  ( mediaRuleList() )?
+  <RBRACE>
 }
 
-void mediaFeature() : {}
+
+//
+// Page rule
+//
+void pseudoPage() : {}
 {
-  <IDENT>  { jjtThis.setText (token.image); }
+  <COLON>
+  <IDENT> { jjtThis.setText (":" + token.image); }
 }
 
 void pageRule() : {}
@@ -802,272 +1038,8 @@ void pageRule() : {}
   styleDeclarationBlock()
 }
 
-void pseudoPage() : {}
-{
-  <COLON>
-  <IDENT> { jjtThis.setText (":" + token.image); }
-}
-
-// ------------ SELECTORS ------------
-
-void selector() : {}
-{
-  simpleSelectorSequence()
-// LA3: <S> <PLUS> <LBRACE> simpleSelectorSequence()   
-  ( LOOKAHEAD(2)
-    combinator()
-    ( <S> )*
-    simpleSelectorSequence()
-  )*
-}
-
-void combinator() : {}
-{
-// IMPORTANT to use ( <S> )? here and not ( <S> )+ because of comment handling!  
-  ( LOOKAHEAD(2)
-    ( <S> )? 
-    <PLUS>       { jjtThis.setText ("+"); }
-  | LOOKAHEAD(2)
-    ( <S> )? 
-    <GREATER>    { jjtThis.setText (">"); }
-  | LOOKAHEAD(2)
-    ( <S> )?
-    <TILDE>      { jjtThis.setText ("~"); }
-  | <S>          { jjtThis.setText (" "); }
-  )
-}
-
-void simpleSelectorSequence() #void : {}
-{
-  LOOKAHEAD(2)
-  ( typeSelector()
-    ( hash()
-    | _class()
-    | attrib()
-    | pseudo()
-    | negation()
-    )*
-  )
-  | ( hash()
-    | _class()
-    | attrib()
-    | pseudo()
-    | negation()
-    )+
-// Extension for CSS animations (e.g. 50%)
-  | <PERCENTAGE>  
-}
-
-void typeSelector() #void : {}
-{
-  ( LOOKAHEAD(2)
-    namespacePrefix()
-  )?
-  elementName()
-}
-
-void namespacePrefix() : {}
-{
-  ( <IDENT>    { jjtThis.setText (token.image); }
-  | <ASTERISK> { jjtThis.setText (token.image); }
-  )?    
-  <DASH>        { jjtThis.appendText ("|"); }
-}
-
-void elementName() : {}
-{
-  ( <IDENT>    { jjtThis.setText (token.image); }
-  | <ASTERISK> { jjtThis.setText (token.image); }
-  )
-}
-
-void _class() #Class : 
-{ String sIdentifier; }
-{
-  <DOT>
-  sIdentifier = anyIdentifier() { jjtThis.setText ("." + sIdentifier); }
-}
-
-void attrib() :
-{ Token t; }
-{
-  <LSQUARE>
-  ( <S> )*
-  ( LOOKAHEAD(2)
-    namespacePrefix() 
-  )?
-  t = <IDENT> { jjtThis.setText (t.image); }
-  /* Hack for html[xmlns*=""] */
-  ( <ASTERISK> { jjtThis.appendText ("*"); } )?          
-  ( <S> )*
-  ( attribOperator()
-    ( <S> )*
-    attribValue()
-    ( <S> )*
-  )?
-  <RSQUARE>
-}
-
-void attribOperator() : {}
-{
-  ( <EQUALS>         { jjtThis.setText ("=");  }
-  | <INCLUDES>       { jjtThis.setText ("~="); }
-  | <DASHMATCH>      { jjtThis.setText ("|="); }
-  | <PREFIXMATCH>    { jjtThis.setText ("^="); }  /* new in 3.0 */
-  | <SUBFIXMATCH>    { jjtThis.setText ("$="); }  /* new in 3.0 */
-  | <SUBSTRINGMATCH> { jjtThis.setText ("*="); }  /* new in 3.0 */
-  )
-}
-
-void attribValue() :
-{ String sStr; }
-{
-  ( <IDENT>         { jjtThis.setText (token.image); }
-  | sStr = string() { jjtThis.setText (sStr); }
-  )
-}
-
-void pseudo() : {}
-{
-  <COLON> { jjtThis.setText (":"); }
-  /* Extension for "::-moz-selection */
-  ( <COLON> { jjtThis.appendText (":"); } ) ?
-  ( <FUNCTION_NTH> { jjtThis.appendText (token.image); }
-    __pseudoNth()
-    <RROUND>  // do not append because of expression!
-  | LOOKAHEAD(2)
-    <FUNCTION> { jjtThis.appendText (token.image); }
-    ( <S> )*
-    ( expr() )?
-    <RROUND>  // do not append because of expression!
-  | <IDENT> { jjtThis.appendText (token.image); }
-  )
-}
-
-void __pseudoNth () #nth : 
-{ Token t; String s; }
-{
-  ( <S> )*
-  ( LOOKAHEAD(3)
-    ( s = unaryOperator() { jjtThis.appendText (s); } )?
-    ( t = <INTEGER> { jjtThis.appendText (t.image); } )? 
-    t = <N>        { jjtThis.appendText ("n"); }
-    ( LOOKAHEAD(2)
-      ( <S> )*
-      s = unaryOperator() { jjtThis.appendText (s); }
-      ( <S> )*
-      t = <INTEGER> { jjtThis.appendText (t.image); }
-    )?
-  | LOOKAHEAD(2)
-    ( s = unaryOperator() { jjtThis.appendText (s); } )?
-    t = <INTEGER> { jjtThis.appendText (t.image); }
-  | t = <EVEN>    { jjtThis.appendText (t.image); }
-  | t = <ODD>     { jjtThis.appendText (t.image); }
-  )
-  ( <S> )* 
-}
-
-void negation() : {}
-{
-  <FUNCTION_NOT> { jjtThis.setText (":not("); }
-  ( <S> )*
-  ( negationArg()
-    ( <S> )*
-  )?  
-  <RROUND>
-}
-
-void negationArg() #void : {}
-{
-  ( LOOKAHEAD(2)
-    typeSelector()
-  | hash()
-  | _class()
-  | attrib()
-  | pseudo()
-  // negation is syntactically allowed
-  | negation()
-  )
-}
-
-
-
-
-void property() : {}
-{
-  <IDENT> { jjtThis.setText (token.image); }
-  ( <S> )*
-}
-
-void styleRule() : {}
-{
-  selector ()
-  ( <S> )*
-  ( <COMMA>
-    ( <S> )*
-    selector()
-    ( <S> )*
-  )*
-  styleDeclarationBlock()
-}
-
-void styleDeclarationBlock() #void : {}
-{
-try{
-  <LBRACE>
-  styleDeclarationList()
-  <RBRACE>
-} catch (ParseException ex) {
-  error_skipto (ex, RBRACE);
-}
-}
-
-void hash() : {}
-{
-  <HASH> { jjtThis.setText (token.image); }
-}
-
-CSSNode styleDeclarationList() : {}
-{
-  ( <S> )*
-  ( styleDeclaration() )?
-  ( <SEMICOLON>
-    ( <S> )*
-    ( styleDeclaration() )?
-  )*
-  { return jjtThis; }
-}
-
-void styleDeclaration() : {}
-{
-  property()
-  <COLON>
-  ( <S> )*
-  expr()
-  ( important() )?
-}
-
-void important() : {}
-{
-  <IMPORTANT_SYM> { jjtThis.setText (token.image); }
-  ( <S> )*
-}
-
-
-
-
-
-void invalid () : {}
-{
-  ( <INVALID_STRING1>
-  | <INVALID_STRING2>
-  )
-}
-
-// new in CSS 3.0:
-
-// 
-// @font-face { <font-description> }
+//
+// Font face rule
 //
 void fontfaceRule() : {}
 {
@@ -1075,23 +1047,10 @@ void fontfaceRule() : {}
   styleDeclarationBlock()
 }
 
-// 
-// @keyframes ...
+//
+// Keyframes rule
 // http://dev.w3.org/csswg/css3-animations/#keyframes
 //
-void keyframesRule() : 
-{ Token t; }
-{
-  t = <KEYFRAMES_SYM>
-  { jjtThis.setText (t.image); }    
-  <S>
-  keyframesIdentifier()
-  <LBRACE>
-  ( <S> )*
-  keyframesBlocks()
-  <RBRACE>
-}
-
 void keyframesIdentifier() :  {}
 {
   <IDENT> { jjtThis.setText (token.image); }    
@@ -1116,7 +1075,6 @@ void keyframesSelector() : {}
   )*  
 }
 
-// #void : do not generate a tree node for this 
 void keyframesBlocks() #void : {}
 {
   ( keyframesSelector()
@@ -1125,52 +1083,55 @@ void keyframesBlocks() #void : {}
   )*
 }
 
+void keyframesRule() : {}
+{
+  <KEYFRAMES_SYM> { jjtThis.setText (token.image); }    
+  <S>
+  keyframesIdentifier()
+  <LBRACE>
+  ( <S> )*
+  keyframesBlocks()
+  <RBRACE>
+}
+
 //
-// @viewport
+// Viewport rule
 // http://dev.w3.org/csswg/css-device-adapt/#the-atviewport-rule
 //
-
 void viewportRule() : {}
 {
   <VIEWPORT_SYM> { jjtThis.setText (token.image); }
-  ( <S> )*
   styleDeclarationBlock()
 }
 
 //
-// @supports
+// Supports rule
 // http://www.w3.org/TR/2013/CR-css3-conditional-20130404/#at-supports
 //
-
-void supportsRule() : {}
+void supportsConditionInParens() : {}
 {
-  <SUPPORTS_SYM>    
+  "(" 
   ( <S> )*
-  supportsCondition() 
-  ( <S> )*
-  groupRuleBody()
-}
-
-void nestedStatement() #void : {}
-{
-  ( styleRule()
-  | mediaRule()
-  | pageRule()
-  | fontfaceRule()
-  | keyframesRule()
-  | supportsRule()
-  | unknownRule()
-  )
-}
-
-void groupRuleBody() #void : {}
-{
-  <LBRACE>
-  ( <S> )*
-  ( nestedStatement()
+  ( styleDeclaration()
+  | supportsCondition()
     ( <S> )*
-  )* 
-  <RBRACE>
+  )  
+  ")"
+/* | general_enclosed */  
+}
+
+void supportsNegation() : {}
+{
+  <NOT_SYM>
+  ( <S> )+
+  supportsConditionInParens()
+}
+
+void supportsConditionOperator() : {}
+{
+  ( <AND_SYM> { jjtThis.setText (token.image); }
+  | <OR_SYM>  { jjtThis.setText (token.image); }
+  )
 }
 
 void supportsCondition() : {}
@@ -1186,27 +1147,66 @@ void supportsCondition() : {}
   )
 }
 
-void supportsConditionOperator() : {}
+void supportsRuleBodyRule() #void : {}
 {
-  ( <AND_SYM> { jjtThis.setText (token.image); }  | <OR_SYM>  { jjtThis.setText (token.image); }
+  ( styleRule()
+  | mediaRule()
+  | pageRule()
+  | fontfaceRule()
+  | keyframesRule()
+  | supportsRule()
+  | unknownRule()
   )
 }
 
-void supportsNegation() : {}
+void supportsRuleBody() #void : {}
 {
-  <NOT_SYM>
-  ( <S> )+
-  supportsConditionInParens()
+  <LBRACE>
+  ( <S> )*
+  ( supportsRuleBodyRule()
+    ( <S> )*
+  )* 
+  <RBRACE>
 }
 
-void supportsConditionInParens() : {}
+void supportsRule() : {}
 {
-  "(" 
+  <SUPPORTS_SYM>    
   ( <S> )*
-  ( styleDeclaration()
-  | supportsCondition()
-    ( <S> )*
-  )  
-  ")"
-/* | general_enclosed */  
+  supportsCondition() 
+  ( <S> )*
+  supportsRuleBody()
+}
+
+//
+// Unknown rule
+//
+void unknownRuleParameterList() : 
+{ String s; }
+{
+  s = javaSkipToOpeningBrace() { jjtThis.setText (s); }
+}  
+
+void unknownRuleBody() : 
+{ String s; }
+{
+  s = javaSkipToClosingBrace() { jjtThis.setText (s); }
+}
+
+// Any unsupported rule
+void unknownRule() : {}
+{
+  <AT_UNKNOWN> { jjtThis.setText (token.image); }
+  unknownRuleParameterList()
+  unknownRuleBody()
+}
+
+//
+// Error handling
+// 
+void invalid () : {}
+{
+  ( <INVALID_STRING1>
+  | <INVALID_STRING2>
+  )
 }
