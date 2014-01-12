@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -40,7 +40,7 @@ import com.phloc.css.utils.CSSURLHelper;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
+public class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
 {
   private String m_sURI;
   private CSSSourceLocation m_aSourceLocation;
@@ -67,14 +67,18 @@ public final class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
    * 
    * @param sURI
    *        The URI to be set. May neither be <code>null</code> nor empty.
+   * @return this
    */
-  public void setURI (@Nonnull @Nonempty final String sURI)
+  @Nonnull
+  public CSSURI setURI (@Nonnull @Nonempty final String sURI)
   {
     if (StringHelper.hasNoText (sURI))
       throw new IllegalArgumentException ("URI may not be empty");
     if (CSSURLHelper.isURLValue (sURI))
       throw new IllegalArgumentException ("Only the URI and not the CSS-URI value must be passed!");
+
     m_sURI = sURI;
+    return this;
   }
 
   /**
@@ -107,6 +111,12 @@ public final class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
     return CSSURLHelper.getAsCSSURL (m_sURI, aSettings.isQuoteURLs ());
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

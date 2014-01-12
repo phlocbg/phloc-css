@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -32,7 +32,7 @@ import com.phloc.css.parser.Token;
  * @author Philip Helger
  */
 @Immutable
-public final class CSSParseError
+public class CSSParseError
 {
   private final ReadonlyToken m_aLastValidToken;
   private final String m_sExpectedTokens;

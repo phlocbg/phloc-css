@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -23,6 +23,11 @@ import org.junit.Test;
 
 import com.phloc.css.AbstractCSS21Test;
 
+/**
+ * Test class for class {@link ParserCSS21}.
+ * 
+ * @author Philip Helger
+ */
 public final class ParserCSS21Test extends AbstractCSS21Test
 {
   @Test

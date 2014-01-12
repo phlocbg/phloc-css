@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -27,7 +27,8 @@ import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.parser.CSSNode;
 
 /**
- * This is the central class for reading and parsing CSS from an input stream.
+ * This class is the entry point for converting AST nodes from the parser to
+ * domain objects.
  * 
  * @author Philip Helger
  */
@@ -35,6 +36,7 @@ import com.phloc.css.parser.CSSNode;
 public final class CSSHandler
 {
   @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
   private static final CSSHandler s_aInstance = new CSSHandler ();
 
   private CSSHandler ()

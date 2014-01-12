@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -42,3 +42,14 @@ element1[attr=value] {}
 element1[attr~=value] {}
 element1[attr|=value] {}
 element1[attr|=value] element2 {}
+
+/* Example from http://www.w3.org/TR/CSS2/syndata.html#rule-sets */
+p[example="public class foo\
+{\
+    private int x;\
+\
+    foo(int x) {\
+        this.x = x;\
+    }\
+\
+}"] { color: red }

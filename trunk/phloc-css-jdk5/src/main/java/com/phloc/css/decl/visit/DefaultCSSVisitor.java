@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -18,6 +18,7 @@
 package com.phloc.css.decl.visit;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.css.decl.CSSDeclaration;
@@ -31,14 +32,16 @@ import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.CSSSupportsRule;
+import com.phloc.css.decl.CSSUnknownRule;
 import com.phloc.css.decl.CSSViewportRule;
 
 /**
  * Default implementation of the {@link ICSSVisitor} interface. Use as base
- * class for your own implementations since this class does nothin on its own.
+ * class for your own implementations since this class does nothing on its own.
  * 
  * @author Philip Helger
  */
+@Immutable
 public class DefaultCSSVisitor implements ICSSVisitor
 {
   public DefaultCSSVisitor ()
@@ -126,6 +129,10 @@ public class DefaultCSSVisitor implements ICSSVisitor
 
   @OverrideOnDemand
   public void onEndSupportsRule (@Nonnull final CSSSupportsRule aSupportsRule)
+  {}
+
+  @OverrideOnDemand
+  public void onUnknownRule (@Nonnull final CSSUnknownRule aUnknownRule)
   {}
 
   @OverrideOnDemand

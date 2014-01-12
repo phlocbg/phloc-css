@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -16,6 +16,8 @@
  * limitations under the License.
  */
 package com.phloc.css.decl;
+
+import java.util.Locale;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -39,13 +41,42 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
+public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
 {
+  public static final boolean DEFAULT_IMPORTANT = false;
+
   private final String m_sProperty;
   private final CSSExpression m_aExpression;
   private final boolean m_bImportant;
   private CSSSourceLocation m_aSourceLocation;
 
+  /**
+   * Constructor for non-important values.
+   * 
+   * @param sProperty
+   *        The name of the property. E.g. "color". May neither be
+   *        <code>null</code> nor empty. The property value is automatically
+   *        lowercased!
+   * @param aExpression
+   *        The value of the property. May not be <code>null</code>.
+   */
+  public CSSDeclaration (@Nonnull @Nonempty final String sProperty, @Nonnull final CSSExpression aExpression)
+  {
+    this (sProperty, aExpression, DEFAULT_IMPORTANT);
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param sProperty
+   *        The name of the property. E.g. "color". May neither be
+   *        <code>null</code> nor empty. The property value is automatically
+   *        lowercased!
+   * @param aExpression
+   *        The value of the property. May not be <code>null</code>.
+   * @param bImportant
+   *        <code>true</code> if it is important, <code>false</code> if not.
+   */
   public CSSDeclaration (@Nonnull @Nonempty final String sProperty,
                          @Nonnull final CSSExpression aExpression,
                          final boolean bImportant)
@@ -54,14 +85,14 @@ public final class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAw
       throw new IllegalArgumentException ("empty property is not allowed");
     if (aExpression == null)
       throw new NullPointerException ("expression");
-    m_sProperty = sProperty.toLowerCase ();
+    m_sProperty = sProperty.toLowerCase (Locale.US);
     m_aExpression = aExpression;
     m_bImportant = bImportant;
   }
 
   /**
    * @return The property of this declaration (e.g. "color" or "margin-top").
-   *         Never <code>null</code>.
+   *         The string is always lowercase. Never <code>null</code>.
    */
   @Nonnull
   @Nonempty
@@ -83,7 +114,7 @@ public final class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAw
 
   /**
    * @return <code>true</code> if this declaration is important (
-   *         <code>!important</code>) or not.
+   *         <code>!important</code>) or <code>false</code> if not.
    */
   public boolean isImportant ()
   {
@@ -100,6 +131,12 @@ public final class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAw
            (m_bImportant ? CCSS.IMPORTANT_SUFFIX : "");
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -20,6 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -30,14 +31,22 @@ import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single supports condition with a declaration
+ * Represents a single supports condition with a declaration. E.g.
+ * "(column-count: 1)"
  * 
  * @author Philip Helger
  */
+@NotThreadSafe
 public class CSSSupportsConditionDeclaration implements ICSSSupportsConditionMember, ICSSSourceLocationAware
 {
   private final CSSDeclaration m_aDeclaration;
   private CSSSourceLocation m_aSourceLocation;
+
+  public CSSSupportsConditionDeclaration (@Nonnull @Nonempty final String sProperty,
+                                          @Nonnull final CSSExpression aExpression)
+  {
+    this (new CSSDeclaration (sProperty, aExpression));
+  }
 
   public CSSSupportsConditionDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
@@ -46,6 +55,9 @@ public class CSSSupportsConditionDeclaration implements ICSSSupportsConditionMem
     m_aDeclaration = aDeclaration;
   }
 
+  /**
+   * @return The contained declaration. Never <code>null</code>.
+   */
   @Nonnull
   public CSSDeclaration getDeclaration ()
   {
@@ -66,6 +78,12 @@ public class CSSSupportsConditionDeclaration implements ICSSSupportsConditionMem
     return ECSSVersion.CSS30;
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -15,11 +15,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@three-dee {
-  @background-lighting {
-    azimuth: 30deg;
-    elevation: 190deg;
-  }
-  h1 { color: red }
+
+/* Ensure this is truly a 3.0 CSS :) */
+E ~ F {}
+
+.ie6-expression
+  {
+  color: expression();
+  *zoom: expression(this.runtimeStyle [ 'zoom' ] = '1', this.innerHTML = ' - ' +
+     this.innerHTML);
 }
-h1 { color: blue }
+
+.opacity
+{
+  /* opacity: always set all 3 values for cross-browser compatibility*/
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+  filter: alpha(opacity=70);
+  opacity: 0.70;
+}
+
+.color
+{
+  color: red();
+}

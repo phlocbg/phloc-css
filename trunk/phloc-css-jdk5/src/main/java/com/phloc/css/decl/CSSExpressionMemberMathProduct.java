@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -23,7 +23,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -37,12 +37,12 @@ import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a CSS calc element
+ * Part of a CSS calc element
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CSSExpressionMemberMathProduct implements ICSSExpressionMathMember, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSExpressionMemberMathProduct implements ICSSExpressionMathMember, ICSSSourceLocationAware
 {
   private final List <ICSSExpressionMathMember> m_aMembers = new ArrayList <ICSSExpressionMathMember> ();
   private CSSSourceLocation m_aSourceLocation;
@@ -50,23 +50,30 @@ public final class CSSExpressionMemberMathProduct implements ICSSExpressionMathM
   public CSSExpressionMemberMathProduct ()
   {}
 
-  public void addMember (@Nonnull final ICSSExpressionMathMember aMember)
+  @Nonnull
+  public CSSExpressionMemberMathProduct addMember (@Nonnull final ICSSExpressionMathMember aMember)
   {
     if (aMember == null)
       throw new NullPointerException ("member");
+
     m_aMembers.add (aMember);
+    return this;
   }
 
-  public void addMember (@Nonnegative final int nIndex, @Nonnull final ICSSExpressionMathMember aMember)
+  @Nonnull
+  public CSSExpressionMemberMathProduct addMember (@Nonnegative final int nIndex,
+                                                   @Nonnull final ICSSExpressionMathMember aMember)
   {
     if (nIndex < 0)
       throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aMember == null)
       throw new NullPointerException ("member");
+
     if (nIndex >= getMemberCount ())
       m_aMembers.add (aMember);
     else
       m_aMembers.add (nIndex, aMember);
+    return this;
   }
 
   @Nonnull
@@ -114,6 +121,12 @@ public final class CSSExpressionMemberMathProduct implements ICSSExpressionMathM
     return ECSSVersion.CSS30;
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -39,7 +40,8 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
-public final class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
 {
   private final List <ICSSSelectorMember> m_aMembers = new ArrayList <ICSSSelectorMember> ();
   private CSSSourceLocation m_aSourceLocation;
@@ -58,11 +60,29 @@ public final class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
     return m_aMembers.size ();
   }
 
-  public void addMember (@Nonnull final ICSSSelectorMember aMember)
+  @Nonnull
+  public CSSSelector addMember (@Nonnull final ICSSSelectorMember aMember)
   {
     if (aMember == null)
       throw new NullPointerException ("member");
+
     m_aMembers.add (aMember);
+    return this;
+  }
+
+  @Nonnull
+  public CSSSelector addMember (@Nonnegative final int nIndex, @Nonnull final ICSSSelectorMember aMember)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+    if (aMember == null)
+      throw new NullPointerException ("member");
+
+    if (nIndex >= getMemberCount ())
+      m_aMembers.add (aMember);
+    else
+      m_aMembers.add (nIndex, aMember);
+    return this;
   }
 
   @Nonnull
@@ -104,6 +124,12 @@ public final class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
     return aSB.toString ();
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

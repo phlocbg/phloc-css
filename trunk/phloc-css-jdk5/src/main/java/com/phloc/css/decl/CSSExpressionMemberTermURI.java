@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -20,7 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -34,8 +34,8 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CSSExpressionMemberTermURI implements ICSSExpressionMember, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSExpressionMemberTermURI implements ICSSExpressionMember, ICSSSourceLocationAware
 {
   private CSSURI m_aURI;
 
@@ -73,12 +73,16 @@ public final class CSSExpressionMemberTermURI implements ICSSExpressionMember, I
    * 
    * @param aURI
    *        The new URI to set. May not be <code>null</code>.
+   * @return this
    */
-  public void setURI (@Nonnull final CSSURI aURI)
+  @Nonnull
+  public CSSExpressionMemberTermURI setURI (@Nonnull final CSSURI aURI)
   {
     if (aURI == null)
       throw new NullPointerException ("URI");
+
     m_aURI = aURI;
+    return this;
   }
 
   /**
@@ -87,10 +91,13 @@ public final class CSSExpressionMemberTermURI implements ICSSExpressionMember, I
    * @param sURIString
    *        The new URI string to set. May neither be <code>null</code> nor
    *        empty.
+   * @return this
    */
-  public void setURIString (@Nonnull @Nonempty final String sURIString)
+  @Nonnull
+  public CSSExpressionMemberTermURI setURIString (@Nonnull @Nonempty final String sURIString)
   {
     m_aURI.setURI (sURIString);
+    return this;
   }
 
   @Nonnull

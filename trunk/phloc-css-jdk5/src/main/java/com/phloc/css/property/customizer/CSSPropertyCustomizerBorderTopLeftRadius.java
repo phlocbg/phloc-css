@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -19,6 +19,7 @@ package com.phloc.css.property.customizer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.property.ECSSProperty;
@@ -31,6 +32,7 @@ import com.phloc.css.propertyvalue.ICSSValue;
  * 
  * @author Philip Helger
  */
+@Immutable
 public class CSSPropertyCustomizerBorderTopLeftRadius implements ICSSPropertyCustomizer
 {
   @Nullable

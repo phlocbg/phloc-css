@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -29,7 +29,7 @@ import com.phloc.css.parser.Token;
  * 
  * @author Philip Helger
  */
-public final class ThrowingCSSParseErrorHandler implements ICSSParseErrorHandler
+public class ThrowingCSSParseErrorHandler implements ICSSParseErrorHandler
 {
   private static final ThrowingCSSParseErrorHandler s_aInstance = new ThrowingCSSParseErrorHandler ();
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -20,7 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -36,8 +36,8 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CSSSelectorMemberFunctionLike implements ICSSSelectorMember, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSSelectorMemberFunctionLike implements ICSSSelectorMember, ICSSSourceLocationAware
 {
   private final String m_sFuncName;
   private final CSSExpression m_aParamExpr;
@@ -79,6 +79,12 @@ public final class CSSSelectorMemberFunctionLike implements ICSSSelectorMember, 
     return m_sFuncName + m_aParamExpr.getAsCSSString (aSettings, nIndentLevel) + ')';
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

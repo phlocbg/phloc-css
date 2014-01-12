@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) 2006-2013 phloc systems
+    Copyright (C) 2006-2014 phloc systems
     http://www.phloc.com
     office[at]phloc[dot]com
 
@@ -20,6 +20,41 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <entry date="2014-01-12" category="api" action="change" incompatible="true">
+    <change>
+      <text locale="en">Improved API to allow for simpler call chaining when manually creating CSS stuff.</text>
+    </change>
+  </entry>
+  <entry date="2014-01-09" category="feature" action="fix">
+    <change>
+      <text locale="en">Namespace URLs are now unescaped in CSSNamespaceRule</text>
+    </change>
+  </entry>
+  <entry date="2014-01-04" category="feature" action="fix">
+    <change>
+      <text locale="en">Allowing CSS 3.0 class names with special names like "and", "or", "from", "to" etc.</text>
+    </change>
+  </entry>
+  <entry date="2014-01-04" category="feature" action="add">
+    <change>
+      <text locale="en">Added support for parsing old IE "expression(...)" statements</text>
+    </change>
+  </entry>
+  <entry date="2014-01-04" category="feature" action="update">
+    <change>
+      <text locale="en">Improved parsing of unknown rules</text>
+    </change>
+  </entry>
+  <entry date="2013-12-12" category="api" action="add">
+    <change>
+      <text locale="en">Extended MediaQueryTools to support nested media rules.</text>
+    </change>
+  </entry>
+  <entry date="2013-12-12" category="tech" action="update">
+    <change>
+      <text locale="en">Improved JavaDocs</text>
+    </change>
+  </entry>
   <release date="2013-12-10" version="3.6.1" />
   <entry date="2013-12-10" category="api" action="add">
     <change>

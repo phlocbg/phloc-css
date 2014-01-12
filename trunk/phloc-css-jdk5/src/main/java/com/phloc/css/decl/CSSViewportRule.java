@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -42,7 +42,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware
+public class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final String m_sDeclaration;
   private final CSSDeclarationContainer m_aDeclarations = new CSSDeclarationContainer ();
@@ -60,14 +60,39 @@ public final class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarati
     m_sDeclaration = sDeclaration;
   }
 
-  public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  /**
+   * @return The rule declaration string used in the CSS. Neither
+   *         <code>null</code> nor empty. Always starting with <code>@</code>
+   *         and ending with <code>viewport</code>.
+   */
+  @Nonnull
+  @Nonempty
+  public String getDeclaration ()
   {
-    m_aDeclarations.addDeclaration (aDeclaration);
+    return m_sDeclaration;
   }
 
-  public void addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSViewportRule addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  {
+    m_aDeclarations.addDeclaration (aDeclaration);
+    return this;
+  }
+
+  @Nonnull
+  public CSSViewportRule addDeclaration (@Nonnull @Nonempty final String sProperty,
+                                         @Nonnull final CSSExpression aExpression,
+                                         final boolean bImportant)
+  {
+    m_aDeclarations.addDeclaration (sProperty, aExpression, bImportant);
+    return this;
+  }
+
+  @Nonnull
+  public CSSViewportRule addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.addDeclaration (nIndex, aNewDeclaration);
+    return this;
   }
 
   @Nonnull
@@ -95,9 +120,12 @@ public final class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarati
     return m_aDeclarations.getDeclarationAtIndex (nIndex);
   }
 
-  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSViewportRule setDeclarationAtIndex (@Nonnegative final int nIndex,
+                                                @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.setDeclarationAtIndex (nIndex, aNewDeclaration);
+    return this;
   }
 
   public boolean hasDeclarations ()
@@ -137,6 +165,12 @@ public final class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarati
     return ECSSVersion.CSS30;
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

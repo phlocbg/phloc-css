@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.css.parser.ParseUtils;
@@ -37,6 +38,10 @@ public final class CSSURLHelper
 {
   /** For compatibility reasons, this is set to false */
   public static final boolean DEFAULT_QUOTE_URLS = false;
+
+  @SuppressWarnings ("unused")
+  @PresentForCodeCoverage
+  private static final CSSURLHelper s_aInstance = new CSSURLHelper ();
 
   private CSSURLHelper ()
   {}

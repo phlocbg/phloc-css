@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -24,7 +24,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
@@ -42,8 +42,8 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CSSWriter
+@NotThreadSafe
+public class CSSWriter
 {
   /** By default optimized output is disabled */
   public static final boolean DEFAULT_OPTIMIZED_OUTPUT = CSSWriterSettings.DEFAULT_OPTIMIZED_OUTPUT;

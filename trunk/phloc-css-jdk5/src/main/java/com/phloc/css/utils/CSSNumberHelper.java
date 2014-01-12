@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -51,6 +51,9 @@ public final class CSSNumberHelper
     // determined first
     s_aNameToUnitMap = ContainerHelper.getSortedByKey (aNameToUnitMap, new ComparatorStringLongestFirst ());
   }
+
+  @SuppressWarnings ("unused")
+  private static final CSSNumberHelper s_aInstance = new CSSNumberHelper ();
 
   private CSSNumberHelper ()
   {}

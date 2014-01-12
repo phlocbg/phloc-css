@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -25,8 +25,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
@@ -43,8 +41,6 @@ import com.phloc.css.reader.CSSReaderDeclarationList;
  */
 public final class CSSVisitorDeclarationListTest
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSVisitorDeclarationListTest.class);
-
   @Test
   public void testVisitConstantCSS ()
   {

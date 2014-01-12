@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -23,7 +23,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
@@ -62,7 +61,7 @@ public abstract class AbstractFuncTestCSSReader
     m_bDebug = bDebug;
   }
 
-  protected final void testReadGood (final String sBaseDir) throws IOException
+  protected final void testReadGood (final String sBaseDir)
   {
     final File aBaseDir = new File (sBaseDir);
     if (!aBaseDir.exists ())
@@ -84,7 +83,7 @@ public abstract class AbstractFuncTestCSSReader
         m_aLogger.info (sCSS);
 
       final CascadingStyleSheet aCSSReRead = CSSReader.readFromString (sCSS, m_aCharset, m_eVersion);
-      assertNotNull ("Failed to parse:\n" + sCSS, aCSSReRead);
+      assertNotNull ("Failed to parse " + sKey + ":\n" + sCSS, aCSSReRead);
       assertEquals (sKey, aCSS, aCSSReRead);
 
       // Write non-optimized version and compare it
@@ -102,7 +101,7 @@ public abstract class AbstractFuncTestCSSReader
     }
   }
 
-  protected final void testReadBad (final String sBaseDir) throws IOException
+  protected final void testReadBad (final String sBaseDir)
   {
     final File aBaseDir = new File (sBaseDir);
     if (!aBaseDir.exists ())
@@ -120,7 +119,7 @@ public abstract class AbstractFuncTestCSSReader
     }
   }
 
-  protected final void testReadBadButRecoverable (final String sBaseDir) throws IOException
+  protected final void testReadBadButRecoverable (final String sBaseDir)
   {
     final File aBaseDir = new File (sBaseDir);
     if (!aBaseDir.exists ())

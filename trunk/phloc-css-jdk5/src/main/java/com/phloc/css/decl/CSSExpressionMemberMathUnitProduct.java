@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -20,7 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -31,12 +31,12 @@ import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a CSS calc element
+ * Part of a CSS calc element
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CSSExpressionMemberMathUnitProduct implements ICSSExpressionMathMember, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSExpressionMemberMathUnitProduct implements ICSSExpressionMathMember, ICSSSourceLocationAware
 {
   private final CSSExpressionMemberMathProduct m_aProduct;
 

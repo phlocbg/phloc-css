@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -20,7 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
@@ -36,15 +36,15 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSourceLocationAware
 {
   private final String m_sFunctionName;
   private final CSSExpression m_aExpression;
   private CSSSourceLocation m_aSourceLocation;
 
   @Nonnull
-  private static String _skipBrackets (@Nonnull final String sName)
+  private static String _skipBracketsAtEnd (@Nonnull final String sName)
   {
     final String sRealName = sName.trim ();
     if (sRealName.length () > 2 && sRealName.endsWith ("()"))
@@ -53,7 +53,7 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
   }
 
   /**
-   * Constructor
+   * Constructor without an expression
    * 
    * @param sFunctionName
    *        Function name. May neither be <code>null</code> nor empty.
@@ -77,7 +77,7 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
     if (StringHelper.hasNoText (sFunctionName))
       throw new IllegalArgumentException ("Empty function name is not allowed");
     // expression may be null
-    m_sFunctionName = _skipBrackets (sFunctionName);
+    m_sFunctionName = _skipBracketsAtEnd (sFunctionName);
     m_aExpression = aExpression;
   }
 
@@ -89,6 +89,16 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
   public String getFunctionName ()
   {
     return m_sFunctionName;
+  }
+
+  /**
+   * @return <code>true</code> if this is a special IE "expression" function.
+   *         This makes a difference, because in case of IE expression
+   *         functions, no parameter splitting takes place!
+   */
+  public boolean isExpressionFunction ()
+  {
+    return m_sFunctionName.startsWith ("expression(") || m_sFunctionName.equals ("expression");
   }
 
   /**
@@ -105,10 +115,24 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     if (m_aExpression == null)
+    {
+      // No parameter expressions
+      if (m_sFunctionName.endsWith (")"))
+      {
+        // E.g. for special IE expression functions!
+        return m_sFunctionName;
+      }
       return m_sFunctionName + "()";
+    }
     return m_sFunctionName + "(" + m_aExpression.getAsCSSString (aSettings, nIndentLevel) + ")";
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

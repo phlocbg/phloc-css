@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -41,6 +41,8 @@ public enum ECSSNodeType
   // top level
   CHARSET (ParserCSS21TreeConstants.JJTCHARSET, ParserCSS30TreeConstants.JJTCHARSET),
   UNKNOWNRULE (ParserCSS21TreeConstants.JJTUNKNOWNRULE, ParserCSS30TreeConstants.JJTUNKNOWNRULE),
+  UNKNOWNRULEPARAMETERLIST (ParserCSS21TreeConstants.JJTUNKNOWNRULEPARAMETERLIST, ParserCSS30TreeConstants.JJTUNKNOWNRULEPARAMETERLIST),
+  UNKNOWNRULEBODY (ParserCSS21TreeConstants.JJTUNKNOWNRULEBODY, ParserCSS30TreeConstants.JJTUNKNOWNRULEBODY),
   STYLERULE (ParserCSS21TreeConstants.JJTSTYLERULE, ParserCSS30TreeConstants.JJTSTYLERULE),
   IMPORTRULE (ParserCSS21TreeConstants.JJTIMPORTRULE, ParserCSS30TreeConstants.JJTIMPORTRULE),
   PAGERULE (ParserCSS21TreeConstants.JJTPAGERULE, ParserCSS30TreeConstants.JJTPAGERULE),
@@ -69,7 +71,7 @@ public enum ECSSNodeType
   EXPR (ParserCSS21TreeConstants.JJTEXPR, ParserCSS30TreeConstants.JJTEXPR),
   TERM (ParserCSS21TreeConstants.JJTTERM, ParserCSS30TreeConstants.JJTTERM),
   OPERATOR (ParserCSS21TreeConstants.JJTOPERATOR, ParserCSS30TreeConstants.JJTOPERATOR),
-  URI (ParserCSS21TreeConstants.JJTURI, ParserCSS30TreeConstants.JJTURI),
+  URL (ParserCSS21TreeConstants.JJTURL, ParserCSS30TreeConstants.JJTURL),
   FUNCTION (ParserCSS21TreeConstants.JJTFUNCTION, ParserCSS30TreeConstants.JJTFUNCTION),
   MATH (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTMATH),
   MATH_SUMOPERATOR (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTSUMOPERATOR),
@@ -110,6 +112,16 @@ public enum ECSSNodeType
   private final int m_nParserType21;
   private final int m_nParserType30;
 
+  /**
+   * Constructor
+   * 
+   * @param nParserType21
+   *        The ID of the node in the 2.1 parser or {@link CGlobal#ILLEGAL_UINT}
+   *        if this node is not present in CSS 2.1.
+   * @param nParserType30
+   *        The ID of the node in the 3.0 parser or {@link CGlobal#ILLEGAL_UINT}
+   *        if this node is not present in CSS 3.0.
+   */
   private ECSSNodeType (final int nParserType21, final int nParserType30)
   {
     m_nParserType21 = nParserType21;
@@ -204,7 +216,7 @@ public enum ECSSNodeType
 
   @Nonnull
   @Nonempty
-  static String getDump (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
+  public static String getDump (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
   {
     final StringBuilder aSB = new StringBuilder ();
     _dumpRecursive (aParserNode, eVersion, aSB, "");

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -20,7 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -34,12 +34,12 @@ import com.phloc.css.ICSSWriterSettings;
 import com.phloc.css.utils.CSSNumberHelper;
 
 /**
- * Represents a CSS calc element
+ * Part of a CSS calc element
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CSSExpressionMemberMathUnitSimple implements ICSSExpressionMathMember, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSExpressionMemberMathUnitSimple implements ICSSExpressionMathMember, ICSSSourceLocationAware
 {
   private final String m_sText;
   private final ECSSUnit m_eUnit;
@@ -86,6 +86,12 @@ public final class CSSExpressionMemberMathUnitSimple implements ICSSExpressionMa
     return ECSSVersion.CSS30;
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

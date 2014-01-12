@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -52,6 +52,7 @@ public final class CCSS
   public static final String IMPORTANT_SUFFIX = " !important";
 
   @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
   private static final CCSS s_aInstance = new CCSS ();
 
   private CCSS ()

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -51,14 +51,26 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   public CSSDeclarationList ()
   {}
 
-  public final void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  @Nonnull
+  public final CSSDeclarationList addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     if (aDeclaration == null)
       throw new NullPointerException ("declaration");
+
     m_aDeclarations.add (aDeclaration);
+    return this;
   }
 
-  public void addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public final CSSDeclarationList addDeclaration (@Nonnull @Nonempty final String sProperty,
+                                                  @Nonnull final CSSExpression aExpression,
+                                                  final boolean bImportant)
+  {
+    return addDeclaration (new CSSDeclaration (sProperty, aExpression, bImportant));
+  }
+
+  @Nonnull
+  public CSSDeclarationList addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
     if (nIndex < 0)
       throw new IllegalArgumentException ("index is invalid: " + nIndex);
@@ -69,6 +81,7 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
       m_aDeclarations.add (aNewDeclaration);
     else
       m_aDeclarations.add (nIndex, aNewDeclaration);
+    return this;
   }
 
   @Nonnull
@@ -98,7 +111,9 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
     return ContainerHelper.getSafe (m_aDeclarations, nIndex);
   }
 
-  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSDeclarationList setDeclarationAtIndex (@Nonnegative final int nIndex,
+                                                   @Nonnull final CSSDeclaration aNewDeclaration)
   {
     if (nIndex < 0)
       throw new IllegalArgumentException ("index is invalid: " + nIndex);
@@ -109,6 +124,7 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
       m_aDeclarations.add (aNewDeclaration);
     else
       m_aDeclarations.set (nIndex, aNewDeclaration);
+    return this;
   }
 
   public boolean hasDeclarations ()
@@ -153,6 +169,12 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
     return aSB.toString ();
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

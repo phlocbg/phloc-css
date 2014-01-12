@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -46,7 +46,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAware, ICSSVersionAware
+public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAware, ICSSVersionAware
 {
   private final List <ICSSSupportsConditionMember> m_aConditionMembers = new ArrayList <ICSSSupportsConditionMember> ();
   private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();
@@ -66,11 +66,30 @@ public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocati
     return m_aConditionMembers.size ();
   }
 
-  public void addSupportConditionMember (@Nonnull final ICSSSupportsConditionMember aMember)
+  @Nonnull
+  public CSSSupportsRule addSupportConditionMember (@Nonnull final ICSSSupportsConditionMember aMember)
   {
     if (aMember == null)
       throw new NullPointerException ("member");
+
     m_aConditionMembers.add (aMember);
+    return this;
+  }
+
+  @Nonnull
+  public CSSSupportsRule addSupportConditionMember (@Nonnegative final int nIndex,
+                                                    @Nonnull final ICSSSupportsConditionMember aMember)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+    if (aMember == null)
+      throw new NullPointerException ("member");
+
+    if (nIndex >= getSupportsConditionMemberCount ())
+      m_aConditionMembers.add (aMember);
+    else
+      m_aConditionMembers.add (nIndex, aMember);
+    return this;
   }
 
   @Nonnull
@@ -114,11 +133,29 @@ public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocati
     return m_aRules.size ();
   }
 
-  public void addRule (@Nonnull final ICSSTopLevelRule aRule)
+  @Nonnull
+  public CSSSupportsRule addRule (@Nonnull final ICSSTopLevelRule aRule)
   {
     if (aRule == null)
       throw new NullPointerException ("rule");
+
     m_aRules.add (aRule);
+    return this;
+  }
+
+  @Nonnull
+  public CSSSupportsRule addRule (@Nonnegative final int nIndex, @Nonnull final ICSSTopLevelRule aRule)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+    if (aRule == null)
+      throw new NullPointerException ("rule");
+
+    if (nIndex >= getRuleCount ())
+      m_aRules.add (aRule);
+    else
+      m_aRules.add (nIndex, aRule);
+    return this;
   }
 
   @Nonnull
@@ -218,6 +255,12 @@ public final class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocati
     return ECSSVersion.CSS30;
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

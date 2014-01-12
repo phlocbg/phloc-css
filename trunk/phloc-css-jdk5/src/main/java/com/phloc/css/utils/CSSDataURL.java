@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -30,8 +30,6 @@ import javax.annotation.WillNotClose;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.omg.CORBA_2_3.portable.OutputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.IHasStringRepresentation;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -56,8 +54,6 @@ import com.phloc.commons.string.ToStringGenerator;
 @NotThreadSafe
 public class CSSDataURL implements IHasStringRepresentation, Serializable
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CSSDataURL.class);
-
   private IMimeType m_aMimeType;
   private boolean m_bBase64Encoded;
   private byte [] m_aContent;

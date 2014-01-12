@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -25,6 +25,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
@@ -64,6 +65,10 @@ public final class CSSDataURLHelper
   public static final EMimeQuoting MIME_QUOTING = EMimeQuoting.URL_ESCAPE;
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSDataURLHelper.class);
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final CSSDataURLHelper s_aInstance = new CSSDataURLHelper ();
 
   private CSSDataURLHelper ()
   {}

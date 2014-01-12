@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -22,7 +22,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -40,17 +40,29 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersionAware, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final List <ICSSSelectorMember> m_aNestedSelectorMembers;
   private CSSSourceLocation m_aSourceLocation;
+
+  public CSSSelectorMemberNot (@Nonnull final ICSSSelectorMember... aNestedSelectorMembers)
+  {
+    if (aNestedSelectorMembers == null)
+      throw new NullPointerException ("nestedSelectorMembers");
+    m_aNestedSelectorMembers = ContainerHelper.newList (aNestedSelectorMembers);
+  }
 
   public CSSSelectorMemberNot (@Nonnull final List <ICSSSelectorMember> aNestedSelectorMembers)
   {
     if (aNestedSelectorMembers == null)
       throw new NullPointerException ("nestedSelectorMembers");
-    m_aNestedSelectorMembers = aNestedSelectorMembers;
+    m_aNestedSelectorMembers = ContainerHelper.newList (aNestedSelectorMembers);
+  }
+
+  public boolean hasNestedMembers ()
+  {
+    return !m_aNestedSelectorMembers.isEmpty ();
   }
 
   @Nonnegative
@@ -84,6 +96,12 @@ public final class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersi
     return ECSSVersion.CSS30;
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

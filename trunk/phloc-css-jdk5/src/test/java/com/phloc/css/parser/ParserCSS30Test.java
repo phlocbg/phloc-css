@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -28,6 +28,11 @@ import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSTopLevelRule;
 import com.phloc.css.handler.CSSHandler;
 
+/**
+ * Test class for class {@link ParserCSS30}.
+ * 
+ * @author Philip Helger
+ */
 public final class ParserCSS30Test extends AbstractCSS30Test
 {
   @Test
