@@ -197,12 +197,16 @@ public class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
    * 
    * @param aLocation
    *        The location to use. May not be <code>null</code>.
+   * @return this;
    */
-  public void setLocation (@Nonnull final CSSURI aLocation)
+  @Nonnull
+  public CSSImportRule setLocation (@Nonnull final CSSURI aLocation)
   {
     if (aLocation == null)
       throw new NullPointerException ("location");
+
     m_aLocation = aLocation;
+    return this;
   }
 
   /**
@@ -210,10 +214,13 @@ public class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
    * 
    * @param sLocationURI
    *        The location URI to use. May not be <code>null</code>.
+   * @return this;
    */
-  public void setLocationString (@Nonnull @Nonempty final String sLocationURI)
+  @Nonnull
+  public CSSImportRule setLocationString (@Nonnull @Nonempty final String sLocationURI)
   {
     m_aLocation.setURI (sLocationURI);
+    return this;
   }
 
   @Nonnull
