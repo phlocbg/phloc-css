@@ -640,12 +640,11 @@ void simpleSelectorSequence() #void : {}
 
 void selectorCombinator() : {}
 {
-// IMPORTANT to use ( <S> )? here and not ( <S> )+ because of comment handling!
   ( LOOKAHEAD(2)
-    ( <S> )? 
+    ( <S> )* 
     <PLUS>       { jjtThis.setText ("+"); }
   | LOOKAHEAD(2)
-    ( <S> )? 
+    ( <S> )* 
     <GREATER>    { jjtThis.setText (">"); }
   | <S>          { jjtThis.setText (" "); }
   )
@@ -654,7 +653,7 @@ void selectorCombinator() : {}
 void selector() : {}
 {
   simpleSelectorSequence()
-  ( LOOKAHEAD(2)
+  ( LOOKAHEAD(3)
     selectorCombinator()
     ( <S> )*
     simpleSelectorSequence()

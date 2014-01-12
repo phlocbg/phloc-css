@@ -91,6 +91,22 @@ div , /* Comment */ span /* comment */ {}
 div /* Comment */ , /* Comment */ span /* comment */ {}
 /* Comment */ div /* Comment */ , /* Comment */ span /* comment */ {}
 
+/* Comment */ /* Comment2 */ div ,  span {}
+div /* Comment */ /* Comment2 */ ,  span {}
+div  , /* Comment */ /* Comment2 */ span {}
+div  , span /* Comment */ /* Comment2 */ {}
+/* Comment */ /* Comment2 */ div /* Comment */ /* Comment2 */ , span {}
+/* Comment */ /* Comment2 */ div , /* Comment */ /* Comment2 */ span {}
+/* Comment */ /* Comment2 */ div , span /* comment */ /* Comment2 */ {}
+div /* Comment */ /* Comment2 */ , /* Comment */ /* Comment2 */ span {}
+div /* Comment */ /* Comment2 */ , span /* comment */ /* Comment2 */ {}
+div , /* Comment */ /* Comment2 */ span /* comment */ /* Comment2 */ {}
+/* Comment */ /* Comment2 */ div /* Comment */ /* Comment2 */ , /* Comment */ /* Comment2 */ span {}
+/* Comment */ /* Comment2 */ div /* Comment */ /* Comment2 */ , span /* comment */ /* Comment2 */ {}
+/* Comment */ /* Comment2 */ div , /* Comment */ /* Comment2 */ span /* comment */ /* Comment2 */ {}
+div /* Comment */ /* Comment2 */ , /* Comment */ /* Comment2 */ span /* comment */ /* Comment2 */ {}
+/* Comment */ /* Comment2 */ div /* Comment */ /* Comment2 */ , /* Comment */ /* Comment2 */ span /* comment */ /* Comment2 */ {}
+
 /* Comment test for selector content: */
 
 .buttonwrapper { /* Comment */ color /* Comment */ : /* Comment */ blue /* Comment */ ; }
