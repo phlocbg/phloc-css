@@ -24,7 +24,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
@@ -42,7 +42,7 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * 
  * @author Philip Helger
  */
-@Immutable
+@NotThreadSafe
 public class CSSWriter
 {
   /** By default optimized output is disabled */

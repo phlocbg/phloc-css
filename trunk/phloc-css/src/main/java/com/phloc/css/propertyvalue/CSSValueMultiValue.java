@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -42,6 +43,7 @@ import com.phloc.css.property.ICSSProperty;
  * 
  * @author Philip Helger
  */
+@Immutable
 public class CSSValueMultiValue implements ICSSMultiValue
 {
   private final List <CSSValue> m_aValues = new ArrayList <CSSValue> ();

@@ -20,6 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
@@ -38,7 +39,8 @@ import com.phloc.css.media.ECSSMediaExpressionFeature;
 /**
  * Represents a single media expression
  */
-public final class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final String m_sFeature;
   private final CSSExpression m_aValue;

@@ -23,7 +23,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -41,8 +41,8 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CSSExpressionMemberMathProduct implements ICSSExpressionMathMember, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSExpressionMemberMathProduct implements ICSSExpressionMathMember, ICSSSourceLocationAware
 {
   private final List <ICSSExpressionMathMember> m_aMembers = new ArrayList <ICSSExpressionMathMember> ();
   private CSSSourceLocation m_aSourceLocation;

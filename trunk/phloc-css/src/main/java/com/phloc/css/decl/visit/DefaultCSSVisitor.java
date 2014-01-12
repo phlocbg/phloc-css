@@ -18,6 +18,7 @@
 package com.phloc.css.decl.visit;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.css.decl.CSSDeclaration;
@@ -40,6 +41,7 @@ import com.phloc.css.decl.CSSViewportRule;
  * 
  * @author Philip Helger
  */
+@Immutable
 public class DefaultCSSVisitor implements ICSSVisitor
 {
   public DefaultCSSVisitor ()

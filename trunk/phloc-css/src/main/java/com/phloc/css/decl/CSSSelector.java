@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -39,6 +40,7 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
+@NotThreadSafe
 public class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
 {
   private final List <ICSSSelectorMember> m_aMembers = new ArrayList <ICSSSelectorMember> ();

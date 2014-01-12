@@ -20,6 +20,7 @@ package com.phloc.css.property;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.string.StringParser;
 import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
@@ -30,6 +31,7 @@ import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
  * 
  * @author Philip Helger
  */
+@NotThreadSafe
 public class CSSPropertyDouble extends AbstractCSSProperty
 {
   public CSSPropertyDouble (@Nonnull final ECSSProperty eProp)
