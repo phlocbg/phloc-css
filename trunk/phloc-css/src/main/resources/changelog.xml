@@ -42,7 +42,7 @@
   </entry>
   <entry date="2014-01-04" category="feature" action="update">
     <change>
-      <text locale="en">Improved parsing of unknown rules</text>
+      <text locale="en">Improved parsing of unknown CSS rules</text>
     </change>
   </entry>
   <entry date="2013-12-12" category="api" action="add">
@@ -52,7 +52,7 @@
   </entry>
   <entry date="2013-12-12" category="tech" action="update">
     <change>
-      <text locale="en">Improved JavaDocs</text>
+      <text locale="en">Improved JavaDocs in many classes</text>
     </change>
   </entry>
   <release date="2013-12-10" version="3.6.1" />

@@ -140,21 +140,24 @@ TOKEN :
            | <NONASCII>
            | <ESCAPE>
            >
-| < NL: "\n" | "\r\n" | "\r" | "\f" >
+| < STRING_EOL: "\n" 
+              | "\r\n" 
+              | "\r" 
+              | "\f" > { matchedToken.image = ""; }
 | < STRING1: "\"" ( ~["\n","\r","\f","\\","\""]
-                  | "\\" <NL>
+                  | "\\" <STRING_EOL>
                   | <ESCAPE>
                   )* "\"" >
 | < STRING2: "'" ( ~["\n","\r","\f","\\","'"]
-                 | "\\" <NL>
+                 | "\\" <STRING_EOL>
                  | <ESCAPE>
                  )* "'" >
 | < INVALID_STRING1: "\"" ( ~["\n","\r","\f","\\","\""]
-                          | "\\" <NL>
+                          | "\\" <STRING_EOL>
                           | <ESCAPE>
                           )* >
 | < INVALID_STRING2: "'" ( ~["\n","\r","\f","\\","'"]
-                         | "\\" <NL>
+                         | "\\" <STRING_EOL>
                          | <ESCAPE>
                          )* >
 | < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/" >

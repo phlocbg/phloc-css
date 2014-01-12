@@ -108,8 +108,8 @@ SKIP :
 TOKEN :
 {
   < N: "n" >
-| < EVEN: "even" >
 | < ODD: "odd" >
+| < EVEN: "even" >
 | < INTEGER: ( ["0"-"9"] )+ >  
 }
 
@@ -166,7 +166,10 @@ TOKEN :
             | <ESCAPE> >
 
 // First, inside a string, a backslash followed by a newline is ignored (i.e., the string is deemed not to contain either the backslash or the newline).           
-| < STRING_EOL: "\\" ( "\n" | "\r\n" | "\r" | "\f" ) >  { matchedToken.image = ""; }    
+| < STRING_EOL: "\\" ( "\n" 
+                     | "\r\n" 
+                     | "\r" 
+                     | "\f" ) >  { matchedToken.image = ""; }    
 | < STRING1: "\"" ( ~["\n","\r","\f","\\","\""]
                   | <STRING_EOL>
                   | <ESCAPE>
