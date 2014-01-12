@@ -21,6 +21,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import javax.annotation.Nonnull;
+
 import org.junit.Test;
 
 import com.phloc.commons.charset.CCharset;
@@ -34,7 +36,8 @@ import com.phloc.css.reader.CSSReader;
  */
 public final class CSSNamespaceRuleTest
 {
-  private CSSNamespaceRule _parse (final String sCSS)
+  @Nonnull
+  private static CSSNamespaceRule _parse (final String sCSS)
   {
     final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.LATEST);
     assertNotNull (sCSS, aCSS);

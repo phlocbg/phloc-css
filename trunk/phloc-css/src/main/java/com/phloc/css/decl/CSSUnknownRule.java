@@ -72,6 +72,10 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     m_sParameterList = StringHelper.trim (sParameterList);
   }
 
+  /**
+   * @return The parameter-list of the unknown rule. This is the part between
+   *         the declaration and the first opening bracket ('{')
+   */
   @Nullable
   public String getParameterList ()
   {
@@ -83,6 +87,10 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     m_sBody = StringHelper.trim (sBody);
   }
 
+  /**
+   * @return The body of the unknown rule. This is the part between the first
+   *         opening bracket ('{') and the matching closing bracket ('}').
+   */
   @Nullable
   public String getBody ()
   {
