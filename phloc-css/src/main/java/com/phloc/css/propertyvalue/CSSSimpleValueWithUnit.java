@@ -34,7 +34,7 @@ import com.phloc.css.ECSSUnit;
  * @author Philip Helger
  */
 @Immutable
-public final class CSSSimpleValueWithUnit implements Serializable
+public class CSSSimpleValueWithUnit implements Serializable
 {
   private final double m_dValue;
   private final ECSSUnit m_eUnit;

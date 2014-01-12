@@ -26,7 +26,7 @@ import com.phloc.css.propertyvalue.ICSSValue;
 
 /**
  * A special customizer that can be assigned to CSS properties to modify their
- * default behavior. This can be used to add browser-specifc values.
+ * default behavior. This can be used to add browser-specific values.
  * 
  * @author Philip Helger
  */

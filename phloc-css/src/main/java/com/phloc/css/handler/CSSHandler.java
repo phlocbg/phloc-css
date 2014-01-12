@@ -36,6 +36,7 @@ import com.phloc.css.parser.CSSNode;
 public final class CSSHandler
 {
   @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
   private static final CSSHandler s_aInstance = new CSSHandler ();
 
   private CSSHandler ()

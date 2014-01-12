@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import javax.annotation.RegEx;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.decl.CSSRect;
@@ -63,6 +64,10 @@ public final class CSSRectHelper
                                                    "\\s+" +
                                                    PATTERN_PART_VALUE +
                                                    "\\s*\\)$";
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final CSSRectHelper s_aInstance = new CSSRectHelper ();
 
   private CSSRectHelper ()
   {}

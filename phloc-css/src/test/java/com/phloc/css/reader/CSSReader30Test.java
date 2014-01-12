@@ -20,7 +20,6 @@ package com.phloc.css.reader;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 import org.junit.Test;
@@ -45,27 +44,27 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   }
 
   @Test
-  public void testReadAll30Good () throws IOException
+  public void testReadAll30Good ()
   {
     testReadGood ("src/test/resources/testfiles/css30/good");
     testReadGood ("src/test/resources/testfiles/css30/bad_but_succeeding");
   }
 
   @Test
-  public void testReadAll30Bad () throws IOException
+  public void testReadAll30Bad ()
   {
     testReadBad ("src/test/resources/testfiles/css30/bad");
     testReadBad ("src/test/resources/testfiles/css30/good_but_failing");
   }
 
   @Test
-  public void testReadAll30BadBadButRecoverable () throws IOException
+  public void testReadAll30BadBadButRecoverable ()
   {
     testReadBadButRecoverable ("src/test/resources/testfiles/css30/bad_but_recoverable");
   }
 
   @Test
-  public void testReadSpecialGood () throws IOException
+  public void testReadSpecialGood ()
   {
     final ECSSVersion eVersion = ECSSVersion.CSS30;
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;

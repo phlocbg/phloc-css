@@ -38,7 +38,7 @@ import com.phloc.css.property.ICSSProperty;
  * @author Philip Helger
  */
 @Immutable
-public final class CSSValue implements ICSSValue
+public class CSSValue implements ICSSValue
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSValue.class);
 

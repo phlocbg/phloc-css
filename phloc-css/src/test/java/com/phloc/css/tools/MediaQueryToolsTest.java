@@ -20,7 +20,6 @@ package com.phloc.css.tools;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -86,7 +85,7 @@ public final class MediaQueryToolsTest
   }
 
   @Test
-  public void testGetWrapped () throws IOException
+  public void testGetWrapped ()
   {
     final CascadingStyleSheet aBaseCSS = CSSReader.readFromString ("p { color:red;}", s_aCharset, s_eVersion);
     assertNotNull (aBaseCSS);

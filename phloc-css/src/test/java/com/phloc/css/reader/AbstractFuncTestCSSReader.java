@@ -23,7 +23,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
@@ -62,7 +61,7 @@ public abstract class AbstractFuncTestCSSReader
     m_bDebug = bDebug;
   }
 
-  protected final void testReadGood (final String sBaseDir) throws IOException
+  protected final void testReadGood (final String sBaseDir)
   {
     final File aBaseDir = new File (sBaseDir);
     if (!aBaseDir.exists ())
@@ -102,7 +101,7 @@ public abstract class AbstractFuncTestCSSReader
     }
   }
 
-  protected final void testReadBad (final String sBaseDir) throws IOException
+  protected final void testReadBad (final String sBaseDir)
   {
     final File aBaseDir = new File (sBaseDir);
     if (!aBaseDir.exists ())
@@ -120,7 +119,7 @@ public abstract class AbstractFuncTestCSSReader
     }
   }
 
-  protected final void testReadBadButRecoverable (final String sBaseDir) throws IOException
+  protected final void testReadBadButRecoverable (final String sBaseDir)
   {
     final File aBaseDir = new File (sBaseDir);
     if (!aBaseDir.exists ())

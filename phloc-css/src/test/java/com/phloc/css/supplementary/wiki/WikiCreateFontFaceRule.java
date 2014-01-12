@@ -17,8 +17,6 @@
  */
 package com.phloc.css.supplementary.wiki;
 
-import java.io.IOException;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -74,7 +72,7 @@ public final class WikiCreateFontFaceRule
   public static CascadingStyleSheet createFontFace (@Nonnull @Nonempty final String sTypefaceName,
                                                     @Nullable final String sLocalName,
                                                     @Nonnull final String sPath,
-                                                    @Nonnull final String sBasename) throws IOException
+                                                    @Nonnull final String sBasename)
   {
     final CascadingStyleSheet aCSS = new CascadingStyleSheet ();
     final CSSFontFaceRule aFFR = new CSSFontFaceRule ();

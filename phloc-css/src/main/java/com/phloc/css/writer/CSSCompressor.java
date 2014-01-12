@@ -25,6 +25,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.reader.CSSReader;
@@ -38,6 +39,10 @@ import com.phloc.css.reader.CSSReader;
 public final class CSSCompressor
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSCompressor.class);
+
+  @SuppressWarnings ("unused")
+  @PresentForCodeCoverage
+  private static final CSSCompressor s_aInstance = new CSSCompressor ();
 
   private CSSCompressor ()
   {}

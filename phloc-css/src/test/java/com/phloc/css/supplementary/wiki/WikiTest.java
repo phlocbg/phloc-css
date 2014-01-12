@@ -20,8 +20,6 @@ package com.phloc.css.supplementary.wiki;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
 import com.phloc.commons.charset.CCharset;
@@ -38,7 +36,7 @@ import com.phloc.css.writer.CSSWriter;
 public final class WikiTest
 {
   @Test
-  public void test () throws IOException
+  public void test ()
   {
     final CascadingStyleSheet aCSS = WikiCreateFontFaceRule.createFontFace ("Your \"typeface\"",
                                                                             "local font name",

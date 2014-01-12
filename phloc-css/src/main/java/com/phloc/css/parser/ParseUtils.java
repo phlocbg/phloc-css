@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import javax.annotation.RegEx;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.propertyvalue.CCSSValue;
@@ -42,6 +43,10 @@ public final class ParseUtils
   // Order of the rules in brackets is important!
   @RegEx
   private static final String SPLIT_NUMBER_REGEX = "^([0-9]*\\.[0-9]+|[0-9]+).*$";
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final ParseUtils s_aInstance = new ParseUtils ();
 
   private ParseUtils ()
   {}

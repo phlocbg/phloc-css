@@ -464,7 +464,6 @@ final class CSSNodeToDomainObject
     }
 
     final CSSNode aChildNode = aNode.jjtGetChild (0);
-    final int nChildChildren = aChildNode.jjtGetNumChildren ();
 
     if (ECSSNodeType.URL.isNode (aChildNode, m_eVersion))
     {

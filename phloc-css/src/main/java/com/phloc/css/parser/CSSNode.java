@@ -50,11 +50,6 @@ public class CSSNode implements Node, Iterable <CSSNode>, Serializable
     m_nType = nType;
   }
 
-  public CSSNode (final Object aParser, final int nType)
-  {
-    m_nType = nType;
-  }
-
   public void jjtOpen ()
   {}
 

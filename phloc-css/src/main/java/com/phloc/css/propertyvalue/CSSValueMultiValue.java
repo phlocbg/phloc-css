@@ -42,7 +42,7 @@ import com.phloc.css.property.ICSSProperty;
  * 
  * @author Philip Helger
  */
-public final class CSSValueMultiValue implements ICSSMultiValue
+public class CSSValueMultiValue implements ICSSMultiValue
 {
   private final List <CSSValue> m_aValues = new ArrayList <CSSValue> ();
 

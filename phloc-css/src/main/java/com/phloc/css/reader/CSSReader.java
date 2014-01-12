@@ -30,6 +30,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.IInputStreamProvider;
@@ -67,6 +68,10 @@ import com.phloc.css.reader.errorhandler.ThrowingCSSParseErrorHandler;
 public final class CSSReader
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSReader.class);
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final CSSReader s_aInstance = new CSSReader ();
 
   private CSSReader ()
   {}
