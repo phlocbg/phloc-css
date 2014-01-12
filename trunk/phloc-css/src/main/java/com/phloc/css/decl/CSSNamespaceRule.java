@@ -45,6 +45,26 @@ public class CSSNamespaceRule implements ICSSWriteable, ICSSSourceLocationAware
   private String m_sURL;
   private CSSSourceLocation m_aSourceLocation;
 
+  /**
+   * Constructor for the default namespace
+   * 
+   * @param sURL
+   *        The namespace URL to use. May not be <code>null</code>.
+   */
+  public CSSNamespaceRule (@Nonnull final String sURL)
+  {
+    this (null, sURL);
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param sNamespacePrefix
+   *        The namespace prefix to use. May be <code>null</code> or empty for
+   *        the default namespace.
+   * @param sURL
+   *        The namespace URL to use. May not be <code>null</code>.
+   */
   public CSSNamespaceRule (@Nullable final String sNamespacePrefix, @Nonnull final String sURL)
   {
     setNamespacePrefix (sNamespacePrefix);
