@@ -30,7 +30,8 @@ import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single supports condition with a declaration
+ * Represents a single supports condition with a declaration. E.g.
+ * "(column-count: 1)"
  * 
  * @author Philip Helger
  */
@@ -46,6 +47,9 @@ public class CSSSupportsConditionDeclaration implements ICSSSupportsConditionMem
     m_aDeclaration = aDeclaration;
   }
 
+  /**
+   * @return The contained declaration. Never <code>null</code>.
+   */
   @Nonnull
   public CSSDeclaration getDeclaration ()
   {

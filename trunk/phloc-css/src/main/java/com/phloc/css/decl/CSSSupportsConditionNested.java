@@ -59,11 +59,13 @@ public class CSSSupportsConditionNested implements ICSSSupportsConditionMember, 
     return m_aMembers.size ();
   }
 
-  public void addMember (@Nonnull final ICSSSupportsConditionMember aMember)
+  @Nonnull
+  public CSSSupportsConditionNested addMember (@Nonnull final ICSSSupportsConditionMember aMember)
   {
     if (aMember == null)
       throw new NullPointerException ("member");
     m_aMembers.add (aMember);
+    return this;
   }
 
   @Nonnull

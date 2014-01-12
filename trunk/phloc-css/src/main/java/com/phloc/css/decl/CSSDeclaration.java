@@ -43,12 +43,31 @@ import com.phloc.css.ICSSWriterSettings;
 @NotThreadSafe
 public final class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
 {
+  public static final boolean DEFAULT_IMPORTANT = false;
+
   private final String m_sProperty;
   private final CSSExpression m_aExpression;
   private final boolean m_bImportant;
   private CSSSourceLocation m_aSourceLocation;
 
   /**
+   * Constructor for non-important values.
+   * 
+   * @param sProperty
+   *        The name of the property. E.g. "color". May neither be
+   *        <code>null</code> nor empty. The property value is automatically
+   *        lowercased!
+   * @param aExpression
+   *        The value of the property. May not be <code>null</code>.
+   */
+  public CSSDeclaration (@Nonnull @Nonempty final String sProperty, @Nonnull final CSSExpression aExpression)
+  {
+    this (sProperty, aExpression, DEFAULT_IMPORTANT);
+  }
+
+  /**
+   * Constructor
+   * 
    * @param sProperty
    *        The name of the property. E.g. "color". May neither be
    *        <code>null</code> nor empty. The property value is automatically

@@ -62,11 +62,21 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
     return m_aSelectors.size ();
   }
 
-  public void addSelector (@Nonnull final CSSSelector aSelector)
+  @Nonnull
+  public CSSStyleRule addSelector (@Nonnull final ICSSSelectorMember aSingleSelectorMember)
+  {
+    if (aSingleSelectorMember == null)
+      throw new NullPointerException ("SingleSelectorMember");
+    return addSelector (new CSSSelector ().addMember (aSingleSelectorMember));
+  }
+
+  @Nonnull
+  public CSSStyleRule addSelector (@Nonnull final CSSSelector aSelector)
   {
     if (aSelector == null)
       throw new NullPointerException ("selector");
     m_aSelectors.add (aSelector);
+    return this;
   }
 
   @Nonnull
@@ -99,14 +109,18 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
     return ContainerHelper.newList (m_aSelectors);
   }
 
-  public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  @Nonnull
+  public CSSStyleRule addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     m_aDeclarations.addDeclaration (aDeclaration);
+    return this;
   }
 
-  public void addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSStyleRule addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.addDeclaration (nIndex, aNewDeclaration);
+    return this;
   }
 
   @Nonnull
@@ -134,9 +148,12 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
     return m_aDeclarations.getDeclarationAtIndex (nIndex);
   }
 
-  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSStyleRule setDeclarationAtIndex (@Nonnegative final int nIndex,
+                                             @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.setDeclarationAtIndex (nIndex, aNewDeclaration);
+    return this;
   }
 
   public boolean hasDeclarations ()

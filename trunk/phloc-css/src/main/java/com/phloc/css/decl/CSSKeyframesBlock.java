@@ -64,14 +64,18 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
     return ContainerHelper.newList (m_aKeyframesSelectors);
   }
 
-  public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  @Nonnull
+  public CSSKeyframesBlock addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     m_aDeclarations.addDeclaration (aDeclaration);
+    return this;
   }
 
-  public void addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSKeyframesBlock addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.addDeclaration (nIndex, aNewDeclaration);
+    return this;
   }
 
   @Nonnull
@@ -99,9 +103,12 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
     return m_aDeclarations.getDeclarationAtIndex (nIndex);
   }
 
-  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSKeyframesBlock setDeclarationAtIndex (@Nonnegative final int nIndex,
+                                                  @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.setDeclarationAtIndex (nIndex, aNewDeclaration);
+    return this;
   }
 
   public boolean hasDeclarations ()

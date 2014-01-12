@@ -49,14 +49,18 @@ public class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
   public CSSFontFaceRule ()
   {}
 
-  public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  @Nonnull
+  public CSSFontFaceRule addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     m_aDeclarations.addDeclaration (aDeclaration);
+    return this;
   }
 
-  public void addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSFontFaceRule addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.addDeclaration (nIndex, aNewDeclaration);
+    return this;
   }
 
   @Nonnull
@@ -84,9 +88,12 @@ public class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
     return m_aDeclarations.getDeclarationAtIndex (nIndex);
   }
 
-  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSFontFaceRule setDeclarationAtIndex (@Nonnegative final int nIndex,
+                                                @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.setDeclarationAtIndex (nIndex, aNewDeclaration);
+    return this;
   }
 
   public boolean hasDeclarations ()

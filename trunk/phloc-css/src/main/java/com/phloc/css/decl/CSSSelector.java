@@ -39,7 +39,7 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
-public final class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
+public class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
 {
   private final List <ICSSSelectorMember> m_aMembers = new ArrayList <ICSSSelectorMember> ();
   private CSSSourceLocation m_aSourceLocation;
@@ -58,11 +58,13 @@ public final class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
     return m_aMembers.size ();
   }
 
-  public void addMember (@Nonnull final ICSSSelectorMember aMember)
+  @Nonnull
+  public CSSSelector addMember (@Nonnull final ICSSSelectorMember aMember)
   {
     if (aMember == null)
       throw new NullPointerException ("member");
     m_aMembers.add (aMember);
+    return this;
   }
 
   @Nonnull
