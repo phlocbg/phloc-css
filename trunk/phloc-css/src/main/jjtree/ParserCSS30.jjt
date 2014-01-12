@@ -186,7 +186,6 @@ TOKEN :
                          | <STRING_EOL>
                          | <ESCAPE>
                          )* >
-| < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/" >
 | < #URANGE_H: <H> 
              | "?" >
 | < #URANGE_PLACEHOLDER: <URANGE_H>
@@ -432,15 +431,14 @@ CSSNode styleSheet() #Root : {}
   { return jjtThis; }
 }
 
-void charsetRule() #Charset :
-{ String sStr; }
+//
+// Generic utility rules
+//
+String string() #void : {}
 {
-  ( <S> )?
-  <CHARSET_SYM>
-  <S>
-  sStr = string () { jjtThis.setText (sStr); }
-  ( <S> )*
-  <SEMICOLON>
+  ( <STRING1> { return token.image; }
+  | <STRING2> { return token.image; }
+  )
 }
 
 String anyIdentifier() #void : {}
@@ -455,6 +453,211 @@ String anyIdentifier() #void : {}
   | <OR_SYM>   { return token.image; }
   )
 }
+
+void url() : {}
+{
+  <URL>  { jjtThis.setText (token.image); } 
+}
+
+void function() : 
+{ String sPlain; }
+{
+  ( <FUNCTION> { jjtThis.setText (token.image + ")"); }
+    ( <S> )*
+    // Support functions without parameters (e.g. "gray ()")
+    ( expr() )?
+    <RROUND>
+  | <FUNCTION_EXPRESSION> { jjtThis.setText (token.image); }
+    // get content of all skipped chars 
+    sPlain = javaSkipToClosingParantheses() { jjtThis.appendText (sPlain); }
+  )
+}
+
+String unaryOperator() #void : {}
+{
+  ( <MINUS> { return "-"; }
+  | <PLUS>  { return "+"; }
+  )
+}
+
+Token dimension() #void :
+{ Token t; }
+{
+  ( t = <EM>          
+  | t = <EX>          
+  | t = <PX>          
+  | t = <REM>         
+  | t = <VW>          
+  | t = <VH>          
+  | t = <VMIN>        
+  | t = <CH>          
+  | t = <DPI>         
+  | t = <DPCM>        
+  | t = <DPPX>        
+  | t = <LENGTH_CM>   
+  | t = <LENGTH_MM>   
+  | t = <LENGTH_IN>   
+  | t = <LENGTH_PT>   
+  | t = <LENGTH_PC>   
+  | t = <ANGLE_DEG>   
+  | t = <ANGLE_RAD>   
+  | t = <ANGLE_GRAD>  
+  | t = <ANGLE_TURN>  
+  | t = <TIME_MS>     
+  | t = <TIME_S>      
+  | t = <FREQ_HZ>     
+  | t = <FREQ_KHZ>
+  )
+  { return t; }   
+}
+
+void mathUnit() : 
+{ 
+  String sPrefix = null;
+  Token t = null; 
+}
+{
+  ( sPrefix = unaryOperator() )?
+  ( t = <NUMBER>
+  | t = <PERCENTAGE>
+  | t = dimension()
+  | <LROUND>
+    ( <S> )*
+    mathSum()
+    ( <S> )*
+    <RROUND>
+  )  
+  {
+    if (sPrefix != null)
+      jjtThis.appendText (sPrefix);
+    if (t != null)
+      jjtThis.appendText (t.image);
+  }
+}
+
+void mathProductOperator() : {}
+{
+  <ASTERISK> { jjtThis.setText ("*"); }
+| <SLASH>    { jjtThis.setText ("/"); }
+}
+
+void mathProduct() : {}
+{
+  mathUnit()
+  ( LOOKAHEAD(2)
+    ( <S> )*
+    mathProductOperator()
+    ( <S> )*
+    mathUnit()
+  )*   
+}
+
+void mathSumOperator() : {}
+{
+  ( <PLUS>  { jjtThis.setText ("+"); } 
+  | <MINUS> { jjtThis.setText ("-"); }
+  )
+}
+
+void mathSum() #void : {}
+{
+  mathProduct()
+  ( <S>
+    mathSumOperator()
+    <S>
+    mathProduct ()
+  )*   
+}
+
+void math() : {}
+{
+  <FUNCTION_CALC>
+  ( <S> )*
+  mathSum()
+  ( <S> )*
+  <RROUND> 
+}
+
+void exprTerm() :
+{
+  String sPrefix = null;
+  Token t = null;
+}
+{
+  ( ( sPrefix = unaryOperator() )?
+    ( t = <NUMBER>
+    | t = <PERCENTAGE>
+    | t = dimension()
+    )
+  | sPrefix = string()
+  | t = <IDENT>
+// Hack to allow "from" and "to" as identifiers (e.g. in linear-gradient)
+  | t = <FROM_SYM>
+  | t = <TO_SYM>
+  | url()
+  | t = <HASH>
+  | function()
+  | math()
+  | t = <INHERIT>
+  | t = <URANGE>
+  )
+  ( <S> )*
+  {
+    if (sPrefix != null)
+      jjtThis.appendText (sPrefix);
+    if (t != null)
+      jjtThis.appendText (t.image);
+  }
+}
+
+void exprOperator() : {}
+{
+  ( <SLASH> ( <S> )*  { jjtThis.setText ("/"); }
+  | <COMMA> ( <S> )*  { jjtThis.setText (","); }
+  /* Extension for Microsoft filters (alpha=50) */
+  | <EQUALS> ( <S> )* { jjtThis.setText ("="); }
+  )
+}
+
+void expr() : {}
+{
+  exprTerm()
+  ( ( exprOperator() )?
+    exprTerm()
+  )*
+}
+
+
+//
+// Charset rule
+//
+void charsetRule() :
+{ String sStr; }
+{
+  ( <S> )?
+  <CHARSET_SYM>
+  <S>
+  sStr = string() { jjtThis.setText (sStr); }
+  ( <S> )*
+  <SEMICOLON>
+}
+
+//
+// Import rule
+//
+void importRule() :
+{ String sUrl; }
+{
+  <IMPORT_SYM>
+  ( <S> )*
+  ( sUrl = string() { jjtThis.setText (sUrl); }
+  | url()
+  )
+  ( <S> )*
+  ( mediaList() )?
+  <SEMICOLON>
+}
+
 
 void unknownRuleParameterList() : 
 { String s; }
@@ -474,21 +677,6 @@ void unknownRule() : {}
   <AT_UNKNOWN> { jjtThis.setText (token.image); }
   unknownRuleParameterList()
   unknownRuleBody()
-}
-
-void importRule() #ImportRule :
-{
-  String sUrl;
-}
-{
-  <IMPORT_SYM>
-  ( <S> )*
-  ( sUrl = string() { jjtThis.setText (sUrl); }
-  | url()
-  )
-  ( <S> )*
-  ( mediaList() )?
-  <SEMICOLON>
 }
 
 // ------------ NAMESPACE ------------
@@ -580,7 +768,7 @@ void mediaModifier() : {}
   )?
 }
 
-void medium() #Medium : {}
+void medium() : {}
 {
   <IDENT> { jjtThis.setText (token.image); }
 }
@@ -599,7 +787,7 @@ void mediaExpr() : {}
   ( <S> )*
 }
 
-void mediaFeature() #MediaFeature : {}
+void mediaFeature() : {}
 {
   <IDENT>  { jjtThis.setText (token.image); }
 }
@@ -614,7 +802,7 @@ void pageRule() : {}
   styleDeclarationBlock()
 }
 
-void pseudoPage() #PseudoPage : {}
+void pseudoPage() : {}
 {
   <COLON>
   <IDENT> { jjtThis.setText (":" + token.image); }
@@ -633,7 +821,7 @@ void selector() : {}
   )*
 }
 
-void combinator() #Combinator : {}
+void combinator() : {}
 {
 // IMPORTANT to use ( <S> )? here and not ( <S> )+ because of comment handling!  
   ( LOOKAHEAD(2)
@@ -678,7 +866,7 @@ void typeSelector() #void : {}
   elementName()
 }
 
-void namespacePrefix() #NamespacePrefix : {}
+void namespacePrefix() : {}
 {
   ( <IDENT>    { jjtThis.setText (token.image); }
   | <ASTERISK> { jjtThis.setText (token.image); }
@@ -686,7 +874,7 @@ void namespacePrefix() #NamespacePrefix : {}
   <DASH>        { jjtThis.appendText ("|"); }
 }
 
-void elementName() #ElementName : {}
+void elementName() : {}
 {
   ( <IDENT>    { jjtThis.setText (token.image); }
   | <ASTERISK> { jjtThis.setText (token.image); }
@@ -700,7 +888,7 @@ void _class() #Class :
   sIdentifier = anyIdentifier() { jjtThis.setText ("." + sIdentifier); }
 }
 
-void attrib() #Attrib :
+void attrib() :
 { Token t; }
 {
   <LSQUARE>
@@ -712,15 +900,15 @@ void attrib() #Attrib :
   /* Hack for html[xmlns*=""] */
   ( <ASTERISK> { jjtThis.appendText ("*"); } )?          
   ( <S> )*
-  ( __attribOperator()
+  ( attribOperator()
     ( <S> )*
-    __attribValue()
+    attribValue()
     ( <S> )*
   )?
   <RSQUARE>
 }
 
-void __attribOperator() #AttribOperator : {}
+void attribOperator() : {}
 {
   ( <EQUALS>         { jjtThis.setText ("=");  }
   | <INCLUDES>       { jjtThis.setText ("~="); }
@@ -731,17 +919,15 @@ void __attribOperator() #AttribOperator : {}
   )
 }
 
-void __attribValue() #AttribValue :
-{
-  String sStr;
-}
+void attribValue() :
+{ String sStr; }
 {
   ( <IDENT>         { jjtThis.setText (token.image); }
   | sStr = string() { jjtThis.setText (sStr); }
   )
 }
 
-void pseudo() #Pseudo : {}
+void pseudo() : {}
 {
   <COLON> { jjtThis.setText (":"); }
   /* Extension for "::-moz-selection */
@@ -781,8 +967,7 @@ void __pseudoNth () #nth :
   ( <S> )* 
 }
 
-void negation() #Negation :
-{ Token t; }
+void negation() : {}
 {
   <FUNCTION_NOT> { jjtThis.setText (":not("); }
   ( <S> )*
@@ -807,23 +992,8 @@ void negationArg() #void : {}
 
 
 
-void operator() #Operator : {}
-{
-  ( <SLASH> ( <S> )*  { jjtThis.setText ("/"); }
-  | <COMMA> ( <S> )*  { jjtThis.setText (","); }
-  /* Extension for Microsoft filters (alpha=50) */
-  | <EQUALS> ( <S> )* { jjtThis.setText ("="); }
-  )
-}
 
-String unaryOperator() #void : {}
-{
-  ( <MINUS> { return "-"; }
-  | <PLUS>  { return "+"; }
-  )
-}
-
-void property() #Property : {}
+void property() : {}
 {
   <IDENT> { jjtThis.setText (token.image); }
   ( <S> )*
@@ -845,228 +1015,48 @@ void styleDeclarationBlock() #void : {}
 {
 try{
   <LBRACE>
-  styleDeclaration()
+  styleDeclarationList()
   <RBRACE>
 } catch (ParseException ex) {
   error_skipto (ex, RBRACE);
 }
 }
 
-void hash() #Hash : {}
+void hash() : {}
 {
   <HASH> { jjtThis.setText (token.image); }
 }
 
-//
-// Multiple style declarations together
-// 
-CSSNode styleDeclaration() #StyleDeclaration : {}
+CSSNode styleDeclarationList() : {}
 {
   ( <S> )*
-  ( declaration() )?
+  ( styleDeclaration() )?
   ( <SEMICOLON>
     ( <S> )*
-    ( declaration() )?
+    ( styleDeclaration() )?
   )*
   { return jjtThis; }
 }
 
-//
-// declaration
-//   : property ':' S* expr prio?
-//   |
-//   ;
-//
-void declaration() : {}
+void styleDeclaration() : {}
 {
   property()
   <COLON>
   ( <S> )*
   expr()
-  ( prio() )?
+  ( important() )?
 }
 
-//
-// prio
-//   : IMPORTANT_SYM S*
-//   ;
-void prio() #Important : {}
+void important() : {}
 {
   <IMPORTANT_SYM> { jjtThis.setText (token.image); }
   ( <S> )*
 }
 
-void expr() : {}
-{
-  term()
-  ( ( operator() )?
-    term()
-  )*
-}
 
-Token dimension() #void :
-{ Token t; }
-{
-  ( t = <EM>          
-  | t = <EX>          
-  | t = <PX>          
-  | t = <REM>         
-  | t = <VW>          
-  | t = <VH>          
-  | t = <VMIN>        
-  | t = <CH>          
-  | t = <DPI>         
-  | t = <DPCM>        
-  | t = <DPPX>        
-  | t = <LENGTH_CM>   
-  | t = <LENGTH_MM>   
-  | t = <LENGTH_IN>   
-  | t = <LENGTH_PT>   
-  | t = <LENGTH_PC>   
-  | t = <ANGLE_DEG>   
-  | t = <ANGLE_RAD>   
-  | t = <ANGLE_GRAD>  
-  | t = <ANGLE_TURN>  
-  | t = <TIME_MS>     
-  | t = <TIME_S>      
-  | t = <FREQ_HZ>     
-  | t = <FREQ_KHZ>
-  )
-  { return t; }   
-}
 
-//
-// term
-//
-void term() #Term :
-{
-  String sPrefix = null;
-  Token t = null;
-}
-{
-  ( ( sPrefix = unaryOperator() )?
-    ( t = <NUMBER>
-    | t = <PERCENTAGE>
-    | t = dimension()
-    )
-  | sPrefix = string()
-  | t = <IDENT>
-// Hack to allow "from" and "to" as identifiers (e.g. in linear-gradient)
-  | t = <FROM_SYM>
-  | t = <TO_SYM>
-  | url()
-  | t = <HASH>
-  | function()
-  | math()
-  | t = <INHERIT>
-  | t = <URANGE>
-  )
-  ( <S> )*
-  {
-    if (sPrefix != null)
-      jjtThis.appendText (sPrefix);
-    if (t != null)
-      jjtThis.appendText (t.image);
-  }
-}
 
-void url() #URL : {}
-{
-  <URL>  { jjtThis.setText (token.image); } 
-}
 
-void function() #Function : 
-{ String sPlain; }
-{
-  ( <FUNCTION> { jjtThis.setText (token.image + ")"); }
-    ( <S> )*
-    // Support functions without parameters (e.g. "gray ()")
-    ( expr() )?
-    <RROUND>
-  | <FUNCTION_EXPRESSION> { jjtThis.setText (token.image); }
-    // get content of all skipped chars 
-    sPlain = javaSkipToClosingParantheses() { jjtThis.appendText (sPlain); }
-  )
-}
-
-void math() : {}
-{
-  <FUNCTION_CALC>
-  ( <S> )*
-  sum()
-  ( <S> )*
-  <RROUND> 
-}
-
-void sumOperator() : {}
-{
-  ( <PLUS>  { jjtThis.setText ("+"); } 
-  | <MINUS> { jjtThis.setText ("-"); }
-  )
-}
-
-void sum() #void : {}
-{
-  product()
-  ( <S>
-    sumOperator()
-    <S>
-    product ()
-  )*   
-}
-
-void productOperator() : {}
-{
-  <ASTERISK> { jjtThis.setText ("*"); }
-| <SLASH>    { jjtThis.setText ("/"); }
-}
-
-void product() : {}
-{
-  unit()
-  ( LOOKAHEAD(2)
-    ( <S> )*
-    productOperator()
-    ( <S> )*
-    unit()
-  )*   
-}
-
-void unit() : 
-{ 
-  String sPrefix = null;
-  Token t = null; 
-}
-{
-  ( sPrefix = unaryOperator() )?
-  ( t = <NUMBER>
-  | t = <PERCENTAGE>
-  | t = dimension()
-  | <LROUND>
-    ( <S> )*
-    sum()
-    ( <S> )*
-    <RROUND>
-  )  
-  {
-    if (sPrefix != null)
-      jjtThis.appendText (sPrefix);
-    if (t != null)
-      jjtThis.appendText (t.image);
-  }
-}
-
-String string() #void :
-{ Token t; }
-{
-  ( t = <STRING1>
-  | t = <STRING2>
-  )
-  { return t.image; }
-}
-
-// invalid      {invalid1}|{invalid2}
-// {invalid}        {return INVALID; /* unclosed string */}
 void invalid () : {}
 {
   ( <INVALID_STRING1>
@@ -1213,7 +1203,7 @@ void supportsConditionInParens() : {}
 {
   "(" 
   ( <S> )*
-  ( declaration()
+  ( styleDeclaration()
   | supportsCondition()
     ( <S> )*
   )  
