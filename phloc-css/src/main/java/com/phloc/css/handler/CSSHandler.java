@@ -82,7 +82,7 @@ public final class CSSHandler
       throw new NullPointerException ("version");
     if (aNode == null)
       throw new NullPointerException ("node");
-    if (!ECSSNodeType.STYLEDECLARATION.isNode (aNode, eVersion))
+    if (!ECSSNodeType.STYLEDECLARATIONLIST.isNode (aNode, eVersion))
       throw new IllegalArgumentException ("Passed node is not a style declaration node!");
 
     return new CSSNodeToDomainObject (eVersion).createDeclarationListFromNode (aNode);

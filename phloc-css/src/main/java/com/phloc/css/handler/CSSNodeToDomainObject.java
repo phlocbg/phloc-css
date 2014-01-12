@@ -324,7 +324,7 @@ final class CSSNodeToDomainObject
   @Nonnull
   private CSSExpressionMemberMathProduct _createExpressionMathProduct (@Nonnull final CSSNode aNode)
   {
-    _expectNodeType (aNode, ECSSNodeType.MATH_PRODUCT);
+    _expectNodeType (aNode, ECSSNodeType.MATHPRODUCT);
 
     final CSSExpressionMemberMathProduct ret = new CSSExpressionMemberMathProduct ();
     ret.setSourceLocation (aNode.getSourceLocation ());
@@ -332,7 +332,7 @@ final class CSSNodeToDomainObject
     // read all sums
     for (final CSSNode aChildNode : aNode)
     {
-      if (ECSSNodeType.MATH_UNIT.isNode (aChildNode, m_eVersion))
+      if (ECSSNodeType.MATHUNIT.isNode (aChildNode, m_eVersion))
       {
         final int nChildCount = aChildNode.jjtGetNumChildren ();
         if (nChildCount == 0)
@@ -354,7 +354,7 @@ final class CSSNodeToDomainObject
         }
       }
       else
-        if (ECSSNodeType.MATH_PRODUCTOPERATOR.isNode (aChildNode, m_eVersion))
+        if (ECSSNodeType.MATHPRODUCTOPERATOR.isNode (aChildNode, m_eVersion))
         {
           final String sText = aChildNode.getText ();
           final ECSSMathOperator eMathOp = ECSSMathOperator.getFromNameOrNull (sText);
@@ -425,12 +425,12 @@ final class CSSNodeToDomainObject
     // read all sums
     for (final CSSNode aChildNode : aNode)
     {
-      if (ECSSNodeType.MATH_PRODUCT.isNode (aChildNode, m_eVersion))
+      if (ECSSNodeType.MATHPRODUCT.isNode (aChildNode, m_eVersion))
       {
         ret.addMember (_createExpressionMathProduct (aChildNode));
       }
       else
-        if (ECSSNodeType.MATH_SUMOPERATOR.isNode (aChildNode, m_eVersion))
+        if (ECSSNodeType.MATHSUMOPERATOR.isNode (aChildNode, m_eVersion))
         {
           final String sText = aChildNode.getText ();
           final ECSSMathOperator eMathOp = ECSSMathOperator.getFromNameOrNull (sText);
@@ -452,7 +452,7 @@ final class CSSNodeToDomainObject
   @Nonnull
   private ICSSExpressionMember _createExpressionTerm (@Nonnull final CSSNode aNode)
   {
-    _expectNodeType (aNode, ECSSNodeType.TERM);
+    _expectNodeType (aNode, ECSSNodeType.EXPRTERM);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount > 1)
       _throwUnexpectedChildrenCount ("Expected 0 or 1 children but got " + nChildCount + "!", aNode);
@@ -497,10 +497,10 @@ final class CSSNodeToDomainObject
     ret.setSourceLocation (aNode.getSourceLocation ());
     for (final CSSNode aChildNode : aNode)
     {
-      if (ECSSNodeType.TERM.isNode (aChildNode, m_eVersion))
+      if (ECSSNodeType.EXPRTERM.isNode (aChildNode, m_eVersion))
         ret.addMember (_createExpressionTerm (aChildNode));
       else
-        if (ECSSNodeType.OPERATOR.isNode (aChildNode, m_eVersion))
+        if (ECSSNodeType.EXPROPERATOR.isNode (aChildNode, m_eVersion))
         {
           final String sText = aChildNode.getText ();
           final ECSSExpressionOperator eOp = ECSSExpressionOperator.getFromNameOrNull (sText);
@@ -523,7 +523,7 @@ final class CSSNodeToDomainObject
   @Nonnull
   private CSSDeclaration _createDeclaration (@Nonnull final CSSNode aNode)
   {
-    _expectNodeType (aNode, ECSSNodeType.DECLARATION);
+    _expectNodeType (aNode, ECSSNodeType.STYLEDECLARATION);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount != 2 && nChildCount != 3)
       _throwUnexpectedChildrenCount ("Expected 2 or 3 children but got " + nChildCount + "!", aNode);
@@ -569,7 +569,7 @@ final class CSSNodeToDomainObject
       {
         // OK, we're after the selectors
         bSelectors = false;
-        if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
+        if (ECSSNodeType.STYLEDECLARATIONLIST.isNode (aChildNode, m_eVersion))
         {
           // Read all contained declarations
           final int nDecls = aChildNode.jjtGetNumChildren ();
@@ -616,7 +616,7 @@ final class CSSNodeToDomainObject
     {
       final CSSNode aChildNode = aNode.jjtGetChild (nIndex);
 
-      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
+      if (ECSSNodeType.STYLEDECLARATIONLIST.isNode (aChildNode, m_eVersion))
       {
         // Read all contained declarations
         final int nDecls = aChildNode.jjtGetNumChildren ();
@@ -791,7 +791,7 @@ final class CSSNodeToDomainObject
     ret.setSourceLocation (aNode.getSourceLocation ());
     for (final CSSNode aChildNode : aNode)
     {
-      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
+      if (ECSSNodeType.STYLEDECLARATIONLIST.isNode (aChildNode, m_eVersion))
       {
         // Read all contained declarations
         final int nDecls = aChildNode.jjtGetNumChildren ();
@@ -845,7 +845,7 @@ final class CSSNodeToDomainObject
         ret.addBlock (aBlock);
       }
       else
-        if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
+        if (ECSSNodeType.STYLEDECLARATIONLIST.isNode (aChildNode, m_eVersion))
         {
           if (aBlock == null)
             throw new IllegalStateException ("No keyframes block present!");
@@ -877,7 +877,7 @@ final class CSSNodeToDomainObject
     ret.setSourceLocation (aNode.getSourceLocation ());
     for (final CSSNode aChildNode : aNode)
     {
-      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
+      if (ECSSNodeType.STYLEDECLARATIONLIST.isNode (aChildNode, m_eVersion))
       {
         // Read all contained declarations
         final int nDecls = aChildNode.jjtGetNumChildren ();
@@ -951,7 +951,7 @@ final class CSSNodeToDomainObject
 
       final CSSNode aChildNode = aNode.jjtGetChild (0);
 
-      if (ECSSNodeType.DECLARATION.isNode (aChildNode, m_eVersion))
+      if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
       {
         final CSSDeclaration aDeclaration = _createDeclaration (aChildNode);
         final CSSSupportsConditionDeclaration ret = new CSSSupportsConditionDeclaration (aDeclaration);
@@ -1112,7 +1112,7 @@ final class CSSNodeToDomainObject
   @Nonnull
   public CSSDeclarationList createDeclarationListFromNode (@Nonnull final CSSNode aNode)
   {
-    _expectNodeType (aNode, ECSSNodeType.STYLEDECLARATION);
+    _expectNodeType (aNode, ECSSNodeType.STYLEDECLARATIONLIST);
     final CSSDeclarationList ret = new CSSDeclarationList ();
     ret.setSourceLocation (aNode.getSourceLocation ());
     final int nDecls = aNode.jjtGetNumChildren ();

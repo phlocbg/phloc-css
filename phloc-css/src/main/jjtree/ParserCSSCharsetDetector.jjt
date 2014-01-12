@@ -84,7 +84,8 @@ TOKEN_MGR_DECLS :
          | <H><H><H><H> 
          | <H><H><H><H><H> 
          | <H><H><H><H><H><H> >
-| < #UNICODE: "\\" <HNUM> ( "\r\n" | [" ","\t","\r","\n","\f"] )? >
+| < #UNICODE: "\\" <HNUM> ( "\r\n" 
+                          | [" ","\t","\r","\n","\f"] )? >
 | < #ESCAPE: <UNICODE> 
            | ( "\\" ~["\r","\n","\f","0"-"9","a"-"f"] ) >
 | < SEMICOLON: ";" >
