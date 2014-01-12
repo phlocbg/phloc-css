@@ -87,7 +87,7 @@ public final class CSSReaderDeclarationList
         aParser.setCustomErrorHandler (aCustomErrorHandler);
         try
         {
-          return aParser.styleDeclaration ();
+          return aParser.styleDeclarationList ();
         }
         catch (final ParseException ex)
         {
@@ -105,7 +105,7 @@ public final class CSSReaderDeclarationList
         aParser.setCustomErrorHandler (aCustomErrorHandler);
         try
         {
-          return aParser.styleDeclaration ();
+          return aParser.styleDeclarationList ();
         }
         catch (final ParseException ex)
         {
