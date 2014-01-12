@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -104,6 +104,12 @@ public interface ICSSWriterSettings
    *         <code>false</code> if not
    */
   boolean isWriteSupportsRules ();
+
+  /**
+   * @return <code>true</code> if unknown @ rules should be written,
+   *         <code>false</code> if not
+   */
+  boolean isWriteUnknownRules ();
 
   /**
    * Check if the passed object matches the version requirements defined be this

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -23,6 +23,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.EChange;
 import com.phloc.css.ICSSWriteable;
@@ -39,8 +40,27 @@ public interface IHasCSSDeclarations extends ICSSWriteable
    * 
    * @param aDeclaration
    *        The declaration to be added. May not be <code>null</code>.
+   * @return this
    */
-  void addDeclaration (@Nonnull CSSDeclaration aDeclaration);
+  @Nonnull
+  IHasCSSDeclarations addDeclaration (@Nonnull CSSDeclaration aDeclaration);
+
+  /**
+   * Add a new declaration.
+   * 
+   * @param sProperty
+   *        The name of the property. E.g. "color". May neither be
+   *        <code>null</code> nor empty.
+   * @param aExpression
+   *        The value of the property. May not be <code>null</code>.
+   * @param bImportant
+   *        <code>true</code> if it is important, <code>false</code> if not.
+   * @return this
+   */
+  @Nonnull
+  IHasCSSDeclarations addDeclaration (@Nonnull @Nonempty final String sProperty,
+                                      @Nonnull final CSSExpression aExpression,
+                                      final boolean bImportant);
 
   /**
    * Add a new declaration at the specified index.
@@ -51,8 +71,10 @@ public interface IHasCSSDeclarations extends ICSSWriteable
    *        {@link #addDeclaration(CSSDeclaration)}.
    * @param aDeclaration
    *        The declaration to be added. May not be <code>null</code>.
+   * @return this
    */
-  void addDeclaration (@Nonnegative int nIndex, @Nonnull CSSDeclaration aDeclaration);
+  @Nonnull
+  IHasCSSDeclarations addDeclaration (@Nonnegative int nIndex, @Nonnull CSSDeclaration aDeclaration);
 
   /**
    * Remove the given declaration
@@ -102,8 +124,10 @@ public interface IHasCSSDeclarations extends ICSSWriteable
    *        {@link #addDeclaration(CSSDeclaration)}.
    * @param aNewDeclaration
    *        The new declaration to be set.
+   * @return this
    */
-  void setDeclarationAtIndex (@Nonnegative int nIndex, @Nonnull CSSDeclaration aNewDeclaration);
+  @Nonnull
+  IHasCSSDeclarations setDeclarationAtIndex (@Nonnegative int nIndex, @Nonnull CSSDeclaration aNewDeclaration);
 
   /**
    * @return <code>true</code> if at least one declaration is present,

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -19,6 +19,7 @@ package com.phloc.css.decl.visit;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.css.decl.CSSDeclaration;
@@ -32,6 +33,7 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * 
  * @author Philip Helger
  */
+@Immutable
 public class DefaultCSSUrlVisitor implements ICSSUrlVisitor
 {
   public DefaultCSSUrlVisitor ()

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -35,7 +35,7 @@ import com.phloc.css.propertyvalue.CCSSValue;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSRect implements ICSSWriteable
+public class CSSRect implements ICSSWriteable
 {
   private String m_sTop;
   private String m_sRight;
@@ -91,12 +91,16 @@ public final class CSSRect implements ICSSWriteable
    * 
    * @param sTop
    *        May neither be <code>null</code> nor empty.
+   * @return this
    */
-  public void setTop (@Nonnull @Nonempty final String sTop)
+  @Nonnull
+  public CSSRect setTop (@Nonnull @Nonempty final String sTop)
   {
     if (StringHelper.hasNoText (sTop))
       throw new IllegalArgumentException ("top");
+
     m_sTop = sTop;
+    return this;
   }
 
   /**
@@ -114,12 +118,16 @@ public final class CSSRect implements ICSSWriteable
    * 
    * @param sRight
    *        May neither be <code>null</code> nor empty.
+   * @return this
    */
-  public void setRight (@Nonnull @Nonempty final String sRight)
+  @Nonnull
+  public CSSRect setRight (@Nonnull @Nonempty final String sRight)
   {
     if (StringHelper.hasNoText (sRight))
       throw new IllegalArgumentException ("right");
+
     m_sRight = sRight;
+    return this;
   }
 
   /**
@@ -137,12 +145,16 @@ public final class CSSRect implements ICSSWriteable
    * 
    * @param sBottom
    *        May neither be <code>null</code> nor empty.
+   * @return this
    */
-  public void setBottom (@Nonnull @Nonempty final String sBottom)
+  @Nonnull
+  public CSSRect setBottom (@Nonnull @Nonempty final String sBottom)
   {
     if (StringHelper.hasNoText (sBottom))
       throw new IllegalArgumentException ("bottom");
+
     m_sBottom = sBottom;
+    return this;
   }
 
   /**
@@ -160,12 +172,16 @@ public final class CSSRect implements ICSSWriteable
    * 
    * @param sLeft
    *        May neither be <code>null</code> nor empty.
+   * @return this
    */
-  public void setLeft (@Nonnull @Nonempty final String sLeft)
+  @Nonnull
+  public CSSRect setLeft (@Nonnull @Nonempty final String sLeft)
   {
     if (StringHelper.hasNoText (sLeft))
       throw new IllegalArgumentException ("left");
+
     m_sLeft = sLeft;
+    return this;
   }
 
   @Nonnull

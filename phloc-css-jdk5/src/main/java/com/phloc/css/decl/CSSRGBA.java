@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -36,7 +36,7 @@ import com.phloc.css.utils.CSSColorHelper;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSRGBA implements ICSSWriteable
+public class CSSRGBA implements ICSSWriteable
 {
   private String m_sRed;
   private String m_sGreen;
@@ -83,11 +83,14 @@ public final class CSSRGBA implements ICSSWriteable
     return m_sRed;
   }
 
-  public void setRed (@Nonnull @Nonempty final String sRed)
+  @Nonnull
+  public CSSRGBA setRed (@Nonnull @Nonempty final String sRed)
   {
     if (StringHelper.hasNoText (sRed))
       throw new IllegalArgumentException ("red");
+
     m_sRed = sRed;
+    return this;
   }
 
   /**
@@ -100,11 +103,14 @@ public final class CSSRGBA implements ICSSWriteable
     return m_sGreen;
   }
 
-  public void setGreen (@Nonnull @Nonempty final String sGreen)
+  @Nonnull
+  public CSSRGBA setGreen (@Nonnull @Nonempty final String sGreen)
   {
     if (StringHelper.hasNoText (sGreen))
       throw new IllegalArgumentException ("green");
+
     m_sGreen = sGreen;
+    return this;
   }
 
   /**
@@ -117,11 +123,14 @@ public final class CSSRGBA implements ICSSWriteable
     return m_sBlue;
   }
 
-  public void setBlue (@Nonnull @Nonempty final String sBlue)
+  @Nonnull
+  public CSSRGBA setBlue (@Nonnull @Nonempty final String sBlue)
   {
     if (StringHelper.hasNoText (sBlue))
       throw new IllegalArgumentException ("blue");
+
     m_sBlue = sBlue;
+    return this;
   }
 
   /**
@@ -134,11 +143,14 @@ public final class CSSRGBA implements ICSSWriteable
     return m_sOpacity;
   }
 
-  public void setOpacity (@Nonnull @Nonempty final String sOpacity)
+  @Nonnull
+  public CSSRGBA setOpacity (@Nonnull @Nonempty final String sOpacity)
   {
     if (StringHelper.hasNoText (sOpacity))
       throw new IllegalArgumentException ("opacity");
+
     m_sOpacity = sOpacity;
+    return this;
   }
 
   @Nonnull

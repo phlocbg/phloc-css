@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -43,11 +43,16 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
+public class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
 {
   private CSSURI m_aLocation;
   private final List <CSSMediaQuery> m_aMediaQueries = new ArrayList <CSSMediaQuery> ();
   private CSSSourceLocation m_aSourceLocation;
+
+  public CSSImportRule (@Nonnull @Nonempty final String sLocation)
+  {
+    this (new CSSURI (sLocation));
+  }
 
   public CSSImportRule (@Nonnull final CSSURI aLocation)
   {
@@ -56,7 +61,7 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
 
   /**
    * @return <code>true</code> if this import rule has any specific media
-   *         queries, to which it belongs.
+   *         queries, to which it belongs, <code>false</code> if not.
    */
   public boolean hasMediaQueries ()
   {
@@ -77,12 +82,16 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
    * 
    * @param aMediaQuery
    *        The media query to be added. May not be <code>null</code>.
+   * @return this
    */
-  public void addMediaQuery (@Nonnull final CSSMediaQuery aMediaQuery)
+  @Nonnull
+  public CSSImportRule addMediaQuery (@Nonnull final CSSMediaQuery aMediaQuery)
   {
     if (aMediaQuery == null)
       throw new NullPointerException ("mediaQuery");
+
     m_aMediaQueries.add (aMediaQuery);
+    return this;
   }
 
   /**
@@ -92,12 +101,21 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
    *        The index where to add the media query. Must be &ge; 0.
    * @param aMediaQuery
    *        The media query to be added. May not be <code>null</code>.
+   * @return this
    */
-  public void addMediaQuery (@Nonnegative final int nIndex, @Nonnull final CSSMediaQuery aMediaQuery)
+  @Nonnull
+  public CSSImportRule addMediaQuery (@Nonnegative final int nIndex, @Nonnull final CSSMediaQuery aMediaQuery)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aMediaQuery == null)
       throw new NullPointerException ("mediaQuery");
-    m_aMediaQueries.add (nIndex, aMediaQuery);
+
+    if (nIndex >= getMediaQueryCount ())
+      m_aMediaQueries.add (aMediaQuery);
+    else
+      m_aMediaQueries.add (nIndex, aMediaQuery);
+    return this;
   }
 
   /**
@@ -179,12 +197,16 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
    * 
    * @param aLocation
    *        The location to use. May not be <code>null</code>.
+   * @return this;
    */
-  public void setLocation (@Nonnull final CSSURI aLocation)
+  @Nonnull
+  public CSSImportRule setLocation (@Nonnull final CSSURI aLocation)
   {
     if (aLocation == null)
       throw new NullPointerException ("location");
+
     m_aLocation = aLocation;
+    return this;
   }
 
   /**
@@ -192,10 +214,13 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
    * 
    * @param sLocationURI
    *        The location URI to use. May not be <code>null</code>.
+   * @return this;
    */
-  public void setLocationString (@Nonnull @Nonempty final String sLocationURI)
+  @Nonnull
+  public CSSImportRule setLocationString (@Nonnull @Nonempty final String sLocationURI)
   {
     m_aLocation.setURI (sLocationURI);
+    return this;
   }
 
   @Nonnull
@@ -222,6 +247,12 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
     return aSB.append (";\n").toString ();
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

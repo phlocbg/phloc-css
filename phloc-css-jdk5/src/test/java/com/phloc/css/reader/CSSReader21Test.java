@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -20,7 +20,6 @@ package com.phloc.css.reader;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 import org.junit.Test;
@@ -43,27 +42,27 @@ public final class CSSReader21Test extends AbstractFuncTestCSSReader
   }
 
   @Test
-  public void testReadAll21Good () throws IOException
+  public void testReadAll21Good ()
   {
     testReadGood ("src/test/resources/testfiles/css21/good");
     testReadGood ("src/test/resources/testfiles/css21/bad_but_succeeding");
   }
 
   @Test
-  public void testReadAll21Bad () throws IOException
+  public void testReadAll21Bad ()
   {
     testReadBad ("src/test/resources/testfiles/css21/bad");
     testReadBad ("src/test/resources/testfiles/css21/good_but_failing");
   }
 
   @Test
-  public void testReadAll21BadButRecoverable () throws IOException
+  public void testReadAll21BadButRecoverable ()
   {
     testReadBadButRecoverable ("src/test/resources/testfiles/css21/bad_but_recoverable");
   }
 
   @Test
-  public void testReadSpecialGood () throws IOException
+  public void testReadSpecialGood ()
   {
     final ECSSVersion eVersion = ECSSVersion.CSS30;
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;

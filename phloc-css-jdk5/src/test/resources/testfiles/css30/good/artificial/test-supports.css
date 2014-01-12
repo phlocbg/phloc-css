@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -125,7 +125,7 @@
   }
 }
 
-/* A trailing ‘!important’ on a declaration being tested is allowed, though it won't change the validity of the declaration. */
+/* A trailing ï¿½!importantï¿½ on a declaration being tested is allowed, though it won't change the validity of the declaration. */
 @supports (display: flexbox !important) {
   div { color:green; }
 }

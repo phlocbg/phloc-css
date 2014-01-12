@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -17,14 +17,11 @@
  */
 package com.phloc.css.supplementary.wiki;
 
-import java.io.IOException;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
-import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSExpression;
 import com.phloc.css.decl.CSSExpressionMemberFunction;
 import com.phloc.css.decl.CSSFontFaceRule;
@@ -74,16 +71,16 @@ public final class WikiCreateFontFaceRule
   public static CascadingStyleSheet createFontFace (@Nonnull @Nonempty final String sTypefaceName,
                                                     @Nullable final String sLocalName,
                                                     @Nonnull final String sPath,
-                                                    @Nonnull final String sBasename) throws IOException
+                                                    @Nonnull final String sBasename)
   {
     final CascadingStyleSheet aCSS = new CascadingStyleSheet ();
     final CSSFontFaceRule aFFR = new CSSFontFaceRule ();
 
     // The font-family
-    aFFR.addDeclaration (new CSSDeclaration ("font-family", CSSExpression.createString (sTypefaceName), false));
+    aFFR.addDeclaration ("font-family", CSSExpression.createString (sTypefaceName), false);
 
     // The special EOT file
-    aFFR.addDeclaration (new CSSDeclaration ("src", CSSExpression.createURI (sPath + sBasename + ".eot"), false));
+    aFFR.addDeclaration ("src", CSSExpression.createURI (sPath + sBasename + ".eot"), false);
 
     // The generic rules
     final CSSExpression aExpr = new CSSExpression ();
@@ -98,7 +95,7 @@ public final class WikiCreateFontFaceRule
          .addMember (ECSSExpressionOperator.COMMA)
          .addURI (sPath + sBasename + ".svg#" + sBasename)
          .addMember (_createFormatFct ("svg"));
-    aFFR.addDeclaration (new CSSDeclaration ("src", aExpr, false));
+    aFFR.addDeclaration ("src", aExpr, false);
 
     // Add the font-face rule to the main CSS
     aCSS.addRule (aFFR);

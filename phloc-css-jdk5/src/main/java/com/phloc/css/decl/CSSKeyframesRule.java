@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -44,7 +44,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAware, ICSSSourceLocationAware
+public class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final String m_sDeclaration;
   private final String m_sAnimationName;
@@ -64,6 +64,11 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
     m_sAnimationName = sAnimationName;
   }
 
+  /**
+   * @return The rule declaration string used in the CSS. Neither
+   *         <code>null</code> nor empty. Always starting with <code>@</code>
+   *         and ending with <code>keyframes</code>.
+   */
   @Nonnull
   @Nonempty
   public String getDeclaration ()
@@ -89,11 +94,29 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
     return m_aBlocks.size ();
   }
 
-  public void addBlock (@Nonnull final CSSKeyframesBlock aKeyframesBlock)
+  @Nonnull
+  public CSSKeyframesRule addBlock (@Nonnull final CSSKeyframesBlock aKeyframesBlock)
   {
     if (aKeyframesBlock == null)
       throw new NullPointerException ("keyframesBlock");
+
     m_aBlocks.add (aKeyframesBlock);
+    return this;
+  }
+
+  @Nonnull
+  public CSSKeyframesRule addBlock (@Nonnegative final int nIndex, @Nonnull final CSSKeyframesBlock aKeyframesBlock)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+    if (aKeyframesBlock == null)
+      throw new NullPointerException ("keyframesBlock");
+
+    if (nIndex >= getBlockCount ())
+      m_aBlocks.add (aKeyframesBlock);
+    else
+      m_aBlocks.add (nIndex, aKeyframesBlock);
+    return this;
   }
 
   @Nonnull
@@ -172,6 +195,12 @@ public final class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAwar
     return ECSSVersion.CSS30;
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

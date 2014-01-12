@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -33,7 +33,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class CSSSourceArea implements Serializable
+public class CSSSourceArea implements Serializable
 {
   private final int m_nBeginLineNumber;
   private final int m_nBeginColumnNumber;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -82,8 +82,8 @@ TOKEN_MGR_DECLS :
 <DEFAULT, IN_NTH>
 TOKEN :
 {
-   < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
- | < W: ( <S> )? >
+  < S: (" "|"\t"|"\r"|"\n"|"\f")+ >
+| < W: ( <S> )? >  
 }
 
 <DEFAULT>
@@ -184,7 +184,8 @@ TOKEN :
                          | <ESCAPE>
                          )* >
 | < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/" >
-| < #URANGE_H: <H> | "?" >
+| < #URANGE_H: <H> 
+             | "?" >
 | < #URANGE_PLACEHOLDER: <URANGE_H>
                        | <URANGE_H><URANGE_H>
                        | <URANGE_H><URANGE_H><URANGE_H>
@@ -193,6 +194,42 @@ TOKEN :
                        | <URANGE_H><URANGE_H><URANGE_H><URANGE_H><URANGE_H><URANGE_H>
                        >
 | < NUMBER: <NUM> >
+
+| < LBRACE: <W> "{" >
+| < RBRACE: "}" >
+| < GREATER: ">" >
+| < DOT: "." >
+| < COMMA: <W> "," >
+| < SEMICOLON: ";" >
+| < COLON: ":" >
+| < ASTERISK: "*" >
+| < SLASH: "/" >
+| < EQUALS: "=" >
+| < DASH: "|" >
+| < LSQUARE: "[" >
+| < RSQUARE: "]" >
+| < TILDE: "~" >
+| < INCLUDES: "~=" >
+| < DASHMATCH: "|=" >
+| < PREFIXMATCH: "^=" >
+| < SUBFIXMATCH: "$=" >
+| < SUBSTRINGMATCH: "*=" >
+| < CDO: "<!--" >
+| < CDC: "-->" >
+| < HASH: "#" <NAME> >
+| < CHARSET_SYM: "@charset" >
+| < IMPORT_SYM: "@import" >
+| < NAMESPACE_SYM: "@namespace" >
+| < PAGE_SYM: "@page" >
+| < MEDIA_SYM: "@media" >
+| < FONTFACE_SYM: "@font-face" >
+| < KEYFRAMES_SYM: "@-" <IDENT> "-keyframes" 
+                 | "@keyframes" >
+| < VIEWPORT_SYM: "@-" <IDENT> "-viewport"
+                | "@viewport" >
+| < SUPPORTS_SYM: "@supports" >
+| < AT_UNKNOWN: "@" <IDENT> >
+| < IMPORTANT_SYM: "!" ( <S> )* "important" >
 
 // before ident!
 | < INHERIT: "inherit" >
@@ -206,32 +243,12 @@ TOKEN :
 // ident        -?{nmstart}{nmchar}*
 // Note: "*" hack for IE <= 6
 // Note: "$" hack for IE <= 7
-| < IDENT: ("-"|"$"|"*")? <NMSTART> ( <NMCHAR> )* > { matchedToken.image = ParseUtils.validateIdentifier(image); }
+| < IDENT: ( "-"
+           | "$" ( <S> )*
+           | "*" ( <S> )* )? 
+           <NMSTART> 
+           ( <NMCHAR> )* > { matchedToken.image = ParseUtils.validateIdentifier(image); }
 
-| < CDO: "<!--" >
-| < CDC: "-->" >
-| < INCLUDES: "~=" >
-| < DASHMATCH: "|=" >
-| < PREFIXMATCH: "^=" >
-| < SUBFIXMATCH: "$=" >
-| < SUBSTRINGMATCH: "*=" >
-| < LBRACE: <W> "{" >
-| < GREATER: ">" >
-| < TILDE: "~" >
-| < COMMA: <W> "," >
-| < HASH: "#" <NAME> >
-| < CHARSET_SYM: "@charset" >
-| < IMPORT_SYM: "@import" >
-| < NAMESPACE_SYM: "@namespace" >
-| < PAGE_SYM: "@page" >
-| < MEDIA_SYM: "@media" >
-| < FONTFACE_SYM: "@font-face" >
-| < KEYFRAMES_SYM: "@-" <IDENT> "-keyframes" 
-                 | "@keyframes" >
-| < VIEWPORT_SYM: "@-" <IDENT> "-viewport"
-                | "@viewport" >
-| < SUPPORTS_SYM: "@supports" >
-| < IMPORTANT_SYM: "!" ( <W> )* "important" >
 
 | < EM: <NUM> "em" >           { matchedToken.image = ParseUtils.splitNumber(image) + "em"; }
 | < EX: <NUM> "ex" >           { matchedToken.image = ParseUtils.splitNumber(image) + "ex"; }
@@ -260,21 +277,22 @@ TOKEN :
 | < PERCENTAGE: <NUM> "%" >    { matchedToken.image = ParseUtils.splitNumber(image) + "%"; }
 // | < DIMENSION: <NUM> <IDENT> >
 
-// "url("{w}{string}{w}")"  {return URI;}
-// "url("{w}{url}{w}")" {return URI;}
-| < URI: "url(" ( <S> )* ( <STRING1>
-                         | <STRING2>
-                         | ( <URLCHAR> )*
-                         ) ( <S> )* ")" >
-  { matchedToken.image = ParseUtils.trimUrl(image); }
+| < #URL_CONTENT: ( <S> )* ( <STRING1>
+                           | <STRING2>
+                           | ( <URLCHAR> )*
+                           ) ( <S> )* >
+| < URL: "url(" <URL_CONTENT> ")" >   { matchedToken.image = ParseUtils.trimUrl(image); }
 
-| < CALC: "calc(" >
-| < NOT: ":not(" >
+| < FUNCTION_CALC: "calc(" >
+| < FUNCTION_NOT: ":not(" >
 | < FUNCTION_NTH: "nth-child(" 
                 | "nth-last-child(" 
                 | "nth-of-type(" 
                 | "nth-last-of-type(" > : IN_NTH
-// Extension for IE filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50); */
+// Expressions were abandoned after IE8                
+| < FUNCTION_EXPRESSION: "expression(" >
+// Extension for IE 
+//   filter: progid:DXImageTransform.Microsoft.Alpha(opacity=50);
 | < FUNCTION: <IDENT> "(" 
             | "progid" ( <S> )* <COLON> ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
   > { matchedToken.image = image.toString (); }
@@ -283,17 +301,6 @@ TOKEN :
                  | <HNUM> "-" <HNUM> 
                  | <URANGE_PLACEHOLDER> 
                  ) >  
-| < RBRACE: "}" >
-| < DOT: "." >
-| < SEMICOLON: ";" >
-| < COLON: ":" >
-| < ASTERISK: "*" >
-| < SLASH: "/" >
-| < EQUALS: "=" >
-| < DASH: "|" >
-| < LSQUARE: "[" >
-| < RSQUARE: "]" >
-| < AT_UNKNOWN: "@" <IDENT> >
 }
 
 <*> TOKEN:
@@ -327,6 +334,57 @@ private Token error_skipto(final ParseException ex, final int... aKinds) throws 
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("Skipped until token " + t.toString ());
   return t;
+}
+
+JAVACODE
+String javaSkipToClosingParantheses() #void {
+  final StringBuilder aSB = new StringBuilder ();
+  int nNesting = 1;
+  while (true) {
+    final Token tok = getNextToken();
+    aSB.append (tok.image);
+    if (tok.kind == LROUND) 
+      nNesting++;
+    else
+      if (tok.kind == RROUND) {
+        nNesting--;
+        if (nNesting == 0)
+          break;
+      }
+  }
+  return aSB.toString ();
+}
+
+JAVACODE
+String javaSkipToOpeningBrace() #void {
+  final StringBuilder aSB = new StringBuilder ();
+  Token tok;
+  while (true) {
+    tok = getNextToken();
+    if (tok.kind == LBRACE)
+      break;
+    aSB.append (tok.image);
+  }
+  return aSB.toString ();
+}
+
+JAVACODE
+String javaSkipToClosingBrace() #void {
+  final StringBuilder aSB = new StringBuilder ();
+  int nNesting = 1;
+  while (true) {
+    final Token tok = getNextToken();
+    if (tok.kind == LBRACE) 
+      nNesting++;
+    else
+      if (tok.kind == RBRACE) {
+        nNesting--;
+        if (nNesting == 0)
+          break;
+      }
+    aSB.append (tok.image);
+  }
+  return aSB.toString ();
 }
 
 //
@@ -382,19 +440,39 @@ void charsetRule() #Charset :
   <SEMICOLON>
 }
 
-void unknownRule() : {}
+String anyIdentifier() #void : {}
 {
-  <AT_UNKNOWN>
-  ( <~[";","}"]> )* 
-  <[";","}"]>
+  ( <IDENT>    { return token.image; }
+  | <INHERIT>  { return token.image; }
+  | <AND_SYM>  { return token.image; }
+  | <NOT_SYM>  { return token.image; }
+  | <ONLY_SYM> { return token.image; }
+  | <FROM_SYM> { return token.image; }
+  | <TO_SYM>   { return token.image; }
+  | <OR_SYM>   { return token.image; }
+  )
 }
 
-//
-// import
-//  : IMPORT_SYM S*
-//    [STRING|URI] S* [ medium [ COMMA S* medium]* ]? ';' S*
-//  ;
-//
+void unknownRuleParameterList() : 
+{ String s; }
+{
+  s = javaSkipToOpeningBrace() { jjtThis.setText (s); }
+}  
+
+void unknownRuleBody() : 
+{ String s; }
+{
+  s = javaSkipToClosingBrace() { jjtThis.setText (s); }
+}  
+
+// Any unsupported rule
+void unknownRule() : {}
+{
+  <AT_UNKNOWN> { jjtThis.setText (token.image); }
+  unknownRuleParameterList()
+  unknownRuleBody()
+}
+
 void importRule() #ImportRule :
 {
   String sUrl;
@@ -403,7 +481,7 @@ void importRule() #ImportRule :
   <IMPORT_SYM>
   ( <S> )*
   ( sUrl = string() { jjtThis.setText (sUrl); }
-  | uri()
+  | url()
   )
   ( <S> )*
   ( mediaList() )?
@@ -411,6 +489,20 @@ void importRule() #ImportRule :
 }
 
 // ------------ NAMESPACE ------------
+
+void namespaceRulePrefix() : {}
+{
+  <IDENT> { jjtThis.setText (token.image); }
+} 
+
+void namespaceRuleURL() : 
+{ String s; }
+{
+  // URL tokens are always passed without the quotes!
+  ( <URL>        { jjtThis.setText (token.image); }
+  | s = string() { jjtThis.setText (ParseUtils.unescapeURL (s)); }
+  )
+} 
 
 void namespaceRule() : {}
 {
@@ -424,27 +516,6 @@ void namespaceRule() : {}
   <SEMICOLON>
 } 
 
-void namespaceRulePrefix() : {}
-{
-  <IDENT> { jjtThis.setText (token.image); }
-} 
-
-void namespaceRuleURL() : 
-{ 
-  String s;
-}
-{
-  // URI tokens are always passed without the quotes!
-  ( <URI> { jjtThis.setText ('"' + token.image + '"'); }
-  | s = string() { jjtThis.setText (s); }
-  )
-} 
-
-//
-// media
-//  : MEDIA_SYM S* medium [ COMMA S* medium ]* LBRACE S* ruleset* '}' S*
-//  ;
-//
 void mediaRule() : {}
 {
   <MEDIA_SYM>
@@ -484,6 +555,7 @@ void mediaQuery() : {}
 {
   ( mediaModifier()
     medium()
+    ( <S> )*
     ( <AND_SYM>
       ( <S> )*
       mediaExpr()
@@ -496,25 +568,18 @@ void mediaQuery() : {}
   )  
 }
 
-void mediaModifier() :
-{ Token t; }
+void mediaModifier() : {}
 {
-  ( t = <ONLY_SYM> { jjtThis.setText (t.image); }
+  ( <ONLY_SYM> { jjtThis.setText (token.image); }
     <S>
-  | t = <NOT_SYM>  { jjtThis.setText (t.image); } 
+  | <NOT_SYM>  { jjtThis.setText (token.image); } 
     <S>
   )?
 }
 
-//
-// medium
-//   : IDENT S*
-//   ;
-//
 void medium() #Medium : {}
 {
   <IDENT> { jjtThis.setText (token.image); }
-  ( <S> )*
 }
 
 void mediaExpr() : {}
@@ -522,8 +587,8 @@ void mediaExpr() : {}
   <LROUND>
   ( <S> )*
   mediaFeature()
-  (
-    <COLON>
+  ( <S> )*
+  ( <COLON>
     ( <S> )*
     expr()
   )?
@@ -531,20 +596,11 @@ void mediaExpr() : {}
   ( <S> )*
 }
 
-void mediaFeature() #MediaFeature :
-{ Token t; }
+void mediaFeature() #MediaFeature : {}
 {
-  t = <IDENT>
-  ( <S> )*
-  { jjtThis.setText (t.image); }
+  <IDENT>  { jjtThis.setText (token.image); }
 }
 
-//
-// page
-//  : PAGE_SYM S* pseudo_page? S*
-//    LBRACE S* declaration [ ';' S* declaration ]* '}' S*
-//  ;
-//
 void pageRule() : {}
 {
   <PAGE_SYM>
@@ -566,6 +622,7 @@ void pseudoPage() #PseudoPage : {}
 void selector() : {}
 {
   simpleSelectorSequence()
+// LA3: <S> <PLUS> <LBRACE> simpleSelectorSequence()   
   ( LOOKAHEAD(2)
     combinator()
     ( <S> )*
@@ -575,6 +632,7 @@ void selector() : {}
 
 void combinator() #Combinator : {}
 {
+// IMPORTANT to use ( <S> )? here and not ( <S> )+ because of comment handling!  
   ( LOOKAHEAD(2)
     ( <S> )? 
     <PLUS>       { jjtThis.setText ("+"); }
@@ -582,7 +640,7 @@ void combinator() #Combinator : {}
     ( <S> )? 
     <GREATER>    { jjtThis.setText (">"); }
   | LOOKAHEAD(2)
-    ( <S> )? 
+    ( <S> )?
     <TILDE>      { jjtThis.setText ("~"); }
   | <S>          { jjtThis.setText (" "); }
   )
@@ -632,10 +690,11 @@ void elementName() #ElementName : {}
   )
 }
 
-void _class() #Class : {}
+void _class() #Class : 
+{ String sIdentifier; }
 {
   <DOT>
-  <IDENT> { jjtThis.setText ("." + token.image); }
+  sIdentifier = anyIdentifier() { jjtThis.setText ("." + sIdentifier); }
 }
 
 void attrib() #Attrib :
@@ -722,7 +781,7 @@ void __pseudoNth () #nth :
 void negation() #Negation :
 { Token t; }
 {
-  <NOT> { jjtThis.setText (":not("); }
+  <FUNCTION_NOT> { jjtThis.setText (":not("); }
   ( <S> )*
   ( negationArg()
     ( <S> )*
@@ -834,11 +893,6 @@ void prio() #Important : {}
   ( <S> )*
 }
 
-//
-// expr
-//   : term [ operator term ]*
-//   ;
-//
 void expr() : {}
 {
   term()
@@ -885,7 +939,6 @@ void term() #Term :
 {
   String sPrefix = null;
   Token t = null;
-  String sStr;
 }
 {
   ( ( sPrefix = unaryOperator() )?
@@ -893,12 +946,12 @@ void term() #Term :
     | t = <PERCENTAGE>
     | t = dimension()
     )
-  | sStr = string()    { jjtThis.setText (sStr); }
+  | sPrefix = string()
   | t = <IDENT>
- // hack to allow "from" and "to" as identifiers (e.g. in linear-gradient)
+// Hack to allow "from" and "to" as identifiers (e.g. in linear-gradient)
   | t = <FROM_SYM>
   | t = <TO_SYM>
-  | uri()
+  | url()
   | t = <HASH>
   | function()
   | math()
@@ -914,28 +967,28 @@ void term() #Term :
   }
 }
 
-void uri() #URI : {}
+void url() #URL : {}
 {
-  <URI>  { jjtThis.setText (token.image); } 
+  <URL>  { jjtThis.setText (token.image); } 
 }
 
-//
-// function
-//   : FUNCTION S* expr ')'
-//   ;
-//
-void function() #Function : {}
+void function() #Function : 
+{ String sPlain; }
 {
-  <FUNCTION> { jjtThis.setText (token.image + ")"); }
-  ( <S> )*
-  // Support functions without parameters (e.g. "gray ()")
-  ( expr() )?
-  <RROUND>
+  ( <FUNCTION> { jjtThis.setText (token.image + ")"); }
+    ( <S> )*
+    // Support functions without parameters (e.g. "gray ()")
+    ( expr() )?
+    <RROUND>
+  | <FUNCTION_EXPRESSION> { jjtThis.setText (token.image); }
+    // get content of all skipped chars 
+    sPlain = javaSkipToClosingParantheses() { jjtThis.appendText (sPlain); }
+  )
 }
 
 void math() : {}
 {
-  <CALC>
+  <FUNCTION_CALC>
   ( <S> )*
   sum()
   ( <S> )*
@@ -1051,31 +1104,32 @@ void keyframesIdentifier() :  {}
   <IDENT> { jjtThis.setText (token.image); }    
 }
 
-// #void : do not generate a tree node for this 
-void keyframesBlocks() #void : {}
-{
-  ( keyframesSelector()
-    styleDeclarationBlock()
-    ( <S> )* 
-  )*
-}
-
-void keyframesSelector() : {}
-{
-  singleKeyframeSelector()
-  ( <COMMA>
-    ( <S> )*
-    singleKeyframeSelector()
-  )*  
-}
-
 void singleKeyframeSelector() : {}
 {
   ( <FROM_SYM>   { jjtThis.setText (token.image); }
   | <TO_SYM>     { jjtThis.setText (token.image); }
   | <PERCENTAGE> { jjtThis.setText (token.image); }  
   )
+}
+
+void keyframesSelector() : {}
+{
+  singleKeyframeSelector()
   ( <S> )*
+  ( <COMMA>
+    ( <S> )*
+    singleKeyframeSelector()
+    ( <S> )*
+  )*  
+}
+
+// #void : do not generate a tree node for this 
+void keyframesBlocks() #void : {}
+{
+  ( keyframesSelector()
+    styleDeclarationBlock()
+    ( <S> )*
+  )*
 }
 
 //
@@ -1085,7 +1139,7 @@ void singleKeyframeSelector() : {}
 
 void viewportRule() : {}
 {
-  <VIEWPORT_SYM> { jjtThis.setText (token.image); }    
+  <VIEWPORT_SYM> { jjtThis.setText (token.image); }
   ( <S> )*
   styleDeclarationBlock()
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -38,7 +38,7 @@ import com.phloc.css.utils.CSSColorHelper;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSHSL implements ICSSWriteable, ICSSVersionAware
+public class CSSHSL implements ICSSWriteable, ICSSVersionAware
 {
   private String m_sHue;
   private String m_sSaturation;
@@ -108,11 +108,14 @@ public final class CSSHSL implements ICSSWriteable, ICSSVersionAware
     return m_sHue;
   }
 
-  public void setHue (@Nonnull @Nonempty final String sHue)
+  @Nonnull
+  public CSSHSL setHue (@Nonnull @Nonempty final String sHue)
   {
     if (StringHelper.hasNoText (sHue))
       throw new IllegalArgumentException ("hue");
+
     m_sHue = sHue;
+    return this;
   }
 
   /**
@@ -125,11 +128,14 @@ public final class CSSHSL implements ICSSWriteable, ICSSVersionAware
     return m_sSaturation;
   }
 
-  public void setSaturation (@Nonnull @Nonempty final String sSaturation)
+  @Nonnull
+  public CSSHSL setSaturation (@Nonnull @Nonempty final String sSaturation)
   {
     if (StringHelper.hasNoText (sSaturation))
       throw new IllegalArgumentException ("saturation");
+
     m_sSaturation = sSaturation;
+    return this;
   }
 
   /**
@@ -142,11 +148,14 @@ public final class CSSHSL implements ICSSWriteable, ICSSVersionAware
     return m_sLightness;
   }
 
-  public void setLightness (@Nonnull @Nonempty final String sLightness)
+  @Nonnull
+  public CSSHSL setLightness (@Nonnull @Nonempty final String sLightness)
   {
     if (StringHelper.hasNoText (sLightness))
       throw new IllegalArgumentException ("lightness");
+
     m_sLightness = sLightness;
+    return this;
   }
 
   @Nonnull

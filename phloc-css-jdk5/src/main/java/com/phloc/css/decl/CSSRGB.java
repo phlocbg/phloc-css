@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -79,11 +79,14 @@ public class CSSRGB implements ICSSWriteable
     return m_sRed;
   }
 
-  public void setRed (@Nonnull @Nonempty final String sRed)
+  @Nonnull
+  public CSSRGB setRed (@Nonnull @Nonempty final String sRed)
   {
     if (StringHelper.hasNoText (sRed))
       throw new IllegalArgumentException ("red");
+
     m_sRed = sRed;
+    return this;
   }
 
   /**
@@ -96,11 +99,14 @@ public class CSSRGB implements ICSSWriteable
     return m_sGreen;
   }
 
-  public void setGreen (@Nonnull @Nonempty final String sGreen)
+  @Nonnull
+  public CSSRGB setGreen (@Nonnull @Nonempty final String sGreen)
   {
     if (StringHelper.hasNoText (sGreen))
       throw new IllegalArgumentException ("green");
+
     m_sGreen = sGreen;
+    return this;
   }
 
   /**
@@ -113,11 +119,14 @@ public class CSSRGB implements ICSSWriteable
     return m_sBlue;
   }
 
-  public void setBlue (@Nonnull @Nonempty final String sBlue)
+  @Nonnull
+  public CSSRGB setBlue (@Nonnull @Nonempty final String sBlue)
   {
     if (StringHelper.hasNoText (sBlue))
       throw new IllegalArgumentException ("blue");
+
     m_sBlue = sBlue;
+    return this;
   }
 
   @Nonnull

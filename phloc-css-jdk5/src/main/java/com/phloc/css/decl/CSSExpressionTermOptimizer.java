@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -45,6 +45,7 @@ public final class CSSExpressionTermOptimizer
       s_aUnitValues0.add (eUnit.format (0));
   }
 
+  @SuppressWarnings ("unused")
   @PresentForCodeCoverage
   private static final CSSExpressionTermOptimizer s_aInstance = new CSSExpressionTermOptimizer ();
 

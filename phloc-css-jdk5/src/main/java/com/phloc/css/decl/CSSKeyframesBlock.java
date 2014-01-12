@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -26,6 +26,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
@@ -42,11 +43,20 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware
+public class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final List <String> m_aKeyframesSelectors;
   private final CSSDeclarationContainer m_aDeclarations = new CSSDeclarationContainer ();
   private CSSSourceLocation m_aSourceLocation;
+
+  public CSSKeyframesBlock (@Nonnull @Nonempty final String... aKeyframesSelectors)
+  {
+    if (ArrayHelper.isEmpty (aKeyframesSelectors))
+      throw new IllegalArgumentException ("keyframesSelectors");
+    if (ArrayHelper.containsAnyNullElement (aKeyframesSelectors))
+      throw new IllegalArgumentException ("keyframesSelectors contains at least one null element");
+    m_aKeyframesSelectors = ContainerHelper.newList (aKeyframesSelectors);
+  }
 
   public CSSKeyframesBlock (@Nonnull @Nonempty final List <String> aKeyframesSelectors)
   {
@@ -64,14 +74,27 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
     return ContainerHelper.newList (m_aKeyframesSelectors);
   }
 
-  public void addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  @Nonnull
+  public CSSKeyframesBlock addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     m_aDeclarations.addDeclaration (aDeclaration);
+    return this;
   }
 
-  public void addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSKeyframesBlock addDeclaration (@Nonnull @Nonempty final String sProperty,
+                                           @Nonnull final CSSExpression aExpression,
+                                           final boolean bImportant)
+  {
+    m_aDeclarations.addDeclaration (sProperty, aExpression, bImportant);
+    return this;
+  }
+
+  @Nonnull
+  public CSSKeyframesBlock addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.addDeclaration (nIndex, aNewDeclaration);
+    return this;
   }
 
   @Nonnull
@@ -99,9 +122,12 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
     return m_aDeclarations.getDeclarationAtIndex (nIndex);
   }
 
-  public void setDeclarationAtIndex (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
+  @Nonnull
+  public CSSKeyframesBlock setDeclarationAtIndex (@Nonnegative final int nIndex,
+                                                  @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.setDeclarationAtIndex (nIndex, aNewDeclaration);
+    return this;
   }
 
   public boolean hasDeclarations ()
@@ -146,6 +172,12 @@ public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersion
     return ECSSVersion.CSS30;
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

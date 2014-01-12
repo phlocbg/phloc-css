@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -20,6 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -30,10 +31,11 @@ import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single negation supports condition
+ * Represents a single negation supports condition. E.g. "not (color: blue)"
  * 
  * @author Philip Helger
  */
+@NotThreadSafe
 public class CSSSupportsConditionNegation implements ICSSSupportsConditionMember, ICSSSourceLocationAware
 {
   private final ICSSSupportsConditionMember m_aSupportsMember;
@@ -46,6 +48,9 @@ public class CSSSupportsConditionNegation implements ICSSSupportsConditionMember
     m_aSupportsMember = aSupportsMember;
   }
 
+  /**
+   * @return The contained supports condition member. Never <code>null</code>.
+   */
   @Nonnull
   public ICSSSupportsConditionMember getSupportsMember ()
   {
@@ -66,6 +71,12 @@ public class CSSSupportsConditionNegation implements ICSSSupportsConditionMember
     return ECSSVersion.CSS30;
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

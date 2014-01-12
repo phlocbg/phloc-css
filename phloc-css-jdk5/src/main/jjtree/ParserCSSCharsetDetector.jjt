@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -82,24 +82,23 @@ TOKEN_MGR_DECLS :
 | < #UNICODE: "\\" <HNUM> ( "\r\n" | [" ","\t","\r","\n","\f"] )? >
 | < #ESCAPE: <UNICODE> | ( "\\" ~["\r","\n","\f","0"-"9","a"-"f"] ) >
 | < NL: "\n" | "\r\n" | "\r" | "\f" >
+| < SEMICOLON: ";" >
 | < STRING1: "\"" ( ~["\n","\r","\f","\\","\""] | "\\" <NL> | <ESCAPE> )* "\"" >
 | < STRING2: "'"  ( ~["\n","\r","\f","\\","'"]  | "\\" <NL> | <ESCAPE> )* "'" >
-| < #COMMENT: "/" "*" ( ~["*"] )* ("*")+ ( ~["/","*"] ( ~["*"] )* ( "*" )+ )* "/">
 | < REST: ~[] >
 }
 
-CSSNode styleSheetCharset() #Root : 
-{ Token t; }
+CSSNode styleSheetCharset() #Root : {}
 {
   try
   {
-    ( <S> )?
+    ( <S> )*
     "@charset"
-    <S>
-    ( t = <STRING1> { jjtThis.setText (t.image); }
-    | t = <STRING2> { jjtThis.setText (t.image); }
+    ( <S> )+
+    ( <STRING1> { jjtThis.setText (token.image); }
+    | <STRING2> { jjtThis.setText (token.image); }
     )
-    ";"
+    <SEMICOLON>
     { return jjtThis; }
   } catch (ParseException e) {
     /* ignore */

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -18,10 +18,17 @@
 package com.phloc.css.decl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import javax.annotation.Nonnull;
 
 import org.junit.Test;
 
+import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.reader.CSSReader;
 import com.phloc.css.writer.CSSWriterSettings;
 
 /**
@@ -31,11 +38,48 @@ import com.phloc.css.writer.CSSWriterSettings;
  */
 public final class CSSImportRuleTest
 {
-  @Test
-  public void testBasic ()
+  @Nonnull
+  private static CSSImportRule _parse (@Nonnull final String sCSS)
   {
-    final CSSURI aURI = new CSSURI ("a.gif");
-    final CSSImportRule aImportRule = new CSSImportRule (aURI);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.LATEST);
+    assertNotNull (sCSS, aCSS);
+    assertTrue (aCSS.hasImportRules ());
+    assertEquals (1, aCSS.getImportRuleCount ());
+    final CSSImportRule ret = aCSS.getAllImportRules ().get (0);
+    assertNotNull (sCSS, ret);
+    return ret;
+  }
+
+  @Test
+  public void testRead ()
+  {
+    CSSImportRule aIR;
+    aIR = _parse ("@import url(a.gif);\n");
+    assertEquals (0, aIR.getMediaQueryCount ());
+    assertTrue (aIR.getAllMediaQueries ().isEmpty ());
+    assertEquals ("a.gif", aIR.getLocationString ());
+
+    aIR = _parse ("@import url(\"a.gif\") print;\n");
+    assertEquals (1, aIR.getMediaQueryCount ());
+    assertEquals (new CSSMediaQuery ("print"), aIR.getAllMediaQueries ().get (0));
+    assertEquals ("a.gif", aIR.getLocationString ());
+
+    aIR = _parse ("@import url('a.gif') print, screen;\n");
+    assertEquals (2, aIR.getMediaQueryCount ());
+    assertEquals (new CSSMediaQuery ("print"), aIR.getAllMediaQueries ().get (0));
+    assertEquals (new CSSMediaQuery ("screen"), aIR.getAllMediaQueries ().get (1));
+    assertEquals ("a.gif", aIR.getLocationString ());
+
+    // Create the same rule by application
+    final CSSImportRule aCreated = new CSSImportRule ("a.gif");
+    aCreated.addMediaQuery (new CSSMediaQuery ("print")).addMediaQuery (new CSSMediaQuery ("screen"));
+    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aIR, aCreated);
+  }
+
+  @Test
+  public void testCreate ()
+  {
+    final CSSImportRule aImportRule = new CSSImportRule ("a.gif");
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
     assertEquals ("@import url(a.gif);\n", aImportRule.getAsCSSString (aSettings, 0));
     aSettings.setQuoteURLs (true);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -35,7 +35,9 @@ import com.phloc.css.decl.ICSSTopLevelRule;
 
 /**
  * A special {@link ICSSVisitor} that is used to extract URLs from the available
- * rules and call the {@link ICSSUrlVisitor} visitor.
+ * rules and call the {@link ICSSUrlVisitor} visitor. This visitor effectively
+ * only visits URLs that are in import rules and those in declaration
+ * expressions.
  * 
  * @author Philip Helger
  */
@@ -45,11 +47,26 @@ public class CSSVisitorForUrl extends DefaultCSSVisitor
   private final ICSSUrlVisitor m_aVisitor;
   private final NonBlockingStack <ICSSTopLevelRule> m_aTopLevelRule = new NonBlockingStack <ICSSTopLevelRule> ();
 
+  /**
+   * Constructor
+   * 
+   * @param aVisitor
+   *        The URL visitor to be used. May not be <code>null</code>.
+   */
   public CSSVisitorForUrl (@Nonnull final ICSSUrlVisitor aVisitor)
   {
     if (aVisitor == null)
       throw new NullPointerException ("visitor");
     m_aVisitor = aVisitor;
+  }
+
+  /**
+   * @return The URL visitor passed in the constructor. Never <code>null</code>.
+   */
+  @Nonnull
+  public ICSSUrlVisitor getVisitor ()
+  {
+    return m_aVisitor;
   }
 
   @Override

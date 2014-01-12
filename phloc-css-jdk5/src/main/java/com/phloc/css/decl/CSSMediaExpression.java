@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -20,6 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
@@ -38,7 +39,8 @@ import com.phloc.css.media.ECSSMediaExpressionFeature;
 /**
  * Represents a single media expression
  */
-public final class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final String m_sFeature;
   private final CSSExpression m_aValue;
@@ -98,6 +100,12 @@ public final class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware
     return ECSSVersion.CSS30;
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -37,7 +37,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @Immutable
-public final class CSSSourceLocation implements Serializable
+public class CSSSourceLocation implements Serializable
 {
   private final CSSSourceArea m_aFirstTokenArea;
   private final CSSSourceArea m_aLastTokenArea;

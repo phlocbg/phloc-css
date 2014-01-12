@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -30,6 +30,7 @@ import com.phloc.css.decl.CSSPageRule;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.CSSSupportsRule;
+import com.phloc.css.decl.CSSUnknownRule;
 import com.phloc.css.decl.CSSViewportRule;
 
 /**
@@ -218,6 +219,15 @@ public interface ICSSVisitor
    *        The supports rule. Never <code>null</code>.
    */
   void onEndSupportsRule (@Nonnull CSSSupportsRule aSupportsRule);
+
+  // unknown rules
+  /**
+   * Called when an unknown rule is encountered.
+   * 
+   * @param aUnknownRule
+   *        The unknown rule. Never <code>null</code>.
+   */
+  void onUnknownRule (@Nonnull CSSUnknownRule aUnknownRule);
 
   /**
    * After visiting is done.<br>

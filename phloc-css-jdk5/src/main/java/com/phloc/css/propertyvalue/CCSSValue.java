@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -19,10 +19,11 @@ package com.phloc.css.propertyvalue;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.css.ECSSUnit;
 
 //ESCA-JAVA0022:
-// ESCA-JAVA0116:
+//ESCA-JAVA0116:
 /**
  * Contains CSS style constants and utility stuff. Only constants that are part
  * of the CSS specification are contained in this class.<br>
@@ -217,6 +218,10 @@ public final class CCSSValue
   public static final String FONT_TAHOMA = "Tahoma";
   public static final String FONT_VERDANA = "Verdana";
   public static final String FONT_MONOSPACE = FONT_COURIER_NEW;
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final CCSSValue s_aInstance = new CCSSValue ();
 
   private CCSSValue ()
   {}

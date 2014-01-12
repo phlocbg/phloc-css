@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -32,6 +32,7 @@ import com.phloc.commons.string.StringHelper;
 @Immutable
 public final class CSSFilenameHelper
 {
+  @SuppressWarnings ("unused")
   @PresentForCodeCoverage
   private static final CSSFilenameHelper s_aInstance = new CSSFilenameHelper ();
 

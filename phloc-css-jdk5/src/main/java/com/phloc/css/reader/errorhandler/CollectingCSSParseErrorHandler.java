@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -28,9 +28,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -45,8 +42,6 @@ import com.phloc.css.parser.Token;
 @ThreadSafe
 public class CollectingCSSParseErrorHandler implements ICSSParseErrorHandler
 {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CollectingCSSParseErrorHandler.class);
-
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   @GuardedBy ("m_aRWLock")
   private final List <CSSParseError> m_aErrors = new ArrayList <CSSParseError> ();

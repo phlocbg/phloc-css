@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -43,7 +43,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAware
+public class CSSExpression implements ICSSWriteable, ICSSSourceLocationAware
 {
   private final List <ICSSExpressionMember> m_aMembers = new ArrayList <ICSSExpressionMember> ();
   private CSSSourceLocation m_aSourceLocation;
@@ -63,7 +63,32 @@ public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAwa
   {
     if (aMember == null)
       throw new NullPointerException ("member");
+
     m_aMembers.add (aMember);
+    return this;
+  }
+
+  /**
+   * Add an expression member
+   * 
+   * @param nIndex
+   *        The index where the member should be added. Must be &ge; 0.
+   * @param aMember
+   *        The member to be added. May not be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public CSSExpression addMember (@Nonnegative final int nIndex, @Nonnull final ICSSExpressionMember aMember)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+    if (aMember == null)
+      throw new NullPointerException ("member");
+
+    if (nIndex >= getMemberCount ())
+      m_aMembers.add (aMember);
+    else
+      m_aMembers.add (nIndex, aMember);
     return this;
   }
 
@@ -78,6 +103,21 @@ public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAwa
   public CSSExpression addTermSimple (@Nonnull @Nonempty final String sValue)
   {
     return addMember (new CSSExpressionMemberTermSimple (sValue));
+  }
+
+  /**
+   * Shortcut method to add a simple text value.
+   * 
+   * @param nIndex
+   *        The index where the member should be added. Must be &ge; 0.
+   * @param sValue
+   *        The value to be added. May neither be <code>null</code> nor empty.
+   * @return this
+   */
+  @Nonnull
+  public CSSExpression addTermSimple (@Nonnegative final int nIndex, @Nonnull @Nonempty final String sValue)
+  {
+    return addMember (nIndex, new CSSExpressionMemberTermSimple (sValue));
   }
 
   /**
@@ -96,6 +136,21 @@ public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAwa
   /**
    * Shortcut method to add a numeric value
    * 
+   * @param nIndex
+   *        The index where the member should be added. Must be &ge; 0.
+   * @param nValue
+   *        The value to be added.
+   * @return this
+   */
+  @Nonnull
+  public CSSExpression addNumber (@Nonnegative final int nIndex, final int nValue)
+  {
+    return addMember (nIndex, new CSSExpressionMemberTermSimple (nValue));
+  }
+
+  /**
+   * Shortcut method to add a numeric value
+   * 
    * @param nValue
    *        The value to be added.
    * @return this
@@ -104,6 +159,21 @@ public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAwa
   public CSSExpression addNumber (final long nValue)
   {
     return addMember (new CSSExpressionMemberTermSimple (nValue));
+  }
+
+  /**
+   * Shortcut method to add a numeric value
+   * 
+   * @param nIndex
+   *        The index where the member should be added. Must be &ge; 0.
+   * @param nValue
+   *        The value to be added.
+   * @return this
+   */
+  @Nonnull
+  public CSSExpression addNumber (@Nonnegative final int nIndex, final long nValue)
+  {
+    return addMember (nIndex, new CSSExpressionMemberTermSimple (nValue));
   }
 
   /**
@@ -122,6 +192,21 @@ public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAwa
   /**
    * Shortcut method to add a numeric value
    * 
+   * @param nIndex
+   *        The index where the member should be added. Must be &ge; 0.
+   * @param fValue
+   *        The value to be added.
+   * @return this
+   */
+  @Nonnull
+  public CSSExpression addNumber (@Nonnegative final int nIndex, final float fValue)
+  {
+    return addMember (nIndex, new CSSExpressionMemberTermSimple (fValue));
+  }
+
+  /**
+   * Shortcut method to add a numeric value
+   * 
    * @param dValue
    *        The value to be added.
    * @return this
@@ -130,6 +215,28 @@ public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAwa
   public CSSExpression addNumber (final double dValue)
   {
     return addMember (new CSSExpressionMemberTermSimple (dValue));
+  }
+
+  /**
+   * Shortcut method to add a numeric value
+   * 
+   * @param nIndex
+   *        The index where the member should be added. Must be &ge; 0.
+   * @param dValue
+   *        The value to be added.
+   * @return this
+   */
+  @Nonnull
+  public CSSExpression addNumber (@Nonnegative final int nIndex, final double dValue)
+  {
+    return addMember (nIndex, new CSSExpressionMemberTermSimple (dValue));
+  }
+
+  @Nonnull
+  @Nonempty
+  private static String _createStringValue (@Nonnull final String sValue)
+  {
+    return '"' + StringHelper.replaceAll (sValue, "\"", "\\\"") + '"';
   }
 
   /**
@@ -142,8 +249,22 @@ public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAwa
   @Nonnull
   public CSSExpression addString (@Nonnull final String sValue)
   {
-    final String sQuoted = StringHelper.replaceAll (sValue, "\"", "\\\"");
-    return addTermSimple ('"' + sQuoted + '"');
+    return addTermSimple (_createStringValue (sValue));
+  }
+
+  /**
+   * Shortcut method to add a string value that is automatically quoted inside
+   * 
+   * @param nIndex
+   *        The index where the member should be added. Must be &ge; 0.
+   * @param sValue
+   *        The value to be quoted and than added. May not be <code>null</code>.
+   * @return this
+   */
+  @Nonnull
+  public CSSExpression addString (@Nonnegative final int nIndex, @Nonnull final String sValue)
+  {
+    return addTermSimple (nIndex, _createStringValue (sValue));
   }
 
   /**
@@ -157,6 +278,21 @@ public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAwa
   public CSSExpression addURI (@Nonnull @Nonempty final String sURI)
   {
     return addMember (new CSSExpressionMemberTermURI (sURI));
+  }
+
+  /**
+   * Shortcut method to add a URI value
+   * 
+   * @param nIndex
+   *        The index where the member should be added. Must be &ge; 0.
+   * @param sURI
+   *        The value to be added. May neither be <code>null</code> nor empty
+   * @return this
+   */
+  @Nonnull
+  public CSSExpression addURI (@Nonnegative final int nIndex, @Nonnull @Nonempty final String sURI)
+  {
+    return addMember (nIndex, new CSSExpressionMemberTermURI (sURI));
   }
 
   /**
@@ -254,6 +390,12 @@ public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAwa
     return aSB.toString ();
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

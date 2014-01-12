@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -46,11 +46,6 @@ public class CSSNode implements Node, Iterable <CSSNode>, Serializable
   private Token m_aLastToken;
 
   public CSSNode (final int nType)
-  {
-    m_nType = nType;
-  }
-
-  public CSSNode (final Object aParser, final int nType)
   {
     m_nType = nType;
   }

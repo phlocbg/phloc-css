@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -20,6 +20,7 @@ package com.phloc.css.property;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
@@ -29,6 +30,7 @@ import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
  * 
  * @author Philip Helger
  */
+@NotThreadSafe
 public class CSSPropertyFree extends AbstractCSSProperty
 {
   public CSSPropertyFree (@Nonnull final ECSSProperty eProp)

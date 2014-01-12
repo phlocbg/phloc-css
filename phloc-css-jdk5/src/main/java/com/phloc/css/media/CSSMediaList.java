@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -39,7 +39,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSMediaList implements Serializable, IHasSize
+public class CSSMediaList implements Serializable, IHasSize
 {
   // ESCA-JAVA0261:
   // Ordered but unique
@@ -71,7 +71,7 @@ public final class CSSMediaList implements Serializable, IHasSize
    * Add a new medium to the list
    * 
    * @param eMedium
-   *        The medium to be added.
+   *        The medium to be added. May not be <code>null</code>.
    * @return <code>this</code>
    */
   @Nonnull
@@ -79,6 +79,7 @@ public final class CSSMediaList implements Serializable, IHasSize
   {
     if (eMedium == null)
       throw new NullPointerException ("medium");
+
     m_aMedia.add (eMedium);
     return this;
   }
@@ -88,7 +89,7 @@ public final class CSSMediaList implements Serializable, IHasSize
    * 
    * @param eMedium
    *        The medium to be removed. May be <code>null</code>.
-   * @return {@link EChange}
+   * @return {@link EChange} and never <code>null</code>.
    */
   @Nonnull
   public EChange removeMedium (@Nullable final ECSSMedium eMedium)
@@ -97,7 +98,17 @@ public final class CSSMediaList implements Serializable, IHasSize
   }
 
   /**
-   * @return <code>true</code> if any explicit media is defined
+   * @return The number of contained media. Always &ge; 0.
+   */
+  @Nonnegative
+  public int getMediaCount ()
+  {
+    return m_aMedia.size ();
+  }
+
+  /**
+   * @return <code>true</code> if any explicit media is defined,
+   *         <code>false</code> if not.
    */
   public boolean hasAnyMedia ()
   {
@@ -105,7 +116,8 @@ public final class CSSMediaList implements Serializable, IHasSize
   }
 
   /**
-   * @return <code>true</code> if no explicit media is defined
+   * @return <code>true</code> if no explicit media is defined,
+   *         <code>false</code> if a media is defined.
    */
   public boolean hasNoMedia ()
   {

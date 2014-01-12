@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -19,6 +19,7 @@ package com.phloc.css.property;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.css.ECSSUnit;
 import com.phloc.css.property.customizer.CSSPropertyCustomizerBorderBottomLeftRadius;
 import com.phloc.css.property.customizer.CSSPropertyCustomizerBorderBottomRightRadius;
@@ -676,6 +677,10 @@ public final class CCSSProperties
   public static final ICSSValue MARGIN_RIGHT_0 = MARGIN_RIGHT.newValue (ECSSUnit.zero ());
   public static final ICSSValue MARGIN_BOTTOM_0 = MARGIN_BOTTOM.newValue (ECSSUnit.zero ());
   public static final ICSSValue MARGIN_LEFT_0 = MARGIN_LEFT.newValue (ECSSUnit.zero ());
+
+  @SuppressWarnings ("unused")
+  @PresentForCodeCoverage
+  private static final CCSSProperties s_aInstance = new CCSSProperties ();
 
   private CCSSProperties ()
   {}

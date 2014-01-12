@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -41,7 +42,8 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
-public final class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
 {
   public static enum EModifier
   {
@@ -68,6 +70,25 @@ public final class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAwa
   private final List <CSSMediaExpression> m_aMediaExpressions = new ArrayList <CSSMediaExpression> ();
   private CSSSourceLocation m_aSourceLocation;
 
+  /**
+   * Constructor without a modifier
+   * 
+   * @param sMedium
+   *        The medium to use. May be <code>null</code>.
+   */
+  public CSSMediaQuery (@Nullable final String sMedium)
+  {
+    this (EModifier.NONE, sMedium);
+  }
+
+  /**
+   * Constructor
+   * 
+   * @param eModifier
+   *        The modifier to use. May not be <code>null</code>.
+   * @param sMedium
+   *        The medium to use. May be <code>null</code>.
+   */
   public CSSMediaQuery (@Nonnull final EModifier eModifier, @Nullable final String sMedium)
   {
     if (eModifier == null)
@@ -103,18 +124,30 @@ public final class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAwa
     return m_aMediaExpressions.size ();
   }
 
-  public void addMediaExpression (@Nonnull final CSSMediaExpression aMediaExpression)
+  @Nonnull
+  public CSSMediaQuery addMediaExpression (@Nonnull final CSSMediaExpression aMediaExpression)
   {
     if (aMediaExpression == null)
       throw new NullPointerException ("expression");
+
     m_aMediaExpressions.add (aMediaExpression);
+    return this;
   }
 
-  public void addMediaExpression (@Nonnegative final int nIndex, @Nonnull final CSSMediaExpression aMediaExpression)
+  @Nonnull
+  public CSSMediaQuery addMediaExpression (@Nonnegative final int nIndex,
+                                           @Nonnull final CSSMediaExpression aMediaExpression)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aMediaExpression == null)
       throw new NullPointerException ("expression");
-    m_aMediaExpressions.add (nIndex, aMediaExpression);
+
+    if (nIndex >= getMediaExpressionCount ())
+      m_aMediaExpressions.add (aMediaExpression);
+    else
+      m_aMediaExpressions.add (nIndex, aMediaExpression);
+    return this;
   }
 
   @Nonnull
@@ -185,6 +218,12 @@ public final class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAwa
     return aSB.toString ();
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

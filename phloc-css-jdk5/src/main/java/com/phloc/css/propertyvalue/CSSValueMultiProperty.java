@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -42,7 +43,8 @@ import com.phloc.css.property.ICSSProperty;
  * 
  * @author Philip Helger
  */
-public final class CSSValueMultiProperty implements ICSSMultiValue
+@Immutable
+public class CSSValueMultiProperty implements ICSSMultiValue
 {
   private final List <CSSValue> m_aValues = new ArrayList <CSSValue> ();
 

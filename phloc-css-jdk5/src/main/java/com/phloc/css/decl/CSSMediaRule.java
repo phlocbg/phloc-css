@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -43,7 +43,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
+public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
 {
   private final List <CSSMediaQuery> m_aMediaQueries = new ArrayList <CSSMediaQuery> ();
   private final List <ICSSTopLevelRule> m_aRules = new ArrayList <ICSSTopLevelRule> ();
@@ -63,11 +63,27 @@ public final class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationA
     return m_aMediaQueries.size ();
   }
 
-  public void addMediaQuery (@Nonnull @Nonempty final CSSMediaQuery aMediaQuery)
+  @Nonnull
+  public CSSMediaRule addMediaQuery (@Nonnull @Nonempty final CSSMediaQuery aMediaQuery)
   {
     if (aMediaQuery == null)
       throw new NullPointerException ("mediaQuery");
+
     m_aMediaQueries.add (aMediaQuery);
+    return this;
+  }
+
+  @Nonnull
+  public CSSMediaRule addMediaQuery (@Nonnegative final int nIndex, @Nonnull @Nonempty final CSSMediaQuery aMediaQuery)
+  {
+    if (aMediaQuery == null)
+      throw new NullPointerException ("mediaQuery");
+
+    if (nIndex >= getMediaQueryCount ())
+      m_aMediaQueries.add (aMediaQuery);
+    else
+      m_aMediaQueries.add (nIndex, aMediaQuery);
+    return this;
   }
 
   @Nonnull
@@ -111,11 +127,29 @@ public final class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationA
     return m_aRules.size ();
   }
 
-  public void addRule (@Nonnull final ICSSTopLevelRule aRule)
+  @Nonnull
+  public CSSMediaRule addRule (@Nonnull final ICSSTopLevelRule aRule)
   {
     if (aRule == null)
       throw new NullPointerException ("rule");
+
     m_aRules.add (aRule);
+    return this;
+  }
+
+  @Nonnull
+  public CSSMediaRule addRule (@Nonnegative final int nIndex, @Nonnull final ICSSTopLevelRule aRule)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+    if (aRule == null)
+      throw new NullPointerException ("rule");
+
+    if (nIndex >= getRuleCount ())
+      m_aRules.add (aRule);
+    else
+      m_aRules.add (nIndex, aRule);
+    return this;
   }
 
   @Nonnull
@@ -207,6 +241,12 @@ public final class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationA
     return aSB.toString ();
   }
 
+  /**
+   * Set the source location of the object, determined while parsing.
+   * 
+   * @param aSourceLocation
+   *        The source location to use. May be <code>null</code>.
+   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

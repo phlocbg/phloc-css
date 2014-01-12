@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -20,6 +20,7 @@ package com.phloc.css.property;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
@@ -31,6 +32,7 @@ import com.phloc.css.utils.CSSURLHelper;
  * 
  * @author Philip Helger
  */
+@NotThreadSafe
 public class CSSPropertyEnumOrURL extends CSSPropertyEnum
 {
   public CSSPropertyEnumOrURL (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final String... aEnumValues)

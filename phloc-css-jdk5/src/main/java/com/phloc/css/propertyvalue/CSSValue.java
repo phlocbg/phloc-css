@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2013 phloc systems
+ * Copyright (C) 2006-2014 phloc systems
  * http://www.phloc.com
  * office[at]phloc[dot]com
  *
@@ -38,7 +38,7 @@ import com.phloc.css.property.ICSSProperty;
  * @author Philip Helger
  */
 @Immutable
-public final class CSSValue implements ICSSValue
+public class CSSValue implements ICSSValue
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSValue.class);
 
