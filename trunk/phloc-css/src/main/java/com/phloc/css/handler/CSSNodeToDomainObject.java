@@ -240,7 +240,7 @@ final class CSSNodeToDomainObject
     if (ECSSNodeType.ATTRIB.isNode (aNode, m_eVersion))
       return _createSelectorAttribute (aNode);
 
-    if (ECSSNodeType.COMBINATOR.isNode (aNode, m_eVersion))
+    if (ECSSNodeType.SELECTORCOMBINATOR.isNode (aNode, m_eVersion))
     {
       final String sText = aNode.getText ();
       final ECSSSelectorCombinator eCombinator = ECSSSelectorCombinator.getFromNameOrNull (sText);

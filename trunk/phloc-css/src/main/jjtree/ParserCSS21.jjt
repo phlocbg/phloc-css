@@ -644,7 +644,7 @@ void simpleSelectorSequence() #void : {}
     )+
 }
 
-void combinator() : {}
+void selectorCombinator() : {}
 {
   ( LOOKAHEAD(2)
     ( <S> )? 
@@ -660,7 +660,7 @@ void selector() : {}
 {
   simpleSelectorSequence()
   ( LOOKAHEAD(2)
-    combinator()
+    selectorCombinator()
     ( <S> )*
     simpleSelectorSequence()
   )*
