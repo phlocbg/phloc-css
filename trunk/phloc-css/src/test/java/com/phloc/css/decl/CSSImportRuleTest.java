@@ -18,10 +18,16 @@
 package com.phloc.css.decl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import javax.annotation.Nonnull;
 
 import org.junit.Test;
 
+import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
+import com.phloc.css.reader.CSSReader;
 import com.phloc.css.writer.CSSWriterSettings;
 
 /**
@@ -31,8 +37,41 @@ import com.phloc.css.writer.CSSWriterSettings;
  */
 public final class CSSImportRuleTest
 {
+  @Nonnull
+  private static CSSImportRule _parse (@Nonnull final String sCSS)
+  {
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.LATEST);
+    assertNotNull (sCSS, aCSS);
+    assertTrue (aCSS.hasImportRules ());
+    assertEquals (1, aCSS.getImportRuleCount ());
+    final CSSImportRule ret = aCSS.getAllImportRules ().get (0);
+    assertNotNull (sCSS, ret);
+    return ret;
+  }
+
   @Test
-  public void testBasic ()
+  public void testRead ()
+  {
+    CSSImportRule aIR;
+    aIR = _parse ("@import url(a.gif);\n");
+    assertEquals (0, aIR.getMediaQueryCount ());
+    assertTrue (aIR.getAllMediaQueries ().isEmpty ());
+    assertEquals ("a.gif", aIR.getLocationString ());
+
+    aIR = _parse ("@import url(\"a.gif\") print;\n");
+    assertEquals (1, aIR.getMediaQueryCount ());
+    assertEquals (new CSSMediaQuery ("print"), aIR.getAllMediaQueries ().get (0));
+    assertEquals ("a.gif", aIR.getLocationString ());
+
+    aIR = _parse ("@import url('a.gif') print, screen;\n");
+    assertEquals (2, aIR.getMediaQueryCount ());
+    assertEquals (new CSSMediaQuery ("print"), aIR.getAllMediaQueries ().get (0));
+    assertEquals (new CSSMediaQuery ("screen"), aIR.getAllMediaQueries ().get (1));
+    assertEquals ("a.gif", aIR.getLocationString ());
+  }
+
+  @Test
+  public void testCreate ()
   {
     final CSSURI aURI = new CSSURI ("a.gif");
     final CSSImportRule aImportRule = new CSSImportRule (aURI);

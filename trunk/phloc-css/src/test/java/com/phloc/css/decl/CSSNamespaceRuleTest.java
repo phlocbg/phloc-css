@@ -20,6 +20,7 @@ package com.phloc.css.decl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import javax.annotation.Nonnull;
 
@@ -37,10 +38,11 @@ import com.phloc.css.reader.CSSReader;
 public final class CSSNamespaceRuleTest
 {
   @Nonnull
-  private static CSSNamespaceRule _parse (final String sCSS)
+  private static CSSNamespaceRule _parse (@Nonnull final String sCSS)
   {
     final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.LATEST);
     assertNotNull (sCSS, aCSS);
+    assertTrue (aCSS.hasNamespaceRules ());
     assertEquals (1, aCSS.getNamespaceRuleCount ());
     final CSSNamespaceRule ret = aCSS.getAllNamespaceRules ().get (0);
     assertNotNull (ret);
