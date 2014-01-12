@@ -43,11 +43,16 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
+public class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
 {
   private CSSURI m_aLocation;
   private final List <CSSMediaQuery> m_aMediaQueries = new ArrayList <CSSMediaQuery> ();
   private CSSSourceLocation m_aSourceLocation;
+
+  public CSSImportRule (@Nonnull @Nonempty final String sLocation)
+  {
+    this (new CSSURI (sLocation));
+  }
 
   public CSSImportRule (@Nonnull final CSSURI aLocation)
   {
@@ -77,12 +82,16 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
    * 
    * @param aMediaQuery
    *        The media query to be added. May not be <code>null</code>.
+   * @return this
    */
-  public void addMediaQuery (@Nonnull final CSSMediaQuery aMediaQuery)
+  @Nonnull
+  public CSSImportRule addMediaQuery (@Nonnull final CSSMediaQuery aMediaQuery)
   {
     if (aMediaQuery == null)
       throw new NullPointerException ("mediaQuery");
+
     m_aMediaQueries.add (aMediaQuery);
+    return this;
   }
 
   /**
@@ -92,12 +101,16 @@ public final class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAwa
    *        The index where to add the media query. Must be &ge; 0.
    * @param aMediaQuery
    *        The media query to be added. May not be <code>null</code>.
+   * @return this
    */
-  public void addMediaQuery (@Nonnegative final int nIndex, @Nonnull final CSSMediaQuery aMediaQuery)
+  @Nonnull
+  public CSSImportRule addMediaQuery (@Nonnegative final int nIndex, @Nonnull final CSSMediaQuery aMediaQuery)
   {
     if (aMediaQuery == null)
       throw new NullPointerException ("mediaQuery");
+
     m_aMediaQueries.add (nIndex, aMediaQuery);
+    return this;
   }
 
   /**

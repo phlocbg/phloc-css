@@ -26,6 +26,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
@@ -42,11 +43,20 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware
+public class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware, ICSSSourceLocationAware
 {
   private final List <String> m_aKeyframesSelectors;
   private final CSSDeclarationContainer m_aDeclarations = new CSSDeclarationContainer ();
   private CSSSourceLocation m_aSourceLocation;
+
+  public CSSKeyframesBlock (@Nonnull @Nonempty final String... aKeyframesSelectors)
+  {
+    if (ArrayHelper.isEmpty (aKeyframesSelectors))
+      throw new IllegalArgumentException ("keyframesSelectors");
+    if (ArrayHelper.containsAnyNullElement (aKeyframesSelectors))
+      throw new IllegalArgumentException ("keyframesSelectors contains at least one null element");
+    m_aKeyframesSelectors = ContainerHelper.newList (aKeyframesSelectors);
+  }
 
   public CSSKeyframesBlock (@Nonnull @Nonempty final List <String> aKeyframesSelectors)
   {

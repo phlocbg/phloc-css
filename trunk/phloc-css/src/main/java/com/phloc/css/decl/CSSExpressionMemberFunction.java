@@ -53,7 +53,7 @@ public final class CSSExpressionMemberFunction implements ICSSExpressionMember, 
   }
 
   /**
-   * Constructor
+   * Constructor without an expression
    * 
    * @param sFunctionName
    *        Function name. May neither be <code>null</code> nor empty.

@@ -39,7 +39,7 @@ import com.phloc.css.utils.CSSURLHelper;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSNamespaceRule implements ICSSWriteable, ICSSSourceLocationAware
+public class CSSNamespaceRule implements ICSSWriteable, ICSSSourceLocationAware
 {
   private String m_sPrefix;
   private String m_sURL;
@@ -57,9 +57,11 @@ public final class CSSNamespaceRule implements ICSSWriteable, ICSSSourceLocation
     return m_sPrefix;
   }
 
-  public void setNamespacePrefix (@Nullable final String sNamespacePrefix)
+  @Nonnull
+  public CSSNamespaceRule setNamespacePrefix (@Nullable final String sNamespacePrefix)
   {
     m_sPrefix = sNamespacePrefix;
+    return this;
   }
 
   /**
@@ -71,11 +73,14 @@ public final class CSSNamespaceRule implements ICSSWriteable, ICSSSourceLocation
     return m_sURL;
   }
 
-  public void setNamespaceURL (@Nonnull final String sURL)
+  @Nonnull
+  public CSSNamespaceRule setNamespaceURL (@Nonnull final String sURL)
   {
     if (sURL == null)
       throw new NullPointerException ("URL");
+
     m_sURL = sURL;
+    return this;
   }
 
   @Nonnull

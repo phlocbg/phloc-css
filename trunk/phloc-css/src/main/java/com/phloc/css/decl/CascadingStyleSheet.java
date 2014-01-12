@@ -77,12 +77,15 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
    * 
    * @param aImportRule
    *        The import rule to add. May not be <code>null</code>.
+   * @return this
    */
-  public void addImportRule (@Nonnull final CSSImportRule aImportRule)
+  @Nonnull
+  public CascadingStyleSheet addImportRule (@Nonnull final CSSImportRule aImportRule)
   {
     if (aImportRule == null)
       throw new NullPointerException ("ImportRule");
     m_aImportRules.add (aImportRule);
+    return this;
   }
 
   /**
@@ -93,14 +96,17 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
    *        The index where the rule should be added. Must be &ge; 0.
    * @param aImportRule
    *        The import rule to add. May not be <code>null</code>.
+   * @return this
    * @throws ArrayIndexOutOfBoundsException
    *         if the index is invalid
    */
-  public void addImportRule (@Nonnegative final int nIndex, @Nonnull final CSSImportRule aImportRule)
+  @Nonnull
+  public CascadingStyleSheet addImportRule (@Nonnegative final int nIndex, @Nonnull final CSSImportRule aImportRule)
   {
     if (aImportRule == null)
       throw new NullPointerException ("ImportRule");
     m_aImportRules.add (nIndex, aImportRule);
+    return this;
   }
 
   /**
@@ -170,12 +176,15 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
    * 
    * @param aNamespaceRule
    *        The namespace rule to be added. May not be <code>null</code>.
+   * @return this
    */
-  public void addNamespaceRule (@Nonnull final CSSNamespaceRule aNamespaceRule)
+  @Nonnull
+  public CascadingStyleSheet addNamespaceRule (@Nonnull final CSSNamespaceRule aNamespaceRule)
   {
     if (aNamespaceRule == null)
       throw new NullPointerException ("NamespaceRule");
     m_aNamespaceRules.add (aNamespaceRule);
+    return this;
   }
 
   /**
@@ -186,12 +195,16 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
    *        The index where the rule should be added.
    * @param aNamespaceRule
    *        The namespace rule to be added. May not be <code>null</code>.
+   * @return this
    */
-  public void addNamespaceRule (@Nonnegative final int nIndex, @Nonnull final CSSNamespaceRule aNamespaceRule)
+  @Nonnull
+  public CascadingStyleSheet addNamespaceRule (@Nonnegative final int nIndex,
+                                               @Nonnull final CSSNamespaceRule aNamespaceRule)
   {
     if (aNamespaceRule == null)
       throw new NullPointerException ("NamespaceRule");
     m_aNamespaceRules.add (nIndex, aNamespaceRule);
+    return this;
   }
 
   /**
@@ -269,12 +282,15 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
    * 
    * @param aRule
    *        The rule to be added. May not be <code>null</code>.
+   * @return this
    */
-  public void addRule (@Nonnull final ICSSTopLevelRule aRule)
+  @Nonnull
+  public CascadingStyleSheet addRule (@Nonnull final ICSSTopLevelRule aRule)
   {
     if (aRule == null)
       throw new NullPointerException ("styleRule");
     m_aRules.add (aRule);
+    return this;
   }
 
   /**
@@ -286,12 +302,15 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
    *        The index where the top-level rule should be added. Must be &ge; 0.
    * @param aRule
    *        The rule to be added. May not be <code>null</code>.
+   * @return this
    */
-  public void addRule (@Nonnegative final int nIndex, @Nonnull final ICSSTopLevelRule aRule)
+  @Nonnull
+  public CascadingStyleSheet addRule (@Nonnegative final int nIndex, @Nonnull final ICSSTopLevelRule aRule)
   {
     if (aRule == null)
       throw new NullPointerException ("styleRule");
     m_aRules.add (nIndex, aRule);
+    return this;
   }
 
   /**

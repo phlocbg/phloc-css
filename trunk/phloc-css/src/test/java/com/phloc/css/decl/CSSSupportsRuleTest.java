@@ -109,7 +109,7 @@ public final class CSSSupportsRuleTest
 
     final ICSSSupportsConditionMember aMember2 = aSR.getSupportsConditionMemberAtIndex (2);
     assertTrue (aMember2 instanceof CSSSupportsConditionNested);
-    final ICSSSupportsConditionMember aMember2M0 = ((CSSSupportsConditionNested) aMember2).getSupportsMemberAtIndex (0);
+    final ICSSSupportsConditionMember aMember2M0 = ((CSSSupportsConditionNested) aMember2).getMemberAtIndex (0);
     assertTrue (aMember2M0 instanceof CSSSupportsConditionNegation);
     final CSSSupportsConditionDeclaration aDecl2 = (CSSSupportsConditionDeclaration) ((CSSSupportsConditionNegation) aMember2M0).getSupportsMember ();
     assertNotNull (aDecl2.getDeclaration ());

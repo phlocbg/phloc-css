@@ -20,7 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
@@ -37,8 +37,8 @@ import com.phloc.css.ICSSWriterSettings;
  * @see ECSSAttributeOperator
  * @author Philip Helger
  */
-@Immutable
-public final class CSSSelectorAttribute implements ICSSSelectorMember, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSSelectorAttribute implements ICSSSelectorMember, ICSSSourceLocationAware
 {
   private final String m_sNamespacePrefix;
   private final String m_sAttrName;

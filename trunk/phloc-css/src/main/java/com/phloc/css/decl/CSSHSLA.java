@@ -38,7 +38,7 @@ import com.phloc.css.utils.CSSColorHelper;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSHSLA implements ICSSWriteable, ICSSVersionAware
+public class CSSHSLA implements ICSSWriteable, ICSSVersionAware
 {
   private String m_sHue;
   private String m_sSaturation;
@@ -117,11 +117,14 @@ public final class CSSHSLA implements ICSSWriteable, ICSSVersionAware
     return m_sHue;
   }
 
-  public void setHue (@Nonnull @Nonempty final String sHue)
+  @Nonnull
+  public CSSHSLA setHue (@Nonnull @Nonempty final String sHue)
   {
     if (StringHelper.hasNoText (sHue))
       throw new IllegalArgumentException ("hue");
+
     m_sHue = sHue;
+    return this;
   }
 
   /**
@@ -134,11 +137,14 @@ public final class CSSHSLA implements ICSSWriteable, ICSSVersionAware
     return m_sSaturation;
   }
 
-  public void setSaturation (@Nonnull @Nonempty final String sSaturation)
+  @Nonnull
+  public CSSHSLA setSaturation (@Nonnull @Nonempty final String sSaturation)
   {
     if (StringHelper.hasNoText (sSaturation))
       throw new IllegalArgumentException ("saturation");
+
     m_sSaturation = sSaturation;
+    return this;
   }
 
   /**
@@ -151,11 +157,14 @@ public final class CSSHSLA implements ICSSWriteable, ICSSVersionAware
     return m_sLightness;
   }
 
-  public void setLightness (@Nonnull @Nonempty final String sLightness)
+  @Nonnull
+  public CSSHSLA setLightness (@Nonnull @Nonempty final String sLightness)
   {
     if (StringHelper.hasNoText (sLightness))
       throw new IllegalArgumentException ("lightness");
+
     m_sLightness = sLightness;
+    return this;
   }
 
   /**
@@ -168,11 +177,14 @@ public final class CSSHSLA implements ICSSWriteable, ICSSVersionAware
     return m_sOpacity;
   }
 
-  public void setOpacity (@Nonnull @Nonempty final String sOpacity)
+  @Nonnull
+  public CSSHSLA setOpacity (@Nonnull @Nonempty final String sOpacity)
   {
     if (StringHelper.hasNoText (sOpacity))
       throw new IllegalArgumentException ("opacity");
+
     m_sOpacity = sOpacity;
+    return this;
   }
 
   @Nonnull
