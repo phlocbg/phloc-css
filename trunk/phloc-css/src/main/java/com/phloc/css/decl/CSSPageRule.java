@@ -67,6 +67,15 @@ public class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSV
   }
 
   @Nonnull
+  public CSSPageRule addDeclaration (@Nonnull @Nonempty final String sProperty,
+                                     @Nonnull final CSSExpression aExpression,
+                                     final boolean bImportant)
+  {
+    m_aDeclarations.addDeclaration (sProperty, aExpression, bImportant);
+    return this;
+  }
+
+  @Nonnull
   public CSSPageRule addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.addDeclaration (nIndex, aNewDeclaration);

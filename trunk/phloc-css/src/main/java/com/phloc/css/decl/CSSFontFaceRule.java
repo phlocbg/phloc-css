@@ -57,6 +57,15 @@ public class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
   }
 
   @Nonnull
+  public CSSFontFaceRule addDeclaration (@Nonnull @Nonempty final String sProperty,
+                                         @Nonnull final CSSExpression aExpression,
+                                         final boolean bImportant)
+  {
+    m_aDeclarations.addDeclaration (sProperty, aExpression, bImportant);
+    return this;
+  }
+
+  @Nonnull
   public CSSFontFaceRule addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
     m_aDeclarations.addDeclaration (nIndex, aNewDeclaration);

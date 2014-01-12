@@ -74,8 +74,8 @@ public final class CSSSupportsRuleTest
 
     // Create the same rule by application
     final CSSSupportsRule aCreated = new CSSSupportsRule ();
-    aCreated.addSupportConditionMember (new CSSSupportsConditionDeclaration (new CSSDeclaration ("column-count",
-                                                                                                 CSSExpression.createNumber (1))));
+    aCreated.addSupportConditionMember (new CSSSupportsConditionDeclaration ("column-count",
+                                                                             CSSExpression.createNumber (1)));
     PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aSR, aCreated);
   }
 
@@ -124,14 +124,13 @@ public final class CSSSupportsRuleTest
 
     // Create the same rule by application
     final CSSSupportsRule aCreated = new CSSSupportsRule ();
-    aCreated.addSupportConditionMember (new CSSSupportsConditionDeclaration (new CSSDeclaration ("column-count",
-                                                                                                 CSSExpression.createNumber (1))));
+    aCreated.addSupportConditionMember (new CSSSupportsConditionDeclaration ("column-count",
+                                                                             CSSExpression.createNumber (1)));
     aCreated.addSupportConditionMember (ECSSSupportsConditionOperator.AND);
-    aCreated.addSupportConditionMember (new CSSSupportsConditionNested ().addMember (new CSSSupportsConditionNegation (new CSSSupportsConditionDeclaration (new CSSDeclaration ("color",
-                                                                                                                                                                                CSSExpression.createSimple ("blue"))))));
+    aCreated.addSupportConditionMember (new CSSSupportsConditionNested ().addMember (new CSSSupportsConditionNegation (new CSSSupportsConditionDeclaration ("color",
+                                                                                                                                                            CSSExpression.createSimple ("blue")))));
     aCreated.addRule (new CSSStyleRule ().addSelector (new CSSSelectorSimpleMember ("div"))
-                                         .addDeclaration (new CSSDeclaration ("color",
-                                                                              CSSExpression.createSimple ("red"))));
+                                         .addDeclaration ("color", CSSExpression.createSimple ("red"), false));
     PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aSR, aCreated);
   }
 }
