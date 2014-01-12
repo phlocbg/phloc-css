@@ -41,7 +41,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
+public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
 {
   public static final boolean DEFAULT_IMPORTANT = false;
 

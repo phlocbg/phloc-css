@@ -47,11 +47,26 @@ public class CSSVisitorForUrl extends DefaultCSSVisitor
   private final ICSSUrlVisitor m_aVisitor;
   private final NonBlockingStack <ICSSTopLevelRule> m_aTopLevelRule = new NonBlockingStack <ICSSTopLevelRule> ();
 
+  /**
+   * Constructor
+   * 
+   * @param aVisitor
+   *        The URL visitor to be used. May not be <code>null</code>.
+   */
   public CSSVisitorForUrl (@Nonnull final ICSSUrlVisitor aVisitor)
   {
     if (aVisitor == null)
       throw new NullPointerException ("visitor");
     m_aVisitor = aVisitor;
+  }
+
+  /**
+   * @return The URL visitor passed in the constructor. Never <code>null</code>.
+   */
+  @Nonnull
+  public ICSSUrlVisitor getVisitor ()
+  {
+    return m_aVisitor;
   }
 
   @Override

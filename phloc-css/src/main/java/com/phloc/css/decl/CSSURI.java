@@ -40,7 +40,7 @@ import com.phloc.css.utils.CSSURLHelper;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
+public class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
 {
   private String m_sURI;
   private CSSSourceLocation m_aSourceLocation;

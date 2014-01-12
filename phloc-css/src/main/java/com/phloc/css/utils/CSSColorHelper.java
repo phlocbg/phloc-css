@@ -26,6 +26,7 @@ import javax.annotation.RegEx;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.css.decl.CSSHSL;
@@ -117,6 +118,10 @@ public final class CSSColorHelper
                                              "\\s*\\)$";
   @RegEx
   private static final String PATTERN_HEX = "^" + CCSSValue.PREFIX_HEX + "[0-9a-fA-F]{1,6}$";
+
+  @SuppressWarnings ("unused")
+  @PresentForCodeCoverage
+  private static final CSSColorHelper s_aInstance = new CSSColorHelper ();
 
   private CSSColorHelper ()
   {}

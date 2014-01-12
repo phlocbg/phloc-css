@@ -20,7 +20,7 @@ package com.phloc.css.decl;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -35,8 +35,8 @@ import com.phloc.css.ICSSWriterSettings;
  * 
  * @author Philip Helger
  */
-@Immutable
-public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember, ICSSSourceLocationAware
+@NotThreadSafe
+public class CSSExpressionMemberTermSimple implements ICSSExpressionMember, ICSSSourceLocationAware
 {
   private String m_sValue;
   private String m_sOptimizedValue;
@@ -67,12 +67,15 @@ public final class CSSExpressionMemberTermSimple implements ICSSExpressionMember
     setValue (sValue);
   }
 
-  public void setValue (@Nonnull @Nonempty final String sValue)
+  @Nonnull
+  public CSSExpressionMemberTermSimple setValue (@Nonnull @Nonempty final String sValue)
   {
     if (StringHelper.hasNoText (sValue))
       throw new IllegalArgumentException ("Empty value is not allowed");
+
     m_sValue = sValue;
     m_sOptimizedValue = CSSExpressionTermOptimizer.getOptimizedValue (sValue);
+    return this;
   }
 
   /**

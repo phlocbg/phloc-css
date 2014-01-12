@@ -43,7 +43,7 @@ import com.phloc.css.ICSSSourceLocationAware;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CascadingStyleSheet implements ICSSSourceLocationAware, Serializable
+public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializable
 {
   private final List <CSSImportRule> m_aImportRules = new ArrayList <CSSImportRule> ();
   private final List <CSSNamespaceRule> m_aNamespaceRules = new ArrayList <CSSNamespaceRule> ();

@@ -20,6 +20,7 @@ package com.phloc.css.property;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 import com.phloc.css.utils.CSSColorHelper;
@@ -29,6 +30,7 @@ import com.phloc.css.utils.CSSColorHelper;
  * 
  * @author Philip Helger
  */
+@NotThreadSafe
 public class CSSPropertyColor extends AbstractCSSProperty
 {
   public CSSPropertyColor (@Nonnull final ECSSProperty eProp)

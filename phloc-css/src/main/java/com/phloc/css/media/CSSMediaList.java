@@ -39,7 +39,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSMediaList implements Serializable, IHasSize
+public class CSSMediaList implements Serializable, IHasSize
 {
   // ESCA-JAVA0261:
   // Ordered but unique

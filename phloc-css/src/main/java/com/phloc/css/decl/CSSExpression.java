@@ -43,7 +43,7 @@ import com.phloc.css.ICSSWriterSettings;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class CSSExpression implements ICSSWriteable, ICSSSourceLocationAware
+public class CSSExpression implements ICSSWriteable, ICSSSourceLocationAware
 {
   private final List <ICSSExpressionMember> m_aMembers = new ArrayList <ICSSExpressionMember> ();
   private CSSSourceLocation m_aSourceLocation;
