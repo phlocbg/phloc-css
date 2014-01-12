@@ -138,6 +138,8 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
   public CSSMediaQuery addMediaExpression (@Nonnegative final int nIndex,
                                            @Nonnull final CSSMediaExpression aMediaExpression)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aMediaExpression == null)
       throw new NullPointerException ("expression");
 

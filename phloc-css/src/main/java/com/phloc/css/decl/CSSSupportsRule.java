@@ -80,6 +80,8 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
   public CSSSupportsRule addSupportConditionMember (@Nonnegative final int nIndex,
                                                     @Nonnull final ICSSSupportsConditionMember aMember)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aMember == null)
       throw new NullPointerException ("member");
 
@@ -144,6 +146,8 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
   @Nonnull
   public CSSSupportsRule addRule (@Nonnegative final int nIndex, @Nonnull final ICSSTopLevelRule aRule)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aRule == null)
       throw new NullPointerException ("rule");
 

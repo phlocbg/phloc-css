@@ -85,6 +85,8 @@ public class CSSSupportsConditionNested implements ICSSSupportsConditionMember, 
   public CSSSupportsConditionNested addMember (@Nonnegative final int nIndex,
                                                @Nonnull final ICSSSupportsConditionMember aMember)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aMember == null)
       throw new NullPointerException ("member");
 

@@ -55,6 +55,7 @@ public final class CSSExpressionMemberMathProduct implements ICSSExpressionMathM
   {
     if (aMember == null)
       throw new NullPointerException ("member");
+
     m_aMembers.add (aMember);
     return this;
   }

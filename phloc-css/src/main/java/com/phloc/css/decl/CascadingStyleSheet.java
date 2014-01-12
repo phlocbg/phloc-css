@@ -84,6 +84,7 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   {
     if (aImportRule == null)
       throw new NullPointerException ("ImportRule");
+
     m_aImportRules.add (aImportRule);
     return this;
   }
@@ -103,9 +104,15 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   @Nonnull
   public CascadingStyleSheet addImportRule (@Nonnegative final int nIndex, @Nonnull final CSSImportRule aImportRule)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aImportRule == null)
       throw new NullPointerException ("ImportRule");
-    m_aImportRules.add (nIndex, aImportRule);
+
+    if (nIndex >= getImportRuleCount ())
+      m_aImportRules.add (aImportRule);
+    else
+      m_aImportRules.add (nIndex, aImportRule);
     return this;
   }
 
@@ -183,6 +190,7 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   {
     if (aNamespaceRule == null)
       throw new NullPointerException ("NamespaceRule");
+
     m_aNamespaceRules.add (aNamespaceRule);
     return this;
   }
@@ -192,7 +200,7 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
    * <code>@namespace</code> rule list.
    * 
    * @param nIndex
-   *        The index where the rule should be added.
+   *        The index where the rule should be added. Must be &ge; 0.
    * @param aNamespaceRule
    *        The namespace rule to be added. May not be <code>null</code>.
    * @return this
@@ -201,9 +209,15 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   public CascadingStyleSheet addNamespaceRule (@Nonnegative final int nIndex,
                                                @Nonnull final CSSNamespaceRule aNamespaceRule)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aNamespaceRule == null)
       throw new NullPointerException ("NamespaceRule");
-    m_aNamespaceRules.add (nIndex, aNamespaceRule);
+
+    if (nIndex >= getNamespaceRuleCount ())
+      m_aNamespaceRules.add (aNamespaceRule);
+    else
+      m_aNamespaceRules.add (nIndex, aNamespaceRule);
     return this;
   }
 
@@ -289,6 +303,7 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   {
     if (aRule == null)
       throw new NullPointerException ("styleRule");
+
     m_aRules.add (aRule);
     return this;
   }
@@ -307,9 +322,15 @@ public final class CascadingStyleSheet implements ICSSSourceLocationAware, Seria
   @Nonnull
   public CascadingStyleSheet addRule (@Nonnegative final int nIndex, @Nonnull final ICSSTopLevelRule aRule)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aRule == null)
       throw new NullPointerException ("styleRule");
-    m_aRules.add (nIndex, aRule);
+
+    if (nIndex >= getRuleCount ())
+      m_aRules.add (aRule);
+    else
+      m_aRules.add (nIndex, aRule);
     return this;
   }
 
