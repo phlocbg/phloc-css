@@ -56,6 +56,7 @@ public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSS
   {
     if (aMember == null)
       throw new NullPointerException ("member");
+
     m_aMembers.add (aMember);
     return this;
   }
@@ -68,6 +69,7 @@ public final class CSSExpressionMemberMath implements ICSSExpressionMember, ICSS
       throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aMember == null)
       throw new NullPointerException ("member");
+
     if (nIndex >= getMemberCount ())
       m_aMembers.add (aMember);
     else

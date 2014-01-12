@@ -140,6 +140,8 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
   @Nonnull
   public CSSMediaRule addRule (@Nonnegative final int nIndex, @Nonnull final ICSSTopLevelRule aRule)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aRule == null)
       throw new NullPointerException ("rule");
 

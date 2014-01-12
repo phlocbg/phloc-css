@@ -106,10 +106,15 @@ public class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
   @Nonnull
   public CSSImportRule addMediaQuery (@Nonnegative final int nIndex, @Nonnull final CSSMediaQuery aMediaQuery)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aMediaQuery == null)
       throw new NullPointerException ("mediaQuery");
 
-    m_aMediaQueries.add (nIndex, aMediaQuery);
+    if (nIndex >= getMediaQueryCount ())
+      m_aMediaQueries.add (aMediaQuery);
+    else
+      m_aMediaQueries.add (nIndex, aMediaQuery);
     return this;
   }
 

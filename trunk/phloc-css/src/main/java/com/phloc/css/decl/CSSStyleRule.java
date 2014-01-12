@@ -93,6 +93,8 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
   @Nonnull
   public CSSStyleRule addSelector (@Nonnegative final int nIndex, @Nonnull final CSSSelector aSelector)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aSelector == null)
       throw new NullPointerException ("selector");
 

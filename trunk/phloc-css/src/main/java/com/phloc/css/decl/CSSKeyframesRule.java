@@ -94,11 +94,29 @@ public class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAware, ICS
     return m_aBlocks.size ();
   }
 
-  public void addBlock (@Nonnull final CSSKeyframesBlock aKeyframesBlock)
+  @Nonnull
+  public CSSKeyframesRule addBlock (@Nonnull final CSSKeyframesBlock aKeyframesBlock)
   {
     if (aKeyframesBlock == null)
       throw new NullPointerException ("keyframesBlock");
+
     m_aBlocks.add (aKeyframesBlock);
+    return this;
+  }
+
+  @Nonnull
+  public CSSKeyframesRule addBlock (@Nonnegative final int nIndex, @Nonnull final CSSKeyframesBlock aKeyframesBlock)
+  {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
+    if (aKeyframesBlock == null)
+      throw new NullPointerException ("keyframesBlock");
+
+    if (nIndex >= getBlockCount ())
+      m_aBlocks.add (aKeyframesBlock);
+    else
+      m_aBlocks.add (nIndex, aKeyframesBlock);
+    return this;
   }
 
   @Nonnull

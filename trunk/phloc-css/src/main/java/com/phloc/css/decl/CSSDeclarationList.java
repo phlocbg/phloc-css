@@ -56,6 +56,7 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   {
     if (aDeclaration == null)
       throw new NullPointerException ("declaration");
+
     m_aDeclarations.add (aDeclaration);
     return this;
   }

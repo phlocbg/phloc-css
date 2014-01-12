@@ -71,7 +71,7 @@ public final class CSSMediaList implements Serializable, IHasSize
    * Add a new medium to the list
    * 
    * @param eMedium
-   *        The medium to be added. MAy not be <code>null</code>.
+   *        The medium to be added. May not be <code>null</code>.
    * @return <code>this</code>
    */
   @Nonnull
@@ -79,6 +79,7 @@ public final class CSSMediaList implements Serializable, IHasSize
   {
     if (eMedium == null)
       throw new NullPointerException ("medium");
+
     m_aMedia.add (eMedium);
     return this;
   }
@@ -94,6 +95,15 @@ public final class CSSMediaList implements Serializable, IHasSize
   public EChange removeMedium (@Nullable final ECSSMedium eMedium)
   {
     return EChange.valueOf (m_aMedia.remove (eMedium));
+  }
+
+  /**
+   * @return The number of contained media. Always &ge; 0.
+   */
+  @Nonnegative
+  public int getMediaCount ()
+  {
+    return m_aMedia.size ();
   }
 
   /**

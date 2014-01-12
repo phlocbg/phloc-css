@@ -71,6 +71,8 @@ public class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
   @Nonnull
   public CSSSelector addMember (@Nonnegative final int nIndex, @Nonnull final ICSSSelectorMember aMember)
   {
+    if (nIndex < 0)
+      throw new IllegalArgumentException ("Index too small: " + nIndex);
     if (aMember == null)
       throw new NullPointerException ("member");
 
