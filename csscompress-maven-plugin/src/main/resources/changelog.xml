@@ -20,6 +20,7 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="csscompress-maven-plugin">
+  <release date="2014-01-12" version="1.1.0" />
   <entry date="2014-01-12" category="tech" action="add">
     <change>
       <text locale="en">Added the following new plugin parameter: writeUnknownRules</text>
