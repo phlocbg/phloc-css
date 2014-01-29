@@ -20,6 +20,17 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2014-01-29" version="3.7.1" />
+  <entry date="2014-01-29" category="tech" action="change" incompatible="true">
+    <change>
+      <text locale="en">CSSNodeToDomainObject now throws CSSHandlingException instead of IllegalArgumentException</text>
+    </change>
+  </entry>
+  <entry date="2014-01-29" category="tech" action="fix">
+    <change>
+      <text locale="en">Explicitly handling invalid selector values like "color:;" - skipping them</text>
+    </change>
+  </entry>
   <release date="2014-01-12" version="3.7.0" />
   <entry date="2014-01-12" category="tech" action="fix">
     <change>
@@ -31,17 +42,17 @@
       <text locale="en">Improved API to allow for simpler call chaining when manually creating CSS stuff.</text>
     </change>
   </entry>
-  <entry date="2014-01-09" category="feature" action="fix">
+  <entry date="2014-01-09" category="tech" action="fix">
     <change>
       <text locale="en">Namespace URLs are now unescaped in CSSNamespaceRule</text>
     </change>
   </entry>
-  <entry date="2014-01-04" category="feature" action="fix">
+  <entry date="2014-01-04" category="tech" action="fix">
     <change>
       <text locale="en">Allowing CSS 3.0 class names with special names like "and", "or", "from", "to" etc.</text>
     </change>
   </entry>
-  <entry date="2014-01-04" category="feature" action="add">
+  <entry date="2014-01-04" category="tech" action="add">
     <change>
       <text locale="en">Added support for parsing old IE "expression(...)" statements</text>
     </change>
