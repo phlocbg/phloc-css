@@ -677,7 +677,8 @@ void styleDeclaration() : {}
   property()
   <COLON>
   ( <S> )*
-  expr()
+  /* Optional to handle e.g. "background-color:;" */
+  ( expr() )?
   ( important() )?
 }
 

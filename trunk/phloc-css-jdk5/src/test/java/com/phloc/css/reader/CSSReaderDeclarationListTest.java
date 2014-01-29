@@ -50,8 +50,16 @@ public final class CSSReaderDeclarationListTest
                                                                       "color:red; background:fixed;",
                                                                       "  color:red; background:fixed;  ",
                                                                       "color:red; background:fixed",
-                                                                      "color:red; background:fixed !important");
-  private static final List <String> INVALID = ContainerHelper.newList ("color", " color ", " color : ");
+                                                                      "color:red; background:fixed !important",
+                                                                      /*
+                                                                       * invalid
+                                                                       * but
+                                                                       * parsed
+                                                                       */
+                                                                      " color : ",
+                                                                      " color :  !important ",
+                                                                      " color :  !  important ");
+  private static final List <String> INVALID = ContainerHelper.newList ("color", " color ");
 
   @Test
   public void testIsValidCSS21 ()

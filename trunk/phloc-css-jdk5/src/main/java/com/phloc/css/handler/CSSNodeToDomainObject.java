@@ -100,20 +100,19 @@ final class CSSNodeToDomainObject
   private void _expectNodeType (@Nonnull final CSSNode aNode, @Nonnull final ECSSNodeType eExpected)
   {
     if (!eExpected.isNode (aNode, m_eVersion))
-      throw new IllegalArgumentException ("Expected a '" +
-                                          eExpected.getNodeName (m_eVersion) +
-                                          "' node but received a '" +
-                                          ECSSNodeType.getNodeName (aNode, m_eVersion) +
-                                          "' node: " +
-                                          aNode);
+      throw new CSSHandlingException (aNode, "Expected a '" +
+                                             eExpected.getNodeName (m_eVersion) +
+                                             "' node but received a '" +
+                                             ECSSNodeType.getNodeName (aNode, m_eVersion) +
+                                             "'");
   }
 
-  private static void _throwUnexpectedChildrenCount (@Nonnull @Nonempty final String sMsg, @Nonnull final CSSNode aNode)
+  private static void _throwUnexpectedChildrenCount (@Nonnull final CSSNode aNode, @Nonnull @Nonempty final String sMsg)
   {
     s_aLogger.error (sMsg);
     for (int i = 0; i < aNode.jjtGetNumChildren (); ++i)
       s_aLogger.error ("  " + aNode.jjtGetChild (i));
-    throw new IllegalArgumentException (sMsg);
+    throw new CSSHandlingException (aNode, sMsg);
   }
 
   @Nonnull
@@ -122,7 +121,7 @@ final class CSSNodeToDomainObject
     _expectNodeType (aNode, ECSSNodeType.IMPORTRULE);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount > 2)
-      _throwUnexpectedChildrenCount ("Expected at last 2 children but got " + nChildCount + "!", aNode);
+      _throwUnexpectedChildrenCount (aNode, "Expected at last 2 children but got " + nChildCount + "!");
 
     CSSURI aImportURI = null;
     int nCurrentIndex = 0;
@@ -198,10 +197,10 @@ final class CSSNodeToDomainObject
     {
       final int nExpectedChildCount = nOperatorIndex + 2;
       if (nChildren != nExpectedChildCount)
-        _throwUnexpectedChildrenCount ("Illegal number of children present (" +
-                                       nChildren +
-                                       ") - expected " +
-                                       nExpectedChildCount, aNode);
+        _throwUnexpectedChildrenCount (aNode, "Illegal number of children present (" +
+                                              nChildren +
+                                              ") - expected " +
+                                              nExpectedChildCount);
 
       // With operator...
       final CSSNode aOperator = aNode.jjtGetChild (nOperatorIndex);
@@ -231,7 +230,7 @@ final class CSSNodeToDomainObject
         ECSSNodeType.CLASS.isNode (aNode, m_eVersion))
     {
       if (nChildCount != 0)
-        _throwUnexpectedChildrenCount ("CSS simple selector member expected 0 children and got " + nChildCount, aNode);
+        _throwUnexpectedChildrenCount (aNode, "CSS simple selector member expected 0 children and got " + nChildCount);
       final CSSSelectorSimpleMember ret = new CSSSelectorSimpleMember (aNode.getText ());
       ret.setSourceLocation (aNode.getSourceLocation ());
       return ret;
@@ -253,7 +252,7 @@ final class CSSNodeToDomainObject
     {
       // Note: no children don't make sense but are syntactically allowed!
       if (nChildCount > 2)
-        _throwUnexpectedChildrenCount ("CSS Negation expected 1 or 2 children and got " + nChildCount, aNode);
+        _throwUnexpectedChildrenCount (aNode, "CSS Negation expected 1 or 2 children and got " + nChildCount);
 
       final List <ICSSSelectorMember> aNestedSelectors = new ArrayList <ICSSSelectorMember> (nChildCount);
       for (int i = 0; i < nChildCount; ++i)
@@ -344,7 +343,7 @@ final class CSSNodeToDomainObject
         else
         {
           if (nChildCount != 1)
-            _throwUnexpectedChildrenCount ("CSS math unit expected 1 child and got " + nChildCount, aChildNode);
+            _throwUnexpectedChildrenCount (aChildNode, "CSS math unit expected 1 child and got " + nChildCount);
 
           final CSSNode aChildChildNode = aChildNode.jjtGetChild (0);
           final CSSExpressionMemberMathProduct aNestedProduct = _createExpressionMathProduct (aChildChildNode);
@@ -380,7 +379,7 @@ final class CSSNodeToDomainObject
 
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount > 0)
-      _throwUnexpectedChildrenCount ("Expected 0 children but got " + nChildCount + "!", aNode);
+      _throwUnexpectedChildrenCount (aNode, "Expected 0 children but got " + nChildCount + "!");
 
     final CSSURI aURI = new CSSURI (aNode.getText ());
     aURI.setSourceLocation (aNode.getSourceLocation ());
@@ -394,7 +393,7 @@ final class CSSNodeToDomainObject
 
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount > 1)
-      _throwUnexpectedChildrenCount ("Expected 0 or 1 children but got " + nChildCount + "!", aNode);
+      _throwUnexpectedChildrenCount (aNode, "Expected 0 or 1 children but got " + nChildCount + "!");
 
     final String sFunctionName = aNode.getText ();
     CSSExpressionMemberFunction aFunc;
@@ -455,7 +454,7 @@ final class CSSNodeToDomainObject
     _expectNodeType (aNode, ECSSNodeType.EXPRTERM);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount > 1)
-      _throwUnexpectedChildrenCount ("Expected 0 or 1 children but got " + nChildCount + "!", aNode);
+      _throwUnexpectedChildrenCount (aNode, "Expected 0 or 1 children but got " + nChildCount + "!");
 
     // Simple value
     if (nChildCount == 0)
@@ -520,13 +519,25 @@ final class CSSNodeToDomainObject
     return ret;
   }
 
-  @Nonnull
+  @Nullable
   private CSSDeclaration _createDeclaration (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.STYLEDECLARATION);
     final int nChildCount = aNode.jjtGetNumChildren ();
-    if (nChildCount != 2 && nChildCount != 3)
-      _throwUnexpectedChildrenCount ("Expected 2 or 3 children but got " + nChildCount + "!", aNode);
+    if (nChildCount < 1 && nChildCount > 1)
+      _throwUnexpectedChildrenCount (aNode, "Expected 1-3 children but got " + nChildCount + "!");
+
+    if (nChildCount == 1)
+    {
+      // Syntax error. E.g. "color:;"
+      return null;
+    }
+
+    if (!ECSSNodeType.EXPR.isNode (aNode.jjtGetChild (1), m_eVersion))
+    {
+      // Syntax error. E.g. "color: !important;"
+      return null;
+    }
 
     final String sProperty = aNode.jjtGetChild (0).getText ();
     final CSSExpression aExpression = _createExpression (aNode.jjtGetChild (1));
@@ -577,7 +588,11 @@ final class CSSNodeToDomainObject
           {
             final CSSNode aChildChildNode = aChildNode.jjtGetChild (nDecl);
             if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildChildNode, m_eVersion))
-              ret.addDeclaration (_createDeclaration (aChildChildNode));
+            {
+              final CSSDeclaration aDeclaration = _createDeclaration (aChildChildNode);
+              if (aDeclaration != null)
+                ret.addDeclaration (aDeclaration);
+            }
           }
         }
         else
@@ -621,7 +636,11 @@ final class CSSNodeToDomainObject
         // Read all contained declarations
         final int nDecls = aChildNode.jjtGetNumChildren ();
         for (int nDecl = 0; nDecl < nDecls; ++nDecl)
-          ret.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+        {
+          final CSSDeclaration aDeclaration = _createDeclaration (aChildNode.jjtGetChild (nDecl));
+          if (aDeclaration != null)
+            ret.addDeclaration (aDeclaration);
+        }
       }
       else
         if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
@@ -757,7 +776,7 @@ final class CSSNodeToDomainObject
     _expectNodeType (aNode, ECSSNodeType.MEDIAEXPR);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount != 1 && nChildCount != 2)
-      _throwUnexpectedChildrenCount ("Expected 1 or 2 children but got " + nChildCount + "!", aNode);
+      _throwUnexpectedChildrenCount (aNode, "Expected 1 or 2 children but got " + nChildCount + "!");
 
     final CSSNode aFeatureNode = aNode.jjtGetChild (0);
     if (!ECSSNodeType.MEDIAFEATURE.isNode (aFeatureNode, m_eVersion))
@@ -796,7 +815,11 @@ final class CSSNodeToDomainObject
         // Read all contained declarations
         final int nDecls = aChildNode.jjtGetNumChildren ();
         for (int nDecl = 0; nDecl < nDecls; ++nDecl)
-          ret.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+        {
+          final CSSDeclaration aDeclaration = _createDeclaration (aChildNode.jjtGetChild (nDecl));
+          if (aDeclaration != null)
+            ret.addDeclaration (aDeclaration);
+        }
       }
       else
         if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
@@ -811,7 +834,7 @@ final class CSSNodeToDomainObject
     _expectNodeType (aNode, ECSSNodeType.KEYFRAMESRULE);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount == 0)
-      _throwUnexpectedChildrenCount ("Expected at least 1 child but got " + nChildCount + "!", aNode);
+      _throwUnexpectedChildrenCount (aNode, "Expected at least 1 child but got " + nChildCount + "!");
 
     // Get the identifier (e.g. the default "@keyframes" or the non-standard
     // "@-webkit-keyframes")
@@ -853,7 +876,11 @@ final class CSSNodeToDomainObject
           // Read all contained declarations
           final int nDecls = aChildNode.jjtGetNumChildren ();
           for (int nDecl = 0; nDecl < nDecls; ++nDecl)
-            aBlock.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+          {
+            final CSSDeclaration aDeclaration = _createDeclaration (aChildNode.jjtGetChild (nDecl));
+            if (aDeclaration != null)
+              aBlock.addDeclaration (aDeclaration);
+          }
         }
         else
           if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
@@ -882,7 +909,11 @@ final class CSSNodeToDomainObject
         // Read all contained declarations
         final int nDecls = aChildNode.jjtGetNumChildren ();
         for (int nDecl = 0; nDecl < nDecls; ++nDecl)
-          ret.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+        {
+          final CSSDeclaration aDeclaration = _createDeclaration (aChildNode.jjtGetChild (nDecl));
+          if (aDeclaration != null)
+            ret.addDeclaration (aDeclaration);
+        }
       }
       else
         if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
@@ -897,8 +928,9 @@ final class CSSNodeToDomainObject
     _expectNodeType (aNode, ECSSNodeType.NAMESPACERULE);
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount < 1 || nChildCount > 2)
-      _throwUnexpectedChildrenCount ("Expected at least 1 child and at last 2 children but got " + nChildCount + "!",
-                                     aNode);
+      _throwUnexpectedChildrenCount (aNode, "Expected at least 1 child and at last 2 children but got " +
+                                            nChildCount +
+                                            "!");
 
     String sPrefix = null;
     int nURLIndex = 0;
@@ -925,7 +957,7 @@ final class CSSNodeToDomainObject
     if (ECSSNodeType.SUPPORTSCONDITIONOPERATOR.isNode (aNode, m_eVersion))
     {
       if (nChildCount != 0)
-        _throwUnexpectedChildrenCount ("Expected no children but got " + nChildCount + "!", aNode);
+        _throwUnexpectedChildrenCount (aNode, "Expected no children but got " + nChildCount + "!");
 
       return ECSSSupportsConditionOperator.getFromNameCaseInsensitiveOrNull (aNode.getText ());
     }
@@ -933,7 +965,7 @@ final class CSSNodeToDomainObject
     if (ECSSNodeType.SUPPORTSNEGATION.isNode (aNode, m_eVersion))
     {
       if (nChildCount != 1)
-        _throwUnexpectedChildrenCount ("Expected at exactly 1 child but got " + nChildCount + "!", aNode);
+        _throwUnexpectedChildrenCount (aNode, "Expected at exactly 1 child but got " + nChildCount + "!");
 
       final ICSSSupportsConditionMember aNestedMember = _createSupportsConditionMemberRecursive (aNode.jjtGetChild (0));
       if (aNestedMember == null)
@@ -947,13 +979,15 @@ final class CSSNodeToDomainObject
     if (ECSSNodeType.SUPPORTSCONDITIONINPARENS.isNode (aNode, m_eVersion))
     {
       if (nChildCount != 1)
-        _throwUnexpectedChildrenCount ("Expected at exactly 1 child but got " + nChildCount + "!", aNode);
+        _throwUnexpectedChildrenCount (aNode, "Expected at exactly 1 child but got " + nChildCount + "!");
 
       final CSSNode aChildNode = aNode.jjtGetChild (0);
 
       if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
       {
         final CSSDeclaration aDeclaration = _createDeclaration (aChildNode);
+        if (aDeclaration == null)
+          throw new CSSHandlingException (aChildNode, "The style declaration in the @supports rule is invalid!");
         final CSSSupportsConditionDeclaration ret = new CSSSupportsConditionDeclaration (aDeclaration);
         ret.setSourceLocation (aNode.getSourceLocation ());
         return ret;
@@ -1035,7 +1069,7 @@ final class CSSNodeToDomainObject
 
     final int nChildCount = aNode.jjtGetNumChildren ();
     if (nChildCount != 2)
-      _throwUnexpectedChildrenCount ("Expected 2 children but got " + nChildCount + "!", aNode);
+      _throwUnexpectedChildrenCount (aNode, "Expected 2 children but got " + nChildCount + "!");
 
     final CSSNode aParameterList = aNode.jjtGetChild (0);
     _expectNodeType (aParameterList, ECSSNodeType.UNKNOWNRULEPARAMETERLIST);
@@ -1117,7 +1151,11 @@ final class CSSNodeToDomainObject
     ret.setSourceLocation (aNode.getSourceLocation ());
     final int nDecls = aNode.jjtGetNumChildren ();
     for (int nDecl = 0; nDecl < nDecls; ++nDecl)
-      ret.addDeclaration (_createDeclaration (aNode.jjtGetChild (nDecl)));
+    {
+      final CSSDeclaration aDeclaration = _createDeclaration (aNode.jjtGetChild (nDecl));
+      if (aDeclaration != null)
+        ret.addDeclaration (aDeclaration);
+    }
     return ret;
   }
 }
