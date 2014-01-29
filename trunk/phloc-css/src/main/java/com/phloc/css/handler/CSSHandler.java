@@ -60,7 +60,7 @@ public final class CSSHandler
     if (aNode == null)
       throw new NullPointerException ("node");
     if (!ECSSNodeType.ROOT.isNode (aNode, eVersion))
-      throw new IllegalArgumentException ("Passed node is not a root node!");
+      throw new CSSHandlingException (aNode, "Passed node is not a root node!");
 
     return new CSSNodeToDomainObject (eVersion).createCascadingStyleSheetFromNode (aNode);
   }
@@ -83,7 +83,7 @@ public final class CSSHandler
     if (aNode == null)
       throw new NullPointerException ("node");
     if (!ECSSNodeType.STYLEDECLARATIONLIST.isNode (aNode, eVersion))
-      throw new IllegalArgumentException ("Passed node is not a style declaration node!");
+      throw new CSSHandlingException (aNode, "Passed node is not a style declaration node!");
 
     return new CSSNodeToDomainObject (eVersion).createDeclarationListFromNode (aNode);
   }
