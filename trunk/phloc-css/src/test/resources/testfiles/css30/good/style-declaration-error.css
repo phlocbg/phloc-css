@@ -1,0 +1,46 @@
+/* Ensure this is truly a 3.0 CSS :) */
+E ~ F {}
+
+div
+{
+  background-color: red;
+  /* value is missing */
+  color:;
+}
+
+div2
+{
+  background-color: red;
+  /* value is missing */
+  color:
+}
+
+div3
+{
+  background-color: red;
+  /* value is missing */
+  color:;
+  color: blue;
+}
+
+span
+{
+  background-color: green;
+  /* value is missing */
+  color: !important;
+}
+
+span2
+{
+  background-color: green;
+  /* value is missing */
+  color: !important
+}
+
+span3
+{
+  background-color: green;
+  /* value is missing */
+  color: !important;
+  color: blue;
+}

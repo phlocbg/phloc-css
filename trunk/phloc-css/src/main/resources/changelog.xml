@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2014-01-29" version="3.7.1" />
+  <entry date="2014-01-29" category="tech" action="fix">
+    <change>
+      <text locale="en">Explicitly handling invalid selector values like "color:;" - skipping them</text>
+    </change>
+  </entry>
   <release date="2014-01-12" version="3.7.0" />
   <entry date="2014-01-12" category="tech" action="fix">
     <change>

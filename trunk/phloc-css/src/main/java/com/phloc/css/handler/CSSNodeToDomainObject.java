@@ -520,13 +520,25 @@ final class CSSNodeToDomainObject
     return ret;
   }
 
-  @Nonnull
+  @Nullable
   private CSSDeclaration _createDeclaration (@Nonnull final CSSNode aNode)
   {
     _expectNodeType (aNode, ECSSNodeType.STYLEDECLARATION);
     final int nChildCount = aNode.jjtGetNumChildren ();
-    if (nChildCount != 2 && nChildCount != 3)
-      _throwUnexpectedChildrenCount ("Expected 2 or 3 children but got " + nChildCount + "!", aNode);
+    if (nChildCount < 1 && nChildCount > 1)
+      _throwUnexpectedChildrenCount ("Expected 1-3 children but got " + nChildCount + "!", aNode);
+
+    if (nChildCount == 1)
+    {
+      // Syntax error. E.g. "color:;"
+      return null;
+    }
+
+    if (!ECSSNodeType.EXPR.isNode (aNode.jjtGetChild (1), m_eVersion))
+    {
+      // Syntax error. E.g. "color: !important;"
+      return null;
+    }
 
     final String sProperty = aNode.jjtGetChild (0).getText ();
     final CSSExpression aExpression = _createExpression (aNode.jjtGetChild (1));
@@ -577,7 +589,11 @@ final class CSSNodeToDomainObject
           {
             final CSSNode aChildChildNode = aChildNode.jjtGetChild (nDecl);
             if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildChildNode, m_eVersion))
-              ret.addDeclaration (_createDeclaration (aChildChildNode));
+            {
+              final CSSDeclaration aDeclaration = _createDeclaration (aChildChildNode);
+              if (aDeclaration != null)
+                ret.addDeclaration (aDeclaration);
+            }
           }
         }
         else
@@ -621,7 +637,11 @@ final class CSSNodeToDomainObject
         // Read all contained declarations
         final int nDecls = aChildNode.jjtGetNumChildren ();
         for (int nDecl = 0; nDecl < nDecls; ++nDecl)
-          ret.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+        {
+          final CSSDeclaration aDeclaration = _createDeclaration (aChildNode.jjtGetChild (nDecl));
+          if (aDeclaration != null)
+            ret.addDeclaration (aDeclaration);
+        }
       }
       else
         if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
@@ -796,7 +816,11 @@ final class CSSNodeToDomainObject
         // Read all contained declarations
         final int nDecls = aChildNode.jjtGetNumChildren ();
         for (int nDecl = 0; nDecl < nDecls; ++nDecl)
-          ret.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+        {
+          final CSSDeclaration aDeclaration = _createDeclaration (aChildNode.jjtGetChild (nDecl));
+          if (aDeclaration != null)
+            ret.addDeclaration (aDeclaration);
+        }
       }
       else
         if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
@@ -853,7 +877,11 @@ final class CSSNodeToDomainObject
           // Read all contained declarations
           final int nDecls = aChildNode.jjtGetNumChildren ();
           for (int nDecl = 0; nDecl < nDecls; ++nDecl)
-            aBlock.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+          {
+            final CSSDeclaration aDeclaration = _createDeclaration (aChildNode.jjtGetChild (nDecl));
+            if (aDeclaration != null)
+              aBlock.addDeclaration (aDeclaration);
+          }
         }
         else
           if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
@@ -882,7 +910,11 @@ final class CSSNodeToDomainObject
         // Read all contained declarations
         final int nDecls = aChildNode.jjtGetNumChildren ();
         for (int nDecl = 0; nDecl < nDecls; ++nDecl)
-          ret.addDeclaration (_createDeclaration (aChildNode.jjtGetChild (nDecl)));
+        {
+          final CSSDeclaration aDeclaration = _createDeclaration (aChildNode.jjtGetChild (nDecl));
+          if (aDeclaration != null)
+            ret.addDeclaration (aDeclaration);
+        }
       }
       else
         if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
@@ -954,6 +986,8 @@ final class CSSNodeToDomainObject
       if (ECSSNodeType.STYLEDECLARATION.isNode (aChildNode, m_eVersion))
       {
         final CSSDeclaration aDeclaration = _createDeclaration (aChildNode);
+        if (aDeclaration == null)
+          throw new IllegalArgumentException ("The declaration in the @supports rule is invalid!");
         final CSSSupportsConditionDeclaration ret = new CSSSupportsConditionDeclaration (aDeclaration);
         ret.setSourceLocation (aNode.getSourceLocation ());
         return ret;
@@ -1117,7 +1151,11 @@ final class CSSNodeToDomainObject
     ret.setSourceLocation (aNode.getSourceLocation ());
     final int nDecls = aNode.jjtGetNumChildren ();
     for (int nDecl = 0; nDecl < nDecls; ++nDecl)
-      ret.addDeclaration (_createDeclaration (aNode.jjtGetChild (nDecl)));
+    {
+      final CSSDeclaration aDeclaration = _createDeclaration (aNode.jjtGetChild (nDecl));
+      if (aDeclaration != null)
+        ret.addDeclaration (aDeclaration);
+    }
     return ret;
   }
 }

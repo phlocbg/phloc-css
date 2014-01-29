@@ -1,0 +1,27 @@
+div
+{
+  background-color: red;
+  /* value is missing */
+  color:;
+}
+
+div2
+{
+  background-color: red;
+  /* value is missing */
+  color:
+}
+
+span
+{
+  background-color: green;
+  /* value is missing */
+  color: !important;
+}
+
+span2
+{
+  background-color: green;
+  /* value is missing */
+  color: !important
+}
