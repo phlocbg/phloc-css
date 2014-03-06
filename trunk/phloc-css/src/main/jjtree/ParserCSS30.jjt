@@ -392,21 +392,12 @@ CSSNode styleSheet() #Root : {}
   ( LOOKAHEAD(2)
     charsetRule()
   )?
-  ( <S>
-  | <CDO>
-  | <CDC>
-  )*
+  ( <S> | <CDO> | <CDC> )*
   ( importRule()
-    ( <S>
-    | <CDO>
-    | <CDC>
-    )*
+    ( <S> | <CDO> | <CDC> )*
   )*
   ( namespaceRule()
-    ( <S>
-    | <CDO>
-    | <CDC>
-    )*
+    ( <S> | <CDO> | <CDC> )*
   )*
   ( ( styleRule()
     | mediaRule()
@@ -417,10 +408,11 @@ CSSNode styleSheet() #Root : {}
     | supportsRule()
     | unknownRule()
     )
-    ( <S>
-    | <CDO>
-    | <CDC>
-    )*
+    ( <S> | <CDO> | <CDC> )*
+// ignore too many closing brackets
+    ( <RBRACE> 
+      ( <S> | <CDO> | <CDC> )*
+    )* 
   )*
   <EOF>
   { return jjtThis; }
@@ -1005,10 +997,14 @@ void mediaRule() : {}
   <MEDIA_SYM>
   ( <S> )*
   ( mediaList() )?
+try{
   <LBRACE>
   ( <S> )*
   ( mediaRuleList() )?
   <RBRACE>
+} catch (ParseException ex) {
+  error_skipto (ex, RBRACE);
+}
 }
 
 
@@ -1081,10 +1077,14 @@ void keyframesRule() : {}
   <KEYFRAMES_SYM> { jjtThis.setText (token.image); }    
   <S>
   keyframesIdentifier()
+try{
   <LBRACE>
   ( <S> )*
   keyframesBlocks()
   <RBRACE>
+} catch (ParseException ex) {
+  error_skipto (ex, RBRACE);
+}
 }
 
 //
@@ -1154,12 +1154,16 @@ void supportsRuleBodyRule() #void : {}
 
 void supportsRuleBody() #void : {}
 {
+try{
   <LBRACE>
   ( <S> )*
   ( supportsRuleBodyRule()
     ( <S> )*
   )* 
   <RBRACE>
+} catch (ParseException ex) {
+  error_skipto (ex, RBRACE);
+}
 }
 
 void supportsRule() : {}

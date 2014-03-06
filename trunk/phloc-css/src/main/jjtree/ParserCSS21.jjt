@@ -334,31 +334,23 @@ CSSNode styleSheet() #Root : {}
   ( LOOKAHEAD(2)
     charsetRule()
   )?
-  ( <S>
-  | <CDO>
-  | <CDC>
-  )*
+  ( <S> | <CDO> | <CDC> )*
   ( importRule()
-    ( <S>
-    | <CDO>
-    | <CDC>
-    )*
+    ( <S> | <CDO> | <CDC> )*
   )*
   ( namespaceRule()
-    ( <S>
-    | <CDO>
-    | <CDC>
-    )*
+    ( <S> | <CDO> | <CDC> )*
   )*
   ( ( styleRule()
     | mediaRule()
     | pageRule()
     | unknownRule()
     )
-    ( <S>
-    | <CDO>
-    | <CDC>
-    )*
+    ( <S> | <CDO> | <CDC> )*
+// ignore too many closing brackets
+    ( <RBRACE> 
+      ( <S> | <CDO> | <CDC> )*
+    )* 
   )*
   <EOF>
   { return jjtThis; }
@@ -750,10 +742,14 @@ void mediaRule() : {}
   <MEDIA_SYM>
   ( <S> )*
   mediaList()
+try{  
   <LBRACE>
   ( <S> )*
   ( mediaRuleList() )?
   <RBRACE>
+} catch (ParseException ex) {
+  error_skipto (ex, RBRACE);
+}
 }
 
 //
