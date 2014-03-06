@@ -123,6 +123,14 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
                                              aLastSkippedToken);
   }
 
+  public void onCSSUnexpectedRule (@Nonnull @Nonempty final String sRule, @Nonnull @Nonempty final String sMsg) throws ParseException
+  {
+    s_aLogger.warn ("Unexpected rule '" + sRule + "': " + sMsg);
+
+    if (m_aNestedErrorHandler != null)
+      m_aNestedErrorHandler.onCSSUnexpectedRule (sRule, sMsg);
+  }
+
   @Override
   public String toString ()
   {
