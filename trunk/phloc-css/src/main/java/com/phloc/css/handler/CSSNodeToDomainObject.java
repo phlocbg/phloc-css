@@ -587,7 +587,7 @@ final class CSSNodeToDomainObject
           for (int nDecl = 0; nDecl < nDecls; ++nDecl)
           {
             final CSSNode aChildChildNode = aChildNode.jjtGetChild (nDecl);
-            if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildChildNode, m_eVersion))
+            if (!ECSSNodeType.isErrorNode (aChildChildNode, m_eVersion))
             {
               final CSSDeclaration aDeclaration = _createDeclaration (aChildChildNode);
               if (aDeclaration != null)
@@ -596,7 +596,7 @@ final class CSSNodeToDomainObject
           }
         }
         else
-          if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+          if (!ECSSNodeType.isErrorNode (aChildNode, m_eVersion))
             s_aLogger.error ("Unsupported child of " +
                              ECSSNodeType.getNodeName (aNode, m_eVersion) +
                              ": " +
@@ -643,7 +643,7 @@ final class CSSNodeToDomainObject
         }
       }
       else
-        if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+        if (!ECSSNodeType.isErrorNode (aChildNode, m_eVersion))
           s_aLogger.error ("Unsupported page rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
@@ -687,7 +687,7 @@ final class CSSNodeToDomainObject
                     if (ECSSNodeType.SUPPORTSRULE.isNode (aChildNode, m_eVersion))
                       ret.addRule (_createSupportsRule (aChildNode));
                     else
-                      if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+                      if (!ECSSNodeType.isErrorNode (aChildNode, m_eVersion))
                         s_aLogger.error ("Unsupported media-rule child: " +
                                          ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
@@ -764,7 +764,7 @@ final class CSSNodeToDomainObject
       if (ECSSNodeType.MEDIAEXPR.isNode (aChildNode, m_eVersion))
         ret.addMediaExpression (_createMediaExpr (aChildNode));
       else
-        if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+        if (!ECSSNodeType.isErrorNode (aChildNode, m_eVersion))
           s_aLogger.error ("Unsupported media query child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
@@ -822,7 +822,7 @@ final class CSSNodeToDomainObject
         }
       }
       else
-        if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+        if (!ECSSNodeType.isErrorNode (aChildNode, m_eVersion))
           s_aLogger.error ("Unsupported font-face rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
@@ -883,7 +883,7 @@ final class CSSNodeToDomainObject
           }
         }
         else
-          if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+          if (!ECSSNodeType.isErrorNode (aChildNode, m_eVersion))
             s_aLogger.error ("Unsupported keyframes rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
 
       ++nIndex;
@@ -916,7 +916,7 @@ final class CSSNodeToDomainObject
         }
       }
       else
-        if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+        if (!ECSSNodeType.isErrorNode (aChildNode, m_eVersion))
           s_aLogger.error ("Unsupported viewport rule child: " + ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }
     return ret;
@@ -1010,7 +1010,7 @@ final class CSSNodeToDomainObject
       return null;
     }
 
-    if (!ECSSNodeType.ERROR_SKIPTO.isNode (aNode, m_eVersion))
+    if (!ECSSNodeType.isErrorNode (aNode, m_eVersion))
       s_aLogger.error ("Unsupported supports-condition child: " + ECSSNodeType.getNodeName (aNode, m_eVersion));
 
     return null;
@@ -1055,7 +1055,7 @@ final class CSSNodeToDomainObject
                     if (ECSSNodeType.SUPPORTSRULE.isNode (aChildNode, m_eVersion))
                       ret.addRule (_createSupportsRule (aChildNode));
                     else
-                      if (!ECSSNodeType.ERROR_SKIPTO.isNode (aChildNode, m_eVersion))
+                      if (!ECSSNodeType.isErrorNode (aChildNode, m_eVersion))
                         s_aLogger.error ("Unsupported supports-rule child: " +
                                          ECSSNodeType.getNodeName (aChildNode, m_eVersion));
     }

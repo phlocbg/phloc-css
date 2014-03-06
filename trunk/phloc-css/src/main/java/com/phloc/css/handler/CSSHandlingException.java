@@ -38,13 +38,21 @@ public class CSSHandlingException extends RuntimeException
     final CSSSourceLocation aSL = aNode.getSourceLocation ();
     if (aSL != null)
     {
+      String sFirstTokenLocation = null;
       if (aSL.hasFirstTokenArea ())
-        aRet.append (aSL.getFirstTokenLocationAsString ());
+      {
+        sFirstTokenLocation = aSL.getFirstTokenLocationAsString ();
+        aRet.append (sFirstTokenLocation);
+      }
       if (aSL.hasLastTokenArea ())
       {
-        if (aRet.length () > 0)
-          aRet.append ('-');
-        aRet.append (aSL.getLastTokenLocationAsString ());
+        final String sLastTokenLocation = aSL.getLastTokenLocationAsString ();
+        if (sFirstTokenLocation == null || !sFirstTokenLocation.equals (sLastTokenLocation))
+        {
+          if (aRet.length () > 0)
+            aRet.append ('-');
+          aRet.append (sLastTokenLocation);
+        }
       }
       if (aRet.length () > 0)
         aRet.append (' ');

@@ -54,3 +54,16 @@ div {
 @keyframes identifier {  
   0% { top: 0; left: 0; }  
 }}}
+
+/* Issue 12 */
+
+/* Cor Home Tab Ie7 fixes */
+.ie .ui-tab-buttons {
+  top: -71px !important;
+}
+
+}
+.ie .ui-tab-buttons li {
+  padding-right: 0px !important;
+  background-color: #fff;
+}

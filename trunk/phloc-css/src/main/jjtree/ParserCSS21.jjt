@@ -253,30 +253,28 @@ TOKEN :
 JAVACODE
 private Token error_skipto(final ParseException ex, final int... aKinds) throws ParseException
 {
-  // print the exception object
-  if (m_aCustomErrorHandler == null)
-    s_aLogger.warn(ex.toString());
   // Skip until (including) the first matching token
-  Token t;
+  Token tok;
   do
   {
-    t = getNextToken();
-    if (t.kind == EOF)
+    tok = getNextToken();
+    if (tok.kind == EOF)
     {
       // Encountered EOF while skipping - throw the original exception!
       throw ex;
     }  
-  } while (!com.phloc.commons.collections.ArrayHelper.contains (aKinds, t.kind));
+  } while (!com.phloc.commons.collections.ArrayHelper.contains (aKinds, tok.kind));
+  if (s_aLogger.isDebugEnabled ())
+    s_aLogger.debug ("Skipped until token " + tok.toString ());
   if (m_aCustomErrorHandler != null)
-    m_aCustomErrorHandler.onCSSParseError (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage, t);
+    m_aCustomErrorHandler.onCSSParseError (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage, tok);
   else  
-    if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("Skipped until token " + t.toString ());
-  return t;
+    s_aLogger.warn("CSS parse error", ex);
+  return tok;
 }
 
 JAVACODE
-String javaSkipToClosingParantheses() #void {
+private String javaSkipToClosingParantheses() throws ParseException #void {
   final StringBuilder aSB = new StringBuilder ();
   int nNesting = 1;
   while (true) {
@@ -290,16 +288,21 @@ String javaSkipToClosingParantheses() #void {
         if (nNesting == 0)
           break;
       }
+      else
+        if (tok.kind == EOF)
+          throw new ParseException ("EOF while searching for matching closing ')'.");
   }
   return aSB.toString ();
 }
 
 JAVACODE
-String javaSkipToOpeningBrace() #void {
+private String javaSkipToOpeningBrace() throws ParseException #void {
   final StringBuilder aSB = new StringBuilder ();
   Token tok;
   while (true) {
     tok = getNextToken();
+    if (tok.kind == EOF)
+      throw new ParseException ("EOF while searching for opening '{'.");
     if (tok.kind == LBRACE)
       break;
     aSB.append (tok.image);
@@ -308,7 +311,7 @@ String javaSkipToOpeningBrace() #void {
 }
 
 JAVACODE
-String javaSkipToClosingBrace() #void {
+private String javaSkipToClosingBrace() throws ParseException #void {
   final StringBuilder aSB = new StringBuilder ();
   int nNesting = 1;
   while (true) {
@@ -321,6 +324,9 @@ String javaSkipToClosingBrace() #void {
         if (nNesting == 0)
           break;
       }
+      else
+        if (tok.kind == EOF)
+          throw new ParseException ("EOF while searching for matching closing '}'.");
     aSB.append (tok.image);
   }
   return aSB.toString ();

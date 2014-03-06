@@ -21,11 +21,14 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.GuardedBy;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,10 +67,14 @@ import com.phloc.css.reader.errorhandler.ThrowingCSSParseErrorHandler;
  * 
  * @author Philip Helger
  */
-@Immutable
+@ThreadSafe
 public final class CSSReader
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSReader.class);
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+
+  @GuardedBy ("s_aRWLock")
+  private static ICSSParseErrorHandler s_aDefaultParseErrorHandler = ThrowingCSSParseErrorHandler.getInstance ();
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
@@ -75,6 +82,45 @@ public final class CSSReader
 
   private CSSReader ()
   {}
+
+  /**
+   * @return The default CSS parse error handler. May be <code>null</code>. For
+   *         backwards compatiblity reasons this is be default an instance of
+   *         {@link ThrowingCSSParseErrorHandler}.
+   */
+  @Nullable
+  public static ICSSParseErrorHandler getDefaultParseErrorHandler ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aDefaultParseErrorHandler;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Set the default CSS parse error handler.
+   * 
+   * @param aDefaultParseErrorHandler
+   *        The new default error handler to be used. May be <code>null</code>
+   *        to indicate that no special error handler should be used.
+   */
+  public static void setDefaultParseErrorHandler (@Nullable final ICSSParseErrorHandler aDefaultParseErrorHandler)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aDefaultParseErrorHandler = aDefaultParseErrorHandler;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
 
   @Nullable
   private static CSSNode _readStyleSheet (@Nonnull final CharStream aStream,
@@ -336,7 +382,7 @@ public final class CSSReader
       final JavaCharStream aCharStream = new JavaCharStream (aReader);
       final CSSNode aNode = _readStyleSheet (aCharStream,
                                              eVersion,
-                                             ThrowingCSSParseErrorHandler.getInstance (),
+                                             getDefaultParseErrorHandler (),
                                              DoNothingCSSParseExceptionHandler.getInstance ());
       return aNode != null;
     }
@@ -827,8 +873,8 @@ public final class CSSReader
     try
     {
       final JavaCharStream aCharStream = new JavaCharStream (aIS, aCharsetToUse);
-      // Use the ThrowingCSSParseErrorHandler for maximum backward compatibility
-      final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? ThrowingCSSParseErrorHandler.getInstance ()
+      // Use the default CSS parse error handler if none is provided
+      final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? getDefaultParseErrorHandler ()
                                                                                  : aCustomErrorHandler;
       final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aRealErrorHandler, aCustomExceptionHandler);
 

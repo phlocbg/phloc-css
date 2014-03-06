@@ -222,4 +222,9 @@ public enum ECSSNodeType
     _dumpRecursive (aParserNode, eVersion, aSB, "");
     return aSB.toString ();
   }
+
+  public static boolean isErrorNode (@Nonnull final CSSNode aParserNode, @Nonnull final ECSSVersion eVersion)
+  {
+    return ERROR_SKIPTO.isNode (aParserNode, eVersion);
+  }
 }
