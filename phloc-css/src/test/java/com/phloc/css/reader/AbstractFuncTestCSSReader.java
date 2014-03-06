@@ -72,8 +72,14 @@ public abstract class AbstractFuncTestCSSReader
       final String sKey = aFile.getAbsolutePath ();
       if (m_bDebug)
         m_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion);
+      final CollectingCSSParseErrorHandler aErrorHdl = new CollectingCSSParseErrorHandler (new LoggingCSSParseErrorHandler ());
+      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion, aErrorHdl);
       assertNotNull (sKey, aCSS);
+
+      // May have errors or not
+      if (m_bDebug)
+        m_aLogger.info (aErrorHdl.getAllParseErrors ().toString ());
+
       PhlocTestUtils.testDefaultSerialization (aCSS);
 
       // Write optimized version and compare it
@@ -132,13 +138,13 @@ public abstract class AbstractFuncTestCSSReader
         m_aLogger.info (sKey);
 
       // Handle each error as a fatal error!
-      final CollectingCSSParseErrorHandler aErrors = new CollectingCSSParseErrorHandler (new LoggingCSSParseErrorHandler ());
-      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion, aErrors);
+      final CollectingCSSParseErrorHandler aErrorHdl = new CollectingCSSParseErrorHandler (new LoggingCSSParseErrorHandler ());
+      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, m_aCharset, m_eVersion, aErrorHdl);
       assertNotNull (sKey, aCSS);
-      assertTrue (sKey, aErrors.hasParseErrors ());
-      assertTrue (sKey, aErrors.getParseErrorCount () > 0);
+      assertTrue (sKey, aErrorHdl.hasParseErrors ());
+      assertTrue (sKey, aErrorHdl.getParseErrorCount () > 0);
       if (m_bDebug)
-        m_aLogger.info (aErrors.getAllParseErrors ().toString ());
+        m_aLogger.info (aErrorHdl.getAllParseErrors ().toString ());
 
       // Write optimized version and re-read it
       final String sCSS = new CSSWriter (m_eVersion, true).getCSSAsString (aCSS);

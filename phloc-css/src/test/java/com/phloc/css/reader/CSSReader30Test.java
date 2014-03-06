@@ -17,6 +17,7 @@
  */
 package com.phloc.css.reader;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
@@ -28,6 +29,7 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.reader.errorhandler.CollectingCSSParseErrorHandler;
+import com.phloc.css.reader.errorhandler.DoNothingCSSParseErrorHandler;
 import com.phloc.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 import com.phloc.css.writer.CSSWriter;
 
@@ -95,5 +97,16 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
     final File aFile = new File ("src/test/resources/testfiles/css30/bad_but_recoverable/test-string.css");
     final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion, aErrors);
     assertNotNull (aCSS);
+  }
+
+  @Test
+  public void testReadErrorAndPrint ()
+  {
+    final String sCSS = ".class{color:red;.class{color:green}.class{color:blue}";
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS,
+                                                               CCharset.CHARSET_UTF_8_OBJ,
+                                                               ECSSVersion.CSS30,
+                                                               DoNothingCSSParseErrorHandler.getInstance ());
+    assertEquals (".class{color:red}.class{color:blue}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
   }
 }
