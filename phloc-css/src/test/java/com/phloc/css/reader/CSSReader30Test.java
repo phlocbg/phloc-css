@@ -47,6 +47,11 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   public void testReadAll30Good ()
   {
     testReadGood ("src/test/resources/testfiles/css30/good");
+  }
+
+  @Test
+  public void testReadAll30BadButSucceeding ()
+  {
     testReadGood ("src/test/resources/testfiles/css30/bad_but_succeeding");
   }
 
@@ -54,6 +59,11 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   public void testReadAll30Bad ()
   {
     testReadBad ("src/test/resources/testfiles/css30/bad");
+  }
+
+  @Test
+  public void testReadAll30GoodButFailing ()
+  {
     testReadBad ("src/test/resources/testfiles/css30/good_but_failing");
   }
 
