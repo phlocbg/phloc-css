@@ -105,7 +105,7 @@ public enum ECSSNodeType
   SUPPORTSNEGATION (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTSUPPORTSNEGATION),
   SUPPORTSCONDITIONINPARENS (CGlobal.ILLEGAL_UINT, ParserCSS30TreeConstants.JJTSUPPORTSCONDITIONINPARENS),
   // rest
-  ERROR_SKIPTO (ParserCSS21TreeConstants.JJTERROR_SKIPTO, ParserCSS30TreeConstants.JJTERROR_SKIPTO);
+  ERROR_SKIPTO (ParserCSS21TreeConstants.JJTERRORSKIPTO, ParserCSS30TreeConstants.JJTERRORSKIPTO);
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (ECSSNodeType.class);
 

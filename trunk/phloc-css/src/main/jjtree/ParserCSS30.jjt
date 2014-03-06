@@ -309,7 +309,16 @@ TOKEN :
 }
 
 JAVACODE
-private Token error_skipto(final ParseException ex, final int... aKinds) throws ParseException
+private void errorUnexpectedRule(final String sRule, final String sMsg) #void
+{
+  if (m_aCustomErrorHandler != null)
+    m_aCustomErrorHandler.onCSSUnexpectedRule (sRule, sMsg);
+  else  
+    s_aLogger.warn("Unexpected rule '" + sRule + "': " + sMsg);
+}
+
+JAVACODE
+private Token errorSkipTo(final ParseException ex, final int... aKinds) throws ParseException
 {
   // Skip until (including) the first matching token
   Token tok;
@@ -413,6 +422,9 @@ CSSNode styleSheet() #Root : {}
     | viewportRule()
     | supportsRule()
     | unknownRule()
+    | charsetRule() { errorUnexpectedRule ("@charset", "charset rule in the middle of the file is not allowed!"); }
+    | importRule() { errorUnexpectedRule ("@import", "import rule in the middle of the file is not allowed!"); }
+    | namespaceRule() { errorUnexpectedRule ("@namespace", "namespace rule in the middle of the file is not allowed!"); }
     )
     ( <S> | <CDO> | <CDC> )*
 // ignore too many closing brackets
@@ -905,7 +917,7 @@ try{
   styleDeclarationList()
   <RBRACE>
 } catch (ParseException ex) {
-  error_skipto (ex, RBRACE);
+  errorSkipTo (ex, RBRACE);
 }
 }
 
@@ -993,6 +1005,9 @@ void mediaRuleList() #void : {}
     | viewportRule()
     | supportsRule()
     | unknownRule()
+    | charsetRule() { errorUnexpectedRule ("@charset", "charset rule in the middle of a @media rule is not allowed!"); }
+    | importRule() { errorUnexpectedRule ("@import", "import rule in the middle of a @media rule is not allowed!"); }
+    | namespaceRule() { errorUnexpectedRule ("@namespace", "namespace rule in the middle of a @media rule is not allowed!"); }
     )
     ( <S> )*
   )+
@@ -1009,7 +1024,7 @@ try{
   ( mediaRuleList() )?
   <RBRACE>
 } catch (ParseException ex) {
-  error_skipto (ex, RBRACE);
+  errorSkipTo (ex, RBRACE);
 }
 }
 
@@ -1089,7 +1104,7 @@ try{
   keyframesBlocks()
   <RBRACE>
 } catch (ParseException ex) {
-  error_skipto (ex, RBRACE);
+  errorSkipTo (ex, RBRACE);
 }
 }
 
@@ -1155,6 +1170,10 @@ void supportsRuleBodyRule() #void : {}
   | keyframesRule()
   | supportsRule()
   | unknownRule()
+  | charsetRule() { errorUnexpectedRule ("@charset", "charset rule in the middle of a @supports rule is not allowed!"); }
+  | importRule() { errorUnexpectedRule ("@import", "import rule in the middle of a @supports rule is not allowed!"); }
+  | namespaceRule() { errorUnexpectedRule ("@namespace", "namespace rule in the middle of a @supports rule is not allowed!"); }
+  | viewportRule() { errorUnexpectedRule ("@viewport", "viewport rule in the middle of a @supports rule is not allowed!"); }
   )
 }
 
@@ -1168,7 +1187,7 @@ try{
   )* 
   <RBRACE>
 } catch (ParseException ex) {
-  error_skipto (ex, RBRACE);
+  errorSkipTo (ex, RBRACE);
 }
 }
 

@@ -18,9 +18,11 @@
 package com.phloc.css.reader.errorhandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.parser.ReadonlyToken;
 import com.phloc.css.parser.Token;
@@ -39,6 +41,17 @@ public class CSSParseError
   private final ReadonlyToken m_aFirstSkippedToken;
   private final ReadonlyToken m_aLastSkippedToken;
   private final String m_sErrorMessage;
+
+  public CSSParseError (@Nonnull @Nonempty final String sErrorMsg)
+  {
+    if (StringHelper.hasNoText (sErrorMsg))
+      throw new IllegalArgumentException ("Error message");
+    m_aLastValidToken = null;
+    m_sExpectedTokens = null;
+    m_aFirstSkippedToken = null;
+    m_aLastSkippedToken = null;
+    m_sErrorMessage = sErrorMsg;
+  }
 
   public CSSParseError (@Nonnull final Token aLastValidToken,
                         @Nonnull final int [][] aExpectedTokenSequencesVal,
@@ -73,19 +86,29 @@ public class CSSParseError
   }
 
   /**
-   * @return The last valid token read. Never <code>null</code>.
+   * @return The last valid token read. May be <code>null</code>.
    */
-  @Nonnull
+  @Nullable
   public ReadonlyToken getLastValidToken ()
   {
     return m_aLastValidToken;
   }
 
   /**
-   * @return The first token that was skipped. That can be used to identify the
-   *         start position of the error. Never <code>null</code>.
+   * @return The expected tokens as a string representation. May be
+   *         <code>null</code>.
    */
-  @Nonnull
+  @Nullable
+  public String getExpectedTokens ()
+  {
+    return m_sExpectedTokens;
+  }
+
+  /**
+   * @return The first token that was skipped. That can be used to identify the
+   *         start position of the error. May be <code>null</code>.
+   */
+  @Nullable
   public ReadonlyToken getFirstSkippedToken ()
   {
     return m_aFirstSkippedToken;
@@ -93,9 +116,9 @@ public class CSSParseError
 
   /**
    * @return The last token that was skipped. That can be used to identify the
-   *         end position of the error. Never <code>null</code>.
+   *         end position of the error. May be <code>null</code>.
    */
-  @Nonnull
+  @Nullable
   public ReadonlyToken getLastSkippedToken ()
   {
     return m_aLastSkippedToken;
@@ -115,10 +138,18 @@ public class CSSParseError
   @Override
   public String toString ()
   {
-    return new ToStringGenerator (this).append ("lastValidToken", m_aLastValidToken)
-                                       .append ("expectedTokens", m_sExpectedTokens)
-                                       .append ("firstSkippedToken", m_aFirstSkippedToken)
-                                       .append ("lastSkippedToken", m_aLastSkippedToken)
+    return new ToStringGenerator (this).appendIfNotNull ("lastValidToken", m_aLastValidToken)
+                                       .appendIfNotNull ("expectedTokens", m_sExpectedTokens)
+                                       .appendIfNotNull ("firstSkippedToken", m_aFirstSkippedToken)
+                                       .appendIfNotNull ("lastSkippedToken", m_aLastSkippedToken)
+                                       .append ("errorMessage", m_sErrorMessage)
                                        .toString ();
+  }
+
+  @Nonnull
+  public static CSSParseError createUnexpectedRule (@Nonnull @Nonempty final String sRule,
+                                                    @Nonnull @Nonempty final String sMsg)
+  {
+    return new CSSParseError ("Unexpected rule '" + sRule + "': " + sMsg);
   }
 }
