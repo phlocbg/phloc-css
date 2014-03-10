@@ -100,13 +100,20 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   }
 
   @Test
-  public void testReadErrorAndPrint ()
+  public void testSpecialCases ()
   {
-    final String sCSS = ".class{color:red;.class{color:green}.class{color:blue}";
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS,
-                                                               CCharset.CHARSET_UTF_8_OBJ,
-                                                               ECSSVersion.CSS30,
-                                                               DoNothingCSSParseErrorHandler.getInstance ());
+    String sCSS = ".class{color:red;.class{color:green}.class{color:blue}";
+    CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS,
+                                                         CCharset.CHARSET_UTF_8_OBJ,
+                                                         ECSSVersion.CSS30,
+                                                         DoNothingCSSParseErrorHandler.getInstance ());
     assertEquals (".class{color:red}.class{color:blue}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
+
+    sCSS = "  \n/* comment */\n  \n.class{color:red;}";
+    aCSS = CSSReader.readFromString (sCSS,
+                                     CCharset.CHARSET_UTF_8_OBJ,
+                                     ECSSVersion.CSS30,
+                                     DoNothingCSSParseErrorHandler.getInstance ());
+    assertEquals (".class{color:red}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
   }
 }
