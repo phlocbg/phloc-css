@@ -99,6 +99,11 @@ public class CSSSourceArea implements Serializable
   @Nonempty
   public String getTokenLocationAsString ()
   {
+    // Begin == end?
+    if (m_nBeginLineNumber == m_nEndLineNumber && m_nBeginColumnNumber == m_nEndColumnNumber)
+      return "(" + m_nBeginLineNumber + ":" + m_nBeginColumnNumber + ")";
+
+    // Begin != end
     return "(" +
            m_nBeginLineNumber +
            ":" +

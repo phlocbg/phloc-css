@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -76,6 +77,21 @@ public class CollectingCSSParseErrorHandler implements ICSSParseErrorHandler
                                              aExpectedTokenSequencesVal,
                                              aTokenImageVal,
                                              aLastSkippedToken);
+  }
+
+  public void onCSSUnexpectedRule (@Nonnull @Nonempty final String sRule, @Nonnull @Nonempty final String sMsg) throws ParseException
+  {
+    m_aRWLock.writeLock ().lock ();
+    try
+    {
+      m_aErrors.add (CSSParseError.createUnexpectedRule (sRule, sMsg));
+    }
+    finally
+    {
+      m_aRWLock.writeLock ().unlock ();
+    }
+    if (m_aNestedErrorHandler != null)
+      m_aNestedErrorHandler.onCSSUnexpectedRule (sRule, sMsg);
   }
 
   /**

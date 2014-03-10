@@ -19,6 +19,7 @@ package com.phloc.css.reader.errorhandler;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.parser.ParseException;
 import com.phloc.css.parser.Token;
@@ -48,6 +49,11 @@ public class ThrowingCSSParseErrorHandler implements ICSSParseErrorHandler
                                @Nonnull final Token aLastSkippedToken) throws ParseException
   {
     throw new ParseException (aLastValidToken, aExpectedTokenSequencesVal, aTokenImageVal);
+  }
+
+  public void onCSSUnexpectedRule (@Nonnull @Nonempty final String sRule, @Nonnull @Nonempty final String sMsg) throws ParseException
+  {
+    throw new ParseException ("Unexpected rule '" + sRule + "': " + sMsg);
   }
 
   @Override

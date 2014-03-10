@@ -19,6 +19,7 @@ package com.phloc.css.reader.errorhandler;
 
 import javax.annotation.Nonnull;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.parser.ParseException;
 import com.phloc.css.parser.Token;
 
@@ -49,4 +50,18 @@ public interface ICSSParseErrorHandler
                         @Nonnull int [][] aExpectedTokenSequencesVal,
                         @Nonnull String [] aTokenImageVal,
                         @Nonnull Token aLastSkippedToken) throws ParseException;
+
+  /**
+   * Called upon an unexpected rule. This happens e.g. when <code>@import</code>
+   * is used in the middle of the file.
+   * 
+   * @param sRule
+   *        The name of the rule. Always starts with a '@'. Neither
+   *        <code>null</code> nor empty.
+   * @param sMsg
+   *        The custom error message. Neither <code>null</code> nor empty.
+   * @throws ParseException
+   *         In case the error is fatal and should be propagated.
+   */
+  void onCSSUnexpectedRule (@Nonnull @Nonempty String sRule, @Nonnull @Nonempty String sMsg) throws ParseException;
 }
