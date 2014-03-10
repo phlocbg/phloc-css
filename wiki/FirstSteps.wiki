@@ -35,7 +35,7 @@ To use phloc-css for JDK 1.6 put the following to your pom.xml:
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-css</artifactId>
-      <version>3.7.0</version>
+      <version>3.7.2</version>
     </dependency>
     ...
   </dependencies>
@@ -47,7 +47,7 @@ For JDK 1.5 use the following dependency (together with the above repository dec
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-css-jdk5</artifactId>
-      <version>3.7.0</version>
+      <version>3.7.2</version>
     </dependency>
 }}}
 
