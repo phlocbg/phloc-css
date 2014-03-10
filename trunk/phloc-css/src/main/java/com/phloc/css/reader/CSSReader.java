@@ -18,7 +18,9 @@
 package com.phloc.css.reader;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.PushbackInputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -36,6 +38,8 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
+import com.phloc.commons.charset.EUnicodeBOM;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.FileSystemResource;
@@ -743,6 +747,37 @@ public final class CSSReader
     return readFromStream (aISP, aCharset, eVersion, aCustomErrorHandler, aCustomExceptionHandler);
   }
 
+  @Nullable
+  private static InputStream _getInputStreamWithoutBOM (@Nonnull final IInputStreamProvider aISP)
+  {
+    // Try to open input stream
+    final InputStream aIS = aISP.getInputStream ();
+    if (aIS == null)
+      return null;
+
+    // Check for BOM
+    final int nMaxBOMBytes = EUnicodeBOM.getMaximumByteCount ();
+    final PushbackInputStream aPIS = new PushbackInputStream (aIS, nMaxBOMBytes);
+    try
+    {
+      final byte [] aBOM = new byte [nMaxBOMBytes];
+      final int nReadBOMBytes = aPIS.read (aBOM);
+      if (nReadBOMBytes > 0)
+      {
+        // Some byte BOMs were read
+        final EUnicodeBOM eBOM = EUnicodeBOM.getFromBytesOrNull (ArrayHelper.getCopy (aBOM, 0, nReadBOMBytes));
+        if (eBOM == null)
+          aPIS.unread (aBOM, 0, nReadBOMBytes);
+      }
+      return aPIS;
+    }
+    catch (final IOException ex)
+    {
+      s_aLogger.error ("Failed to determine BOM", ex);
+      return null;
+    }
+  }
+
   /**
    * Check if the CSS represented by the passed input stream provider has a
    * custom charset contained
@@ -760,7 +795,7 @@ public final class CSSReader
       throw new NullPointerException ("inputStreamProvider");
 
     // Open input stream
-    final InputStream aIS = aISP.getInputStream ();
+    final InputStream aIS = _getInputStreamWithoutBOM (aISP);
     if (aIS == null)
       return null;
 
@@ -866,7 +901,7 @@ public final class CSSReader
     }
 
     // Try to open input stream
-    final InputStream aIS = aISP.getInputStream ();
+    final InputStream aIS = _getInputStreamWithoutBOM (aISP);
     if (aIS == null)
       return null;
 

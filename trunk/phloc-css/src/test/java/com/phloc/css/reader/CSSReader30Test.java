@@ -80,7 +80,7 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   {
     final ECSSVersion eVersion = ECSSVersion.CSS30;
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
-    final File aFile = new File ("src/test/resources/testfiles/css30/good/artificial/test-fonts.css");
+    final File aFile = new File ("src/test/resources/testfiles/css30/good/issue15.css");
     final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
     assertNotNull (aCSS);
 
@@ -104,16 +104,30 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   {
     String sCSS = ".class{color:red;.class{color:green}.class{color:blue}";
     CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS,
-                                                         CCharset.CHARSET_UTF_8_OBJ,
+                                                         CCharset.CHARSET_ISO_8859_1_OBJ,
                                                          ECSSVersion.CSS30,
                                                          DoNothingCSSParseErrorHandler.getInstance ());
     assertEquals (".class{color:red}.class{color:blue}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
 
     sCSS = "  \n/* comment */\n  \n.class{color:red;}";
     aCSS = CSSReader.readFromString (sCSS,
-                                     CCharset.CHARSET_UTF_8_OBJ,
+                                     CCharset.CHARSET_ISO_8859_1_OBJ,
                                      ECSSVersion.CSS30,
                                      DoNothingCSSParseErrorHandler.getInstance ());
     assertEquals (".class{color:red}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
+
+    sCSS = "\u00ef\u00bb\u00bf\r\n"
+           + "/* validation styles */\r\n"
+           + "\r\n"
+           + ".validation-summary-errors\r\n"
+           + "{\r\n"
+           + "  color:Red;\r\n"
+           + "}";
+    aCSS = CSSReader.readFromString (sCSS,
+                                     CCharset.CHARSET_ISO_8859_1_OBJ,
+                                     ECSSVersion.CSS30,
+                                     DoNothingCSSParseErrorHandler.getInstance ());
+    assertEquals (".validation-summary-errors{color:Red}",
+                  new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
   }
 }
