@@ -345,7 +345,7 @@ public final class CSSVisitor
   /**
    * Visit all CSS elements in the order of their declaration. import rules come
    * first, namespace rules come next and all other top-level rules in the order
-   * of their declration.
+   * of their declaration.
    * 
    * @param aCSS
    *        The CSS to visit. May not be <code>null</code>.
