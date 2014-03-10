@@ -73,9 +73,10 @@ public interface ICSSVisitor
   void onDeclaration (@Nonnull CSSDeclaration aDeclaration);
 
   // style rules:
-  // contained declarations are handled by onDeclaration
   /**
-   * Called when a style rule starts.
+   * Called when a style rule starts.<br>
+   * Note: contained declarations are handled by
+   * {@link #onDeclaration(CSSDeclaration)}
    * 
    * @param aStyleRule
    *        The style rule. Never <code>null</code>.
@@ -99,9 +100,10 @@ public interface ICSSVisitor
   void onEndStyleRule (@Nonnull CSSStyleRule aStyleRule);
 
   // page rules:
-  // contained declarations are handled by onDeclaration
   /**
-   * Called when a page rule starts.
+   * Called when a page rule starts.<br>
+   * Note: contained declarations are handled by
+   * {@link #onDeclaration(CSSDeclaration)}
    * 
    * @param aPageRule
    *        The page rule. Never <code>null</code>.
@@ -117,9 +119,10 @@ public interface ICSSVisitor
   void onEndPageRule (@Nonnull CSSPageRule aPageRule);
 
   // font face rules:
-  // contained declarations are handled by onDeclaration
   /**
-   * Called when a font-face rule starts.
+   * Called when a font-face rule starts.<br>
+   * Note: contained declarations are handled by
+   * {@link #onDeclaration(CSSDeclaration)}
    * 
    * @param aFontFaceRule
    *        The font-face rule. Never <code>null</code>.
@@ -135,9 +138,10 @@ public interface ICSSVisitor
   void onEndFontFaceRule (@Nonnull CSSFontFaceRule aFontFaceRule);
 
   // media rules:
-  // contained style rules are handled by the on*StyleRule* methods
   /**
-   * Called when a media rule starts.
+   * Called when a media rule starts.<br>
+   * Note: contained declarations are handled by
+   * {@link #onDeclaration(CSSDeclaration)}
    * 
    * @param aMediaRule
    *        The media rule. Never <code>null</code>.
@@ -153,9 +157,10 @@ public interface ICSSVisitor
   void onEndMediaRule (@Nonnull CSSMediaRule aMediaRule);
 
   // keyframes rules:
-  // contained declarations are handled by onDeclaration
   /**
-   * Called when a keyframes rule starts.
+   * Called when a keyframes rule starts.<br>
+   * Note: contained declarations are handled by
+   * {@link #onDeclaration(CSSDeclaration)}
    * 
    * @param aKeyframesRule
    *        The keyframes rule. Never <code>null</code>.

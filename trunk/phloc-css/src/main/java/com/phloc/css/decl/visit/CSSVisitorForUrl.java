@@ -26,10 +26,16 @@ import com.phloc.css.decl.CSSExpression;
 import com.phloc.css.decl.CSSExpressionMemberTermURI;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSKeyframesBlock;
 import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaRule;
+import com.phloc.css.decl.CSSNamespaceRule;
 import com.phloc.css.decl.CSSPageRule;
+import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
+import com.phloc.css.decl.CSSSupportsRule;
+import com.phloc.css.decl.CSSUnknownRule;
+import com.phloc.css.decl.CSSViewportRule;
 import com.phloc.css.decl.ICSSExpressionMember;
 import com.phloc.css.decl.ICSSTopLevelRule;
 
@@ -42,7 +48,7 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * @author Philip Helger
  */
 @NotThreadSafe
-public class CSSVisitorForUrl extends DefaultCSSVisitor
+public class CSSVisitorForUrl implements ICSSVisitor
 {
   private final ICSSUrlVisitor m_aVisitor;
   private final NonBlockingStack <ICSSTopLevelRule> m_aTopLevelRule = new NonBlockingStack <ICSSTopLevelRule> ();
@@ -81,6 +87,11 @@ public class CSSVisitorForUrl extends DefaultCSSVisitor
     m_aVisitor.onImport (aImportRule);
   }
 
+  public void onNamespace (@Nonnull final CSSNamespaceRule aNamespaceRule)
+  {
+    // No action
+  }
+
   @Override
   public void onDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
@@ -98,6 +109,11 @@ public class CSSVisitorForUrl extends DefaultCSSVisitor
   public void onBeginStyleRule (@Nonnull final CSSStyleRule aStyleRule)
   {
     m_aTopLevelRule.push (aStyleRule);
+  }
+
+  public void onStyleRuleSelector (@Nonnull final CSSSelector aSelector)
+  {
+    // no action
   }
 
   @Override
@@ -148,10 +164,45 @@ public class CSSVisitorForUrl extends DefaultCSSVisitor
     m_aTopLevelRule.push (aKeyframesRule);
   }
 
+  public void onBeginKeyframesBlock (@Nonnull final CSSKeyframesBlock aKeyframesBlock)
+  {
+    // no action
+  }
+
+  public void onEndKeyframesBlock (@Nonnull final CSSKeyframesBlock aKeyframesBlock)
+  {
+    // no action
+  }
+
   @Override
   public void onEndKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule)
   {
     m_aTopLevelRule.pop ();
+  }
+
+  public void onBeginViewportRule (@Nonnull final CSSViewportRule aViewportRule)
+  {
+    m_aTopLevelRule.push (aViewportRule);
+  }
+
+  public void onEndViewportRule (@Nonnull final CSSViewportRule aViewportRule)
+  {
+    m_aTopLevelRule.pop ();
+  }
+
+  public void onBeginSupportsRule (@Nonnull final CSSSupportsRule aSupportsRule)
+  {
+    m_aTopLevelRule.push (aSupportsRule);
+  }
+
+  public void onEndSupportsRule (@Nonnull final CSSSupportsRule aSupportsRule)
+  {
+    m_aTopLevelRule.pop ();
+  }
+
+  public void onUnknownRule (@Nonnull final CSSUnknownRule aUnknownRule)
+  {
+    // no action
   }
 
   @Override
