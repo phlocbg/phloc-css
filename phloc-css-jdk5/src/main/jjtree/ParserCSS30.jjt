@@ -169,8 +169,8 @@ TOKEN :
                  )* "'" >
 | < INVALID_STRING1: "\"" ( ~["\n","\r","\f","\\","\""]
                           | <STRING_EOL>
-	                      | <ESCAPE>
-	                      )* >
+	                        | <ESCAPE>
+	                        )* >
 | < INVALID_STRING2: "'" ( ~["\n","\r","\f","\\","'"]
                          | <STRING_EOL>
                          | <ESCAPE>
@@ -309,32 +309,39 @@ TOKEN :
 }
 
 JAVACODE
-private Token error_skipto(final ParseException ex, final int... aKinds) throws ParseException
+private void errorUnexpectedRule(final String sRule, final String sMsg) #void
 {
-  // print the exception object
-  if (m_aCustomErrorHandler == null)
-    s_aLogger.warn(ex.toString());
+  if (m_aCustomErrorHandler != null)
+    m_aCustomErrorHandler.onCSSUnexpectedRule (sRule, sMsg);
+  else  
+    s_aLogger.warn("Unexpected rule '" + sRule + "': " + sMsg);
+}
+
+JAVACODE
+private Token errorSkipTo(final ParseException ex, final int... aKinds) throws ParseException
+{
   // Skip until (including) the first matching token
-  Token t;
+  Token tok;
   do
   {
-    t = getNextToken();
-    if (t.kind == EOF)
+    tok = getNextToken();
+    if (tok.kind == EOF)
     {
       // Encountered EOF while skipping - throw the original exception!
       throw ex;
     }  
-  } while (!com.phloc.commons.collections.ArrayHelper.contains (aKinds, t.kind));
+  } while (!com.phloc.commons.collections.ArrayHelper.contains (aKinds, tok.kind));
+  if (s_aLogger.isDebugEnabled ())
+    s_aLogger.debug ("Skipped until token " + tok.toString ());
   if (m_aCustomErrorHandler != null)
-    m_aCustomErrorHandler.onCSSParseError (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage, t);
+    m_aCustomErrorHandler.onCSSParseError (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage, tok);
   else  
-    if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("Skipped until token " + t.toString ());
-  return t;
+    s_aLogger.warn("CSS parse error", ex);
+  return tok;
 }
 
 JAVACODE
-String javaSkipToClosingParantheses() #void {
+private String javaSkipToClosingParantheses() throws ParseException #void {
   final StringBuilder aSB = new StringBuilder ();
   int nNesting = 1;
   while (true) {
@@ -348,16 +355,21 @@ String javaSkipToClosingParantheses() #void {
         if (nNesting == 0)
           break;
       }
+      else
+        if (tok.kind == EOF)
+          throw new ParseException ("EOF while searching for matching closing ')'.");
   }
   return aSB.toString ();
 }
 
 JAVACODE
-String javaSkipToOpeningBrace() #void {
+private String javaSkipToOpeningBrace() throws ParseException #void {
   final StringBuilder aSB = new StringBuilder ();
   Token tok;
   while (true) {
     tok = getNextToken();
+    if (tok.kind == EOF)
+      throw new ParseException ("EOF while searching for opening '{'.");
     if (tok.kind == LBRACE)
       break;
     aSB.append (tok.image);
@@ -366,7 +378,7 @@ String javaSkipToOpeningBrace() #void {
 }
 
 JAVACODE
-String javaSkipToClosingBrace() #void {
+private String javaSkipToClosingBrace() throws ParseException #void {
   final StringBuilder aSB = new StringBuilder ();
   int nNesting = 1;
   while (true) {
@@ -379,6 +391,9 @@ String javaSkipToClosingBrace() #void {
         if (nNesting == 0)
           break;
       }
+      else
+        if (tok.kind == EOF)
+          throw new ParseException ("EOF while searching for matching closing '}'.");
     aSB.append (tok.image);
   }
   return aSB.toString ();
@@ -392,21 +407,12 @@ CSSNode styleSheet() #Root : {}
   ( LOOKAHEAD(2)
     charsetRule()
   )?
-  ( <S>
-  | <CDO>
-  | <CDC>
-  )*
+  ( <S> | <CDO> | <CDC> )*
   ( importRule()
-    ( <S>
-    | <CDO>
-    | <CDC>
-    )*
+    ( <S> | <CDO> | <CDC> )*
   )*
   ( namespaceRule()
-    ( <S>
-    | <CDO>
-    | <CDC>
-    )*
+    ( <S> | <CDO> | <CDC> )*
   )*
   ( ( styleRule()
     | mediaRule()
@@ -416,11 +422,15 @@ CSSNode styleSheet() #Root : {}
     | viewportRule()
     | supportsRule()
     | unknownRule()
+    | charsetRule() { errorUnexpectedRule ("@charset", "charset rule in the middle of the file is not allowed!"); }
+    | importRule() { errorUnexpectedRule ("@import", "import rule in the middle of the file is not allowed!"); }
+    | namespaceRule() { errorUnexpectedRule ("@namespace", "namespace rule in the middle of the file is not allowed!"); }
     )
-    ( <S>
-    | <CDO>
-    | <CDC>
-    )*
+    ( <S> | <CDO> | <CDC> )*
+// ignore too many closing brackets
+    ( <RBRACE> 
+      ( <S> | <CDO> | <CDC> )*
+    )* 
   )*
   <EOF>
   { return jjtThis; }
@@ -907,7 +917,7 @@ try{
   styleDeclarationList()
   <RBRACE>
 } catch (ParseException ex) {
-  error_skipto (ex, RBRACE);
+  errorSkipTo (ex, RBRACE);
 }
 }
 
@@ -995,6 +1005,9 @@ void mediaRuleList() #void : {}
     | viewportRule()
     | supportsRule()
     | unknownRule()
+    | charsetRule() { errorUnexpectedRule ("@charset", "charset rule in the middle of a @media rule is not allowed!"); }
+    | importRule() { errorUnexpectedRule ("@import", "import rule in the middle of a @media rule is not allowed!"); }
+    | namespaceRule() { errorUnexpectedRule ("@namespace", "namespace rule in the middle of a @media rule is not allowed!"); }
     )
     ( <S> )*
   )+
@@ -1005,10 +1018,14 @@ void mediaRule() : {}
   <MEDIA_SYM>
   ( <S> )*
   ( mediaList() )?
+try{
   <LBRACE>
   ( <S> )*
   ( mediaRuleList() )?
   <RBRACE>
+} catch (ParseException ex) {
+  errorSkipTo (ex, RBRACE);
+}
 }
 
 
@@ -1081,10 +1098,14 @@ void keyframesRule() : {}
   <KEYFRAMES_SYM> { jjtThis.setText (token.image); }    
   <S>
   keyframesIdentifier()
+try{
   <LBRACE>
   ( <S> )*
   keyframesBlocks()
   <RBRACE>
+} catch (ParseException ex) {
+  errorSkipTo (ex, RBRACE);
+}
 }
 
 //
@@ -1149,17 +1170,25 @@ void supportsRuleBodyRule() #void : {}
   | keyframesRule()
   | supportsRule()
   | unknownRule()
+  | charsetRule() { errorUnexpectedRule ("@charset", "charset rule in the middle of a @supports rule is not allowed!"); }
+  | importRule() { errorUnexpectedRule ("@import", "import rule in the middle of a @supports rule is not allowed!"); }
+  | namespaceRule() { errorUnexpectedRule ("@namespace", "namespace rule in the middle of a @supports rule is not allowed!"); }
+  | viewportRule() { errorUnexpectedRule ("@viewport", "viewport rule in the middle of a @supports rule is not allowed!"); }
   )
 }
 
 void supportsRuleBody() #void : {}
 {
+try{
   <LBRACE>
   ( <S> )*
   ( supportsRuleBodyRule()
     ( <S> )*
   )* 
   <RBRACE>
+} catch (ParseException ex) {
+  errorSkipTo (ex, RBRACE);
+}
 }
 
 void supportsRule() : {}

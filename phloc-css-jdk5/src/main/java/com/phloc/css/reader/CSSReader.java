@@ -18,14 +18,19 @@
 package com.phloc.css.reader;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.PushbackInputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillClose;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.GuardedBy;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +38,8 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
+import com.phloc.commons.charset.EUnicodeBOM;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.FileSystemResource;
@@ -64,10 +71,14 @@ import com.phloc.css.reader.errorhandler.ThrowingCSSParseErrorHandler;
  * 
  * @author Philip Helger
  */
-@Immutable
+@ThreadSafe
 public final class CSSReader
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSReader.class);
+  private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
+
+  @GuardedBy ("s_aRWLock")
+  private static ICSSParseErrorHandler s_aDefaultParseErrorHandler = ThrowingCSSParseErrorHandler.getInstance ();
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
@@ -75,6 +86,45 @@ public final class CSSReader
 
   private CSSReader ()
   {}
+
+  /**
+   * @return The default CSS parse error handler. May be <code>null</code>. For
+   *         backwards compatiblity reasons this is be default an instance of
+   *         {@link ThrowingCSSParseErrorHandler}.
+   */
+  @Nullable
+  public static ICSSParseErrorHandler getDefaultParseErrorHandler ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aDefaultParseErrorHandler;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Set the default CSS parse error handler.
+   * 
+   * @param aDefaultParseErrorHandler
+   *        The new default error handler to be used. May be <code>null</code>
+   *        to indicate that no special error handler should be used.
+   */
+  public static void setDefaultParseErrorHandler (@Nullable final ICSSParseErrorHandler aDefaultParseErrorHandler)
+  {
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aDefaultParseErrorHandler = aDefaultParseErrorHandler;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
 
   @Nullable
   private static CSSNode _readStyleSheet (@Nonnull final CharStream aStream,
@@ -336,7 +386,7 @@ public final class CSSReader
       final JavaCharStream aCharStream = new JavaCharStream (aReader);
       final CSSNode aNode = _readStyleSheet (aCharStream,
                                              eVersion,
-                                             ThrowingCSSParseErrorHandler.getInstance (),
+                                             getDefaultParseErrorHandler (),
                                              DoNothingCSSParseExceptionHandler.getInstance ());
       return aNode != null;
     }
@@ -697,6 +747,37 @@ public final class CSSReader
     return readFromStream (aISP, aCharset, eVersion, aCustomErrorHandler, aCustomExceptionHandler);
   }
 
+  @Nullable
+  private static InputStream _getInputStreamWithoutBOM (@Nonnull final IInputStreamProvider aISP)
+  {
+    // Try to open input stream
+    final InputStream aIS = aISP.getInputStream ();
+    if (aIS == null)
+      return null;
+
+    // Check for BOM
+    final int nMaxBOMBytes = EUnicodeBOM.getMaximumByteCount ();
+    final PushbackInputStream aPIS = new PushbackInputStream (aIS, nMaxBOMBytes);
+    try
+    {
+      final byte [] aBOM = new byte [nMaxBOMBytes];
+      final int nReadBOMBytes = aPIS.read (aBOM);
+      if (nReadBOMBytes > 0)
+      {
+        // Some byte BOMs were read
+        final EUnicodeBOM eBOM = EUnicodeBOM.getFromBytesOrNull (ArrayHelper.getCopy (aBOM, 0, nReadBOMBytes));
+        if (eBOM == null)
+          aPIS.unread (aBOM, 0, nReadBOMBytes);
+      }
+      return aPIS;
+    }
+    catch (final IOException ex)
+    {
+      s_aLogger.error ("Failed to determine BOM", ex);
+      return null;
+    }
+  }
+
   /**
    * Check if the CSS represented by the passed input stream provider has a
    * custom charset contained
@@ -714,7 +795,7 @@ public final class CSSReader
       throw new NullPointerException ("inputStreamProvider");
 
     // Open input stream
-    final InputStream aIS = aISP.getInputStream ();
+    final InputStream aIS = _getInputStreamWithoutBOM (aISP);
     if (aIS == null)
       return null;
 
@@ -820,15 +901,15 @@ public final class CSSReader
     }
 
     // Try to open input stream
-    final InputStream aIS = aISP.getInputStream ();
+    final InputStream aIS = _getInputStreamWithoutBOM (aISP);
     if (aIS == null)
       return null;
 
     try
     {
       final JavaCharStream aCharStream = new JavaCharStream (aIS, aCharsetToUse);
-      // Use the ThrowingCSSParseErrorHandler for maximum backward compatibility
-      final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? ThrowingCSSParseErrorHandler.getInstance ()
+      // Use the default CSS parse error handler if none is provided
+      final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? getDefaultParseErrorHandler ()
                                                                                  : aCustomErrorHandler;
       final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aRealErrorHandler, aCustomExceptionHandler);
 

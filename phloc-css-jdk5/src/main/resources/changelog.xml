@@ -20,6 +20,32 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2014-03-10" version="3.7.2" />
+  <entry date="2014-03-10" category="tech" action="fix">
+    <change>
+      <text locale="en">Fixed reading CSS with a BOM</text>
+    </change>
+  </entry>
+  <entry date="2014-03-06" category="tech" action="update">
+    <change>
+      <text locale="en">In optimized writing of CSS, the last declaration wont get a semicolon</text>
+    </change>
+  </entry>
+  <entry date="2014-03-06" category="feature" action="add">
+    <change>
+      <text locale="en">Improved error handling for unexpected rules (e.g. @import in the middle of a file)</text>
+    </change>
+  </entry>
+  <entry date="2014-03-06" category="feature" action="add">
+    <change>
+      <text locale="en">Improved error handling in case a closing bracket is missing.</text>
+    </change>
+  </entry>
+  <entry date="2014-03-06" category="feature" action="add">
+    <change>
+      <text locale="en">Allowing multiple closing brackets in top-level rules</text>
+    </change>
+  </entry>
   <release date="2014-01-29" version="3.7.1" />
   <entry date="2014-01-29" category="tech" action="change" incompatible="true">
     <change>

@@ -2,6 +2,12 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>3/10/14</td><td colspan="4">_Release *3.7.2*_</td></tr>
+<tr><td>3/10/14</td><td>fix</td><td>tech</td><td></td><td>Fixed reading CSS with a BOM</td></tr>
+<tr><td>3/6/14</td><td>update</td><td>tech</td><td></td><td>In optimized writing of CSS, the last declaration wont get a semicolon</td></tr>
+<tr><td>3/6/14</td><td>add</td><td>feature</td><td></td><td>Improved error handling for unexpected rules (e.g. @import in the middle of a file)</td></tr>
+<tr><td>3/6/14</td><td>add</td><td>feature</td><td></td><td>Improved error handling in case a closing bracket is missing.</td></tr>
+<tr><td>3/6/14</td><td>add</td><td>feature</td><td></td><td>Allowing multiple closing brackets in top-level rules</td></tr>
 <tr border="1"><td>1/29/14</td><td colspan="4">_Release *3.7.1*_</td></tr>
 <tr><td>1/29/14</td><td>change</td><td>tech</td><td>*yes*</td><td>CSSNodeToDomainObject now throws CSSHandlingException instead of IllegalArgumentException</td></tr>
 <tr><td>1/29/14</td><td>fix</td><td>tech</td><td></td><td>Explicitly handling invalid selector values like "color:;" - skipping them</td></tr>

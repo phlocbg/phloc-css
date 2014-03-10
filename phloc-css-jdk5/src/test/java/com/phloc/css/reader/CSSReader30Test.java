@@ -17,6 +17,7 @@
  */
 package com.phloc.css.reader;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
@@ -28,6 +29,7 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.reader.errorhandler.CollectingCSSParseErrorHandler;
+import com.phloc.css.reader.errorhandler.DoNothingCSSParseErrorHandler;
 import com.phloc.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 import com.phloc.css.writer.CSSWriter;
 
@@ -47,6 +49,11 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   public void testReadAll30Good ()
   {
     testReadGood ("src/test/resources/testfiles/css30/good");
+  }
+
+  @Test
+  public void testReadAll30BadButSucceeding ()
+  {
     testReadGood ("src/test/resources/testfiles/css30/bad_but_succeeding");
   }
 
@@ -54,6 +61,11 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   public void testReadAll30Bad ()
   {
     testReadBad ("src/test/resources/testfiles/css30/bad");
+  }
+
+  @Test
+  public void testReadAll30GoodButFailing ()
+  {
     testReadBad ("src/test/resources/testfiles/css30/good_but_failing");
   }
 
@@ -68,7 +80,7 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   {
     final ECSSVersion eVersion = ECSSVersion.CSS30;
     final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
-    final File aFile = new File ("src/test/resources/testfiles/css30/good/artificial/test-fonts.css");
+    final File aFile = new File ("src/test/resources/testfiles/css30/good/issue15.css");
     final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
     assertNotNull (aCSS);
 
@@ -85,5 +97,37 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
     final File aFile = new File ("src/test/resources/testfiles/css30/bad_but_recoverable/test-string.css");
     final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion, aErrors);
     assertNotNull (aCSS);
+  }
+
+  @Test
+  public void testSpecialCases ()
+  {
+    String sCSS = ".class{color:red;.class{color:green}.class{color:blue}";
+    CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS,
+                                                         CCharset.CHARSET_ISO_8859_1_OBJ,
+                                                         ECSSVersion.CSS30,
+                                                         DoNothingCSSParseErrorHandler.getInstance ());
+    assertEquals (".class{color:red}.class{color:blue}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
+
+    sCSS = "  \n/* comment */\n  \n.class{color:red;}";
+    aCSS = CSSReader.readFromString (sCSS,
+                                     CCharset.CHARSET_ISO_8859_1_OBJ,
+                                     ECSSVersion.CSS30,
+                                     DoNothingCSSParseErrorHandler.getInstance ());
+    assertEquals (".class{color:red}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
+
+    sCSS = "\u00ef\u00bb\u00bf\r\n"
+           + "/* validation styles */\r\n"
+           + "\r\n"
+           + ".validation-summary-errors\r\n"
+           + "{\r\n"
+           + "  color:Red;\r\n"
+           + "}";
+    aCSS = CSSReader.readFromString (sCSS,
+                                     CCharset.CHARSET_ISO_8859_1_OBJ,
+                                     ECSSVersion.CSS30,
+                                     DoNothingCSSParseErrorHandler.getInstance ());
+    assertEquals (".validation-summary-errors{color:Red}",
+                  new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
   }
 }

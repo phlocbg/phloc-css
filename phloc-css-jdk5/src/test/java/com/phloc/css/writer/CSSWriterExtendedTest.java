@@ -123,11 +123,11 @@ public final class CSSWriterExtendedTest
     // Only whitespace optimization
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS21, true);
     String sContent = new CSSWriter (aSettings).getCSSAsString (aCSS);
-    assertEquals (2873, sContent.length ());
+    assertEquals (2846, sContent.length ());
 
     // Also remove empty declarations
     aSettings.setRemoveUnnecessaryCode (true);
     sContent = new CSSWriter (aSettings).getCSSAsString (aCSS);
-    assertEquals (2866, sContent.length ());
+    assertEquals (2839, sContent.length ());
   }
 }

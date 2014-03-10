@@ -150,21 +150,30 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
     if (nDeclCount == 1)
     {
       // A single declaration
-      return ContainerHelper.getFirstElement (m_aDeclarations).getAsCSSString (aSettings, nIndentLevel) +
-             CCSS.DEFINITION_END;
+      final StringBuilder aSB = new StringBuilder ();
+      aSB.append (ContainerHelper.getFirstElement (m_aDeclarations).getAsCSSString (aSettings, nIndentLevel));
+      // No ';' at the last entry
+      if (!bOptimizedOutput)
+        aSB.append (CCSS.DEFINITION_END);
+      return aSB.toString ();
     }
 
     // More than one declaration
     final StringBuilder aSB = new StringBuilder ();
+    int nIndex = 0;
     for (final CSSDeclaration aDeclaration : m_aDeclarations)
     {
       // Indentation
       if (!bOptimizedOutput)
         aSB.append (aSettings.getIndent (nIndentLevel + 1));
       // Emit the main declaration plus the semicolon
-      aSB.append (aDeclaration.getAsCSSString (aSettings, nIndentLevel + 1)).append (CCSS.DEFINITION_END);
+      aSB.append (aDeclaration.getAsCSSString (aSettings, nIndentLevel + 1));
+      // No ';' at the last decl
+      if (!bOptimizedOutput || nIndex < nDeclCount - 1)
+        aSB.append (CCSS.DEFINITION_END);
       if (!bOptimizedOutput)
         aSB.append ('\n');
+      ++nIndex;
     }
     return aSB.toString ();
   }
