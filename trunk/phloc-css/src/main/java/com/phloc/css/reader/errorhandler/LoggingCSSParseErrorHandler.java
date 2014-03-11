@@ -19,6 +19,7 @@ package com.phloc.css.reader.errorhandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ import com.phloc.css.parser.Token;
  * 
  * @author Philip Helger
  */
+@Immutable
 public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
 {
   private static final Logger s_aLogger = LoggerFactory.getLogger (LoggingCSSParseErrorHandler.class);
@@ -63,22 +65,41 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
 
   @Nonnull
   @Nonempty
-  public static String createLoggingString (@Nonnull final ParseException ex)
+  public static String createLoggingStringParseError (@Nonnull final ParseException ex)
   {
     if (ex.currentToken == null)
     {
       // Is null if the constructor with String only was used
       return ex.getMessage ();
     }
-    return createLoggingString (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage, null);
+    return createLoggingStringParseError (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage, null);
   }
 
+  /**
+   * @deprecated Use
+   *             {@link #createLoggingStringParseError(Token,int[][],String[],Token)}
+   *             instead
+   */
+  @Deprecated
   @Nonnull
   @Nonempty
   public static String createLoggingString (@Nonnull final Token aLastValidToken,
                                             @Nonnull final int [][] aExpectedTokenSequencesVal,
                                             @Nonnull final String [] aTokenImageVal,
                                             @Nullable final Token aLastSkippedToken)
+  {
+    return createLoggingStringParseError (aLastValidToken,
+                                          aExpectedTokenSequencesVal,
+                                          aTokenImageVal,
+                                          aLastSkippedToken);
+  }
+
+  @Nonnull
+  @Nonempty
+  public static String createLoggingStringParseError (@Nonnull final Token aLastValidToken,
+                                                      @Nonnull final int [][] aExpectedTokenSequencesVal,
+                                                      @Nonnull final String [] aTokenImageVal,
+                                                      @Nullable final Token aLastSkippedToken)
   {
     if (aLastValidToken == null)
       throw new NullPointerException ("LastValidToken");
@@ -142,9 +163,12 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
   public void onCSSParseError (@Nonnull final Token aLastValidToken,
                                @Nonnull final int [][] aExpectedTokenSequencesVal,
                                @Nonnull final String [] aTokenImageVal,
-                               @Nonnull final Token aLastSkippedToken) throws ParseException
+                               @Nullable final Token aLastSkippedToken) throws ParseException
   {
-    s_aLogger.warn (createLoggingString (aLastValidToken, aExpectedTokenSequencesVal, aTokenImageVal, aLastSkippedToken));
+    s_aLogger.warn (createLoggingStringParseError (aLastValidToken,
+                                                   aExpectedTokenSequencesVal,
+                                                   aTokenImageVal,
+                                                   aLastSkippedToken));
 
     if (m_aNestedErrorHandler != null)
       m_aNestedErrorHandler.onCSSParseError (aLastValidToken,
@@ -153,12 +177,30 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
                                              aLastSkippedToken);
   }
 
-  public void onCSSUnexpectedRule (@Nonnull @Nonempty final String sRule, @Nonnull @Nonempty final String sMsg) throws ParseException
+  @Nonnull
+  @Nonempty
+  public static String createLoggingStringUnexpectedRule (@Nonnull final Token aCurrentToken,
+                                                          @Nonnull @Nonempty final String sRule,
+                                                          @Nonnull @Nonempty final String sMsg)
   {
-    s_aLogger.warn ("Unexpected rule '" + sRule + "': " + sMsg);
+    return "[" +
+           aCurrentToken.beginLine +
+           ":" +
+           aCurrentToken.beginColumn +
+           "] Unexpected rule '" +
+           sRule +
+           "': " +
+           sMsg;
+  }
+
+  public void onCSSUnexpectedRule (@Nonnull final Token aCurrentToken,
+                                   @Nonnull @Nonempty final String sRule,
+                                   @Nonnull @Nonempty final String sMsg) throws ParseException
+  {
+    s_aLogger.warn (createLoggingStringUnexpectedRule (aCurrentToken, sRule, sMsg));
 
     if (m_aNestedErrorHandler != null)
-      m_aNestedErrorHandler.onCSSUnexpectedRule (sRule, sMsg);
+      m_aNestedErrorHandler.onCSSUnexpectedRule (aCurrentToken, sRule, sMsg);
   }
 
   @Override

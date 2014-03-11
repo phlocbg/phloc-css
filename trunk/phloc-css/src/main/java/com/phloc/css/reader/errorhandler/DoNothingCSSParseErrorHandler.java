@@ -18,6 +18,7 @@
 package com.phloc.css.reader.errorhandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
@@ -47,12 +48,14 @@ public final class DoNothingCSSParseErrorHandler implements ICSSParseErrorHandle
   public void onCSSParseError (@Nonnull final Token aLastValidToken,
                                @Nonnull final int [][] aExpectedTokenSequencesVal,
                                @Nonnull final String [] aTokenImageVal,
-                               @Nonnull final Token aLastSkippedToken)
+                               @Nullable final Token aLastSkippedToken)
   {
     // ignore
   }
 
-  public void onCSSUnexpectedRule (@Nonnull @Nonempty final String sRule, @Nonnull @Nonempty final String sMsg)
+  public void onCSSUnexpectedRule (@Nonnull final Token aCurrentToken,
+                                   @Nonnull @Nonempty final String sRule,
+                                   @Nonnull @Nonempty final String sMsg)
   {
     // ignore
   }

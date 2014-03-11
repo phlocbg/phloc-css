@@ -312,9 +312,9 @@ JAVACODE
 private void errorUnexpectedRule(final String sRule, final String sMsg) #void
 {
   if (m_aCustomErrorHandler != null)
-    m_aCustomErrorHandler.onCSSUnexpectedRule (sRule, sMsg);
+    m_aCustomErrorHandler.onCSSUnexpectedRule (token, sRule, sMsg);
   else  
-    s_aLogger.warn("Unexpected rule '" + sRule + "': " + sMsg);
+    s_aLogger.warn("[" + token.beginLine + ":" + token.beginColumn + "] Unexpected rule '" + sRule + "': " + sMsg);
 }
 
 JAVACODE

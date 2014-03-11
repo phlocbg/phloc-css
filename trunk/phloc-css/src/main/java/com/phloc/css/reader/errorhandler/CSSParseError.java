@@ -56,7 +56,7 @@ public class CSSParseError
   public CSSParseError (@Nonnull final Token aLastValidToken,
                         @Nonnull final int [][] aExpectedTokenSequencesVal,
                         @Nonnull final String [] aTokenImageVal,
-                        @Nonnull final Token aLastSkippedToken)
+                        @Nullable final Token aLastSkippedToken)
   {
     if (aLastValidToken == null)
       throw new NullPointerException ("LastValidToken");
@@ -64,8 +64,6 @@ public class CSSParseError
       throw new NullPointerException ("ExpectedTokenSequencesVal");
     if (aTokenImageVal == null)
       throw new NullPointerException ("TokenImageVal");
-    if (aLastSkippedToken == null)
-      throw new NullPointerException ("LastSkippedToken");
 
     m_aLastValidToken = new ReadonlyToken (aLastValidToken);
     final StringBuilder aExpected = new StringBuilder ();
@@ -78,11 +76,11 @@ public class CSSParseError
     }
     m_sExpectedTokens = aExpected.toString ();
     m_aFirstSkippedToken = new ReadonlyToken (aLastValidToken.next);
-    m_aLastSkippedToken = new ReadonlyToken (aLastSkippedToken);
-    m_sErrorMessage = LoggingCSSParseErrorHandler.createLoggingString (aLastValidToken,
-                                                                       aExpectedTokenSequencesVal,
-                                                                       aTokenImageVal,
-                                                                       aLastSkippedToken);
+    m_aLastSkippedToken = aLastSkippedToken == null ? null : new ReadonlyToken (aLastSkippedToken);
+    m_sErrorMessage = LoggingCSSParseErrorHandler.createLoggingStringParseError (aLastValidToken,
+                                                                                 aExpectedTokenSequencesVal,
+                                                                                 aTokenImageVal,
+                                                                                 aLastSkippedToken);
   }
 
   /**
@@ -147,9 +145,10 @@ public class CSSParseError
   }
 
   @Nonnull
-  public static CSSParseError createUnexpectedRule (@Nonnull @Nonempty final String sRule,
+  public static CSSParseError createUnexpectedRule (@Nonnull final Token aCurrentToken,
+                                                    @Nonnull @Nonempty final String sRule,
                                                     @Nonnull @Nonempty final String sMsg)
   {
-    return new CSSParseError ("Unexpected rule '" + sRule + "': " + sMsg);
+    return new CSSParseError (LoggingCSSParseErrorHandler.createLoggingStringUnexpectedRule (aCurrentToken, sRule, sMsg));
   }
 }
