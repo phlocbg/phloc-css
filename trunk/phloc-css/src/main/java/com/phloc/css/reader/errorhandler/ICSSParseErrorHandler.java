@@ -25,7 +25,8 @@ import com.phloc.css.parser.Token;
 
 /**
  * Special CSS handler that is invoked during reading in case of a recoverable
- * error.
+ * errors. In case of unrecoverable errors, a
+ * {@link com.phloc.css.parser.ParseException} is thrown!
  * 
  * @author Philip Helger
  */

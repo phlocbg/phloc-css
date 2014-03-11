@@ -35,6 +35,9 @@ public final class DoNothingCSSParseErrorHandler implements ICSSParseErrorHandle
   private DoNothingCSSParseErrorHandler ()
   {}
 
+  /**
+   * @return The singleton instance. Never <code>null</code>.
+   */
   @Nonnull
   public static DoNothingCSSParseErrorHandler getInstance ()
   {

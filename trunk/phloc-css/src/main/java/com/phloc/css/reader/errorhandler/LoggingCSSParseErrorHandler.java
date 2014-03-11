@@ -40,11 +40,22 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
 
   private final ICSSParseErrorHandler m_aNestedErrorHandler;
 
+  /**
+   * Default constructor.
+   */
   public LoggingCSSParseErrorHandler ()
   {
     this (null);
   }
 
+  /**
+   * Constructor with a nested error handler.
+   * 
+   * @param aNestedErrorHandler
+   *        The nested error handler to be invoked after this error handler. May
+   *        be <code>null</code> to indicate that no nested error handler is
+   *        present.
+   */
   public LoggingCSSParseErrorHandler (@Nullable final ICSSParseErrorHandler aNestedErrorHandler)
   {
     m_aNestedErrorHandler = aNestedErrorHandler;
