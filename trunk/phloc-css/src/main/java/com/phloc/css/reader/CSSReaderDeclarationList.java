@@ -51,6 +51,7 @@ import com.phloc.css.parser.ParserCSS21TokenManager;
 import com.phloc.css.parser.ParserCSS30;
 import com.phloc.css.parser.ParserCSS30TokenManager;
 import com.phloc.css.reader.errorhandler.ICSSParseErrorHandler;
+import com.phloc.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 import com.phloc.css.reader.errorhandler.ThrowingCSSParseErrorHandler;
 
 /**
@@ -94,7 +95,8 @@ public final class CSSReaderDeclarationList
           if (aCustomExceptionHandler != null)
             aCustomExceptionHandler.onException (ex);
           else
-            s_aLogger.error ("Failed to parse CSS 2.1 style declaration: " + ex.getMessage ());
+            s_aLogger.error ("Failed to parse CSS 2.1 style declaration: " +
+                             LoggingCSSParseErrorHandler.createLoggingString (ex));
           return null;
         }
       }
@@ -112,7 +114,8 @@ public final class CSSReaderDeclarationList
           if (aCustomExceptionHandler != null)
             aCustomExceptionHandler.onException (ex);
           else
-            s_aLogger.error ("Failed to parse CSS 3.0 style declaration: " + ex.getMessage ());
+            s_aLogger.error ("Failed to parse CSS 3.0 style declaration: " +
+                             LoggingCSSParseErrorHandler.createLoggingString (ex));
           return null;
         }
       }

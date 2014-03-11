@@ -63,10 +63,22 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
 
   @Nonnull
   @Nonempty
+  public static String createLoggingString (@Nonnull final ParseException ex)
+  {
+    if (ex.currentToken == null)
+    {
+      // Is null if the constructor with String only was used
+      return ex.getMessage ();
+    }
+    return createLoggingString (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage, null);
+  }
+
+  @Nonnull
+  @Nonempty
   public static String createLoggingString (@Nonnull final Token aLastValidToken,
                                             @Nonnull final int [][] aExpectedTokenSequencesVal,
                                             @Nonnull final String [] aTokenImageVal,
-                                            @Nonnull final Token aLastSkippedToken)
+                                            @Nullable final Token aLastSkippedToken)
   {
     if (aLastValidToken == null)
       throw new NullPointerException ("LastValidToken");
@@ -83,19 +95,26 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
         nMaxSize = aExpectedTokens.length;
 
       if (aExpected.length () > 0)
-        aExpected.append (",");
+        aExpected.append (',');
       for (final int nExpectedToken : aExpectedTokens)
         aExpected.append (' ').append (aTokenImageVal[nExpectedToken]);
     }
 
-    final StringBuilder retval = new StringBuilder ("[").append (aLastValidToken.next.beginLine)
-                                                        .append (':')
-                                                        .append (aLastValidToken.next.beginColumn)
-                                                        .append ("]-[")
-                                                        .append (aLastSkippedToken.endLine)
-                                                        .append (':')
-                                                        .append (aLastSkippedToken.endColumn)
-                                                        .append ("] Encountered");
+    final StringBuilder retval = new StringBuilder (1024);
+    retval.append ('[')
+          .append (aLastValidToken.next.beginLine)
+          .append (':')
+          .append (aLastValidToken.next.beginColumn)
+          .append (']');
+    if (aLastSkippedToken != null)
+    {
+      retval.append ("-[")
+            .append (aLastSkippedToken.endLine)
+            .append (':')
+            .append (aLastSkippedToken.endColumn)
+            .append (']');
+    }
+    retval.append (" Encountered");
     Token aCurToken = aLastValidToken.next;
     for (int i = 0; i < nMaxSize; i++)
     {
@@ -112,10 +131,10 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
             .append ('\'');
       aCurToken = aCurToken.next;
     }
-    retval.append (". Skipped until token ")
-          .append (aLastSkippedToken)
-          .append (". ")
-          .append (aExpectedTokenSequencesVal.length == 1 ? "Was expecting:" : "Was expecting one of:")
+    retval.append (". ");
+    if (aLastSkippedToken != null)
+      retval.append ("Skipped until token ").append (aLastSkippedToken).append (". ");
+    retval.append (aExpectedTokenSequencesVal.length == 1 ? "Was expecting:" : "Was expecting one of:")
           .append (aExpected);
     return retval.toString ();
   }
