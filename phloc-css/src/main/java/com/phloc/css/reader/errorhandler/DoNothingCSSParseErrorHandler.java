@@ -25,7 +25,8 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.parser.Token;
 
 /**
- * An implementation of {@link ICSSParseErrorHandler} that does nothing.
+ * An implementation of {@link ICSSParseErrorHandler} that does nothing. So in
+ * case a recoverable error occurs it is silently ignored.
  * 
  * @author Philip Helger
  */

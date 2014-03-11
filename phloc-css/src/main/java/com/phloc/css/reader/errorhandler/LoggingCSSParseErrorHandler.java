@@ -30,7 +30,8 @@ import com.phloc.css.parser.ParseException;
 import com.phloc.css.parser.Token;
 
 /**
- * A logging implementation of {@link ICSSParseErrorHandler}
+ * A logging implementation of {@link ICSSParseErrorHandler}. So in case a
+ * recoverable error occurs, the details are logged to an SLF4J logger.
  * 
  * @author Philip Helger
  */
@@ -145,11 +146,10 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
         retval.append (aTokenImageVal[TOKEN_EOF]);
         break;
       }
-      retval.append ("token ")
-            .append (aTokenImageVal[aCurToken.kind])
-            .append (" with image '")
+      retval.append ("text '")
             .append (aCurToken.image)
-            .append ('\'');
+            .append ("' corresponding to token ")
+            .append (aTokenImageVal[aCurToken.kind]);
       aCurToken = aCurToken.next;
     }
     retval.append (". ");
