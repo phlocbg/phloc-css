@@ -29,7 +29,7 @@ import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSUnit;
 
 /**
- * This class encapsulates a single numeric value and a unit.
+ * This class encapsulates a single numeric value and a unit ({@link ECSSUnit}).
  * 
  * @author Philip Helger
  */
@@ -56,7 +56,7 @@ public class CSSSimpleValueWithUnit implements Serializable
   }
 
   /**
-   * @return The numeric value as a decimal value
+   * @return The numeric value as a decimal value (as passed in the constructor)
    */
   public double getValue ()
   {
