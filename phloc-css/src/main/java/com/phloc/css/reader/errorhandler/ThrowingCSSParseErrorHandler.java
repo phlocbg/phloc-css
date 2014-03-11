@@ -25,8 +25,9 @@ import com.phloc.css.parser.ParseException;
 import com.phloc.css.parser.Token;
 
 /**
- * An implementation of {@link ICSSParseErrorHandler} that throws an exception
- * in case of a parse error. This is the most strict version.
+ * An implementation of {@link ICSSParseErrorHandler} that throws a
+ * {@link ParseException} in case of a parse error. This is the most strict
+ * version.
  * 
  * @author Philip Helger
  */
@@ -37,6 +38,9 @@ public class ThrowingCSSParseErrorHandler implements ICSSParseErrorHandler
   private ThrowingCSSParseErrorHandler ()
   {}
 
+  /**
+   * @return The singleton instance. Never <code>null</code>.
+   */
   @Nonnull
   public static ThrowingCSSParseErrorHandler getInstance ()
   {

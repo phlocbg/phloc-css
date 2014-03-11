@@ -89,7 +89,7 @@ public final class CSSReader
 
   /**
    * @return The default CSS parse error handler. May be <code>null</code>. For
-   *         backwards compatiblity reasons this is be default an instance of
+   *         backwards compatibility reasons this is be default an instance of
    *         {@link ThrowingCSSParseErrorHandler}.
    */
   @Nullable
