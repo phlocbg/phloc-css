@@ -33,7 +33,10 @@ import com.phloc.css.property.ECSSProperty;
 import com.phloc.css.property.ICSSProperty;
 
 /**
- * Represents the combination of a single CSS property and it's according value.
+ * Represents the combination of a single CSS property ({@link ICSSProperty})
+ * and it's according value plus the important state (<code>!important</code> or
+ * not).<br>
+ * Instances of this class are immutable and cannot be changed.
  * 
  * @author Philip Helger
  */
@@ -52,7 +55,9 @@ public class CSSValue implements ICSSValue
    * @param aProperty
    *        The CSS property. May not be <code>null</code>.
    * @param sValue
-   *        The String value to use. May be <code>null</code>.
+   *        The String value to use. May be <code>null</code>. The value may
+   *        <strong>NOT</strong> contain the <code>!important</code> flag! The
+   *        value is internally trimmed to avoid leading and trailing.
    * @param bIsImportant
    *        <code>true</code> if the value should be important,
    *        <code>false</code> otherwise
@@ -75,7 +80,7 @@ public class CSSValue implements ICSSValue
                       "' string! Pass 'true' as important parameter instead.");
 
     m_aProperty = aProperty;
-    m_sValue = StringHelper.hasText (sValue) ? sValue + (bIsImportant ? CCSS.IMPORTANT_SUFFIX : "") : null;
+    m_sValue = StringHelper.getNotNull (sValue).trim ();
     m_bIsImportant = bIsImportant;
   }
 
@@ -98,8 +103,9 @@ public class CSSValue implements ICSSValue
   }
 
   /**
-   * @return The CSS value used. May be <code>null</code>.
+   * @return The CSS value used. May not be <code>null</code> but maybe empty.
    */
+  @Nonnull
   public String getValue ()
   {
     return m_sValue;
@@ -117,7 +123,11 @@ public class CSSValue implements ICSSValue
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     aSettings.checkVersionRequirements (m_aProperty);
-    return m_aProperty.getProp ().getName () + CCSS.SEPARATOR_PROPERTY_VALUE + m_sValue + CCSS.DEFINITION_END;
+    return m_aProperty.getProp ().getName () +
+           CCSS.SEPARATOR_PROPERTY_VALUE +
+           m_sValue +
+           (StringHelper.hasText (m_sValue) && m_bIsImportant ? CCSS.IMPORTANT_SUFFIX : "") +
+           CCSS.DEFINITION_END;
   }
 
   @Override

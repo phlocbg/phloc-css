@@ -207,7 +207,35 @@ public final class CCSSValue
 
   @Deprecated
   public static final String PX0 = ECSSUnit.px (0);
+  /** 10% */
+  public static final String PERC10 = ECSSUnit.perc (10);
+  /** 20% */
+  public static final String PERC20 = ECSSUnit.perc (20);
+  /** 30% */
+  public static final String PERC30 = ECSSUnit.perc (30);
+  /** 40% */
+  public static final String PERC40 = ECSSUnit.perc (40);
+  /** 50% */
   public static final String PERC50 = ECSSUnit.perc (50);
+  /** 60% */
+  public static final String PERC60 = ECSSUnit.perc (60);
+  /** 70% */
+  public static final String PERC70 = ECSSUnit.perc (70);
+  /** 80% */
+  public static final String PERC80 = ECSSUnit.perc (80);
+  /** 90% */
+  public static final String PERC90 = ECSSUnit.perc (90);
+  /** 95% */
+  public static final String PERC95 = ECSSUnit.perc (95);
+  /** 96% */
+  public static final String PERC96 = ECSSUnit.perc (96);
+  /** 97% */
+  public static final String PERC97 = ECSSUnit.perc (97);
+  /** 98% */
+  public static final String PERC98 = ECSSUnit.perc (98);
+  /** 99% */
+  public static final String PERC99 = ECSSUnit.perc (99);
+  /** 100% */
   public static final String PERC100 = ECSSUnit.perc (100);
 
   // CSS values that occur recurrently but are not part of the CSS
