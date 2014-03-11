@@ -61,7 +61,7 @@ public class CollectingCSSParseErrorHandler implements ICSSParseErrorHandler
   public void onCSSParseError (@Nonnull final Token aLastValidToken,
                                @Nonnull final int [][] aExpectedTokenSequencesVal,
                                @Nonnull final String [] aTokenImageVal,
-                               @Nonnull final Token aLastSkippedToken) throws ParseException
+                               @Nullable final Token aLastSkippedToken) throws ParseException
   {
     m_aRWLock.writeLock ().lock ();
     try
@@ -79,19 +79,21 @@ public class CollectingCSSParseErrorHandler implements ICSSParseErrorHandler
                                              aLastSkippedToken);
   }
 
-  public void onCSSUnexpectedRule (@Nonnull @Nonempty final String sRule, @Nonnull @Nonempty final String sMsg) throws ParseException
+  public void onCSSUnexpectedRule (@Nonnull final Token aCurrentToken,
+                                   @Nonnull @Nonempty final String sRule,
+                                   @Nonnull @Nonempty final String sMsg) throws ParseException
   {
     m_aRWLock.writeLock ().lock ();
     try
     {
-      m_aErrors.add (CSSParseError.createUnexpectedRule (sRule, sMsg));
+      m_aErrors.add (CSSParseError.createUnexpectedRule (aCurrentToken, sRule, sMsg));
     }
     finally
     {
       m_aRWLock.writeLock ().unlock ();
     }
     if (m_aNestedErrorHandler != null)
-      m_aNestedErrorHandler.onCSSUnexpectedRule (sRule, sMsg);
+      m_aNestedErrorHandler.onCSSUnexpectedRule (aCurrentToken, sRule, sMsg);
   }
 
   /**

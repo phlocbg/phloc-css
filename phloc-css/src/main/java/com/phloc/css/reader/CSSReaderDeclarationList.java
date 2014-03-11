@@ -96,7 +96,7 @@ public final class CSSReaderDeclarationList
             aCustomExceptionHandler.onException (ex);
           else
             s_aLogger.error ("Failed to parse CSS 2.1 style declaration: " +
-                             LoggingCSSParseErrorHandler.createLoggingString (ex));
+                             LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
           return null;
         }
       }
@@ -115,7 +115,7 @@ public final class CSSReaderDeclarationList
             aCustomExceptionHandler.onException (ex);
           else
             s_aLogger.error ("Failed to parse CSS 3.0 style declaration: " +
-                             LoggingCSSParseErrorHandler.createLoggingString (ex));
+                             LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
           return null;
         }
       }

@@ -18,6 +18,7 @@
 package com.phloc.css.reader.errorhandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.parser.ParseException;
@@ -37,25 +38,27 @@ public interface ICSSParseErrorHandler
    * of the {@link com.phloc.css.parser.ParseException}.
    * 
    * @param aLastValidToken
-   *        The last valid token.
+   *        The last valid token. May not be <code>null</code>.
    * @param aExpectedTokenSequencesVal
-   *        The expected token.
+   *        The expected token. May not be <code>null</code>.
    * @param aTokenImageVal
-   *        The error token image.
+   *        The error token image. May not be <code>null</code>.
    * @param aLastSkippedToken
-   *        The token until which was skipped (incl.)
+   *        The token until which was skipped (incl.) May be <code>null</code>.
    * @throws ParseException
    *         In case the error is fatal and should be propagated.
    */
   void onCSSParseError (@Nonnull Token aLastValidToken,
                         @Nonnull int [][] aExpectedTokenSequencesVal,
                         @Nonnull String [] aTokenImageVal,
-                        @Nonnull Token aLastSkippedToken) throws ParseException;
+                        @Nullable Token aLastSkippedToken) throws ParseException;
 
   /**
    * Called upon an unexpected rule. This happens e.g. when <code>@import</code>
    * is used in the middle of the file.
    * 
+   * @param aCurrentToken
+   *        The token that could not be interpreted. Never <code>null</code>.
    * @param sRule
    *        The name of the rule. Always starts with a '@'. Neither
    *        <code>null</code> nor empty.
@@ -64,5 +67,7 @@ public interface ICSSParseErrorHandler
    * @throws ParseException
    *         In case the error is fatal and should be propagated.
    */
-  void onCSSUnexpectedRule (@Nonnull @Nonempty String sRule, @Nonnull @Nonempty String sMsg) throws ParseException;
+  void onCSSUnexpectedRule (@Nonnull Token aCurrentToken,
+                            @Nonnull @Nonempty String sRule,
+                            @Nonnull @Nonempty String sMsg) throws ParseException;
 }

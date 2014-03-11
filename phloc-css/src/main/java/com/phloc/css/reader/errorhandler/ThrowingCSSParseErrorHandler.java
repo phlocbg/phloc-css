@@ -18,6 +18,7 @@
 package com.phloc.css.reader.errorhandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
@@ -50,14 +51,16 @@ public class ThrowingCSSParseErrorHandler implements ICSSParseErrorHandler
   public void onCSSParseError (@Nonnull final Token aLastValidToken,
                                @Nonnull final int [][] aExpectedTokenSequencesVal,
                                @Nonnull final String [] aTokenImageVal,
-                               @Nonnull final Token aLastSkippedToken) throws ParseException
+                               @Nullable final Token aLastSkippedToken) throws ParseException
   {
     throw new ParseException (aLastValidToken, aExpectedTokenSequencesVal, aTokenImageVal);
   }
 
-  public void onCSSUnexpectedRule (@Nonnull @Nonempty final String sRule, @Nonnull @Nonempty final String sMsg) throws ParseException
+  public void onCSSUnexpectedRule (@Nonnull final Token aCurrentToken,
+                                   @Nonnull @Nonempty final String sRule,
+                                   @Nonnull @Nonempty final String sMsg) throws ParseException
   {
-    throw new ParseException ("Unexpected rule '" + sRule + "': " + sMsg);
+    throw new ParseException (LoggingCSSParseErrorHandler.createLoggingStringUnexpectedRule (aCurrentToken, sRule, sMsg));
   }
 
   @Override
