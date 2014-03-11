@@ -28,7 +28,7 @@ import com.phloc.css.parser.CSSNode;
 
 /**
  * This class is the entry point for converting AST nodes from the parser to
- * domain objects.
+ * domain objects. This class is only used internally.
  * 
  * @author Philip Helger
  */

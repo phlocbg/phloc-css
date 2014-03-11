@@ -31,7 +31,8 @@ import com.phloc.css.parser.ParserCSS21TreeConstants;
 import com.phloc.css.parser.ParserCSS30TreeConstants;
 
 /**
- * Maps the different parser tokens between the 2.1 and the 3.0 parser.
+ * Maps the different parser tokens between the 2.1 and the 3.0 parser. This
+ * enum is only used internally.
  * 
  * @author Philip Helger
  */
