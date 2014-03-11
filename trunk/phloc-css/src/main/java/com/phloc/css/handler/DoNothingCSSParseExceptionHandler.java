@@ -23,7 +23,8 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.css.parser.ParseException;
 
 /**
- * Ignoring handler :)
+ * An implementation of {@link ICSSParseExceptionHandler} that silently ignores
+ * all errors.
  * 
  * @author Philip Helger
  */
@@ -42,7 +43,7 @@ public final class DoNothingCSSParseExceptionHandler implements ICSSParseExcepti
     return s_aInstance;
   }
 
-  public void onException (final ParseException ex)
+  public void onException (@Nonnull final ParseException ex)
   {
     // ignore
   }

@@ -171,12 +171,28 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
                                                    aLastSkippedToken));
 
     if (m_aNestedErrorHandler != null)
+    {
+      // Invoke nested handler
       m_aNestedErrorHandler.onCSSParseError (aLastValidToken,
                                              aExpectedTokenSequencesVal,
                                              aTokenImageVal,
                                              aLastSkippedToken);
+    }
   }
 
+  /**
+   * Create a common string to be used for unexpected rules.
+   * 
+   * @param aCurrentToken
+   *        The current token that caused an error. Never <code>null</code>.
+   * @param sRule
+   *        The name of the rule. Always starts with a '@'. May neither be
+   *        <code>null</code> nor empty.
+   * @param sMsg
+   *        The custom error message. Neither <code>null</code> nor empty.
+   * @return The concatenated string with source location, rule and message. May
+   *         neither be <code>null</code> nor empty.
+   */
   @Nonnull
   @Nonempty
   public static String createLoggingStringUnexpectedRule (@Nonnull final Token aCurrentToken,
@@ -200,7 +216,10 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
     s_aLogger.warn (createLoggingStringUnexpectedRule (aCurrentToken, sRule, sMsg));
 
     if (m_aNestedErrorHandler != null)
+    {
+      // Invoke nested handler
       m_aNestedErrorHandler.onCSSUnexpectedRule (aCurrentToken, sRule, sMsg);
+    }
   }
 
   @Override

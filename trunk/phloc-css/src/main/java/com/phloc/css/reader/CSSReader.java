@@ -68,7 +68,9 @@ import com.phloc.css.reader.errorhandler.ThrowingCSSParseErrorHandler;
 
 /**
  * This is the central user class for reading and parsing CSS from different
- * sources. This class reads full CSS declarations only.
+ * sources. This class reads full CSS declarations only. To read only a
+ * declaration list (like from an HTML <code>&lt;style&gt;</code> attribute) the
+ * {@link CSSReaderDeclarationList} is available.
  * 
  * @author Philip Helger
  */
@@ -127,6 +129,22 @@ public final class CSSReader
     }
   }
 
+  /**
+   * Main reading of the CSS
+   * 
+   * @param aStream
+   *        The stream to read from. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomErrorHandler
+   *        A custom handler for recoverable errors. May be <code>null</code>.
+   * @param aCustomExceptionHandler
+   *        A custom handler for unrecoverable errors. May be <code>null</code>.
+   * @return <code>null</code> if parsing failed with an unrecoverable error, or
+   *         <code>null</code> if a recoverable error occurred and a
+   *         {@link com.phloc.css.reader.errorhandler.ThrowingCSSParseErrorHandler}
+   *         was used or non-<code>null</code> if parsing succeeded.
+   */
   @Nullable
   private static CSSNode _readStyleSheet (@Nonnull final CharStream aStream,
                                           @Nonnull final ECSSVersion eVersion,
@@ -142,6 +160,7 @@ public final class CSSReader
         aParser.setCustomErrorHandler (aCustomErrorHandler);
         try
         {
+          // Main parsing
           return aParser.styleSheet ();
         }
         catch (final ParseException ex)
@@ -161,6 +180,7 @@ public final class CSSReader
         aParser.setCustomErrorHandler (aCustomErrorHandler);
         try
         {
+          // Main parsing
           return aParser.styleSheet ();
         }
         catch (final ParseException ex)

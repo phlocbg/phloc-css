@@ -79,7 +79,8 @@ import com.phloc.css.parser.ParseUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
- * This class converts the jjtree node to a domain object.
+ * This class converts the jjtree node to a domain object. This is where the
+ * hard work happens.
  * 
  * @author Philip Helger
  */
@@ -90,6 +91,12 @@ final class CSSNodeToDomainObject
 
   private final ECSSVersion m_eVersion;
 
+  /**
+   * Constructor
+   * 
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   */
   public CSSNodeToDomainObject (@Nonnull final ECSSVersion eVersion)
   {
     if (eVersion == null)
