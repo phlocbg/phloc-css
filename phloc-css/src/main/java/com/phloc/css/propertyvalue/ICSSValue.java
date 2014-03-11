@@ -24,7 +24,7 @@ import com.phloc.css.ICSSWriteable;
 import com.phloc.css.property.ECSSProperty;
 
 /**
- * Represents a single CSS value.
+ * Represents a single CSS value that is used in a CSS declaration.
  * 
  * @author Philip Helger
  */
@@ -32,7 +32,7 @@ import com.phloc.css.property.ECSSProperty;
 public interface ICSSValue extends ICSSWriteable
 {
   /**
-   * @return The underlying CSS property. Never <code>null</code>.
+   * @return The underlying CSS property from an enum. Never <code>null</code>.
    */
   @Nonnull
   ECSSProperty getProp ();

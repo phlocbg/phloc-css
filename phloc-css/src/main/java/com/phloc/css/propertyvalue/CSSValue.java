@@ -139,13 +139,18 @@ public class CSSValue implements ICSSValue
       return false;
     final CSSValue rhs = (CSSValue) o;
     // Important flag is contained in the value!
-    return m_aProperty.getProp ().equals (rhs.m_aProperty.getProp ()) && m_sValue.equals (rhs.m_sValue);
+    return m_aProperty.getProp ().equals (rhs.m_aProperty.getProp ()) &&
+           m_sValue.equals (rhs.m_sValue) &&
+           m_bIsImportant == rhs.m_bIsImportant;
   }
 
   @Override
   public int hashCode ()
   {
-    return new HashCodeGenerator (this).append (m_aProperty.getProp ()).append (m_sValue).getHashCode ();
+    return new HashCodeGenerator (this).append (m_aProperty.getProp ())
+                                       .append (m_sValue)
+                                       .append (m_bIsImportant)
+                                       .getHashCode ();
   }
 
   @Override

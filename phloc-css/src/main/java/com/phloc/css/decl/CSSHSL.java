@@ -33,7 +33,7 @@ import com.phloc.css.propertyvalue.CCSSValue;
 import com.phloc.css.utils.CSSColorHelper;
 
 /**
- * Represents a single HSL color value
+ * Represents a single HSL color value (hue, saturation, lightness).
  * 
  * @author Philip Helger
  */
