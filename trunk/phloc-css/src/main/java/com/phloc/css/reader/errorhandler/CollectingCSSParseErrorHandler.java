@@ -36,7 +36,9 @@ import com.phloc.css.parser.ParseException;
 import com.phloc.css.parser.Token;
 
 /**
- * A collecting implementation of {@link ICSSParseErrorHandler}
+ * A collecting implementation of {@link ICSSParseErrorHandler}. So in case a
+ * recoverable error occurs, it is remembered in the internal list and can be
+ * retrieved by {@link #getAllParseErrors()}.
  * 
  * @author Philip Helger
  */
@@ -115,7 +117,7 @@ public class CollectingCSSParseErrorHandler implements ICSSParseErrorHandler
   }
 
   /**
-   * @return The number of contained parse errors.
+   * @return The number of contained parse errors. Always &ge; 0.
    */
   @Nonnegative
   public int getParseErrorCount ()
@@ -131,6 +133,12 @@ public class CollectingCSSParseErrorHandler implements ICSSParseErrorHandler
     }
   }
 
+  /**
+   * @return A copy of the list with all contained errors. Never
+   *         <code>null</code> but maybe empty.
+   * @see #getParseErrorCount()
+   * @see #hasParseErrors()
+   */
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSParseError> getAllParseErrors ()

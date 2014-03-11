@@ -27,8 +27,9 @@ import com.phloc.css.parser.Token;
 
 /**
  * An implementation of {@link ICSSParseErrorHandler} that throws a
- * {@link ParseException} in case of a parse error. This is the most strict
- * version.
+ * {@link ParseException}. So in case a recoverable error occurs, a new
+ * {@link ParseException} is thrown. This is the most strict implementation of
+ * {@link ICSSParseErrorHandler}.
  * 
  * @author Philip Helger
  */
