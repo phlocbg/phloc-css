@@ -35,7 +35,8 @@ import com.phloc.css.utils.CSSDataURLHelper;
 import com.phloc.css.utils.CSSURLHelper;
 
 /**
- * Represents a single CSS URI
+ * Represents a single CSS URI. The contained URI might be modified using
+ * {@link #setURI(String)}.
  * 
  * @author Philip Helger
  */
