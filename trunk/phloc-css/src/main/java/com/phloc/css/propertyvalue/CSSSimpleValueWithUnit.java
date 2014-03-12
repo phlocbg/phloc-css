@@ -24,7 +24,7 @@ import java.math.RoundingMode;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
@@ -38,11 +38,11 @@ import com.phloc.css.ECSSUnit;
  * 
  * @author Philip Helger
  */
-@Immutable
+@NotThreadSafe
 public class CSSSimpleValueWithUnit implements Serializable
 {
-  private final BigDecimal m_aValue;
-  private final ECSSUnit m_eUnit;
+  private BigDecimal m_aValue;
+  private ECSSUnit m_eUnit;
 
   /**
    * Constructor
@@ -54,11 +54,9 @@ public class CSSSimpleValueWithUnit implements Serializable
    */
   public CSSSimpleValueWithUnit (@Nonnull final BigDecimal aValue, @Nonnull final ECSSUnit eUnit)
   {
-    if (aValue == null)
-      throw new NullPointerException ("Value");
     if (eUnit == null)
       throw new NullPointerException ("Unit");
-    m_aValue = aValue;
+    setValue (aValue);
     m_eUnit = eUnit;
   }
 
@@ -73,6 +71,37 @@ public class CSSSimpleValueWithUnit implements Serializable
   public CSSSimpleValueWithUnit (final double dValue, @Nonnull final ECSSUnit eUnit)
   {
     this (BigDecimal.valueOf (dValue), eUnit);
+  }
+
+  /**
+   * Set the numerical value.
+   * 
+   * @param aValue
+   *        The new value to set. May not be <code>null</code>.
+   * @return this
+   * @since 3.7.3
+   */
+  @Nonnull
+  public CSSSimpleValueWithUnit setValue (@Nonnull final BigDecimal aValue)
+  {
+    if (aValue == null)
+      throw new NullPointerException ("Value");
+    m_aValue = aValue;
+    return this;
+  }
+
+  /**
+   * Set the numerical value.
+   * 
+   * @param dValue
+   *        The new value to set.
+   * @return this
+   * @since 3.7.3
+   */
+  @Nonnull
+  public CSSSimpleValueWithUnit setValue (final double dValue)
+  {
+    return setValue (BigDecimal.valueOf (dValue));
   }
 
   /**
@@ -109,6 +138,23 @@ public class CSSSimpleValueWithUnit implements Serializable
   public long getAsLongValue ()
   {
     return m_aValue.longValue ();
+  }
+
+  /**
+   * Set the unit type.
+   * 
+   * @param eUnit
+   *        The new unit to set. May not be <code>null</code>.
+   * @return this
+   * @since 3.7.3
+   */
+  @Nonnull
+  public CSSSimpleValueWithUnit setUnit (@Nonnull final ECSSUnit eUnit)
+  {
+    if (eUnit == null)
+      throw new NullPointerException ("Unit");
+    m_eUnit = eUnit;
+    return this;
   }
 
   /**
