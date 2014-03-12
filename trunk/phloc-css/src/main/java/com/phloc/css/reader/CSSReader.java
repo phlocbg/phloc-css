@@ -40,6 +40,7 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.charset.EUnicodeBOM;
 import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.collections.pair.ReadonlyPair;
 import com.phloc.commons.io.IInputStreamProvider;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.FileSystemResource;
@@ -771,7 +772,7 @@ public final class CSSReader
   }
 
   @Nullable
-  private static InputStream _getInputStreamWithoutBOM (@Nonnull final IInputStreamProvider aISP)
+  private static ReadonlyPair <InputStream, Charset> _getInputStreamWithoutBOM (@Nonnull final IInputStreamProvider aISP)
   {
     // Try to open input stream
     final InputStream aIS = aISP.getInputStream ();
@@ -785,14 +786,40 @@ public final class CSSReader
     {
       final byte [] aBOM = new byte [nMaxBOMBytes];
       final int nReadBOMBytes = aPIS.read (aBOM);
+      Charset aDeterminedCharset = null;
       if (nReadBOMBytes > 0)
       {
         // Some byte BOMs were read
         final EUnicodeBOM eBOM = EUnicodeBOM.getFromBytesOrNull (ArrayHelper.getCopy (aBOM, 0, nReadBOMBytes));
         if (eBOM == null)
           aPIS.unread (aBOM, 0, nReadBOMBytes);
+        else
+          switch (eBOM)
+          {
+            case BOM_UTF_8:
+              aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-8");
+              break;
+            case BOM_UTF_16_BIG_ENDIAN:
+              aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-16be");
+              break;
+            case BOM_UTF_16_LITTLE_ENDIAN:
+              aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-16le");
+              break;
+            case BOM_UTF_32_BIG_ENDIAN:
+              aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-32be");
+              break;
+            case BOM_UTF_32_LITTLE_ENDIAN:
+              aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-32le");
+              break;
+            case BOM_GB_18030:
+              aDeterminedCharset = CharsetManager.getCharsetFromName ("gb18030");
+              break;
+            default:
+              // The charset required by the BOM is not a standard charset
+              break;
+          }
       }
-      return aPIS;
+      return new ReadonlyPair <InputStream, Charset> (aPIS, aDeterminedCharset);
     }
     catch (final IOException ex)
     {
@@ -818,9 +845,11 @@ public final class CSSReader
       throw new NullPointerException ("inputStreamProvider");
 
     // Open input stream
-    final InputStream aIS = _getInputStreamWithoutBOM (aISP);
-    if (aIS == null)
+    final ReadonlyPair <InputStream, Charset> aISAndBOM = _getInputStreamWithoutBOM (aISP);
+    if (aISAndBOM == null || aISAndBOM.getFirst () == null)
       return null;
+
+    final InputStream aIS = aISAndBOM.getFirst ();
 
     try
     {
@@ -831,7 +860,10 @@ public final class CSSReader
       final ParserCSSCharsetDetector aParser = new ParserCSSCharsetDetector (aTokenHdl);
       final String sCharsetName = aParser.styleSheetCharset ().getText ();
       if (sCharsetName == null)
-        return null;
+      {
+        // No charset specified - use the one from the BOM (if any)
+        return aISAndBOM.getSecond ();
+      }
       // Remove leading and trailing quotes from value
       return CharsetManager.getCharsetFromName (ParseUtils.extractStringValue (sCharsetName));
     }
@@ -914,7 +946,8 @@ public final class CSSReader
 
     Charset aCharsetToUse = aCharset;
 
-    // Check if the CSS contains a declared charset
+    // Check if the CSS contains a declared charset or as an alternative use the
+    // Charset from the BOM
     final Charset aDeclaredCharset = getCharsetDeclaredInCSS (aISP);
     if (aDeclaredCharset != null)
     {
@@ -923,10 +956,12 @@ public final class CSSReader
       aCharsetToUse = aDeclaredCharset;
     }
 
-    // Try to open input stream
-    final InputStream aIS = _getInputStreamWithoutBOM (aISP);
-    if (aIS == null)
+    // Open input stream
+    final ReadonlyPair <InputStream, Charset> aISAndBOM = _getInputStreamWithoutBOM (aISP);
+    if (aISAndBOM == null || aISAndBOM.getFirst () == null)
       return null;
+
+    final InputStream aIS = aISAndBOM.getFirst ();
 
     try
     {
