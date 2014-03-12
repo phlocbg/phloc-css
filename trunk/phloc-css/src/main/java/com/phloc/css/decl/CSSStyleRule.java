@@ -38,7 +38,9 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a single CSS style rule. A style rule consists of a number of
  * selectors (determine the element to which the style rule applies) and a
- * number of declarations (the rules to be applied to the selected elements).
+ * number of declarations (the rules to be applied to the selected elements).<br>
+ * Example:<br>
+ * <code>div { color: red; }</code>
  * 
  * @author Philip Helger
  */

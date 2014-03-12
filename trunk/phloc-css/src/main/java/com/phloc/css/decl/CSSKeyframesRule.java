@@ -39,7 +39,12 @@ import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single @keyframes rule.
+ * Represents a single @keyframes rule.<br>
+ * Example:<br>
+ * <code>@keyframes identifier {  
+  0% { top: 0; left: 0; }  
+  30% { top: 50px; }  
+ }</code>
  * 
  * @author Philip Helger
  */

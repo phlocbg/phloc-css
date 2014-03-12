@@ -38,7 +38,13 @@ import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a single <code>@media</code> rule: a list of style rules only
- * valid for certain media.
+ * valid for certain media.<br>
+ * Example:<br>
+ * <code>@media print {
+  div#footer {
+    display: none;
+  }
+}</code>
  * 
  * @author Philip Helger
  */

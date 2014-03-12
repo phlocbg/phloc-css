@@ -38,7 +38,9 @@ import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a single import rule on top level. It consists of a mandatory URI
- * and an optional list of media queries.
+ * and an optional list of media queries.<br>
+ * Example:<br>
+ * <code>@import url("style.css") screen;</code>
  * 
  * @author Philip Helger
  */

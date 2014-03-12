@@ -37,7 +37,9 @@ import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single <code>@viewport</code> rule.
+ * Represents a single <code>@viewport</code> rule.<br>
+ * Example:<br>
+ * <code>@viewport { width: device-width; }</code>
  * 
  * @author Philip Helger
  */

@@ -34,7 +34,9 @@ import com.phloc.css.ICSSWriterSettings;
 import com.phloc.css.utils.CSSURLHelper;
 
 /**
- * Represents a single namespace rule on top level.
+ * Represents a single namespace rule on top level.<br>
+ * Example:<br>
+ * <code>@namespace Q "http://example.com/q-markup";</code>
  * 
  * @author Philip Helger
  */

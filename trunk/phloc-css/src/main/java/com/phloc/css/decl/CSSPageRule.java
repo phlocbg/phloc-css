@@ -37,7 +37,12 @@ import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single <code>@page</code> rule.
+ * Represents a single <code>@page</code> rule.<br>
+ * Example:<br>
+ * <code>@page {
+  size: auto;
+  margin: 10%;
+}</code>
  * 
  * @author Philip Helger
  */
