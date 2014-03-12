@@ -792,8 +792,17 @@ public final class CSSReader
         // Some byte BOMs were read
         final EUnicodeBOM eBOM = EUnicodeBOM.getFromBytesOrNull (ArrayHelper.getCopy (aBOM, 0, nReadBOMBytes));
         if (eBOM == null)
+        {
+          // Unread the whole BOM
           aPIS.unread (aBOM, 0, nReadBOMBytes);
+        }
         else
+        {
+          // Unread the unnecessary parts of the BOM
+          final int nBOMBytes = eBOM.getByteCount ();
+          if (nBOMBytes < nReadBOMBytes)
+            aPIS.unread (aBOM, nBOMBytes, nReadBOMBytes - nBOMBytes);
+
           switch (eBOM)
           {
             case BOM_UTF_8:
@@ -818,6 +827,7 @@ public final class CSSReader
               // The charset required by the BOM is not a standard charset
               break;
           }
+        }
       }
       return new ReadonlyPair <InputStream, Charset> (aPIS, aDeterminedCharset);
     }
