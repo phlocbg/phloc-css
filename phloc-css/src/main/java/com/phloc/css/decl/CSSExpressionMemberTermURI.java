@@ -118,7 +118,7 @@ public class CSSExpressionMemberTermURI implements ICSSExpressionMember, ICSSSou
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSExpressionMemberTermURI))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSExpressionMemberTermURI rhs = (CSSExpressionMemberTermURI) o;
     return m_aURI.equals (rhs.m_aURI);

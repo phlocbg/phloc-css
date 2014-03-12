@@ -134,7 +134,7 @@ public class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSURI))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSURI rhs = (CSSURI) o;
     return m_sURI.equals (rhs.m_sURI);

@@ -263,7 +263,7 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSStyleRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSStyleRule rhs = (CSSStyleRule) o;
     return m_aSelectors.equals (rhs.m_aSelectors) && m_aDeclarations.equals (rhs.m_aDeclarations);

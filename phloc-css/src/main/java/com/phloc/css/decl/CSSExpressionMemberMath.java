@@ -144,7 +144,7 @@ public class CSSExpressionMemberMath implements ICSSExpressionMember, ICSSVersio
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSExpressionMemberMath))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSExpressionMemberMath rhs = (CSSExpressionMemberMath) o;
     return m_aMembers.equals (rhs.m_aMembers);

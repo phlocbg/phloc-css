@@ -164,7 +164,7 @@ public class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSFontFaceRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSFontFaceRule rhs = (CSSFontFaceRule) o;
     return m_aDeclarations.equals (rhs.m_aDeclarations);

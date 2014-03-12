@@ -93,7 +93,7 @@ public class CSSSupportsConditionNegation implements ICSSSupportsConditionMember
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSupportsConditionNegation))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSupportsConditionNegation rhs = (CSSSupportsConditionNegation) o;
     return m_aSupportsMember.equals (rhs.m_aSupportsMember);

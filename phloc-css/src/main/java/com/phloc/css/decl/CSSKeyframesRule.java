@@ -217,7 +217,7 @@ public class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAware, ICS
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSKeyframesRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSKeyframesRule rhs = (CSSKeyframesRule) o;
     return m_sDeclaration.equals (rhs.m_sDeclaration) &&

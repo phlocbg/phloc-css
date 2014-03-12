@@ -177,7 +177,7 @@ public class CSSHSL implements ICSSWriteable, ICSSVersionAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSHSL))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSHSL rhs = (CSSHSL) o;
     return m_sHue.equals (rhs.m_sHue) &&

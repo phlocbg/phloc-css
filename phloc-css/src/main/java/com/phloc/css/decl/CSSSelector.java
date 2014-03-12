@@ -36,7 +36,10 @@ import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single selector as the aggregation of selector members.
+ * Represents a single selector as the aggregation of selector members. An
+ * example for a selector is e.g. <code>div</code> or <code>.class</code> or
+ * <code>h1.class</code> or <code>#id</code> or
+ * <code>table tbody td .class</code> etc.
  * 
  * @author Philip Helger
  */
@@ -100,6 +103,15 @@ public class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
     return EChange.CHANGED;
   }
 
+  @Nonnull
+  public EChange removeAllMembers ()
+  {
+    if (m_aMembers.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aMembers.clear ();
+    return EChange.CHANGED;
+  }
+
   @Nullable
   public ICSSSelectorMember getMemberAtIndex (@Nonnegative final int nMemberIndex)
   {
@@ -146,7 +158,7 @@ public class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSelector))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSelector rhs = (CSSSelector) o;
     return m_aMembers.equals (rhs.m_aMembers);

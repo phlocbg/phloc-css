@@ -143,7 +143,7 @@ public class CSSExpressionMemberMathProduct implements ICSSExpressionMathMember,
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSExpressionMemberMathProduct))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSExpressionMemberMathProduct rhs = (CSSExpressionMemberMathProduct) o;
     return m_aMembers.equals (rhs.m_aMembers);

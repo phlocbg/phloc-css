@@ -263,7 +263,7 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSMediaRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSMediaRule rhs = (CSSMediaRule) o;
     return m_aMediaQueries.equals (rhs.m_aMediaQueries) && m_aRules.equals (rhs.m_aRules);

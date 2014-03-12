@@ -412,7 +412,7 @@ public class CSSExpression implements ICSSWriteable, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSExpression))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSExpression rhs = (CSSExpression) o;
     return m_aMembers.equals (rhs.m_aMembers);

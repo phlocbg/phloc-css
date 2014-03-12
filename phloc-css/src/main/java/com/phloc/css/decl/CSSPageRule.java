@@ -180,7 +180,7 @@ public class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSV
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSPageRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSPageRule rhs = (CSSPageRule) o;
     return m_aDeclarations.equals (rhs.m_aDeclarations);

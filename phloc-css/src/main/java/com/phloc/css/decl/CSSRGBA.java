@@ -31,7 +31,7 @@ import com.phloc.css.propertyvalue.CCSSValue;
 import com.phloc.css.utils.CSSColorHelper;
 
 /**
- * Represents a single RGBA color value
+ * Represents a single RGBA color value (red, green, blue, opacity)
  * 
  * @author Philip Helger
  */
@@ -54,6 +54,18 @@ public class CSSRGBA implements ICSSWriteable
     this (aOther.getRed (), aOther.getGreen (), aOther.getBlue (), aOther.getOpacity ());
   }
 
+  /**
+   * Constructor
+   * 
+   * @param nRed
+   *        Red part. Is fitted to a value between 0 and 255.
+   * @param nGreen
+   *        Green part. Is fitted to a value between 0 and 255.
+   * @param nBlue
+   *        Blue part. Is fitted to a value between 0 and 255.
+   * @param fOpacity
+   *        Opacity part. Is fitted to a value between 0 and 1.
+   */
   public CSSRGBA (final int nRed, final int nGreen, final int nBlue, final float fOpacity)
   {
     this (Integer.toString (CSSColorHelper.getRGBValue (nRed)),
@@ -62,6 +74,18 @@ public class CSSRGBA implements ICSSWriteable
           Float.toString (CSSColorHelper.getOpacityToUse (fOpacity)));
   }
 
+  /**
+   * Constructor
+   * 
+   * @param sRed
+   *        Red part.
+   * @param sGreen
+   *        Green part.
+   * @param sBlue
+   *        Blue part.
+   * @param sOpacity
+   *        Opacity part.
+   */
   public CSSRGBA (@Nonnull @Nonempty final String sRed,
                   @Nonnull @Nonempty final String sGreen,
                   @Nonnull @Nonempty final String sBlue,
@@ -173,7 +197,7 @@ public class CSSRGBA implements ICSSWriteable
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSRGBA))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSRGBA rhs = (CSSRGBA) o;
     return m_sRed.equals (rhs.m_sRed) &&

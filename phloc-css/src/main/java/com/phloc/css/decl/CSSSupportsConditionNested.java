@@ -203,7 +203,7 @@ public class CSSSupportsConditionNested implements ICSSSupportsConditionMember, 
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSupportsConditionNested))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSupportsConditionNested rhs = (CSSSupportsConditionNested) o;
     return m_aMembers.equals (rhs.m_aMembers);

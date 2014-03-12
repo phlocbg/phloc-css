@@ -200,7 +200,7 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSDeclarationList))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSDeclarationList rhs = (CSSDeclarationList) o;
     return m_aDeclarations.equals (rhs.m_aDeclarations);

@@ -801,7 +801,7 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   {
     if (o == this)
       return true;
-    if (!(o instanceof CascadingStyleSheet))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CascadingStyleSheet rhs = (CascadingStyleSheet) o;
     return m_aImportRules.equals (rhs.m_aImportRules) &&

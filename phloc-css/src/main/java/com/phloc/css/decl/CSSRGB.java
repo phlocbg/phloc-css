@@ -31,7 +31,7 @@ import com.phloc.css.propertyvalue.CCSSValue;
 import com.phloc.css.utils.CSSColorHelper;
 
 /**
- * Represents a single RGB color value
+ * Represents a single RGB color value (red, green, blue)
  * 
  * @author Philip Helger
  */
@@ -53,6 +53,16 @@ public class CSSRGB implements ICSSWriteable
     this (aOther.getRed (), aOther.getGreen (), aOther.getBlue ());
   }
 
+  /**
+   * Constructor
+   * 
+   * @param nRed
+   *        Red part. Is fitted to a value between 0 and 255.
+   * @param nGreen
+   *        Green part. Is fitted to a value between 0 and 255.
+   * @param nBlue
+   *        Blue part. Is fitted to a value between 0 and 255.
+   */
   public CSSRGB (final int nRed, final int nGreen, final int nBlue)
   {
     this (Integer.toString (CSSColorHelper.getRGBValue (nRed)),
@@ -60,6 +70,16 @@ public class CSSRGB implements ICSSWriteable
           Integer.toString (CSSColorHelper.getRGBValue (nBlue)));
   }
 
+  /**
+   * Constructor
+   * 
+   * @param sRed
+   *        Red part.
+   * @param sGreen
+   *        Green part.
+   * @param sBlue
+   *        Blue part.
+   */
   public CSSRGB (@Nonnull @Nonempty final String sRed,
                  @Nonnull @Nonempty final String sGreen,
                  @Nonnull @Nonempty final String sBlue)
@@ -141,7 +161,7 @@ public class CSSRGB implements ICSSWriteable
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSRGB))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSRGB rhs = (CSSRGB) o;
     return m_sRed.equals (rhs.m_sRed) && m_sGreen.equals (rhs.m_sGreen) && m_sBlue.equals (rhs.m_sBlue);
