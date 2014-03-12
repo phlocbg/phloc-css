@@ -71,8 +71,6 @@ public class CSSValueMultiValue implements ICSSMultiValue
   @Nonnull
   public ECSSProperty getProp ()
   {
-    if (m_aValues.isEmpty ())
-      throw new IllegalStateException ("no value present to determine the property from!");
     return ContainerHelper.getFirstElement (m_aValues).getProp ();
   }
 

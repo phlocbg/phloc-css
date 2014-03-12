@@ -45,12 +45,16 @@ import com.phloc.css.property.ICSSProperty;
 @Immutable
 public class CSSValueList implements ICSSMultiValue
 {
+  private final ECSSProperty m_eProperty;
   private final List <CSSValue> m_aValues;
 
-  public CSSValueList (@Nonnull final ICSSProperty [] aProperties,
+  public CSSValueList (@Nonnull final ECSSProperty eProperty,
+                       @Nonnull final ICSSProperty [] aProperties,
                        @Nonnull final String [] aValues,
                        final boolean bIsImportant)
   {
+    if (eProperty == null)
+      throw new NullPointerException ("Property");
     if (ArrayHelper.isEmpty (aProperties))
       throw new IllegalArgumentException ("No properties passed!");
     if (ArrayHelper.isEmpty (aValues))
@@ -58,6 +62,19 @@ public class CSSValueList implements ICSSMultiValue
     if (aProperties.length != aValues.length)
       throw new IllegalArgumentException ("Different number of properties and values passed");
 
+    boolean bFound = false;
+    for (final ICSSProperty aProperty : aProperties)
+      if (aProperty.getProp () == eProperty)
+      {
+        bFound = true;
+        break;
+      }
+    if (!bFound)
+      throw new IllegalArgumentException ("The property " +
+                                          eProperty +
+                                          " is not contained in an ICSSProperty instance!");
+
+    m_eProperty = eProperty;
     m_aValues = new ArrayList <CSSValue> (aProperties.length);
     for (int i = 0; i < aProperties.length; ++i)
       m_aValues.add (new CSSValue (aProperties[i], aValues[i], bIsImportant));
@@ -73,9 +90,7 @@ public class CSSValueList implements ICSSMultiValue
   @Nonnull
   public ECSSProperty getProp ()
   {
-    if (m_aValues.isEmpty ())
-      throw new IllegalStateException ("No value present to determine the property from!");
-    return ContainerHelper.getLastElement (m_aValues).getProp ();
+    return m_eProperty;
   }
 
   @Nonnull

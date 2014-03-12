@@ -40,7 +40,8 @@ public class CSSPropertyCustomizerBorderBottomLeftRadius extends AbstractCSSProp
                                        @Nonnull @Nonempty final String sValue,
                                        final boolean bIsImportant)
   {
-    return new CSSValueMultiProperty (new ICSSProperty [] { aProperty,
+    return new CSSValueMultiProperty (aProperty.getProp (),
+                                      new ICSSProperty [] { aProperty,
                                                            aProperty.getClone (ECSSProperty._MOZ_BORDER_RADIUS_BOTTOMLEFT),
                                                            aProperty.getClone (ECSSProperty._WEBKIT_BORDER_BOTTOM_LEFT_RADIUS),
                                                            aProperty.getClone (ECSSProperty._KHTML_BORDER_BOTTOM_LEFT_RADIUS) },
