@@ -103,6 +103,12 @@ public class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
     return EChange.CHANGED;
   }
 
+  /**
+   * Remove all members.
+   * 
+   * @return {@link EChange#CHANGED} if any member was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   */
   @Nonnull
   public EChange removeAllMembers ()
   {

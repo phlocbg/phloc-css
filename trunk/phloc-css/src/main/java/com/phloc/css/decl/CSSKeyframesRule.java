@@ -133,6 +133,22 @@ public class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAware, ICS
     return EChange.valueOf (m_aBlocks.remove (nBlockIndex) != null);
   }
 
+  /**
+   * Remove all blocks.
+   * 
+   * @return {@link EChange#CHANGED} if any block was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllBlocks ()
+  {
+    if (m_aBlocks.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aBlocks.clear ();
+    return EChange.CHANGED;
+  }
+
   @Nullable
   public CSSKeyframesBlock getBlockAtIndex (@Nonnegative final int nBlockIndex)
   {

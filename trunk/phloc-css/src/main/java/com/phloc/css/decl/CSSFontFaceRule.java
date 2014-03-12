@@ -85,6 +85,12 @@ public class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
   }
 
   @Nonnull
+  public EChange removeAllDeclarations ()
+  {
+    return m_aDeclarations.removeAllDeclarations ();
+  }
+
+  @Nonnull
   @ReturnsMutableCopy
   public List <CSSDeclaration> getAllDeclarations ()
   {

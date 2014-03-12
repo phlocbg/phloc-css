@@ -121,6 +121,22 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
     return EChange.CHANGED;
   }
 
+  /**
+   * Remove all selectors.
+   * 
+   * @return {@link EChange#CHANGED} if any selector was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllSelectors ()
+  {
+    if (m_aSelectors.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aSelectors.clear ();
+    return EChange.CHANGED;
+  }
+
   @Nullable
   public CSSSelector getSelectorAtIndex (@Nonnegative final int nSelectorIndex)
   {
@@ -169,6 +185,12 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
   public EChange removeDeclaration (@Nonnegative final int nDeclarationIndex)
   {
     return m_aDeclarations.removeDeclaration (nDeclarationIndex);
+  }
+
+  @Nonnull
+  public EChange removeAllDeclarations ()
+  {
+    return m_aDeclarations.removeAllDeclarations ();
   }
 
   @Nonnull
