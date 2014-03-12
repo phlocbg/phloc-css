@@ -89,7 +89,7 @@ public class CSSValueMultiProperty implements ICSSMultiValue
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSValueMultiProperty))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSValueMultiProperty rhs = (CSSValueMultiProperty) o;
     return m_aValues.equals (rhs.m_aValues);

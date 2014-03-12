@@ -92,7 +92,7 @@ public class CSSValueList implements ICSSMultiValue
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSValueList))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSValueList rhs = (CSSValueList) o;
     return m_aValues.equals (rhs.m_aValues);

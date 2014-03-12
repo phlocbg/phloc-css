@@ -174,7 +174,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   {
     // Always format with English locale ('.' as decimal separator)
     final NumberFormat aNF = NumberFormat.getNumberInstance (CGlobal.LOCALE_FIXED_NUMBER_FORMAT);
-    aNF.setMaximumFractionDigits (16);
+    aNF.setMaximumFractionDigits (CCSS.CSS_MAXIMUM_FRACTION_DIGITS);
     aNF.setGroupingUsed (false);
     return aNF.format (dValue) + m_sName;
   }
@@ -194,7 +194,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   {
     // Always format with English locale ('.' as decimal separator)
     final NumberFormat aNF = NumberFormat.getNumberInstance (CGlobal.LOCALE_FIXED_NUMBER_FORMAT);
-    aNF.setMaximumFractionDigits (16);
+    aNF.setMaximumFractionDigits (CCSS.CSS_MAXIMUM_FRACTION_DIGITS);
     aNF.setGroupingUsed (false);
     return aNF.format (aValue) + m_sName;
   }
