@@ -108,7 +108,7 @@ public class CSSExpressionMemberMathUnitSimple implements ICSSExpressionMathMemb
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSExpressionMemberMathUnitSimple))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSExpressionMemberMathUnitSimple rhs = (CSSExpressionMemberMathUnitSimple) o;
     return m_sText.equals (rhs.m_sText);

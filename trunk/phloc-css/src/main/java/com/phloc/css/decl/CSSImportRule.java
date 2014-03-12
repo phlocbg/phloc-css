@@ -269,7 +269,7 @@ public class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSImportRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSImportRule rhs = (CSSImportRule) o;
     return m_aLocation.equals (rhs.m_aLocation) && m_aMediaQueries.equals (rhs.m_aMediaQueries);

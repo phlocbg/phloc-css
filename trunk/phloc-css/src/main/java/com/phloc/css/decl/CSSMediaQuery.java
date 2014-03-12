@@ -316,7 +316,7 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSMediaQuery))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSMediaQuery rhs = (CSSMediaQuery) o;
     return m_eModifier.equals (rhs.m_eModifier) &&

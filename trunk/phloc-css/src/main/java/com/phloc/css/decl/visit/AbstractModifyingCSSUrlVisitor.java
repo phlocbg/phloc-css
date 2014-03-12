@@ -41,8 +41,11 @@ public abstract class AbstractModifyingCSSUrlVisitor extends DefaultCSSUrlVisito
   @Override
   public void onImport (@Nonnull final CSSImportRule aImportRule)
   {
+    // Get the source URL
     final String sURI = aImportRule.getLocationString ();
+    // Modify the URL
     final String sModifiedURI = getModifiedURI (sURI);
+    // And set the new URL
     aImportRule.setLocationString (sModifiedURI);
   }
 
@@ -51,8 +54,11 @@ public abstract class AbstractModifyingCSSUrlVisitor extends DefaultCSSUrlVisito
                                 @Nonnull final CSSDeclaration aDeclaration,
                                 @Nonnull final CSSExpressionMemberTermURI aExprTerm)
   {
+    // Get the source URL
     final String sURI = aExprTerm.getURIString ();
+    // Modify the URL
     final String sModifiedURI = getModifiedURI (sURI);
+    // And set the new URL
     aExprTerm.setURIString (sModifiedURI);
   }
 }

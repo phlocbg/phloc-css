@@ -277,7 +277,7 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSupportsRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSupportsRule rhs = (CSSSupportsRule) o;
     return m_aConditionMembers.equals (rhs.m_aConditionMembers) && m_aRules.equals (rhs.m_aRules);

@@ -144,7 +144,7 @@ public class CSSNamespaceRule implements ICSSWriteable, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSNamespaceRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSNamespaceRule rhs = (CSSNamespaceRule) o;
     return EqualsUtils.equals (m_sPrefix, rhs.m_sPrefix) && m_sURL.equals (rhs.m_sURL);

@@ -26,6 +26,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
@@ -111,6 +112,23 @@ public class CSSPropertyEnum extends AbstractCSSProperty
   public CSSPropertyEnum getClone (@Nonnull final ECSSProperty eProp)
   {
     return new CSSPropertyEnum (eProp, getCustomizer (), m_aEnumValues);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (!super.equals (o))
+      return false;
+    final CSSPropertyEnum rhs = (CSSPropertyEnum) o;
+    return m_aEnumValues.equals (rhs.m_aEnumValues);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return HashCodeGenerator.getDerived (super.hashCode ()).append (m_aEnumValues).getHashCode ();
   }
 
   @Override

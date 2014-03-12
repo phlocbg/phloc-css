@@ -204,7 +204,7 @@ public class CSSRect implements ICSSWriteable
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSRect))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSRect rhs = (CSSRect) o;
     return m_sTop.equals (rhs.m_sTop) &&

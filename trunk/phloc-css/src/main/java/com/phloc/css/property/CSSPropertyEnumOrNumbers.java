@@ -24,6 +24,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
@@ -125,6 +126,29 @@ public class CSSPropertyEnumOrNumbers extends CSSPropertyEnum
                                          m_nMinNumbers,
                                          m_nMaxNumbers,
                                          directGetEnumValues ());
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (!super.equals (o))
+      return false;
+    final CSSPropertyEnumOrNumbers rhs = (CSSPropertyEnumOrNumbers) o;
+    return m_bWithPercentage == rhs.m_bWithPercentage &&
+           m_nMinNumbers == rhs.m_nMinNumbers &&
+           m_nMaxNumbers == rhs.m_nMaxNumbers;
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return HashCodeGenerator.getDerived (super.hashCode ())
+                            .append (m_bWithPercentage)
+                            .append (m_nMinNumbers)
+                            .append (m_nMaxNumbers)
+                            .getHashCode ();
   }
 
   @Override

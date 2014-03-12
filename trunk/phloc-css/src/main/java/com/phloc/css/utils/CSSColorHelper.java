@@ -335,7 +335,7 @@ public final class CSSColorHelper
    * 
    * @param fOpacity
    *        The original opacity
-   * @return The opacity in the correct range.
+   * @return The opacity in the correct range between 0 and 1.
    */
   @Nonnegative
   public static float getOpacityToUse (final float fOpacity)

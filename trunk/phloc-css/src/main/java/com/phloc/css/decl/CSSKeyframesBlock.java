@@ -194,7 +194,7 @@ public class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware,
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSKeyframesBlock))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSKeyframesBlock rhs = (CSSKeyframesBlock) o;
     return m_aKeyframesSelectors.equals (rhs.m_aKeyframesSelectors) && m_aDeclarations.equals (rhs.m_aDeclarations);

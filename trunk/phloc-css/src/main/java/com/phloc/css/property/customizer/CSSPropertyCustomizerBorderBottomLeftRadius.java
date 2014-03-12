@@ -33,7 +33,7 @@ import com.phloc.css.propertyvalue.ICSSValue;
  * @author Philip Helger
  */
 @Immutable
-public class CSSPropertyCustomizerBorderBottomLeftRadius implements ICSSPropertyCustomizer
+public class CSSPropertyCustomizerBorderBottomLeftRadius extends AbstractCSSPropertyCustomizer
 {
   @Nullable
   public ICSSValue createSpecialValue (@Nonnull final ICSSProperty aProperty,

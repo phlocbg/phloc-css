@@ -187,7 +187,7 @@ public class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSViewportRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSViewportRule rhs = (CSSViewportRule) o;
     return m_sDeclaration.equals (rhs.m_sDeclaration) && m_aDeclarations.equals (rhs.m_aDeclarations);

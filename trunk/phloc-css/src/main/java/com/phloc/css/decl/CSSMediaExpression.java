@@ -122,7 +122,7 @@ public class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware, ICSS
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSMediaExpression))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSMediaExpression rhs = (CSSMediaExpression) o;
     return m_sFeature.equals (rhs.m_sFeature) && EqualsUtils.equals (m_aValue, rhs.m_aValue);
