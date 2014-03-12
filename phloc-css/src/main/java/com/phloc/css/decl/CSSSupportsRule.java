@@ -41,7 +41,11 @@ import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a single <code>@supports/code> rule: a list of style rules only
- * valid when a certain declaration is available. See {@link ECSSSpecification#CSS3_CONDITIONAL}
+ * valid when a certain declaration is available. See {@link ECSSSpecification#CSS3_CONDITIONAL}<br>
+ * Example:<br>
+ * <code>@supports (transition-property: color) {
+  div { color:red; }
+}</code>
  * 
  * @author Philip Helger
  */

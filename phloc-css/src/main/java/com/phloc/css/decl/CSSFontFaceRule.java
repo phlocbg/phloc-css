@@ -36,7 +36,13 @@ import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single <code>@font-face</code> rule.
+ * Represents a single <code>@font-face</code> rule.<br>
+ * Example:<br>
+ * <code>@font-face {
+    font-family: 'icons';
+    src: url(path/to/font.woff) format('woff');
+    unicode-range: U+E000-E005;
+}</code>
  * 
  * @author Philip Helger
  */
