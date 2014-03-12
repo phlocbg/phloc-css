@@ -17,6 +17,7 @@
  */
 package com.phloc.css;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 
 import javax.annotation.Nonnull;
@@ -116,6 +117,9 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
     return m_sName;
   }
 
+  /**
+   * @return The underlying meta unit. Never <code>null</code>.
+   */
   @Nonnull
   public ECSSMetaUnit getMetaUnit ()
   {
@@ -169,7 +173,29 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public String format (final double dValue)
   {
     // Always format with English locale ('.' as decimal separator)
-    return NumberFormat.getNumberInstance (CGlobal.LOCALE_FIXED_NUMBER_FORMAT).format (dValue) + m_sName;
+    final NumberFormat aNF = NumberFormat.getNumberInstance (CGlobal.LOCALE_FIXED_NUMBER_FORMAT);
+    aNF.setMaximumFractionDigits (16);
+    aNF.setGroupingUsed (false);
+    return aNF.format (dValue) + m_sName;
+  }
+
+  /**
+   * Get the passed value formatted with this unit. Always '.' is used as the
+   * separator.
+   * 
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + getName()</code>
+   */
+  @Nonnull
+  @Nonempty
+  public String format (@Nonnull final BigDecimal aValue)
+  {
+    // Always format with English locale ('.' as decimal separator)
+    final NumberFormat aNF = NumberFormat.getNumberInstance (CGlobal.LOCALE_FIXED_NUMBER_FORMAT);
+    aNF.setMaximumFractionDigits (16);
+    aNF.setGroupingUsed (false);
+    return aNF.format (aValue) + m_sName;
   }
 
   @Nullable
@@ -211,6 +237,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "em"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String em (@Nonnull final BigDecimal aValue)
+  {
+    return EM.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
    * @return <code>value + "ex"</code>
@@ -232,6 +270,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public static String ex (final double dValue)
   {
     return EX.format (dValue);
+  }
+
+  /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "ex"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String ex (@Nonnull final BigDecimal aValue)
+  {
+    return EX.format (aValue);
   }
 
   /**
@@ -259,6 +309,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "px"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String px (@Nonnull final BigDecimal aValue)
+  {
+    return PX.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
    * @return <code>value + "rem"</code>
@@ -280,6 +342,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public static String rem (final double dValue)
   {
     return REM.format (dValue);
+  }
+
+  /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "rem"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String rem (@Nonnull final BigDecimal aValue)
+  {
+    return REM.format (aValue);
   }
 
   /**
@@ -307,6 +381,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "vw"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String vw (@Nonnull final BigDecimal aValue)
+  {
+    return VW.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
    * @return <code>value + "vh"</code>
@@ -328,6 +414,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public static String vh (final double dValue)
   {
     return VH.format (dValue);
+  }
+
+  /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "vh"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String vh (@Nonnull final BigDecimal aValue)
+  {
+    return VH.format (aValue);
   }
 
   /**
@@ -355,6 +453,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "vmin"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String vmin (@Nonnull final BigDecimal aValue)
+  {
+    return VMIN.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
    * @return <code>value + "ch"</code>
@@ -376,6 +486,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public static String ch (final double dValue)
   {
     return CH.format (dValue);
+  }
+
+  /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "ch"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String ch (@Nonnull final BigDecimal aValue)
+  {
+    return CH.format (aValue);
   }
 
   /**
@@ -403,6 +525,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "in"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String in (@Nonnull final BigDecimal aValue)
+  {
+    return LENGTH_IN.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
    * @return <code>value + "cm"</code>
@@ -424,6 +558,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public static String cm (final double dValue)
   {
     return LENGTH_CM.format (dValue);
+  }
+
+  /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "cm"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String cm (@Nonnull final BigDecimal aValue)
+  {
+    return LENGTH_CM.format (aValue);
   }
 
   /**
@@ -451,6 +597,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "mm"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String mm (@Nonnull final BigDecimal aValue)
+  {
+    return LENGTH_MM.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
    * @return <code>value + "pt"</code>
@@ -472,6 +630,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public static String pt (final double dValue)
   {
     return LENGTH_PT.format (dValue);
+  }
+
+  /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "pt"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String pt (@Nonnull final BigDecimal aValue)
+  {
+    return LENGTH_PT.format (aValue);
   }
 
   /**
@@ -499,6 +669,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "pc"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String pc (@Nonnull final BigDecimal aValue)
+  {
+    return LENGTH_PC.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
    * @return <code>value + "%"</code>
@@ -520,6 +702,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public static String perc (final double dValue)
   {
     return PERCENTAGE.format (dValue);
+  }
+
+  /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "%"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String perc (@Nonnull final BigDecimal aValue)
+  {
+    return PERCENTAGE.format (aValue);
   }
 
   /**
@@ -547,6 +741,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "deg"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String deg (@Nonnull final BigDecimal aValue)
+  {
+    return ANGLE_DEG.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
    * @return <code>value + "rad"</code>
@@ -568,6 +774,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public static String rad (final double dValue)
   {
     return ANGLE_RAD.format (dValue);
+  }
+
+  /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "rad"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String rad (@Nonnull final BigDecimal aValue)
+  {
+    return ANGLE_RAD.format (aValue);
   }
 
   /**
@@ -595,9 +813,21 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "grad"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String grad (@Nonnull final BigDecimal aValue)
+  {
+    return ANGLE_GRAD.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
-   * @return <code>value + "urn"</code>
+   * @return <code>value + "turn"</code>
    */
   @Nonnull
   @Nonempty
@@ -609,13 +839,25 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   /**
    * @param dValue
    *        value to format
-   * @return <code>value + "urn"</code>
+   * @return <code>value + "turn"</code>
    */
   @Nonnull
   @Nonempty
   public static String turn (final double dValue)
   {
     return ANGLE_TURN.format (dValue);
+  }
+
+  /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "turn"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String turn (@Nonnull final BigDecimal aValue)
+  {
+    return ANGLE_TURN.format (aValue);
   }
 
   /**
@@ -643,6 +885,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "ms"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String ms (@Nonnull final BigDecimal aValue)
+  {
+    return TIME_MS.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
    * @return <code>value + "s"</code>
@@ -664,6 +918,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public static String s (final double dValue)
   {
     return TIME_S.format (dValue);
+  }
+
+  /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "s"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String s (@Nonnull final BigDecimal aValue)
+  {
+    return TIME_S.format (aValue);
   }
 
   /**
@@ -691,6 +957,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "hz"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String hz (@Nonnull final BigDecimal aValue)
+  {
+    return FREQ_HZ.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
    * @return <code>value + "khz"</code>
@@ -712,6 +990,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public static String khz (final double dValue)
   {
     return FREQ_KHZ.format (dValue);
+  }
+
+  /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "khz"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String khz (@Nonnull final BigDecimal aValue)
+  {
+    return FREQ_KHZ.format (aValue);
   }
 
   /**
@@ -739,6 +1029,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "dpi"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String dpi (@Nonnull final BigDecimal aValue)
+  {
+    return DPI.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
    * @return <code>value + "dpcm"</code>
@@ -763,6 +1065,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   }
 
   /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "dpcm"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String dpcm (@Nonnull final BigDecimal aValue)
+  {
+    return DPCM.format (aValue);
+  }
+
+  /**
    * @param nValue
    *        value to format
    * @return <code>value + "dppx"</code>
@@ -784,6 +1098,18 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
   public static String dppx (final double dValue)
   {
     return DPPX.format (dValue);
+  }
+
+  /**
+   * @param aValue
+   *        Value to format. May not be <code>null</code>.
+   * @return <code>value + "dppx"</code>
+   */
+  @Nonnull
+  @Nonempty
+  public static String dppx (@Nonnull final BigDecimal aValue)
+  {
+    return DPPX.format (aValue);
   }
 
   /**

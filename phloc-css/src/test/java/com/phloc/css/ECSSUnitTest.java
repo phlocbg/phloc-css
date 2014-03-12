@@ -22,6 +22,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.math.BigDecimal;
+
 import org.junit.Test;
 
 import com.phloc.commons.string.StringHelper;
@@ -79,5 +81,17 @@ public final class ECSSUnitTest
     assertEquals ("5%", ECSSUnit.perc (5));
     assertEquals ("0%", ECSSUnit.perc (0));
     assertEquals ("-5%", ECSSUnit.perc (-5));
+    assertEquals ("5000em", ECSSUnit.em (5000));
+    assertEquals ("5000000em", ECSSUnit.em (5000000));
+    assertEquals ("0.0000005em", ECSSUnit.em (0.0000005));
+    assertEquals ("5000em", ECSSUnit.em (BigDecimal.valueOf (5000)));
+    assertEquals ("5000000em", ECSSUnit.em (BigDecimal.valueOf (5000000)));
+    assertEquals ("0.0000005em", ECSSUnit.em (BigDecimal.valueOf (0.0000005)));
+    assertEquals ("5000em", ECSSUnit.em (new BigDecimal ("5000")));
+    assertEquals ("5000000em", ECSSUnit.em (new BigDecimal ("5000000")));
+    assertEquals ("0.0000005em", ECSSUnit.em (new BigDecimal ("0.0000005")));
+    assertEquals ("5000em", ECSSUnit.em (new BigDecimal ("5000.000")));
+    assertEquals ("5000000em", ECSSUnit.em (new BigDecimal ("5000000.000")));
+    assertEquals ("0.0000005em", ECSSUnit.em (new BigDecimal ("0.0000005000")));
   }
 }
