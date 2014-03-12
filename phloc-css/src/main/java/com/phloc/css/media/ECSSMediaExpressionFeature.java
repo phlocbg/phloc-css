@@ -74,6 +74,9 @@ public enum ECSSMediaExpressionFeature implements IHasName
     m_sName = sName;
   }
 
+  /**
+   * @return the CSS media expression name. Never <code>null</code> nor empty.
+   */
   @Nonnull
   @Nonempty
   public String getName ()
@@ -81,11 +84,19 @@ public enum ECSSMediaExpressionFeature implements IHasName
     return m_sName;
   }
 
+  /**
+   * @return <code>true</code> if this media expression feature is WebKit
+   *         specific, <code>false</code> if not.
+   */
   public boolean isWebkitSpecific ()
   {
     return m_sName.startsWith ("-webkit-");
   }
 
+  /**
+   * @return <code>true</code> if this media expression feature is browser
+   *         specific, <code>false</code> if not.
+   */
   public boolean isBrowserSpecific ()
   {
     return m_sName.startsWith ("-");

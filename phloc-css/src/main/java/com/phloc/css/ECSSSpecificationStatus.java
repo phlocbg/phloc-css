@@ -17,10 +17,10 @@
  */
 package com.phloc.css;
 
-
 /**
  * Enumeration containing all W3C CSS specifications status. Source:
- * http://www.w3.org/Style/CSS/current-work
+ * http://www.w3.org/Style/CSS/current-work<br>
+ * For regular CSS parsing/writing this enum has no impact!
  * 
  * @author Philip Helger
  */

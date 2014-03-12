@@ -29,6 +29,8 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Defines the source location of a single token when reading CSS from a stream.
+ * It consists of the start position (getTokenBegin*) and the end position
+ * (getTokenEnd*).
  * 
  * @author Philip Helger
  */
@@ -40,6 +42,20 @@ public class CSSSourceArea implements Serializable
   private final int m_nEndLineNumber;
   private final int m_nEndColumnNumber;
 
+  /**
+   * Constructor
+   * 
+   * @param nBeginLineNumber
+   *        Line number of the beginning. May be -1 if not such token is
+   *        available.
+   * @param nBeginColumnNumber
+   *        Column number of the beginning. May be -1 if not such token is
+   *        available.
+   * @param nEndLineNumber
+   *        Line number of the end. May be -1 if not such token is available.
+   * @param nEndColumnNumber
+   *        Column number of the end. May be -1 if not such token is available.
+   */
   public CSSSourceArea (final int nBeginLineNumber,
                         final int nBeginColumnNumber,
                         final int nEndLineNumber,
@@ -93,7 +109,9 @@ public class CSSSourceArea implements Serializable
 
   /**
    * @return The location of the token as a simple string. Never
-   *         <code>null</code>. Example: <code>(1:2/3:4)</code>
+   *         <code>null</code>. Example: <code>(1:2/3:4)</code>. If begin and
+   *         end are identical, only one line/column value is printed:
+   *         <code>(1:2)</code>.
    */
   @Nonnull
   @Nonempty
@@ -120,7 +138,7 @@ public class CSSSourceArea implements Serializable
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSourceArea))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSourceArea rhs = (CSSSourceArea) o;
     return m_nBeginLineNumber == rhs.m_nBeginLineNumber &&
