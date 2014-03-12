@@ -51,6 +51,14 @@ public final class CCSS
   /** The "!important" suffix for property values */
   public static final String IMPORTANT_SUFFIX = " !important";
 
+  /**
+   * The maximum fraction digits to be considered when printing CSS decimal
+   * values.
+   * 
+   * @since 3.7.3
+   */
+  public static final int CSS_MAXIMUM_FRACTION_DIGITS = 16;
+
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
   private static final CCSS s_aInstance = new CCSS ();
