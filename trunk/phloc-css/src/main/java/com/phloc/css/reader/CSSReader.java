@@ -205,7 +205,8 @@ public final class CSSReader
    * @param aFile
    *        The file to be parsed. May not be <code>null</code>.
    * @param sCharset
-   *        The charset to be used for reading the CSS file. May not be
+   *        The charset to be used for reading the CSS file in case neither a
+   *        <code>@charset</code> rule nor a BOM is present. May not be
    *        <code>null</code>.
    * @param eVersion
    *        The CSS version to be used for scanning. May not be
@@ -229,7 +230,8 @@ public final class CSSReader
    * @param aFile
    *        The file to be parsed. May not be <code>null</code>.
    * @param aCharset
-   *        The charset to be used for reading the CSS file. May not be
+   *        The charset to be used for reading the CSS file in case neither a
+   *        <code>@charset</code> rule nor a BOM is present. May not be
    *        <code>null</code>.
    * @param eVersion
    *        The CSS version to be used for scanning. May not be
@@ -250,7 +252,8 @@ public final class CSSReader
    * @param aRes
    *        The resource to be parsed. May not be <code>null</code>.
    * @param sCharset
-   *        The charset to be used for reading the CSS file. May not be
+   *        The charset to be used for reading the CSS file in case neither a
+   *        <code>@charset</code> rule nor a BOM is present. May not be
    *        <code>null</code>.
    * @param eVersion
    *        The CSS version to be used for scanning. May not be
@@ -275,7 +278,8 @@ public final class CSSReader
    * @param aRes
    *        The resource to be parsed. May not be <code>null</code>.
    * @param aCharset
-   *        The charset to be used for reading the CSS file. May not be
+   *        The charset to be used for reading the CSS file in case neither a
+   *        <code>@charset</code> rule nor a BOM is present. May not be
    *        <code>null</code>.
    * @param eVersion
    *        The CSS version to be used for scanning. May not be
@@ -314,7 +318,8 @@ public final class CSSReader
    *        The input stream to use. Is automatically closed. May not be
    *        <code>null</code>.
    * @param sCharset
-   *        The charset to be used. May not be <code>null</code>.
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
    *        The CSS version to use. May not be <code>null</code>.
    * @return <code>true</code> if the CSS is valid according to the version,
@@ -344,7 +349,8 @@ public final class CSSReader
    *        The input stream to use. Is automatically closed. May not be
    *        <code>null</code>.
    * @param aCharset
-   *        The charset to be used. May not be <code>null</code>.
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
    *        The CSS version to use. May not be <code>null</code>.
    * @return <code>true</code> if the CSS is valid according to the version,
@@ -420,6 +426,20 @@ public final class CSSReader
     }
   }
 
+  /**
+   * Read the CSS from the passed String.
+   * 
+   * @param sCSS
+   *        The source string containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param sCharset
+   *        The charset name to be used in case neither a <code>@charset</code>
+   *        rule nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
@@ -429,6 +449,20 @@ public final class CSSReader
     return readFromString (sCSS, sCharset, eVersion, null, null);
   }
 
+  /**
+   * Read the CSS from the passed String.
+   * 
+   * @param sCSS
+   *        The source string containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param aCharset
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
                                                     @Nonnull final Charset aCharset,
@@ -437,6 +471,23 @@ public final class CSSReader
     return readFromString (sCSS, aCharset, eVersion, null, null);
   }
 
+  /**
+   * Read the CSS from the passed String.
+   * 
+   * @param sCSS
+   *        The source string containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param sCharset
+   *        The charset name to be used in case neither a <code>@charset</code>
+   *        rule nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomErrorHandler
+   *        An optional custom error handler that can be used to collect the
+   *        recoverable parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
@@ -447,6 +498,23 @@ public final class CSSReader
     return readFromString (sCSS, sCharset, eVersion, aCustomErrorHandler, null);
   }
 
+  /**
+   * Read the CSS from the passed String.
+   * 
+   * @param sCSS
+   *        The source string containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param aCharset
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomErrorHandler
+   *        An optional custom error handler that can be used to collect the
+   *        recoverable parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
                                                     @Nonnull final Charset aCharset,
@@ -456,6 +524,23 @@ public final class CSSReader
     return readFromString (sCSS, aCharset, eVersion, aCustomErrorHandler, null);
   }
 
+  /**
+   * Read the CSS from the passed String.
+   * 
+   * @param sCSS
+   *        The source string containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param sCharset
+   *        The charset name to be used in case neither a <code>@charset</code>
+   *        rule nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomExceptionHandler
+   *        An optional custom exception handler that can be used to collect the
+   *        unrecoverable parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
@@ -470,6 +555,23 @@ public final class CSSReader
                            aCustomExceptionHandler);
   }
 
+  /**
+   * Read the CSS from the passed String.
+   * 
+   * @param sCSS
+   *        The source string containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param aCharset
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomExceptionHandler
+   *        An optional custom exception handler that can be used to collect the
+   *        unrecoverable parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
                                                     @Nonnull final Charset aCharset,
@@ -483,6 +585,26 @@ public final class CSSReader
                            aCustomExceptionHandler);
   }
 
+  /**
+   * Read the CSS from the passed String.
+   * 
+   * @param sCSS
+   *        The source string containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param sCharset
+   *        The charset name to be used in case neither a <code>@charset</code>
+   *        rule nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomErrorHandler
+   *        An optional custom error handler that can be used to collect the
+   *        recoverable parsing errors. May be <code>null</code>.
+   * @param aCustomExceptionHandler
+   *        An optional custom exception handler that can be used to collect the
+   *        unrecoverable parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
@@ -498,6 +620,26 @@ public final class CSSReader
                            aCustomExceptionHandler);
   }
 
+  /**
+   * Read the CSS from the passed String.
+   * 
+   * @param sCSS
+   *        The source string containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param aCharset
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomErrorHandler
+   *        An optional custom error handler that can be used to collect the
+   *        recoverable parsing errors. May be <code>null</code>.
+   * @param aCustomExceptionHandler
+   *        An optional custom exception handler that can be used to collect the
+   *        unrecoverable parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
                                                     @Nonnull final Charset aCharset,
@@ -512,6 +654,20 @@ public final class CSSReader
                            aCustomExceptionHandler);
   }
 
+  /**
+   * Read the CSS from the passed File.
+   * 
+   * @param aFile
+   *        The file containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param sCharset
+   *        The charset name to be used in case neither a <code>@charset</code>
+   *        rule nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   @Deprecated
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
@@ -521,6 +677,20 @@ public final class CSSReader
     return readFromFile (aFile, sCharset, eVersion, null, null);
   }
 
+  /**
+   * Read the CSS from the passed File.
+   * 
+   * @param aFile
+   *        The file containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param aCharset
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
                                                   @Nonnull final Charset aCharset,
@@ -529,6 +699,23 @@ public final class CSSReader
     return readFromFile (aFile, aCharset, eVersion, null, null);
   }
 
+  /**
+   * Read the CSS from the passed File.
+   * 
+   * @param aFile
+   *        The file containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param sCharset
+   *        The charset name to be used in case neither a <code>@charset</code>
+   *        rule nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomErrorHandler
+   *        An optional custom error handler that can be used to collect the
+   *        recoverable parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   @Deprecated
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
@@ -539,6 +726,23 @@ public final class CSSReader
     return readFromFile (aFile, sCharset, eVersion, aCustomErrorHandler, null);
   }
 
+  /**
+   * Read the CSS from the passed File.
+   * 
+   * @param aFile
+   *        The file containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param aCharset
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomErrorHandler
+   *        An optional custom error handler that can be used to collect the
+   *        recoverable parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
                                                   @Nonnull final Charset aCharset,
@@ -548,6 +752,23 @@ public final class CSSReader
     return readFromFile (aFile, aCharset, eVersion, aCustomErrorHandler, null);
   }
 
+  /**
+   * Read the CSS from the passed File.
+   * 
+   * @param aFile
+   *        The file containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param sCharset
+   *        The charset name to be used in case neither a <code>@charset</code>
+   *        rule nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomExceptionHandler
+   *        An optional custom exception handler that can be used to collect the
+   *        unrecoverable parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   @Deprecated
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
@@ -558,6 +779,52 @@ public final class CSSReader
     return readFromStream (new FileSystemResource (aFile), sCharset, eVersion, null, aCustomExceptionHandler);
   }
 
+  /**
+   * Read the CSS from the passed File.
+   * 
+   * @param aFile
+   *        The file containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param aCharset
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomExceptionHandler
+   *        An optional custom exception handler that can be used to collect the
+   *        unrecoverable parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
+  @Nullable
+  public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
+                                                  @Nonnull final Charset aCharset,
+                                                  @Nonnull final ECSSVersion eVersion,
+                                                  @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+  {
+    return readFromStream (new FileSystemResource (aFile), aCharset, eVersion, null, aCustomExceptionHandler);
+  }
+
+  /**
+   * Read the CSS from the passed File.
+   * 
+   * @param aFile
+   *        The file containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param sCharset
+   *        The charset name to be used in case neither a <code>@charset</code>
+   *        rule nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomErrorHandler
+   *        An optional custom error handler that can be used to collect the
+   *        recoverable parsing errors. May be <code>null</code>.
+   * @param aCustomExceptionHandler
+   *        An optional custom exception handler that can be used to collect the
+   *        unrecoverable parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   @Deprecated
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
@@ -573,15 +840,26 @@ public final class CSSReader
                            aCustomExceptionHandler);
   }
 
-  @Nullable
-  public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
-                                                  @Nonnull final Charset aCharset,
-                                                  @Nonnull final ECSSVersion eVersion,
-                                                  @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
-  {
-    return readFromStream (new FileSystemResource (aFile), aCharset, eVersion, null, aCustomExceptionHandler);
-  }
-
+  /**
+   * Read the CSS from the passed File.
+   * 
+   * @param aFile
+   *        The file containing the CSS to be parsed. May not be
+   *        <code>null</code>.
+   * @param aCharset
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
+   * @param eVersion
+   *        The CSS version to use. May not be <code>null</code>.
+   * @param aCustomErrorHandler
+   *        An optional custom error handler that can be used to collect the
+   *        recoverable parsing errors. May be <code>null</code>.
+   * @param aCustomExceptionHandler
+   *        An optional custom exception handler that can be used to collect the
+   *        unrecoverable parsing errors. May be <code>null</code>.
+   * @return <code>null</code> if reading failed, the CSS declarations
+   *         otherwise.
+   */
   @Nullable
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
                                                   @Nonnull final Charset aCharset,
@@ -607,7 +885,8 @@ public final class CSSReader
    *        streams on every invocation, in case an explicit charset node was
    *        found. May not be <code>null</code>.
    * @param sCharset
-   *        The charset name to be used. May not be <code>null</code>.
+   *        The charset name to be used in case neither a <code>@charset</code>
+   *        rule nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
    *        The CSS version to use. May not be <code>null</code>.
    * @return <code>null</code> if reading failed, the CSS declarations
@@ -633,7 +912,8 @@ public final class CSSReader
    *        streams on every invocation, in case an explicit charset node was
    *        found. May not be <code>null</code>.
    * @param sCharset
-   *        The charset name to be used. May not be <code>null</code>.
+   *        The charset name to be used in case neither a <code>@charset</code>
+   *        rule nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
    *        The CSS version to use. May not be <code>null</code>.
    * @param aCustomErrorHandler
@@ -663,7 +943,8 @@ public final class CSSReader
    *        streams on every invocation, in case an explicit charset node was
    *        found. May not be <code>null</code>.
    * @param aCharset
-   *        The charset to be used. May not be <code>null</code>.
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
    *        The CSS version to use. May not be <code>null</code>.
    * @return <code>null</code> if reading failed, the CSS declarations
@@ -688,7 +969,8 @@ public final class CSSReader
    *        streams on every invocation, in case an explicit charset node was
    *        found. May not be <code>null</code>.
    * @param aCharset
-   *        The charset to be used. May not be <code>null</code>.
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
    *        The CSS version to use. May not be <code>null</code>.
    * @param aCustomErrorHandler
@@ -717,7 +999,8 @@ public final class CSSReader
    *        streams on every invocation, in case an explicit charset node was
    *        found. May not be <code>null</code>.
    * @param sCharset
-   *        The charset name to be used. May not be <code>null</code>.
+   *        The charset name to be used in case neither a <code>@charset</code>
+   *        rule nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
    *        The CSS version to use. May not be <code>null</code>.
    * @param aCustomExceptionHandler
@@ -747,7 +1030,8 @@ public final class CSSReader
    *        streams on every invocation, in case an explicit charset node was
    *        found. May not be <code>null</code>.
    * @param sCharset
-   *        The charset name to be used. May not be <code>null</code>.
+   *        The charset name to be used in case neither a <code>@charset</code>
+   *        rule nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
    *        The CSS version to use. May not be <code>null</code>.
    * @param aCustomErrorHandler
@@ -803,6 +1087,7 @@ public final class CSSReader
           if (nBOMBytes < nReadBOMBytes)
             aPIS.unread (aBOM, nBOMBytes, nReadBOMBytes - nBOMBytes);
 
+          // FIXME use eBOM.getCharset in phloc-commons > 4.2.0
           switch (eBOM)
           {
             case BOM_UTF_8:
@@ -899,7 +1184,8 @@ public final class CSSReader
    *        streams on every invocation, in case an explicit charset node was
    *        found. May not be <code>null</code>.
    * @param aCharset
-   *        The charset to be used. May not be <code>null</code>.
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
    *        The CSS version to use. May not be <code>null</code>.
    * @param aCustomExceptionHandler
@@ -928,7 +1214,8 @@ public final class CSSReader
    *        streams on every invocation, in case an explicit charset node was
    *        found. May not be <code>null</code>.
    * @param aCharset
-   *        The charset to be used. May not be <code>null</code>.
+   *        The charset to be used in case neither a <code>@charset</code> rule
+   *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
    *        The CSS version to use. May not be <code>null</code>.
    * @param aCustomErrorHandler
