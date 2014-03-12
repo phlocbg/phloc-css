@@ -186,6 +186,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + getName()</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -240,6 +241,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "em"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -276,6 +278,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "ex"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -312,6 +315,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "px"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -348,6 +352,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "rem"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -384,6 +389,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "vw"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -420,6 +426,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "vh"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -456,6 +463,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "vmin"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -492,6 +500,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "ch"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -528,6 +537,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "in"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -564,6 +574,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "cm"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -600,6 +611,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "mm"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -636,6 +648,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "pt"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -672,6 +685,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "pc"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -708,6 +722,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "%"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -744,6 +759,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "deg"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -780,6 +796,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "rad"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -816,6 +833,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "grad"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -852,6 +870,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "turn"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -888,6 +907,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "ms"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -924,6 +944,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "s"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -960,6 +981,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "hz"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -996,6 +1018,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "khz"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -1032,6 +1055,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "dpi"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -1068,6 +1092,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "dpcm"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
@@ -1104,6 +1129,7 @@ public enum ECSSUnit implements IHasName, ICSSVersionAware
    * @param aValue
    *        Value to format. May not be <code>null</code>.
    * @return <code>value + "dppx"</code>
+   * @since 3.7.3
    */
   @Nonnull
   @Nonempty
