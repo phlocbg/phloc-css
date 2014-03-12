@@ -80,6 +80,9 @@ public enum ECSSMedium implements ICSSVersionAware, IHasName
     m_eVersion = eVersion;
   }
 
+  /**
+   * @return the CSS medium name. Never <code>null</code> nor empty.
+   */
   @Nonnull
   @Nonempty
   public String getName ()
