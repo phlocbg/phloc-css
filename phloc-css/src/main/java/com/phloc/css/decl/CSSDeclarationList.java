@@ -98,6 +98,22 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
     return EChange.valueOf (m_aDeclarations.remove (nDeclarationIndex) != null);
   }
 
+  /**
+   * Remove all declarations.
+   * 
+   * @return {@link EChange#CHANGED} if any declaration was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllDeclarations ()
+  {
+    if (m_aDeclarations.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aDeclarations.clear ();
+    return EChange.CHANGED;
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public final List <CSSDeclaration> getAllDeclarations ()

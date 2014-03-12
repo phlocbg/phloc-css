@@ -95,6 +95,12 @@ public class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSV
   }
 
   @Nonnull
+  public EChange removeAllDeclarations ()
+  {
+    return m_aDeclarations.removeAllDeclarations ();
+  }
+
+  @Nonnull
   @ReturnsMutableCopy
   public List <CSSDeclaration> getAllDeclarations ()
   {

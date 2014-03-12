@@ -123,6 +123,22 @@ public class CSSMediaList implements Serializable, IHasSize
   }
 
   /**
+   * Remove all media.
+   * 
+   * @return {@link EChange#CHANGED} if any medium was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllMedia ()
+  {
+    if (m_aMedia.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aMedia.clear ();
+    return EChange.CHANGED;
+  }
+
+  /**
    * @return The number of contained media. Always &ge; 0.
    */
   @Nonnegative

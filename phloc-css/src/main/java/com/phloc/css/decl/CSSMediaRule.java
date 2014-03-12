@@ -101,6 +101,22 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     return EChange.CHANGED;
   }
 
+  /**
+   * Remove all media queries.
+   * 
+   * @return {@link EChange#CHANGED} if any media query was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllMediaQueries ()
+  {
+    if (m_aMediaQueries.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aMediaQueries.clear ();
+    return EChange.CHANGED;
+  }
+
   @Nullable
   public CSSMediaQuery getMediaQueryAtIndex (@Nonnegative final int nMediumIndex)
   {
@@ -164,6 +180,22 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
       return EChange.UNCHANGED;
     m_aRules.remove (nRuleIndex);
+    return EChange.CHANGED;
+  }
+
+  /**
+   * Remove all rules.
+   * 
+   * @return {@link EChange#CHANGED} if any rule was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllRules ()
+  {
+    if (m_aRules.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aRules.clear ();
     return EChange.CHANGED;
   }
 

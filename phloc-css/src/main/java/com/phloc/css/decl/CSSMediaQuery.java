@@ -230,6 +230,22 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
   }
 
   /**
+   * Remove all media expressions.
+   * 
+   * @return {@link EChange#CHANGED} if any media expression was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllMediaExpressions ()
+  {
+    if (m_aMediaExpressions.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aMediaExpressions.clear ();
+    return EChange.CHANGED;
+  }
+
+  /**
    * Get the media expression at the specified index.
    * 
    * @param nExpressionIndex

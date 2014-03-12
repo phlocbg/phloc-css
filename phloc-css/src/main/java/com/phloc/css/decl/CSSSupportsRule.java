@@ -107,6 +107,22 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
     return EChange.CHANGED;
   }
 
+  /**
+   * Remove all supports condition members.
+   * 
+   * @return {@link EChange#CHANGED} if any supports condition was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllSupportsConditionMembers ()
+  {
+    if (m_aConditionMembers.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aConditionMembers.clear ();
+    return EChange.CHANGED;
+  }
+
   @Nullable
   public ICSSSupportsConditionMember getSupportsConditionMemberAtIndex (@Nonnegative final int nIndex)
   {
@@ -179,6 +195,22 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
     if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
       return null;
     return m_aRules.get (nRuleIndex);
+  }
+
+  /**
+   * Remove all rules.
+   * 
+   * @return {@link EChange#CHANGED} if any rule was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllDeclarations ()
+  {
+    if (m_aRules.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aRules.clear ();
+    return EChange.CHANGED;
   }
 
   @Nonnull

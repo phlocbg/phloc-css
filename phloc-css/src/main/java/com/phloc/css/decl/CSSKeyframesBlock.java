@@ -110,6 +110,12 @@ public class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware,
   }
 
   @Nonnull
+  public EChange removeAllDeclarations ()
+  {
+    return m_aDeclarations.removeAllDeclarations ();
+  }
+
+  @Nonnull
   @ReturnsMutableCopy
   public List <CSSDeclaration> getAllDeclarations ()
   {
