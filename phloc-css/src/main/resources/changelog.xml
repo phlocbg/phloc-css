@@ -20,17 +20,22 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
-  <entry date="2014-03-11" category="api" action="add">
+  <entry date="2014-03-13" category="api" action="add">
+    <change>
+      <text locale="en">Added new methods CSSReader.readFromReader + special overlods for String</text>
+    </change>
+  </entry>
+  <entry date="2014-03-12" category="api" action="add">
     <change>
       <text locale="en">Added removeAll... methods to several classes</text>
     </change>
   </entry>
-  <entry date="2014-03-11" category="tech" action="fix">
+  <entry date="2014-03-12" category="tech" action="fix">
     <change>
       <text locale="en">Fixed reading of CSS files with BOMs; also automatically determining the charset from the BOM if possible</text>
     </change>
   </entry>
-  <entry date="2014-03-11" category="api" action="add">
+  <entry date="2014-03-12" category="api" action="add">
     <change>
       <text locale="en">Extended CSSSimpleValueWithUnit to internally use BigDecimal for the numbers</text>
     </change>
