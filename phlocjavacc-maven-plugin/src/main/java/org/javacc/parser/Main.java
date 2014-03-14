@@ -297,7 +297,7 @@ public final class Main
     org.javacc.parser.Semanticize.reInit ();
     org.javacc.parser.OtherFilesGen.reInit ();
     // [phloc] Was missing
-    LexGen.reInit ();
+    org.javacc.parser.LexGen.reInit ();
   }
 
 }
