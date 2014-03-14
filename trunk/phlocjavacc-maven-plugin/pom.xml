@@ -41,14 +41,58 @@
   </prerequisites>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/mojo/tags/javacc-maven-plugin-2.6</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/tags/javacc-maven-plugin-2.6</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/mojo/tags/javacc-maven-plugin-2.6</url>
+    <url>http://code.google.com/p/phloc-css/source/browse/</url>
+    <connection>scm:svn:http://phloc-css.googlecode.com/svn/trunk/phlocjavacc-maven-plugin</connection>
+    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/trunk/phlocjavacc-maven-plugin</developerConnection>
   </scm>
-  <issueManagement>
-    <system>JIRA</system>
-    <url>http://jira.codehaus.org/browse/MJAVACC</url>
-  </issueManagement>
+  
+  <organization>
+    <name>phloc systems</name>
+    <url>http://www.phloc.com</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <id>philip</id>
+      <name>Philip Helger</name>
+      <email>ph(at)phloc.com</email>
+      <url>http://www.phloc.com</url>
+      <organization>phloc systems</organization>
+    </developer>
+  </developers>
+  
+  <repositories>
+    <repository>
+      <id>phloc.com</id>
+      <url>http://repo.phloc.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>phloc.com</id>
+      <url>http://repo.phloc.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <distributionManagement>
+    <repository>
+      <id>repo.phloc.public</id>
+      <url>sftp://www.phloc.com:23040/var/www/html-repo/maven2</url>
+    </repository>
+  </distributionManagement>
 
   <dependencies>
     <dependency>
@@ -165,6 +209,34 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <configuration>
+          <goalPrefix>csscompress</goalPrefix>
+        </configuration>
+        <executions>
+          <execution>
+            <id>mojo-descriptor</id>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>help-goal</id>
+            <goals>
+              <goal>helpmojo</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <tagBase>https://phloc-css.googlecode.com/svn/tags</tagBase>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>javacc-maven-plugin</artifactId>
         <version>2.6</version>
@@ -247,4 +319,14 @@
       </plugins>
     </pluginManagement>
   </build>
+  
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.2</version>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
