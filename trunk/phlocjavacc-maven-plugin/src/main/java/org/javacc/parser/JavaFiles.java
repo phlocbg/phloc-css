@@ -51,7 +51,8 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
   static final String charStreamVersion = "6.0";
 
   /**
-   * ID of the latest version (of JavaCC) in which the TokenManager interface is modified.
+   * ID of the latest version (of JavaCC) in which the TokenManager interface is
+   * modified.
    */
   static final String tokenManagerVersion = "6.0";
 
@@ -75,69 +76,83 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
   /**
    * Replaces all backslahes with double backslashes.
    */
-  static String replaceBackslash(String str)
+  static String replaceBackslash (final String str)
   {
     StringBuffer b;
-    int i = 0, len = str.length();
+    int i = 0;
+    final int len = str.length ();
 
-    while (i < len && str.charAt(i++) != '\\') ;
+    while (i < len && str.charAt (i++) != '\\')
+      ;
 
-    if (i == len)  // No backslash found.
+    if (i == len) // No backslash found.
       return str;
 
     char c;
-    b = new StringBuffer();
+    b = new StringBuffer ();
     for (i = 0; i < len; i++)
-      if ((c = str.charAt(i)) == '\\')
-        b.append("\\\\");
+      if ((c = str.charAt (i)) == '\\')
+        b.append ("\\\\");
       else
-        b.append(c);
+        b.append (c);
 
-    return b.toString();
+    return b.toString ();
   }
 
   /**
-   * Read the version from the comment in the specified file.
-   * This method does not try to recover from invalid comment syntax, but
-   * rather returns version 0.0 (which will always be taken to mean the file
-   * is out of date).
-   * @param fileName eg Token.java
+   * Read the version from the comment in the specified file. This method does
+   * not try to recover from invalid comment syntax, but rather returns version
+   * 0.0 (which will always be taken to mean the file is out of date).
+   * 
+   * @param fileName
+   *        eg Token.java
    * @return The version as a double, eg 4.1
    * @since 4.1
    */
-  static double getVersion(String fileName)
+  static double getVersion (final String fileName)
   {
-    final String commentHeader = "/* " + getIdString(toolName, fileName) + " Version ";
-    File file = new File(Options.getOutputDirectory(), replaceBackslash(fileName));
+    final String commentHeader = "/* " + getIdString (toolName, fileName) + " Version ";
+    final File file = new File (Options.getOutputDirectory (), replaceBackslash (fileName));
 
-    if (!file.exists()) {
+    if (!file.exists ())
+    {
       // Has not yet been created, so it must be up to date.
-      try {
-        String majorVersion = Version.versionNumber.replaceAll("[^0-9.]+.*", "");
-        return Double.parseDouble(majorVersion);
-      } catch (NumberFormatException e) {
+      try
+      {
+        final String majorVersion = Version.versionNumber.replaceAll ("[^0-9.]+.*", "");
+        return Double.parseDouble (majorVersion);
+      }
+      catch (final NumberFormatException e)
+      {
         return 0.0; // Should never happen
       }
     }
 
     BufferedReader reader = null;
-    try {
-      reader = new BufferedReader(new FileReader(file));
+    try
+    {
+      reader = new BufferedReader (new FileReader (file));
       String str;
       double version = 0.0;
 
       // Although the version comment should be the first line, sometimes the
       // user might have put comments before it.
-      while ( (str = reader.readLine()) != null) {
-        if (str.startsWith(commentHeader)) {
-          str = str.substring(commentHeader.length());
-          int pos = str.indexOf(' ');
-          if (pos >= 0) str = str.substring(0, pos);
-          if (str.length() > 0) {
-            try {
-              version = Double.parseDouble(str);
+      while ((str = reader.readLine ()) != null)
+      {
+        if (str.startsWith (commentHeader))
+        {
+          str = str.substring (commentHeader.length ());
+          final int pos = str.indexOf (' ');
+          if (pos >= 0)
+            str = str.substring (0, pos);
+          if (str.length () > 0)
+          {
+            try
+            {
+              version = Double.parseDouble (str);
             }
-            catch (NumberFormatException nfe) {
+            catch (final NumberFormatException nfe)
+            {
               // Ignore - leave version as 0.0
             }
           }
@@ -148,322 +163,376 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
 
       return version;
     }
-    catch (IOException ioe)
+    catch (final IOException ioe)
     {
       return 0.0;
     }
-    finally {
+    finally
+    {
       if (reader != null)
       {
-        try { reader.close(); } catch (IOException e) {}
-      }
-    }
-  }
-
-
-
-  public static void gen_JavaCharStream() {
-    try {
-      final File file = new File(Options.getOutputDirectory(), "JavaCharStream.java");
-      final OutputFile outputFile = new OutputFile(file, charStreamVersion, new String[] {"STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC"});
-
-      if (!outputFile.needToWrite)
-      {
-        return;
-      }
-
-      final PrintWriter ostr = outputFile.getPrintWriter();
-
-      if (cu_to_insertion_point_1.size() != 0 &&
-          ((Token)cu_to_insertion_point_1.get(0)).kind == PACKAGE
-      ) {
-        for (int i = 1; i < cu_to_insertion_point_1.size(); i++) {
-          if (((Token)cu_to_insertion_point_1.get(i)).kind == SEMICOLON) {
-            cline = ((Token)(cu_to_insertion_point_1.get(0))).beginLine;
-            ccol = ((Token)(cu_to_insertion_point_1.get(0))).beginColumn;
-            for (int j = 0; j <= i; j++) {
-              printToken((Token)(cu_to_insertion_point_1.get(j)), ostr);
-            }
-            ostr.println("");
-            ostr.println("");
-            break;
-          }
+        try
+        {
+          reader.close ();
         }
+        catch (final IOException e)
+        {}
       }
-      String prefix = (Options.getStatic() ? "static " : "");
-      Map options = new HashMap(Options.getOptions());
-      options.put("PREFIX", prefix);
-      
-      JavaFileGenerator generator = new JavaFileGenerator(
-          "/templates/JavaCharStream.template", options);
-      
-      generator.generate(ostr);
-
-      ostr.close();
-    } catch (IOException e) {
-      System.err.println("Failed to create JavaCharStream " + e);
-      JavaCCErrors.semantic_error("Could not open file JavaCharStream.java for writing.");
-      throw new Error();
     }
   }
 
-  public static void gen_SimpleCharStream() {
-    try {
-      final File file = new File(Options.getOutputDirectory(), "SimpleCharStream.java");
-      final OutputFile outputFile = new OutputFile(file, charStreamVersion, new String[] {"STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC"});
-
-      if (!outputFile.needToWrite)
-      {
-        return;
-      }
-
-      final PrintWriter ostr = outputFile.getPrintWriter();
-
-      if (cu_to_insertion_point_1.size() != 0 &&
-          ((Token)cu_to_insertion_point_1.get(0)).kind == PACKAGE
-      ) {
-        for (int i = 1; i < cu_to_insertion_point_1.size(); i++) {
-          if (((Token)cu_to_insertion_point_1.get(i)).kind == SEMICOLON) {
-            cline = ((Token)(cu_to_insertion_point_1.get(0))).beginLine;
-            ccol = ((Token)(cu_to_insertion_point_1.get(0))).beginColumn;
-            for (int j = 0; j <= i; j++) {
-              printToken((Token)(cu_to_insertion_point_1.get(j)), ostr);
-            }
-            ostr.println("");
-            ostr.println("");
-            break;
-          }
-        }
-      }
-      String prefix = (Options.getStatic() ? "static " : "");
-      Map options = new HashMap(Options.getOptions());
-      options.put("PREFIX", prefix);
-      
-      JavaFileGenerator generator = new JavaFileGenerator(
-          "/templates/SimpleCharStream.template", options);
-      
-      generator.generate(ostr);
-
-      ostr.close();
-    } catch (IOException e) {
-      System.err.println("Failed to create SimpleCharStream " + e);
-      JavaCCErrors.semantic_error("Could not open file SimpleCharStream.java for writing.");
-      throw new Error();
-    }
-  }
-
-  public static void gen_CharStream() {
-    try {
-      final File file = new File(Options.getOutputDirectory(), "CharStream.java");
-      final OutputFile outputFile = new OutputFile(file, charStreamVersion, new String[] {"STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC"});
-
-      if (!outputFile.needToWrite)
-      {
-        return;
-      }
-
-      final PrintWriter ostr = outputFile.getPrintWriter();
-
-      if (cu_to_insertion_point_1.size() != 0 &&
-          ((Token)cu_to_insertion_point_1.get(0)).kind == PACKAGE
-      ) {
-        for (int i = 1; i < cu_to_insertion_point_1.size(); i++) {
-          if (((Token)cu_to_insertion_point_1.get(i)).kind == SEMICOLON) {
-            cline = ((Token)(cu_to_insertion_point_1.get(0))).beginLine;
-            ccol = ((Token)(cu_to_insertion_point_1.get(0))).beginColumn;
-            for (int j = 0; j <= i; j++) {
-              printToken((Token)(cu_to_insertion_point_1.get(j)), ostr);
-            }
-            ostr.println("");
-            ostr.println("");
-            break;
-          }
-        }
-      }
-      
-      JavaFileGenerator generator = new JavaFileGenerator(
-          "/templates/CharStream.template", Options.getOptions());
-      
-      generator.generate(ostr);
-
-      ostr.close();
-    } catch (IOException e) {
-      System.err.println("Failed to create CharStream " + e);
-      JavaCCErrors.semantic_error("Could not open file CharStream.java for writing.");
-      throw new Error();
-    }
-  }
-
-  public static void gen_ParseException() {
-    try {
-      final File file = new File(Options.getOutputDirectory(), "ParseException.java");
-      final OutputFile outputFile = new OutputFile(file, parseExceptionVersion, new String[] {"KEEP_LINE_COL"});
-
-      if (!outputFile.needToWrite)
-      {
-        return;
-      }
-
-      final PrintWriter ostr = outputFile.getPrintWriter();
-
-      if (cu_to_insertion_point_1.size() != 0 &&
-          ((Token)cu_to_insertion_point_1.get(0)).kind == PACKAGE
-      ) {
-        for (int i = 1; i < cu_to_insertion_point_1.size(); i++) {
-          if (((Token)cu_to_insertion_point_1.get(i)).kind == SEMICOLON) {
-            cline = ((Token)(cu_to_insertion_point_1.get(0))).beginLine;
-            ccol = ((Token)(cu_to_insertion_point_1.get(0))).beginColumn;
-            for (int j = 0; j <= i; j++) {
-              printToken((Token)(cu_to_insertion_point_1.get(j)), ostr);
-            }
-            ostr.println("");
-            ostr.println("");
-            break;
-          }
-        }
-      }
-      
-      JavaFileGenerator generator = new JavaFileGenerator(
-          "/templates/ParseException.template", Options.getOptions());
-      
-      generator.generate(ostr);
-
-      ostr.close();
-    } catch (IOException e) {
-      System.err.println("Failed to create ParseException " + e);
-      JavaCCErrors.semantic_error("Could not open file ParseException.java for writing.");
-      throw new Error();
-    }
-  }
-
-  public static void gen_TokenMgrError() {
-    try {
-      final File file = new File(Options.getOutputDirectory(), "TokenMgrError.java");
-      final OutputFile outputFile = new OutputFile(file, tokenMgrErrorVersion, new String[0]);
-
-      if (!outputFile.needToWrite)
-      {
-        return;
-      }
-
-      final PrintWriter ostr = outputFile.getPrintWriter();
-
-      if (cu_to_insertion_point_1.size() != 0 &&
-          ((Token)cu_to_insertion_point_1.get(0)).kind == PACKAGE
-      ) {
-        for (int i = 1; i < cu_to_insertion_point_1.size(); i++) {
-          if (((Token)cu_to_insertion_point_1.get(i)).kind == SEMICOLON) {
-            cline = ((Token)(cu_to_insertion_point_1.get(0))).beginLine;
-            ccol = ((Token)(cu_to_insertion_point_1.get(0))).beginColumn;
-            for (int j = 0; j <= i; j++) {
-              printToken((Token)(cu_to_insertion_point_1.get(j)), ostr);
-            }
-            ostr.println("");
-            ostr.println("");
-            break;
-          }
-        }
-      }
-      
-      JavaFileGenerator generator = new JavaFileGenerator(
-          "/templates/TokenMgrError.template", Options.getOptions());
-      
-      generator.generate(ostr);
-
-      ostr.close();
-    } catch (IOException e) {
-      System.err.println("Failed to create TokenMgrError " + e);
-      JavaCCErrors.semantic_error("Could not open file TokenMgrError.java for writing.");
-      throw new Error();
-    }
-  }
-
-  public static void gen_Token() {
-    try {
-      final File file = new File(Options.getOutputDirectory(), "Token.java");
-      final OutputFile outputFile = new OutputFile(file, tokenVersion, new String[] {"TOKEN_EXTENDS", "KEEP_LINE_COL", "SUPPORT_CLASS_VISIBILITY_PUBLIC"});
-
-      if (!outputFile.needToWrite)
-      {
-        return;
-      }
-
-      final PrintWriter ostr = outputFile.getPrintWriter();
-
-      if (cu_to_insertion_point_1.size() != 0 &&
-          ((Token)cu_to_insertion_point_1.get(0)).kind == PACKAGE
-      ) {
-        for (int i = 1; i < cu_to_insertion_point_1.size(); i++) {
-          if (((Token)cu_to_insertion_point_1.get(i)).kind == SEMICOLON) {
-            cline = ((Token)(cu_to_insertion_point_1.get(0))).beginLine;
-            ccol = ((Token)(cu_to_insertion_point_1.get(0))).beginColumn;
-            for (int j = 0; j <= i; j++) {
-              printToken((Token)(cu_to_insertion_point_1.get(j)), ostr);
-            }
-            ostr.println("");
-            ostr.println("");
-            break;
-          }
-        }
-      }
-      
-      JavaFileGenerator generator = new JavaFileGenerator(
-          "/templates/Token.template", Options.getOptions());
-      
-      generator.generate(ostr);
- 
-      ostr.close();
-    } catch (IOException e) {
-      System.err.println("Failed to create Token " + e);
-      JavaCCErrors.semantic_error("Could not open file Token.java for writing.");
-      throw new Error();
-    }
-  }
-
-  public static void gen_TokenManager() {
-    try {
-      final File file = new File(Options.getOutputDirectory(), "TokenManager.java");
-      final OutputFile outputFile = new OutputFile(file, tokenManagerVersion, new String[] {"SUPPORT_CLASS_VISIBILITY_PUBLIC"});
-
-      if (!outputFile.needToWrite)
-      {
-        return;
-      }
-
-      final PrintWriter ostr = outputFile.getPrintWriter();
-
-      if (cu_to_insertion_point_1.size() != 0 &&
-          ((Token)cu_to_insertion_point_1.get(0)).kind == PACKAGE
-      ) {
-        for (int i = 1; i < cu_to_insertion_point_1.size(); i++) {
-          if (((Token)cu_to_insertion_point_1.get(i)).kind == SEMICOLON) {
-            cline = ((Token)(cu_to_insertion_point_1.get(0))).beginLine;
-            ccol = ((Token)(cu_to_insertion_point_1.get(0))).beginColumn;
-            for (int j = 0; j <= i; j++) {
-              printToken((Token)(cu_to_insertion_point_1.get(j)), ostr);
-            }
-            ostr.println("");
-            ostr.println("");
-            break;
-          }
-        }
-      }
-
-      JavaFileGenerator generator = new JavaFileGenerator(
-          "/templates/TokenManager.template", Options.getOptions());
-      
-      generator.generate(ostr);
-      
-      ostr.close();
-    } catch (IOException e) {
-      System.err.println("Failed to create TokenManager " + e);
-      JavaCCErrors.semantic_error("Could not open file TokenManager.java for writing.");
-      throw new Error();
-    }
-  }
-
-  public static void reInit()
+  public static void gen_JavaCharStream ()
   {
+    try
+    {
+      final File file = new File (Options.getOutputDirectory (), "JavaCharStream.java");
+      final OutputFile outputFile = new OutputFile (file,
+                                                    charStreamVersion,
+                                                    new String [] { "STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC" });
+
+      if (!outputFile.needToWrite)
+      {
+        return;
+      }
+
+      final PrintWriter ostr = outputFile.getPrintWriter ();
+
+      if (cu_to_insertion_point_1.size () != 0 && ((Token) cu_to_insertion_point_1.get (0)).kind == PACKAGE)
+      {
+        for (int i = 1; i < cu_to_insertion_point_1.size (); i++)
+        {
+          if (((Token) cu_to_insertion_point_1.get (i)).kind == SEMICOLON)
+          {
+            cline = ((Token) (cu_to_insertion_point_1.get (0))).beginLine;
+            ccol = ((Token) (cu_to_insertion_point_1.get (0))).beginColumn;
+            for (int j = 0; j <= i; j++)
+            {
+              printToken ((Token) (cu_to_insertion_point_1.get (j)), ostr);
+            }
+            ostr.println ("");
+            ostr.println ("");
+            break;
+          }
+        }
+      }
+      final String prefix = (Options.getStatic () ? "static " : "");
+      final Map options = new HashMap (Options.getOptions ());
+      options.put ("PREFIX", prefix);
+
+      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/JavaCharStream.template", options);
+
+      generator.generate (ostr);
+
+      ostr.close ();
+    }
+    catch (final IOException e)
+    {
+      System.err.println ("Failed to create JavaCharStream " + e);
+      JavaCCErrors.semantic_error ("Could not open file JavaCharStream.java for writing.");
+      throw new Error ();
+    }
   }
+
+  public static void gen_SimpleCharStream ()
+  {
+    try
+    {
+      final File file = new File (Options.getOutputDirectory (), "SimpleCharStream.java");
+      final OutputFile outputFile = new OutputFile (file,
+                                                    charStreamVersion,
+                                                    new String [] { "STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC" });
+
+      if (!outputFile.needToWrite)
+      {
+        return;
+      }
+
+      final PrintWriter ostr = outputFile.getPrintWriter ();
+
+      if (cu_to_insertion_point_1.size () != 0 && ((Token) cu_to_insertion_point_1.get (0)).kind == PACKAGE)
+      {
+        for (int i = 1; i < cu_to_insertion_point_1.size (); i++)
+        {
+          if (((Token) cu_to_insertion_point_1.get (i)).kind == SEMICOLON)
+          {
+            cline = ((Token) (cu_to_insertion_point_1.get (0))).beginLine;
+            ccol = ((Token) (cu_to_insertion_point_1.get (0))).beginColumn;
+            for (int j = 0; j <= i; j++)
+            {
+              printToken ((Token) (cu_to_insertion_point_1.get (j)), ostr);
+            }
+            ostr.println ("");
+            ostr.println ("");
+            break;
+          }
+        }
+      }
+      final String prefix = (Options.getStatic () ? "static " : "");
+      final Map options = new HashMap (Options.getOptions ());
+      options.put ("PREFIX", prefix);
+
+      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/SimpleCharStream.template", options);
+
+      generator.generate (ostr);
+
+      ostr.close ();
+    }
+    catch (final IOException e)
+    {
+      System.err.println ("Failed to create SimpleCharStream " + e);
+      JavaCCErrors.semantic_error ("Could not open file SimpleCharStream.java for writing.");
+      throw new Error ();
+    }
+  }
+
+  public static void gen_CharStream ()
+  {
+    try
+    {
+      final File file = new File (Options.getOutputDirectory (), "CharStream.java");
+      final OutputFile outputFile = new OutputFile (file,
+                                                    charStreamVersion,
+                                                    new String [] { "STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC" });
+
+      if (!outputFile.needToWrite)
+      {
+        return;
+      }
+
+      final PrintWriter ostr = outputFile.getPrintWriter ();
+
+      if (cu_to_insertion_point_1.size () != 0 && ((Token) cu_to_insertion_point_1.get (0)).kind == PACKAGE)
+      {
+        for (int i = 1; i < cu_to_insertion_point_1.size (); i++)
+        {
+          if (((Token) cu_to_insertion_point_1.get (i)).kind == SEMICOLON)
+          {
+            cline = ((Token) (cu_to_insertion_point_1.get (0))).beginLine;
+            ccol = ((Token) (cu_to_insertion_point_1.get (0))).beginColumn;
+            for (int j = 0; j <= i; j++)
+            {
+              printToken ((Token) (cu_to_insertion_point_1.get (j)), ostr);
+            }
+            ostr.println ("");
+            ostr.println ("");
+            break;
+          }
+        }
+      }
+
+      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/CharStream.template",
+                                                                 Options.getOptions ());
+
+      generator.generate (ostr);
+
+      ostr.close ();
+    }
+    catch (final IOException e)
+    {
+      System.err.println ("Failed to create CharStream " + e);
+      JavaCCErrors.semantic_error ("Could not open file CharStream.java for writing.");
+      throw new Error ();
+    }
+  }
+
+  public static void gen_ParseException ()
+  {
+    try
+    {
+      final File file = new File (Options.getOutputDirectory (), "ParseException.java");
+      final OutputFile outputFile = new OutputFile (file, parseExceptionVersion, new String [] { "KEEP_LINE_COL" });
+
+      if (!outputFile.needToWrite)
+      {
+        return;
+      }
+
+      final PrintWriter ostr = outputFile.getPrintWriter ();
+
+      if (cu_to_insertion_point_1.size () != 0 && ((Token) cu_to_insertion_point_1.get (0)).kind == PACKAGE)
+      {
+        for (int i = 1; i < cu_to_insertion_point_1.size (); i++)
+        {
+          if (((Token) cu_to_insertion_point_1.get (i)).kind == SEMICOLON)
+          {
+            cline = ((Token) (cu_to_insertion_point_1.get (0))).beginLine;
+            ccol = ((Token) (cu_to_insertion_point_1.get (0))).beginColumn;
+            for (int j = 0; j <= i; j++)
+            {
+              printToken ((Token) (cu_to_insertion_point_1.get (j)), ostr);
+            }
+            ostr.println ("");
+            ostr.println ("");
+            break;
+          }
+        }
+      }
+
+      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/ParseException.template",
+                                                                 Options.getOptions ());
+
+      generator.generate (ostr);
+
+      ostr.close ();
+    }
+    catch (final IOException e)
+    {
+      System.err.println ("Failed to create ParseException " + e);
+      JavaCCErrors.semantic_error ("Could not open file ParseException.java for writing.");
+      throw new Error ();
+    }
+  }
+
+  public static void gen_TokenMgrError ()
+  {
+    try
+    {
+      final File file = new File (Options.getOutputDirectory (), "TokenMgrError.java");
+      final OutputFile outputFile = new OutputFile (file, tokenMgrErrorVersion, new String [0]);
+
+      if (!outputFile.needToWrite)
+      {
+        return;
+      }
+
+      final PrintWriter ostr = outputFile.getPrintWriter ();
+
+      if (cu_to_insertion_point_1.size () != 0 && ((Token) cu_to_insertion_point_1.get (0)).kind == PACKAGE)
+      {
+        for (int i = 1; i < cu_to_insertion_point_1.size (); i++)
+        {
+          if (((Token) cu_to_insertion_point_1.get (i)).kind == SEMICOLON)
+          {
+            cline = ((Token) (cu_to_insertion_point_1.get (0))).beginLine;
+            ccol = ((Token) (cu_to_insertion_point_1.get (0))).beginColumn;
+            for (int j = 0; j <= i; j++)
+            {
+              printToken ((Token) (cu_to_insertion_point_1.get (j)), ostr);
+            }
+            ostr.println ("");
+            ostr.println ("");
+            break;
+          }
+        }
+      }
+
+      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/TokenMgrError.template",
+                                                                 Options.getOptions ());
+
+      generator.generate (ostr);
+
+      ostr.close ();
+    }
+    catch (final IOException e)
+    {
+      System.err.println ("Failed to create TokenMgrError " + e);
+      JavaCCErrors.semantic_error ("Could not open file TokenMgrError.java for writing.");
+      throw new Error ();
+    }
+  }
+
+  public static void gen_Token ()
+  {
+    try
+    {
+      final File file = new File (Options.getOutputDirectory (), "Token.java");
+      final OutputFile outputFile = new OutputFile (file,
+                                                    tokenVersion,
+                                                    new String [] { "TOKEN_EXTENDS",
+                                                                   "KEEP_LINE_COL",
+                                                                   "SUPPORT_CLASS_VISIBILITY_PUBLIC" });
+
+      if (!outputFile.needToWrite)
+      {
+        return;
+      }
+
+      final PrintWriter ostr = outputFile.getPrintWriter ();
+
+      if (cu_to_insertion_point_1.size () != 0 && ((Token) cu_to_insertion_point_1.get (0)).kind == PACKAGE)
+      {
+        for (int i = 1; i < cu_to_insertion_point_1.size (); i++)
+        {
+          if (((Token) cu_to_insertion_point_1.get (i)).kind == SEMICOLON)
+          {
+            cline = ((Token) (cu_to_insertion_point_1.get (0))).beginLine;
+            ccol = ((Token) (cu_to_insertion_point_1.get (0))).beginColumn;
+            for (int j = 0; j <= i; j++)
+            {
+              printToken ((Token) (cu_to_insertion_point_1.get (j)), ostr);
+            }
+            ostr.println ("");
+            ostr.println ("");
+            break;
+          }
+        }
+      }
+
+      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/Token.template", Options.getOptions ());
+
+      generator.generate (ostr);
+
+      ostr.close ();
+    }
+    catch (final IOException e)
+    {
+      System.err.println ("Failed to create Token " + e);
+      JavaCCErrors.semantic_error ("Could not open file Token.java for writing.");
+      throw new Error ();
+    }
+  }
+
+  public static void gen_TokenManager ()
+  {
+    try
+    {
+      final File file = new File (Options.getOutputDirectory (), "TokenManager.java");
+      final OutputFile outputFile = new OutputFile (file,
+                                                    tokenManagerVersion,
+                                                    new String [] { "SUPPORT_CLASS_VISIBILITY_PUBLIC" });
+
+      if (!outputFile.needToWrite)
+      {
+        return;
+      }
+
+      final PrintWriter ostr = outputFile.getPrintWriter ();
+
+      if (cu_to_insertion_point_1.size () != 0 && ((Token) cu_to_insertion_point_1.get (0)).kind == PACKAGE)
+      {
+        for (int i = 1; i < cu_to_insertion_point_1.size (); i++)
+        {
+          if (((Token) cu_to_insertion_point_1.get (i)).kind == SEMICOLON)
+          {
+            cline = ((Token) (cu_to_insertion_point_1.get (0))).beginLine;
+            ccol = ((Token) (cu_to_insertion_point_1.get (0))).beginColumn;
+            for (int j = 0; j <= i; j++)
+            {
+              printToken ((Token) (cu_to_insertion_point_1.get (j)), ostr);
+            }
+            ostr.println ("");
+            ostr.println ("");
+            break;
+          }
+        }
+      }
+
+      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/TokenManager.template",
+                                                                 Options.getOptions ());
+
+      generator.generate (ostr);
+
+      ostr.close ();
+    }
+    catch (final IOException e)
+    {
+      System.err.println ("Failed to create TokenManager " + e);
+      JavaCCErrors.semantic_error ("Could not open file TokenManager.java for writing.");
+      throw new Error ();
+    }
+  }
+
+  public static void reInit ()
+  {}
 
 }

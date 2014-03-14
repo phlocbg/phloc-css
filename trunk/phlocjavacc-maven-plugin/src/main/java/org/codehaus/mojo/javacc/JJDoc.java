@@ -34,263 +34,280 @@ import org.codehaus.plexus.util.cli.StreamConsumer;
  * @version $Id: JJDoc.java 10603 2009-09-06 15:05:08Z bentmann $
  * @see <a href="https://javacc.dev.java.net/doc/JJDoc.html">JJDoc Reference</a>
  */
-class JJDoc
-    extends ToolFacade
+class JJDoc extends ToolFacade
 {
 
-    /**
-     * The input grammar.
-     */
-    private File inputFile;
+  /**
+   * The input grammar.
+   */
+  private File inputFile;
+
+  /**
+   * The option OUTPUT_FILE.
+   */
+  private File outputFile;
+
+  /**
+   * The option GRAMMAR_ENCODING.
+   */
+  private String grammarEncoding;
+
+  /**
+   * The option CSS.
+   */
+  private String cssHref;
+
+  /**
+   * The option TEXT.
+   */
+  private Boolean text;
+
+  /**
+   * The option BNF.
+   */
+  private Boolean bnf;
+
+  /**
+   * The option ONE_TABLE.
+   */
+  private Boolean oneTable;
+
+  /**
+   * Sets the absolute path to the grammar file to pass into JJDoc for
+   * documentation.
+   * 
+   * @param value
+   *        The absolute path to the grammar file to pass into JJDoc for
+   *        documentation.
+   */
+  public void setInputFile (final File value)
+  {
+    if (value != null && !value.isAbsolute ())
+    {
+      throw new IllegalArgumentException ("path is not absolute: " + value);
+    }
+    this.inputFile = value;
+  }
+
+  /**
+   * Sets the absolute path to the output file.
+   * 
+   * @param value
+   *        The absolute path to the HTML/text file to generate.
+   */
+  public void setOutputFile (final File value)
+  {
+    if (value != null && !value.isAbsolute ())
+    {
+      throw new IllegalArgumentException ("path is not absolute: " + value);
+    }
+    this.outputFile = value;
+  }
+
+  /**
+   * Sets the option GRAMMAR_ENCODING.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setGrammarEncoding (final String value)
+  {
+    this.grammarEncoding = value;
+  }
+
+  /**
+   * Sets the option CSS, i.e the hypertext reference to a CSS file for the
+   * generated HTML output.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the default style.
+   */
+  public void setCssHref (final String value)
+  {
+    this.cssHref = value;
+  }
+
+  /**
+   * Sets the option TEXT.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the default value.
+   */
+  public void setText (final Boolean value)
+  {
+    this.text = value;
+  }
+
+  /**
+   * Sets the option BNF.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the default value.
+   */
+  public void setBnf (final Boolean value)
+  {
+    this.bnf = value;
+  }
+
+  /**
+   * Sets the option value ONE_TABLE.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the default value.
+   */
+  public void setOneTable (final Boolean value)
+  {
+    this.oneTable = value;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected int execute () throws Exception
+  {
+    final String [] args = generateArguments ();
+
+    final File outputDirectory = (this.outputFile != null) ? this.outputFile.getParentFile () : null;
+    if (outputDirectory != null && !outputDirectory.exists ())
+    {
+      outputDirectory.mkdirs ();
+    }
+
+    // fork jjdoc because of calls to System.exit()
+    final ForkedJvm jvm = new ForkedJvm ();
+    jvm.setMainClass (org.javacc.jjdoc.JJDocMain.class);
+    jvm.addArguments (args);
+    jvm.setSystemOut (new MojoLogStreamConsumer (false));
+    jvm.setSystemErr (new MojoLogStreamConsumer (true));
+    if (getLog ().isDebugEnabled ())
+    {
+      getLog ().debug ("Forking: " + jvm);
+    }
+    return jvm.run ();
+  }
+
+  /**
+   * Assembles the command line arguments for the invocation of JJDoc according
+   * to the configuration.
+   * 
+   * @return A string array that represents the arguments to use for JJDoc.
+   */
+  private String [] generateArguments ()
+  {
+    final List argsList = new ArrayList ();
+
+    if (StringUtils.isNotEmpty (this.grammarEncoding))
+    {
+      argsList.add ("-GRAMMAR_ENCODING=" + this.grammarEncoding);
+    }
+
+    if (this.text != null)
+    {
+      argsList.add ("-TEXT=" + this.text);
+    }
+
+    if (this.bnf != null)
+    {
+      argsList.add ("-BNF=" + this.bnf);
+    }
+
+    if (this.oneTable != null)
+    {
+      argsList.add ("-ONE_TABLE=" + this.oneTable);
+    }
+
+    if (this.outputFile != null)
+    {
+      argsList.add ("-OUTPUT_FILE=" + this.outputFile.getAbsolutePath ());
+    }
+
+    if (StringUtils.isNotEmpty (this.cssHref))
+    {
+      argsList.add ("-CSS=" + this.cssHref);
+    }
+
+    if (this.inputFile != null)
+    {
+      argsList.add (this.inputFile.getAbsolutePath ());
+    }
+
+    return (String []) argsList.toArray (new String [argsList.size ()]);
+  }
+
+  /**
+   * Gets a string representation of the command line arguments.
+   * 
+   * @return A string representation of the command line arguments.
+   */
+  @Override
+  public String toString ()
+  {
+    return Arrays.asList (generateArguments ()).toString ();
+  }
+
+  /**
+   * Consume and log command line output from the JJDoc process.
+   */
+  class MojoLogStreamConsumer implements StreamConsumer
+  {
 
     /**
-     * The option OUTPUT_FILE.
+     * The line prefix used by JJDoc to report errors.
      */
-    private File outputFile;
+    private static final String ERROR_PREFIX = "Error: ";
 
     /**
-     * The option GRAMMAR_ENCODING.
+     * The line prefix used by JJDoc to report warnings.
      */
-    private String grammarEncoding;
+    private static final String WARN_PREFIX = "Warning: ";
 
     /**
-     * The option CSS.
+     * Determines if the stream consumer is being used for
+     * <code>System.out</code> or <code>System.err</code>.
      */
-    private String cssHref;
+    private final boolean err;
 
     /**
-     * The option TEXT.
-     */
-    private Boolean text;
-
-    /**
-     * The option BNF.
-     */
-    private Boolean bnf;
-
-    /**
-     * The option ONE_TABLE.
-     */
-    private Boolean oneTable;
-
-    /**
-     * Sets the absolute path to the grammar file to pass into JJDoc for documentation.
+     * Single param constructor.
      * 
-     * @param value The absolute path to the grammar file to pass into JJDoc for documentation.
+     * @param error
+     *        If set to <code>true</code>, all consumed lines will be logged at
+     *        the error level.
      */
-    public void setInputFile( File value )
+    public MojoLogStreamConsumer (final boolean error)
     {
-        if ( value != null && !value.isAbsolute() )
-        {
-            throw new IllegalArgumentException( "path is not absolute: " + value );
-        }
-        this.inputFile = value;
+      this.err = error;
     }
 
     /**
-     * Sets the absolute path to the output file.
+     * Consume a line of text.
      * 
-     * @param value The absolute path to the HTML/text file to generate.
+     * @param line
+     *        The line to consume.
      */
-    public void setOutputFile( File value )
+    public void consumeLine (final String line)
     {
-        if ( value != null && !value.isAbsolute() )
+      if (line.startsWith (ERROR_PREFIX))
+      {
+        getLog ().error (line.substring (ERROR_PREFIX.length ()));
+      }
+      else
+        if (line.startsWith (WARN_PREFIX))
         {
-            throw new IllegalArgumentException( "path is not absolute: " + value );
+          getLog ().warn (line.substring (WARN_PREFIX.length ()));
         }
-        this.outputFile = value;
+        else
+          if (this.err)
+          {
+            getLog ().error (line);
+          }
+          else
+          {
+            getLog ().debug (line);
+          }
     }
-
-    /**
-     * Sets the option GRAMMAR_ENCODING.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setGrammarEncoding( String value )
-    {
-        this.grammarEncoding = value;
-    }
-
-    /**
-     * Sets the option CSS, i.e the hypertext reference to a CSS file for the generated HTML output.
-     * 
-     * @param value The option value, may be <code>null</code> to use the default style.
-     */
-    public void setCssHref( String value )
-    {
-        this.cssHref = value;
-    }
-
-    /**
-     * Sets the option TEXT.
-     * 
-     * @param value The option value, may be <code>null</code> to use the default value.
-     */
-    public void setText( Boolean value )
-    {
-        this.text = value;
-    }
-
-    /**
-     * Sets the option BNF.
-     * 
-     * @param value The option value, may be <code>null</code> to use the default value.
-     */
-    public void setBnf( Boolean value )
-    {
-        this.bnf = value;
-    }
-
-    /**
-     * Sets the option value ONE_TABLE.
-     * 
-     * @param value The option value, may be <code>null</code> to use the default value.
-     */
-    public void setOneTable( Boolean value )
-    {
-        this.oneTable = value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected int execute()
-        throws Exception
-    {
-        String[] args = generateArguments();
-
-        File outputDirectory = ( this.outputFile != null ) ? this.outputFile.getParentFile() : null;
-        if ( outputDirectory != null && !outputDirectory.exists() )
-        {
-            outputDirectory.mkdirs();
-        }
-
-        // fork jjdoc because of calls to System.exit()
-        ForkedJvm jvm = new ForkedJvm();
-        jvm.setMainClass( org.javacc.jjdoc.JJDocMain.class );
-        jvm.addArguments( args );
-        jvm.setSystemOut( new MojoLogStreamConsumer( false ) );
-        jvm.setSystemErr( new MojoLogStreamConsumer( true ) );
-        if ( getLog().isDebugEnabled() )
-        {
-            getLog().debug( "Forking: " + jvm );
-        }
-        return jvm.run();
-    }
-
-    /**
-     * Assembles the command line arguments for the invocation of JJDoc according to the configuration.
-     * 
-     * @return A string array that represents the arguments to use for JJDoc.
-     */
-    private String[] generateArguments()
-    {
-        List argsList = new ArrayList();
-
-        if ( StringUtils.isNotEmpty( this.grammarEncoding ) )
-        {
-            argsList.add( "-GRAMMAR_ENCODING=" + this.grammarEncoding );
-        }
-
-        if ( this.text != null )
-        {
-            argsList.add( "-TEXT=" + this.text );
-        }
-
-        if ( this.bnf != null )
-        {
-            argsList.add( "-BNF=" + this.bnf );
-        }
-
-        if ( this.oneTable != null )
-        {
-            argsList.add( "-ONE_TABLE=" + this.oneTable );
-        }
-
-        if ( this.outputFile != null )
-        {
-            argsList.add( "-OUTPUT_FILE=" + this.outputFile.getAbsolutePath() );
-        }
-
-        if ( StringUtils.isNotEmpty( this.cssHref ) )
-        {
-            argsList.add( "-CSS=" + this.cssHref );
-        }
-
-        if ( this.inputFile != null )
-        {
-            argsList.add( this.inputFile.getAbsolutePath() );
-        }
-
-        return (String[]) argsList.toArray( new String[argsList.size()] );
-    }
-
-    /**
-     * Gets a string representation of the command line arguments.
-     * 
-     * @return A string representation of the command line arguments.
-     */
-    public String toString()
-    {
-        return Arrays.asList( generateArguments() ).toString();
-    }
-
-    /**
-     * Consume and log command line output from the JJDoc process.
-     */
-    class MojoLogStreamConsumer
-        implements StreamConsumer
-    {
-
-        /**
-         * The line prefix used by JJDoc to report errors.
-         */
-        private static final String ERROR_PREFIX = "Error: ";
-
-        /**
-         * The line prefix used by JJDoc to report warnings.
-         */
-        private static final String WARN_PREFIX = "Warning: ";
-
-        /**
-         * Determines if the stream consumer is being used for <code>System.out</code> or <code>System.err</code>.
-         */
-        private boolean err;
-
-        /**
-         * Single param constructor.
-         * 
-         * @param error If set to <code>true</code>, all consumed lines will be logged at the error level.
-         */
-        public MojoLogStreamConsumer( boolean error )
-        {
-            this.err = error;
-        }
-
-        /**
-         * Consume a line of text.
-         * 
-         * @param line The line to consume.
-         */
-        public void consumeLine( String line )
-        {
-            if ( line.startsWith( ERROR_PREFIX ) )
-            {
-                getLog().error( line.substring( ERROR_PREFIX.length() ) );
-            }
-            else if ( line.startsWith( WARN_PREFIX ) )
-            {
-                getLog().warn( line.substring( WARN_PREFIX.length() ) );
-            }
-            else if ( this.err )
-            {
-                getLog().error( line );
-            }
-            else
-            {
-                getLog().debug( line );
-            }
-        }
-    }
+  }
 
 }

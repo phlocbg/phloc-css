@@ -5,8 +5,6 @@ package org.javacc.jjtree;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.javacc.parser.Options;
@@ -20,22 +18,25 @@ final class CPPJJTreeState
 
   static final String JJTStateVersion = "6.0";
 
-  private CPPJJTreeState() {}
+  private CPPJJTreeState ()
+  {}
 
-  static void generateTreeState() throws IOException
+  static void generateTreeState () throws IOException
   {
-    Map options = JJTreeOptions.getOptions();
-    options.put("PARSER_NAME", JJTreeGlobals.parserName);
-    String filePrefix = new File(JJTreeOptions.getJJTreeOutputDirectory(), "JJT" + JJTreeGlobals.parserName + "State").getAbsolutePath();
+    final Map options = Options.getOptions ();
+    options.put ("PARSER_NAME", JJTreeGlobals.parserName);
+    final String filePrefix = new File (JJTreeOptions.getJJTreeOutputDirectory (), "JJT" +
+                                                                                   JJTreeGlobals.parserName +
+                                                                                   "State").getAbsolutePath ();
 
-    OutputFile outputFile = new OutputFile(new File(filePrefix + ".h"), JJTStateVersion, new String[0]);
-    CPPNodeFiles.generateFile(outputFile, "/templates/cpp/JJTTreeState.h.template", options);
+    OutputFile outputFile = new OutputFile (new File (filePrefix + ".h"), JJTStateVersion, new String [0]);
+    CPPNodeFiles.generateFile (outputFile, "/templates/cpp/JJTTreeState.h.template", options);
 
-    outputFile = new OutputFile(new File(filePrefix + ".cc"), JJTStateVersion, new String[0]);
-    CPPNodeFiles.generateFile(outputFile, "/templates/cpp/JJTTreeState.cc.template", options);
+    outputFile = new OutputFile (new File (filePrefix + ".cc"), JJTStateVersion, new String [0]);
+    CPPNodeFiles.generateFile (outputFile, "/templates/cpp/JJTTreeState.cc.template", options);
 
   }
 
 }
 
-/*end*/
+/* end */

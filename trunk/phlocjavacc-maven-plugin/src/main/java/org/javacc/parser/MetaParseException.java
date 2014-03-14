@@ -31,5 +31,5 @@ package org.javacc.parser;
 /**
  * Thrown when there is a mis-configuration or a bug.
  */
-public class MetaParseException extends ParseException {
-}
+public class MetaParseException extends ParseException
+{}
