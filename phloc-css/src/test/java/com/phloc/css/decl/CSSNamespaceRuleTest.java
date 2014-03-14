@@ -39,7 +39,7 @@ public final class CSSNamespaceRuleTest
   @Nonnull
   private static CSSNamespaceRule _parse (@Nonnull final String sCSS)
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, ECSSVersion.LATEST);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30);
     assertNotNull (sCSS, aCSS);
     assertTrue (aCSS.hasNamespaceRules ());
     assertEquals (1, aCSS.getNamespaceRuleCount ());

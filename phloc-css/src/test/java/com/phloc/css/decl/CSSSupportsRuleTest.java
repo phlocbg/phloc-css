@@ -41,7 +41,7 @@ public final class CSSSupportsRuleTest
   @Nonnull
   private static CSSSupportsRule _parse (@Nonnull final String sCSS)
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, ECSSVersion.LATEST);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30);
     assertNotNull (sCSS, aCSS);
     assertTrue (aCSS.hasSupportsRules ());
     assertEquals (1, aCSS.getSupportsRuleCount ());
