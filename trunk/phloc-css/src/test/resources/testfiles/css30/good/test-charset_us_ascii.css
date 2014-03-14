@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@CHARSET /* comment */  "ISO-8859-1"  ;
+@CHARSET "US-ASCII";
 
-
-/* eof */
+div { color:red;}

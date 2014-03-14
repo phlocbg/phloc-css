@@ -113,6 +113,7 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
                                      CCharset.CHARSET_ISO_8859_1_OBJ,
                                      ECSSVersion.CSS30,
                                      new LoggingCSSParseErrorHandler ());
+    assertNotNull (aCSS);
     assertEquals (".class{color:red}.class{color:blue}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
 
     sCSS = "  \n/* comment */\n  \n.class{color:red;}";
@@ -120,17 +121,20 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
                                      CCharset.CHARSET_ISO_8859_1_OBJ,
                                      ECSSVersion.CSS30,
                                      new LoggingCSSParseErrorHandler ());
+    assertNotNull (aCSS);
     assertEquals (".class{color:red}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
 
     // With Umlauts
-    sCSS = "@charset 'iso-8859-1'; div { colör: räd; }";
+    sCSS = "div { colör: räd; }";
     aCSS = CSSReader.readFromString (sCSS,
                                      CCharset.CHARSET_UTF_16_OBJ,
                                      ECSSVersion.CSS30,
                                      new LoggingCSSParseErrorHandler ());
+    assertNotNull (aCSS);
     assertEquals ("div{colör:räd}",
                   new CSSWriter (new CSSWriterSettings (ECSSVersion.CSS30).setOptimizedOutput (true)).getCSSAsString (aCSS));
     aCSS2 = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
+    assertNotNull (aCSS2);
     assertEquals ("div{colör:räd}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS2));
     assertEquals (aCSS, aCSS2);
   }
