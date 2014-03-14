@@ -296,6 +296,8 @@ public final class Main
     org.javacc.parser.LookaheadWalk.reInit ();
     org.javacc.parser.Semanticize.reInit ();
     org.javacc.parser.OtherFilesGen.reInit ();
+    // [phloc] Was missing
+    LexGen.reInit ();
   }
 
 }
