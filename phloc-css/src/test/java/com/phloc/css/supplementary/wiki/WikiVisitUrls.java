@@ -20,7 +20,6 @@ package com.phloc.css.supplementary.wiki;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.charset.CCharset;
 import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
@@ -59,7 +58,7 @@ public final class WikiVisitUrls
     final String sStyle = "@import 'foobar.css';\n"
                           + "div{background:fixed url(a.gif) !important;}\n"
                           + "span { background-image:url('/my/folder/b.gif');}";
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (sStyle, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sStyle, ECSSVersion.CSS30);
     CSSVisitor.visitCSSUrl (aCSS, new DefaultCSSUrlVisitor ()
     {
       // Called for each import

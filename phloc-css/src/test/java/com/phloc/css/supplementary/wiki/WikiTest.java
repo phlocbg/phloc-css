@@ -22,7 +22,6 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.reader.CSSReader;
@@ -45,9 +44,7 @@ public final class WikiTest
     final String sCSS = new CSSWriter (ECSSVersion.CSS30).getCSSAsString (aCSS);
     System.out.println (sCSS);
 
-    final CascadingStyleSheet aCSS2 = CSSReader.readFromString (sCSS,
-                                                                CCharset.CHARSET_ISO_8859_1_OBJ,
-                                                                ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS2 = CSSReader.readFromString (sCSS, ECSSVersion.CSS30);
     assertNotNull (aCSS2);
     assertEquals (aCSS, aCSS2);
   }

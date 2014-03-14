@@ -62,35 +62,35 @@ public final class CSSVisitor30Test extends AbstractCSS30Test
   public void testVisitConstantCSS ()
   {
     // CSS 1
-    CascadingStyleSheet aCSS = CSSReader.readFromString (CSS1, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    CascadingStyleSheet aCSS = CSSReader.readFromString (CSS1, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     MockCountingUrlVisitor aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);
     assertEquals (4, aVisitor.getCount ());
 
     // CSS 2
-    aCSS = CSSReader.readFromString (CSS2, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    aCSS = CSSReader.readFromString (CSS2, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);
     assertEquals (18, aVisitor.getCount ());
 
     // CSS 3
-    aCSS = CSSReader.readFromString (CSS3, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    aCSS = CSSReader.readFromString (CSS3, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);
     assertEquals (1, aVisitor.getCount ());
 
     // CSS 4
-    aCSS = CSSReader.readFromString (CSS4, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    aCSS = CSSReader.readFromString (CSS4, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);
     assertEquals (1, aVisitor.getCount ());
 
     // CSS 5
-    aCSS = CSSReader.readFromString (CSS5, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    aCSS = CSSReader.readFromString (CSS5, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);

@@ -25,7 +25,6 @@ import javax.annotation.Nonnull;
 
 import org.junit.Test;
 
-import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.reader.CSSReader;
 
@@ -39,7 +38,7 @@ public final class CSSUnknownRuleTest
   @Nonnull
   private static CSSUnknownRule _parse (@Nonnull final String sCSS)
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.LATEST);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, ECSSVersion.LATEST);
     assertNotNull (sCSS, aCSS);
     assertTrue (aCSS.hasUnknownRules ());
     assertEquals (1, aCSS.getUnknownRuleCount ());

@@ -22,7 +22,6 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.phloc.commons.charset.CCharset;
 import com.phloc.css.AbstractCSS30Test;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
@@ -38,7 +37,7 @@ public final class CSSWriterTest extends AbstractCSS30Test
   @Test
   public void testIndentation ()
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS3, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS3, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
@@ -146,7 +145,7 @@ public final class CSSWriterTest extends AbstractCSS30Test
   @Test
   public void testIndentationNested ()
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS4, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS4, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
@@ -190,7 +189,7 @@ public final class CSSWriterTest extends AbstractCSS30Test
   @Test
   public void testRemoveUnnecessaryCode1 ()
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS3, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS3, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false).setRemoveUnnecessaryCode (true);
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
@@ -238,7 +237,7 @@ public final class CSSWriterTest extends AbstractCSS30Test
   @Test
   public void testRemoveUnnecessaryCode2 ()
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS4, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS4, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false).setRemoveUnnecessaryCode (true);
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
@@ -277,7 +276,7 @@ public final class CSSWriterTest extends AbstractCSS30Test
   @Test
   public void testHeaderText ()
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS5, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (CSS5, ECSSVersion.CSS30);
     assertNotNull (aCSS);
 
     // Non-optimized version
@@ -312,17 +311,17 @@ public final class CSSWriterTest extends AbstractCSS30Test
     final CSSWriter aWriter = new CSSWriter (aSettings).setWriteHeaderText (false);
 
     // Some non-special rules
-    CascadingStyleSheet aCSS = CSSReader.readFromString (CSS3, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    CascadingStyleSheet aCSS = CSSReader.readFromString (CSS3, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     assertEquals ("h1{color:red;margin:1px}h2{color:rgb(1,2,3)}h3{}", aWriter.getCSSAsString (aCSS));
 
     // Only @media rule
-    aCSS = CSSReader.readFromString (CSS4, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    aCSS = CSSReader.readFromString (CSS4, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     assertEquals ("", aWriter.getCSSAsString (aCSS));
 
     // Nothing special
-    aCSS = CSSReader.readFromString (CSS5, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    aCSS = CSSReader.readFromString (CSS5, ECSSVersion.CSS30);
     assertNotNull (aCSS);
     assertEquals ("h1{color:red;margin:1px}h2{color:red;margin:1px}", aWriter.getCSSAsString (aCSS));
   }

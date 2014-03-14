@@ -55,15 +55,23 @@ public final class MediaQueryTools
   {}
 
   @Nullable
+  @Deprecated
   public static List <CSSMediaQuery> parseToMediaQuery (@Nullable final String sMediaQuery,
                                                         @Nonnull final Charset aCharset,
+                                                        @Nonnull final ECSSVersion eVersion)
+  {
+    return parseToMediaQuery (sMediaQuery, eVersion);
+  }
+
+  @Nullable
+  public static List <CSSMediaQuery> parseToMediaQuery (@Nullable final String sMediaQuery,
                                                         @Nonnull final ECSSVersion eVersion)
   {
     if (StringHelper.hasNoText (sMediaQuery))
       return null;
 
     final String sCSS = "@media " + sMediaQuery + " {}";
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, aCharset, eVersion);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, eVersion);
     if (aCSS == null)
       return null;
 

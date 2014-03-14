@@ -45,41 +45,39 @@ public final class MediaQueryToolsTest
   @Test
   public void testParseMediaQuery ()
   {
-    List <CSSMediaQuery> aMQs = MediaQueryTools.parseToMediaQuery ("screen", s_aCharset, s_eVersion);
+    List <CSSMediaQuery> aMQs = MediaQueryTools.parseToMediaQuery ("screen", s_eVersion);
     assertNotNull (aMQs);
     assertEquals (1, aMQs.size ());
 
-    aMQs = MediaQueryTools.parseToMediaQuery ("screen and (color)", s_aCharset, s_eVersion);
+    aMQs = MediaQueryTools.parseToMediaQuery ("screen and (color)", s_eVersion);
     assertNotNull (aMQs);
     assertEquals (1, aMQs.size ());
 
-    aMQs = MediaQueryTools.parseToMediaQuery ("not screen and (color)", s_aCharset, s_eVersion);
+    aMQs = MediaQueryTools.parseToMediaQuery ("not screen and (color)", s_eVersion);
     assertNotNull (aMQs);
     assertEquals (1, aMQs.size ());
 
-    aMQs = MediaQueryTools.parseToMediaQuery ("only screen and (color)", s_aCharset, s_eVersion);
+    aMQs = MediaQueryTools.parseToMediaQuery ("only screen and (color)", s_eVersion);
     assertNotNull (aMQs);
     assertEquals (1, aMQs.size ());
 
-    aMQs = MediaQueryTools.parseToMediaQuery ("screen and (color), projection and (color)", s_aCharset, s_eVersion);
+    aMQs = MediaQueryTools.parseToMediaQuery ("screen and (color), projection and (color)", s_eVersion);
     assertNotNull (aMQs);
     assertEquals (2, aMQs.size ());
 
-    aMQs = MediaQueryTools.parseToMediaQuery ("aural and (device-aspect-ratio: 16/9)", s_aCharset, s_eVersion);
+    aMQs = MediaQueryTools.parseToMediaQuery ("aural and (device-aspect-ratio: 16/9)", s_eVersion);
     assertNotNull (aMQs);
     assertEquals (1, aMQs.size ());
 
-    aMQs = MediaQueryTools.parseToMediaQuery ("speech and (min-device-width: 800px)", s_aCharset, s_eVersion);
+    aMQs = MediaQueryTools.parseToMediaQuery ("speech and (min-device-width: 800px)", s_eVersion);
     assertNotNull (aMQs);
     assertEquals (1, aMQs.size ());
 
-    aMQs = MediaQueryTools.parseToMediaQuery ("screen and (max-weight: 3kg) and (color), (color)",
-                                              s_aCharset,
-                                              s_eVersion);
+    aMQs = MediaQueryTools.parseToMediaQuery ("screen and (max-weight: 3kg) and (color), (color)", s_eVersion);
     assertNotNull (aMQs);
     assertEquals (2, aMQs.size ());
 
-    aMQs = MediaQueryTools.parseToMediaQuery ("print and (min-width: 25cm)", s_aCharset, s_eVersion);
+    aMQs = MediaQueryTools.parseToMediaQuery ("print and (min-width: 25cm)", s_eVersion);
     assertNotNull (aMQs);
     assertEquals (1, aMQs.size ());
   }
@@ -87,10 +85,10 @@ public final class MediaQueryToolsTest
   @Test
   public void testGetWrapped ()
   {
-    final CascadingStyleSheet aBaseCSS = CSSReader.readFromString ("p { color:red;}", s_aCharset, s_eVersion);
+    final CascadingStyleSheet aBaseCSS = CSSReader.readFromString ("p { color:red;}", s_eVersion);
     assertNotNull (aBaseCSS);
 
-    final List <CSSMediaQuery> aMQs = MediaQueryTools.parseToMediaQuery ("screen", s_aCharset, s_eVersion);
+    final List <CSSMediaQuery> aMQs = MediaQueryTools.parseToMediaQuery ("screen", s_eVersion);
     assertNotNull (aMQs);
 
     final CascadingStyleSheet aWrappedCSS = MediaQueryTools.getWrappedInMediaQuery (aBaseCSS, aMQs, false);
