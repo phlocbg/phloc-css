@@ -36,6 +36,7 @@ import com.phloc.css.reader.errorhandler.CollectingCSSParseErrorHandler;
 import com.phloc.css.reader.errorhandler.DoNothingCSSParseErrorHandler;
 import com.phloc.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 import com.phloc.css.writer.CSSWriter;
+import com.phloc.css.writer.CSSWriterSettings;
 
 /**
  * Test reading CSS 3.0 stuff
@@ -107,32 +108,31 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   public void testSpecialCases ()
   {
     String sCSS = ".class{color:red;.class{color:green}.class{color:blue}";
-    CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS,
-                                                         CCharset.CHARSET_ISO_8859_1_OBJ,
-                                                         ECSSVersion.CSS30,
-                                                         DoNothingCSSParseErrorHandler.getInstance ());
+    CascadingStyleSheet aCSS, aCSS2;
+    aCSS = CSSReader.readFromString (sCSS,
+                                     CCharset.CHARSET_ISO_8859_1_OBJ,
+                                     ECSSVersion.CSS30,
+                                     new LoggingCSSParseErrorHandler ());
     assertEquals (".class{color:red}.class{color:blue}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
 
     sCSS = "  \n/* comment */\n  \n.class{color:red;}";
     aCSS = CSSReader.readFromString (sCSS,
                                      CCharset.CHARSET_ISO_8859_1_OBJ,
                                      ECSSVersion.CSS30,
-                                     DoNothingCSSParseErrorHandler.getInstance ());
+                                     new LoggingCSSParseErrorHandler ());
     assertEquals (".class{color:red}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
 
-    sCSS = "\u00ef\u00bb\u00bf\r\n"
-           + "/* validation styles */\r\n"
-           + "\r\n"
-           + ".validation-summary-errors\r\n"
-           + "{\r\n"
-           + "  color:Red;\r\n"
-           + "}";
+    // With Umlauts
+    sCSS = "@charset 'iso-8859-1'; div { colör: räd; }";
     aCSS = CSSReader.readFromString (sCSS,
-                                     CCharset.CHARSET_ISO_8859_1_OBJ,
+                                     CCharset.CHARSET_UTF_16_OBJ,
                                      ECSSVersion.CSS30,
-                                     DoNothingCSSParseErrorHandler.getInstance ());
-    assertEquals (".validation-summary-errors{color:Red}",
-                  new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
+                                     new LoggingCSSParseErrorHandler ());
+    assertEquals ("div{colör:räd}",
+                  new CSSWriter (new CSSWriterSettings (ECSSVersion.CSS30).setOptimizedOutput (true)).getCSSAsString (aCSS));
+    aCSS2 = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
+    assertEquals ("div{colör:räd}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS2));
+    assertEquals (aCSS, aCSS2);
   }
 
   @Test
