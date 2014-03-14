@@ -32,458 +32,503 @@ import org.codehaus.plexus.util.StringUtils;
  * 
  * @author Benjamin Bentmann
  * @version $Id: JJTree.java 10603 2009-09-06 15:05:08Z bentmann $
- * @see <a href="https://javacc.dev.java.net/doc/JJTree.html">JJTree Reference</a>
+ * @see <a href="https://javacc.dev.java.net/doc/JJTree.html">JJTree
+ *      Reference</a>
  */
-class JJTree
-    extends ToolFacade
+class JJTree extends ToolFacade
 {
 
-    /**
-     * The input grammar.
-     */
-    private File inputFile;
+  /**
+   * The input grammar.
+   */
+  private File inputFile;
 
-    /**
-     * The option OUTPUT_DIRECTORY.
-     */
-    private File outputDirectory;
+  /**
+   * The option OUTPUT_DIRECTORY.
+   */
+  private File outputDirectory;
 
-    /**
-     * The option GRAMMAR_ENCODING.
-     */
-    private String grammarEncoding;
+  /**
+   * The option GRAMMAR_ENCODING.
+   */
+  private String grammarEncoding;
 
-    /**
-     * The option JDK_VERSION.
-     */
-    private String jdkVersion;
+  /**
+   * The option JDK_VERSION.
+   */
+  private String jdkVersion;
 
-    /**
-     * The option STATIC.
-     */
-    private Boolean isStatic;
+  /**
+   * The option STATIC.
+   */
+  private Boolean isStatic;
 
-    /**
-     * The option BUILD_NODE_FILES.
-     */
-    private Boolean buildNodeFiles;
+  /**
+   * The option BUILD_NODE_FILES.
+   */
+  private Boolean buildNodeFiles;
 
-    /**
-     * The option MULTI.
-     */
-    private Boolean multi;
+  /**
+   * The option MULTI.
+   */
+  private Boolean multi;
 
-    /**
-     * The option NODE_DEFAULT_VOID.
-     */
-    private Boolean nodeDefaultVoid;
+  /**
+   * The option NODE_DEFAULT_VOID.
+   */
+  private Boolean nodeDefaultVoid;
 
-    /**
-     * The option NODE_CLASS.
-     */
-    private String nodeClass;
+  /**
+   * The option NODE_CLASS.
+   */
+  private String nodeClass;
 
-    /**
-     * The option NODE_FACTORY.
-     */
-    private String nodeFactory;
+  /**
+   * The option NODE_FACTORY.
+   */
+  private String nodeFactory;
 
-    /**
-     * The option NODE_PACKAGE.
-     */
-    private String nodePackage;
+  /**
+   * The option NODE_PACKAGE.
+   */
+  private String nodePackage;
 
-    /**
-     * The option NODE_PREFIX.
-     */
-    private String nodePrefix;
+  /**
+   * The option NODE_PREFIX.
+   */
+  private String nodePrefix;
 
-    /**
-     * The option NODE_SCOPE_HOOK.
-     */
-    private Boolean nodeScopeHook;
+  /**
+   * The option NODE_SCOPE_HOOK.
+   */
+  private Boolean nodeScopeHook;
 
-    /**
-     * The option NODE_USES_PARSER.
-     */
-    private Boolean nodeUsesParser;
+  /**
+   * The option NODE_USES_PARSER.
+   */
+  private Boolean nodeUsesParser;
 
-    /**
-     * The option TRACK_TOKENS.
-     */
-    private Boolean trackTokens;
+  /**
+   * The option TRACK_TOKENS.
+   */
+  private Boolean trackTokens;
 
-    /**
-     * The option VISITOR.
-     */
-    private Boolean visitor;
+  /**
+   * The option VISITOR.
+   */
+  private Boolean visitor;
 
-    /**
-     * The option VISITOR_DATA_TYPE.
-     */
-    private String visitorDataType;
+  /**
+   * The option VISITOR_DATA_TYPE.
+   */
+  private String visitorDataType;
 
-    /**
-     * The option VISITOR_RETURN_TYPE.
-     */
-    private String visitorReturnType;
+  /**
+   * The option VISITOR_RETURN_TYPE.
+   */
+  private String visitorReturnType;
 
-    /**
-     * The option VISITOR_EXCEPTION.
-     */
-    private String visitorException;
+  /**
+   * The option VISITOR_EXCEPTION.
+   */
+  private String visitorException;
 
-    /**
-     * Sets the absolute path to the grammar file to pass into JJTree for preprocessing.
-     * 
-     * @param value The absolute path to the grammar file to pass into JJTree for preprocessing.
-     */
-    public void setInputFile( File value )
+  /**
+   * Sets the absolute path to the grammar file to pass into JJTree for
+   * preprocessing.
+   * 
+   * @param value
+   *        The absolute path to the grammar file to pass into JJTree for
+   *        preprocessing.
+   */
+  public void setInputFile (final File value)
+  {
+    if (value != null && !value.isAbsolute ())
     {
-        if ( value != null && !value.isAbsolute() )
-        {
-            throw new IllegalArgumentException( "path is not absolute: " + value );
-        }
-        this.inputFile = value;
+      throw new IllegalArgumentException ("path is not absolute: " + value);
+    }
+    this.inputFile = value;
+  }
+
+  /**
+   * Sets the absolute path to the output directory.
+   * 
+   * @param value
+   *        The absolute path to the output directory for the generated grammar
+   *        file. If this directory does not exist yet, it is created. Note that
+   *        this path should already include the desired package hierarchy
+   *        because JJTree will not append the required sub directories
+   *        automatically.
+   */
+  public void setOutputDirectory (final File value)
+  {
+    if (value != null && !value.isAbsolute ())
+    {
+      throw new IllegalArgumentException ("path is not absolute: " + value);
+    }
+    this.outputDirectory = value;
+  }
+
+  /**
+   * Gets the absolute path to the enhanced grammar file generated by JJTree.
+   * 
+   * @return The absolute path to the enhanced grammar file generated by JJTree
+   *         or <code>null</code> if either the input file or the output
+   *         directory have not been set.
+   */
+  public File getOutputFile ()
+  {
+    File outputFile = null;
+    if (this.outputDirectory != null && this.inputFile != null)
+    {
+      final String fileName = FileUtils.removeExtension (this.inputFile.getName ()) + ".jj";
+      outputFile = new File (this.outputDirectory, fileName);
+    }
+    return outputFile;
+  }
+
+  /**
+   * Sets the option GRAMMAR_ENCODING.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setGrammarEncoding (final String value)
+  {
+    this.grammarEncoding = value;
+  }
+
+  /**
+   * Sets the option JDK_VERSION.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setJdkVersion (final String value)
+  {
+    this.jdkVersion = value;
+  }
+
+  /**
+   * Sets the option STATIC.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setStatic (final Boolean value)
+  {
+    this.isStatic = value;
+  }
+
+  /**
+   * Sets the option value BUILD_NODE_FILES.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setBuildNodeFiles (final Boolean value)
+  {
+    this.buildNodeFiles = value;
+  }
+
+  /**
+   * Sets the option value MULTI.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setMulti (final Boolean value)
+  {
+    this.multi = value;
+  }
+
+  /**
+   * Sets the option value NODE_DEFAULT_VOID.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setNodeDefaultVoid (final Boolean value)
+  {
+    this.nodeDefaultVoid = value;
+  }
+
+  /**
+   * Sets the option value NODE_CLASS.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setNodeClass (final String value)
+  {
+    this.nodeClass = value;
+  }
+
+  /**
+   * Sets the option value NODE_FACTORY.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setNodeFactory (final String value)
+  {
+    this.nodeFactory = value;
+  }
+
+  /**
+   * Sets the option value NODE_PACKAGE.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setNodePackage (final String value)
+  {
+    this.nodePackage = value;
+  }
+
+  /**
+   * Sets the option value NODE_PREFIX.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setNodePrefix (final String value)
+  {
+    this.nodePrefix = value;
+  }
+
+  /**
+   * Sets the option value NODE_SCOPE_HOOK.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setNodeScopeHook (final Boolean value)
+  {
+    this.nodeScopeHook = value;
+  }
+
+  /**
+   * Sets the option value NODE_USES_PARSER.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setNodeUsesParser (final Boolean value)
+  {
+    this.nodeUsesParser = value;
+  }
+
+  /**
+   * Sets the option value TRACK_TOKENS.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setTrackTokens (final Boolean value)
+  {
+    this.trackTokens = value;
+  }
+
+  /**
+   * Sets the option value VISITOR.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setVisitor (final Boolean value)
+  {
+    this.visitor = value;
+  }
+
+  /**
+   * Sets the option value VISITOR_DATA_TYPE.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setVisitorDataType (final String value)
+  {
+    this.visitorDataType = value;
+  }
+
+  /**
+   * Sets the option value VISITOR_RETURN_TYPE.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setVisitorReturnType (final String value)
+  {
+    this.visitorReturnType = value;
+  }
+
+  /**
+   * Sets the option value VISITOR_EXCEPTION.
+   * 
+   * @param value
+   *        The option value, may be <code>null</code> to use the value provided
+   *        in the grammar or the default.
+   */
+  public void setVisitorException (final String value)
+  {
+    this.visitorException = value;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected int execute () throws Exception
+  {
+    final String [] args = generateArguments ();
+
+    if (this.outputDirectory != null && !this.outputDirectory.exists ())
+    {
+      this.outputDirectory.mkdirs ();
     }
 
-    /**
-     * Sets the absolute path to the output directory.
-     * 
-     * @param value The absolute path to the output directory for the generated grammar file. If this directory does not
-     *            exist yet, it is created. Note that this path should already include the desired package hierarchy
-     *            because JJTree will not append the required sub directories automatically.
-     */
-    public void setOutputDirectory( File value )
+    final org.javacc.jjtree.JJTree jjtree = new org.javacc.jjtree.JJTree ();
+    return jjtree.main (args);
+  }
+
+  /**
+   * Assembles the command line arguments for the invocation of JJTree according
+   * to the configuration.<br/>
+   * <br/>
+   * <strong>Note:</strong> To prevent conflicts with JavaCC options that might
+   * be set directly in the grammar file, only those parameters that have been
+   * explicitly set are passed on the command line.
+   * 
+   * @return A string array that represents the arguments to use for JJTree.
+   */
+  private String [] generateArguments ()
+  {
+    final List argsList = new ArrayList ();
+
+    if (StringUtils.isNotEmpty (this.grammarEncoding))
     {
-        if ( value != null && !value.isAbsolute() )
-        {
-            throw new IllegalArgumentException( "path is not absolute: " + value );
-        }
-        this.outputDirectory = value;
+      argsList.add ("-GRAMMAR_ENCODING=" + this.grammarEncoding);
     }
 
-    /**
-     * Gets the absolute path to the enhanced grammar file generated by JJTree.
-     * 
-     * @return The absolute path to the enhanced grammar file generated by JJTree or <code>null</code> if either the
-     *         input file or the output directory have not been set.
-     */
-    public File getOutputFile()
+    if (StringUtils.isNotEmpty (jdkVersion))
     {
-        File outputFile = null;
-        if ( this.outputDirectory != null && this.inputFile != null )
-        {
-            String fileName = FileUtils.removeExtension( this.inputFile.getName() ) + ".jj";
-            outputFile = new File( this.outputDirectory, fileName );
-        }
-        return outputFile;
+      argsList.add ("-JDK_VERSION=" + this.jdkVersion);
     }
 
-    /**
-     * Sets the option GRAMMAR_ENCODING.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setGrammarEncoding( String value )
+    if (this.buildNodeFiles != null)
     {
-        this.grammarEncoding = value;
+      argsList.add ("-BUILD_NODE_FILES=" + this.buildNodeFiles);
     }
 
-    /**
-     * Sets the option JDK_VERSION.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setJdkVersion( String value )
+    if (this.multi != null)
     {
-        this.jdkVersion = value;
+      argsList.add ("-MULTI=" + this.multi);
     }
 
-    /**
-     * Sets the option STATIC.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setStatic( Boolean value )
+    if (this.nodeDefaultVoid != null)
     {
-        this.isStatic = value;
+      argsList.add ("-NODE_DEFAULT_VOID=" + this.nodeDefaultVoid);
     }
 
-    /**
-     * Sets the option value BUILD_NODE_FILES.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setBuildNodeFiles( Boolean value )
+    if (StringUtils.isNotEmpty (this.nodeClass))
     {
-        this.buildNodeFiles = value;
+      argsList.add ("-NODE_CLASS=" + this.nodeClass);
     }
 
-    /**
-     * Sets the option value MULTI.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setMulti( Boolean value )
+    if (StringUtils.isNotEmpty (this.nodeFactory))
     {
-        this.multi = value;
+      argsList.add ("-NODE_FACTORY=" + this.nodeFactory);
     }
 
-    /**
-     * Sets the option value NODE_DEFAULT_VOID.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setNodeDefaultVoid( Boolean value )
+    if (StringUtils.isNotEmpty (this.nodePackage))
     {
-        this.nodeDefaultVoid = value;
+      argsList.add ("-NODE_PACKAGE=" + this.nodePackage);
     }
 
-    /**
-     * Sets the option value NODE_CLASS.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setNodeClass( String value )
+    if (StringUtils.isNotEmpty (this.nodePrefix))
     {
-        this.nodeClass = value;
+      argsList.add ("-NODE_PREFIX=" + this.nodePrefix);
     }
 
-    /**
-     * Sets the option value NODE_FACTORY.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setNodeFactory( String value )
+    if (this.nodeScopeHook != null)
     {
-        this.nodeFactory = value;
+      argsList.add ("-NODE_SCOPE_HOOK=" + this.nodeScopeHook);
     }
 
-    /**
-     * Sets the option value NODE_PACKAGE.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setNodePackage( String value )
+    if (this.nodeUsesParser != null)
     {
-        this.nodePackage = value;
+      argsList.add ("-NODE_USES_PARSER=" + this.nodeUsesParser);
     }
 
-    /**
-     * Sets the option value NODE_PREFIX.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setNodePrefix( String value )
+    if (this.isStatic != null)
     {
-        this.nodePrefix = value;
+      argsList.add ("-STATIC=" + this.isStatic);
     }
 
-    /**
-     * Sets the option value NODE_SCOPE_HOOK.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setNodeScopeHook( Boolean value )
+    if (this.trackTokens != null)
     {
-        this.nodeScopeHook = value;
+      argsList.add ("-TRACK_TOKENS=" + this.trackTokens);
     }
 
-    /**
-     * Sets the option value NODE_USES_PARSER.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setNodeUsesParser( Boolean value )
+    if (this.visitor != null)
     {
-        this.nodeUsesParser = value;
+      argsList.add ("-VISITOR=" + this.visitor);
     }
 
-    /**
-     * Sets the option value TRACK_TOKENS.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setTrackTokens( Boolean value )
+    if (StringUtils.isNotEmpty (this.visitorDataType))
     {
-        this.trackTokens = value;
+      argsList.add ("-VISITOR_DATA_TYPE=" + this.visitorDataType);
     }
 
-    /**
-     * Sets the option value VISITOR.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setVisitor( Boolean value )
+    if (StringUtils.isNotEmpty (this.visitorReturnType))
     {
-        this.visitor = value;
+      argsList.add ("-VISITOR_RETURN_TYPE=" + this.visitorReturnType);
     }
 
-    /**
-     * Sets the option value VISITOR_DATA_TYPE.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setVisitorDataType( String value )
+    if (StringUtils.isNotEmpty (this.visitorException))
     {
-        this.visitorDataType = value;
+      argsList.add ("-VISITOR_EXCEPTION=" + this.visitorException);
     }
 
-    /**
-     * Sets the option value VISITOR_RETURN_TYPE.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setVisitorReturnType( String value )
+    if (this.outputDirectory != null)
     {
-        this.visitorReturnType = value;
+      argsList.add ("-OUTPUT_DIRECTORY=" + this.outputDirectory.getAbsolutePath ());
     }
 
-    /**
-     * Sets the option value VISITOR_EXCEPTION.
-     * 
-     * @param value The option value, may be <code>null</code> to use the value provided in the grammar or the default.
-     */
-    public void setVisitorException( String value )
+    if (this.inputFile != null)
     {
-        this.visitorException = value;
+      argsList.add (this.inputFile.getAbsolutePath ());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected int execute()
-        throws Exception
-    {
-        String[] args = generateArguments();
+    return (String []) argsList.toArray (new String [argsList.size ()]);
+  }
 
-        if ( this.outputDirectory != null && !this.outputDirectory.exists() )
-        {
-            this.outputDirectory.mkdirs();
-        }
-
-        org.javacc.jjtree.JJTree jjtree = new org.javacc.jjtree.JJTree();
-        return jjtree.main( args );
-    }
-
-    /**
-     * Assembles the command line arguments for the invocation of JJTree according to the configuration.<br/><br/>
-     * <strong>Note:</strong> To prevent conflicts with JavaCC options that might be set directly in the grammar file,
-     * only those parameters that have been explicitly set are passed on the command line.
-     * 
-     * @return A string array that represents the arguments to use for JJTree.
-     */
-    private String[] generateArguments()
-    {
-        List argsList = new ArrayList();
-
-        if ( StringUtils.isNotEmpty( this.grammarEncoding ) )
-        {
-            argsList.add( "-GRAMMAR_ENCODING=" + this.grammarEncoding );
-        }
-
-        if ( StringUtils.isNotEmpty( jdkVersion ) )
-        {
-            argsList.add( "-JDK_VERSION=" + this.jdkVersion );
-        }
-
-        if ( this.buildNodeFiles != null )
-        {
-            argsList.add( "-BUILD_NODE_FILES=" + this.buildNodeFiles );
-        }
-
-        if ( this.multi != null )
-        {
-            argsList.add( "-MULTI=" + this.multi );
-        }
-
-        if ( this.nodeDefaultVoid != null )
-        {
-            argsList.add( "-NODE_DEFAULT_VOID=" + this.nodeDefaultVoid );
-        }
-
-        if ( StringUtils.isNotEmpty( this.nodeClass ) )
-        {
-            argsList.add( "-NODE_CLASS=" + this.nodeClass );
-        }
-
-        if ( StringUtils.isNotEmpty( this.nodeFactory ) )
-        {
-            argsList.add( "-NODE_FACTORY=" + this.nodeFactory );
-        }
-
-        if ( StringUtils.isNotEmpty( this.nodePackage ) )
-        {
-            argsList.add( "-NODE_PACKAGE=" + this.nodePackage );
-        }
-
-        if ( StringUtils.isNotEmpty( this.nodePrefix ) )
-        {
-            argsList.add( "-NODE_PREFIX=" + this.nodePrefix );
-        }
-
-        if ( this.nodeScopeHook != null )
-        {
-            argsList.add( "-NODE_SCOPE_HOOK=" + this.nodeScopeHook );
-        }
-
-        if ( this.nodeUsesParser != null )
-        {
-            argsList.add( "-NODE_USES_PARSER=" + this.nodeUsesParser );
-        }
-
-        if ( this.isStatic != null )
-        {
-            argsList.add( "-STATIC=" + this.isStatic );
-        }
-
-        if ( this.trackTokens != null )
-        {
-            argsList.add( "-TRACK_TOKENS=" + this.trackTokens );
-        }
-
-        if ( this.visitor != null )
-        {
-            argsList.add( "-VISITOR=" + this.visitor );
-        }
-
-        if ( StringUtils.isNotEmpty( this.visitorDataType ) )
-        {
-            argsList.add( "-VISITOR_DATA_TYPE=" + this.visitorDataType );
-        }
-
-        if ( StringUtils.isNotEmpty( this.visitorReturnType ) )
-        {
-            argsList.add( "-VISITOR_RETURN_TYPE=" + this.visitorReturnType );
-        }
-
-        if ( StringUtils.isNotEmpty( this.visitorException ) )
-        {
-            argsList.add( "-VISITOR_EXCEPTION=" + this.visitorException );
-        }
-
-        if ( this.outputDirectory != null )
-        {
-            argsList.add( "-OUTPUT_DIRECTORY=" + this.outputDirectory.getAbsolutePath() );
-        }
-
-        if ( this.inputFile != null )
-        {
-            argsList.add( this.inputFile.getAbsolutePath() );
-        }
-
-        return (String[]) argsList.toArray( new String[argsList.size()] );
-    }
-
-    /**
-     * Gets a string representation of the command line arguments.
-     * 
-     * @return A string representation of the command line arguments.
-     */
-    public String toString()
-    {
-        return Arrays.asList( generateArguments() ).toString();
-    }
+  /**
+   * Gets a string representation of the command line arguments.
+   * 
+   * @return A string representation of the command line arguments.
+   */
+  @Override
+  public String toString ()
+  {
+    return Arrays.asList (generateArguments ()).toString ();
+  }
 
 }

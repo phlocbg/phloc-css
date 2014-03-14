@@ -33,81 +33,85 @@ import org.apache.maven.plugin.logging.SystemStreamLog;
 abstract class ToolFacade
 {
 
-    /**
-     * The logger used to output diagnostic messages.
-     */
-    private Log log;
+  /**
+   * The logger used to output diagnostic messages.
+   */
+  private Log log;
 
-    /**
-     * Sets the logger used to output diagnostic messages.
-     * 
-     * @param logger The logger used to output diagnostic messages, may be <code>null</code>.
-     */
-    public void setLog( Log logger )
+  /**
+   * Sets the logger used to output diagnostic messages.
+   * 
+   * @param logger
+   *        The logger used to output diagnostic messages, may be
+   *        <code>null</code>.
+   */
+  public void setLog (final Log logger)
+  {
+    this.log = logger;
+  }
+
+  /**
+   * Gets the logger used to output diagnostic messages.
+   * 
+   * @return The logger used to output diagnostic messages, never
+   *         <code>null</code>.
+   */
+  protected Log getLog ()
+  {
+    if (this.log == null)
     {
-        this.log = logger;
+      this.log = new SystemStreamLog ();
     }
+    return this.log;
+  }
 
-    /**
-     * Gets the logger used to output diagnostic messages.
-     * 
-     * @return The logger used to output diagnostic messages, never <code>null</code>.
-     */
-    protected Log getLog()
+  /**
+   * Gets the name of the tool.
+   * 
+   * @return The name of the tool, never <code>null</code>.
+   */
+  protected String getToolName ()
+  {
+    final String name = getClass ().getName ();
+    return name.substring (name.lastIndexOf ('.') + 1);
+  }
+
+  /**
+   * Runs the tool using the previously set parameters.
+   * 
+   * @throws MojoExecutionException
+   *         If the tool could not be invoked.
+   * @throws MojoFailureException
+   *         If the tool reported a non-zero exit code.
+   */
+  public void run () throws MojoExecutionException, MojoFailureException
+  {
+    int exitCode;
+    try
     {
-        if ( this.log == null )
-        {
-            this.log = new SystemStreamLog();
-        }
-        return this.log;
+      if (getLog ().isDebugEnabled ())
+      {
+        getLog ().debug ("Running " + getToolName () + ": " + this);
+      }
+      exitCode = execute ();
     }
-
-    /**
-     * Gets the name of the tool.
-     * 
-     * @return The name of the tool, never <code>null</code>.
-     */
-    protected String getToolName()
+    catch (final Exception e)
     {
-        String name = getClass().getName();
-        return name.substring( name.lastIndexOf( '.' ) + 1 );
+      throw new MojoExecutionException ("Failed to execute " + getToolName (), e);
     }
-
-    /**
-     * Runs the tool using the previously set parameters.
-     * 
-     * @throws MojoExecutionException If the tool could not be invoked.
-     * @throws MojoFailureException If the tool reported a non-zero exit code.
-     */
-    public void run()
-        throws MojoExecutionException, MojoFailureException
+    if (exitCode != 0)
     {
-        int exitCode;
-        try
-        {
-            if ( getLog().isDebugEnabled() )
-            {
-                getLog().debug( "Running " + getToolName() + ": " + this );
-            }
-            exitCode = execute();
-        }
-        catch ( Exception e )
-        {
-            throw new MojoExecutionException( "Failed to execute " + getToolName(), e );
-        }
-        if ( exitCode != 0 )
-        {
-            throw new MojoFailureException( getToolName() + " reported exit code " + exitCode + ": " + this );
-        }
+      throw new MojoFailureException (getToolName () + " reported exit code " + exitCode + ": " + this);
     }
+  }
 
-    /**
-     * Runs the tool using the previously set parameters.
-     * 
-     * @return The exit code of the tool, non-zero means failure.
-     * @throws Exception If the tool could not be invoked.
-     */
-    protected abstract int execute()
-        throws Exception;
+  /**
+   * Runs the tool using the previously set parameters.
+   * 
+   * @return The exit code of the tool, non-zero means failure.
+   * @throws Exception
+   *         If the tool could not be invoked.
+   */
+  protected abstract int execute () throws Exception;
 
 }

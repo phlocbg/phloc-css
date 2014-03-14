@@ -31,28 +31,35 @@
 
 package org.javacc.jjtree;
 
-import org.javacc.parser.JavaCCGlobals;
+import org.javacc.parser.Options;
 
-
-public class ASTGrammar extends JJTreeNode {
-  ASTGrammar(int id) {
-    super(id);
+public class ASTGrammar extends JJTreeNode
+{
+  ASTGrammar (final int id)
+  {
+    super (id);
   }
 
-  void generate(IO io) {
-System.out.println("opt:" + JJTreeOptions.getOutputLanguage());
-    if (JJTreeOptions.getOutputLanguage().equals("java")) {
-      new JavaCodeGenerator().visit(this, io);
-    } else {
-      new CPPCodeGenerator().visit(this, io);
-      CPPNodeFiles.generateTreeClasses();
+  void generate (final IO io)
+  {
+    System.out.println ("opt:" + Options.getOutputLanguage ());
+    if (Options.getOutputLanguage ().equals ("java"))
+    {
+      new JavaCodeGenerator ().visit (this, io);
+    }
+    else
+    {
+      new CPPCodeGenerator ().visit (this, io);
+      CPPNodeFiles.generateTreeClasses ();
     }
   }
 
   /** Accept the visitor. **/
-  public Object jjtAccept(JJTreeParserVisitor visitor, Object data) {
-    return visitor.visit(this, data);
+  @Override
+  public Object jjtAccept (final JJTreeParserVisitor visitor, final Object data)
+  {
+    return visitor.visit (this, data);
   }
 }
 
-/*end*/
+/* end */

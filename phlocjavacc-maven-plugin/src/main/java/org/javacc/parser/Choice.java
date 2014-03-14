@@ -34,53 +34,62 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Describes expansions where one of many choices
- * is taken (c1|c2|...).
+ * Describes expansions where one of many choices is taken (c1|c2|...).
  */
 
-public class Choice extends Expansion {
+public class Choice extends Expansion
+{
 
   /**
-   * The list of choices of this expansion unit.  Each
-   * List component will narrow to ExpansionUnit.
+   * The list of choices of this expansion unit. Each List component will narrow
+   * to ExpansionUnit.
    */
-  private List choices = new ArrayList();
+  private List choices = new ArrayList ();
 
-  public Choice() {}
+  public Choice ()
+  {}
 
-  public Choice(Token token) {
-    this.setLine(token.beginLine);
-    this.setColumn(token.beginColumn);
+  public Choice (final Token token)
+  {
+    this.setLine (token.beginLine);
+    this.setColumn (token.beginColumn);
   }
 
-  public Choice(Expansion expansion) {
-    this.setLine(expansion.getLine());
-    this.setColumn(expansion.getColumn());
-    this.getChoices().add(expansion);
+  public Choice (final Expansion expansion)
+  {
+    this.setLine (expansion.getLine ());
+    this.setColumn (expansion.getColumn ());
+    this.getChoices ().add (expansion);
   }
 
   /**
-   * @param choices the choices to set
+   * @param choices
+   *        the choices to set
    */
-  public void setChoices(List choices) {
+  public void setChoices (final List choices)
+  {
     this.choices = choices;
   }
 
   /**
    * @return the choices
    */
-  public List getChoices() {
+  public List getChoices ()
+  {
     return choices;
   }
 
-  public StringBuffer dump(int indent, Set alreadyDumped) {
-    StringBuffer sb = super.dump(indent, alreadyDumped);
-    if (alreadyDumped.contains(this))
+  @Override
+  public StringBuffer dump (final int indent, final Set alreadyDumped)
+  {
+    final StringBuffer sb = super.dump (indent, alreadyDumped);
+    if (alreadyDumped.contains (this))
       return sb;
-    alreadyDumped.add(this);
-    for (Iterator it = getChoices().iterator(); it.hasNext(); ) {
-      Expansion next = (Expansion)it.next();
-      sb.append(eol).append(next.dump(indent + 1, alreadyDumped));
+    alreadyDumped.add (this);
+    for (final Iterator it = getChoices ().iterator (); it.hasNext ();)
+    {
+      final Expansion next = (Expansion) it.next ();
+      sb.append (eol).append (next.dump (indent + 1, alreadyDumped));
     }
     return sb;
   }
