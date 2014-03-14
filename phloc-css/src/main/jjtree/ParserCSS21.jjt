@@ -90,9 +90,10 @@ TOKEN :
 MORE :
 {
   < "/*" > : IN_COMMENT
+| < "/\u0000*" > : IN_COMMENT_UNICODE
 }
 
-<IN_COMMENT>
+<IN_COMMENT, IN_COMMENT_UNICODE>
 MORE :
 {
   < ~[] > : IN_COMMENT
@@ -102,6 +103,12 @@ MORE :
 SKIP :
 {
   < "*/" > : DEFAULT
+}
+
+<IN_COMMENT_UNICODE>
+SKIP :
+{
+  < "*\u0000/" > : DEFAULT
 }
 
 <DEFAULT>
