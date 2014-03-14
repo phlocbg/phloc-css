@@ -63,7 +63,7 @@ public final class CSSWriterExtendedTest
       // read again from buffer
       assertEquals (aFile.getAbsolutePath () + (i == 0 ? " unoptimized" : " optimized"),
                     aCSS,
-                    CSSReader.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, eVersion));
+                    CSSReader.readFromString (sCSS, eVersion));
     }
   }
 

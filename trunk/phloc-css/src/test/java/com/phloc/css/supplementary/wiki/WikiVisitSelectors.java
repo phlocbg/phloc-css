@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CascadingStyleSheet;
@@ -54,7 +53,7 @@ public final class WikiVisitSelectors
                           + "a:hover { text-decoration:none; }\r\n"
                           + "\r\n"
                           + "img { border:none; }";
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (sStyle, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sStyle, ECSSVersion.CSS30);
     final List <String> aAllSelectors = new ArrayList <String> ();
     CSSVisitor.visitCSS (aCSS, new DefaultCSSVisitor ()
     {

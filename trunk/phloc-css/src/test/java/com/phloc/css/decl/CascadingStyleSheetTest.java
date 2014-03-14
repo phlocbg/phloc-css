@@ -26,7 +26,6 @@ import javax.annotation.Nonnull;
 
 import org.junit.Test;
 
-import com.phloc.commons.charset.CCharset;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.reader.CSSReader;
 
@@ -40,7 +39,7 @@ public final class CascadingStyleSheetTest
   @Nonnull
   private static CascadingStyleSheet _parse (@Nonnull final String sCSS)
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.LATEST);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, ECSSVersion.LATEST);
     assertNotNull (sCSS, aCSS);
     assertNotNull (aCSS.getSourceLocation ());
     return aCSS;

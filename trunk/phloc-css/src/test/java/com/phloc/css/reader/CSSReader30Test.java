@@ -109,27 +109,18 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   {
     String sCSS = ".class{color:red;.class{color:green}.class{color:blue}";
     CascadingStyleSheet aCSS, aCSS2;
-    aCSS = CSSReader.readFromString (sCSS,
-                                     CCharset.CHARSET_ISO_8859_1_OBJ,
-                                     ECSSVersion.CSS30,
-                                     new LoggingCSSParseErrorHandler ());
+    aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
     assertNotNull (aCSS);
     assertEquals (".class{color:red}.class{color:blue}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
 
     sCSS = "  \n/* comment */\n  \n.class{color:red;}";
-    aCSS = CSSReader.readFromString (sCSS,
-                                     CCharset.CHARSET_ISO_8859_1_OBJ,
-                                     ECSSVersion.CSS30,
-                                     new LoggingCSSParseErrorHandler ());
+    aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
     assertNotNull (aCSS);
     assertEquals (".class{color:red}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
 
     // With Umlauts
     sCSS = "div { colör: räd; }";
-    aCSS = CSSReader.readFromString (sCSS,
-                                     CCharset.CHARSET_UTF_16_OBJ,
-                                     ECSSVersion.CSS30,
-                                     new LoggingCSSParseErrorHandler ());
+    aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
     assertNotNull (aCSS);
     assertEquals ("div{colör:räd}",
                   new CSSWriter (new CSSWriterSettings (ECSSVersion.CSS30).setOptimizedOutput (true)).getCSSAsString (aCSS));

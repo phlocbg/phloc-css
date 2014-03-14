@@ -46,6 +46,7 @@ import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.IReaderProvider;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.io.streamprovider.StringInputStreamProvider;
+import com.phloc.commons.io.streamprovider.StringReaderProvider;
 import com.phloc.commons.io.streams.NonBlockingStringReader;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.css.ECSSVersion;
@@ -465,6 +466,7 @@ public final class CSSReader
    *         otherwise.
    */
   @Nullable
+  @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
                                                     @Nonnull final Charset aCharset,
                                                     @Nonnull final ECSSVersion eVersion)
@@ -517,6 +519,7 @@ public final class CSSReader
    *         otherwise.
    */
   @Nullable
+  @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
                                                     @Nonnull final Charset aCharset,
                                                     @Nonnull final ECSSVersion eVersion,
@@ -570,6 +573,7 @@ public final class CSSReader
    *         otherwise.
    */
   @Nullable
+  @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
                                                     @Nonnull final Charset aCharset,
                                                     @Nonnull final ECSSVersion eVersion,
@@ -606,8 +610,8 @@ public final class CSSReader
                                                     @Nullable final ICSSParseErrorHandler aCustomErrorHandler,
                                                     @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    return readFromStream (new StringInputStreamProvider (sCSS, CCharset.CHARSET_UTF_16_OBJ),
-                           CCharset.CHARSET_UTF_16_OBJ,
+    return readFromStream (new StringInputStreamProvider (sCSS, sCharset),
+                           sCharset,
                            eVersion,
                            aCustomErrorHandler,
                            aCustomExceptionHandler);
@@ -635,14 +639,15 @@ public final class CSSReader
    * @since 3.7.3
    */
   @Nullable
+  @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
                                                     @Nonnull final Charset aCharset,
                                                     @Nonnull final ECSSVersion eVersion,
                                                     @Nullable final ICSSParseErrorHandler aCustomErrorHandler,
                                                     @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    return readFromStream (new StringInputStreamProvider (sCSS, CCharset.CHARSET_UTF_16_OBJ),
-                           CCharset.CHARSET_UTF_16_OBJ,
+    return readFromStream (new StringInputStreamProvider (sCSS, aCharset),
+                           aCharset,
                            eVersion,
                            aCustomErrorHandler,
                            aCustomExceptionHandler);
@@ -664,8 +669,7 @@ public final class CSSReader
   @Nullable
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS, @Nonnull final ECSSVersion eVersion)
   {
-    return readFromStream (new StringInputStreamProvider (sCSS, CCharset.CHARSET_UTF_16_OBJ),
-                           CCharset.CHARSET_UTF_16_OBJ,
+    return readFromReader (new StringReaderProvider (sCSS),
                            eVersion,
                            (ICSSParseErrorHandler) null,
                            (ICSSParseExceptionHandler) null);
@@ -692,8 +696,7 @@ public final class CSSReader
                                                     @Nonnull final ECSSVersion eVersion,
                                                     @Nullable final ICSSParseErrorHandler aCustomErrorHandler)
   {
-    return readFromStream (new StringInputStreamProvider (sCSS, CCharset.CHARSET_UTF_16_OBJ),
-                           CCharset.CHARSET_UTF_16_OBJ,
+    return readFromReader (new StringReaderProvider (sCSS),
                            eVersion,
                            aCustomErrorHandler,
                            (ICSSParseExceptionHandler) null);
@@ -720,8 +723,7 @@ public final class CSSReader
                                                     @Nonnull final ECSSVersion eVersion,
                                                     @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    return readFromStream (new StringInputStreamProvider (sCSS, CCharset.CHARSET_UTF_16_OBJ),
-                           CCharset.CHARSET_UTF_16_OBJ,
+    return readFromReader (new StringReaderProvider (sCSS),
                            eVersion,
                            (ICSSParseErrorHandler) null,
                            aCustomExceptionHandler);
@@ -752,11 +754,7 @@ public final class CSSReader
                                                     @Nullable final ICSSParseErrorHandler aCustomErrorHandler,
                                                     @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    return readFromStream (new StringInputStreamProvider (sCSS, CCharset.CHARSET_UTF_16_OBJ),
-                           CCharset.CHARSET_UTF_16_OBJ,
-                           eVersion,
-                           aCustomErrorHandler,
-                           aCustomExceptionHandler);
+    return readFromReader (new StringReaderProvider (sCSS), eVersion, aCustomErrorHandler, aCustomExceptionHandler);
   }
 
   /**
@@ -1241,14 +1239,26 @@ public final class CSSReader
   }
 
   /**
-   * Check if the CSS represented by the passed input stream provider has a
-   * custom charset contained
+   * Determine the charset to read the CSS file. The logic is as follows:
+   * <ol>
+   * <li>Determine the charset used to read the @charset from the stream. If a
+   * BOM is present and a matching Charset is present, this charset is used. As
+   * a fallback the CSS file is initially read with ISO-8859-1.</li>
+   * <li>If the CSS content contains a valid @charset rule, the defined charset
+   * is returned even if a different BOM is present.</li>
+   * <li>If the CSS content does not contain a valid @charset rule than the
+   * charset of the BOM is returned (if any).</li>
+   * <li>Otherwise <code>null</code> is returned.</li>
+   * </ol>
    * 
    * @param aISP
    *        The input stream provider to read from. May not be <code>null</code>
    *        .
-   * @return <code>null</code> if the CSS does not contain a custom CSS
-   *         declaration, the declared charset otherwise
+   * @return <code>null</code> if the input stream could not be opened or if
+   *         neither a BOM nor a charset is specified. Otherwise a non-
+   *         <code>null</code> Charset is returned.
+   * @throws IllegalArgumentException
+   *         if an invalid charset is supplied
    */
   @Nullable
   public static Charset getCharsetDeclaredInCSS (@Nonnull final IInputStreamProvider aISP)
@@ -1259,16 +1269,20 @@ public final class CSSReader
     // Open input stream
     final ReadonlyPair <InputStream, Charset> aISAndBOM = _getInputStreamWithoutBOM (aISP);
     if (aISAndBOM == null || aISAndBOM.getFirst () == null)
+    {
+      // Failed to open stream, so no charset!
       return null;
+    }
 
     final InputStream aIS = aISAndBOM.getFirst ();
-    Charset aStreamCharset = aISAndBOM.getSecond ();
+    final Charset aBOMCharset = aISAndBOM.getSecond ();
+    Charset aStreamCharset = aBOMCharset;
     if (aStreamCharset == null)
     {
       // Always read as ISO-8859-1 as everything contained in the CSS charset
       // declaration can be handled by this charset
-      // A known problem is when the file is UTF-16 encoded and a comment is
-      // before the @charset rule. In this case a BOM must be present!
+      // A known problem is when the file is UTF-16, UTF-16BE, UTF-16LE etc.
+      // encoded. In this case a BOM must be present to read the file correctly!
       aStreamCharset = CCharset.CHARSET_ISO_8859_1_OBJ;
     }
 
@@ -1280,16 +1294,29 @@ public final class CSSReader
       final String sCharsetName = aParser.styleSheetCharset ().getText ();
       if (sCharsetName == null)
       {
-        // No charset specified - use the one from the BOM (if any)
+        // No charset specified - use the one from the BOM (may be null)
         return aISAndBOM.getSecond ();
       }
       // Remove leading and trailing quotes from value
       final String sPlainCharsetName = ParseUtils.extractStringValue (sCharsetName);
-      return CharsetManager.getCharsetFromName (sPlainCharsetName);
+      final Charset aReadCharset = CharsetManager.getCharsetFromName (sPlainCharsetName);
+
+      if (aBOMCharset != null && !aBOMCharset.equals (aReadCharset))
+      {
+        // BOM charset different from read charset
+        s_aLogger.warn ("The charset found in the CSS data (" +
+                        aReadCharset.name () +
+                        ") differs from the charset determined by the BOM (" +
+                        aBOMCharset.name () +
+                        ")!");
+      }
+
+      return aReadCharset;
     }
     catch (final ParseException ex)
     {
-      // Should never occur, as the parse exception is caught inside!
+      // Should never occur, as the parse exception is caught inside the
+      // grammar!
       throw new IllegalStateException ("Failed to parse CSS charset definition", ex);
     }
     finally
