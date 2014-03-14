@@ -494,7 +494,7 @@ void charsetRule() :
 { String sStr; }
 {
   <CHARSET_SYM>
-  <S>
+  ( <S> )+
   sStr = string () { jjtThis.setText (sStr); }
   ( <S> )*
   <SEMICOLON>
