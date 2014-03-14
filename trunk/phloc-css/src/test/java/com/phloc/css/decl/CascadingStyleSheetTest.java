@@ -39,7 +39,7 @@ public final class CascadingStyleSheetTest
   @Nonnull
   private static CascadingStyleSheet _parse (@Nonnull final String sCSS)
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, ECSSVersion.LATEST);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30);
     assertNotNull (sCSS, aCSS);
     assertNotNull (aCSS.getSourceLocation ());
     return aCSS;

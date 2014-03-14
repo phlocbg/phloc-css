@@ -39,7 +39,7 @@ public final class CSSStyleRuleTest
   @Nonnull
   private static CSSStyleRule _parse (@Nonnull final String sCSS)
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, ECSSVersion.LATEST);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30);
     assertNotNull (sCSS, aCSS);
     assertTrue (aCSS.hasStyleRules ());
     assertEquals (1, aCSS.getStyleRuleCount ());

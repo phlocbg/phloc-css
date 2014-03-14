@@ -40,7 +40,7 @@ public final class CSSImportRuleTest
   @Nonnull
   private static CSSImportRule _parse (@Nonnull final String sCSS)
   {
-    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, ECSSVersion.LATEST);
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30);
     assertNotNull (sCSS, aCSS);
     assertTrue (aCSS.hasImportRules ());
     assertEquals (1, aCSS.getImportRuleCount ());
