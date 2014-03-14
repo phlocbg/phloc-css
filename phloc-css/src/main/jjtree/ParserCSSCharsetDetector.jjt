@@ -99,6 +99,7 @@ TOKEN_MGR_DECLS :
 | < STRING2: "'"  ( ~["\n","\r","\f","\\","'"] 
                   | "\\" <STRING_EOL> 
                   | <ESCAPE> )* "'" >
+| < CHARSET_RULE: "@charset" >                  
 | < REST: ~[] >
 }
 
@@ -107,13 +108,12 @@ CSSNode styleSheetCharset() #Root : {}
   try
   {
     ( <S> )*
-    "@charset"
+    <CHARSET_RULE>
     ( <S> )+
     ( <STRING1> { jjtThis.setText (token.image); }
     | <STRING2> { jjtThis.setText (token.image); }
     )
     <SEMICOLON>
-    { return jjtThis; }
   } catch (ParseException e) {
     /* ignore */
   }

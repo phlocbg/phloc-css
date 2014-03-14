@@ -1279,7 +1279,8 @@ public final class CSSReader
         return aISAndBOM.getSecond ();
       }
       // Remove leading and trailing quotes from value
-      return CharsetManager.getCharsetFromName (ParseUtils.extractStringValue (sCharsetName));
+      final String sPlainCharsetName = ParseUtils.extractStringValue (sCharsetName);
+      return CharsetManager.getCharsetFromName (sPlainCharsetName);
     }
     catch (final ParseException ex)
     {

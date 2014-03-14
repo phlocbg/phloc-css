@@ -43,7 +43,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public final class JavaCharStream implements CharStream
 {
   private static final int DEFAULT_BUF_SIZE = 4096;
-  private static final int TAB_SIZE = 8;
 
   private final Reader m_aReader;
   private int m_nLine;
@@ -63,6 +62,9 @@ public final class JavaCharStream implements CharStream
   private int m_nNextCharInd = -1;
   /** Position in buffer. */
   private int m_nBufpos = -1;
+
+  private int m_nTabSize = 8;
+  private boolean m_bTrackLineColumn = true;
 
   @Deprecated
   public JavaCharStream (@Nonnull final InputStream aIS, @Nonnull final String sCharset)
@@ -108,6 +110,16 @@ public final class JavaCharStream implements CharStream
     m_aBufLine = new int [nBufferSize];
     m_aBufColumn = new int [nBufferSize];
     m_aNextCharBuf = new char [DEFAULT_BUF_SIZE];
+  }
+
+  public void setTabSize (final int i)
+  {
+    m_nTabSize = i;
+  }
+
+  public int getTabSize ()
+  {
+    return m_nTabSize;
   }
 
   private void _expandBuff (final boolean bWrapAround)
@@ -279,7 +291,7 @@ public final class JavaCharStream implements CharStream
         break;
       case '\t':
         m_nColumn--;
-        m_nColumn += (TAB_SIZE - (m_nColumn % TAB_SIZE));
+        m_nColumn += (m_nTabSize - (m_nColumn % m_nTabSize));
         break;
       default:
         break;
@@ -320,7 +332,8 @@ public final class JavaCharStream implements CharStream
     char c;
     if ((m_aBuffer[m_nBufpos] = c = _readByte ()) == '\\')
     {
-      _updateLineColumn (c);
+      if (m_bTrackLineColumn)
+        _updateLineColumn (c);
 
       int backSlashCnt = 1;
 
@@ -333,7 +346,8 @@ public final class JavaCharStream implements CharStream
         {
           if ((m_aBuffer[m_nBufpos] = c = _readByte ()) != '\\')
           {
-            _updateLineColumn (c);
+            if (m_bTrackLineColumn)
+              _updateLineColumn (c);
             // found a non-backslash char.
             if ((c == 'u') && ((backSlashCnt & 1) == 1))
             {
@@ -356,7 +370,8 @@ public final class JavaCharStream implements CharStream
           return '\\';
         }
 
-        _updateLineColumn (c);
+        if (m_bTrackLineColumn)
+          _updateLineColumn (c);
         backSlashCnt++;
       }
 
@@ -464,5 +479,62 @@ public final class JavaCharStream implements CharStream
     m_aBuffer = null;
     m_aBufLine = null;
     m_aBufColumn = null;
+  }
+
+  /**
+   * Method to adjust line and column numbers for the start of a token.
+   */
+  public void adjustBeginLineColumn (int newLine, final int newCol)
+  {
+    int start = m_nTokenBegin;
+    int len;
+
+    if (m_nBufpos >= m_nTokenBegin)
+    {
+      len = m_nBufpos - m_nTokenBegin + m_nInBuf + 1;
+    }
+    else
+    {
+      len = m_nBufsize - m_nTokenBegin + m_nBufpos + 1 + m_nInBuf;
+    }
+
+    int i = 0, j = 0, k = 0;
+    int nextColDiff = 0, columnDiff = 0;
+
+    while (i < len && m_aBufLine[j = start % m_nBufsize] == m_aBufLine[k = ++start % m_nBufsize])
+    {
+      m_aBufLine[j] = newLine;
+      nextColDiff = columnDiff + m_aBufColumn[k] - m_aBufColumn[j];
+      m_aBufColumn[j] = newCol + columnDiff;
+      columnDiff = nextColDiff;
+      i++;
+    }
+
+    if (i < len)
+    {
+      m_aBufLine[j] = newLine++;
+      m_aBufColumn[j] = newCol + columnDiff;
+
+      while (i++ < len)
+      {
+        if (m_aBufLine[j = start % m_nBufsize] != m_aBufLine[++start % m_nBufsize])
+          m_aBufLine[j] = newLine++;
+        else
+          m_aBufLine[j] = newLine;
+      }
+    }
+
+    m_nLine = m_aBufLine[j];
+    m_nColumn = m_aBufColumn[j];
+  }
+
+  public boolean getTrackLineColumn ()
+  {
+    return m_bTrackLineColumn;
+  }
+
+  public void setTrackLineColumn (final boolean tlc)
+  {
+    m_bTrackLineColumn = tlc;
   }
 }
