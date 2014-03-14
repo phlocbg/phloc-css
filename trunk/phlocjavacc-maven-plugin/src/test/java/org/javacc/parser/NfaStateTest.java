@@ -1,4 +1,4 @@
-package org.javacc.parser.test;
+package org.javacc.parser;
 
 import org.javacc.JavaCCTestCase;
 import org.javacc.parser.CodeGenerator;
