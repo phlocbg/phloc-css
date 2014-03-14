@@ -16,8 +16,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>javacc-maven-plugin</artifactId>
+        <groupId>com.phloc.maven</groupId>
+        <artifactId>phlocjavacc-maven-plugin</artifactId>
         <version>@pom.version@</version>
       </plugin>
       <plugin>
@@ -30,8 +30,8 @@
   <reporting>
     <plugins>
       <plugin>
-        <artifactId>javacc-maven-plugin</artifactId>
-        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>phlocjavacc-maven-plugin</artifactId>
+        <groupId>com.phloc.maven</groupId>
         <version>@pom.version@</version>
       </plugin>
       <plugin>

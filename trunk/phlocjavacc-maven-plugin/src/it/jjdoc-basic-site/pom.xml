@@ -16,8 +16,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>javacc-maven-plugin</artifactId>
+        <groupId>com.phloc.maven</groupId>
+        <artifactId>phlocjavacc-maven-plugin</artifactId>
         <version>@pom.version@</version>
       </plugin>
       <plugin>
@@ -30,8 +30,8 @@
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>javacc-maven-plugin</artifactId>
+        <groupId>com.phloc.maven</groupId>
+        <artifactId>phlocjavacc-maven-plugin</artifactId>
         <version>@pom.version@</version>
         <configuration>
           <!-- this parameter should be irrelevant during a site generation, the site plugin will specify the output directory instead -->
