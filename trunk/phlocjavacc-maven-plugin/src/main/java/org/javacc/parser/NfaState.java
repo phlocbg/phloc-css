@@ -3294,7 +3294,7 @@ public class NfaState
   {
     if (statesForState == null)
     {
-      assert (false) : "This should never be null.";
+      assert (false) : "This statesForState should never be null.";
       codeGenerator.genCodeLine ("null;");
       return;
     }
@@ -3361,7 +3361,8 @@ public class NfaState
 
     if (statesForState == null)
     {
-      assert (false) : "This should never be null.";
+      if (false)
+        assert (false) : "This statesForState should never be null.";
       codeGenerator.genCodeLine ("null;");
       return;
     }
@@ -3451,7 +3452,7 @@ public class NfaState
       {
         cnt = 0;
         codeGenerator.genCode ("{ ");
-        for (int j = 0; j < kind2.length; j++)
+        for (final int element : kind2)
         {
           if (cnt % 15 == 0)
             codeGenerator.genCode ("\n  ");
@@ -3459,7 +3460,7 @@ public class NfaState
             if (cnt > 1)
               codeGenerator.genCode (" ");
 
-          codeGenerator.genCode (kind2[j]);
+          codeGenerator.genCode (element);
           codeGenerator.genCode (", ");
 
         }
