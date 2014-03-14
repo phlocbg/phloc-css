@@ -19,9 +19,6 @@
         <groupId>com.phloc.maven</groupId>
         <artifactId>phlocjavacc-maven-plugin</artifactId>
         <version>@pom.version@</version>
-        <configuration>
-          <outputDirectory>target/it-site</outputDirectory>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
@@ -36,9 +33,6 @@
         <artifactId>phlocjavacc-maven-plugin</artifactId>
         <groupId>com.phloc.maven</groupId>
         <version>@pom.version@</version>
-        <configuration>
-          <outputDirectory>target/it-site</outputDirectory>
-        </configuration>
       </plugin>
     </plugins>
   </reporting>

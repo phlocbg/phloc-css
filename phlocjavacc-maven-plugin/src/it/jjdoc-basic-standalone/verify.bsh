@@ -4,14 +4,7 @@ import org.codehaus.plexus.util.*;
 
 try
 {
-    File siteOutputDir = new File( basedir, "target/site" );
-    if ( siteOutputDir.exists() )
-    {
-        System.err.println( "Report was generated into wrong output directory!" );
-        return false;
-    }
-
-    File mojoOutputDir = new File( basedir, "target/it-site" );
+    File mojoOutputDir = new File( basedir, "target/site" );
 
     /* FIXME: maven-reporting-impl:2.0.4 fails to output the sink contents
     File indexFile = new File( siteOutputDir, "jjdoc/index.html" );
