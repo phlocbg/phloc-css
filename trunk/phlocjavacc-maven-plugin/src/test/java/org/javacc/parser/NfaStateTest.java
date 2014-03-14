@@ -1,14 +1,6 @@
 package org.javacc.parser;
 
 import org.javacc.JavaCCTestCase;
-import org.javacc.parser.CodeGenerator;
-import org.javacc.parser.JavaCCGlobals;
-import org.javacc.parser.JavaCCParser;
-import org.javacc.parser.LexGen;
-import org.javacc.parser.Main;
-import org.javacc.parser.NfaState;
-import org.javacc.parser.Options;
-import org.javacc.parser.Semanticize;
 
 /**
  * A sea anchor, to ensure that code is not inadvertently broken.
@@ -178,15 +170,14 @@ public class NfaStateTest extends JavaCCTestCase
 
   /**
    * Test method for
-   * {@link org.javacc.parser.NfaState#DumpCharAndRangeMoves(java.io.PrintWriter)}
-   * .
+   * {@link org.javacc.parser.NfaState#DumpCharAndRangeMoves(CodeGenerator)} .
    */
   public void testDumpCharAndRangeMovesInitialised () throws Exception
   {
     final CodeGenerator cg = new CodeGenerator ();
     setupState ();
     NfaState.DumpCharAndRangeMoves (cg);
-    assertEquals ("         int hiByte = (int)(curChar >> 8);\n"
+    assertEquals ("         int hiByte = (curChar >> 8);\n"
                   + "         int i1 = hiByte >> 6;\n"
                   + "         long l1 = 1L << (hiByte & 077);\n"
                   + "         int i2 = (curChar & 0xff) >> 6;\n"
@@ -195,9 +186,10 @@ public class NfaStateTest extends JavaCCTestCase
                   + "         {\n"
                   + "            switch(jjstateSet[--i])\n"
                   + "            {\n"
-                  + "               default : break;\n"
+                  + "               default : if (i1 == 0 || l1 == 0 || i2 == 0 ||  l2 == 0) break; else break;\n"
                   + "            }\n"
-                  + "         } while(i != startsAt);\n", cg.getGeneratedCode ().replaceAll ("\r", ""));
+                  + "         } while(i != startsAt);\n"
+                  + "\n", cg.getGeneratedCode ().replaceAll ("\r", ""));
   }
 
   /**
@@ -399,7 +391,7 @@ public class NfaStateTest extends JavaCCTestCase
                   + "            return true;\n"
                   + "         return false;\n"
                   + "   }\n"
-                  + "}\n", cg.getGeneratedCode ().replaceAll ("\r", ""));
+                  + "}", cg.getGeneratedCode ().replaceAll ("\r", "").trim ());
   }
 
   /**
@@ -450,8 +442,8 @@ public class NfaStateTest extends JavaCCTestCase
     final CodeGenerator cg = new CodeGenerator ();
     setupState ();
     NfaState.DumpMoveNfa (cg);
-    assertEquals ("private int jjMoveNfa_3(int startState, int curPos)\n" + "{\n" + "   return curPos;\n" + "}\n",
-                  cg.getGeneratedCode ().replaceAll ("\r", ""));
+    assertEquals ("private int jjMoveNfa_3(int startState, int curPos)\n" + "{\n" + "   return curPos;\n" + "}",
+                  cg.getGeneratedCode ().replaceAll ("\r", "").trim ());
   }
 
   /**
