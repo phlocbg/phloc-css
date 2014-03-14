@@ -55,27 +55,32 @@ PARSER_END(ParserCSSCharsetDetector)
 TOKEN_MGR_DECLS :
 {}
 
-<DEFAULT> TOKEN :
+<DEFAULT>
+TOKEN :
 {
   < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
 }
 
-<DEFAULT> MORE :
+<DEFAULT>
+MORE :
 {
   < "/*" > : IN_COMMENT
 }
 
-<IN_COMMENT> MORE :
+<IN_COMMENT>
+MORE :
 {
   < ~[] > : IN_COMMENT
 }
 
-<IN_COMMENT> SKIP :
+<IN_COMMENT>
+SKIP :
 {
   < "*/" > : DEFAULT
 }
 
-<DEFAULT> TOKEN :
+<DEFAULT>
+TOKEN :
 {
   < #H: ["0"-"9","a"-"f"] >
 | < #HNUM: <H> 
@@ -99,7 +104,9 @@ TOKEN_MGR_DECLS :
 | < STRING2: "'"  ( ~["\n","\r","\f","\\","'"] 
                   | "\\" <STRING_EOL> 
                   | <ESCAPE> )* "'" >
-| < CHARSET_RULE: "@charset" >                  
+| < CDO: "<!--" >
+| < CDC: "-->" >
+| < CHARSET_SYM: "@charset" >
 | < REST: ~[] >
 }
 
@@ -107,8 +114,8 @@ CSSNode styleSheetCharset() #Root : {}
 {
   try
   {
-    ( <S> )*
-    <CHARSET_RULE>
+    ( <S> | <CDO> | <CDC> )*
+    <CHARSET_SYM>
     ( <S> )+
     ( <STRING1> { jjtThis.setText (token.image); }
     | <STRING2> { jjtThis.setText (token.image); }
