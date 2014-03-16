@@ -48,7 +48,7 @@ public class RRepetitionRange extends RegularExpression
   @Override
   public Nfa GenerateNfa (final boolean ignoreCase)
   {
-    final List units = new ArrayList ();
+    final List <RegularExpression> units = new ArrayList <RegularExpression> ();
     RSequence seq;
     int i;
 

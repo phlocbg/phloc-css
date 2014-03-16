@@ -49,7 +49,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * Note that this option takes precedence over <code>nodePackageName</code>
    * and <code>visitorPackageName</code> if specified.
    * 
-   * @parameter expression="${package}"
+   * @parameter property=package
    */
   private String packageName;
 
@@ -61,7 +61,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * located in the package <code>org.apache.demo</code>. Default value is
    * <code>*.syntaxtree</code>.
    * 
-   * @parameter expression="${nodePackageName}"
+   * @parameter property=nodePackageName
    */
   private String nodePackageName;
 
@@ -73,7 +73,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * located in the package <code>org.apache.demo</code>. Default value is
    * <code>*.visitor</code>.
    * 
-   * @parameter expression="${visitorPackageName}"
+   * @parameter property=visitorPackageName
    */
   private String visitorPackageName;
 
@@ -81,7 +81,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * If <code>true</code>, JTB will suppress its semantic error checking.
    * Default value is <code>false</code>.
    * 
-   * @parameter expression="${supressErrorChecking}"
+   * @parameter property=supressErrorChecking
    */
   private Boolean supressErrorChecking;
 
@@ -90,7 +90,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * <code>&lt;pre&gt;</code> tags so that they are formatted correctly in API
    * docs. Default value is <code>false</code>.
    * 
-   * @parameter expression="${javadocFriendlyComments}"
+   * @parameter property=javadocFriendlyComments
    */
   private Boolean javadocFriendlyComments;
 
@@ -99,7 +99,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * that reflect the structure of the tree instead of generic names like
    * <code>f0</code>, <code>f1</code> etc. Default value is <code>false</code>.
    * 
-   * @parameter expression="${descriptiveFieldNames}"
+   * @parameter property=descriptiveFieldNames
    */
   private Boolean descriptiveFieldNames;
 
@@ -108,7 +108,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * inherit. By default, AST nodes will inherit from the generated class
    * <code>Node</code>.
    * 
-   * @parameter expression="${nodeParentClass}"
+   * @parameter property=nodeParentClass
    */
   private String nodeParentClass;
 
@@ -116,7 +116,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * If <code>true</code>, all nodes will contain fields for its parent node.
    * Default value is <code>false</code>.
    * 
-   * @parameter expression="${parentPointers}"
+   * @parameter property=parentPointers
    */
   private Boolean parentPointers;
 
@@ -124,7 +124,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * If <code>true</code>, JTB will include JavaCC "special tokens" in the AST.
    * Default value is <code>false</code>.
    * 
-   * @parameter expression="${specialTokens}"
+   * @parameter property=specialTokens
    */
   private Boolean specialTokens;
 
@@ -137,7 +137,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * </ul>
    * Default value is <code>false</code>.
    * 
-   * @parameter expression="${scheme}"
+   * @parameter property=scheme
    */
   private Boolean scheme;
 
@@ -145,7 +145,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * If <code>true</code>, JTB will generate a syntax tree dumping visitor.
    * Default value is <code>false</code>.
    * 
-   * @parameter expression="${printer}"
+   * @parameter property=printer
    */
   private Boolean printer;
 
@@ -155,8 +155,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * parameters <code>includes</code> and <code>excludes</code> can be used to
    * select a subset of files.
    * 
-   * @parameter expression="${sourceDirectory}"
-   *            default-value="${basedir}/src/main/jtb"
+   * @parameter property=sourceDirectory default-value="${basedir}/src/main/jtb"
    */
   private File sourceDirectory;
 
@@ -166,7 +165,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * project such that the generated files will participate in later build
    * phases like compiling and packaging.
    * 
-   * @parameter expression="${interimDirectory}"
+   * @parameter property=interimDirectory
    *            default-value="${project.build.directory}/generated-sources/jtb"
    */
   private File interimDirectory;
@@ -177,7 +176,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * such that the generated files will participate in later build phases like
    * compiling and packaging.
    * 
-   * @parameter expression="${outputDirectory}"
+   * @parameter property=outputDirectory
    *            default-value="${project.build.directory}/generated-sources/javacc"
    */
   private File outputDirectory;
@@ -205,7 +204,7 @@ public class JTBJavaCCMojo extends AbstractJavaCCMojo
    * The granularity in milliseconds of the last modification date for testing
    * whether a grammar file needs recompilation.
    * 
-   * @parameter expression="${lastModGranularityMs}" default-value="0"
+   * @parameter property=lastModGranularityMs default-value="0"
    */
   private int staleMillis;
 

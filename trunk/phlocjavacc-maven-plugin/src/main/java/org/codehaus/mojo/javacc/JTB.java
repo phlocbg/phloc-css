@@ -467,7 +467,7 @@ class JTB extends ToolFacade
    */
   private String [] generateArguments ()
   {
-    final List argsList = new ArrayList ();
+    final List <String> argsList = new ArrayList <String> ();
 
     argsList.add ("-np");
     argsList.add (getEffectiveNodePackageName ());
@@ -528,7 +528,7 @@ class JTB extends ToolFacade
       argsList.add (this.inputFile.getAbsolutePath ());
     }
 
-    return (String []) argsList.toArray (new String [argsList.size ()]);
+    return argsList.toArray (new String [argsList.size ()]);
   }
 
   /**

@@ -43,7 +43,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * <code>SimpleNode</code> and any other nodes used in the grammar. Default
    * value is <code>true</code>.
    * 
-   * @parameter expression="${buildNodeFiles}"
+   * @parameter property=buildNodeFiles
    */
   private Boolean buildNodeFiles;
 
@@ -51,7 +51,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * A flag whether to generate a multi mode parse tree or a single mode parse
    * tree. Default value is <code>false</code>.
    * 
-   * @parameter expression="${multi}"
+   * @parameter property=multi
    */
   private Boolean multi;
 
@@ -59,7 +59,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * A flag whether to make each non-decorated production void instead of an
    * indefinite node. Default value is <code>false</code>.
    * 
-   * @parameter expression="${nodeDefaultVoid}"
+   * @parameter property=nodeDefaultVoid
    */
   private Boolean nodeDefaultVoid;
 
@@ -69,7 +69,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * the tree node classes will directly extend the class
    * <code>SimpleNode</code>.
    * 
-   * @parameter expression="${nodeClass}"
+   * @parameter property=nodeClass
    * @since 2.5
    */
   private String nodeClass;
@@ -80,7 +80,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * <code>public static Node jjtCreate(int id)</code>. By default, the class
    * <code>SimpleNode</code> will be used as the factory class.
    * 
-   * @parameter expression="${nodeFactory}"
+   * @parameter property=nodeFactory
    */
   private String nodeFactory;
 
@@ -92,7 +92,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * located in the package <code>org.apache.node</code>. By default, the
    * package of the corresponding parser is used.
    * 
-   * @parameter expression="${nodePackage}"
+   * @parameter property=nodePackage
    */
   private String nodePackage;
 
@@ -100,7 +100,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * The prefix used to construct node class names from node identifiers in
    * multi mode. Default value is <code>AST</code>.
    * 
-   * @parameter expression="${nodePrefix}"
+   * @parameter property=nodePrefix
    */
   private String nodePrefix;
 
@@ -108,7 +108,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * A flag whether user-defined parser methods should be called on entry and
    * exit of every node scope. Default value is <code>false</code>.
    * 
-   * @parameter expression="${nodeScopeHook}"
+   * @parameter property=nodeScopeHook
    */
   private Boolean nodeScopeHook;
 
@@ -117,7 +117,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * parameter to receive the parser object. Default value is <code>false</code>
    * .
    * 
-   * @parameter expression="${nodeUsesParser}"
+   * @parameter property=nodeUsesParser
    */
   private Boolean nodeUsesParser;
 
@@ -127,7 +127,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * <code>jjtSetLastToken()</code> into the class <code>SimpleNode</code>.
    * Default value is <code>false</code>.
    * 
-   * @parameter expression="${trackTokens}"
+   * @parameter property=trackTokens
    * @since 2.5
    */
   private Boolean trackTokens;
@@ -137,7 +137,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * classes and to generate a visitor implementation with an entry for every
    * node type used in the grammar. Default value is <code>false</code>.
    * 
-   * @parameter expression="${visitor}"
+   * @parameter property=visitor
    */
   private Boolean visitor;
 
@@ -146,7 +146,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * <code>jjtAccept()</code> and <code>visit()</code> methods. Default value is
    * <code>java.lang.Object</code>.
    * 
-   * @parameter expression="${visitorDataType}"
+   * @parameter property=visitorDataType
    * @since 2.5
    */
   private String visitorDataType;
@@ -156,7 +156,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * <code>jjtAccept()</code> and <code>visit()</code> methods. Default value is
    * <code>java.lang.Object</code>.
    * 
-   * @parameter expression="${visitorReturnType}"
+   * @parameter property=visitorReturnType
    * @since 2.5
    */
   private String visitorReturnType;
@@ -167,7 +167,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * <code>throws</code> clause of the generated methods is empty such that only
    * unchecked exceptions can be thrown.
    * 
-   * @parameter expression="${visitorException}"
+   * @parameter property=visitorException
    */
   private String visitorException;
 
@@ -177,7 +177,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * JJTree. The parameters <code>includes</code> and <code>excludes</code> can
    * be used to select a subset of files.
    * 
-   * @parameter expression="${sourceDirectory}"
+   * @parameter property=sourceDirectory
    *            default-value="${basedir}/src/main/jjtree"
    */
   private File sourceDirectory;
@@ -188,7 +188,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * such that the generated files will participate in later build phases like
    * compiling and packaging.
    * 
-   * @parameter expression="${interimDirectory}"
+   * @parameter property=interimDirectory
    *            default-value="${project.build.directory}/generated-sources/jjtree"
    */
   private File interimDirectory;
@@ -199,7 +199,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * such that the generated files will participate in later build phases like
    * compiling and packaging.
    * 
-   * @parameter expression="${outputDirectory}"
+   * @parameter property=outputDirectory
    *            default-value="${project.build.directory}/generated-sources/javacc"
    */
   private File outputDirectory;
@@ -227,7 +227,7 @@ public class JJTreeJavaCCMojo extends AbstractJavaCCMojo
    * The granularity in milliseconds of the last modification date for testing
    * whether a grammar file needs recompilation.
    * 
-   * @parameter expression="${lastModGranularityMs}" default-value="0"
+   * @parameter property=lastModGranularityMs default-value="0"
    */
   private int staleMillis;
 

@@ -130,7 +130,7 @@ public class Expansion
     return sb;
   }
 
-  public StringBuffer dump (final int indent, final Set alreadyDumped)
+  public StringBuffer dump (final int indent, final Set <Expansion> alreadyDumped)
   {
     final StringBuffer value = dumpPrefix (indent).append (System.identityHashCode (this))
                                                   .append (" ")

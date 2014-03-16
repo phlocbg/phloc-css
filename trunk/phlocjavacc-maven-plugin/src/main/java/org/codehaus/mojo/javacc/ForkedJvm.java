@@ -66,7 +66,7 @@ class ForkedJvm
   /**
    * The class path entries for the forked JVM, given as strings.
    */
-  private final Set classPathEntries = new LinkedHashSet ();
+  private final Set <String> classPathEntries = new LinkedHashSet <String> ();
 
   /**
    * The qualified name of the class on which to invoke the <code>main()</code>
@@ -78,7 +78,7 @@ class ForkedJvm
    * The command line arguments to pass to the <code>main()</code> method, given
    * as strings.
    */
-  private final List cmdLineArgs = new ArrayList ();
+  private final List <String> cmdLineArgs = new ArrayList <String> ();
 
   /**
    * Creates a new configuration to fork a JVM.
@@ -179,7 +179,7 @@ class ForkedJvm
    * @param type
    *        The class/interface to add, may be <code>null</code>.
    */
-  public void addClassPathEntry (final Class type)
+  public void addClassPathEntry (final Class <?> type)
   {
     addClassPathEntry (getClassSource (type));
   }
@@ -192,7 +192,7 @@ class ForkedJvm
    * @return The absolute path to the class source location or <code>null</code>
    *         if unknown.
    */
-  private static File getClassSource (final Class type)
+  private static File getClassSource (final Class <?> type)
   {
     if (type != null)
     {
@@ -274,7 +274,7 @@ class ForkedJvm
    *        The class on which to invoke the <code>main()</code> method, may be
    *        <code>null</code>.
    */
-  public void setMainClass (final Class type)
+  public void setMainClass (final Class <?> type)
   {
     this.mainClass = (type != null) ? type.getName () : null;
     addClassPathEntry (type);
@@ -287,7 +287,7 @@ class ForkedJvm
    */
   private String [] getArguments ()
   {
-    return (String []) this.cmdLineArgs.toArray (new String [this.cmdLineArgs.size ()]);
+    return this.cmdLineArgs.toArray (new String [this.cmdLineArgs.size ()]);
   }
 
   /**

@@ -67,7 +67,7 @@ class GrammarDirectoryScanner
    * A set of grammar infos describing the included grammar files, must never be
    * <code>null</code>.
    */
-  private final List includedGrammars;
+  private final List <GrammarInfo> includedGrammars;
 
   /**
    * Creates a new grammar directory scanner.
@@ -76,7 +76,7 @@ class GrammarDirectoryScanner
   {
     this.scanner = new DirectoryScanner ();
     this.scanner.setFollowSymlinks (true);
-    this.includedGrammars = new ArrayList ();
+    this.includedGrammars = new ArrayList <GrammarInfo> ();
   }
 
   /**
@@ -234,7 +234,7 @@ class GrammarDirectoryScanner
    */
   public GrammarInfo [] getIncludedGrammars ()
   {
-    return (GrammarInfo []) this.includedGrammars.toArray (new GrammarInfo [this.includedGrammars.size ()]);
+    return this.includedGrammars.toArray (new GrammarInfo [this.includedGrammars.size ()]);
   }
 
 }

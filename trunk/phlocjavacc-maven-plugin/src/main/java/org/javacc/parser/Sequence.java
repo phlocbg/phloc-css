@@ -29,7 +29,6 @@
 package org.javacc.parser;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -44,7 +43,7 @@ public class Sequence extends Expansion
    * The list of units in this expansion sequence. Each List component will
    * narrow to Expansion.
    */
-  public List units = new ArrayList ();
+  public List <Object> units = new ArrayList <Object> ();
 
   public Sequence ()
   {}
@@ -57,7 +56,7 @@ public class Sequence extends Expansion
   }
 
   @Override
-  public StringBuffer dump (final int indent, final Set alreadyDumped)
+  public StringBuffer dump (final int indent, final Set <Expansion> alreadyDumped)
   {
     if (alreadyDumped.contains (this))
     {
@@ -66,9 +65,9 @@ public class Sequence extends Expansion
 
     alreadyDumped.add (this);
     final StringBuffer sb = super.dump (indent, alreadyDumped);
-    for (final Iterator it = units.iterator (); it.hasNext ();)
+    for (final Object lookahead : units)
     {
-      final Expansion next = (Expansion) it.next ();
+      final Expansion next = (Expansion) lookahead;
       sb.append (eol).append (next.dump (indent + 1, alreadyDumped));
     }
     return sb;

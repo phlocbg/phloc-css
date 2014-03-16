@@ -56,7 +56,7 @@ public class CPPFiles extends JavaCCGlobals implements JavaCCParserConstants
     final int len = str.length ();
 
     while (i < len && str.charAt (i++) != '\\')
-      ;
+    {}
 
     if (i == len) // No backslash found.
       return str;

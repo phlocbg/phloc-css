@@ -50,7 +50,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * Note that this option takes precedence over <code>nodePackageName</code>
    * and <code>visitorPackageName</code> if specified.
    * 
-   * @parameter expression="${package}"
+   * @parameter property=package
    */
   private String packageName;
 
@@ -62,7 +62,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * located in the package <code>org.apache.demo</code>. Default value is
    * <code>*.syntaxtree</code>.
    * 
-   * @parameter expression="${nodePackageName}"
+   * @parameter property=nodePackageName
    */
   private String nodePackageName;
 
@@ -74,7 +74,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * located in the package <code>org.apache.demo</code>. Default value is
    * <code>*.visitor</code>.
    * 
-   * @parameter expression="${visitorPackageName}"
+   * @parameter property=visitorPackageName
    */
   private String visitorPackageName;
 
@@ -82,7 +82,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * If <code>true</code>, JTB will suppress its semantic error checking.
    * Default value is <code>false</code>.
    * 
-   * @parameter expression="${supressErrorChecking}"
+   * @parameter property=supressErrorChecking
    */
   private Boolean supressErrorChecking;
 
@@ -91,7 +91,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * <code>&lt;pre&gt;</code> tags so that they are formatted correctly in API
    * docs. Default value is <code>false</code>.
    * 
-   * @parameter expression="${javadocFriendlyComments}"
+   * @parameter property=javadocFriendlyComments
    */
   private Boolean javadocFriendlyComments;
 
@@ -100,7 +100,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * that reflect the structure of the tree instead of generic names like
    * <code>f0</code>, <code>f1</code> etc. Default value is <code>false</code>.
    * 
-   * @parameter expression="${descriptiveFieldNames}"
+   * @parameter property=descriptiveFieldNames
    */
   private Boolean descriptiveFieldNames;
 
@@ -109,7 +109,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * inherit. By default, AST nodes will inherit from the generated class
    * <code>Node</code>.
    * 
-   * @parameter expression="${nodeParentClass}"
+   * @parameter property=nodeParentClass
    */
   private String nodeParentClass;
 
@@ -117,7 +117,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * If <code>true</code>, all nodes will contain fields for its parent node.
    * Default value is <code>false</code>.
    * 
-   * @parameter expression="${parentPointers}"
+   * @parameter property=parentPointers
    */
   private Boolean parentPointers;
 
@@ -125,7 +125,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * If <code>true</code>, JTB will include JavaCC "special tokens" in the AST.
    * Default value is <code>false</code>.
    * 
-   * @parameter expression="${specialTokens}"
+   * @parameter property=specialTokens
    */
   private Boolean specialTokens;
 
@@ -138,7 +138,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * </ul>
    * Default value is <code>false</code>.
    * 
-   * @parameter expression="${scheme}"
+   * @parameter property=scheme
    */
   private Boolean scheme;
 
@@ -146,7 +146,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * If <code>true</code>, JTB will generate a syntax tree dumping visitor.
    * Default value is <code>false</code>.
    * 
-   * @parameter expression="${printer}"
+   * @parameter property=printer
    */
   private Boolean printer;
 
@@ -154,15 +154,14 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * The directory where the JavaCC grammar files (<code>*.jtb</code>) are
    * located. It will be recursively scanned for input files to pass to JTB.
    * 
-   * @parameter expression="${sourceDirectory}"
-   *            default-value="${basedir}/src/main/jtb"
+   * @parameter property=sourceDirectory default-value="${basedir}/src/main/jtb"
    */
   private File sourceDirectory;
 
   /**
    * The directory where the output Java files will be located.
    * 
-   * @parameter expression="${outputDirectory}"
+   * @parameter property=outputDirectory
    *            default-value="${project.build.directory}/generated-sources/jtb"
    */
   private File outputDirectory;
@@ -171,7 +170,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * The directory to store the processed input files for later detection of
    * stale sources.
    * 
-   * @parameter expression="${timestampDirectory}" default-value=
+   * @parameter property=timestampDirectory default-value=
    *            "${project.build.directory}/generated-sources/jtb-timestamp"
    */
   private File timestampDirectory;
@@ -180,7 +179,7 @@ public class JTBMojo extends AbstractPreprocessorMojo
    * The granularity in milliseconds of the last modification date for testing
    * whether a source needs recompilation.
    * 
-   * @parameter expression="${lastModGranularityMs}" default-value="0"
+   * @parameter property=lastModGranularityMs default-value="0"
    */
   private int staleMillis;
 

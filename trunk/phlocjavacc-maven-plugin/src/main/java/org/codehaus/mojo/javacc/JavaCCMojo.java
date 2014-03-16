@@ -44,7 +44,7 @@ public class JavaCCMojo extends AbstractJavaCCMojo
    * also be used to create the directory structure where sources will be
    * generated. Defaults to the package name specified in a grammar file.
    * 
-   * @parameter expression="${packageName}"
+   * @parameter property=packageName
    * @deprecated As of version 2.4 because the plugin extracts the package name
    *             from each grammar file.
    */
@@ -55,7 +55,7 @@ public class JavaCCMojo extends AbstractJavaCCMojo
    * The directory where the JavaCC grammar files (<code>*.jj</code>) are
    * located.
    * 
-   * @parameter expression="${sourceDirectory}"
+   * @parameter property=sourceDirectory
    *            default-value="${basedir}/src/main/javacc"
    */
   private File sourceDirectory;
@@ -66,7 +66,7 @@ public class JavaCCMojo extends AbstractJavaCCMojo
    * such that the generated files will participate in later build phases like
    * compiling and packaging.
    * 
-   * @parameter expression="${outputDirectory}"
+   * @parameter property=outputDirectory
    *            default-value="${project.build.directory}/generated-sources/javacc"
    */
   private File outputDirectory;
@@ -75,7 +75,7 @@ public class JavaCCMojo extends AbstractJavaCCMojo
    * The granularity in milliseconds of the last modification date for testing
    * whether a source needs recompilation.
    * 
-   * @parameter expression="${lastModGranularityMs}" default-value="0"
+   * @parameter property=lastModGranularityMs default-value="0"
    */
   private int staleMillis;
 
