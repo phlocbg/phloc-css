@@ -194,9 +194,9 @@ public class JJDoc extends JJDocGlobals
         {
           boolean first = true;
           final Choice c = (Choice) np.getExpansion ();
-          for (final Iterator expansionsIterator = c.getChoices ().iterator (); expansionsIterator.hasNext ();)
+          for (final Object element : c.getChoices ())
           {
-            final Expansion e = (Expansion) (expansionsIterator.next ());
+            final Expansion e = (Expansion) (element);
             gen.expansionStart (e, first);
             emitExpansionTree (e, gen);
             gen.expansionEnd (e, first);
@@ -326,9 +326,9 @@ public class JJDoc extends JJDocGlobals
   private static void emitExpansionSequence (final Sequence s, final Generator gen)
   {
     boolean firstUnit = true;
-    for (final Iterator it = s.units.iterator (); it.hasNext ();)
+    for (final Object element : s.units)
     {
-      final Expansion e = (Expansion) it.next ();
+      final Expansion e = (Expansion) element;
       if (e instanceof Lookahead || e instanceof Action)
       {
         continue;

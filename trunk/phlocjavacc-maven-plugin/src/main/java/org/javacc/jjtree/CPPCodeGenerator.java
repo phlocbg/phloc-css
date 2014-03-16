@@ -387,7 +387,10 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
     io.println (indent + "}");
   }
 
-  private void insertCatchBlocks (final NodeScope ns, final IO io, final Enumeration thrown_names, final String indent)
+  private void insertCatchBlocks (final NodeScope ns,
+                                  final IO io,
+                                  final Enumeration <String> thrown_names,
+                                  final String indent)
   {
     final String thrown;
     // if (thrown_names.hasMoreElements()) {
@@ -423,7 +426,7 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
     openJJTreeComment (io, null);
     io.println ();
 
-    final Enumeration thrown_names = ns.production.throws_list.elements ();
+    final Enumeration <String> thrown_names = ns.production.throws_list.elements ();
     insertCatchBlocks (ns, io, thrown_names, indent);
 
     io.println (indent + "} {");
@@ -437,7 +440,9 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
     closeJJTreeComment (io);
   }
 
-  private static void findThrown (final NodeScope ns, final Hashtable thrown_set, final JJTreeNode expansion_unit)
+  private static void findThrown (final NodeScope ns,
+                                  final Hashtable <String, String> thrown_set,
+                                  final JJTreeNode expansion_unit)
   {
     if (expansion_unit instanceof ASTBNFNonTerminal)
     {
@@ -448,10 +453,10 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
       final ASTProduction prod = (ASTProduction) JJTreeGlobals.productions.get (nt);
       if (prod != null)
       {
-        final Enumeration e = prod.throws_list.elements ();
+        final Enumeration <String> e = prod.throws_list.elements ();
         while (e.hasMoreElements ())
         {
-          final String t = (String) e.nextElement ();
+          final String t = e.nextElement ();
           thrown_set.put (t, t);
         }
       }
@@ -473,9 +478,9 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
     openJJTreeComment (io, null);
     io.println ();
 
-    final Hashtable thrown_set = new Hashtable ();
+    final Hashtable <String, String> thrown_set = new Hashtable <String, String> ();
     findThrown (ns, thrown_set, expansion_unit);
-    final Enumeration thrown_names = thrown_set.elements ();
+    final Enumeration <String> thrown_names = thrown_set.elements ();
     insertCatchBlocks (ns, io, thrown_names, indent);
 
     io.println (indent + "} {");

@@ -55,7 +55,7 @@ final class NodeFiles
    */
   static final String nodeVersion = "6.0";
 
-  static Set nodesGenerated = new HashSet ();
+  static Set <String> nodesGenerated = new HashSet <String> ();
 
   static void ensure (final IO io, final String nodeType)
   {
@@ -382,7 +382,7 @@ final class NodeFiles
 
     generatePrologue (ostr);
 
-    final Map options = new HashMap (Options.getOptions ());
+    final Map <String, Object> options = new HashMap <String, Object> (Options.getOptions ());
     options.put ("PARSER_NAME", JJTreeGlobals.parserName);
 
     final JavaFileGenerator generator = new JavaFileGenerator ("/templates/Node.template", options);
@@ -398,7 +398,7 @@ final class NodeFiles
 
     generatePrologue (ostr);
 
-    final Map options = new HashMap (Options.getOptions ());
+    final Map <String, Object> options = new HashMap <String, Object> (Options.getOptions ());
     options.put ("PARSER_NAME", JJTreeGlobals.parserName);
     options.put ("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf (JJTreeOptions.getVisitorReturnType ().equals ("void")));
 
@@ -415,7 +415,7 @@ final class NodeFiles
 
     generatePrologue (ostr);
 
-    final Map options = new HashMap (Options.getOptions ());
+    final Map <String, Object> options = new HashMap <String, Object> (Options.getOptions ());
     options.put ("PARSER_NAME", JJTreeGlobals.parserName);
     options.put ("NODE_TYPE", nodeType);
     options.put ("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf (JJTreeOptions.getVisitorReturnType ().equals ("void")));

@@ -111,9 +111,9 @@ public class OtherFilesGenCPP extends JavaCCGlobals implements JavaCCParserConst
     final String constPrefix = "const";
     ostr.println ("  /** End of File. */");
     ostr.println (constPrefix + "  int _EOF = 0;");
-    for (final java.util.Iterator it = ordered_named_tokens.iterator (); it.hasNext ();)
+    for (final Object element : ordered_named_tokens)
     {
-      re = (RegularExpression) it.next ();
+      re = (RegularExpression) element;
       ostr.println ("  /** RegularExpression Id. */");
       ostr.println (constPrefix + "  int " + re.label + " = " + re.ordinal + ";");
     }
@@ -134,9 +134,9 @@ public class OtherFilesGenCPP extends JavaCCGlobals implements JavaCCParserConst
     printCharArray (ostr, "<EOF>");
     ostr.println (";");
 
-    for (final java.util.Iterator it = rexprlist.iterator (); it.hasNext ();)
+    for (final Object element : rexprlist)
     {
-      final TokenProduction tp = (TokenProduction) (it.next ());
+      final TokenProduction tp = (TokenProduction) (element);
       final List respecs = tp.respecs;
       for (final java.util.Iterator it2 = respecs.iterator (); it2.hasNext ();)
       {

@@ -66,7 +66,7 @@ public class JavaCCGlobals
    * The list of tools that have participated in generating the input grammar
    * file.
    */
-  static public List toolNames;
+  static public List <String> toolNames;
 
   /**
    * This prints the banner line when the various tools are invoked. This takes
@@ -118,7 +118,7 @@ public class JavaCCGlobals
    * table is indexed by the name of the left hand side non-terminal. Its
    * contents are of type "NormalProduction".
    */
-  static public java.util.Map production_table = new java.util.HashMap ();
+  static public java.util.Map <String, NormalProduction> production_table = new java.util.HashMap <String, NormalProduction> ();
 
   /**
    * A mapping of lexical state strings to their integer internal
@@ -155,13 +155,13 @@ public class JavaCCGlobals
    * defined with a label). The index to the table is the image of the label and
    * the contents of the table are of type "RegularExpression".
    */
-  static public java.util.Map named_tokens_table = new java.util.HashMap ();
+  static public java.util.Map <String, RegularExpression> named_tokens_table = new java.util.HashMap <String, RegularExpression> ();
 
   /**
    * Contains the same entries as "named_tokens_table", but this is an ordered
    * list which is ordered by the order of appearance in the input file.
    */
-  static public java.util.List ordered_named_tokens = new java.util.ArrayList ();
+  static public java.util.List <RegularExpression> ordered_named_tokens = new java.util.ArrayList <RegularExpression> ();
 
   /**
    * A mapping of ordinal values (represented as objects of type "Integer") to
@@ -643,14 +643,14 @@ public class JavaCCGlobals
     cu_to_insertion_point_2 = new java.util.ArrayList ();
     cu_from_insertion_point_2 = new java.util.ArrayList ();
     bnfproductions = new java.util.ArrayList ();
-    production_table = new java.util.HashMap ();
+    production_table = new java.util.HashMap <String, NormalProduction> ();
     lexstate_S2I = new java.util.Hashtable ();
     lexstate_I2S = new java.util.Hashtable ();
     token_mgr_decls = null;
     rexprlist = new java.util.ArrayList <TokenProduction> ();
     tokenCount = 0;
-    named_tokens_table = new java.util.HashMap ();
-    ordered_named_tokens = new java.util.ArrayList ();
+    named_tokens_table = new java.util.HashMap <String, RegularExpression> ();
+    ordered_named_tokens = new java.util.ArrayList <RegularExpression> ();
     names_of_tokens = new java.util.HashMap ();
     rexps_of_tokens = new java.util.HashMap ();
     simple_tokens_table = new java.util.Hashtable ();

@@ -41,14 +41,14 @@ import org.javacc.parser.TokenProduction;
 
 public class BNFGenerator implements Generator
 {
-  private final Hashtable id_map = new Hashtable ();
+  private final Hashtable <String, String> id_map = new Hashtable <String, String> ();
   private int id = 1;
   protected PrintWriter ostr;
   private boolean printing = true;
 
   protected String get_id (final String nt)
   {
-    String i = (String) id_map.get (nt);
+    String i = id_map.get (nt);
     if (i == null)
     {
       i = "prod" + id++;

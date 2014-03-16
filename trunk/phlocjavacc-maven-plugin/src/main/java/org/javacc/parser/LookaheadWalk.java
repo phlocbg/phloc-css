@@ -171,7 +171,10 @@ public final class LookaheadWalk
                     }
   }
 
-  private static void listSplit (final List <MatchInfo> toSplit, final List <MatchInfo> mask, final List <MatchInfo> partInMask, final List <MatchInfo> rest)
+  private static void listSplit (final List <MatchInfo> toSplit,
+                                 final List <MatchInfo> mask,
+                                 final List <MatchInfo> partInMask,
+                                 final List <MatchInfo> rest)
   {
     OuterLoop: for (int i = 0; i < toSplit.size (); i++)
     {
@@ -187,7 +190,9 @@ public final class LookaheadWalk
     }
   }
 
-  public static List <MatchInfo> genFollowSet (final List <MatchInfo> partialMatches, final Expansion exp, final long generation)
+  public static List <MatchInfo> genFollowSet (final List <MatchInfo> partialMatches,
+                                               final Expansion exp,
+                                               final long generation)
   {
     if (exp.myGeneration == generation)
     {

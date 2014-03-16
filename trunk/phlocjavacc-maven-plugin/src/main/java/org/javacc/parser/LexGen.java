@@ -503,7 +503,7 @@ public class LexGen extends CodeGenerator implements JavaCCParserConstants
       NfaState.ComputeClosures ();
 
       for (i = 0; i < initialState.epsilonMoves.size (); i++)
-        ((NfaState) initialState.epsilonMoves.elementAt (i)).GenerateCode ();
+        initialState.epsilonMoves.elementAt (i).GenerateCode ();
 
       if (hasNfa[lexStateIndex] = (NfaState.generatedStates != 0))
       {
