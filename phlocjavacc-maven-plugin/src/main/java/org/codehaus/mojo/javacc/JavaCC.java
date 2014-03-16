@@ -554,7 +554,7 @@ class JavaCC extends ToolFacade
    */
   private String [] generateArguments ()
   {
-    final List argsList = new ArrayList ();
+    final List <String> argsList = new ArrayList <String> ();
 
     if (StringUtils.isNotEmpty (this.grammarEncoding))
     {
@@ -696,7 +696,7 @@ class JavaCC extends ToolFacade
       argsList.add (this.inputFile.getAbsolutePath ());
     }
 
-    return (String []) argsList.toArray (new String [argsList.size ()]);
+    return argsList.toArray (new String [argsList.size ()]);
   }
 
   /**

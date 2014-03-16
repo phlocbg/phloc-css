@@ -52,14 +52,14 @@ final class CPPNodeFiles
   private CPPNodeFiles ()
   {}
 
-  private static List headersForJJTreeH = new ArrayList ();
+  private static List <String> headersForJJTreeH = new ArrayList <String> ();
   /**
    * ID of the latest version (of JJTree) in which one of the Node classes was
    * modified.
    */
   static final String nodeVersion = "6.0";
 
-  static Set nodesToGenerate = new HashSet ();
+  static Set <String> nodesToGenerate = new HashSet <String> ();
 
   static void addType (final String type)
   {
@@ -120,7 +120,7 @@ final class CPPNodeFiles
         return;
       }
 
-      final Map optionMap = new HashMap (Options.getOptions ());
+      final Map <String, Comparable> optionMap = new HashMap <String, Comparable> (Options.getOptions ());
       optionMap.put ("PARSER_NAME", JJTreeGlobals.parserName);
       optionMap.put ("VISITOR_RETURN_TYPE", getVisitorReturnType ());
       optionMap.put ("VISITOR_DATA_TYPE", getVisitorArgumentType ());
@@ -168,7 +168,7 @@ final class CPPNodeFiles
         return;
       }
 
-      final Map optionMap = new HashMap (Options.getOptions ());
+      final Map <String, Comparable> optionMap = new HashMap <String, Comparable> (Options.getOptions ());
       optionMap.put ("PARSER_NAME", JJTreeGlobals.parserName);
       optionMap.put ("VISITOR_RETURN_TYPE", getVisitorReturnType ());
       optionMap.put ("VISITOR_DATA_TYPE", getVisitorArgumentType ());
@@ -186,9 +186,9 @@ final class CPPNodeFiles
       }
 
       generateFile (outputFile, "/templates/cpp/SimpleNodeInterface.template", optionMap, false);
-      for (final Iterator i = nodesToGenerate.iterator (); i.hasNext ();)
+      for (final Iterator <String> i = nodesToGenerate.iterator (); i.hasNext ();)
       {
-        final String s = (String) i.next ();
+        final String s = i.next ();
         optionMap.put ("NODE_TYPE", s);
         generateFile (outputFile, "/templates/cpp/MultiNodeInterface.template", optionMap, false);
       }
@@ -240,7 +240,7 @@ final class CPPNodeFiles
         return;
       }
 
-      final Map optionMap = new HashMap (Options.getOptions ());
+      final Map <String, Comparable> optionMap = new HashMap <String, Comparable> (Options.getOptions ());
       optionMap.put ("PARSER_NAME", JJTreeGlobals.parserName);
       optionMap.put ("VISITOR_RETURN_TYPE", getVisitorReturnType ());
       optionMap.put ("VISITOR_DATA_TYPE", getVisitorArgumentType ());
@@ -254,9 +254,9 @@ final class CPPNodeFiles
       }
 
       generateFile (outputFile, "/templates/cpp/SimpleNodeImpl.template", optionMap, false);
-      for (final Iterator i = nodesToGenerate.iterator (); i.hasNext ();)
+      for (final Iterator <String> i = nodesToGenerate.iterator (); i.hasNext ();)
       {
-        final String s = (String) i.next ();
+        final String s = i.next ();
         optionMap.put ("NODE_TYPE", s);
         generateFile (outputFile, "/templates/cpp/MultiNodeImpl.template", optionMap, false);
       }
@@ -528,14 +528,14 @@ final class CPPNodeFiles
     ostr.println ("};");
   }
 
-  public static void generateFile (final OutputFile outputFile, final String template, final Map options) throws IOException
+  public static void generateFile (final OutputFile outputFile, final String template, final Map <String, Comparable> options) throws IOException
   {
     generateFile (outputFile, template, options, true);
   }
 
   public static void generateFile (final OutputFile outputFile,
                                    final String template,
-                                   final Map options,
+                                   final Map <String, Comparable> options,
                                    final boolean close) throws IOException
   {
     final PrintWriter ostr = outputFile.getPrintWriter ();

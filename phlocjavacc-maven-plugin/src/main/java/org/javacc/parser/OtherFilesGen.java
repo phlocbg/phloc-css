@@ -84,7 +84,7 @@ public class OtherFilesGen extends JavaCCGlobals implements JavaCCParserConstant
       throw new Error ();
     }
 
-    final List tn = new ArrayList (toolNames);
+    final List <String> tn = new ArrayList <String> (toolNames);
     tn.add (toolName);
     ostr.println ("/* " + getIdString (tn, cu_name + "Constants.java") + " */");
 

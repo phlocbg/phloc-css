@@ -75,9 +75,9 @@ public class ParseEngine
    * optimization and the hashtable makes it look like we do not need the flag
    * "phase3done" any more. But this has not been removed yet.
    */
-  private List phase2list = new ArrayList ();
-  private List phase3list = new ArrayList ();
-  private java.util.Hashtable phase3table = new java.util.Hashtable ();
+  private List <Lookahead> phase2list = new ArrayList <Lookahead> ();
+  private List <Phase3Data> phase3list = new ArrayList <Phase3Data> ();
+  private java.util.Hashtable <Expansion, Phase3Data> phase3table = new java.util.Hashtable <Expansion, Phase3Data> ();
 
   /**
    * The phase 1 routines generates their output into String's and dumps these
@@ -290,7 +290,7 @@ public class ParseEngine
     for (int i = 0; i < conds.length; i++)
     {
       System.err.println ("Lookahead: " + i);
-      System.err.println (conds[i].dump (0, new HashSet ()));
+      System.err.println (conds[i].dump (0, new HashSet <Expansion> ()));
       System.err.println ();
     }
   }
@@ -1276,7 +1276,7 @@ public class ParseEngine
       // }
       e.internal_name = "R_" + gensymindex;
     }
-    Phase3Data p3d = (Phase3Data) (phase3table.get (e));
+    Phase3Data p3d = (phase3table.get (e));
     if (p3d == null || p3d.count < inf.count)
     {
       p3d = new Phase3Data (e, inf.count);
@@ -1841,7 +1841,7 @@ public class ParseEngine
     codeGenerator.switchToIncludeFile ();
     for (int phase2index = 0; phase2index < phase2list.size (); phase2index++)
     {
-      buildPhase2Routine ((Lookahead) (phase2list.get (phase2index)));
+      buildPhase2Routine ((phase2list.get (phase2index)));
     }
 
     int phase3index = 0;
@@ -1850,13 +1850,13 @@ public class ParseEngine
     {
       for (; phase3index < phase3list.size (); phase3index++)
       {
-        setupPhase3Builds ((Phase3Data) (phase3list.get (phase3index)));
+        setupPhase3Builds ((phase3list.get (phase3index)));
       }
     }
 
-    for (final java.util.Enumeration enumeration = phase3table.elements (); enumeration.hasMoreElements ();)
+    for (final java.util.Enumeration <Phase3Data> enumeration = phase3table.elements (); enumeration.hasMoreElements ();)
     {
-      buildPhase3Routine ((Phase3Data) (enumeration.nextElement ()), false);
+      buildPhase3Routine ((enumeration.nextElement ()), false);
     }
 
     codeGenerator.switchToMainFile ();
@@ -1867,9 +1867,9 @@ public class ParseEngine
     gensymindex = 0;
     indentamt = 0;
     jj2LA = false;
-    phase2list = new ArrayList ();
-    phase3list = new ArrayList ();
-    phase3table = new java.util.Hashtable ();
+    phase2list = new ArrayList <Lookahead> ();
+    phase3list = new ArrayList <Phase3Data> ();
+    phase3table = new java.util.Hashtable <Expansion, Phase3Data> ();
     firstSet = null;
     xsp_declared = false;
     jj3_expansion = null;
