@@ -447,9 +447,9 @@ public abstract class AbstractJavaCCMojo extends AbstractMojo
       }
 
     final Collection <File> compileSourceRoots = new LinkedHashSet <File> (Arrays.asList (getCompileSourceRoots ()));
-    for (final Iterator <File> it = compileSourceRoots.iterator (); it.hasNext ();)
+    for (final File file : compileSourceRoots)
     {
-      addSourceRoot (it.next ());
+      addSourceRoot (file);
     }
   }
 
@@ -676,9 +676,8 @@ public abstract class AbstractJavaCCMojo extends AbstractMojo
   private File findSourceFile (final String filename)
   {
     final Collection <File> sourceRoots = this.nonGeneratedSourceRoots;
-    for (final Iterator <File> it = sourceRoots.iterator (); it.hasNext ();)
+    for (final File sourceRoot : sourceRoots)
     {
-      final File sourceRoot = it.next ();
       final File sourceFile = new File (sourceRoot, filename);
       if (sourceFile.exists ())
       {

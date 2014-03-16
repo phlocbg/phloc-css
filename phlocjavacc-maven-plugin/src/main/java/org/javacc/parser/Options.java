@@ -55,7 +55,7 @@ public class Options
    * of legal options. Its initial values define the default option values, and
    * the option types can be determined from these values too.
    */
-  protected static Map optionValues = null;
+  protected static Map <String, Object> optionValues = null;
 
   /**
    * Convenience method to retrieve integer options.
@@ -81,9 +81,9 @@ public class Options
     return (String) optionValues.get (option);
   }
 
-  public static Map getOptions ()
+  public static Map <String, Object> getOptions ()
   {
-    final HashMap ret = new HashMap (optionValues);
+    final HashMap <String, Object> ret = new HashMap <String, Object> (optionValues);
     return ret;
   }
 
@@ -92,23 +92,23 @@ public class Options
    * to see if the options set from the command line and the ones set in the
    * input files clash in any way.
    */
-  private static Set cmdLineSetting = null;
+  private static Set <String> cmdLineSetting = null;
 
   /**
    * Keep track of what options were set from the grammar file. We use this to
    * see if the options set from the command line and the ones set in the input
    * files clash in any way.
    */
-  private static Set inputFileSetting = null;
+  private static Set <String> inputFileSetting = null;
 
   /**
    * Initialize for JavaCC
    */
   public static void init ()
   {
-    optionValues = new HashMap ();
-    cmdLineSetting = new HashSet ();
-    inputFileSetting = new HashSet ();
+    optionValues = new HashMap <String, Object> ();
+    cmdLineSetting = new HashSet <String> ();
+    inputFileSetting = new HashSet <String> ();
 
     optionValues.put ("PARSER_SUPER_CLASS", null);
     optionValues.put ("TOKEN_MANAGER_SUPER_CLASS", null);

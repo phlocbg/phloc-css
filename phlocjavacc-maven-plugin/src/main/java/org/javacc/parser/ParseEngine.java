@@ -131,7 +131,7 @@ public class ParseEngine
             final Sequence seq = (Sequence) exp;
             for (int i = 0; i < seq.units.size (); i++)
             {
-              final Expansion [] units = (Expansion []) seq.units.toArray (new Expansion [seq.units.size ()]);
+              final Expansion [] units = seq.units.toArray (new Expansion [seq.units.size ()]);
               if (units[i] instanceof Lookahead && ((Lookahead) units[i]).isExplicit ())
               {
                 // An explicit lookahead (rather than one generated implicitly).
@@ -1247,7 +1247,7 @@ public class ParseEngine
           if (seq instanceof NonTerminal)
           {
             final NonTerminal e_nrw = (NonTerminal) seq;
-            final NormalProduction ntprod = (NormalProduction) (production_table.get (e_nrw.getName ()));
+            final NormalProduction ntprod = (production_table.get (e_nrw.getName ()));
             if (ntprod instanceof JavaCodeProduction)
             {
               break; // nothing to do here
@@ -1300,10 +1300,10 @@ public class ParseEngine
         // fact, we rely here on the fact that the "name" fields of both these
         // variables are the same.
         final NonTerminal e_nrw = (NonTerminal) e;
-        final NormalProduction ntprod = (NormalProduction) (production_table.get (e_nrw.getName ()));
+        final NormalProduction ntprod = (production_table.get (e_nrw.getName ()));
         if (ntprod instanceof JavaCodeProduction)
         {
-          ; // nothing to do here
+          // nothing to do here
         }
         else
         {
@@ -1454,7 +1454,7 @@ public class ParseEngine
         // fact, we rely here on the fact that the "name" fields of both these
         // variables are the same.
         final NonTerminal e_nrw = (NonTerminal) e;
-        final NormalProduction ntprod = (NormalProduction) (production_table.get (e_nrw.getName ()));
+        final NormalProduction ntprod = (production_table.get (e_nrw.getName ()));
         if (ntprod instanceof JavaCodeProduction)
         {
           codeGenerator.genCodeLine ("    if (true) { jj_la = 0; jj_scanpos = jj_lastpos; " + genReturn (false) + "}");
@@ -1653,7 +1653,7 @@ public class ParseEngine
       if (e instanceof NonTerminal)
       {
         final NonTerminal e_nrw = (NonTerminal) e;
-        final NormalProduction ntprod = (NormalProduction) (production_table.get (e_nrw.getName ()));
+        final NormalProduction ntprod = (production_table.get (e_nrw.getName ()));
         if (ntprod instanceof JavaCodeProduction)
         {
           retval = Integer.MAX_VALUE;

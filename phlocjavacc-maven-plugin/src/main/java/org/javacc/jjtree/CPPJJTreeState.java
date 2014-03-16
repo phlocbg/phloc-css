@@ -23,7 +23,7 @@ final class CPPJJTreeState
 
   static void generateTreeState () throws IOException
   {
-    final Map options = Options.getOptions ();
+    final Map <String, Object> options = Options.getOptions ();
     options.put ("PARSER_NAME", JJTreeGlobals.parserName);
     final String filePrefix = new File (JJTreeOptions.getJJTreeOutputDirectory (), "JJT" +
                                                                                    JJTreeGlobals.parserName +

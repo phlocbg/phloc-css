@@ -123,9 +123,9 @@ public class OtherFilesGen extends JavaCCGlobals implements JavaCCParserConstant
     RegularExpression re;
     ostr.println ("  /** End of File. */");
     ostr.println ("  int EOF = 0;");
-    for (final java.util.Iterator it = ordered_named_tokens.iterator (); it.hasNext ();)
+    for (final Object element : ordered_named_tokens)
     {
-      re = (RegularExpression) it.next ();
+      re = (RegularExpression) element;
       ostr.println ("  /** RegularExpression Id. */");
       ostr.println ("  int " + re.label + " = " + re.ordinal + ";");
     }
@@ -143,9 +143,9 @@ public class OtherFilesGen extends JavaCCGlobals implements JavaCCParserConstant
     ostr.println ("  String[] tokenImage = {");
     ostr.println ("    \"<EOF>\",");
 
-    for (final java.util.Iterator it = rexprlist.iterator (); it.hasNext ();)
+    for (final Object element : rexprlist)
     {
-      final TokenProduction tp = (TokenProduction) (it.next ());
+      final TokenProduction tp = (TokenProduction) (element);
       final List respecs = tp.respecs;
       for (final java.util.Iterator it2 = respecs.iterator (); it2.hasNext ();)
       {

@@ -53,14 +53,14 @@ import java.util.List;
  * Generate lexer.
  */
 public class LexGenCPP extends LexGen // CodeGenerator implements
-                                      // JavaCCParserConstants
+// JavaCCParserConstants
 {
   @Override
   void PrintClassHead ()
   {
     int i, j;
 
-    final List tn = new ArrayList (toolNames);
+    final List <String> tn = new ArrayList <String> (toolNames);
     tn.add (toolName);
 
     switchToStaticsFile ();
@@ -181,14 +181,14 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
     {
       tp = (TokenProduction) it.next ();
       final List respecs = tp.respecs;
-      List tps;
+      List <TokenProduction> tps;
 
       for (i = 0; i < tp.lexStates.length; i++)
       {
-        if ((tps = (List) allTpsForState.get (tp.lexStates[i])) == null)
+        if ((tps = allTpsForState.get (tp.lexStates[i])) == null)
         {
           tmpLexStateName[maxLexStates++] = tp.lexStates[i];
-          allTpsForState.put (tp.lexStates[i], tps = new ArrayList ());
+          allTpsForState.put (tp.lexStates[i], tps = new ArrayList <TokenProduction> ());
         }
 
         tps.add (tp);
@@ -212,7 +212,7 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
     actions = new Action [maxOrdinal];
     actions[0] = actForEof;
     hasTokenActions = actForEof != null;
-    initStates = new Hashtable ();
+    initStates = new Hashtable <String, NfaState> ();
     canMatchAnyChar = new int [maxLexStates];
     canLoop = new boolean [maxLexStates];
     stateHasActions = new boolean [maxLexStates];
@@ -259,8 +259,8 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
       return;
 
     keepLineCol = Options.getKeepLineColumn ();
-    final List choices = new ArrayList ();
-    Enumeration e;
+    final List <RegularExpression> choices = new ArrayList <RegularExpression> ();
+    Enumeration <String> e;
     TokenProduction tp;
     int i, j;
 
@@ -279,11 +279,11 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
       NfaState.ReInit ();
       RStringLiteral.ReInit ();
 
-      final String key = (String) e.nextElement ();
+      final String key = e.nextElement ();
 
       lexStateIndex = GetIndex (key);
       lexStateSuffix = "_" + lexStateIndex;
-      final List allTps = (List) allTpsForState.get (key);
+      final List allTps = allTpsForState.get (key);
       initStates.put (key, initialState = new NfaState ());
       ignoring = false;
 
@@ -396,7 +396,7 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
       NfaState.ComputeClosures ();
 
       for (i = 0; i < initialState.epsilonMoves.size (); i++)
-        ((NfaState) initialState.epsilonMoves.elementAt (i)).GenerateCode ();
+        initialState.epsilonMoves.elementAt (i).GenerateCode ();
 
       if (hasNfa[lexStateIndex] = (NfaState.generatedStates != 0))
       {

@@ -42,7 +42,7 @@ import org.javacc.parser.TokenProduction;
  */
 public class HTMLGenerator extends TextGenerator implements Generator
 {
-  private final Hashtable id_map = new Hashtable ();
+  private final Hashtable <String, String> id_map = new Hashtable <String, String> ();
   private int id = 1;
 
   public HTMLGenerator ()
@@ -52,7 +52,7 @@ public class HTMLGenerator extends TextGenerator implements Generator
 
   protected String get_id (final String nt)
   {
-    String i = (String) id_map.get (nt);
+    String i = id_map.get (nt);
     if (i == null)
     {
       i = "prod" + id++;
