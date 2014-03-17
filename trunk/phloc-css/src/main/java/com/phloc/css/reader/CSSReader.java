@@ -1206,22 +1206,22 @@ public final class CSSReader
           switch (eBOM)
           {
             case BOM_UTF_8:
-              aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-8");
+              aDeterminedCharset = CharsetManager.getCharsetFromNameOrNull ("utf-8");
               break;
             case BOM_UTF_16_BIG_ENDIAN:
-              aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-16be");
+              aDeterminedCharset = CharsetManager.getCharsetFromNameOrNull ("utf-16be");
               break;
             case BOM_UTF_16_LITTLE_ENDIAN:
-              aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-16le");
+              aDeterminedCharset = CharsetManager.getCharsetFromNameOrNull ("utf-16le");
               break;
             case BOM_UTF_32_BIG_ENDIAN:
-              aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-32be");
+              aDeterminedCharset = CharsetManager.getCharsetFromNameOrNull ("utf-32be");
               break;
             case BOM_UTF_32_LITTLE_ENDIAN:
-              aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-32le");
+              aDeterminedCharset = CharsetManager.getCharsetFromNameOrNull ("utf-32le");
               break;
             case BOM_GB_18030:
-              aDeterminedCharset = CharsetManager.getCharsetFromName ("gb18030");
+              aDeterminedCharset = CharsetManager.getCharsetFromNameOrNull ("gb18030");
               break;
             default:
               // The charset required by the BOM is not a standard charset
