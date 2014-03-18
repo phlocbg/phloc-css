@@ -1202,31 +1202,8 @@ public final class CSSReader
           if (nBOMBytes < nReadBOMBytes)
             aPIS.unread (aBOM, nBOMBytes, nReadBOMBytes - nBOMBytes);
 
-          // FIXME use eBOM.getCharset in phloc-commons > 4.2.0
-          switch (eBOM)
-          {
-            case BOM_UTF_8:
-              aDeterminedCharset = CharsetManager.getCharsetFromNameOrNull ("utf-8");
-              break;
-            case BOM_UTF_16_BIG_ENDIAN:
-              aDeterminedCharset = CharsetManager.getCharsetFromNameOrNull ("utf-16be");
-              break;
-            case BOM_UTF_16_LITTLE_ENDIAN:
-              aDeterminedCharset = CharsetManager.getCharsetFromNameOrNull ("utf-16le");
-              break;
-            case BOM_UTF_32_BIG_ENDIAN:
-              aDeterminedCharset = CharsetManager.getCharsetFromNameOrNull ("utf-32be");
-              break;
-            case BOM_UTF_32_LITTLE_ENDIAN:
-              aDeterminedCharset = CharsetManager.getCharsetFromNameOrNull ("utf-32le");
-              break;
-            case BOM_GB_18030:
-              aDeterminedCharset = CharsetManager.getCharsetFromNameOrNull ("gb18030");
-              break;
-            default:
-              // The charset required by the BOM is not a standard charset
-              break;
-          }
+          // Use the Charset of the BOM - maybe null!
+          aDeterminedCharset = eBOM.getCharset ();
         }
       }
       return new ReadonlyPair <InputStream, Charset> (aPIS, aDeterminedCharset);
