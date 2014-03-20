@@ -18,14 +18,12 @@
 package com.phloc.css.parser;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
-import java.nio.charset.Charset;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.io.streams.NonBlockingStringReader;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.string.StringHelper;
 
@@ -36,7 +34,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * An implementation of interface {@link CharStream}, where the stream is
  * assumed to contain only ASCII characters (with java-like unicode escape
  * processing).
- * 
+ *
  * @author Philip Helger
  */
 @SuppressFBWarnings ("NM_METHOD_NAMING_CONVENTION")
@@ -66,22 +64,6 @@ public final class JavaCharStream implements CharStream
   private int m_nTabSize = 8;
   private boolean m_bTrackLineColumn = true;
 
-  @Deprecated
-  public JavaCharStream (@Nonnull final InputStream aIS, @Nonnull final String sCharset)
-  {
-    this (StreamUtils.createReader (aIS, sCharset), 1, 1, DEFAULT_BUF_SIZE);
-  }
-
-  public JavaCharStream (@Nonnull final InputStream aIS, @Nonnull final Charset aCharset)
-  {
-    this (StreamUtils.createReader (aIS, aCharset), 1, 1, DEFAULT_BUF_SIZE);
-  }
-
-  public JavaCharStream (@Nonnull final String sCSS)
-  {
-    this (new NonBlockingStringReader (sCSS), 1, 1, DEFAULT_BUF_SIZE);
-  }
-
   public JavaCharStream (@Nonnull final Reader aReader)
   {
     this (aReader, 1, 1, DEFAULT_BUF_SIZE);
@@ -92,17 +74,11 @@ public final class JavaCharStream implements CharStream
                           @Nonnegative final int nStartColumn,
                           @Nonnegative final int nBufferSize)
   {
-    if (aReader == null)
-      throw new NullPointerException ("reader");
-    if (nStartLine < 0)
-      throw new IllegalArgumentException ("startLine to small: " + nStartLine);
-    if (nStartColumn < 0)
-      throw new IllegalArgumentException ("startColumn to small: " + nStartColumn);
-    if (nBufferSize < 0)
-      throw new IllegalArgumentException ("bufferSize to small: " + nBufferSize);
-    m_aReader = aReader;
-    m_nLine = nStartLine;
-    m_nColumn = nStartColumn - 1;
+    ValueEnforcer.isGE0 (nBufferSize, "BufferSize");
+    // Using a buffered reader gives a minimal speedup
+    m_aReader = StreamUtils.getBuffered (ValueEnforcer.notNull (aReader, "Reader"));
+    m_nLine = ValueEnforcer.isGE0 (nStartLine, "StartLine");
+    m_nColumn = ValueEnforcer.isGE0 (nStartColumn, "StartColumn") - 1;
 
     m_nAvailable = nBufferSize;
     m_nBufsize = nBufferSize;
@@ -180,8 +156,8 @@ public final class JavaCharStream implements CharStream
 
     try
     {
-      int i;
-      if ((i = m_aReader.read (m_aNextCharBuf, m_nMaxNextCharInd, DEFAULT_BUF_SIZE - m_nMaxNextCharInd)) == -1)
+      final int i = m_aReader.read (m_aNextCharBuf, m_nMaxNextCharInd, DEFAULT_BUF_SIZE - m_nMaxNextCharInd);
+      if (i == -1)
       {
         m_aReader.close ();
         throw new IOException ("EOF in JavaCharStream");
@@ -311,7 +287,7 @@ public final class JavaCharStream implements CharStream
 
   /**
    * Read a character.
-   * 
+   *
    * @return The read character
    * @throws IOException
    *         if an I/O error occurs
@@ -330,26 +306,29 @@ public final class JavaCharStream implements CharStream
       _adjustBuffSize ();
 
     char c;
-    if ((m_aBuffer[m_nBufpos] = c = _readByte ()) == '\\')
+    m_aBuffer[m_nBufpos] = c = _readByte ();
+    if (c == '\\')
     {
       if (m_bTrackLineColumn)
         _updateLineColumn (c);
 
-      int backSlashCnt = 1;
+      int nBackSlashCnt = 1;
 
-      for (;;) // Read all the backslashes
+      // Read all the backslashes
+      for (;;)
       {
         if (++m_nBufpos == m_nAvailable)
           _adjustBuffSize ();
 
         try
         {
-          if ((m_aBuffer[m_nBufpos] = c = _readByte ()) != '\\')
+          m_aBuffer[m_nBufpos] = c = _readByte ();
+          if (c != '\\')
           {
             if (m_bTrackLineColumn)
               _updateLineColumn (c);
             // found a non-backslash char.
-            if ((c == 'u') && ((backSlashCnt & 1) == 1))
+            if (c == 'u' && (nBackSlashCnt & 1) == 1)
             {
               if (--m_nBufpos < 0)
                 m_nBufpos = m_nBufsize - 1;
@@ -357,33 +336,33 @@ public final class JavaCharStream implements CharStream
               break;
             }
 
-            backup (backSlashCnt);
+            backup (nBackSlashCnt);
             return '\\';
           }
         }
         catch (final IOException e)
         {
           // We are returning one backslash so we should only backup (count-1)
-          if (backSlashCnt > 1)
-            backup (backSlashCnt - 1);
+          if (nBackSlashCnt > 1)
+            backup (nBackSlashCnt - 1);
 
           return '\\';
         }
 
         if (m_bTrackLineColumn)
           _updateLineColumn (c);
-        backSlashCnt++;
+        nBackSlashCnt++;
       }
 
-      // Here, we have seen an odd number of backslash's followed by a 'u'
+      // Here, we have seen an odd number of backslash's followed by a digit
       try
       {
         while ((c = _readByte ()) == 'u')
           ++m_nColumn;
 
         m_aBuffer[m_nBufpos] = c = (char) (_hexval (c) << 12 |
-                                           _hexval (_readByte ()) << 8 |
-                                           _hexval (_readByte ()) << 4 | _hexval (_readByte ()));
+            _hexval (_readByte ()) << 8 |
+            _hexval (_readByte ()) << 4 | _hexval (_readByte ()));
         m_nColumn += 4;
       }
       catch (final IOException e)
@@ -391,14 +370,15 @@ public final class JavaCharStream implements CharStream
         throw new Error ("Invalid escape character at line " + m_nLine + " column " + m_nColumn + ".");
       }
 
-      if (backSlashCnt == 1)
+      if (nBackSlashCnt == 1)
         return c;
 
-      backup (backSlashCnt - 1);
+      backup (nBackSlashCnt - 1);
       return '\\';
     }
 
-    _updateLineColumn (c);
+    if (m_bTrackLineColumn)
+      _updateLineColumn (c);
     return c;
   }
 

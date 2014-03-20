@@ -35,6 +35,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
@@ -74,7 +75,7 @@ import com.phloc.css.reader.errorhandler.ThrowingCSSParseErrorHandler;
  * sources. This class reads full CSS declarations only. To read only a
  * declaration list (like from an HTML <code>&lt;style&gt;</code> attribute) the
  * {@link CSSReaderDeclarationList} is available.
- * 
+ *
  * @author Philip Helger
  */
 @ThreadSafe
@@ -114,7 +115,7 @@ public final class CSSReader
 
   /**
    * Set the default CSS parse error handler.
-   * 
+   *
    * @param aDefaultParseErrorHandler
    *        The new default error handler to be used. May be <code>null</code>
    *        to indicate that no special error handler should be used.
@@ -134,7 +135,7 @@ public final class CSSReader
 
   /**
    * Main reading of the CSS
-   * 
+   *
    * @param aStream
    *        The stream to read from. May not be <code>null</code>.
    * @param eVersion
@@ -203,7 +204,7 @@ public final class CSSReader
 
   /**
    * Check if the passed CSS file can be parsed without error
-   * 
+   *
    * @param aFile
    *        The file to be parsed. May not be <code>null</code>.
    * @param sCharset
@@ -228,10 +229,10 @@ public final class CSSReader
 
   /**
    * Check if the passed CSS file can be parsed without error
-   * 
+   *
    * @param aFile
    *        The file to be parsed. May not be <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used for reading the CSS file in case neither a
    *        <code>@charset</code> rule nor a BOM is present. May not be
    *        <code>null</code>.
@@ -242,15 +243,15 @@ public final class CSSReader
    *         <code>false</code> if not
    */
   public static boolean isValidCSS (@Nonnull final File aFile,
-                                    @Nonnull final Charset aCharset,
+                                    @Nonnull final Charset aFallbackCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
-    return isValidCSS (new FileSystemResource (aFile), aCharset, eVersion);
+    return isValidCSS (new FileSystemResource (aFile), aFallbackCharset, eVersion);
   }
 
   /**
    * Check if the passed CSS resource can be parsed without error
-   * 
+   *
    * @param aRes
    *        The resource to be parsed. May not be <code>null</code>.
    * @param sCharset
@@ -270,16 +271,16 @@ public final class CSSReader
                                     @Nonnull final String sCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
-    final Charset aCharset = CharsetManager.getCharsetFromName (sCharset);
-    return isValidCSS (aRes, aCharset, eVersion);
+    final Charset aFallbackCharset = CharsetManager.getCharsetFromName (sCharset);
+    return isValidCSS (aRes, aFallbackCharset, eVersion);
   }
 
   /**
    * Check if the passed CSS resource can be parsed without error
-   * 
+   *
    * @param aRes
    *        The resource to be parsed. May not be <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used for reading the CSS file in case neither a
    *        <code>@charset</code> rule nor a BOM is present. May not be
    *        <code>null</code>.
@@ -290,17 +291,17 @@ public final class CSSReader
    *         <code>false</code> if not
    */
   public static boolean isValidCSS (@Nonnull final IReadableResource aRes,
-                                    @Nonnull final Charset aCharset,
+                                    @Nonnull final Charset aFallbackCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
     if (aRes == null)
       throw new NullPointerException ("resources");
-    if (aCharset == null)
+    if (aFallbackCharset == null)
       throw new NullPointerException ("charset");
     if (eVersion == null)
       throw new NullPointerException ("version");
 
-    final Reader aReader = aRes.getReader (aCharset);
+    final Reader aReader = aRes.getReader (aFallbackCharset);
     if (aReader == null)
     {
       s_aLogger.warn ("Failed to open CSS reader " + aRes);
@@ -315,7 +316,7 @@ public final class CSSReader
    * called. This is similar to calling
    * {@link #readFromStream(IInputStreamProvider, String, ECSSVersion)} and
    * checking for a non-<code>null</code> result.
-   * 
+   *
    * @param aIS
    *        The input stream to use. Is automatically closed. May not be
    *        <code>null</code>.
@@ -346,11 +347,11 @@ public final class CSSReader
    * called. This is similar to calling
    * {@link #readFromStream(IInputStreamProvider,Charset, ECSSVersion)} and
    * checking for a non-<code>null</code> result.
-   * 
+   *
    * @param aIS
    *        The input stream to use. Is automatically closed. May not be
    *        <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -359,15 +360,15 @@ public final class CSSReader
    *         <code>false</code> if not
    */
   public static boolean isValidCSS (@Nonnull @WillClose final InputStream aIS,
-                                    @Nonnull final Charset aCharset,
+                                    @Nonnull final Charset aFallbackCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
     if (aIS == null)
       throw new NullPointerException ("inputStream");
-    if (aCharset == null)
+    if (aFallbackCharset == null)
       throw new NullPointerException ("charset");
 
-    return isValidCSS (StreamUtils.createReader (aIS, aCharset), eVersion);
+    return isValidCSS (StreamUtils.createReader (aIS, aFallbackCharset), eVersion);
   }
 
   /**
@@ -376,7 +377,7 @@ public final class CSSReader
    * This is similar to calling
    * {@link #readFromString(String, Charset, ECSSVersion)} and checking for a
    * non-<code>null</code> result.
-   * 
+   *
    * @param sCSS
    *        The CSS string to scan. May not be <code>null</code>.
    * @param eVersion
@@ -398,7 +399,7 @@ public final class CSSReader
    * is similar to calling
    * {@link #readFromStream(IInputStreamProvider, Charset, ECSSVersion)} and
    * checking for a non-<code>null</code> result.
-   * 
+   *
    * @param aReader
    *        The reader to use. May not be <code>null</code>.
    * @param eVersion
@@ -430,7 +431,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   * 
+   *
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -453,11 +454,11 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   * 
+   *
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -466,17 +467,16 @@ public final class CSSReader
    *         otherwise.
    */
   @Nullable
-  @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
-                                                    @Nonnull final Charset aCharset,
+                                                    @Nonnull final Charset aFallbackCharset,
                                                     @Nonnull final ECSSVersion eVersion)
   {
-    return readFromString (sCSS, aCharset, eVersion, null, null);
+    return readFromString (sCSS, aFallbackCharset, eVersion, null, null);
   }
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   * 
+   *
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -503,11 +503,11 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   * 
+   *
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -519,18 +519,17 @@ public final class CSSReader
    *         otherwise.
    */
   @Nullable
-  @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
-                                                    @Nonnull final Charset aCharset,
+                                                    @Nonnull final Charset aFallbackCharset,
                                                     @Nonnull final ECSSVersion eVersion,
                                                     @Nullable final ICSSParseErrorHandler aCustomErrorHandler)
   {
-    return readFromString (sCSS, aCharset, eVersion, aCustomErrorHandler, null);
+    return readFromString (sCSS, aFallbackCharset, eVersion, aCustomErrorHandler, null);
   }
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   * 
+   *
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -557,11 +556,11 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   * 
+   *
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -573,18 +572,17 @@ public final class CSSReader
    *         otherwise.
    */
   @Nullable
-  @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
-                                                    @Nonnull final Charset aCharset,
+                                                    @Nonnull final Charset aFallbackCharset,
                                                     @Nonnull final ECSSVersion eVersion,
                                                     @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    return readFromString (sCSS, aCharset, eVersion, null, aCustomExceptionHandler);
+    return readFromString (sCSS, aFallbackCharset, eVersion, null, aCustomExceptionHandler);
   }
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   * 
+   *
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -619,11 +617,11 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   * 
+   *
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -639,15 +637,14 @@ public final class CSSReader
    * @since 3.7.3
    */
   @Nullable
-  @Deprecated
   public static CascadingStyleSheet readFromString (@Nonnull final String sCSS,
-                                                    @Nonnull final Charset aCharset,
+                                                    @Nonnull final Charset aFallbackCharset,
                                                     @Nonnull final ECSSVersion eVersion,
                                                     @Nullable final ICSSParseErrorHandler aCustomErrorHandler,
                                                     @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    return readFromStream (new StringInputStreamProvider (sCSS, aCharset),
-                           aCharset,
+    return readFromStream (new StringInputStreamProvider (sCSS, aFallbackCharset),
+                           aFallbackCharset,
                            eVersion,
                            aCustomErrorHandler,
                            aCustomExceptionHandler);
@@ -656,7 +653,7 @@ public final class CSSReader
   /**
    * Read the CSS from the passed String using a character stream. An eventually
    * contained <code>@charset</code> rule is ignored.
-   * 
+   *
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -678,7 +675,7 @@ public final class CSSReader
   /**
    * Read the CSS from the passed String using a character stream. An eventually
    * contained <code>@charset</code> rule is ignored.
-   * 
+   *
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -705,7 +702,7 @@ public final class CSSReader
   /**
    * Read the CSS from the passed String using a character stream. An eventually
    * contained <code>@charset</code> rule is ignored.
-   * 
+   *
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -732,7 +729,7 @@ public final class CSSReader
   /**
    * Read the CSS from the passed String using a character stream. An eventually
    * contained <code>@charset</code> rule is ignored.
-   * 
+   *
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -759,7 +756,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   * 
+   *
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -782,11 +779,11 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   * 
+   *
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -796,15 +793,15 @@ public final class CSSReader
    */
   @Nullable
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
-                                                  @Nonnull final Charset aCharset,
+                                                  @Nonnull final Charset aFallbackCharset,
                                                   @Nonnull final ECSSVersion eVersion)
   {
-    return readFromFile (aFile, aCharset, eVersion, null, null);
+    return readFromFile (aFile, aFallbackCharset, eVersion, null, null);
   }
 
   /**
    * Read the CSS from the passed File.
-   * 
+   *
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -831,11 +828,11 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   * 
+   *
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -848,16 +845,16 @@ public final class CSSReader
    */
   @Nullable
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
-                                                  @Nonnull final Charset aCharset,
+                                                  @Nonnull final Charset aFallbackCharset,
                                                   @Nonnull final ECSSVersion eVersion,
                                                   @Nullable final ICSSParseErrorHandler aCustomErrorHandler)
   {
-    return readFromFile (aFile, aCharset, eVersion, aCustomErrorHandler, null);
+    return readFromFile (aFile, aFallbackCharset, eVersion, aCustomErrorHandler, null);
   }
 
   /**
    * Read the CSS from the passed File.
-   * 
+   *
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -884,11 +881,11 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   * 
+   *
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -901,16 +898,16 @@ public final class CSSReader
    */
   @Nullable
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
-                                                  @Nonnull final Charset aCharset,
+                                                  @Nonnull final Charset aFallbackCharset,
                                                   @Nonnull final ECSSVersion eVersion,
                                                   @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    return readFromStream (new FileSystemResource (aFile), aCharset, eVersion, null, aCustomExceptionHandler);
+    return readFromStream (new FileSystemResource (aFile), aFallbackCharset, eVersion, null, aCustomExceptionHandler);
   }
 
   /**
    * Read the CSS from the passed File.
-   * 
+   *
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -945,11 +942,11 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   * 
+   *
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -965,13 +962,13 @@ public final class CSSReader
    */
   @Nullable
   public static CascadingStyleSheet readFromFile (@Nonnull final File aFile,
-                                                  @Nonnull final Charset aCharset,
+                                                  @Nonnull final Charset aFallbackCharset,
                                                   @Nonnull final ECSSVersion eVersion,
                                                   @Nullable final ICSSParseErrorHandler aCustomErrorHandler,
                                                   @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
     return readFromStream (new FileSystemResource (aFile),
-                           aCharset,
+                           aFallbackCharset,
                            eVersion,
                            aCustomErrorHandler,
                            aCustomExceptionHandler);
@@ -982,7 +979,7 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   * 
+   *
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
@@ -1009,7 +1006,7 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   * 
+   *
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
@@ -1040,12 +1037,12 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   * 
+   *
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
    *        found. May not be <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -1055,10 +1052,10 @@ public final class CSSReader
    */
   @Nullable
   public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
-                                                    @Nonnull final Charset aCharset,
+                                                    @Nonnull final Charset aFallbackCharset,
                                                     @Nonnull final ECSSVersion eVersion)
   {
-    return readFromStream (aISP, aCharset, eVersion, null, null);
+    return readFromStream (aISP, aFallbackCharset, eVersion, null, null);
   }
 
   /**
@@ -1066,12 +1063,12 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   * 
+   *
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
    *        found. May not be <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -1084,11 +1081,11 @@ public final class CSSReader
    */
   @Nullable
   public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
-                                                    @Nonnull final Charset aCharset,
+                                                    @Nonnull final Charset aFallbackCharset,
                                                     @Nonnull final ECSSVersion eVersion,
                                                     @Nullable final ICSSParseErrorHandler aCustomErrorHandler)
   {
-    return readFromStream (aISP, aCharset, eVersion, aCustomErrorHandler, null);
+    return readFromStream (aISP, aFallbackCharset, eVersion, aCustomErrorHandler, null);
   }
 
   /**
@@ -1096,7 +1093,7 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   * 
+   *
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
@@ -1127,7 +1124,7 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   * 
+   *
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
@@ -1154,8 +1151,8 @@ public final class CSSReader
                                                     @Nullable final ICSSParseErrorHandler aCustomErrorHandler,
                                                     @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    final Charset aCharset = CharsetManager.getCharsetFromName (sCharset);
-    return readFromStream (aISP, aCharset, eVersion, aCustomErrorHandler, aCustomExceptionHandler);
+    final Charset aFallbackCharset = CharsetManager.getCharsetFromName (sCharset);
+    return readFromStream (aISP, aFallbackCharset, eVersion, aCustomErrorHandler, aCustomExceptionHandler);
   }
 
   /**
@@ -1163,7 +1160,7 @@ public final class CSSReader
    * {@link IInputStreamProvider}. If a BOM is present in the
    * {@link InputStream} it is read and if possible the charset is automatically
    * determined from the BOM.
-   * 
+   *
    * @param aISP
    *        The input stream provider to use. May not be <code>null</code>.
    * @return <code>null</code> if no InputStream could be opened, the pair with
@@ -1227,7 +1224,7 @@ public final class CSSReader
    * charset of the BOM is returned (if any).</li>
    * <li>Otherwise <code>null</code> is returned.</li>
    * </ol>
-   * 
+   *
    * @param aISP
    *        The input stream provider to read from. May not be <code>null</code>
    *        .
@@ -1265,7 +1262,8 @@ public final class CSSReader
 
     try
     {
-      final JavaCharStream aCharStream = new JavaCharStream (aIS, aStreamCharset);
+      // Read with the Stream charset
+      final JavaCharStream aCharStream = new JavaCharStream (StreamUtils.createReader (aIS, aStreamCharset));
       final ParserCSSCharsetDetectorTokenManager aTokenHdl = new ParserCSSCharsetDetectorTokenManager (aCharStream);
       final ParserCSSCharsetDetector aParser = new ParserCSSCharsetDetector (aTokenHdl);
       final String sCharsetName = aParser.styleSheetCharset ().getText ();
@@ -1307,12 +1305,12 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   * 
+   *
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
    *        found. May not be <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -1325,11 +1323,11 @@ public final class CSSReader
    */
   @Nullable
   public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
-                                                    @Nonnull final Charset aCharset,
+                                                    @Nonnull final Charset aFallbackCharset,
                                                     @Nonnull final ECSSVersion eVersion,
                                                     @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    return readFromStream (aISP, aCharset, eVersion, null, aCustomExceptionHandler);
+    return readFromStream (aISP, aFallbackCharset, eVersion, null, aCustomExceptionHandler);
   }
 
   /**
@@ -1337,12 +1335,12 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   * 
+   *
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
    *        found. May not be <code>null</code>.
-   * @param aCharset
+   * @param aFallbackCharset
    *        The charset to be used in case neither a <code>@charset</code> rule
    *        nor a BOM is present. May not be <code>null</code>.
    * @param eVersion
@@ -1358,19 +1356,16 @@ public final class CSSReader
    */
   @Nullable
   public static CascadingStyleSheet readFromStream (@Nonnull final IInputStreamProvider aISP,
-                                                    @Nonnull final Charset aCharset,
+                                                    @Nonnull final Charset aFallbackCharset,
                                                     @Nonnull final ECSSVersion eVersion,
                                                     @Nullable final ICSSParseErrorHandler aCustomErrorHandler,
                                                     @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    if (aISP == null)
-      throw new NullPointerException ("inputStreamProvider");
-    if (aCharset == null)
-      throw new NullPointerException ("charset");
-    if (eVersion == null)
-      throw new NullPointerException ("version");
+    ValueEnforcer.notNull (aISP, "InputStreamProvider");
+    ValueEnforcer.notNull (aFallbackCharset, "FallbackCharset");
+    ValueEnforcer.notNull (eVersion, "Version");
 
-    Charset aCharsetToUse = aCharset;
+    Charset aCharsetToUse;
 
     // Check if the CSS contains a declared charset or as an alternative use the
     // Charset from the BOM
@@ -1381,17 +1376,26 @@ public final class CSSReader
         s_aLogger.debug ("Reading CSS definition again with explicit charset '" + aDeclaredCharset.name () + "'");
       aCharsetToUse = aDeclaredCharset;
     }
+    else
+    {
+      // No charset declared - use fallback
+      aCharsetToUse = aFallbackCharset;
+    }
 
     // Open input stream
     final ReadonlyPair <InputStream, Charset> aISAndBOM = _getInputStreamWithoutBOM (aISP);
     if (aISAndBOM == null || aISAndBOM.getFirst () == null)
+    {
+      // Failed to open stream!
       return null;
+    }
 
     final InputStream aIS = aISAndBOM.getFirst ();
 
     try
     {
-      final JavaCharStream aCharStream = new JavaCharStream (aIS, aCharsetToUse);
+      final JavaCharStream aCharStream = new JavaCharStream (StreamUtils.createReader (aIS, aCharsetToUse));
+
       // Use the default CSS parse error handler if none is provided
       final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? getDefaultParseErrorHandler ()
                                                                                  : aCustomErrorHandler;
@@ -1414,7 +1418,7 @@ public final class CSSReader
    * Read the CSS from the passed {@link IReaderProvider}. If the CSS contains
    * an explicit <code>@charset</code> rule, it is ignored and the charset used
    * to create the reader is used instead!
-   * 
+   *
    * @param aRP
    *        The reader provider to use. The reader is retrieved exactly once and
    *        closed anyway. May not be <code>null</code>.
@@ -1444,7 +1448,10 @@ public final class CSSReader
     // Create the reader
     final Reader aReader = aRP.getReader ();
     if (aReader == null)
+    {
+      // Failed to open reader
       return null;
+    }
 
     // No charset determination, as the Reader already has an implicit Charset
 
