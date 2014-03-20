@@ -44,7 +44,7 @@ import com.phloc.css.handler.DoNothingCSSParseExceptionHandler;
 import com.phloc.css.handler.ICSSParseExceptionHandler;
 import com.phloc.css.parser.CSSNode;
 import com.phloc.css.parser.CharStream;
-import com.phloc.css.parser.JavaCharStream;
+import com.phloc.css.parser.CSSCharStream;
 import com.phloc.css.parser.ParseException;
 import com.phloc.css.parser.ParserCSS21;
 import com.phloc.css.parser.ParserCSS21TokenManager;
@@ -349,7 +349,7 @@ public final class CSSReaderDeclarationList
 
     try
     {
-      final JavaCharStream aCharStream = new JavaCharStream (aReader);
+      final CSSCharStream aCharStream = new CSSCharStream (aReader);
       final CSSNode aNode = _readStyleDeclaration (aCharStream,
                                                    eVersion,
                                                    ThrowingCSSParseErrorHandler.getInstance (),
@@ -766,7 +766,7 @@ public final class CSSReaderDeclarationList
 
     try
     {
-      final JavaCharStream aCharStream = new JavaCharStream (aReader);
+      final CSSCharStream aCharStream = new CSSCharStream (aReader);
       // Use the ThrowingCSSParseErrorHandler for maximum backward compatibility
       final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? ThrowingCSSParseErrorHandler.getInstance ()
                                                                                  : aCustomErrorHandler;
