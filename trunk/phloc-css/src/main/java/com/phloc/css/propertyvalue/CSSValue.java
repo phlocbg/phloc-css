@@ -24,6 +24,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -37,7 +38,7 @@ import com.phloc.css.property.ICSSProperty;
  * and it's according value plus the important state (<code>!important</code> or
  * not).<br>
  * Instances of this class are mutable since 3.7.3.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -51,7 +52,7 @@ public class CSSValue implements ICSSValue
 
   /**
    * Constructor
-   * 
+   *
    * @param aProperty
    *        The CSS property. May not be <code>null</code>.
    * @param sValue
@@ -89,7 +90,7 @@ public class CSSValue implements ICSSValue
 
   /**
    * Set the property of this CSS value (e.g. <code>background-color</code>).
-   * 
+   *
    * @param aProperty
    *        The CSS property to set. May not be <code>null</code>.
    * @return this
@@ -98,9 +99,7 @@ public class CSSValue implements ICSSValue
   @Nonnull
   public CSSValue setProperty (@Nonnull final ICSSProperty aProperty)
   {
-    if (aProperty == null)
-      throw new NullPointerException ("property");
-    m_aProperty = aProperty;
+    m_aProperty = ValueEnforcer.notNull (aProperty, "Property");
     return this;
   }
 
@@ -116,7 +115,7 @@ public class CSSValue implements ICSSValue
   /**
    * Set the value of this CSS value (e.g. <code>red</code> in case the property
    * is <code>background-color</code>).
-   * 
+   *
    * @param sValue
    *        The value to be set. May not be <code>null</code>. The value may
    *        <strong>NOT</strong> contain the <code>!important</code> flag! The
@@ -127,8 +126,7 @@ public class CSSValue implements ICSSValue
   @Nonnull
   public CSSValue setValue (@Nonnull final String sValue)
   {
-    if (sValue == null)
-      throw new NullPointerException ("value");
+    ValueEnforcer.notNull (sValue, "Value");
     if (!m_aProperty.isValidValue (sValue))
       s_aLogger.warn ("CSS: the value '" +
                       sValue +
@@ -155,7 +153,7 @@ public class CSSValue implements ICSSValue
 
   /**
    * Set the important flag of this value.
-   * 
+   *
    * @param bIsImportant
    *        <code>true</code> to mark it important, <code>false</code> to remove
    *        it.
