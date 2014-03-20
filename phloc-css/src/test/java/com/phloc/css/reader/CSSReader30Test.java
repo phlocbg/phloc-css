@@ -40,7 +40,7 @@ import com.phloc.css.writer.CSSWriterSettings;
 
 /**
  * Test reading CSS 3.0 stuff
- * 
+ *
  * @author Philip Helger
  */
 public final class CSSReader30Test extends AbstractFuncTestCSSReader
@@ -128,6 +128,44 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
     assertNotNull (aCSS2);
     assertEquals ("div{colör:räd}", new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS2));
     assertEquals (aCSS, aCSS2);
+
+    // With masking
+    sCSS = "#mask\\26{ color: red; }";
+    aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
+    assertNotNull (aCSS);
+    assertEquals ("#mask\\26{color:red}",
+                  new CSSWriter (new CSSWriterSettings (ECSSVersion.CSS30).setOptimizedOutput (true)).getCSSAsString (aCSS));
+
+    sCSS = "#mask\\26 { color: red; }";
+    aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
+    assertNotNull (aCSS);
+    assertEquals ("#mask\\26 {color:red}",
+                  new CSSWriter (new CSSWriterSettings (ECSSVersion.CSS30).setOptimizedOutput (true)).getCSSAsString (aCSS));
+
+    sCSS = "#mask\\26   { color: red; }";
+    aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
+    assertNotNull (aCSS);
+    assertEquals ("#mask\\26 {color:red}",
+                  new CSSWriter (new CSSWriterSettings (ECSSVersion.CSS30).setOptimizedOutput (true)).getCSSAsString (aCSS));
+
+    // With masking
+    sCSS = "#mask\\x{ color: red; }";
+    aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
+    assertNotNull (aCSS);
+    assertEquals ("#mask\\x{color:red}",
+                  new CSSWriter (new CSSWriterSettings (ECSSVersion.CSS30).setOptimizedOutput (true)).getCSSAsString (aCSS));
+
+    sCSS = "#mask\\x { color: red; }";
+    aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
+    assertNotNull (aCSS);
+    assertEquals ("#mask\\x{color:red}",
+                  new CSSWriter (new CSSWriterSettings (ECSSVersion.CSS30).setOptimizedOutput (true)).getCSSAsString (aCSS));
+
+    sCSS = "#mask\\x   { color: red; }";
+    aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
+    assertNotNull (aCSS);
+    assertEquals ("#mask\\x{color:red}",
+                  new CSSWriter (new CSSWriterSettings (ECSSVersion.CSS30).setOptimizedOutput (true)).getCSSAsString (aCSS));
   }
 
   @Test
