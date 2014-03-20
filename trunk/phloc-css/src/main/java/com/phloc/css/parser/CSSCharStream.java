@@ -38,7 +38,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author Philip Helger
  */
 @SuppressFBWarnings ("NM_METHOD_NAMING_CONVENTION")
-public final class JavaCharStream implements CharStream
+public final class CSSCharStream implements CharStream
 {
   private static final int DEFAULT_BUF_SIZE = 4096;
 
@@ -64,15 +64,15 @@ public final class JavaCharStream implements CharStream
   private int m_nTabSize = 8;
   private boolean m_bTrackLineColumn = true;
 
-  public JavaCharStream (@Nonnull final Reader aReader)
+  public CSSCharStream (@Nonnull final Reader aReader)
   {
     this (aReader, 1, 1, DEFAULT_BUF_SIZE);
   }
 
-  private JavaCharStream (@Nonnull final Reader aReader,
-                          @Nonnegative final int nStartLine,
-                          @Nonnegative final int nStartColumn,
-                          @Nonnegative final int nBufferSize)
+  private CSSCharStream (@Nonnull final Reader aReader,
+                         @Nonnegative final int nStartLine,
+                         @Nonnegative final int nStartColumn,
+                         @Nonnegative final int nBufferSize)
   {
     ValueEnforcer.isGE0 (nBufferSize, "BufferSize");
     // Using a buffered reader gives a minimal speedup
@@ -183,7 +183,8 @@ public final class JavaCharStream implements CharStream
 
   private char _readByte () throws IOException
   {
-    if (++m_nNextCharInd >= m_nMaxNextCharInd)
+    ++m_nNextCharInd;
+    if (m_nNextCharInd >= m_nMaxNextCharInd)
       _fillBuff ();
 
     return m_aNextCharBuf[m_nNextCharInd];
@@ -277,6 +278,11 @@ public final class JavaCharStream implements CharStream
     m_aBufColumn[m_nBufpos] = m_nColumn;
   }
 
+  private static boolean _isHexChar (final char c)
+  {
+    return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+  }
+
   private static int _hexval (final char c) throws IOException
   {
     final int ret = StringHelper.getHexValue (c);
@@ -307,76 +313,8 @@ public final class JavaCharStream implements CharStream
 
     char c;
     m_aBuffer[m_nBufpos] = c = _readByte ();
-    if (c == '\\')
-    {
-      if (m_bTrackLineColumn)
-        _updateLineColumn (c);
 
-      int nBackSlashCnt = 1;
-
-      // Read all the backslashes
-      for (;;)
-      {
-        if (++m_nBufpos == m_nAvailable)
-          _adjustBuffSize ();
-
-        try
-        {
-          m_aBuffer[m_nBufpos] = c = _readByte ();
-          if (c != '\\')
-          {
-            if (m_bTrackLineColumn)
-              _updateLineColumn (c);
-            // found a non-backslash char.
-            if (c == 'u' && (nBackSlashCnt & 1) == 1)
-            {
-              if (--m_nBufpos < 0)
-                m_nBufpos = m_nBufsize - 1;
-
-              break;
-            }
-
-            backup (nBackSlashCnt);
-            return '\\';
-          }
-        }
-        catch (final IOException e)
-        {
-          // We are returning one backslash so we should only backup (count-1)
-          if (nBackSlashCnt > 1)
-            backup (nBackSlashCnt - 1);
-
-          return '\\';
-        }
-
-        if (m_bTrackLineColumn)
-          _updateLineColumn (c);
-        nBackSlashCnt++;
-      }
-
-      // Here, we have seen an odd number of backslash's followed by a digit
-      try
-      {
-        while ((c = _readByte ()) == 'u')
-          ++m_nColumn;
-
-        m_aBuffer[m_nBufpos] = c = (char) (_hexval (c) << 12 |
-            _hexval (_readByte ()) << 8 |
-            _hexval (_readByte ()) << 4 | _hexval (_readByte ()));
-        m_nColumn += 4;
-      }
-      catch (final IOException e)
-      {
-        throw new Error ("Invalid escape character at line " + m_nLine + " column " + m_nColumn + ".");
-      }
-
-      if (nBackSlashCnt == 1)
-        return c;
-
-      backup (nBackSlashCnt - 1);
-      return '\\';
-    }
-
+    // This would be the point to handle CSS (un)escaping
     if (m_bTrackLineColumn)
       _updateLineColumn (c);
     return c;

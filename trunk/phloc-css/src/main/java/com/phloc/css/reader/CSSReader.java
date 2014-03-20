@@ -57,7 +57,7 @@ import com.phloc.css.handler.DoNothingCSSParseExceptionHandler;
 import com.phloc.css.handler.ICSSParseExceptionHandler;
 import com.phloc.css.parser.CSSNode;
 import com.phloc.css.parser.CharStream;
-import com.phloc.css.parser.JavaCharStream;
+import com.phloc.css.parser.CSSCharStream;
 import com.phloc.css.parser.ParseException;
 import com.phloc.css.parser.ParseUtils;
 import com.phloc.css.parser.ParserCSS21;
@@ -416,7 +416,7 @@ public final class CSSReader
 
     try
     {
-      final JavaCharStream aCharStream = new JavaCharStream (aReader);
+      final CSSCharStream aCharStream = new CSSCharStream (aReader);
       final CSSNode aNode = _readStyleSheet (aCharStream,
                                              eVersion,
                                              getDefaultParseErrorHandler (),
@@ -1263,7 +1263,7 @@ public final class CSSReader
     try
     {
       // Read with the Stream charset
-      final JavaCharStream aCharStream = new JavaCharStream (StreamUtils.createReader (aIS, aStreamCharset));
+      final CSSCharStream aCharStream = new CSSCharStream (StreamUtils.createReader (aIS, aStreamCharset));
       final ParserCSSCharsetDetectorTokenManager aTokenHdl = new ParserCSSCharsetDetectorTokenManager (aCharStream);
       final ParserCSSCharsetDetector aParser = new ParserCSSCharsetDetector (aTokenHdl);
       final String sCharsetName = aParser.styleSheetCharset ().getText ();
@@ -1394,7 +1394,7 @@ public final class CSSReader
 
     try
     {
-      final JavaCharStream aCharStream = new JavaCharStream (StreamUtils.createReader (aIS, aCharsetToUse));
+      final CSSCharStream aCharStream = new CSSCharStream (StreamUtils.createReader (aIS, aCharsetToUse));
 
       // Use the default CSS parse error handler if none is provided
       final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? getDefaultParseErrorHandler ()
@@ -1457,7 +1457,7 @@ public final class CSSReader
 
     try
     {
-      final JavaCharStream aCharStream = new JavaCharStream (aReader);
+      final CSSCharStream aCharStream = new CSSCharStream (aReader);
       // Use the default CSS parse error handler if none is provided
       final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? getDefaultParseErrorHandler ()
                                                                                  : aCustomErrorHandler;

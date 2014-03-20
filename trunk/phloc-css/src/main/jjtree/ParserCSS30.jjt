@@ -140,7 +140,7 @@ TOKEN :
 
 | < #ESCAPE_UNICODE: "\\" <HNUM> ( "\r\n"
                                  | [" ","\t","\r","\n","\f"]
-                                 )? >
+                                 )? >   
 | < #ESCAPE_OTHER: "\\" ~["\r","\n","\f","0"-"9","a"-"f"] >
 | < #ESCAPE: <ESCAPE_UNICODE>
            | <ESCAPE_OTHER> >

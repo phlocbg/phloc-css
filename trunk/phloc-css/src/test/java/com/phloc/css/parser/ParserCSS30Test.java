@@ -39,7 +39,7 @@ public final class ParserCSS30Test extends AbstractCSS30Test
   @Test
   public void test1 () throws ParseException
   {
-    final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (new JavaCharStream (new NonBlockingStringReader (CSS1)));
+    final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (new CSSCharStream (new NonBlockingStringReader (CSS1)));
     aTokenHdl.setDebugStream (System.out);
     final ParserCSS30 aParser = new ParserCSS30 (aTokenHdl);
     aParser.disable_tracing ();
@@ -50,7 +50,7 @@ public final class ParserCSS30Test extends AbstractCSS30Test
   @Test
   public void test2 () throws ParseException
   {
-    final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (new JavaCharStream (new NonBlockingStringReader (CSS2)));
+    final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (new CSSCharStream (new NonBlockingStringReader (CSS2)));
     aTokenHdl.setDebugStream (System.out);
     final ParserCSS30 aParser = new ParserCSS30 (aTokenHdl);
     aParser.disable_tracing ();
