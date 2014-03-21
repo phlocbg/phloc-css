@@ -55,9 +55,9 @@ import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.handler.CSSHandler;
 import com.phloc.css.handler.DoNothingCSSParseExceptionHandler;
 import com.phloc.css.handler.ICSSParseExceptionHandler;
+import com.phloc.css.parser.CSSCharStream;
 import com.phloc.css.parser.CSSNode;
 import com.phloc.css.parser.CharStream;
-import com.phloc.css.parser.CSSCharStream;
 import com.phloc.css.parser.ParseException;
 import com.phloc.css.parser.ParseUtils;
 import com.phloc.css.parser.ParserCSS21;
@@ -84,6 +84,7 @@ public final class CSSReader
   private static final Logger s_aLogger = LoggerFactory.getLogger (CSSReader.class);
   private static final ReadWriteLock s_aRWLock = new ReentrantReadWriteLock ();
 
+  // Use the ThrowingCSSParseErrorHandler for maximum backward compatibility
   @GuardedBy ("s_aRWLock")
   private static ICSSParseErrorHandler s_aDefaultParseErrorHandler = ThrowingCSSParseErrorHandler.getInstance ();
 
@@ -144,8 +145,9 @@ public final class CSSReader
    *        A custom handler for recoverable errors. May be <code>null</code>.
    * @param aCustomExceptionHandler
    *        A custom handler for unrecoverable errors. May be <code>null</code>.
-   * @return <code>null</code> if parsing failed with an unrecoverable error, or
-   *         <code>null</code> if a recoverable error occurred and a
+   * @return <code>null</code> if parsing failed with an unrecoverable error
+   *         (and no throwing exception handler is used), or <code>null</code>
+   *         if a recoverable error occurred and no
    *         {@link com.phloc.css.reader.errorhandler.ThrowingCSSParseErrorHandler}
    *         was used or non-<code>null</code> if parsing succeeded.
    */
@@ -173,7 +175,7 @@ public final class CSSReader
             aCustomExceptionHandler.onException (ex);
           else
             s_aLogger.error ("Failed to parse CSS 2.1 style sheet: " +
-                             LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
+                LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
           return null;
         }
       }
@@ -193,7 +195,7 @@ public final class CSSReader
             aCustomExceptionHandler.onException (ex);
           else
             s_aLogger.error ("Failed to parse CSS 3.0 style sheet: " +
-                             LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
+                LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
           return null;
         }
       }
@@ -1280,10 +1282,10 @@ public final class CSSReader
       {
         // BOM charset different from read charset
         s_aLogger.warn ("The charset found in the CSS data (" +
-                        aReadCharset.name () +
-                        ") differs from the charset determined by the BOM (" +
-                        aBOMCharset.name () +
-                        ")!");
+            aReadCharset.name () +
+            ") differs from the charset determined by the BOM (" +
+            aBOMCharset.name () +
+            ")!");
       }
 
       return aReadCharset;
@@ -1398,7 +1400,7 @@ public final class CSSReader
 
       // Use the default CSS parse error handler if none is provided
       final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? getDefaultParseErrorHandler ()
-                                                                                 : aCustomErrorHandler;
+                                                                                  : aCustomErrorHandler;
       final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aRealErrorHandler, aCustomExceptionHandler);
 
       // Failed to interpret content as CSS?
@@ -1460,7 +1462,7 @@ public final class CSSReader
       final CSSCharStream aCharStream = new CSSCharStream (aReader);
       // Use the default CSS parse error handler if none is provided
       final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? getDefaultParseErrorHandler ()
-                                                                                 : aCustomErrorHandler;
+                                                                                  : aCustomErrorHandler;
       final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aRealErrorHandler, aCustomExceptionHandler);
 
       // Failed to interpret content as CSS?
