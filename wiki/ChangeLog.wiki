@@ -3,6 +3,17 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>3/21/14</td><td colspan="4">_Release *3.7.3*_</td></tr>
+<tr><td>3/14/14</td><td>fix</td><td>tech</td><td></td><td>Fixed parsing error when a comment was between @charset and the name</td></tr>
+<tr><td>3/14/14</td><td>update</td><td>tech</td><td></td><td>Updated to JavaCC 6.0.1 which gives a huge speedup</td></tr>
+<tr><td>3/13/14</td><td>add</td><td>api</td><td></td><td>Added new methods CSSReader.readFromReader + special overloads for String</td></tr>
+<tr><td>3/12/14</td><td>add</td><td>api</td><td></td><td>Added removeAll... methods to several classes</td></tr>
+<tr><td>3/12/14</td><td>fix</td><td>tech</td><td></td><td>Fixed reading of CSS files with BOMs; also automatically determining the charset from the BOM if possible</td></tr>
+<tr><td>3/12/14</td><td>add</td><td>api</td><td></td><td>Extended CSSSimpleValueWithUnit to internally use BigDecimal for the numbers</td></tr>
+<tr><td>3/11/14</td><td>add</td><td>api</td><td></td><td>Extended ECSSUnit to support BigDecimal for formatting as well</td></tr>
+<tr><td>3/11/14</td><td>update</td><td>api</td><td>*yes*</td><td>Added parameter of type Token to ICSSParseErrorHandler.onCSSUnexpectedRule</td></tr>
+<tr><td>3/11/14</td><td>update</td><td>tech</td><td></td><td>Updated logging output for unrecoverable errors by using LoggingCSSParseErrorHandler.createLoggingStringParseError</td></tr>
+<tr><td>3/10/14</td><td>fix</td><td>tech</td><td></td><td>CSSVisitorForUrl was not considering @supports and @viewport rules</td></tr>
 <tr border="1"><td>3/10/14</td><td colspan="4">_Release *3.7.2*_</td></tr>
 <tr><td>3/10/14</td><td>fix</td><td>tech</td><td></td><td>Fixed reading CSS with a BOM</td></tr>
 <tr><td>3/6/14</td><td>update</td><td>tech</td><td></td><td>In optimized writing of CSS, the last declaration wont get a semicolon</td></tr>
