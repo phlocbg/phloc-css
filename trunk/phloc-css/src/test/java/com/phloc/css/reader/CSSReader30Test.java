@@ -26,6 +26,7 @@ import java.nio.charset.Charset;
 import org.junit.Test;
 
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.charset.EUnicodeBOM;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.io.streamprovider.ByteArrayInputStreamProvider;
@@ -185,10 +186,11 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
       if (aDeterminedCharset != null)
       {
         final CascadingStyleSheet aCSS = CSSReader.readFromStream (new ByteArrayInputStreamProvider (ArrayHelper.getConcatenated (eBOM.getBytes (),
-                                                                                                                                  sCSSBase.getBytes (aDeterminedCharset))),
-                                                                                                                                  aDeterminedCharset,
-                                                                                                                                  ECSSVersion.CSS30,
-                                                                                                                                  DoNothingCSSParseErrorHandler.getInstance ());
+                                                                                                                                  CharsetManager.getAsBytes (sCSSBase,
+                                                                                                                                                             aDeterminedCharset))),
+                                                                   aDeterminedCharset,
+                                                                   ECSSVersion.CSS30,
+                                                                   DoNothingCSSParseErrorHandler.getInstance ());
         assertNotNull ("Failed to read with BOM " + eBOM, aCSS);
         assertEquals (".class{color:red}.class{color:blue}",
                       new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
