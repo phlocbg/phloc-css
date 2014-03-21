@@ -36,7 +36,10 @@ import com.phloc.css.property.ICSSProperty;
 /**
  * Represents the combination of a single CSS property ({@link ICSSProperty})
  * and it's according value plus the important state (<code>!important</code> or
- * not).<br>
+ * not). The main purpose of this class to make building a CSS from scratch
+ * simpler. When an existing CSS is read the information resides in a
+ * {@link com.phloc.css.decl.CSSDeclaration} because it contains the declaration
+ * value in a more structured form.<br>
  * Instances of this class are mutable since 3.7.3.
  *
  * @author Philip Helger
@@ -138,7 +141,7 @@ public class CSSValue implements ICSSValue
                       sValue +
                       "' should not contain the '" +
                       CCSS.IMPORTANT_SUFFIX +
-                      "' string! Pass 'true' as important parameter instead.");
+                      "' string! Use 'setImportant' method instead.");
     m_sValue = sValue.trim ();
     return this;
   }

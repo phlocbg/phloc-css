@@ -37,7 +37,8 @@ import com.phloc.css.property.ECSSProperty;
 
 /**
  * Represents a single element in a CSS style rule. (eg. <code>color:red;</code>
- * or <code>background:uri(a.gif) !important;</code>)
+ * or <code>background:uri(a.gif) !important;</code>)<br>
+ * Instances of this class are mutable since 3.7.4.
  *
  * @author Philip Helger
  */
@@ -67,7 +68,7 @@ public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
   }
 
   /**
-   * Constructor
+   * Constructor.
    *
    * @param sProperty
    *        The name of the property. E.g. "color". May neither be
