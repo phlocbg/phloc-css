@@ -22,7 +22,9 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
@@ -34,7 +36,7 @@ import com.phloc.css.utils.ICSSNamedColor;
 
 /**
  * Abstract base class for implementing {@link ICSSProperty}
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -45,7 +47,7 @@ public abstract class AbstractCSSProperty implements ICSSProperty
 
   /**
    * Constructor
-   * 
+   *
    * @param eProp
    *        The base property to use. May not be <code>null</code>.
    * @param aCustomizer
@@ -53,9 +55,7 @@ public abstract class AbstractCSSProperty implements ICSSProperty
    */
   protected AbstractCSSProperty (@Nonnull final ECSSProperty eProp, @Nullable final ICSSPropertyCustomizer aCustomizer)
   {
-    if (eProp == null)
-      throw new NullPointerException ("prop");
-    m_eProp = eProp;
+    m_eProp = ValueEnforcer.notNull (eProp, "Property");
     m_aCustomizer = aCustomizer;
   }
 
@@ -134,6 +134,23 @@ public abstract class AbstractCSSProperty implements ICSSProperty
   public final ICSSValue newImportantValue (@Nonnull final ICSSNamedColor aColor)
   {
     return newImportantValue (aColor.getName ());
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    final AbstractCSSProperty rhs = (AbstractCSSProperty) o;
+    return m_eProp.equals (rhs.m_eProp);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return new HashCodeGenerator (this).append (m_eProp).getHashCode ();
   }
 
   @Override

@@ -140,7 +140,7 @@ TOKEN :
 
 | < #ESCAPE_UNICODE: "\\" <HNUM> ( "\r\n"
                                  | [" ","\t","\r","\n","\f"]
-                                 )? >
+                                 )? >   
 | < #ESCAPE_OTHER: "\\" ~["\r","\n","\f","0"-"9","a"-"f"] >
 | < #ESCAPE: <ESCAPE_UNICODE>
            | <ESCAPE_OTHER> >
@@ -312,9 +312,9 @@ JAVACODE
 private void errorUnexpectedRule(final String sRule, final String sMsg) #void
 {
   if (m_aCustomErrorHandler != null)
-    m_aCustomErrorHandler.onCSSUnexpectedRule (sRule, sMsg);
+    m_aCustomErrorHandler.onCSSUnexpectedRule (token, sRule, sMsg);
   else  
-    s_aLogger.warn("Unexpected rule '" + sRule + "': " + sMsg);
+    s_aLogger.warn("[" + token.beginLine + ":" + token.beginColumn + "] Unexpected rule '" + sRule + "': " + sMsg);
 }
 
 JAVACODE
@@ -404,14 +404,17 @@ private String javaSkipToClosingBrace() throws ParseException #void {
 //
 CSSNode styleSheet() #Root : {}
 {
+  ( <S> | <CDO> | <CDC> )*
   ( LOOKAHEAD(2)
     charsetRule()
+    ( <S> | <CDO> | <CDC> )*
   )?
-  ( <S> | <CDO> | <CDC> )*
-  ( importRule()
+  ( LOOKAHEAD(2)
+    importRule()
     ( <S> | <CDO> | <CDC> )*
   )*
-  ( namespaceRule()
+  ( LOOKAHEAD(2)
+    namespaceRule()
     ( <S> | <CDO> | <CDC> )*
   )*
   ( ( styleRule()
@@ -639,9 +642,8 @@ void expr() : {}
 void charsetRule() :
 { String sStr; }
 {
-  ( <S> )?
   <CHARSET_SYM>
-  <S>
+  ( <S> )+
   sStr = string() { jjtThis.setText (sStr); }
   ( <S> )*
   <SEMICOLON>

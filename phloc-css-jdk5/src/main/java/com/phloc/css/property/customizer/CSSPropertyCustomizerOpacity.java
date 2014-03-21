@@ -35,7 +35,7 @@ import com.phloc.css.propertyvalue.ICSSValue;
  * @author Philip Helger
  */
 @Immutable
-public class CSSPropertyCustomizerOpacity implements ICSSPropertyCustomizer
+public class CSSPropertyCustomizerOpacity extends AbstractCSSPropertyCustomizer
 {
   @Nullable
   public ICSSValue createSpecialValue (@Nonnull final ICSSProperty aProperty,
@@ -46,7 +46,8 @@ public class CSSPropertyCustomizerOpacity implements ICSSPropertyCustomizer
     if (!Double.isNaN (dValue))
     {
       final int nPerc = (int) (dValue * 100);
-      return new CSSValueList (new ICSSProperty [] { new CSSPropertyFree (ECSSProperty._MS_FILTER),
+      return new CSSValueList (ECSSProperty.OPACITY,
+                               new ICSSProperty [] { new CSSPropertyFree (ECSSProperty._MS_FILTER),
                                                     new CSSPropertyFree (ECSSProperty.FILTER),
                                                     aProperty.getClone (ECSSProperty._MOZ_OPACITY),
                                                     aProperty.getClone (ECSSProperty._WEBKIT_OPACITY),

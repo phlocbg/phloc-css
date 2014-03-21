@@ -15,36 +15,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css.handler;
+package com.phloc.css.property.customizer;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.css.parser.ParseException;
+import com.phloc.commons.hash.HashCodeGenerator;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * An implementation of {@link ICSSParseExceptionHandler} that silently ignores
- * all errors.
+ * Abstract base class for property customizer.
  * 
  * @author Philip Helger
+ * @since 3.7.3
  */
 @Immutable
-public final class DoNothingCSSParseExceptionHandler implements ICSSParseExceptionHandler
+public abstract class AbstractCSSPropertyCustomizer implements ICSSPropertyCustomizer
 {
-  private static final DoNothingCSSParseExceptionHandler s_aInstance = new DoNothingCSSParseExceptionHandler ();
-
-  @Deprecated
-  public DoNothingCSSParseExceptionHandler ()
-  {}
-
-  @Nonnull
-  public static DoNothingCSSParseExceptionHandler getInstance ()
+  @Override
+  public boolean equals (final Object o)
   {
-    return s_aInstance;
+    if (o == this)
+      return true;
+    if (o == null || !getClass ().equals (o.getClass ()))
+      return false;
+    return true;
   }
 
-  public void onException (@Nonnull final ParseException ex)
+  @Override
+  public int hashCode ()
   {
-    // ignore
+    return new HashCodeGenerator (this).getHashCode ();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).toString ();
   }
 }

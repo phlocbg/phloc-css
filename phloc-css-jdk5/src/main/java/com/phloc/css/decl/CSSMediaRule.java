@@ -38,7 +38,13 @@ import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a single <code>@media</code> rule: a list of style rules only
- * valid for certain media.
+ * valid for certain media.<br>
+ * Example:<br>
+ * <code>@media print {
+  div#footer {
+    display: none;
+  }
+}</code>
  * 
  * @author Philip Helger
  */
@@ -98,6 +104,22 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     if (nMediumIndex < 0 || nMediumIndex >= m_aMediaQueries.size ())
       return EChange.UNCHANGED;
     m_aMediaQueries.remove (nMediumIndex);
+    return EChange.CHANGED;
+  }
+
+  /**
+   * Remove all media queries.
+   * 
+   * @return {@link EChange#CHANGED} if any media query was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllMediaQueries ()
+  {
+    if (m_aMediaQueries.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aMediaQueries.clear ();
     return EChange.CHANGED;
   }
 
@@ -164,6 +186,22 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
     if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
       return EChange.UNCHANGED;
     m_aRules.remove (nRuleIndex);
+    return EChange.CHANGED;
+  }
+
+  /**
+   * Remove all rules.
+   * 
+   * @return {@link EChange#CHANGED} if any rule was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllRules ()
+  {
+    if (m_aRules.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aRules.clear ();
     return EChange.CHANGED;
   }
 
@@ -263,7 +301,7 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSMediaRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSMediaRule rhs = (CSSMediaRule) o;
     return m_aMediaQueries.equals (rhs.m_aMediaQueries) && m_aRules.equals (rhs.m_aRules);

@@ -39,7 +39,12 @@ import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single @keyframes rule.
+ * Represents a single @keyframes rule.<br>
+ * Example:<br>
+ * <code>@keyframes identifier {  
+  0% { top: 0; left: 0; }  
+  30% { top: 50px; }  
+ }</code>
  * 
  * @author Philip Helger
  */
@@ -133,6 +138,22 @@ public class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAware, ICS
     return EChange.valueOf (m_aBlocks.remove (nBlockIndex) != null);
   }
 
+  /**
+   * Remove all blocks.
+   * 
+   * @return {@link EChange#CHANGED} if any block was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllBlocks ()
+  {
+    if (m_aBlocks.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aBlocks.clear ();
+    return EChange.CHANGED;
+  }
+
   @Nullable
   public CSSKeyframesBlock getBlockAtIndex (@Nonnegative final int nBlockIndex)
   {
@@ -217,7 +238,7 @@ public class CSSKeyframesRule implements ICSSTopLevelRule, ICSSVersionAware, ICS
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSKeyframesRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSKeyframesRule rhs = (CSSKeyframesRule) o;
     return m_sDeclaration.equals (rhs.m_sDeclaration) &&

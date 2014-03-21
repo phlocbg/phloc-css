@@ -133,6 +133,22 @@ public class CSSSupportsConditionNested implements ICSSSupportsConditionMember, 
   }
 
   /**
+   * Remove all members.
+   * 
+   * @return {@link EChange#CHANGED} if any member was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllMembers ()
+  {
+    if (m_aMembers.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aMembers.clear ();
+    return EChange.CHANGED;
+  }
+
+  /**
    * @deprecated Use {@link #getMemberAtIndex(int)} instead
    */
   @Deprecated
@@ -203,7 +219,7 @@ public class CSSSupportsConditionNested implements ICSSSupportsConditionMember, 
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSupportsConditionNested))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSupportsConditionNested rhs = (CSSSupportsConditionNested) o;
     return m_aMembers.equals (rhs.m_aMembers);

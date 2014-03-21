@@ -36,7 +36,13 @@ import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single <code>@font-face</code> rule.
+ * Represents a single <code>@font-face</code> rule.<br>
+ * Example:<br>
+ * <code>@font-face {
+    font-family: 'icons';
+    src: url(path/to/font.woff) format('woff');
+    unicode-range: U+E000-E005;
+}</code>
  * 
  * @author Philip Helger
  */
@@ -82,6 +88,12 @@ public class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
   public EChange removeDeclaration (@Nonnegative final int nDeclarationIndex)
   {
     return m_aDeclarations.removeDeclaration (nDeclarationIndex);
+  }
+
+  @Nonnull
+  public EChange removeAllDeclarations ()
+  {
+    return m_aDeclarations.removeAllDeclarations ();
   }
 
   @Nonnull
@@ -164,7 +176,7 @@ public class CSSFontFaceRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSFontFaceRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSFontFaceRule rhs = (CSSFontFaceRule) o;
     return m_aDeclarations.equals (rhs.m_aDeclarations);

@@ -282,7 +282,7 @@ public abstract class AbstractCSS30Test
                                        + "  background-color: #d3e9f7;\n"
                                        + "  color: #114669;\n"
                                        + "}";
-  protected static final String CSS2 = "@charSet 'UTF-8';\n"
+  protected static final String CSS2 = "@charset 'utf-8';\n"
                                        + "@import url(../dijit.css);\n"
                                        + "@import url(\"../dijit.css\");\n"
                                        + "@import url(\"../dijit.css\") print;\n"

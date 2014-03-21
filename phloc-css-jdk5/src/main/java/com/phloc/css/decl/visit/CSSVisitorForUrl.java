@@ -26,10 +26,16 @@ import com.phloc.css.decl.CSSExpression;
 import com.phloc.css.decl.CSSExpressionMemberTermURI;
 import com.phloc.css.decl.CSSFontFaceRule;
 import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSKeyframesBlock;
 import com.phloc.css.decl.CSSKeyframesRule;
 import com.phloc.css.decl.CSSMediaRule;
+import com.phloc.css.decl.CSSNamespaceRule;
 import com.phloc.css.decl.CSSPageRule;
+import com.phloc.css.decl.CSSSelector;
 import com.phloc.css.decl.CSSStyleRule;
+import com.phloc.css.decl.CSSSupportsRule;
+import com.phloc.css.decl.CSSUnknownRule;
+import com.phloc.css.decl.CSSViewportRule;
 import com.phloc.css.decl.ICSSExpressionMember;
 import com.phloc.css.decl.ICSSTopLevelRule;
 
@@ -38,18 +44,18 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * rules and call the {@link ICSSUrlVisitor} visitor. This visitor effectively
  * only visits URLs that are in import rules and those in declaration
  * expressions.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
-public class CSSVisitorForUrl extends DefaultCSSVisitor
+public class CSSVisitorForUrl implements ICSSVisitor
 {
   private final ICSSUrlVisitor m_aVisitor;
   private final NonBlockingStack <ICSSTopLevelRule> m_aTopLevelRule = new NonBlockingStack <ICSSTopLevelRule> ();
 
   /**
    * Constructor
-   * 
+   *
    * @param aVisitor
    *        The URL visitor to be used. May not be <code>null</code>.
    */
@@ -69,19 +75,21 @@ public class CSSVisitorForUrl extends DefaultCSSVisitor
     return m_aVisitor;
   }
 
-  @Override
   public void begin ()
   {
     m_aVisitor.begin ();
   }
 
-  @Override
   public void onImport (@Nonnull final CSSImportRule aImportRule)
   {
     m_aVisitor.onImport (aImportRule);
   }
 
-  @Override
+  public void onNamespace (@Nonnull final CSSNamespaceRule aNamespaceRule)
+  {
+    // No action
+  }
+
   public void onDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     final ICSSTopLevelRule aTopLevelRule = m_aTopLevelRule.isEmpty () ? null : m_aTopLevelRule.peek ();
@@ -94,67 +102,96 @@ public class CSSVisitorForUrl extends DefaultCSSVisitor
       }
   }
 
-  @Override
   public void onBeginStyleRule (@Nonnull final CSSStyleRule aStyleRule)
   {
     m_aTopLevelRule.push (aStyleRule);
   }
 
-  @Override
+  public void onStyleRuleSelector (@Nonnull final CSSSelector aSelector)
+  {
+    // no action
+  }
+
   public void onEndStyleRule (@Nonnull final CSSStyleRule aStyleRule)
   {
     m_aTopLevelRule.pop ();
   }
 
-  @Override
   public void onBeginPageRule (@Nonnull final CSSPageRule aPageRule)
   {
     m_aTopLevelRule.push (aPageRule);
   }
 
-  @Override
   public void onEndPageRule (@Nonnull final CSSPageRule aPageRule)
   {
     m_aTopLevelRule.pop ();
   }
 
-  @Override
   public void onBeginFontFaceRule (@Nonnull final CSSFontFaceRule aFontFaceRule)
   {
     m_aTopLevelRule.push (aFontFaceRule);
   }
 
-  @Override
   public void onEndFontFaceRule (@Nonnull final CSSFontFaceRule aFontFaceRule)
   {
     m_aTopLevelRule.pop ();
   }
 
-  @Override
   public void onBeginMediaRule (@Nonnull final CSSMediaRule aMediaRule)
   {
     m_aTopLevelRule.push (aMediaRule);
   }
 
-  @Override
   public void onEndMediaRule (@Nonnull final CSSMediaRule aMediaRule)
   {
     m_aTopLevelRule.pop ();
   }
 
-  @Override
   public void onBeginKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule)
   {
     m_aTopLevelRule.push (aKeyframesRule);
   }
 
-  @Override
+  public void onBeginKeyframesBlock (@Nonnull final CSSKeyframesBlock aKeyframesBlock)
+  {
+    // no action
+  }
+
+  public void onEndKeyframesBlock (@Nonnull final CSSKeyframesBlock aKeyframesBlock)
+  {
+    // no action
+  }
+
   public void onEndKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule)
   {
     m_aTopLevelRule.pop ();
   }
 
-  @Override
+  public void onBeginViewportRule (@Nonnull final CSSViewportRule aViewportRule)
+  {
+    m_aTopLevelRule.push (aViewportRule);
+  }
+
+  public void onEndViewportRule (@Nonnull final CSSViewportRule aViewportRule)
+  {
+    m_aTopLevelRule.pop ();
+  }
+
+  public void onBeginSupportsRule (@Nonnull final CSSSupportsRule aSupportsRule)
+  {
+    m_aTopLevelRule.push (aSupportsRule);
+  }
+
+  public void onEndSupportsRule (@Nonnull final CSSSupportsRule aSupportsRule)
+  {
+    m_aTopLevelRule.pop ();
+  }
+
+  public void onUnknownRule (@Nonnull final CSSUnknownRule aUnknownRule)
+  {
+    // no action
+  }
+
   public void end ()
   {
     m_aVisitor.end ();

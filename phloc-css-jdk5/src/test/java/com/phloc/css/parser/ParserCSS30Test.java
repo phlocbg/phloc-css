@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.phloc.commons.io.streams.NonBlockingStringReader;
 import com.phloc.css.AbstractCSS30Test;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
@@ -30,7 +31,7 @@ import com.phloc.css.handler.CSSHandler;
 
 /**
  * Test class for class {@link ParserCSS30}.
- * 
+ *
  * @author Philip Helger
  */
 public final class ParserCSS30Test extends AbstractCSS30Test
@@ -38,7 +39,7 @@ public final class ParserCSS30Test extends AbstractCSS30Test
   @Test
   public void test1 () throws ParseException
   {
-    final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (new JavaCharStream (CSS1));
+    final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (new CSSCharStream (new NonBlockingStringReader (CSS1)));
     aTokenHdl.setDebugStream (System.out);
     final ParserCSS30 aParser = new ParserCSS30 (aTokenHdl);
     aParser.disable_tracing ();
@@ -49,7 +50,7 @@ public final class ParserCSS30Test extends AbstractCSS30Test
   @Test
   public void test2 () throws ParseException
   {
-    final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (new JavaCharStream (CSS2));
+    final ParserCSS30TokenManager aTokenHdl = new ParserCSS30TokenManager (new CSSCharStream (new NonBlockingStringReader (CSS2)));
     aTokenHdl.setDebugStream (System.out);
     final ParserCSS30 aParser = new ParserCSS30 (aTokenHdl);
     aParser.disable_tracing ();

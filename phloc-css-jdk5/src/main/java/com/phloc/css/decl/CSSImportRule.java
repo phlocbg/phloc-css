@@ -38,7 +38,9 @@ import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a single import rule on top level. It consists of a mandatory URI
- * and an optional list of media queries.
+ * and an optional list of media queries.<br>
+ * Example:<br>
+ * <code>@import url("style.css") screen;</code>
  * 
  * @author Philip Helger
  */
@@ -269,7 +271,7 @@ public class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSImportRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSImportRule rhs = (CSSImportRule) o;
     return m_aLocation.equals (rhs.m_aLocation) && m_aMediaQueries.equals (rhs.m_aMediaQueries);

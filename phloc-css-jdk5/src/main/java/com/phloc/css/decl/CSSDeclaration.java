@@ -153,7 +153,7 @@ public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSDeclaration))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSDeclaration rhs = (CSSDeclaration) o;
     return m_sProperty.equals (rhs.m_sProperty) &&

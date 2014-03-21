@@ -41,7 +41,11 @@ import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a single <code>@supports/code> rule: a list of style rules only
- * valid when a certain declaration is available. See {@link ECSSSpecification#CSS3_CONDITIONAL}
+ * valid when a certain declaration is available. See {@link ECSSSpecification#CSS3_CONDITIONAL}<br>
+ * Example:<br>
+ * <code>@supports (transition-property: color) {
+  div { color:red; }
+}</code>
  * 
  * @author Philip Helger
  */
@@ -104,6 +108,22 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
     if (nIndex < 0 || nIndex >= m_aConditionMembers.size ())
       return EChange.UNCHANGED;
     m_aConditionMembers.remove (nIndex);
+    return EChange.CHANGED;
+  }
+
+  /**
+   * Remove all supports condition members.
+   * 
+   * @return {@link EChange#CHANGED} if any supports condition was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllSupportsConditionMembers ()
+  {
+    if (m_aConditionMembers.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aConditionMembers.clear ();
     return EChange.CHANGED;
   }
 
@@ -179,6 +199,22 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
     if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
       return null;
     return m_aRules.get (nRuleIndex);
+  }
+
+  /**
+   * Remove all rules.
+   * 
+   * @return {@link EChange#CHANGED} if any rule was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllDeclarations ()
+  {
+    if (m_aRules.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aRules.clear ();
+    return EChange.CHANGED;
   }
 
   @Nonnull
@@ -277,7 +313,7 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSupportsRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSupportsRule rhs = (CSSSupportsRule) o;
     return m_aConditionMembers.equals (rhs.m_aConditionMembers) && m_aRules.equals (rhs.m_aRules);

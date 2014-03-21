@@ -40,7 +40,9 @@ import com.phloc.css.decl.IHasCSSDeclarations;
 
 /**
  * This class is used to walk a CSS domain object and call the respective
- * {@link ICSSVisitor} and {@link ICSSUrlVisitor} interface methods.
+ * {@link ICSSVisitor} and {@link ICSSUrlVisitor} interface methods. Method
+ * {@link #visitCSS(CascadingStyleSheet, ICSSVisitor)} is usually the entry
+ * point to iterate over the whole content of a parsed CSS.
  * 
  * @author Philip Helger
  */
@@ -345,7 +347,7 @@ public final class CSSVisitor
   /**
    * Visit all CSS elements in the order of their declaration. import rules come
    * first, namespace rules come next and all other top-level rules in the order
-   * of their declration.
+   * of their declaration.
    * 
    * @param aCSS
    *        The CSS to visit. May not be <code>null</code>.

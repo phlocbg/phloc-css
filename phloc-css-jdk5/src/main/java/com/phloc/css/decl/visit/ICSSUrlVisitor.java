@@ -31,6 +31,8 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * @author Philip Helger
  * @see DefaultCSSUrlVisitor DefaultCSSUrlVisitor for a default empty
  *      implementation
+ * @see AbstractModifyingCSSUrlVisitor AbstractModifyingCSSUrlVisitor for an
+ *      abstract URL visitor that modifies URLs according to a rule
  */
 public interface ICSSUrlVisitor
 {

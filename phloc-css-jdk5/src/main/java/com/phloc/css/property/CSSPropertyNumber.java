@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
 import com.phloc.css.utils.CSSNumberHelper;
@@ -60,6 +61,23 @@ public class CSSPropertyNumber extends AbstractCSSProperty
   public CSSPropertyNumber getClone (@Nonnull final ECSSProperty eProp)
   {
     return new CSSPropertyNumber (eProp, getCustomizer (), m_bWithPercentage);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (!super.equals (o))
+      return false;
+    final CSSPropertyNumber rhs = (CSSPropertyNumber) o;
+    return m_bWithPercentage == rhs.m_bWithPercentage;
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return HashCodeGenerator.getDerived (super.hashCode ()).append (m_bWithPercentage).getHashCode ();
   }
 
   @Override

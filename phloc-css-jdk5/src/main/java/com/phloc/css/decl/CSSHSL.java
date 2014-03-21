@@ -33,7 +33,7 @@ import com.phloc.css.propertyvalue.CCSSValue;
 import com.phloc.css.utils.CSSColorHelper;
 
 /**
- * Represents a single HSL color value
+ * Represents a single HSL color value (hue, saturation, lightness).
  * 
  * @author Philip Helger
  */
@@ -177,7 +177,7 @@ public class CSSHSL implements ICSSWriteable, ICSSVersionAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSHSL))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSHSL rhs = (CSSHSL) o;
     return m_sHue.equals (rhs.m_sHue) &&

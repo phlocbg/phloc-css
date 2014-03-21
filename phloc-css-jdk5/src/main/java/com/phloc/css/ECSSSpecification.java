@@ -28,7 +28,8 @@ import com.phloc.commons.string.StringHelper;
 /**
  * Enumeration containing all W3C CSS specifications.<br>
  * Source: http://www.w3.org/Style/CSS/current-work<br>
- * Last update: 27.8.2013
+ * Last update: 27.8.2013<br>
+ * For regular CSS parsing/writing this enum has no impact!
  * 
  * @author Philip Helger
  */

@@ -37,7 +37,12 @@ import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single <code>@page</code> rule.
+ * Represents a single <code>@page</code> rule.<br>
+ * Example:<br>
+ * <code>@page {
+  size: auto;
+  margin: 10%;
+}</code>
  * 
  * @author Philip Helger
  */
@@ -92,6 +97,12 @@ public class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSV
   public EChange removeDeclaration (@Nonnegative final int nDeclarationIndex)
   {
     return m_aDeclarations.removeDeclaration (nDeclarationIndex);
+  }
+
+  @Nonnull
+  public EChange removeAllDeclarations ()
+  {
+    return m_aDeclarations.removeAllDeclarations ();
   }
 
   @Nonnull
@@ -180,7 +191,7 @@ public class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSV
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSPageRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSPageRule rhs = (CSSPageRule) o;
     return m_aDeclarations.equals (rhs.m_aDeclarations);

@@ -158,7 +158,7 @@ public class CSSUnknownRule implements ICSSTopLevelRule, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSUnknownRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSUnknownRule rhs = (CSSUnknownRule) o;
     return m_sDeclaration.equals (rhs.m_sDeclaration) &&

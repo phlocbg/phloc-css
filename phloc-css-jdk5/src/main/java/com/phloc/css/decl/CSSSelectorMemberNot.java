@@ -118,7 +118,7 @@ public class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersionAwar
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSelectorMemberNot))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSelectorMemberNot rhs = (CSSSelectorMemberNot) o;
     return m_aNestedSelectorMembers.equals (rhs.m_aNestedSelectorMembers);

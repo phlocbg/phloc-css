@@ -101,7 +101,7 @@ public class CSSSelectorMemberFunctionLike implements ICSSSelectorMember, ICSSSo
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSelectorMemberFunctionLike))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSelectorMemberFunctionLike rhs = (CSSSelectorMemberFunctionLike) o;
     return m_sFuncName.equals (rhs.m_sFuncName) && m_aParamExpr.equals (rhs.m_aParamExpr);

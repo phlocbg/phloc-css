@@ -23,7 +23,8 @@ import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.parser.CSSNode;
 
 /**
- * Runtime exception that is thrown if interpreting the CSS fails.
+ * Runtime exception that is thrown if interpreting the CSS fails. Only thrown
+ * from classes in this package.
  * 
  * @author Philip Helger
  */
