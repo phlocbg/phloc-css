@@ -98,6 +98,16 @@ public interface IHasCSSDeclarations extends ICSSWriteable
   EChange removeDeclaration (@Nonnegative int nDeclarationIndex);
 
   /**
+   * Remove all declarations.
+   * 
+   * @return {@link EChange#CHANGED} if any declaration was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  EChange removeAllDeclarations ();
+
+  /**
    * @return A mutable, non-<code>null</code> copy of all contained
    *         declarations.
    */

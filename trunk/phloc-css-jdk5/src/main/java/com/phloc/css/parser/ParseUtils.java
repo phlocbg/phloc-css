@@ -31,7 +31,7 @@ import com.phloc.css.propertyvalue.CCSSValue;
 
 /**
  * This class is used by the generated parsers to do some common stuff.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -60,7 +60,7 @@ public final class ParseUtils
   /**
    * Remove surrounding quotes (single or double) of a string (if present). If
    * the start and the end quote are not equal, nothing happens.
-   * 
+   *
    * @param sStr
    *        The string where the quotes should be removed
    * @return The string without quotes.
@@ -83,7 +83,7 @@ public final class ParseUtils
   /**
    * Unescape all escaped characters in a CSS URL. All characters masked with a
    * '\\' character replaced.
-   * 
+   *
    * @param sEscapedURL
    *        The escaped URL. May not be <code>null</code>!
    * @return The unescaped URL or the original string, if not a single escape
@@ -121,7 +121,7 @@ public final class ParseUtils
    * Remove the leading "url(" and the trailing ")" from an URL CSS value. No
    * check is performed for the existence of a leading "url("! This method
    * should only be called from within the parser.
-   * 
+   *
    * @param s
    *        The value to remove the string from.
    * @return The trimmed value. Never <code>null</code>.
@@ -155,7 +155,7 @@ public final class ParseUtils
    * digit. Identifiers can also contain escaped characters and any ISO 10646
    * character as a numeric code (see next item). For instance, the identifier
    * "B&W?" may be written as "B\&W\?" or "B\26 W\3F".
-   * 
+   *
    * @param aPattern
    *        pattern to check
    * @return The input string
@@ -163,86 +163,55 @@ public final class ParseUtils
   @Nonnull
   public static String validateIdentifier (@Nonnull final StringBuilder aPattern)
   {
+    final int nLength = aPattern.length ();
+    final char c1 = aPattern.charAt (0);
+    final char c2 = nLength <= 1 ? 0 : aPattern.charAt (1);
+
+    // Starts with a hack?
+    if (c1 == '-' || c1 == '$' || c1 == '*')
     {
-      final int nLength = aPattern.length ();
-      final char c1 = aPattern.charAt (0);
-      final char c2 = nLength <= 1 ? 0 : aPattern.charAt (1);
-
-      // Starts with a hack?
-      if (c1 == '-' || c1 == '$' || c1 == '*')
-      {
-        if (nLength > 1 && Character.isDigit (c2))
-          throw new TokenMgrError ("Identifier may not start with a hyphen and a digit: " + aPattern,
-                                   TokenMgrError.LEXICAL_ERROR);
-      }
-      else
-      {
-        if (Character.isDigit (c1))
-          throw new TokenMgrError ("Identifier may not start with a digit: " + aPattern, TokenMgrError.LEXICAL_ERROR);
-      }
-
-      if (nLength > 1 && c1 == '-' && c2 == '-')
-        throw new TokenMgrError ("Identifier may not start with two hyphens: " + aPattern, TokenMgrError.LEXICAL_ERROR);
+      if (nLength > 1 && Character.isDigit (c2))
+        throw new TokenMgrError ("Identifier may not start with a hyphen and a digit: " + aPattern,
+                                 TokenMgrError.LEXICAL_ERROR);
+    }
+    else
+    {
+      if (Character.isDigit (c1))
+        throw new TokenMgrError ("Identifier may not start with a digit: " + aPattern, TokenMgrError.LEXICAL_ERROR);
     }
 
-    // Unescape
-    // if (false)
-    // {
-    // int nLastIndex = 0;
-    // boolean bModified = false;
-    // final String sOld = aPattern.toString ();
-    // while (true)
-    // {
-    // final int nIndex = aPattern.indexOf ("\\", nLastIndex);
-    // if (nIndex < 0)
-    // break;
-    //
-    // bModified = true;
-    //
-    // final char c1 = aPattern.charAt (nIndex + 1);
-    // if (Character.isDigit (c1))
-    // {
-    // // Search for unicode: \\{h}{1,6}(\r\n|[ \t\r\n\f])?
-    // final int nLength = aPattern.length ();
-    // int nLastDigitIndex = nIndex + 2;
-    // while (nLastDigitIndex <= nIndex + 6 && nLastDigitIndex < nLength)
-    // {
-    // if (!Character.isDigit (aPattern.charAt (nLastDigitIndex)))
-    // break;
-    // nLastDigitIndex++;
-    // }
-    //
-    // final String sNum = aPattern.substring (nIndex + 1, nLastDigitIndex);
-    // final int nNum = Integer.parseInt (sNum);
-    // final char cNum = (char) nNum;
-    //
-    // if (nLastDigitIndex < nLength)
-    // if (nLastDigitIndex < (nLength - 1) &&
-    // aPattern.charAt (nLastDigitIndex) == '\r' &&
-    // aPattern.charAt (nLastDigitIndex + 1) == '\n')
-    // nLastDigitIndex += 2;
-    // else
-    // nLastDigitIndex++;
-    //
-    // aPattern.replace (nIndex, nIndex + nLastDigitIndex, Character.toString
-    // (cNum));
-    // }
-    // else
-    // {
-    // // Search for escape: \\[^\r\n\f0-9a-f]
-    // aPattern.replace (nIndex, nIndex + 2, Character.toString (c1));
-    // }
-    //
-    // nLastIndex = nIndex + 1;
-    // }
-    //
-    // if (bModified)
-    // {
-    // System.out.println ("  old: " + sOld);
-    // System.out.println ("  new: " + aPattern.toString ());
-    // }
-    // }
+    if (nLength > 1 && c1 == '-' && c2 == '-')
+      throw new TokenMgrError ("Identifier may not start with two hyphens: " + aPattern, TokenMgrError.LEXICAL_ERROR);
 
     return aPattern.toString ();
+  }
+
+  /**
+   * Unescape e.g. <code>\26</code> or <code>\000026</code> to
+   * <code>&amp;</code>.
+   *
+   * @param aImage
+   *        Source string
+   * @return Unmasked string
+   */
+  @Nonnull
+  public static String unescapeUnicode (final StringBuilder aImage)
+  {
+    // FIXME
+    return aImage.toString ();
+  }
+
+  /**
+   * Unescape e.g. <code>\x</code> to x.
+   *
+   * @param aImage
+   *        Source string
+   * @return Unmasked string
+   */
+  @Nonnull
+  public static String unescapeOther (final StringBuilder aImage)
+  {
+    // FIXME
+    return aImage.toString ();
   }
 }

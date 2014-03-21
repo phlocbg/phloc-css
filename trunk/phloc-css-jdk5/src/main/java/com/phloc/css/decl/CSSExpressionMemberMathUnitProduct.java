@@ -78,7 +78,7 @@ public class CSSExpressionMemberMathUnitProduct implements ICSSExpressionMathMem
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSExpressionMemberMathUnitProduct))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSExpressionMemberMathUnitProduct rhs = (CSSExpressionMemberMathUnitProduct) o;
     return m_aProduct.equals (rhs.m_aProduct);

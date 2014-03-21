@@ -100,7 +100,7 @@ public class CSSSupportsConditionDeclaration implements ICSSSupportsConditionMem
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSupportsConditionDeclaration))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSupportsConditionDeclaration rhs = (CSSSupportsConditionDeclaration) o;
     return m_aDeclaration.equals (rhs.m_aDeclaration);

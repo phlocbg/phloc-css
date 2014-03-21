@@ -38,7 +38,9 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Represents a single CSS style rule. A style rule consists of a number of
  * selectors (determine the element to which the style rule applies) and a
- * number of declarations (the rules to be applied to the selected elements).
+ * number of declarations (the rules to be applied to the selected elements).<br>
+ * Example:<br>
+ * <code>div { color: red; }</code>
  * 
  * @author Philip Helger
  */
@@ -121,6 +123,22 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
     return EChange.CHANGED;
   }
 
+  /**
+   * Remove all selectors.
+   * 
+   * @return {@link EChange#CHANGED} if any selector was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllSelectors ()
+  {
+    if (m_aSelectors.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aSelectors.clear ();
+    return EChange.CHANGED;
+  }
+
   @Nullable
   public CSSSelector getSelectorAtIndex (@Nonnegative final int nSelectorIndex)
   {
@@ -169,6 +187,12 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
   public EChange removeDeclaration (@Nonnegative final int nDeclarationIndex)
   {
     return m_aDeclarations.removeDeclaration (nDeclarationIndex);
+  }
+
+  @Nonnull
+  public EChange removeAllDeclarations ()
+  {
+    return m_aDeclarations.removeAllDeclarations ();
   }
 
   @Nonnull
@@ -263,7 +287,7 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSStyleRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSStyleRule rhs = (CSSStyleRule) o;
     return m_aSelectors.equals (rhs.m_aSelectors) && m_aDeclarations.equals (rhs.m_aDeclarations);

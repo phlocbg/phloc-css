@@ -46,17 +46,34 @@ import com.phloc.css.property.ICSSProperty;
 @Immutable
 public class CSSValueMultiProperty implements ICSSMultiValue
 {
+  private final ECSSProperty m_eProperty;
   private final List <CSSValue> m_aValues = new ArrayList <CSSValue> ();
 
-  public CSSValueMultiProperty (@Nonnull final ICSSProperty [] aProperties,
+  public CSSValueMultiProperty (@Nonnull final ECSSProperty eProperty,
+                                @Nonnull final ICSSProperty [] aProperties,
                                 @Nonnull @Nonempty final String sValue,
                                 final boolean bIsImportant)
   {
+    if (eProperty == null)
+      throw new NullPointerException ("Property");
     if (ArrayHelper.isEmpty (aProperties))
       throw new IllegalArgumentException ("No properties passed!");
     if (sValue == null)
       throw new NullPointerException ("value");
 
+    boolean bFound = false;
+    for (final ICSSProperty aProperty : aProperties)
+      if (aProperty.getProp () == eProperty)
+      {
+        bFound = true;
+        break;
+      }
+    if (!bFound)
+      throw new IllegalArgumentException ("The property " +
+                                          eProperty +
+                                          " is not contained in an ICSSProperty instance!");
+
+    m_eProperty = eProperty;
     for (final ICSSProperty aProperty : aProperties)
       m_aValues.add (new CSSValue (aProperty, sValue, bIsImportant));
   }
@@ -71,8 +88,7 @@ public class CSSValueMultiProperty implements ICSSMultiValue
   @Nonnull
   public ECSSProperty getProp ()
   {
-    // ... not necessarily correct
-    return m_aValues.get (0).getProp ();
+    return m_eProperty;
   }
 
   @Nonnull
@@ -89,7 +105,7 @@ public class CSSValueMultiProperty implements ICSSMultiValue
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSValueMultiProperty))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSValueMultiProperty rhs = (CSSValueMultiProperty) o;
     return m_aValues.equals (rhs.m_aValues);

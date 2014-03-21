@@ -32,7 +32,9 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * Defines the source location of an object when reading CSS from a stream.
+ * Defines the source location of an object when reading CSS from a stream. It
+ * consists of the position of the start token and the position of the end
+ * token.
  * 
  * @author Philip Helger
  */
@@ -212,7 +214,7 @@ public class CSSSourceLocation implements Serializable
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSourceLocation))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSourceLocation rhs = (CSSSourceLocation) o;
     return EqualsUtils.equals (m_aFirstTokenArea, rhs.m_aFirstTokenArea) &&

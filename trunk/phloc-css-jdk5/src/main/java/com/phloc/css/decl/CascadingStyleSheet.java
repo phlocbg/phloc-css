@@ -148,6 +148,22 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   }
 
   /**
+   * Remove all <code>@import</code> rules.
+   * 
+   * @return {@link EChange#CHANGED} if any rule was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllImportRules ()
+  {
+    if (m_aImportRules.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aImportRules.clear ();
+    return EChange.CHANGED;
+  }
+
+  /**
    * @return A copy of all contained <code>@import</code> rules. Never
    *         <code>null</code>.
    */
@@ -251,6 +267,22 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
     if (nNamespaceRuleIndex < 0 || nNamespaceRuleIndex >= m_aNamespaceRules.size ())
       return EChange.UNCHANGED;
     m_aNamespaceRules.remove (nNamespaceRuleIndex);
+    return EChange.CHANGED;
+  }
+
+  /**
+   * Remove all <code>@namespace</code> rules.
+   * 
+   * @return {@link EChange#CHANGED} if any rule was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllNamespaceRules ()
+  {
+    if (m_aNamespaceRules.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aNamespaceRules.clear ();
     return EChange.CHANGED;
   }
 
@@ -366,6 +398,22 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
     if (nRuleIndex < 0 || nRuleIndex >= m_aRules.size ())
       return EChange.UNCHANGED;
     m_aRules.remove (nRuleIndex);
+    return EChange.CHANGED;
+  }
+
+  /**
+   * Remove all top-level rules.
+   * 
+   * @return {@link EChange#CHANGED} if any rule was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllRules ()
+  {
+    if (m_aRules.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aRules.clear ();
     return EChange.CHANGED;
   }
 
@@ -801,7 +849,7 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   {
     if (o == this)
       return true;
-    if (!(o instanceof CascadingStyleSheet))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CascadingStyleSheet rhs = (CascadingStyleSheet) o;
     return m_aImportRules.equals (rhs.m_aImportRules) &&

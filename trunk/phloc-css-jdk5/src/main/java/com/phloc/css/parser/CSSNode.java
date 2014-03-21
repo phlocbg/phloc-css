@@ -31,7 +31,8 @@ import com.phloc.css.CSSSourceArea;
 import com.phloc.css.CSSSourceLocation;
 
 /**
- * This class represents a simple node in the tree built by jjtree.
+ * This class represents a simple node in the tree built by jjtree. It's a
+ * customized version of the default JJTree Node.
  * 
  * @author Philip Helger
  */
@@ -48,6 +49,11 @@ public class CSSNode implements Node, Iterable <CSSNode>, Serializable
   public CSSNode (final int nType)
   {
     m_nType = nType;
+  }
+
+  public int getId ()
+  {
+    return m_nType;
   }
 
   public void jjtOpen ()

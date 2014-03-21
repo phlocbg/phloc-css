@@ -28,7 +28,8 @@ import javax.annotation.Nonnull;
 public interface ICSSVersionAware
 {
   /**
-   * @return The minimum supported CSS version. May not be <code>null</code>.
+   * @return The minimum CSS version that is required to read or write this
+   *         artifact. May not be <code>null</code>.
    */
   @Nonnull
   ECSSVersion getMinimumCSSVersion ();

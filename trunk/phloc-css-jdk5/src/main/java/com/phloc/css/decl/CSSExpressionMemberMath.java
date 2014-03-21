@@ -92,6 +92,22 @@ public class CSSExpressionMemberMath implements ICSSExpressionMember, ICSSVersio
     return EChange.CHANGED;
   }
 
+  /**
+   * Remove all members.
+   * 
+   * @return {@link EChange#CHANGED} if any member was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllMembers ()
+  {
+    if (m_aMembers.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aMembers.clear ();
+    return EChange.CHANGED;
+  }
+
   @Nonnull
   @ReturnsMutableCopy
   public List <ICSSExpressionMathMember> getAllMembers ()
@@ -144,7 +160,7 @@ public class CSSExpressionMemberMath implements ICSSExpressionMember, ICSSVersio
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSExpressionMemberMath))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSExpressionMemberMath rhs = (CSSExpressionMemberMath) o;
     return m_aMembers.equals (rhs.m_aMembers);

@@ -21,11 +21,12 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import com.phloc.commons.io.streams.NonBlockingStringReader;
 import com.phloc.css.AbstractCSS21Test;
 
 /**
  * Test class for class {@link ParserCSS21}.
- * 
+ *
  * @author Philip Helger
  */
 public final class ParserCSS21Test extends AbstractCSS21Test
@@ -33,7 +34,7 @@ public final class ParserCSS21Test extends AbstractCSS21Test
   @Test
   public void test1 () throws ParseException
   {
-    final ParserCSS21TokenManager aTokenHdl = new ParserCSS21TokenManager (new JavaCharStream (CSS1));
+    final ParserCSS21TokenManager aTokenHdl = new ParserCSS21TokenManager (new CSSCharStream (new NonBlockingStringReader (CSS1)));
     aTokenHdl.setDebugStream (System.out);
     final ParserCSS21 aParser = new ParserCSS21 (aTokenHdl);
     aParser.disable_tracing ();
@@ -44,7 +45,7 @@ public final class ParserCSS21Test extends AbstractCSS21Test
   @Test
   public void test2 () throws ParseException
   {
-    final ParserCSS21TokenManager aTokenHdl = new ParserCSS21TokenManager (new JavaCharStream (CSS2));
+    final ParserCSS21TokenManager aTokenHdl = new ParserCSS21TokenManager (new CSSCharStream (new NonBlockingStringReader (CSS2)));
     aTokenHdl.setDebugStream (System.out);
     final ParserCSS21 aParser = new ParserCSS21 (aTokenHdl);
     aParser.disable_tracing ();

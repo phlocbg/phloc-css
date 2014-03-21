@@ -33,7 +33,7 @@ import com.phloc.css.propertyvalue.CCSSValue;
 import com.phloc.css.utils.CSSColorHelper;
 
 /**
- * Represents a single HSLA color value
+ * Represents a single HSLA color value (hue, saturation, lightness, opacity).
  * 
  * @author Philip Helger
  */
@@ -214,7 +214,7 @@ public class CSSHSLA implements ICSSWriteable, ICSSVersionAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSHSLA))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSHSLA rhs = (CSSHSLA) o;
     return m_sHue.equals (rhs.m_sHue) &&

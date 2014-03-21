@@ -18,14 +18,12 @@
 package com.phloc.css.parser;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
-import java.nio.charset.Charset;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
-import com.phloc.commons.io.streams.NonBlockingStringReader;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.string.StringHelper;
 
@@ -36,14 +34,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * An implementation of interface {@link CharStream}, where the stream is
  * assumed to contain only ASCII characters (with java-like unicode escape
  * processing).
- * 
+ *
  * @author Philip Helger
  */
 @SuppressFBWarnings ("NM_METHOD_NAMING_CONVENTION")
-public final class JavaCharStream implements CharStream
+public final class CSSCharStream implements CharStream
 {
   private static final int DEFAULT_BUF_SIZE = 4096;
-  private static final int TAB_SIZE = 8;
 
   private final Reader m_aReader;
   private int m_nLine;
@@ -64,43 +61,24 @@ public final class JavaCharStream implements CharStream
   /** Position in buffer. */
   private int m_nBufpos = -1;
 
-  @Deprecated
-  public JavaCharStream (@Nonnull final InputStream aIS, @Nonnull final String sCharset)
-  {
-    this (StreamUtils.createReader (aIS, sCharset), 1, 1, DEFAULT_BUF_SIZE);
-  }
+  private int m_nTabSize = 8;
+  private boolean m_bTrackLineColumn = true;
 
-  public JavaCharStream (@Nonnull final InputStream aIS, @Nonnull final Charset aCharset)
-  {
-    this (StreamUtils.createReader (aIS, aCharset), 1, 1, DEFAULT_BUF_SIZE);
-  }
-
-  public JavaCharStream (@Nonnull final String sCSS)
-  {
-    this (new NonBlockingStringReader (sCSS), 1, 1, DEFAULT_BUF_SIZE);
-  }
-
-  public JavaCharStream (@Nonnull final Reader aReader)
+  public CSSCharStream (@Nonnull final Reader aReader)
   {
     this (aReader, 1, 1, DEFAULT_BUF_SIZE);
   }
 
-  private JavaCharStream (@Nonnull final Reader aReader,
-                          @Nonnegative final int nStartLine,
-                          @Nonnegative final int nStartColumn,
-                          @Nonnegative final int nBufferSize)
+  private CSSCharStream (@Nonnull final Reader aReader,
+                         @Nonnegative final int nStartLine,
+                         @Nonnegative final int nStartColumn,
+                         @Nonnegative final int nBufferSize)
   {
-    if (aReader == null)
-      throw new NullPointerException ("reader");
-    if (nStartLine < 0)
-      throw new IllegalArgumentException ("startLine to small: " + nStartLine);
-    if (nStartColumn < 0)
-      throw new IllegalArgumentException ("startColumn to small: " + nStartColumn);
-    if (nBufferSize < 0)
-      throw new IllegalArgumentException ("bufferSize to small: " + nBufferSize);
-    m_aReader = aReader;
-    m_nLine = nStartLine;
-    m_nColumn = nStartColumn - 1;
+    ValueEnforcer.isGE0 (nBufferSize, "BufferSize");
+    // Using a buffered reader gives a minimal speedup
+    m_aReader = StreamUtils.getBuffered (ValueEnforcer.notNull (aReader, "Reader"));
+    m_nLine = ValueEnforcer.isGE0 (nStartLine, "StartLine");
+    m_nColumn = ValueEnforcer.isGE0 (nStartColumn, "StartColumn") - 1;
 
     m_nAvailable = nBufferSize;
     m_nBufsize = nBufferSize;
@@ -108,6 +86,16 @@ public final class JavaCharStream implements CharStream
     m_aBufLine = new int [nBufferSize];
     m_aBufColumn = new int [nBufferSize];
     m_aNextCharBuf = new char [DEFAULT_BUF_SIZE];
+  }
+
+  public void setTabSize (final int i)
+  {
+    m_nTabSize = i;
+  }
+
+  public int getTabSize ()
+  {
+    return m_nTabSize;
   }
 
   private void _expandBuff (final boolean bWrapAround)
@@ -168,8 +156,8 @@ public final class JavaCharStream implements CharStream
 
     try
     {
-      int i;
-      if ((i = m_aReader.read (m_aNextCharBuf, m_nMaxNextCharInd, DEFAULT_BUF_SIZE - m_nMaxNextCharInd)) == -1)
+      final int i = m_aReader.read (m_aNextCharBuf, m_nMaxNextCharInd, DEFAULT_BUF_SIZE - m_nMaxNextCharInd);
+      if (i == -1)
       {
         m_aReader.close ();
         throw new IOException ("EOF in JavaCharStream");
@@ -195,7 +183,8 @@ public final class JavaCharStream implements CharStream
 
   private char _readByte () throws IOException
   {
-    if (++m_nNextCharInd >= m_nMaxNextCharInd)
+    ++m_nNextCharInd;
+    if (m_nNextCharInd >= m_nMaxNextCharInd)
       _fillBuff ();
 
     return m_aNextCharBuf[m_nNextCharInd];
@@ -279,7 +268,7 @@ public final class JavaCharStream implements CharStream
         break;
       case '\t':
         m_nColumn--;
-        m_nColumn += (TAB_SIZE - (m_nColumn % TAB_SIZE));
+        m_nColumn += (m_nTabSize - (m_nColumn % m_nTabSize));
         break;
       default:
         break;
@@ -287,6 +276,11 @@ public final class JavaCharStream implements CharStream
 
     m_aBufLine[m_nBufpos] = m_nLine;
     m_aBufColumn[m_nBufpos] = m_nColumn;
+  }
+
+  private static boolean _isHexChar (final char c)
+  {
+    return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
   }
 
   private static int _hexval (final char c) throws IOException
@@ -299,7 +293,7 @@ public final class JavaCharStream implements CharStream
 
   /**
    * Read a character.
-   * 
+   *
    * @return The read character
    * @throws IOException
    *         if an I/O error occurs
@@ -318,72 +312,11 @@ public final class JavaCharStream implements CharStream
       _adjustBuffSize ();
 
     char c;
-    if ((m_aBuffer[m_nBufpos] = c = _readByte ()) == '\\')
-    {
+    m_aBuffer[m_nBufpos] = c = _readByte ();
+
+    // This would be the point to handle CSS (un)escaping
+    if (m_bTrackLineColumn)
       _updateLineColumn (c);
-
-      int backSlashCnt = 1;
-
-      for (;;) // Read all the backslashes
-      {
-        if (++m_nBufpos == m_nAvailable)
-          _adjustBuffSize ();
-
-        try
-        {
-          if ((m_aBuffer[m_nBufpos] = c = _readByte ()) != '\\')
-          {
-            _updateLineColumn (c);
-            // found a non-backslash char.
-            if ((c == 'u') && ((backSlashCnt & 1) == 1))
-            {
-              if (--m_nBufpos < 0)
-                m_nBufpos = m_nBufsize - 1;
-
-              break;
-            }
-
-            backup (backSlashCnt);
-            return '\\';
-          }
-        }
-        catch (final IOException e)
-        {
-          // We are returning one backslash so we should only backup (count-1)
-          if (backSlashCnt > 1)
-            backup (backSlashCnt - 1);
-
-          return '\\';
-        }
-
-        _updateLineColumn (c);
-        backSlashCnt++;
-      }
-
-      // Here, we have seen an odd number of backslash's followed by a 'u'
-      try
-      {
-        while ((c = _readByte ()) == 'u')
-          ++m_nColumn;
-
-        m_aBuffer[m_nBufpos] = c = (char) (_hexval (c) << 12 |
-                                           _hexval (_readByte ()) << 8 |
-                                           _hexval (_readByte ()) << 4 | _hexval (_readByte ()));
-        m_nColumn += 4;
-      }
-      catch (final IOException e)
-      {
-        throw new Error ("Invalid escape character at line " + m_nLine + " column " + m_nColumn + ".");
-      }
-
-      if (backSlashCnt == 1)
-        return c;
-
-      backup (backSlashCnt - 1);
-      return '\\';
-    }
-
-    _updateLineColumn (c);
     return c;
   }
 
@@ -464,5 +397,62 @@ public final class JavaCharStream implements CharStream
     m_aBuffer = null;
     m_aBufLine = null;
     m_aBufColumn = null;
+  }
+
+  /**
+   * Method to adjust line and column numbers for the start of a token.
+   */
+  public void adjustBeginLineColumn (int newLine, final int newCol)
+  {
+    int start = m_nTokenBegin;
+    int len;
+
+    if (m_nBufpos >= m_nTokenBegin)
+    {
+      len = m_nBufpos - m_nTokenBegin + m_nInBuf + 1;
+    }
+    else
+    {
+      len = m_nBufsize - m_nTokenBegin + m_nBufpos + 1 + m_nInBuf;
+    }
+
+    int i = 0, j = 0, k = 0;
+    int nextColDiff = 0, columnDiff = 0;
+
+    while (i < len && m_aBufLine[j = start % m_nBufsize] == m_aBufLine[k = ++start % m_nBufsize])
+    {
+      m_aBufLine[j] = newLine;
+      nextColDiff = columnDiff + m_aBufColumn[k] - m_aBufColumn[j];
+      m_aBufColumn[j] = newCol + columnDiff;
+      columnDiff = nextColDiff;
+      i++;
+    }
+
+    if (i < len)
+    {
+      m_aBufLine[j] = newLine++;
+      m_aBufColumn[j] = newCol + columnDiff;
+
+      while (i++ < len)
+      {
+        if (m_aBufLine[j = start % m_nBufsize] != m_aBufLine[++start % m_nBufsize])
+          m_aBufLine[j] = newLine++;
+        else
+          m_aBufLine[j] = newLine;
+      }
+    }
+
+    m_nLine = m_aBufLine[j];
+    m_nColumn = m_aBufColumn[j];
+  }
+
+  public boolean getTrackLineColumn ()
+  {
+    return m_bTrackLineColumn;
+  }
+
+  public void setTrackLineColumn (final boolean tlc)
+  {
+    m_bTrackLineColumn = tlc;
   }
 }

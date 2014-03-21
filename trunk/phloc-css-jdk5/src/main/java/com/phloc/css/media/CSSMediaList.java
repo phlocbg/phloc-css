@@ -34,25 +34,42 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * Manages a set of {@link ECSSMedium} objects.
+ * Manages an ordered set of {@link ECSSMedium} objects.
  * 
  * @author Philip Helger
  */
 @NotThreadSafe
 public class CSSMediaList implements Serializable, IHasSize
 {
-  // ESCA-JAVA0261:
+  public static final String DEFAULT_MEDIA_STRING_SEPARATOR = ", ";
+
   // Ordered but unique
   private final Set <ECSSMedium> m_aMedia = new LinkedHashSet <ECSSMedium> ();
 
+  /**
+   * Constructor
+   */
   public CSSMediaList ()
   {}
 
+  /**
+   * Constructor with a single medium
+   * 
+   * @param eMedium
+   *        The medium to be added. May not be <code>null</code>.
+   */
   public CSSMediaList (@Nonnull final ECSSMedium eMedium)
   {
     addMedium (eMedium);
   }
 
+  /**
+   * Constructor with an array of media.
+   * 
+   * @param aMedia
+   *        The array of media to be added. The array may be <code>null</code>
+   *        but it may not contain <code>null</code> elements.
+   */
   public CSSMediaList (@Nullable final ECSSMedium... aMedia)
   {
     if (aMedia != null)
@@ -60,6 +77,13 @@ public class CSSMediaList implements Serializable, IHasSize
         addMedium (eMedium);
   }
 
+  /**
+   * Constructor with a collection of media.
+   * 
+   * @param aMedia
+   *        The collection of media to be added. The collection may be
+   *        <code>null</code> but it may not contain <code>null</code> elements.
+   */
   public CSSMediaList (@Nullable final Iterable <ECSSMedium> aMedia)
   {
     if (aMedia != null)
@@ -89,12 +113,29 @@ public class CSSMediaList implements Serializable, IHasSize
    * 
    * @param eMedium
    *        The medium to be removed. May be <code>null</code>.
-   * @return {@link EChange} and never <code>null</code>.
+   * @return {@link EChange#CHANGED} if the medium was removed,
+   *         {@link EChange#UNCHANGED} otherwise.
    */
   @Nonnull
   public EChange removeMedium (@Nullable final ECSSMedium eMedium)
   {
     return EChange.valueOf (m_aMedia.remove (eMedium));
+  }
+
+  /**
+   * Remove all media.
+   * 
+   * @return {@link EChange#CHANGED} if any medium was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllMedia ()
+  {
+    if (m_aMedia.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aMedia.clear ();
+    return EChange.CHANGED;
   }
 
   /**
@@ -170,11 +211,12 @@ public class CSSMediaList implements Serializable, IHasSize
   public boolean isForScreen ()
   {
     // Default is "screen" if none is provided
-    return m_aMedia.isEmpty () || containsMediumOrAll (ECSSMedium.SCREEN);
+    return hasNoMedia () || containsMediumOrAll (ECSSMedium.SCREEN);
   }
 
   /**
-   * @return A copy of all specified media
+   * @return A copy of all specified media. Never <code>null</code> but maybe
+   *         empty.
    */
   @Nonnull
   @ReturnsMutableCopy
@@ -185,12 +227,14 @@ public class CSSMediaList implements Serializable, IHasSize
 
   /**
    * @return A non-<code>null</code> but maybe empty String with all media in
-   *         the order they where inserted and separated by a ", "
+   *         the order they where inserted and separated by
+   *         {@value #DEFAULT_MEDIA_STRING_SEPARATOR}
+   * @see #getMediaString(String)
    */
   @Nonnull
   public String getMediaString ()
   {
-    return getMediaString (", ");
+    return getMediaString (DEFAULT_MEDIA_STRING_SEPARATOR);
   }
 
   /**
@@ -221,12 +265,12 @@ public class CSSMediaList implements Serializable, IHasSize
   @Nonnegative
   public int size ()
   {
-    return m_aMedia.size ();
+    return getMediaCount ();
   }
 
   public boolean isEmpty ()
   {
-    return m_aMedia.isEmpty ();
+    return hasNoMedia ();
   }
 
   @Override
@@ -234,7 +278,7 @@ public class CSSMediaList implements Serializable, IHasSize
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSMediaList))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSMediaList rhs = (CSSMediaList) o;
     return m_aMedia.equals (rhs.m_aMedia);

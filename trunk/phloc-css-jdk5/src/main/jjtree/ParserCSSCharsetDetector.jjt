@@ -55,27 +55,32 @@ PARSER_END(ParserCSSCharsetDetector)
 TOKEN_MGR_DECLS :
 {}
 
-<DEFAULT> TOKEN :
+<DEFAULT>
+TOKEN :
 {
   < S: ( " "|"\t"|"\r"|"\n"|"\f" )+ >
 }
 
-<DEFAULT> MORE :
+<DEFAULT>
+MORE :
 {
   < "/*" > : IN_COMMENT
 }
 
-<IN_COMMENT> MORE :
+<IN_COMMENT>
+MORE :
 {
   < ~[] > : IN_COMMENT
 }
 
-<IN_COMMENT> SKIP :
+<IN_COMMENT>
+SKIP :
 {
   < "*/" > : DEFAULT
 }
 
-<DEFAULT> TOKEN :
+<DEFAULT>
+TOKEN :
 {
   < #H: ["0"-"9","a"-"f"] >
 | < #HNUM: <H> 
@@ -84,10 +89,12 @@ TOKEN_MGR_DECLS :
          | <H><H><H><H> 
          | <H><H><H><H><H> 
          | <H><H><H><H><H><H> >
-| < #UNICODE: "\\" <HNUM> ( "\r\n" 
-                          | [" ","\t","\r","\n","\f"] )? >
-| < #ESCAPE: <UNICODE> 
-           | ( "\\" ~["\r","\n","\f","0"-"9","a"-"f"] ) >
+| < #ESCAPE_UNICODE: "\\" <HNUM> ( "\r\n"
+                                 | [" ","\t","\r","\n","\f"]
+                                 )? >   
+| < #ESCAPE_OTHER: "\\" ~["\r","\n","\f","0"-"9","a"-"f"] >
+| < #ESCAPE: <ESCAPE_UNICODE>
+           | <ESCAPE_OTHER> >
 | < SEMICOLON: ";" >
 | < #STRING_EOL: "\n" 
                | "\r\n" 
@@ -99,6 +106,9 @@ TOKEN_MGR_DECLS :
 | < STRING2: "'"  ( ~["\n","\r","\f","\\","'"] 
                   | "\\" <STRING_EOL> 
                   | <ESCAPE> )* "'" >
+| < CDO: "<!--" >
+| < CDC: "-->" >
+| < CHARSET_SYM: "@charset" >
 | < REST: ~[] >
 }
 
@@ -106,14 +116,13 @@ CSSNode styleSheetCharset() #Root : {}
 {
   try
   {
-    ( <S> )*
-    "@charset"
+    ( <S> | <CDO> | <CDC> )*
+    <CHARSET_SYM>
     ( <S> )+
     ( <STRING1> { jjtThis.setText (token.image); }
     | <STRING2> { jjtThis.setText (token.image); }
     )
     <SEMICOLON>
-    { return jjtThis; }
   } catch (ParseException e) {
     /* ignore */
   }

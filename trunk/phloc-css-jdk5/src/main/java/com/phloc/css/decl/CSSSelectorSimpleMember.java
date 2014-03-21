@@ -117,7 +117,7 @@ public class CSSSelectorSimpleMember implements ICSSSelectorMember, ICSSSourceLo
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSelectorSimpleMember))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSelectorSimpleMember rhs = (CSSSelectorSimpleMember) o;
     return m_sValue.equals (rhs.m_sValue);

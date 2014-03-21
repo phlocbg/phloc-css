@@ -37,7 +37,9 @@ import com.phloc.css.ICSSVersionAware;
 import com.phloc.css.ICSSWriterSettings;
 
 /**
- * Represents a single <code>@viewport</code> rule.
+ * Represents a single <code>@viewport</code> rule.<br>
+ * Example:<br>
+ * <code>@viewport { width: device-width; }</code>
  * 
  * @author Philip Helger
  */
@@ -105,6 +107,12 @@ public class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
   public EChange removeDeclaration (@Nonnegative final int nDeclarationIndex)
   {
     return m_aDeclarations.removeDeclaration (nDeclarationIndex);
+  }
+
+  @Nonnull
+  public EChange removeAllDeclarations ()
+  {
+    return m_aDeclarations.removeAllDeclarations ();
   }
 
   @Nonnull
@@ -187,7 +195,7 @@ public class CSSViewportRule implements ICSSTopLevelRule, IHasCSSDeclarations, I
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSViewportRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSViewportRule rhs = (CSSViewportRule) o;
     return m_sDeclaration.equals (rhs.m_sDeclaration) && m_aDeclarations.equals (rhs.m_aDeclarations);

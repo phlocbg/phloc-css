@@ -62,14 +62,14 @@ public final class CSSVisitor21Test extends AbstractCSS21Test
   public void testVisitConstantCSS ()
   {
     // CSS 1
-    CascadingStyleSheet aCSS = CSSReader.readFromString (CSS1, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21);
+    CascadingStyleSheet aCSS = CSSReader.readFromString (CSS1, ECSSVersion.CSS21);
     assertNotNull (aCSS);
     MockCountingUrlVisitor aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);
     assertEquals (4, aVisitor.getCount ());
 
     // CSS 2
-    aCSS = CSSReader.readFromString (CSS2, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS21);
+    aCSS = CSSReader.readFromString (CSS2, ECSSVersion.CSS21);
     assertNotNull (aCSS);
     aVisitor = new MockCountingUrlVisitor ();
     CSSVisitor.visitCSSUrl (aCSS, aVisitor);

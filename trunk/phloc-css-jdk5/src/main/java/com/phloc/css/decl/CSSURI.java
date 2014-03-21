@@ -35,7 +35,8 @@ import com.phloc.css.utils.CSSDataURLHelper;
 import com.phloc.css.utils.CSSURLHelper;
 
 /**
- * Represents a single CSS URI
+ * Represents a single CSS URI. The contained URI might be modified using
+ * {@link #setURI(String)}.
  * 
  * @author Philip Helger
  */
@@ -133,7 +134,7 @@ public class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSURI))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSURI rhs = (CSSURI) o;
     return m_sURI.equals (rhs.m_sURI);

@@ -88,7 +88,7 @@ public abstract class AbstractFuncTestCSSReader
       if (m_bDebug)
         m_aLogger.info (sCSS);
 
-      final CascadingStyleSheet aCSSReRead = CSSReader.readFromString (sCSS, m_aCharset, m_eVersion);
+      final CascadingStyleSheet aCSSReRead = CSSReader.readFromString (sCSS, m_eVersion);
       assertNotNull ("Failed to parse " + sKey + ":\n" + sCSS, aCSSReRead);
       assertEquals (sKey, aCSS, aCSSReRead);
 
@@ -97,13 +97,13 @@ public abstract class AbstractFuncTestCSSReader
       assertNotNull (sKey, sCSS);
       if (m_bDebug)
         m_aLogger.info (sCSS);
-      assertEquals (sKey, aCSS, CSSReader.readFromString (sCSS, m_aCharset, m_eVersion));
+      assertEquals (sKey, aCSS, CSSReader.readFromString (sCSS, m_eVersion));
 
       // Write non-optimized and code-removed version and ensure it is not
       // null
       sCSS = new CSSWriter (new CSSWriterSettings (m_eVersion, false).setRemoveUnnecessaryCode (true)).getCSSAsString (aCSS);
       assertNotNull (sKey, sCSS);
-      assertNotNull (sKey, CSSReader.readFromString (sCSS, m_aCharset, m_eVersion));
+      assertNotNull (sKey, CSSReader.readFromString (sCSS, m_eVersion));
     }
   }
 
@@ -152,7 +152,7 @@ public abstract class AbstractFuncTestCSSReader
       if (m_bDebug)
         m_aLogger.info (sCSS);
 
-      final CascadingStyleSheet aCSSReRead = CSSReader.readFromString (sCSS, m_aCharset, m_eVersion);
+      final CascadingStyleSheet aCSSReRead = CSSReader.readFromString (sCSS, m_eVersion);
       assertNotNull ("Failed to parse:\n" + sCSS, aCSSReRead);
       assertEquals (sKey, aCSS, aCSSReRead);
     }

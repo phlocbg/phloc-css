@@ -30,6 +30,9 @@ import javax.annotation.Nonnull;
 public interface ICSSWriteable extends Serializable
 {
   /**
+   * Get the contents of this object as a serialized CSS string for writing to
+   * an output.
+   * 
    * @param aSettings
    *        The settings to be used to format the output. May not be
    *        <code>null</code>.

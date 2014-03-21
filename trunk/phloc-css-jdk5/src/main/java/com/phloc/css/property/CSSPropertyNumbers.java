@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
@@ -90,6 +91,29 @@ public class CSSPropertyNumbers extends AbstractCSSProperty
   public CSSPropertyNumbers getClone (@Nonnull final ECSSProperty eProp)
   {
     return new CSSPropertyNumbers (eProp, getCustomizer (), m_bWithPercentage, m_nMinNumbers, m_nMaxNumbers);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (!super.equals (o))
+      return false;
+    final CSSPropertyNumbers rhs = (CSSPropertyNumbers) o;
+    return m_bWithPercentage == rhs.m_bWithPercentage &&
+           m_nMinNumbers == rhs.m_nMinNumbers &&
+           m_nMaxNumbers == rhs.m_nMaxNumbers;
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return HashCodeGenerator.getDerived (super.hashCode ())
+                            .append (m_bWithPercentage)
+                            .append (m_nMinNumbers)
+                            .append (m_nMaxNumbers)
+                            .getHashCode ();
   }
 
   @Override

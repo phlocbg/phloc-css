@@ -34,7 +34,9 @@ import com.phloc.css.ICSSWriterSettings;
 import com.phloc.css.utils.CSSURLHelper;
 
 /**
- * Represents a single namespace rule on top level.
+ * Represents a single namespace rule on top level.<br>
+ * Example:<br>
+ * <code>@namespace Q "http://example.com/q-markup";</code>
  * 
  * @author Philip Helger
  */
@@ -144,7 +146,7 @@ public class CSSNamespaceRule implements ICSSWriteable, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSNamespaceRule))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSNamespaceRule rhs = (CSSNamespaceRule) o;
     return EqualsUtils.equals (m_sPrefix, rhs.m_sPrefix) && m_sURL.equals (rhs.m_sURL);

@@ -47,10 +47,12 @@ public interface ICSSWriterSettings
   boolean isRemoveUnnecessaryCode ();
 
   /**
-   * Get the indentation for an arbitrary number of levels.
+   * Get the indentation for an arbitrary number of levels. This can be used to
+   * customize the indentation strategy like using tabs or spaces, how many
+   * spaces etc.
    * 
    * @param nCount
-   *        The number of indentations desired.
+   *        The number of indentations desired. Always &ge; 0.
    * @return The string to be used for indentation. May not be <code>null</code>
    *         but may be empty.
    */
@@ -59,7 +61,8 @@ public interface ICSSWriterSettings
 
   /**
    * @return <code>true</code> if all URL values should be quoted,
-   *         <code>false</code> if not.
+   *         <code>false</code> if URL quoting should only be applied if
+   *         absolutely necessary.
    */
   boolean isQuoteURLs ();
 
@@ -119,6 +122,7 @@ public interface ICSSWriterSettings
    *        The object to be checked.
    * @throws IllegalStateException
    *         In case the version does not match
+   * @see #getVersion()
    */
   void checkVersionRequirements (@Nonnull ICSSVersionAware aCSSObject) throws IllegalStateException;
 }

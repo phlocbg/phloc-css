@@ -143,7 +143,7 @@ public class CSSSelectorAttribute implements ICSSSelectorMember, ICSSSourceLocat
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSSelectorAttribute))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSSelectorAttribute rhs = (CSSSelectorAttribute) o;
     return EqualsUtils.equals (m_sNamespacePrefix, rhs.m_sNamespacePrefix) &&

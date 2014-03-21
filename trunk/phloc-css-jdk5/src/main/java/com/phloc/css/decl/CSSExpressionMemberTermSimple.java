@@ -129,7 +129,7 @@ public class CSSExpressionMemberTermSimple implements ICSSExpressionMember, ICSS
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSExpressionMemberTermSimple))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSExpressionMemberTermSimple rhs = (CSSExpressionMemberTermSimple) o;
     // Compare the optimized value so that "0em" equals "0px"

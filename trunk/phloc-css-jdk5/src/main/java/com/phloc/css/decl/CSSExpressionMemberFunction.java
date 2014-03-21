@@ -149,7 +149,7 @@ public class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSo
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSExpressionMemberFunction))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSExpressionMemberFunction rhs = (CSSExpressionMemberFunction) o;
     return m_sFunctionName.equals (rhs.m_sFunctionName) && EqualsUtils.equals (m_aExpression, rhs.m_aExpression);

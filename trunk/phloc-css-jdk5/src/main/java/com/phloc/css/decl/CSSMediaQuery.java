@@ -45,6 +45,11 @@ import com.phloc.css.ICSSWriterSettings;
 @NotThreadSafe
 public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
 {
+  /**
+   * A global modifier that can be used in front of a single CSS media query.
+   * 
+   * @author Philip Helger
+   */
   public static enum EModifier
   {
     NONE (""),
@@ -71,7 +76,8 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
   private CSSSourceLocation m_aSourceLocation;
 
   /**
-   * Constructor without a modifier
+   * Constructor without a modifier. This implicitly uses the modifier
+   * {@link EModifier#NONE}.
    * 
    * @param sMedium
    *        The medium to use. May be <code>null</code>.
@@ -97,33 +103,66 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
     m_sMedium = sMedium;
   }
 
+  /**
+   * @return The media query modifier that was used. Never <code>null</code>.
+   */
+  @Nonnull
+  public EModifier getModifier ()
+  {
+    return m_eModifier;
+  }
+
+  /**
+   * @return <code>true</code> if the modifier is {@link EModifier#NOT}.
+   * @see #getModifier()
+   */
   public boolean isNot ()
   {
     return m_eModifier == EModifier.NOT;
   }
 
+  /**
+   * @return <code>true</code> if the modifier is {@link EModifier#ONLY}.
+   * @see #getModifier()
+   */
   public boolean isOnly ()
   {
     return m_eModifier == EModifier.ONLY;
   }
 
+  /**
+   * @return The medium passed in the constructor.
+   */
   @Nullable
   public String getMedium ()
   {
     return m_sMedium;
   }
 
+  /**
+   * @return <code>true</code> if at least a single media expression is present.
+   */
   public boolean hasMediaExpressions ()
   {
     return !m_aMediaExpressions.isEmpty ();
   }
 
+  /**
+   * @return The number of contained media expressions. Always &ge; 0.
+   */
   @Nonnegative
   public int getMediaExpressionCount ()
   {
     return m_aMediaExpressions.size ();
   }
 
+  /**
+   * Append a media expression to the list.
+   * 
+   * @param aMediaExpression
+   *        The media expression to be added. May not be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public CSSMediaQuery addMediaExpression (@Nonnull final CSSMediaExpression aMediaExpression)
   {
@@ -134,6 +173,16 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
     return this;
   }
 
+  /**
+   * Add a media expression to the list at the specified index.
+   * 
+   * @param nIndex
+   *        The index where the media expression should be added. Must be &ge;
+   *        0.
+   * @param aMediaExpression
+   *        The media expression to be added. May not be <code>null</code>.
+   * @return this
+   */
   @Nonnull
   public CSSMediaQuery addMediaExpression (@Nonnegative final int nIndex,
                                            @Nonnull final CSSMediaExpression aMediaExpression)
@@ -150,20 +199,59 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
     return this;
   }
 
+  /**
+   * Remove the specified media expression.
+   * 
+   * @param aMediaExpression
+   *        The media expression to be removed. May be <code>null</code>.
+   * @return {@link EChange#CHANGED} if removal succeeded,
+   *         {@link EChange#UNCHANGED} otherwise.
+   */
   @Nonnull
-  public EChange removeMediaExpression (@Nonnull final CSSMediaExpression aMediaExpression)
+  public EChange removeMediaExpression (@Nullable final CSSMediaExpression aMediaExpression)
   {
     return EChange.valueOf (m_aMediaExpressions.remove (aMediaExpression));
   }
 
+  /**
+   * Remove the media expression at the specified index.
+   * 
+   * @param nExpressionIndex
+   *        The index of the media expression to be removed.
+   * @return {@link EChange#CHANGED} if removal succeeded,
+   *         {@link EChange#UNCHANGED} otherwise.
+   */
   @Nonnull
-  public EChange removeMediaExpression (@Nonnegative final int nExpressionIndex)
+  public EChange removeMediaExpression (final int nExpressionIndex)
   {
     if (nExpressionIndex < 0 || nExpressionIndex >= m_aMediaExpressions.size ())
       return EChange.UNCHANGED;
     return EChange.valueOf (m_aMediaExpressions.remove (nExpressionIndex) != null);
   }
 
+  /**
+   * Remove all media expressions.
+   * 
+   * @return {@link EChange#CHANGED} if any media expression was removed,
+   *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
+   * @since 3.7.3
+   */
+  @Nonnull
+  public EChange removeAllMediaExpressions ()
+  {
+    if (m_aMediaExpressions.isEmpty ())
+      return EChange.UNCHANGED;
+    m_aMediaExpressions.clear ();
+    return EChange.CHANGED;
+  }
+
+  /**
+   * Get the media expression at the specified index.
+   * 
+   * @param nExpressionIndex
+   *        The index to be retrieved.
+   * @return <code>null</code> if the index is &lt; 0 or too large.
+   */
   @Nullable
   public CSSMediaExpression getMediaExpression (@Nonnegative final int nExpressionIndex)
   {
@@ -172,6 +260,10 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
     return m_aMediaExpressions.get (nExpressionIndex);
   }
 
+  /**
+   * @return A copy of all media expression. Never <code>null</code> but maybe
+   *         empty.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSMediaExpression> getAllMediaExpressions ()
@@ -240,7 +332,7 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
   {
     if (o == this)
       return true;
-    if (!(o instanceof CSSMediaQuery))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final CSSMediaQuery rhs = (CSSMediaQuery) o;
     return m_eModifier.equals (rhs.m_eModifier) &&
