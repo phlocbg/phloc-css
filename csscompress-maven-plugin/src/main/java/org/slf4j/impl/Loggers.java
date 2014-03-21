@@ -42,7 +42,6 @@ final class Loggers implements ILoggerFactory
   /**
    * {@inheritDoc}
    */
-  @Override
   public Logger getLogger (final String name)
   {
     if (name == null)

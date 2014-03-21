@@ -45,6 +45,7 @@ import org.slf4j.spi.LoggerFactoryBinder;
  * 
  * 
  * 
+ * 
  * </pre>
  * <p>
  * All SLF4J calls will be forwarded to Maven Log.
@@ -105,7 +106,6 @@ public final class StaticLoggerBinder implements LoggerFactoryBinder
   /**
    * {@inheritDoc}
    */
-  @Override
   public ILoggerFactory getLoggerFactory ()
   {
     return m_aLoggers;
@@ -114,7 +114,6 @@ public final class StaticLoggerBinder implements LoggerFactoryBinder
   /**
    * {@inheritDoc}
    */
-  @Override
   public String getLoggerFactoryClassStr ()
   {
     return m_aLoggers.getClass ().getName ();
