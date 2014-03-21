@@ -44,7 +44,7 @@ import com.phloc.css.decl.ICSSTopLevelRule;
  * rules and call the {@link ICSSUrlVisitor} visitor. This visitor effectively
  * only visits URLs that are in import rules and those in declaration
  * expressions.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -55,7 +55,7 @@ public class CSSVisitorForUrl implements ICSSVisitor
 
   /**
    * Constructor
-   * 
+   *
    * @param aVisitor
    *        The URL visitor to be used. May not be <code>null</code>.
    */
@@ -75,13 +75,11 @@ public class CSSVisitorForUrl implements ICSSVisitor
     return m_aVisitor;
   }
 
-  @Override
   public void begin ()
   {
     m_aVisitor.begin ();
   }
 
-  @Override
   public void onImport (@Nonnull final CSSImportRule aImportRule)
   {
     m_aVisitor.onImport (aImportRule);
@@ -92,7 +90,6 @@ public class CSSVisitorForUrl implements ICSSVisitor
     // No action
   }
 
-  @Override
   public void onDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
     final ICSSTopLevelRule aTopLevelRule = m_aTopLevelRule.isEmpty () ? null : m_aTopLevelRule.peek ();
@@ -105,7 +102,6 @@ public class CSSVisitorForUrl implements ICSSVisitor
       }
   }
 
-  @Override
   public void onBeginStyleRule (@Nonnull final CSSStyleRule aStyleRule)
   {
     m_aTopLevelRule.push (aStyleRule);
@@ -116,49 +112,41 @@ public class CSSVisitorForUrl implements ICSSVisitor
     // no action
   }
 
-  @Override
   public void onEndStyleRule (@Nonnull final CSSStyleRule aStyleRule)
   {
     m_aTopLevelRule.pop ();
   }
 
-  @Override
   public void onBeginPageRule (@Nonnull final CSSPageRule aPageRule)
   {
     m_aTopLevelRule.push (aPageRule);
   }
 
-  @Override
   public void onEndPageRule (@Nonnull final CSSPageRule aPageRule)
   {
     m_aTopLevelRule.pop ();
   }
 
-  @Override
   public void onBeginFontFaceRule (@Nonnull final CSSFontFaceRule aFontFaceRule)
   {
     m_aTopLevelRule.push (aFontFaceRule);
   }
 
-  @Override
   public void onEndFontFaceRule (@Nonnull final CSSFontFaceRule aFontFaceRule)
   {
     m_aTopLevelRule.pop ();
   }
 
-  @Override
   public void onBeginMediaRule (@Nonnull final CSSMediaRule aMediaRule)
   {
     m_aTopLevelRule.push (aMediaRule);
   }
 
-  @Override
   public void onEndMediaRule (@Nonnull final CSSMediaRule aMediaRule)
   {
     m_aTopLevelRule.pop ();
   }
 
-  @Override
   public void onBeginKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule)
   {
     m_aTopLevelRule.push (aKeyframesRule);
@@ -174,7 +162,6 @@ public class CSSVisitorForUrl implements ICSSVisitor
     // no action
   }
 
-  @Override
   public void onEndKeyframesRule (@Nonnull final CSSKeyframesRule aKeyframesRule)
   {
     m_aTopLevelRule.pop ();
@@ -205,7 +192,6 @@ public class CSSVisitorForUrl implements ICSSVisitor
     // no action
   }
 
-  @Override
   public void end ()
   {
     m_aVisitor.end ();
