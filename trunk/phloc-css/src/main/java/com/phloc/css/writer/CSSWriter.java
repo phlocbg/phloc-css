@@ -39,7 +39,7 @@ import com.phloc.css.decl.ICSSTopLevelRule;
 
 /**
  * Convert CSS domain objects back to a text representation.
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -57,7 +57,7 @@ public class CSSWriter
 
   /**
    * Constructor for creating non-optimized output.
-   * 
+   *
    * @param eVersion
    *        The CSS version to emit the code for. May not be <code>null</code> .
    */
@@ -68,7 +68,7 @@ public class CSSWriter
 
   /**
    * Constructor.
-   * 
+   *
    * @param eVersion
    *        The CSS version to emit the code for. May not be <code>null</code> .
    * @param bOptimizedOutput
@@ -82,7 +82,7 @@ public class CSSWriter
 
   /**
    * Constructor
-   * 
+   *
    * @param aSettings
    *        The settings to be used. May not be <code>null</code>.
    */
@@ -98,7 +98,7 @@ public class CSSWriter
   /**
    * Check if the header text should be emitted. By default it is enabled, if
    * non-optimized output is desired.
-   * 
+   *
    * @return <code>true</code> if the header text should be emitted,
    *         <code>false</code> if not.
    */
@@ -110,7 +110,7 @@ public class CSSWriter
   /**
    * Determine whether the file header should be written or not. By default it
    * is enabled, if non-optimized output is desired.
-   * 
+   *
    * @param bWriteHeaderText
    *        If <code>true</code> the header text will be written, if
    *        <code>false</code> the text will not be written.
@@ -136,7 +136,7 @@ public class CSSWriter
    * Set a custom header text that should be emitted. This text may be multi
    * line separated by the '\n' character. It will emitted if
    * {@link #isWriteHeaderText()} returns <code>true</code>.
-   * 
+   *
    * @param sHeaderText
    *        The header text to be emitted. May be <code>null</code>.
    * @return this
@@ -151,7 +151,7 @@ public class CSSWriter
   /**
    * Check if the footer text should be emitted. By default it is enabled, if
    * non-optimized output is desired.
-   * 
+   *
    * @return <code>true</code> if the footer text should be emitted,
    *         <code>false</code> if not.
    */
@@ -163,7 +163,7 @@ public class CSSWriter
   /**
    * Determine whether the file footer should be written or not. By default it
    * is enabled, if non-optimized output is desired.
-   * 
+   *
    * @param bWriteFooterText
    *        If <code>true</code> the footer text will be written, if
    *        <code>false</code> the text will not be written.
@@ -189,7 +189,7 @@ public class CSSWriter
    * Set a custom footer text that should be emitted. This text may be multi
    * line separated by the '\n' character. It will emitted if
    * {@link #isWriteFooterText()} returns <code>true</code>.
-   * 
+   *
    * @param sFooterText
    *        The footer text to be emitted. May be <code>null</code>.
    * @return this
@@ -216,9 +216,9 @@ public class CSSWriter
    * empty, the <code>@charset</code> element is emitted into the CSS. By
    * default no charset is defined.<br>
    * <b>Important:</b> this does not define the encoding of the output - it is
-   * just a declarative marker inside the code. Best practise is to use the same
+   * just a declarative marker inside the code. Best practice is to use the same
    * encoding for the CSS and the respective writer!
-   * 
+   *
    * @param sContentCharset
    *        The content charset to be used. May be <code>null</code> to indicate
    *        that no special charset name should be emitted into the CSS.
@@ -245,7 +245,7 @@ public class CSSWriter
 
   /**
    * Write the CSS content to the passed writer. No specific charset is used.
-   * 
+   *
    * @param aCSS
    *        The CSS to write. May not be <code>null</code>.
    * @param aWriter
@@ -340,7 +340,7 @@ public class CSSWriter
 
   /**
    * Create the CSS without a specific charset.
-   * 
+   *
    * @param aCSS
    *        The CSS object to be converted to text. May not be <code>null</code>
    *        .
@@ -366,7 +366,7 @@ public class CSSWriter
 
   /**
    * Write the CSS content to the passed writer. No specific charset is used.
-   * 
+   *
    * @param aCSS
    *        The CSS to write. May not be <code>null</code>.
    * @param aWriter
@@ -399,7 +399,7 @@ public class CSSWriter
   /**
    * Get the string representation of the passed CSS object. It can be any
    * object that implements {@link ICSSWriteable}.
-   * 
+   *
    * @param aCSS
    *        The CSS object to be converted to text. May not be <code>null</code>
    *        .

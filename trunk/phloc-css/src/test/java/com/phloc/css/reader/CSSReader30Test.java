@@ -26,7 +26,6 @@ import java.nio.charset.Charset;
 import org.junit.Test;
 
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.charset.EUnicodeBOM;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.io.streamprovider.ByteArrayInputStreamProvider;
@@ -105,8 +104,9 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
   }
 
   @Test
-  public void testSpecialCases ()
+  public void testSpecialCasesAsString ()
   {
+    // Parsing problem
     String sCSS = ".class{color:red;.class{color:green}.class{color:blue}";
     CascadingStyleSheet aCSS, aCSS2;
     aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
@@ -166,6 +166,13 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
     assertNotNull (aCSS);
     assertEquals ("#mask\\x{color:red}",
                   new CSSWriter (new CSSWriterSettings (ECSSVersion.CSS30).setOptimizedOutput (true)).getCSSAsString (aCSS));
+
+    // With charset rule defined
+    sCSS = "@charset \"iso-8859-1\"; div{color:red ; }";
+    aCSS = CSSReader.readFromString (sCSS, ECSSVersion.CSS30, new LoggingCSSParseErrorHandler ());
+    assertNotNull (aCSS);
+    assertEquals ("div{color:red}",
+                  new CSSWriter (new CSSWriterSettings (ECSSVersion.CSS30).setOptimizedOutput (true)).getCSSAsString (aCSS));
   }
 
   @Test
@@ -174,38 +181,14 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
     final String sCSSBase = "/* comment */.class{color:red}.class{color:blue}";
     for (final EUnicodeBOM eBOM : EUnicodeBOM.values ())
     {
-      Charset aDeterminedCharset = null;
-      switch (eBOM)
-      {
-        case BOM_UTF_8:
-          aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-8");
-          break;
-        case BOM_UTF_16_BIG_ENDIAN:
-          aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-16be");
-          break;
-        case BOM_UTF_16_LITTLE_ENDIAN:
-          aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-16le");
-          break;
-        case BOM_UTF_32_BIG_ENDIAN:
-          aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-32be");
-          break;
-        case BOM_UTF_32_LITTLE_ENDIAN:
-          aDeterminedCharset = CharsetManager.getCharsetFromName ("utf-32le");
-          break;
-        case BOM_GB_18030:
-          aDeterminedCharset = CharsetManager.getCharsetFromName ("gb18030");
-          break;
-        default:
-          // The charset required by the BOM is not a standard charset
-          break;
-      }
+      final Charset aDeterminedCharset = eBOM.getCharset ();
       if (aDeterminedCharset != null)
       {
         final CascadingStyleSheet aCSS = CSSReader.readFromStream (new ByteArrayInputStreamProvider (ArrayHelper.getConcatenated (eBOM.getBytes (),
                                                                                                                                   sCSSBase.getBytes (aDeterminedCharset))),
-                                                                   aDeterminedCharset,
-                                                                   ECSSVersion.CSS30,
-                                                                   DoNothingCSSParseErrorHandler.getInstance ());
+                                                                                                                                  aDeterminedCharset,
+                                                                                                                                  ECSSVersion.CSS30,
+                                                                                                                                  DoNothingCSSParseErrorHandler.getInstance ());
         assertNotNull ("Failed to read with BOM " + eBOM, aCSS);
         assertEquals (".class{color:red}.class{color:blue}",
                       new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
