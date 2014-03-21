@@ -47,7 +47,7 @@ import com.phloc.css.annotations.DeprecatedInCSS30;
  * https://developer.mozilla.org/en/CSS_Reference/Mozilla_Extensions<br>
  * <br>
  * CSS 3.0: see {@link ECSSSpecification}
- * 
+ *
  * @author Philip Helger
  */
 public enum ECSSProperty implements IHasName, ICSSVersionAware
@@ -787,6 +787,10 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
     m_aSpecifications = ContainerHelper.newEnumSet (ECSSSpecification.class, aSpecifications);
   }
 
+  /**
+   * @return The name of this property. E.g. <code>color</code> or
+   *         <code>-webkit-writing-mode</code>
+   */
   @Nonnull
   @Nonempty
   public String getName ()
@@ -852,6 +856,15 @@ public enum ECSSProperty implements IHasName, ICSSVersionAware
     return EnumHelper.getFromNameOrNull (ECSSProperty.class, sName);
   }
 
+  /**
+   * Get the real name of the property without hacking prefixes. This method
+   * strips the first leading '*', '_' or '$' from the name.
+   *
+   * @param sName
+   *        The source name. May be <code>null</code>.
+   * @return <code>null</code> if the source was <code>null</code> or the string
+   *         without the leading hack indicator.
+   */
   @Nullable
   public static String getPropertyNameHandlingHacks (@Nullable final String sName)
   {
