@@ -55,6 +55,7 @@ import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.handler.CSSHandler;
 import com.phloc.css.handler.DoNothingCSSParseExceptionHandler;
 import com.phloc.css.handler.ICSSParseExceptionHandler;
+import com.phloc.css.handler.LoggingCSSParseExceptionHandler;
 import com.phloc.css.parser.CSSCharStream;
 import com.phloc.css.parser.CSSNode;
 import com.phloc.css.parser.CharStream;
@@ -67,7 +68,6 @@ import com.phloc.css.parser.ParserCSS30TokenManager;
 import com.phloc.css.parser.ParserCSSCharsetDetector;
 import com.phloc.css.parser.ParserCSSCharsetDetectorTokenManager;
 import com.phloc.css.reader.errorhandler.ICSSParseErrorHandler;
-import com.phloc.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 import com.phloc.css.reader.errorhandler.ThrowingCSSParseErrorHandler;
 
 /**
@@ -87,6 +87,10 @@ public final class CSSReader
   // Use the ThrowingCSSParseErrorHandler for maximum backward compatibility
   @GuardedBy ("s_aRWLock")
   private static ICSSParseErrorHandler s_aDefaultParseErrorHandler = ThrowingCSSParseErrorHandler.getInstance ();
+
+  // Use the LoggingCSSParseExceptionHandler for maximum backward compatibility
+  @GuardedBy ("s_aRWLock")
+  private static ICSSParseExceptionHandler s_aDefaultParseExceptionHandler = new LoggingCSSParseExceptionHandler ();
 
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
@@ -115,7 +119,7 @@ public final class CSSReader
   }
 
   /**
-   * Set the default CSS parse error handler.
+   * Set the default CSS parse error handler (for recoverable errors).
    *
    * @param aDefaultParseErrorHandler
    *        The new default error handler to be used. May be <code>null</code>
@@ -135,6 +139,49 @@ public final class CSSReader
   }
 
   /**
+   * @return The default CSS parse exception handler. May not be
+   *         <code>null</code>. For backwards compatibility reasons this is be
+   *         default an instance of {@link LoggingCSSParseExceptionHandler}.
+   * @since 3.7.4
+   */
+  @Nonnull
+  public static ICSSParseExceptionHandler getDefaultParseExceptionHandler ()
+  {
+    s_aRWLock.readLock ().lock ();
+    try
+    {
+      return s_aDefaultParseExceptionHandler;
+    }
+    finally
+    {
+      s_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * Set the default CSS parse exception handler (for unrecoverable errors).
+   *
+   * @param aDefaultParseExceptionHandler
+   *        The new default exception handler to be used. May not be
+   *        <code>null</code>.
+   * @since 3.7.4
+   */
+  public static void setDefaultParseExceptionHandler (@Nonnull final ICSSParseExceptionHandler aDefaultParseExceptionHandler)
+  {
+    ValueEnforcer.notNull (aDefaultParseExceptionHandler, "DefaultParseExceptionHandler");
+
+    s_aRWLock.writeLock ().lock ();
+    try
+    {
+      s_aDefaultParseExceptionHandler = aDefaultParseExceptionHandler;
+    }
+    finally
+    {
+      s_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  /**
    * Main reading of the CSS
    *
    * @param aStream
@@ -144,7 +191,8 @@ public final class CSSReader
    * @param aCustomErrorHandler
    *        A custom handler for recoverable errors. May be <code>null</code>.
    * @param aCustomExceptionHandler
-   *        A custom handler for unrecoverable errors. May be <code>null</code>.
+   *        A custom handler for unrecoverable errors. May not be
+   *        <code>null</code>.
    * @return <code>null</code> if parsing failed with an unrecoverable error
    *         (and no throwing exception handler is used), or <code>null</code>
    *         if a recoverable error occurred and no
@@ -155,7 +203,7 @@ public final class CSSReader
   private static CSSNode _readStyleSheet (@Nonnull final CharStream aStream,
                                           @Nonnull final ECSSVersion eVersion,
                                           @Nullable final ICSSParseErrorHandler aCustomErrorHandler,
-                                          @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
+                                          @Nonnull final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
     switch (eVersion)
     {
@@ -171,11 +219,8 @@ public final class CSSReader
         }
         catch (final ParseException ex)
         {
-          if (aCustomExceptionHandler != null)
-            aCustomExceptionHandler.onException (ex);
-          else
-            s_aLogger.error ("Failed to parse CSS 2.1 style sheet: " +
-                LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
+          // Unrecoverable error
+          aCustomExceptionHandler.onException (ex);
           return null;
         }
       }
@@ -191,11 +236,8 @@ public final class CSSReader
         }
         catch (final ParseException ex)
         {
-          if (aCustomExceptionHandler != null)
-            aCustomExceptionHandler.onException (ex);
-          else
-            s_aLogger.error ("Failed to parse CSS 3.0 style sheet: " +
-                LoggingCSSParseErrorHandler.createLoggingStringParseError (ex));
+          // Unrecoverable error
+          aCustomExceptionHandler.onException (ex);
           return null;
         }
       }
@@ -1282,10 +1324,10 @@ public final class CSSReader
       {
         // BOM charset different from read charset
         s_aLogger.warn ("The charset found in the CSS data (" +
-            aReadCharset.name () +
-            ") differs from the charset determined by the BOM (" +
-            aBOMCharset.name () +
-            ")!");
+                        aReadCharset.name () +
+                        ") differs from the charset determined by the BOM (" +
+                        aBOMCharset.name () +
+                        ")!");
       }
 
       return aReadCharset;
@@ -1400,8 +1442,11 @@ public final class CSSReader
 
       // Use the default CSS parse error handler if none is provided
       final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? getDefaultParseErrorHandler ()
-                                                                                  : aCustomErrorHandler;
-      final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aRealErrorHandler, aCustomExceptionHandler);
+                                                                                 : aCustomErrorHandler;
+      // Use the default CSS exception handler if none is provided
+      final ICSSParseExceptionHandler aRealExceptionHandler = aCustomExceptionHandler == null ? getDefaultParseExceptionHandler ()
+                                                                                              : aCustomExceptionHandler;
+      final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aRealErrorHandler, aRealExceptionHandler);
 
       // Failed to interpret content as CSS?
       if (aNode == null)
@@ -1462,7 +1507,7 @@ public final class CSSReader
       final CSSCharStream aCharStream = new CSSCharStream (aReader);
       // Use the default CSS parse error handler if none is provided
       final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? getDefaultParseErrorHandler ()
-                                                                                  : aCustomErrorHandler;
+                                                                                 : aCustomErrorHandler;
       final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aRealErrorHandler, aCustomExceptionHandler);
 
       // Failed to interpret content as CSS?
