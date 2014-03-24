@@ -30,6 +30,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
 import com.phloc.css.CSSSourceLocation;
@@ -149,9 +150,53 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   }
 
   @Nonnegative
-  public final int getDeclarationCount ()
+  public int getDeclarationCount ()
   {
     return m_aDeclarations.size ();
+  }
+
+  @Nullable
+  public CSSDeclaration getDeclarationOfPropertyName (@Nullable final String sPropertyName)
+  {
+    if (StringHelper.hasText (sPropertyName))
+      for (final CSSDeclaration aDecl : m_aDeclarations)
+        if (aDecl.getProperty ().equals (sPropertyName))
+          return aDecl;
+    return null;
+  }
+
+  @Nullable
+  public CSSDeclaration getDeclarationOfPropertyNameCaseInsensitive (@Nullable final String sPropertyName)
+  {
+    if (StringHelper.hasText (sPropertyName))
+      for (final CSSDeclaration aDecl : m_aDeclarations)
+        if (aDecl.getProperty ().equalsIgnoreCase (sPropertyName))
+          return aDecl;
+    return null;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSDeclaration> getAllDeclarationsOfPropertyName (@Nullable final String sPropertyName)
+  {
+    final List <CSSDeclaration> ret = new ArrayList <CSSDeclaration> ();
+    if (StringHelper.hasText (sPropertyName))
+      for (final CSSDeclaration aDecl : m_aDeclarations)
+        if (aDecl.getProperty ().equals (sPropertyName))
+          ret.add (aDecl);
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSDeclaration> getAllDeclarationsOfPropertyNameCaseInsensitive (@Nullable final String sPropertyName)
+  {
+    final List <CSSDeclaration> ret = new ArrayList <CSSDeclaration> ();
+    if (StringHelper.hasText (sPropertyName))
+      for (final CSSDeclaration aDecl : m_aDeclarations)
+        if (aDecl.getProperty ().equalsIgnoreCase (sPropertyName))
+          ret.add (aDecl);
+    return ret;
   }
 
   @Nonnull

@@ -136,6 +136,32 @@ public class CSSPageRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSSV
     return m_aDeclarations.getDeclarationCount ();
   }
 
+  @Nullable
+  public CSSDeclaration getDeclarationOfPropertyName (@Nullable final String sPropertyName)
+  {
+    return m_aDeclarations.getDeclarationOfPropertyName (sPropertyName);
+  }
+
+  @Nullable
+  public CSSDeclaration getDeclarationOfPropertyNameCaseInsensitive (@Nullable final String sPropertyName)
+  {
+    return m_aDeclarations.getDeclarationOfPropertyNameCaseInsensitive (sPropertyName);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSDeclaration> getAllDeclarationsOfPropertyName (@Nullable final String sPropertyName)
+  {
+    return m_aDeclarations.getAllDeclarationsOfPropertyName (sPropertyName);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSDeclaration> getAllDeclarationsOfPropertyNameCaseInsensitive (@Nullable final String sPropertyName)
+  {
+    return m_aDeclarations.getAllDeclarationsOfPropertyNameCaseInsensitive (sPropertyName);
+  }
+
   @Nonnull
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
