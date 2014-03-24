@@ -142,9 +142,7 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
   @Nullable
   public CSSSelector getSelectorAtIndex (@Nonnegative final int nSelectorIndex)
   {
-    if (nSelectorIndex < 0 || nSelectorIndex >= m_aSelectors.size ())
-      return null;
-    return m_aSelectors.get (nSelectorIndex);
+    return ContainerHelper.getSafe (m_aSelectors, nSelectorIndex);
   }
 
   @Nonnull
@@ -225,6 +223,32 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
   public int getDeclarationCount ()
   {
     return m_aDeclarations.getDeclarationCount ();
+  }
+
+  @Nullable
+  public CSSDeclaration getDeclarationOfPropertyName (@Nullable final String sPropertyName)
+  {
+    return m_aDeclarations.getDeclarationOfPropertyName (sPropertyName);
+  }
+
+  @Nullable
+  public CSSDeclaration getDeclarationOfPropertyNameCaseInsensitive (@Nullable final String sPropertyName)
+  {
+    return m_aDeclarations.getDeclarationOfPropertyNameCaseInsensitive (sPropertyName);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSDeclaration> getAllDeclarationsOfPropertyName (@Nullable final String sPropertyName)
+  {
+    return m_aDeclarations.getAllDeclarationsOfPropertyName (sPropertyName);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSDeclaration> getAllDeclarationsOfPropertyNameCaseInsensitive (@Nullable final String sPropertyName)
+  {
+    return m_aDeclarations.getAllDeclarationsOfPropertyNameCaseInsensitive (sPropertyName);
   }
 
   @Nonnull
