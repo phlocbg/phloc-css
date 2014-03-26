@@ -33,7 +33,10 @@ import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.io.streamprovider.ByteArrayInputStreamProvider;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
+import com.phloc.css.decl.CSSExpressionMemberFunction;
+import com.phloc.css.decl.CSSExpressionMemberMath;
 import com.phloc.css.decl.CSSExpressionMemberTermSimple;
+import com.phloc.css.decl.CSSExpressionMemberTermURI;
 import com.phloc.css.decl.CSSStyleRule;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.decl.ICSSExpressionMember;
@@ -234,6 +237,83 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
     aMember = aDecl.getExpression ().getMemberAtIndex (0);
     assertTrue (aMember instanceof CSSExpressionMemberTermSimple);
     assertEquals ("\"string2\"", aMember.getAsCSSString (aCSSWS, 0));
+
+    // o: abc
+    aDecl = aSR.getDeclarationOfPropertyName ("o");
+    assertNotNull (aDecl);
+    assertEquals (1, aDecl.getExpression ().getMemberCount ());
+    aMember = aDecl.getExpression ().getMemberAtIndex (0);
+    assertTrue (aMember instanceof CSSExpressionMemberTermSimple);
+    assertEquals ("abc", aMember.getAsCSSString (aCSSWS, 0));
+
+    // p: from
+    aDecl = aSR.getDeclarationOfPropertyName ("p");
+    assertNotNull (aDecl);
+    assertEquals (1, aDecl.getExpression ().getMemberCount ());
+    aMember = aDecl.getExpression ().getMemberAtIndex (0);
+    assertTrue (aMember instanceof CSSExpressionMemberTermSimple);
+    assertEquals ("from", aMember.getAsCSSString (aCSSWS, 0));
+
+    // q: to
+    aDecl = aSR.getDeclarationOfPropertyName ("q");
+    assertNotNull (aDecl);
+    assertEquals (1, aDecl.getExpression ().getMemberCount ());
+    aMember = aDecl.getExpression ().getMemberAtIndex (0);
+    assertTrue (aMember instanceof CSSExpressionMemberTermSimple);
+    assertEquals ("to", aMember.getAsCSSString (aCSSWS, 0));
+
+    // r: url(a.gif)
+    aDecl = aSR.getDeclarationOfPropertyName ("r");
+    assertNotNull (aDecl);
+    assertEquals (1, aDecl.getExpression ().getMemberCount ());
+    aMember = aDecl.getExpression ().getMemberAtIndex (0);
+    assertTrue (aMember instanceof CSSExpressionMemberTermURI);
+    assertEquals ("url(a.gif)", aMember.getAsCSSString (aCSSWS, 0));
+
+    // s: #123
+    aDecl = aSR.getDeclarationOfPropertyName ("s");
+    assertNotNull (aDecl);
+    assertEquals (1, aDecl.getExpression ().getMemberCount ());
+    aMember = aDecl.getExpression ().getMemberAtIndex (0);
+    assertTrue (aMember instanceof CSSExpressionMemberTermSimple);
+    assertEquals ("#123", aMember.getAsCSSString (aCSSWS, 0));
+
+    // t: function(5,6,abc)
+    aDecl = aSR.getDeclarationOfPropertyName ("t");
+    assertNotNull (aDecl);
+    assertEquals (1, aDecl.getExpression ().getMemberCount ());
+    aMember = aDecl.getExpression ().getMemberAtIndex (0);
+    assertTrue (aMember instanceof CSSExpressionMemberFunction);
+    assertEquals ("function", ((CSSExpressionMemberFunction) aMember).getFunctionName ());
+    // 3 parameters and 2 commas
+    assertEquals (5, ((CSSExpressionMemberFunction) aMember).getExpression ().getMemberCount ());
+    assertEquals ("function(5,6,abc)", aMember.getAsCSSString (aCSSWS, 0));
+
+    // u: calc(4 + 5)
+    aDecl = aSR.getDeclarationOfPropertyName ("u");
+    assertNotNull (aDecl);
+    assertEquals (1, aDecl.getExpression ().getMemberCount ());
+    aMember = aDecl.getExpression ().getMemberAtIndex (0);
+    assertTrue (aMember instanceof CSSExpressionMemberMath);
+    // 2 values and 1 operator
+    assertEquals (3, ((CSSExpressionMemberMath) aMember).getMemberCount ());
+    assertEquals ("calc(4 + 5)", aMember.getAsCSSString (aCSSWS, 0));
+
+    // v: inherit
+    aDecl = aSR.getDeclarationOfPropertyName ("v");
+    assertNotNull (aDecl);
+    assertEquals (1, aDecl.getExpression ().getMemberCount ());
+    aMember = aDecl.getExpression ().getMemberAtIndex (0);
+    assertTrue (aMember instanceof CSSExpressionMemberTermSimple);
+    assertEquals ("inherit", aMember.getAsCSSString (aCSSWS, 0));
+
+    // w: u+1234
+    aDecl = aSR.getDeclarationOfPropertyName ("w");
+    assertNotNull (aDecl);
+    assertEquals (1, aDecl.getExpression ().getMemberCount ());
+    aMember = aDecl.getExpression ().getMemberAtIndex (0);
+    assertTrue (aMember instanceof CSSExpressionMemberTermSimple);
+    assertEquals ("u+1234", aMember.getAsCSSString (aCSSWS, 0));
 
     // Write result
     final String sCSS = new CSSWriter (aCSSWS).getCSSAsString (aCSS);

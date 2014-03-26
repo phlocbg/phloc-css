@@ -17,6 +17,7 @@
  */
 package com.phloc.css.utils;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.ComparatorStringLongestFirst;
 import com.phloc.commons.string.StringHelper;
@@ -61,6 +63,7 @@ public final class CSSNumberHelper
   @Nullable
   public static ECSSUnit getMatchingUnitInclPercentage (@Nonnull final String sCSSValue)
   {
+    ValueEnforcer.notNull (sCSSValue, "CSSValue");
     // Search units, the ones with the longest names come first
     for (final Map.Entry <String, ECSSUnit> aEntry : s_aNameToUnitMap.entrySet ())
       if (sCSSValue.endsWith (aEntry.getKey ()))
@@ -105,7 +108,7 @@ public final class CSSNumberHelper
     {
       // Special case for 0!
       if (sRealValue.equals ("0"))
-        return new CSSSimpleValueWithUnit (0, ECSSUnit.PX);
+        return new CSSSimpleValueWithUnit (BigDecimal.ZERO, ECSSUnit.PX);
 
       final ECSSUnit eUnit = bWithPerc ? getMatchingUnitInclPercentage (sRealValue)
                                       : getMatchingUnitExclPercentage (sRealValue);
@@ -113,9 +116,9 @@ public final class CSSNumberHelper
       {
         // Cut the unit off
         sRealValue = sRealValue.substring (0, sRealValue.length () - eUnit.getName ().length ()).trim ();
-        final Double aValue = StringParser.parseDoubleObj (sRealValue);
+        final BigDecimal aValue = StringParser.parseBigDecimal (sRealValue);
         if (aValue != null)
-          return new CSSSimpleValueWithUnit (aValue.doubleValue (), eUnit);
+          return new CSSSimpleValueWithUnit (aValue, eUnit);
       }
     }
     return null;
