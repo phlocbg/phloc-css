@@ -2,7 +2,13 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr><td>3/21/14</td><td>add</td><td>api</td><td></td><td>Made CSSDeclaration mutable</td></tr>
+<tr><td>3/21/14</td><td>add</td><td>api</td><td></td><td>Added default parse exception handler support in CSSReader and CSSReaderDeclarationList</td></tr>
+<tr><td>3/21/14</td><td>add</td><td>api</td><td></td><td>Added new class LoggingCSSParseExceptionHandler</td></tr>
+<tr><td>3/21/14</td><td>add</td><td>api</td><td></td><td>Added default parse error handler support in CSSReaderDeclarationList</td></tr>
+<tr><td>3/21/14</td><td>add</td><td>api</td><td></td><td>Added reading methods in CSSReaderDeclarationList that read directly from an InputStream because this is a one-pass parsing</td></tr>
 <tr border="1"><td>3/21/14</td><td colspan="4">_Release *3.7.3*_</td></tr>
+<tr><td>3/20/14</td><td>change</td><td>api</td><td>*yes*</td><td>Renamed class JavaCharStream to CSSCharStream and removed the \uXXXX special handling.</td></tr>
 <tr><td>3/14/14</td><td>fix</td><td>tech</td><td></td><td>Fixed parsing error when a comment was between @charset and the name</td></tr>
 <tr><td>3/14/14</td><td>update</td><td>tech</td><td></td><td>Updated to JavaCC 6.0.1 which gives a huge speedup</td></tr>
 <tr><td>3/13/14</td><td>add</td><td>api</td><td></td><td>Added new methods CSSReader.readFromReader + special overloads for String</td></tr>
