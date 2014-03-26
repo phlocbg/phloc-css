@@ -47,7 +47,8 @@ public final class CSSURLHelper
   {}
 
   /**
-   * Check if the passed CSS value is an URL value.
+   * Check if the passed CSS value is an URL value. This is either a URL
+   * starting with "url(" or it is the string "none".
    * 
    * @param sValue
    *        The value to be checked.
@@ -57,8 +58,14 @@ public final class CSSURLHelper
   public static boolean isURLValue (@Nullable final String sValue)
   {
     final String sRealValue = StringHelper.trim (sValue);
+    if (StringHelper.hasNoText (sRealValue))
+      return false;
+
+    if (sRealValue.equals (CCSSValue.NONE))
+      return true;
+
     // 5 = "url(".length () + ")".length
-    return StringHelper.getLength (sRealValue) > 5 &&
+    return sRealValue.length () > 5 &&
            sRealValue.startsWith (CCSSValue.PREFIX_URL_OPEN) &&
            sRealValue.endsWith (CCSSValue.SUFFIX_URL_CLOSE);
   }

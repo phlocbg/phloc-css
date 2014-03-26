@@ -26,6 +26,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -54,10 +55,8 @@ public class CSSSimpleValueWithUnit implements Serializable
    */
   public CSSSimpleValueWithUnit (@Nonnull final BigDecimal aValue, @Nonnull final ECSSUnit eUnit)
   {
-    if (eUnit == null)
-      throw new NullPointerException ("Unit");
     setValue (aValue);
-    m_eUnit = eUnit;
+    setUnit (eUnit);
   }
 
   /**
@@ -84,9 +83,7 @@ public class CSSSimpleValueWithUnit implements Serializable
   @Nonnull
   public CSSSimpleValueWithUnit setValue (@Nonnull final BigDecimal aValue)
   {
-    if (aValue == null)
-      throw new NullPointerException ("Value");
-    m_aValue = aValue;
+    m_aValue = ValueEnforcer.notNull (aValue, "Value");
     return this;
   }
 
@@ -151,9 +148,7 @@ public class CSSSimpleValueWithUnit implements Serializable
   @Nonnull
   public CSSSimpleValueWithUnit setUnit (@Nonnull final ECSSUnit eUnit)
   {
-    if (eUnit == null)
-      throw new NullPointerException ("Unit");
-    m_eUnit = eUnit;
+    m_eUnit = ValueEnforcer.notNull (eUnit, "Unit");
     return this;
   }
 
