@@ -3,8 +3,14 @@ package com.phloc.css.decl.shorthand;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.property.ICSSProperty;
 
+/**
+ * A descriptor for a property and a default value
+ * 
+ * @author Philip Helger
+ */
 public final class CSSPropertyWithDefaultValue
 {
   private final ICSSProperty m_aProperty;
@@ -15,9 +21,26 @@ public final class CSSPropertyWithDefaultValue
     m_aProperty = ValueEnforcer.notNull (aProperty, "Property");
     m_sDefaultValue = ValueEnforcer.notNull (sDefaultValue, "DefaultValue");
     if (!aProperty.isValidValue (sDefaultValue))
-      throw new IllegalArgumentException ("Default value '" +
-                                          sDefaultValue +
-                                          "' does not match property " +
-                                          aProperty);
+      throw new IllegalArgumentException ("Default value '" + sDefaultValue + "' does not match property " + aProperty);
+  }
+
+  @Nonnull
+  public ICSSProperty getProperty ()
+  {
+    return m_aProperty;
+  }
+
+  @Nonnull
+  public String getDefaultValue ()
+  {
+    return m_sDefaultValue;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return new ToStringGenerator (this).append ("property", m_aProperty)
+                                       .append ("defaultValue", m_sDefaultValue)
+                                       .toString ();
   }
 }
