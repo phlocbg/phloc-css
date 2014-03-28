@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -56,13 +57,29 @@ public class CSSPropertyNumbers extends AbstractCSSProperty
                              @Nonnegative final int nMaxNumbers)
   {
     super (eProp, aCustomizer);
-    if (nMinNumbers < 0)
-      throw new IllegalArgumentException ("minNumbers: " + nMinNumbers);
-    if (nMaxNumbers < 0 || nMaxNumbers < nMinNumbers)
-      throw new IllegalArgumentException ("maxNumbers: " + nMaxNumbers);
+    ValueEnforcer.isGT0 (nMinNumbers, "MinNumbers");
+    ValueEnforcer.isGT0 (nMaxNumbers, "MaxNumbers");
+    if (nMaxNumbers < nMinNumbers)
+      throw new IllegalArgumentException ("MaxNumbers (" +
+                                          nMaxNumbers +
+                                          ") must be >= MinNumbers (" +
+                                          nMinNumbers +
+                                          ")");
     m_bWithPercentage = bWithPercentage;
     m_nMinNumbers = nMinNumbers;
     m_nMaxNumbers = nMaxNumbers;
+  }
+
+  @Override
+  public int getMinimumArgumentCount ()
+  {
+    return m_nMinNumbers;
+  }
+
+  @Override
+  public int getMaximumArgumentCount ()
+  {
+    return m_nMaxNumbers;
   }
 
   @Override
