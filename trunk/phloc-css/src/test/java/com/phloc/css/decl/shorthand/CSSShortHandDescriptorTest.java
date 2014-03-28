@@ -32,7 +32,43 @@ public class CSSShortHandDescriptorTest
   }
 
   @Test
-  public void testBorder ()
+  public void testBorder1 ()
+  {
+    final CSSShortHandDescriptor aSHD = CSSShortHandRegistry.getShortHandDescriptor (ECSSProperty.BORDER);
+    assertNotNull (aSHD);
+
+    final CSSDeclaration aDecl = CSSReaderDeclarationList.readFromString ("border:1px", ECSSVersion.CSS30)
+                                                         .getDeclarationAtIndex (0);
+    assertNotNull (aDecl);
+
+    final List <CSSDeclaration> aSplittedDecls = aSHD.getSplitIntoPieces (aDecl);
+    assertNotNull (aSplittedDecls);
+    assertEquals (3, aSplittedDecls.size ());
+    assertEquals ("border-width:1px", aSplittedDecls.get (0).getAsCSSString (CWS, 0));
+    assertEquals ("border-style:solid", aSplittedDecls.get (1).getAsCSSString (CWS, 0));
+    assertEquals ("border-color:black", aSplittedDecls.get (2).getAsCSSString (CWS, 0));
+  }
+
+  @Test
+  public void testBorder2 ()
+  {
+    final CSSShortHandDescriptor aSHD = CSSShortHandRegistry.getShortHandDescriptor (ECSSProperty.BORDER);
+    assertNotNull (aSHD);
+
+    final CSSDeclaration aDecl = CSSReaderDeclarationList.readFromString ("border:1px dashed", ECSSVersion.CSS30)
+                                                         .getDeclarationAtIndex (0);
+    assertNotNull (aDecl);
+
+    final List <CSSDeclaration> aSplittedDecls = aSHD.getSplitIntoPieces (aDecl);
+    assertNotNull (aSplittedDecls);
+    assertEquals (3, aSplittedDecls.size ());
+    assertEquals ("border-width:1px", aSplittedDecls.get (0).getAsCSSString (CWS, 0));
+    assertEquals ("border-style:dashed", aSplittedDecls.get (1).getAsCSSString (CWS, 0));
+    assertEquals ("border-color:black", aSplittedDecls.get (2).getAsCSSString (CWS, 0));
+  }
+
+  @Test
+  public void testBorder3a ()
   {
     final CSSShortHandDescriptor aSHD = CSSShortHandRegistry.getShortHandDescriptor (ECSSProperty.BORDER);
     assertNotNull (aSHD);
@@ -47,6 +83,24 @@ public class CSSShortHandDescriptorTest
     assertEquals ("border-style:dashed", aSplittedDecls.get (0).getAsCSSString (CWS, 0));
     assertEquals ("border-width:1px", aSplittedDecls.get (1).getAsCSSString (CWS, 0));
     assertEquals ("border-color:red", aSplittedDecls.get (2).getAsCSSString (CWS, 0));
+  }
+
+  @Test
+  public void testBorder3b ()
+  {
+    final CSSShortHandDescriptor aSHD = CSSShortHandRegistry.getShortHandDescriptor (ECSSProperty.BORDER);
+    assertNotNull (aSHD);
+
+    final CSSDeclaration aDecl = CSSReaderDeclarationList.readFromString ("border:red 1px dashed", ECSSVersion.CSS30)
+                                                         .getDeclarationAtIndex (0);
+    assertNotNull (aDecl);
+
+    final List <CSSDeclaration> aSplittedDecls = aSHD.getSplitIntoPieces (aDecl);
+    assertNotNull (aSplittedDecls);
+    assertEquals (3, aSplittedDecls.size ());
+    assertEquals ("border-color:red", aSplittedDecls.get (0).getAsCSSString (CWS, 0));
+    assertEquals ("border-width:1px", aSplittedDecls.get (1).getAsCSSString (CWS, 0));
+    assertEquals ("border-style:dashed", aSplittedDecls.get (2).getAsCSSString (CWS, 0));
   }
 
   @Test
