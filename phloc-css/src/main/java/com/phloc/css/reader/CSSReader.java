@@ -1445,7 +1445,7 @@ public final class CSSReader
                                                                                  : aCustomErrorHandler;
       // Use the default CSS exception handler if none is provided
       final ICSSParseExceptionHandler aRealExceptionHandler = aCustomExceptionHandler == null ? getDefaultParseExceptionHandler ()
-                                                                                              : aCustomExceptionHandler;
+                                                                                             : aCustomExceptionHandler;
       final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aRealErrorHandler, aRealExceptionHandler);
 
       // Failed to interpret content as CSS?
