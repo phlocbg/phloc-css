@@ -61,10 +61,14 @@ public class CSSPropertyEnumOrNumbers extends CSSPropertyEnum
                                    @Nonnull @Nonempty final String... aEnumValues)
   {
     super (eProp, aCustomizer, aEnumValues);
-    ValueEnforcer.isGE0 (nMinNumbers, "MinNumbers");
-    ValueEnforcer.isGE0 (nMaxNumbers, "MaxNumbers");
+    ValueEnforcer.isGT0 (nMinNumbers, "MinNumbers");
+    ValueEnforcer.isGT0 (nMaxNumbers, "MaxNumbers");
     if (nMaxNumbers < nMinNumbers)
-      throw new IllegalArgumentException ("maxNumbers: " + nMaxNumbers);
+      throw new IllegalArgumentException ("MaxNumbers (" +
+                                          nMaxNumbers +
+                                          ") must be >= MinNumbers (" +
+                                          nMinNumbers +
+                                          ")");
     m_bWithPercentage = bWithPercentage;
     m_nMinNumbers = nMinNumbers;
     m_nMaxNumbers = nMaxNumbers;
@@ -87,13 +91,29 @@ public class CSSPropertyEnumOrNumbers extends CSSPropertyEnum
                                    @Nonnull @Nonempty final Iterable <String> aEnumValues)
   {
     super (eProp, aCustomizer, aEnumValues);
-    ValueEnforcer.isGE0 (nMinNumbers, "MinNumbers");
-    ValueEnforcer.isGE0 (nMaxNumbers, "MaxNumbers");
+    ValueEnforcer.isGT0 (nMinNumbers, "MinNumbers");
+    ValueEnforcer.isGT0 (nMaxNumbers, "MaxNumbers");
     if (nMaxNumbers < nMinNumbers)
-      throw new IllegalArgumentException ("maxNumbers: " + nMaxNumbers);
+      throw new IllegalArgumentException ("MaxNumbers (" +
+                                          nMaxNumbers +
+                                          ") must be >= MinNumbers (" +
+                                          nMinNumbers +
+                                          ")");
     m_bWithPercentage = bWithPercentage;
     m_nMinNumbers = nMinNumbers;
     m_nMaxNumbers = nMaxNumbers;
+  }
+
+  @Override
+  public int getMinimumArgumentCount ()
+  {
+    return m_nMinNumbers;
+  }
+
+  @Override
+  public int getMaximumArgumentCount ()
+  {
+    return m_nMaxNumbers;
   }
 
   @Override

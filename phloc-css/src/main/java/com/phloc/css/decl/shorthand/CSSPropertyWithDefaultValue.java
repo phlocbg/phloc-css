@@ -10,6 +10,7 @@ import com.phloc.css.property.ICSSProperty;
  * A descriptor for a property and a default value
  * 
  * @author Philip Helger
+ * @since 3.7.4
  */
 public final class CSSPropertyWithDefaultValue
 {
@@ -20,6 +21,8 @@ public final class CSSPropertyWithDefaultValue
   {
     m_aProperty = ValueEnforcer.notNull (aProperty, "Property");
     m_sDefaultValue = ValueEnforcer.notNull (sDefaultValue, "DefaultValue");
+
+    // Check that default value is valid for property
     if (!aProperty.isValidValue (sDefaultValue))
       throw new IllegalArgumentException ("Default value '" + sDefaultValue + "' does not match property " + aProperty);
   }

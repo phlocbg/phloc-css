@@ -25,7 +25,10 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableObject;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -51,6 +54,7 @@ public class CSSPropertyEnum extends AbstractCSSProperty
                           @Nonnull @Nonempty final String... aEnumValues)
   {
     super (eProp, aCustomizer);
+    ValueEnforcer.notEmptyNoNullValue (aEnumValues, "EnumValues");
     m_aEnumValues = new HashSet <String> (aEnumValues.length);
     for (final String sPotentialValue : aEnumValues)
     {
@@ -58,8 +62,6 @@ public class CSSPropertyEnum extends AbstractCSSProperty
         throw new IllegalArgumentException ("At least one enumeration value is empty");
       m_aEnumValues.add (sPotentialValue);
     }
-    if (m_aEnumValues.isEmpty ())
-      throw new IllegalArgumentException ("At least one enumeration value needs to be passed!");
   }
 
   public CSSPropertyEnum (@Nonnull final ECSSProperty eProp, @Nonnull @Nonempty final Iterable <String> aEnumValues)
@@ -72,6 +74,7 @@ public class CSSPropertyEnum extends AbstractCSSProperty
                           @Nonnull @Nonempty final Iterable <String> aEnumValues)
   {
     super (eProp, aCustomizer);
+    ValueEnforcer.notEmptyNoNullValue (aEnumValues, "EnumValues");
     m_aEnumValues = new HashSet <String> ();
     for (final String sPotentialValue : aEnumValues)
     {
@@ -79,16 +82,24 @@ public class CSSPropertyEnum extends AbstractCSSProperty
         throw new IllegalArgumentException ("At least one enumeration value is empty");
       m_aEnumValues.add (sPotentialValue);
     }
-    if (m_aEnumValues.isEmpty ())
-      throw new IllegalArgumentException ("At least one enumeration value needs to be passed!");
   }
 
+  /**
+   * Private constructor for {@link #getClone(ECSSProperty)}
+   * 
+   * @param eProp
+   *        Property to use
+   * @param aCustomizer
+   *        Customizer to use.
+   * @param aEnumValues
+   *        Enum values to use. May neither be <code>null</code> nor empty.
+   */
   private CSSPropertyEnum (@Nonnull final ECSSProperty eProp,
                            @Nullable final ICSSPropertyCustomizer aCustomizer,
                            @Nonnull @Nonempty final Set <String> aEnumValues)
   {
     super (eProp, aCustomizer);
-    m_aEnumValues = new HashSet <String> (aEnumValues);
+    m_aEnumValues = ContainerHelper.newSet (aEnumValues);
   }
 
   /**
@@ -96,6 +107,7 @@ public class CSSPropertyEnum extends AbstractCSSProperty
    *         <code>null</code>.
    */
   @Nonnull
+  @ReturnsMutableObject (reason = "Design")
   protected final Set <String> directGetEnumValues ()
   {
     return m_aEnumValues;
