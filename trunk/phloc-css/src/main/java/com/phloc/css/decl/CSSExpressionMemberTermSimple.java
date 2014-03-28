@@ -22,9 +22,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ICSSSourceLocationAware;
@@ -32,7 +32,7 @@ import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a simple expression member
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -70,9 +70,7 @@ public class CSSExpressionMemberTermSimple implements ICSSExpressionMember, ICSS
   @Nonnull
   public CSSExpressionMemberTermSimple setValue (@Nonnull @Nonempty final String sValue)
   {
-    if (StringHelper.hasNoText (sValue))
-      throw new IllegalArgumentException ("Empty value is not allowed");
-
+    ValueEnforcer.notEmpty (sValue, "Value");
     m_sValue = sValue;
     m_sOptimizedValue = CSSExpressionTermOptimizer.getOptimizedValue (sValue);
     return this;
@@ -101,6 +99,12 @@ public class CSSExpressionMemberTermSimple implements ICSSExpressionMember, ICSS
   }
 
   @Nonnull
+  public CSSExpressionMemberTermSimple getClone ()
+  {
+    return new CSSExpressionMemberTermSimple (m_sValue);
+  }
+
+  @Nonnull
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
@@ -109,7 +113,7 @@ public class CSSExpressionMemberTermSimple implements ICSSExpressionMember, ICSS
 
   /**
    * Set the source location of the object, determined while parsing.
-   * 
+   *
    * @param aSourceLocation
    *        The source location to use. May be <code>null</code>.
    */

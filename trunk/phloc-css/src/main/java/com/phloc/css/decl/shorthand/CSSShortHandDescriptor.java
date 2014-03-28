@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -74,6 +75,16 @@ public class CSSShortHandDescriptor
     return ContainerHelper.newList (m_aSubProperties);
   }
 
+  /**
+   * Modify the passed expression members before they are splitted
+   * 
+   * @param aExpressionMembers
+   *        The list to be modified. Never <code>null</code> but maybe empty.
+   */
+  @OverrideOnDemand
+  protected void modifyExpressionMembers (@Nonnull final List <ICSSExpressionMember> aExpressionMembers)
+  {}
+
   @Nonnull
   @ReturnsMutableCopy
   public List <CSSDeclaration> getSplitIntoPieces (@Nonnull final CSSDeclaration aDeclaration)
@@ -92,23 +103,28 @@ public class CSSShortHandDescriptor
     final int nSubProperties = m_aSubProperties.size ();
     final List <CSSDeclaration> ret = new ArrayList <CSSDeclaration> ();
     final List <ICSSExpressionMember> aExpressionMembers = aDeclaration.getExpression ().getAllMembers ();
+
+    // Modification for margin and padding
+    modifyExpressionMembers (aExpressionMembers);
     final int nExpressionMembers = aExpressionMembers.size ();
     final CSSWriterSettings aCWS = new CSSWriterSettings (ECSSVersion.CSS30, false);
     final boolean [] aHandledSubProperties = new boolean [nSubProperties];
 
     // For all expression members
-    for (int i = 0; i < nExpressionMembers; ++i)
+    for (int nExprMemberIndex = 0; nExprMemberIndex < nExpressionMembers; ++nExprMemberIndex)
     {
-      final ICSSExpressionMember aMember = aExpressionMembers.get (i);
-      for (int j = 0; j < nSubProperties; ++j)
-        if (!aHandledSubProperties[j])
+      final ICSSExpressionMember aMember = aExpressionMembers.get (nExprMemberIndex);
+
+      // For all unhandled sub-properties
+      for (int nSubPropIndex = 0; nSubPropIndex < nSubProperties; ++nSubPropIndex)
+        if (!aHandledSubProperties[nSubPropIndex])
         {
-          final CSSPropertyWithDefaultValue aSubProp = m_aSubProperties.get (j);
+          final CSSPropertyWithDefaultValue aSubProp = m_aSubProperties.get (nSubPropIndex);
           final ICSSProperty aProperty = aSubProp.getProperty ();
           final int nMinArgs = aProperty.getMinimumArgumentCount ();
 
           // Always use minimum number of arguments
-          if (i + nMinArgs - 1 < nExpressionMembers)
+          if (nExprMemberIndex + nMinArgs - 1 < nExpressionMembers)
           {
             // Build sum of all members
             final StringBuilder aSB = new StringBuilder ();
@@ -125,22 +141,25 @@ public class CSSShortHandDescriptor
               // We found a match
               final CSSExpression aExpr = new CSSExpression ();
               for (int k = 0; k < nMinArgs; ++k)
-                aExpr.addMember (aExpressionMembers.get (i + k));
+                aExpr.addMember (aExpressionMembers.get (nExprMemberIndex + k));
               ret.add (new CSSDeclaration (aSubProp.getProperty ().getProp ().getName (), aExpr));
-              i += nMinArgs - 1;
+              nExprMemberIndex += nMinArgs - 1;
 
               // Remember as handled
-              aHandledSubProperties[j] = true;
+              aHandledSubProperties[nSubPropIndex] = true;
+
+              // Next expression member
+              break;
             }
           }
         }
     }
 
-    for (int j = 0; j < nSubProperties; ++j)
-      if (!aHandledSubProperties[j])
+    // Assign all default values that are not present
+    for (int nSubPropIndex = 0; nSubPropIndex < nSubProperties; ++nSubPropIndex)
+      if (!aHandledSubProperties[nSubPropIndex])
       {
-        final CSSPropertyWithDefaultValue aSubProp = m_aSubProperties.get (j);
-        // not a match for this property
+        final CSSPropertyWithDefaultValue aSubProp = m_aSubProperties.get (nSubPropIndex);
         // assign default value
         final CSSExpression aExpr = new CSSExpression ();
         aExpr.addMember (new CSSExpressionMemberTermSimple (aSubProp.getDefaultValue ()));

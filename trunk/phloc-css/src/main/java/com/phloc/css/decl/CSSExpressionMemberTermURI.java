@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -31,7 +32,7 @@ import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents an expression member URI
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -70,7 +71,7 @@ public class CSSExpressionMemberTermURI implements ICSSExpressionMember, ICSSSou
 
   /**
    * Set a new URI
-   * 
+   *
    * @param aURI
    *        The new URI to set. May not be <code>null</code>.
    * @return this
@@ -78,16 +79,13 @@ public class CSSExpressionMemberTermURI implements ICSSExpressionMember, ICSSSou
   @Nonnull
   public CSSExpressionMemberTermURI setURI (@Nonnull final CSSURI aURI)
   {
-    if (aURI == null)
-      throw new NullPointerException ("URI");
-
-    m_aURI = aURI;
+    m_aURI = ValueEnforcer.notNull (aURI, "URI");
     return this;
   }
 
   /**
    * Replace the URI string in the existing {@link CSSURI} object.
-   * 
+   *
    * @param sURIString
    *        The new URI string to set. May neither be <code>null</code> nor
    *        empty.
@@ -98,6 +96,12 @@ public class CSSExpressionMemberTermURI implements ICSSExpressionMember, ICSSSou
   {
     m_aURI.setURI (sURIString);
     return this;
+  }
+
+  @Nonnull
+  public CSSExpressionMemberTermURI getClone ()
+  {
+    return new CSSExpressionMemberTermURI (m_aURI);
   }
 
   @Nonnull
