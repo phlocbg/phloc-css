@@ -22,7 +22,7 @@ import com.phloc.css.writer.CSSWriterSettings;
 
 /**
  * A single descriptor for a short hand property (like font or border)
- * 
+ *
  * @author Philip Helger
  * @since 3.7.4
  */
@@ -88,45 +88,64 @@ public class CSSShortHandDescriptor
                                           m_eProperty.getName () +
                                           "'");
 
-    // Result list initially contains all the default values
-    final int nSubProps = m_aSubProperties.size ();
+    // global
+    final int nSubProperties = m_aSubProperties.size ();
     final List <CSSDeclaration> ret = new ArrayList <CSSDeclaration> ();
     final List <ICSSExpressionMember> aExpressionMembers = aDeclaration.getExpression ().getAllMembers ();
-    int nExpressionMemberIndex = 0;
+    final int nExpressionMembers = aExpressionMembers.size ();
     final CSSWriterSettings aCWS = new CSSWriterSettings (ECSSVersion.CSS30, false);
-    for (final CSSPropertyWithDefaultValue aSubProp : m_aSubProperties)
-    {
-      final ICSSProperty aProperty = aSubProp.getProperty ();
-      final int nMinArgs = aProperty.getMinimumArgumentCount ();
-      // Always use minimum number of arguments
-      final StringBuilder aSB = new StringBuilder ();
-      for (int i = 0; i < nMinArgs; ++i)
-      {
-        final ICSSExpressionMember aMember = aExpressionMembers.get (nExpressionMemberIndex);
-        final String sValue = aMember.getAsCSSString (aCWS, 0);
-        if (aSB.length () > 0)
-          aSB.append (' ');
-        aSB.append (sValue);
-      }
+    final boolean [] aHandledSubProperties = new boolean [nSubProperties];
 
-      if (aProperty.isValidValue (aSB.toString ()))
+    // For all expression members
+    for (int i = 0; i < nExpressionMembers; ++i)
+    {
+      final ICSSExpressionMember aMember = aExpressionMembers.get (i);
+      for (int j = 0; j < nSubProperties; ++j)
+        if (!aHandledSubProperties[j])
+        {
+          final CSSPropertyWithDefaultValue aSubProp = m_aSubProperties.get (j);
+          final ICSSProperty aProperty = aSubProp.getProperty ();
+          final int nMinArgs = aProperty.getMinimumArgumentCount ();
+
+          // Always use minimum number of arguments
+          if (i + nMinArgs - 1 < nExpressionMembers)
+          {
+            // Build sum of all members
+            final StringBuilder aSB = new StringBuilder ();
+            for (int k = 0; k < nMinArgs; ++k)
+            {
+              final String sValue = aMember.getAsCSSString (aCWS, 0);
+              if (aSB.length () > 0)
+                aSB.append (' ');
+              aSB.append (sValue);
+            }
+
+            if (aProperty.isValidValue (aSB.toString ()))
+            {
+              // We found a match
+              final CSSExpression aExpr = new CSSExpression ();
+              for (int k = 0; k < nMinArgs; ++k)
+                aExpr.addMember (aExpressionMembers.get (i + k));
+              ret.add (new CSSDeclaration (aSubProp.getProperty ().getProp ().getName (), aExpr));
+              i += nMinArgs - 1;
+
+              // Remember as handled
+              aHandledSubProperties[j] = true;
+            }
+          }
+        }
+    }
+
+    for (int j = 0; j < nSubProperties; ++j)
+      if (!aHandledSubProperties[j])
       {
-        // We found a match
-        final CSSExpression aExpr = new CSSExpression ();
-        for (int i = 0; i < nMinArgs; ++i)
-          aExpr.addMember (aExpressionMembers.get (nExpressionMemberIndex + i));
-        ret.add (new CSSDeclaration (aSubProp.getProperty ().getProp ().getName (), aExpr));
-        nExpressionMemberIndex += nMinArgs;
-      }
-      else
-      {
+        final CSSPropertyWithDefaultValue aSubProp = m_aSubProperties.get (j);
         // not a match for this property
         // assign default value
         final CSSExpression aExpr = new CSSExpression ();
         aExpr.addMember (new CSSExpressionMemberTermSimple (aSubProp.getDefaultValue ()));
         ret.add (new CSSDeclaration (aSubProp.getProperty ().getProp ().getName (), aExpr));
       }
-    }
 
     return ret;
   }

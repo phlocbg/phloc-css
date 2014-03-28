@@ -1081,10 +1081,10 @@ public final class CSSReaderDeclarationList
       final CSSCharStream aCharStream = new CSSCharStream (aReader);
       // Use the default CSS parse error handler if none is provided
       final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? getDefaultParseErrorHandler ()
-                                                                                  : aCustomErrorHandler;
+                                                                                 : aCustomErrorHandler;
       // Use the default CSS exception handler if none is provided
       final ICSSParseExceptionHandler aRealExceptionHandler = aCustomExceptionHandler == null ? getDefaultParseExceptionHandler ()
-                                                                                              : aCustomExceptionHandler;
+                                                                                             : aCustomExceptionHandler;
       final CSSNode aNode = _readStyleDeclaration (aCharStream, eVersion, aRealErrorHandler, aRealExceptionHandler);
 
       // Failed to interpret content as CSS?
