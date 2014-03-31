@@ -84,6 +84,7 @@ public final class CCSSValue
   public static final String BLOCK = "block";
   public static final String BOLD = "bold";
   public static final String BOLDER = "bolder";
+  public static final String BORDER_BOX = "border-box";
   public static final String BOTH = "both";
   public static final String BOTTOM = "bottom";
   public static final String CAPITALIZE = "capitalize";
@@ -144,6 +145,7 @@ public final class CCSSValue
   public static final String OUTSET = "outset";
   public static final String OUTSIDE = "outside";
   public static final String OVERLINE = "overline";
+  public static final String PADDING_BOX = "padding-box";
   public static final String POINTER = "pointer";
   public static final String PORTRAIT = "portrait";
   public static final String PRE = "pre";
