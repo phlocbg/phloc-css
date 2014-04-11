@@ -23,7 +23,7 @@ import com.phloc.css.utils.ECSSColor;
 /**
  * A static registry for all CSS short hand declarations (like
  * <code>border</code> or <code>margin</code>).
- * 
+ *
  * @author Philip Helger
  * @since 3.7.4
  */
@@ -48,8 +48,6 @@ public final class CSSShortHandRegistry
                                                                                               "top left"),
                                                              new CSSPropertyWithDefaultValue (CCSSProperties.BACKGROUND_ATTACHMENT,
                                                                                               CCSSValue.SCROLL),
-                                                             // FIXME specify
-                                                             // props:
                                                              new CSSPropertyWithDefaultValue (CCSSProperties.BACKGROUND_CLIP,
                                                                                               CCSSValue.BORDER_BOX),
                                                              new CSSPropertyWithDefaultValue (CCSSProperties.BACKGROUND_ORIGIN,

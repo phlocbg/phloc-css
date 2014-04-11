@@ -35,7 +35,7 @@ import com.phloc.css.propertyvalue.ICSSValue;
 /**
  * Contains the most commonly used CSS properties plus the available value
  * ranges.
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -304,6 +304,14 @@ public final class CCSSProperties
   public static final ICSSProperty BACKGROUND_ATTACHMENT = new CSSPropertyEnum (ECSSProperty.BACKGROUND_ATTACHMENT,
                                                                                 CCSSValue.SCROLL,
                                                                                 CCSSValue.FIXED);
+  public static final ICSSProperty BACKGROUND_CLIP = new CSSPropertyEnum (ECSSProperty.BACKGROUND_CLIP,
+                                                                          CCSSValue.BORDER_BOX,
+                                                                          CCSSValue.PADDING_BOX,
+                                                                          CCSSValue.CONTENT_BOX);
+  public static final ICSSProperty BACKGROUND_ORIGIN = new CSSPropertyEnum (ECSSProperty.BACKGROUND_ORIGIN,
+                                                                            CCSSValue.BORDER_BOX,
+                                                                            CCSSValue.PADDING_BOX,
+                                                                            CCSSValue.CONTENT_BOX);
   public static final ICSSProperty BACKGROUND_POSITION = new CSSPropertyEnumOrNumbers (ECSSProperty.BACKGROUND_POSITION,
                                                                                        true,
                                                                                        2,
@@ -313,6 +321,13 @@ public final class CCSSProperties
                                                                                        CCSSValue.CENTER,
                                                                                        CCSSValue.LEFT,
                                                                                        CCSSValue.RIGHT);
+  public static final ICSSProperty BACKGROUND_SIZE = new CSSPropertyEnumOrNumbers (ECSSProperty.BACKGROUND_SIZE,
+                                                                                   true,
+                                                                                   2,
+                                                                                   2,
+                                                                                   CCSSValue.AUTO,
+                                                                                   CCSSValue.COVER,
+                                                                                   CCSSValue.CONTAIN);
 
   // list formatting
   public static final ICSSProperty LIST_STYLE_TYPE = new CSSPropertyEnum (ECSSProperty.LIST_STYLE_TYPE,
@@ -450,9 +465,6 @@ public final class CCSSProperties
   public static final ICSSProperty ANIMATION_TIMING_FUNCTION = new CSSPropertyFree (ECSSProperty.ANIMATION_TIMING_FUNCTION);
   public static final ICSSProperty AZIMUTH = new CSSPropertyFree (ECSSProperty.AZIMUTH);
   public static final ICSSProperty BACKFACE_VISIBILITY = new CSSPropertyFree (ECSSProperty.BACKFACE_VISIBILITY);
-  public static final ICSSProperty BACKGROUND_CLIP = new CSSPropertyFree (ECSSProperty.BACKGROUND_CLIP);
-  public static final ICSSProperty BACKGROUND_ORIGIN = new CSSPropertyFree (ECSSProperty.BACKGROUND_ORIGIN);
-  public static final ICSSProperty BACKGROUND_SIZE = new CSSPropertyFree (ECSSProperty.BACKGROUND_SIZE);
   public static final ICSSProperty BASELINE_SHIFT = new CSSPropertyFree (ECSSProperty.BASELINE_SHIFT);
   public static final ICSSProperty BLEED = new CSSPropertyFree (ECSSProperty.BLEED);
   public static final ICSSProperty BOOKMARK_LABEL = new CSSPropertyFree (ECSSProperty.BOOKMARK_LABEL);
