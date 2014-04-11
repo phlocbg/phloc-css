@@ -262,4 +262,29 @@ public class CSSShortHandDescriptorTest
     assertEquals ("padding-bottom:5px", aSplittedDecls.get (2).getAsCSSString (CWS, 0));
     assertEquals ("padding-left:7px", aSplittedDecls.get (3).getAsCSSString (CWS, 0));
   }
+
+  @Test
+  public void testBackground1 ()
+  {
+    final CSSShortHandDescriptor aSHD = CSSShortHandRegistry.getShortHandDescriptor (ECSSProperty.BACKGROUND);
+    assertNotNull (aSHD);
+
+    final CSSDeclaration aDecl = CSSReaderDeclarationList.readFromString ("background: #ff0000 url('grafik.png') left top / 180px 100px no-repeat",
+                                                                          ECSSVersion.CSS30)
+                                                         .getDeclarationAtIndex (0);
+    assertNotNull (aDecl);
+
+    final List <CSSDeclaration> aSplittedDecls = aSHD.getSplitIntoPieces (aDecl);
+    assertNotNull (aSplittedDecls);
+    assertEquals (8, aSplittedDecls.size ());
+
+    assertEquals ("background-color:#ff0000", aSplittedDecls.get (0).getAsCSSString (CWS, 0));
+    assertEquals ("background-image:url(grafik.png)", aSplittedDecls.get (1).getAsCSSString (CWS, 0));
+    assertEquals ("background-position:left top", aSplittedDecls.get (2).getAsCSSString (CWS, 0));
+    assertEquals ("background-size:180px 100px", aSplittedDecls.get (3).getAsCSSString (CWS, 0));
+    assertEquals ("background-repeat:no-repeat", aSplittedDecls.get (4).getAsCSSString (CWS, 0));
+    assertEquals ("background-attachment:scroll", aSplittedDecls.get (5).getAsCSSString (CWS, 0));
+    assertEquals ("background-clip:border-box", aSplittedDecls.get (6).getAsCSSString (CWS, 0));
+    assertEquals ("background-origin:padding-box", aSplittedDecls.get (7).getAsCSSString (CWS, 0));
+  }
 }
