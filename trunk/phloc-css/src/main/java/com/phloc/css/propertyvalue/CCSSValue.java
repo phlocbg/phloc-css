@@ -29,7 +29,7 @@ import com.phloc.css.ECSSUnit;
  * of the CSS specification are contained in this class.<br>
  * Units of measurement are based on:
  * http://de.selfhtml.org/css/formate/wertzuweisung.htm<br>
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -91,6 +91,9 @@ public final class CCSSValue
   public static final String CENTER = "center";
   public static final String CIRCLE = "circle";
   public static final String COLLAPSE = "collapse";
+  public static final String CONTAIN = "contain";
+  public static final String CONTENT_BOX = "content-box";
+  public static final String COVER = "cover";
   public static final String CROSSHAIR = "crosshair";
   public static final String CURRENTCOLOR = "currentColor";
   public static final String CURSIVE = "cursive";
