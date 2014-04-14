@@ -75,7 +75,7 @@ import com.phloc.css.reader.errorhandler.ThrowingCSSParseErrorHandler;
  * sources. This class reads full CSS declarations only. To read only a
  * declaration list (like from an HTML <code>&lt;style&gt;</code> attribute) the
  * {@link CSSReaderDeclarationList} is available.
- *
+ * 
  * @author Philip Helger
  */
 @ThreadSafe
@@ -120,7 +120,7 @@ public final class CSSReader
 
   /**
    * Set the default CSS parse error handler (for recoverable errors).
-   *
+   * 
    * @param aDefaultParseErrorHandler
    *        The new default error handler to be used. May be <code>null</code>
    *        to indicate that no special error handler should be used.
@@ -160,7 +160,7 @@ public final class CSSReader
 
   /**
    * Set the default CSS parse exception handler (for unrecoverable errors).
-   *
+   * 
    * @param aDefaultParseExceptionHandler
    *        The new default exception handler to be used. May not be
    *        <code>null</code>.
@@ -183,7 +183,7 @@ public final class CSSReader
 
   /**
    * Main reading of the CSS
-   *
+   * 
    * @param aStream
    *        The stream to read from. May not be <code>null</code>.
    * @param eVersion
@@ -248,7 +248,7 @@ public final class CSSReader
 
   /**
    * Check if the passed CSS file can be parsed without error
-   *
+   * 
    * @param aFile
    *        The file to be parsed. May not be <code>null</code>.
    * @param sCharset
@@ -273,7 +273,7 @@ public final class CSSReader
 
   /**
    * Check if the passed CSS file can be parsed without error
-   *
+   * 
    * @param aFile
    *        The file to be parsed. May not be <code>null</code>.
    * @param aFallbackCharset
@@ -295,7 +295,7 @@ public final class CSSReader
 
   /**
    * Check if the passed CSS resource can be parsed without error
-   *
+   * 
    * @param aRes
    *        The resource to be parsed. May not be <code>null</code>.
    * @param sCharset
@@ -321,7 +321,7 @@ public final class CSSReader
 
   /**
    * Check if the passed CSS resource can be parsed without error
-   *
+   * 
    * @param aRes
    *        The resource to be parsed. May not be <code>null</code>.
    * @param aFallbackCharset
@@ -360,7 +360,7 @@ public final class CSSReader
    * called. This is similar to calling
    * {@link #readFromStream(IInputStreamProvider, String, ECSSVersion)} and
    * checking for a non-<code>null</code> result.
-   *
+   * 
    * @param aIS
    *        The input stream to use. Is automatically closed. May not be
    *        <code>null</code>.
@@ -391,7 +391,7 @@ public final class CSSReader
    * called. This is similar to calling
    * {@link #readFromStream(IInputStreamProvider,Charset, ECSSVersion)} and
    * checking for a non-<code>null</code> result.
-   *
+   * 
    * @param aIS
    *        The input stream to use. Is automatically closed. May not be
    *        <code>null</code>.
@@ -421,7 +421,7 @@ public final class CSSReader
    * This is similar to calling
    * {@link #readFromString(String, Charset, ECSSVersion)} and checking for a
    * non-<code>null</code> result.
-   *
+   * 
    * @param sCSS
    *        The CSS string to scan. May not be <code>null</code>.
    * @param eVersion
@@ -443,7 +443,7 @@ public final class CSSReader
    * is similar to calling
    * {@link #readFromStream(IInputStreamProvider, Charset, ECSSVersion)} and
    * checking for a non-<code>null</code> result.
-   *
+   * 
    * @param aReader
    *        The reader to use. May not be <code>null</code>.
    * @param eVersion
@@ -475,7 +475,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   *
+   * 
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -498,7 +498,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   *
+   * 
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -520,7 +520,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   *
+   * 
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -547,7 +547,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   *
+   * 
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -573,7 +573,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   *
+   * 
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -600,7 +600,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   *
+   * 
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -626,7 +626,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   *
+   * 
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -661,7 +661,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed String using a byte stream.
-   *
+   * 
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -697,7 +697,7 @@ public final class CSSReader
   /**
    * Read the CSS from the passed String using a character stream. An eventually
    * contained <code>@charset</code> rule is ignored.
-   *
+   * 
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -719,7 +719,7 @@ public final class CSSReader
   /**
    * Read the CSS from the passed String using a character stream. An eventually
    * contained <code>@charset</code> rule is ignored.
-   *
+   * 
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -746,7 +746,7 @@ public final class CSSReader
   /**
    * Read the CSS from the passed String using a character stream. An eventually
    * contained <code>@charset</code> rule is ignored.
-   *
+   * 
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -773,7 +773,7 @@ public final class CSSReader
   /**
    * Read the CSS from the passed String using a character stream. An eventually
    * contained <code>@charset</code> rule is ignored.
-   *
+   * 
    * @param sCSS
    *        The source string containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -800,7 +800,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   *
+   * 
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -823,7 +823,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   *
+   * 
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -845,7 +845,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   *
+   * 
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -872,7 +872,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   *
+   * 
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -898,7 +898,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   *
+   * 
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -925,7 +925,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   *
+   * 
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -951,7 +951,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   *
+   * 
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -986,7 +986,7 @@ public final class CSSReader
 
   /**
    * Read the CSS from the passed File.
-   *
+   * 
    * @param aFile
    *        The file containing the CSS to be parsed. May not be
    *        <code>null</code>.
@@ -1023,7 +1023,7 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
@@ -1050,7 +1050,7 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
@@ -1081,7 +1081,7 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
@@ -1107,7 +1107,7 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
@@ -1137,7 +1137,7 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
@@ -1168,7 +1168,7 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
@@ -1204,7 +1204,7 @@ public final class CSSReader
    * {@link IInputStreamProvider}. If a BOM is present in the
    * {@link InputStream} it is read and if possible the charset is automatically
    * determined from the BOM.
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. May not be <code>null</code>.
    * @return <code>null</code> if no InputStream could be opened, the pair with
@@ -1268,7 +1268,7 @@ public final class CSSReader
    * charset of the BOM is returned (if any).</li>
    * <li>Otherwise <code>null</code> is returned.</li>
    * </ol>
-   *
+   * 
    * @param aISP
    *        The input stream provider to read from. May not be <code>null</code>
    *        .
@@ -1349,7 +1349,7 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
@@ -1379,7 +1379,7 @@ public final class CSSReader
    * contains an explicit charset, the whole CSS is parsed again, with the
    * charset found inside the file, so the passed {@link IInputStreamProvider}
    * must be able to create a new input stream on second invocation!
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. Must be able to create new input
    *        streams on every invocation, in case an explicit charset node was
@@ -1465,7 +1465,7 @@ public final class CSSReader
    * Read the CSS from the passed {@link IReaderProvider}. If the CSS contains
    * an explicit <code>@charset</code> rule, it is ignored and the charset used
    * to create the reader is used instead!
-   *
+   * 
    * @param aRP
    *        The reader provider to use. The reader is retrieved exactly once and
    *        closed anyway. May not be <code>null</code>.
@@ -1508,7 +1508,10 @@ public final class CSSReader
       // Use the default CSS parse error handler if none is provided
       final ICSSParseErrorHandler aRealErrorHandler = aCustomErrorHandler == null ? getDefaultParseErrorHandler ()
                                                                                  : aCustomErrorHandler;
-      final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aRealErrorHandler, aCustomExceptionHandler);
+      // Use the default CSS exception handler if none is provided
+      final ICSSParseExceptionHandler aRealExceptionHandler = aCustomExceptionHandler == null ? getDefaultParseExceptionHandler ()
+                                                                                             : aCustomExceptionHandler;
+      final CSSNode aNode = _readStyleSheet (aCharStream, eVersion, aRealErrorHandler, aRealExceptionHandler);
 
       // Failed to interpret content as CSS?
       if (aNode == null)
