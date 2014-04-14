@@ -258,15 +258,14 @@ final class CSSNodeToDomainObject
     if (ECSSNodeType.NEGATION.isNode (aNode, m_eVersion))
     {
       // Note: no children don't make sense but are syntactically allowed!
-      if (nChildCount > 2)
-        _throwUnexpectedChildrenCount (aNode, "CSS Negation expected 1 or 2 children and got " + nChildCount);
-
-      final List <ICSSSelectorMember> aNestedSelectors = new ArrayList <ICSSSelectorMember> (nChildCount);
+      final List <CSSSelector> aNestedSelectors = new ArrayList <CSSSelector> ();
       for (int i = 0; i < nChildCount; ++i)
       {
-        final CSSNode aChildNode = aNode.jjtGetChild (i);
-        aNestedSelectors.add (_createSelectorMember (aChildNode));
+        final CSSNode aChildNode = aNode.jjtGetChild (0);
+        final CSSSelector aSelector = _createSelector (aChildNode);
+        aNestedSelectors.add (aSelector);
       }
+
       final CSSSelectorMemberNot ret = new CSSSelectorMemberNot (aNestedSelectors);
       ret.setSourceLocation (aNode.getSourceLocation ());
       return ret;

@@ -810,26 +810,18 @@ void pseudo() : {}
   )
 }
 
-void negationArg() #void : {}
-{
-  ( LOOKAHEAD(2)
-    typeSelector()
-  | hash()
-  | _class()
-  | attrib()
-  | pseudo()
-  // negation is syntactically allowed
-  | negation()
-  )
-}
-
 void negation() : {}
 {
   <FUNCTION_NOT> { jjtThis.setText (":not("); }
   ( <S> )*
-  ( negationArg()
+  ( selector ()
     ( <S> )*
-  )?  
+    ( <COMMA>
+      ( <S> )*
+      selector()
+      ( <S> )*
+    )*
+  )?
   <RROUND>
 }
 
