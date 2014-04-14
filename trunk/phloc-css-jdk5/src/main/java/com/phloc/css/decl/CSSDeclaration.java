@@ -24,19 +24,22 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableObject;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
 import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ICSSSourceLocationAware;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
+import com.phloc.css.property.ECSSProperty;
 
 /**
  * Represents a single element in a CSS style rule. (eg. <code>color:red;</code>
- * or <code>background:uri(a.gif) !important;</code>)
+ * or <code>background:uri(a.gif) !important;</code>)<br>
+ * Instances of this class are mutable since 3.7.4.
  * 
  * @author Philip Helger
  */
@@ -45,9 +48,9 @@ public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
 {
   public static final boolean DEFAULT_IMPORTANT = false;
 
-  private final String m_sProperty;
-  private final CSSExpression m_aExpression;
-  private final boolean m_bImportant;
+  private String m_sProperty;
+  private CSSExpression m_aExpression;
+  private boolean m_bIsImportant;
   private CSSSourceLocation m_aSourceLocation;
 
   /**
@@ -66,7 +69,7 @@ public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
   }
 
   /**
-   * Constructor
+   * Constructor.
    * 
    * @param sProperty
    *        The name of the property. E.g. "color". May neither be
@@ -74,20 +77,16 @@ public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
    *        lowercased!
    * @param aExpression
    *        The value of the property. May not be <code>null</code>.
-   * @param bImportant
+   * @param bIsImportant
    *        <code>true</code> if it is important, <code>false</code> if not.
    */
   public CSSDeclaration (@Nonnull @Nonempty final String sProperty,
                          @Nonnull final CSSExpression aExpression,
-                         final boolean bImportant)
+                         final boolean bIsImportant)
   {
-    if (StringHelper.hasNoText (sProperty))
-      throw new IllegalArgumentException ("empty property is not allowed");
-    if (aExpression == null)
-      throw new NullPointerException ("expression");
-    m_sProperty = sProperty.toLowerCase (Locale.US);
-    m_aExpression = aExpression;
-    m_bImportant = bImportant;
+    setProperty (sProperty);
+    setExpression (aExpression);
+    setImportant (bIsImportant);
   }
 
   /**
@@ -102,14 +101,61 @@ public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
   }
 
   /**
+   * Set the property of this CSS value (e.g. <code>background-color</code>).
+   * 
+   * @param sProperty
+   *        The CSS property name to set. May neither be <code>null</code> nor
+   *        empty. The property value is automatically lowercased!
+   * @return this
+   * @since 3.7.4
+   */
+  @Nonnull
+  public CSSDeclaration setProperty (@Nonnull @Nonempty final String sProperty)
+  {
+    m_sProperty = ValueEnforcer.notEmpty (sProperty, "Property").toLowerCase (Locale.US);
+    return this;
+  }
+
+  /**
+   * Set the property of this CSS value (e.g. <code>background-color</code>).
+   * 
+   * @param eProperty
+   *        The CSS property to set. May not be <code>null</code>.
+   * @return this
+   * @since 3.7.4
+   */
+  @Nonnull
+  public CSSDeclaration setProperty (@Nonnull final ECSSProperty eProperty)
+  {
+    ValueEnforcer.notNull (eProperty, "Property");
+    return setProperty (eProperty.getName ());
+  }
+
+  /**
    * @return The expression of this declaration (e.g. "red" or "25px" or
    *         "25px 10px 25px 9px") as a structured value. Never
    *         <code>null</code>.
    */
   @Nonnull
+  @ReturnsMutableObject (reason = "design")
   public CSSExpression getExpression ()
   {
     return m_aExpression;
+  }
+
+  /**
+   * Set the expression (= value) of this declaration.
+   * 
+   * @param aExpression
+   *        The value of the property. May not be <code>null</code>.
+   * @return this
+   * @since 3.7.4
+   */
+  @Nonnull
+  public CSSDeclaration setExpression (@Nonnull final CSSExpression aExpression)
+  {
+    m_aExpression = ValueEnforcer.notNull (aExpression, "Expression");
+    return this;
   }
 
   /**
@@ -118,7 +164,23 @@ public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
    */
   public boolean isImportant ()
   {
-    return m_bImportant;
+    return m_bIsImportant;
+  }
+
+  /**
+   * Set the important flag of this value.
+   * 
+   * @param bIsImportant
+   *        <code>true</code> to mark it important, <code>false</code> to remove
+   *        it.
+   * @return this
+   * @since 3.7.4
+   */
+  @Nonnull
+  public CSSDeclaration setImportant (final boolean bIsImportant)
+  {
+    m_bIsImportant = bIsImportant;
+    return this;
   }
 
   @Nonnull
@@ -128,7 +190,7 @@ public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
     return m_sProperty +
            CCSS.SEPARATOR_PROPERTY_VALUE +
            m_aExpression.getAsCSSString (aSettings, nIndentLevel) +
-           (m_bImportant ? CCSS.IMPORTANT_SUFFIX : "");
+           (m_bIsImportant ? CCSS.IMPORTANT_SUFFIX : "");
   }
 
   /**
@@ -158,7 +220,7 @@ public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
     final CSSDeclaration rhs = (CSSDeclaration) o;
     return m_sProperty.equals (rhs.m_sProperty) &&
            m_aExpression.equals (rhs.m_aExpression) &&
-           m_bImportant == rhs.m_bImportant;
+           m_bIsImportant == rhs.m_bIsImportant;
   }
 
   @Override
@@ -166,7 +228,7 @@ public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
   {
     return new HashCodeGenerator (this).append (m_sProperty)
                                        .append (m_aExpression)
-                                       .append (m_bImportant)
+                                       .append (m_bIsImportant)
                                        .getHashCode ();
   }
 
@@ -175,7 +237,7 @@ public class CSSDeclaration implements ICSSWriteable, ICSSSourceLocationAware
   {
     return new ToStringGenerator (this).append ("property", m_sProperty)
                                        .append ("expression", m_aExpression)
-                                       .append ("important", m_bImportant)
+                                       .append ("important", m_bIsImportant)
                                        .appendIfNotNull ("sourceLocation", m_aSourceLocation)
                                        .toString ();
   }

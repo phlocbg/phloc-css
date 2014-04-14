@@ -29,7 +29,7 @@ import com.phloc.css.ICSSWriterSettings;
 /**
  * Enumeration with expression operators. E.g. used in
  * <code>rgb(1<b>,</b>2<b>,</b>3)</code>
- * 
+ *
  * @author Philip Helger
  */
 public enum ECSSExpressionOperator implements ICSSExpressionMember, IHasName
@@ -57,6 +57,13 @@ public enum ECSSExpressionOperator implements ICSSExpressionMember, IHasName
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
     return m_sName;
+  }
+
+  @Nonnull
+  public ECSSExpressionOperator getClone ()
+  {
+    // No possibility to clone :)
+    return this;
   }
 
   @Nullable

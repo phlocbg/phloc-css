@@ -29,7 +29,7 @@ import com.phloc.css.ECSSUnit;
  * of the CSS specification are contained in this class.<br>
  * Units of measurement are based on:
  * http://de.selfhtml.org/css/formate/wertzuweisung.htm<br>
- * 
+ *
  * @author Philip Helger
  */
 @Immutable
@@ -84,12 +84,16 @@ public final class CCSSValue
   public static final String BLOCK = "block";
   public static final String BOLD = "bold";
   public static final String BOLDER = "bolder";
+  public static final String BORDER_BOX = "border-box";
   public static final String BOTH = "both";
   public static final String BOTTOM = "bottom";
   public static final String CAPITALIZE = "capitalize";
   public static final String CENTER = "center";
   public static final String CIRCLE = "circle";
   public static final String COLLAPSE = "collapse";
+  public static final String CONTAIN = "contain";
+  public static final String CONTENT_BOX = "content-box";
+  public static final String COVER = "cover";
   public static final String CROSSHAIR = "crosshair";
   public static final String CURRENTCOLOR = "currentColor";
   public static final String CURSIVE = "cursive";
@@ -144,6 +148,7 @@ public final class CCSSValue
   public static final String OUTSET = "outset";
   public static final String OUTSIDE = "outside";
   public static final String OVERLINE = "overline";
+  public static final String PADDING_BOX = "padding-box";
   public static final String POINTER = "pointer";
   public static final String PORTRAIT = "portrait";
   public static final String PRE = "pre";

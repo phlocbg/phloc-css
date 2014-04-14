@@ -17,6 +17,7 @@
  */
 package com.phloc.css.property;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -24,6 +25,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -36,7 +38,7 @@ import com.phloc.css.utils.ICSSNamedColor;
 
 /**
  * Abstract base class for implementing {@link ICSSProperty}
- *
+ * 
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -47,7 +49,7 @@ public abstract class AbstractCSSProperty implements ICSSProperty
 
   /**
    * Constructor
-   *
+   * 
    * @param eProp
    *        The base property to use. May not be <code>null</code>.
    * @param aCustomizer
@@ -75,6 +77,20 @@ public abstract class AbstractCSSProperty implements ICSSProperty
   public final ICSSPropertyCustomizer getCustomizer ()
   {
     return m_aCustomizer;
+  }
+
+  @Nonnegative
+  @OverrideOnDemand
+  public int getMinimumArgumentCount ()
+  {
+    return 1;
+  }
+
+  @Nonnegative
+  @OverrideOnDemand
+  public int getMaximumArgumentCount ()
+  {
+    return 1;
   }
 
   public static boolean isValidPropertyValue (@Nullable final String sValue)

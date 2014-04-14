@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -39,7 +40,7 @@ import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a CSS calc() element
- * 
+ *
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -51,12 +52,15 @@ public class CSSExpressionMemberMath implements ICSSExpressionMember, ICSSVersio
   public CSSExpressionMemberMath ()
   {}
 
+  public CSSExpressionMemberMath (@Nonnull final List <ICSSExpressionMathMember> aMembers)
+  {
+    m_aMembers.addAll (aMembers);
+  }
+
   @Nonnull
   public CSSExpressionMemberMath addMember (@Nonnull final ICSSExpressionMathMember aMember)
   {
-    if (aMember == null)
-      throw new NullPointerException ("member");
-
+    ValueEnforcer.notNull (aMember, "Member");
     m_aMembers.add (aMember);
     return this;
   }
@@ -65,10 +69,8 @@ public class CSSExpressionMemberMath implements ICSSExpressionMember, ICSSVersio
   public CSSExpressionMemberMath addMember (@Nonnegative final int nIndex,
                                             @Nonnull final ICSSExpressionMathMember aMember)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aMember == null)
-      throw new NullPointerException ("member");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aMember, "Member");
 
     if (nIndex >= getMemberCount ())
       m_aMembers.add (aMember);
@@ -94,7 +96,7 @@ public class CSSExpressionMemberMath implements ICSSExpressionMember, ICSSVersio
 
   /**
    * Remove all members.
-   * 
+   *
    * @return {@link EChange#CHANGED} if any member was removed,
    *         {@link EChange#UNCHANGED} otherwise. Never <code>null</code>.
    * @since 3.7.3
@@ -122,6 +124,12 @@ public class CSSExpressionMemberMath implements ICSSExpressionMember, ICSSVersio
   }
 
   @Nonnull
+  public CSSExpressionMemberMath getClone ()
+  {
+    return new CSSExpressionMemberMath (m_aMembers);
+  }
+
+  @Nonnull
   @Nonempty
   public String getAsCSSString (@Nonnull final ICSSWriterSettings aSettings, @Nonnegative final int nIndentLevel)
   {
@@ -140,7 +148,7 @@ public class CSSExpressionMemberMath implements ICSSExpressionMember, ICSSVersio
 
   /**
    * Set the source location of the object, determined while parsing.
-   * 
+   *
    * @param aSourceLocation
    *        The source location to use. May be <code>null</code>.
    */

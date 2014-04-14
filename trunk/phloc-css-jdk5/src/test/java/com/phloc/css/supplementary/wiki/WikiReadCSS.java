@@ -29,7 +29,7 @@ import com.phloc.css.reader.CSSReader;
 
 /**
  * This is example code to read a CSS declaration from a {@link File}.
- * 
+ *
  * @author Philip Helger
  */
 public final class WikiReadCSS
@@ -38,13 +38,14 @@ public final class WikiReadCSS
 
   /**
    * Read a CSS 3.0 declaration from a file using UTF-8 encoding.
-   * 
+   *
    * @param aFile
    *        The file to be read. May not be <code>null</code>.
    * @return <code>null</code> if the file has syntax errors.
    */
   public static CascadingStyleSheet readCSS30 (final File aFile)
   {
+    // UTF-8 is the fallback if neither a BOM nor @charset rule is present
     final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
     if (aCSS == null)
     {

@@ -19,6 +19,7 @@ package com.phloc.css.property;
 
 import java.io.Serializable;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -49,6 +50,20 @@ public interface ICSSProperty extends ICSSVersionAware, Serializable
    */
   @Nullable
   ICSSPropertyCustomizer getCustomizer ();
+
+  /**
+   * @return The minimum number of arguments for this property.
+   * @since 3.7.4
+   */
+  @Nonnegative
+  int getMinimumArgumentCount ();
+
+  /**
+   * @return The maximum number of arguments for this property.
+   * @since 3.7.4
+   */
+  @Nonnegative
+  int getMaximumArgumentCount ();
 
   /**
    * Check if the passed value is valid for this property according to the
