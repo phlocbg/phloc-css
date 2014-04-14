@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -68,16 +69,15 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
   @Nonnull
   public CSSStyleRule addSelector (@Nonnull final ICSSSelectorMember aSingleSelectorMember)
   {
-    if (aSingleSelectorMember == null)
-      throw new NullPointerException ("SingleSelectorMember");
+    ValueEnforcer.notNull (aSingleSelectorMember, "SingleSelectorMember");
+
     return addSelector (new CSSSelector ().addMember (aSingleSelectorMember));
   }
 
   @Nonnull
   public CSSStyleRule addSelector (@Nonnull final CSSSelector aSelector)
   {
-    if (aSelector == null)
-      throw new NullPointerException ("selector");
+    ValueEnforcer.notNull (aSelector, "Selector");
 
     m_aSelectors.add (aSelector);
     return this;
@@ -87,8 +87,7 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
   public CSSStyleRule addSelector (@Nonnegative final int nIndex,
                                    @Nonnull final ICSSSelectorMember aSingleSelectorMember)
   {
-    if (aSingleSelectorMember == null)
-      throw new NullPointerException ("SingleSelectorMember");
+    ValueEnforcer.notNull (aSingleSelectorMember, "SingleSelectorMember");
 
     return addSelector (nIndex, new CSSSelector ().addMember (aSingleSelectorMember));
   }
@@ -96,10 +95,8 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
   @Nonnull
   public CSSStyleRule addSelector (@Nonnegative final int nIndex, @Nonnull final CSSSelector aSelector)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aSelector == null)
-      throw new NullPointerException ("selector");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aSelector, "Selector");
 
     if (nIndex >= getSelectorCount ())
       m_aSelectors.add (aSelector);
@@ -263,7 +260,12 @@ public class CSSStyleRule implements ICSSTopLevelRule, IHasCSSDeclarations, ICSS
       if (bFirst)
         bFirst = false;
       else
-        aSB.append (bOptimizedOutput ? "," : ",\n");
+      {
+        if (bOptimizedOutput)
+          aSB.append (',');
+        else
+          aSB.append (",\n").append (aSettings.getIndent (nIndentLevel));
+      }
       aSB.append (aSelector.getAsCSSString (aSettings, nIndentLevel));
     }
     return aSB.toString ();

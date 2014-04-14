@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -53,12 +54,11 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   {}
 
   @Nonnull
-  public final CSSDeclarationList addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  public final CSSDeclarationList addDeclaration (@Nonnull final CSSDeclaration aNewDeclaration)
   {
-    if (aDeclaration == null)
-      throw new NullPointerException ("declaration");
+    ValueEnforcer.notNull (aNewDeclaration, "NewDeclaration");
 
-    m_aDeclarations.add (aDeclaration);
+    m_aDeclarations.add (aNewDeclaration);
     return this;
   }
 
@@ -73,10 +73,8 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   @Nonnull
   public CSSDeclarationList addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("index is invalid: " + nIndex);
-    if (aNewDeclaration == null)
-      throw new NullPointerException ("newDeclaration");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aNewDeclaration, "NewDeclaration");
 
     if (nIndex >= getDeclarationCount ())
       m_aDeclarations.add (aNewDeclaration);
@@ -132,10 +130,8 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   public CSSDeclarationList setDeclarationAtIndex (@Nonnegative final int nIndex,
                                                    @Nonnull final CSSDeclaration aNewDeclaration)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("index is invalid: " + nIndex);
-    if (aNewDeclaration == null)
-      throw new NullPointerException ("newDeclaration");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aNewDeclaration, "NewDeclaration");
 
     if (nIndex >= getDeclarationCount ())
       m_aDeclarations.add (aNewDeclaration);
