@@ -35,7 +35,7 @@ import com.phloc.css.reader.CSSReader;
 /**
  * Example how to extract all URLs from a certain CSS file using an
  * {@link ICSSUrlVisitor}.
- * 
+ *
  * @author Philip Helger
  */
 public final class WikiVisitUrls

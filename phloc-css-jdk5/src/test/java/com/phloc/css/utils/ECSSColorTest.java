@@ -42,6 +42,7 @@ public final class ECSSColorTest
     for (final ECSSColor eColor : ECSSColor.values ())
     {
       assertTrue (StringHelper.hasText (eColor.getName ()));
+      assertTrue (CSSColorHelper.isColorValue (eColor.getName ()));
 
       final String sHex = eColor.getAsHexColorValue ();
       assertTrue (sHex, CSSColorHelper.isHexColorValue (sHex));

@@ -15,17 +15,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.phloc.css.decl;
+package com.phloc.css.utils;
 
-import com.phloc.commons.ICloneable;
-import com.phloc.css.ICSSWriteable;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+import com.phloc.commons.string.StringHelper;
 
 /**
- * Base interface for all CSS expression objects.
- *
+ * Test class for class {@link ECSSColorName}.
+ * 
  * @author Philip Helger
  */
-public interface ICSSExpressionMember extends ICSSWriteable, ICloneable <ICSSExpressionMember>
+public final class ECSSColorNameTest
 {
-  /* empty */
+  @Test
+  public void testAll ()
+  {
+    for (final ECSSColorName eColor : ECSSColorName.values ())
+    {
+      assertTrue (StringHelper.hasText (eColor.getName ()));
+      assertTrue (CSSColorHelper.isColorValue (eColor.getName ()));
+
+      assertSame (eColor, ECSSColorName.getFromNameCaseInsensitiveOrNull (eColor.getName ()));
+      assertTrue (ECSSColorName.isDefaultColorName (eColor.getName ()));
+    }
+  }
 }

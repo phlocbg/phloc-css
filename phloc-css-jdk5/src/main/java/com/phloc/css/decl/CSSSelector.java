@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -66,8 +67,7 @@ public class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
   @Nonnull
   public CSSSelector addMember (@Nonnull final ICSSSelectorMember aMember)
   {
-    if (aMember == null)
-      throw new NullPointerException ("member");
+    ValueEnforcer.notNull (aMember, "Member");
 
     m_aMembers.add (aMember);
     return this;
@@ -76,10 +76,8 @@ public class CSSSelector implements ICSSWriteable, ICSSSourceLocationAware
   @Nonnull
   public CSSSelector addMember (@Nonnegative final int nIndex, @Nonnull final ICSSSelectorMember aMember)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aMember == null)
-      throw new NullPointerException ("member");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aMember, "Member");
 
     if (nIndex >= getMemberCount ())
       m_aMembers.add (aMember);

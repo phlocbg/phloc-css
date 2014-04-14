@@ -150,4 +150,62 @@ public interface IHasCSSDeclarations extends ICSSWriteable
    */
   @Nonnegative
   int getDeclarationCount ();
+
+  /**
+   * Get the first declaration with the specified property name. If no such
+   * property name is present, <code>null</code> is returned. If more than one
+   * declaration ith the specified property name is present, always the first in
+   * the list will be returned. The comparison happens <b>case sensitive</b>.
+   * 
+   * @param sPropertyName
+   *        The property name of the declaration to search (e.g.
+   *        <code>color</code>). May be <code>null</code>.
+   * @return <code>null</code> if no such property name was found.
+   * @since 3.7.4
+   */
+  @Nullable
+  CSSDeclaration getDeclarationOfPropertyName (@Nullable String sPropertyName);
+
+  /**
+   * Get the first declaration with the specified property name. If no such
+   * property name is present, <code>null</code> is returned. If more than one
+   * declaration ith the specified property name is present, always the first in
+   * the list will be returned. The comparison happens <b>case insensitive</b>.
+   * 
+   * @param sPropertyName
+   *        The property name of the declaration to search (e.g.
+   *        <code>color</code>). May be <code>null</code>.
+   * @return <code>null</code> if no such property name was found.
+   * @since 3.7.4
+   */
+  @Nullable
+  CSSDeclaration getDeclarationOfPropertyNameCaseInsensitive (@Nullable String sPropertyName);
+
+  /**
+   * Get all declarations within this list that have the specified property
+   * name. The comparison happens <b>case sensitive</b>.
+   * 
+   * @param sPropertyName
+   *        The property name of the declaration to search (e.g.
+   *        <code>color</code>). May be <code>null</code>.
+   * @return Never <code>null</code> but maybe an empty list.
+   * @since 3.7.4
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <CSSDeclaration> getAllDeclarationsOfPropertyName (@Nullable String sPropertyName);
+
+  /**
+   * Get all declarations within this list that have the specified property
+   * name. The comparison happens <b>case insensitive</b>.
+   * 
+   * @param sPropertyName
+   *        The property name of the declaration to search (e.g.
+   *        <code>color</code>). May be <code>null</code>.
+   * @return Never <code>null</code> but maybe an empty list.
+   * @since 3.7.4
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  List <CSSDeclaration> getAllDeclarationsOfPropertyNameCaseInsensitive (@Nullable String sPropertyName);
 }

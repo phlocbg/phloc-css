@@ -25,11 +25,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
 import com.phloc.css.CSSSourceLocation;
@@ -52,12 +54,11 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   {}
 
   @Nonnull
-  public final CSSDeclarationList addDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+  public final CSSDeclarationList addDeclaration (@Nonnull final CSSDeclaration aNewDeclaration)
   {
-    if (aDeclaration == null)
-      throw new NullPointerException ("declaration");
+    ValueEnforcer.notNull (aNewDeclaration, "NewDeclaration");
 
-    m_aDeclarations.add (aDeclaration);
+    m_aDeclarations.add (aNewDeclaration);
     return this;
   }
 
@@ -72,10 +73,8 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   @Nonnull
   public CSSDeclarationList addDeclaration (@Nonnegative final int nIndex, @Nonnull final CSSDeclaration aNewDeclaration)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("index is invalid: " + nIndex);
-    if (aNewDeclaration == null)
-      throw new NullPointerException ("newDeclaration");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aNewDeclaration, "NewDeclaration");
 
     if (nIndex >= getDeclarationCount ())
       m_aDeclarations.add (aNewDeclaration);
@@ -131,10 +130,8 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   public CSSDeclarationList setDeclarationAtIndex (@Nonnegative final int nIndex,
                                                    @Nonnull final CSSDeclaration aNewDeclaration)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("index is invalid: " + nIndex);
-    if (aNewDeclaration == null)
-      throw new NullPointerException ("newDeclaration");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aNewDeclaration, "NewDeclaration");
 
     if (nIndex >= getDeclarationCount ())
       m_aDeclarations.add (aNewDeclaration);
@@ -149,9 +146,53 @@ public class CSSDeclarationList implements IHasCSSDeclarations, ICSSSourceLocati
   }
 
   @Nonnegative
-  public final int getDeclarationCount ()
+  public int getDeclarationCount ()
   {
     return m_aDeclarations.size ();
+  }
+
+  @Nullable
+  public CSSDeclaration getDeclarationOfPropertyName (@Nullable final String sPropertyName)
+  {
+    if (StringHelper.hasText (sPropertyName))
+      for (final CSSDeclaration aDecl : m_aDeclarations)
+        if (aDecl.getProperty ().equals (sPropertyName))
+          return aDecl;
+    return null;
+  }
+
+  @Nullable
+  public CSSDeclaration getDeclarationOfPropertyNameCaseInsensitive (@Nullable final String sPropertyName)
+  {
+    if (StringHelper.hasText (sPropertyName))
+      for (final CSSDeclaration aDecl : m_aDeclarations)
+        if (aDecl.getProperty ().equalsIgnoreCase (sPropertyName))
+          return aDecl;
+    return null;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSDeclaration> getAllDeclarationsOfPropertyName (@Nullable final String sPropertyName)
+  {
+    final List <CSSDeclaration> ret = new ArrayList <CSSDeclaration> ();
+    if (StringHelper.hasText (sPropertyName))
+      for (final CSSDeclaration aDecl : m_aDeclarations)
+        if (aDecl.getProperty ().equals (sPropertyName))
+          ret.add (aDecl);
+    return ret;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <CSSDeclaration> getAllDeclarationsOfPropertyNameCaseInsensitive (@Nullable final String sPropertyName)
+  {
+    final List <CSSDeclaration> ret = new ArrayList <CSSDeclaration> ();
+    if (StringHelper.hasText (sPropertyName))
+      for (final CSSDeclaration aDecl : m_aDeclarations)
+        if (aDecl.getProperty ().equalsIgnoreCase (sPropertyName))
+          ret.add (aDecl);
+    return ret;
   }
 
   @Nonnull

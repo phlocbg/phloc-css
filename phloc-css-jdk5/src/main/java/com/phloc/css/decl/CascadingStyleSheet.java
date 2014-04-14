@@ -72,6 +72,21 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   }
 
   /**
+   * Get the <code>@import</code> rule at the specified index.
+   * 
+   * @param nIndex
+   *        The index to be resolved. Should be &ge; 0 and &lt;
+   *        {@link #getImportRuleCount()}.
+   * @return <code>null</code> if an invalid index was specified.
+   * @since 3.7.4
+   */
+  @Nullable
+  public CSSImportRule getImportRuleAtIndex (@Nonnegative final int nIndex)
+  {
+    return ContainerHelper.getSafe (m_aImportRules, nIndex);
+  }
+
+  /**
    * Add a new <code>@import</code> rule at the end of the <code>@import</code>
    * rule list.
    * 
@@ -191,6 +206,21 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   public int getNamespaceRuleCount ()
   {
     return m_aNamespaceRules.size ();
+  }
+
+  /**
+   * Get the <code>@namespace</code> rule at the specified index.
+   * 
+   * @param nIndex
+   *        The index to be resolved. Should be &ge; 0 and &lt;
+   *        {@link #getNamespaceRuleCount()}.
+   * @return <code>null</code> if an invalid index was specified.
+   * @since 3.7.4
+   */
+  @Nullable
+  public CSSNamespaceRule getNamespaceRuleAtIndex (@Nonnegative final int nIndex)
+  {
+    return ContainerHelper.getSafe (m_aNamespaceRules, nIndex);
   }
 
   /**
@@ -320,6 +350,21 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   public int getRuleCount ()
   {
     return m_aRules.size ();
+  }
+
+  /**
+   * Get the top-level rule at the specified index.
+   * 
+   * @param nIndex
+   *        The index to be resolved. Should be &ge; 0 and &lt;
+   *        {@link #getRuleCount()}.
+   * @return <code>null</code> if an invalid index was specified.
+   * @since 3.7.4
+   */
+  @Nullable
+  public ICSSTopLevelRule getRuleAtIndex (@Nonnegative final int nIndex)
+  {
+    return ContainerHelper.getSafe (m_aRules, nIndex);
   }
 
   /**
@@ -463,6 +508,32 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   }
 
   /**
+   * Get the style rule at the specified index.
+   * 
+   * @param nIndex
+   *        The index to be resolved. Should be &ge; 0 and &lt;
+   *        {@link #getStyleRuleCount()}.
+   * @return <code>null</code> if an invalid index was specified.
+   * @since 3.7.4
+   */
+  @Nullable
+  public CSSStyleRule getStyleRuleAtIndex (@Nonnegative final int nIndex)
+  {
+    if (nIndex >= 0)
+    {
+      int nCurIndex = 0;
+      for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+        if (aTopLevelRule instanceof CSSStyleRule)
+        {
+          if (nCurIndex == nIndex)
+            return (CSSStyleRule) aTopLevelRule;
+          ++nCurIndex;
+        }
+    }
+    return null;
+  }
+
+  /**
    * Get a list of all top-level rules that are style rules (implementing
    * {@link CSSStyleRule}).
    * 
@@ -508,6 +579,32 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
       if (aTopLevelRule instanceof CSSPageRule)
         ret++;
     return ret;
+  }
+
+  /**
+   * Get the <code>@page</code> rule at the specified index.
+   * 
+   * @param nIndex
+   *        The index to be resolved. Should be &ge; 0 and &lt;
+   *        {@link #getPageRuleCount()}.
+   * @return <code>null</code> if an invalid index was specified.
+   * @since 3.7.4
+   */
+  @Nullable
+  public CSSPageRule getPageRuleAtIndex (@Nonnegative final int nIndex)
+  {
+    if (nIndex >= 0)
+    {
+      int nCurIndex = 0;
+      for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+        if (aTopLevelRule instanceof CSSPageRule)
+        {
+          if (nCurIndex == nIndex)
+            return (CSSPageRule) aTopLevelRule;
+          ++nCurIndex;
+        }
+    }
+    return null;
   }
 
   /**
@@ -557,6 +654,32 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
       if (aTopLevelRule instanceof CSSMediaRule)
         ret++;
     return ret;
+  }
+
+  /**
+   * Get the <code>@media</code> rule at the specified index.
+   * 
+   * @param nIndex
+   *        The index to be resolved. Should be &ge; 0 and &lt;
+   *        {@link #getMediaRuleCount()}.
+   * @return <code>null</code> if an invalid index was specified.
+   * @since 3.7.4
+   */
+  @Nullable
+  public CSSMediaRule getMediaRuleAtIndex (@Nonnegative final int nIndex)
+  {
+    if (nIndex >= 0)
+    {
+      int nCurIndex = 0;
+      for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+        if (aTopLevelRule instanceof CSSMediaRule)
+        {
+          if (nCurIndex == nIndex)
+            return (CSSMediaRule) aTopLevelRule;
+          ++nCurIndex;
+        }
+    }
+    return null;
   }
 
   /**
@@ -610,6 +733,32 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   }
 
   /**
+   * Get the <code>@font-face</code> rule at the specified index.
+   * 
+   * @param nIndex
+   *        The index to be resolved. Should be &ge; 0 and &lt;
+   *        {@link #getFontFaceRuleCount()}.
+   * @return <code>null</code> if an invalid index was specified.
+   * @since 3.7.4
+   */
+  @Nullable
+  public CSSFontFaceRule getFontFaceRuleAtIndex (@Nonnegative final int nIndex)
+  {
+    if (nIndex >= 0)
+    {
+      int nCurIndex = 0;
+      for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+        if (aTopLevelRule instanceof CSSFontFaceRule)
+        {
+          if (nCurIndex == nIndex)
+            return (CSSFontFaceRule) aTopLevelRule;
+          ++nCurIndex;
+        }
+    }
+    return null;
+  }
+
+  /**
    * Get a list of all top-level rules that are font-face rules (implementing
    * {@link CSSFontFaceRule}).
    * 
@@ -657,6 +806,32 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
       if (aTopLevelRule instanceof CSSKeyframesRule)
         ret++;
     return ret;
+  }
+
+  /**
+   * Get the <code>@keyframes</code> rule at the specified index.
+   * 
+   * @param nIndex
+   *        The index to be resolved. Should be &ge; 0 and &lt;
+   *        {@link #getKeyframesRuleCount()}.
+   * @return <code>null</code> if an invalid index was specified.
+   * @since 3.7.4
+   */
+  @Nullable
+  public CSSKeyframesRule getKeyframesRuleAtIndex (@Nonnegative final int nIndex)
+  {
+    if (nIndex >= 0)
+    {
+      int nCurIndex = 0;
+      for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+        if (aTopLevelRule instanceof CSSKeyframesRule)
+        {
+          if (nCurIndex == nIndex)
+            return (CSSKeyframesRule) aTopLevelRule;
+          ++nCurIndex;
+        }
+    }
+    return null;
   }
 
   /**
@@ -710,6 +885,32 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   }
 
   /**
+   * Get the <code>@viewport</code> rule at the specified index.
+   * 
+   * @param nIndex
+   *        The index to be resolved. Should be &ge; 0 and &lt;
+   *        {@link #getViewportRuleCount()}.
+   * @return <code>null</code> if an invalid index was specified.
+   * @since 3.7.4
+   */
+  @Nullable
+  public CSSViewportRule getViewportRuleAtIndex (@Nonnegative final int nIndex)
+  {
+    if (nIndex >= 0)
+    {
+      int nCurIndex = 0;
+      for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+        if (aTopLevelRule instanceof CSSViewportRule)
+        {
+          if (nCurIndex == nIndex)
+            return (CSSViewportRule) aTopLevelRule;
+          ++nCurIndex;
+        }
+    }
+    return null;
+  }
+
+  /**
    * Get a list of all top-level rules that are viewport rules (implementing
    * {@link CSSViewportRule}).
    * 
@@ -760,6 +961,32 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   }
 
   /**
+   * Get the <code>@supports</code> rule at the specified index.
+   * 
+   * @param nIndex
+   *        The index to be resolved. Should be &ge; 0 and &lt;
+   *        {@link #getSupportsRuleCount()}.
+   * @return <code>null</code> if an invalid index was specified.
+   * @since 3.7.4
+   */
+  @Nullable
+  public CSSSupportsRule getSupportsRuleAtIndex (@Nonnegative final int nIndex)
+  {
+    if (nIndex >= 0)
+    {
+      int nCurIndex = 0;
+      for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+        if (aTopLevelRule instanceof CSSSupportsRule)
+        {
+          if (nCurIndex == nIndex)
+            return (CSSSupportsRule) aTopLevelRule;
+          ++nCurIndex;
+        }
+    }
+    return null;
+  }
+
+  /**
    * Get a list of all top-level rules that are support rules (implementing
    * {@link CSSSupportsRule}).
    * 
@@ -807,6 +1034,32 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
       if (aTopLevelRule instanceof CSSUnknownRule)
         ret++;
     return ret;
+  }
+
+  /**
+   * Get the unknown rule at the specified index.
+   * 
+   * @param nIndex
+   *        The index to be resolved. Should be &ge; 0 and &lt;
+   *        {@link #getUnknownRuleCount()}.
+   * @return <code>null</code> if an invalid index was specified.
+   * @since 3.7.4
+   */
+  @Nullable
+  public CSSUnknownRule getUnknownRuleAtIndex (@Nonnegative final int nIndex)
+  {
+    if (nIndex >= 0)
+    {
+      int nCurIndex = 0;
+      for (final ICSSTopLevelRule aTopLevelRule : m_aRules)
+        if (aTopLevelRule instanceof CSSUnknownRule)
+        {
+          if (nCurIndex == nIndex)
+            return (CSSUnknownRule) aTopLevelRule;
+          ++nCurIndex;
+        }
+    }
+    return null;
   }
 
   /**

@@ -33,6 +33,7 @@ import com.phloc.css.AbstractCSS30Test;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
 import com.phloc.css.reader.CSSReader;
+import com.phloc.css.reader.errorhandler.LoggingCSSParseErrorHandler;
 
 /**
  * Test class for class {@link CSSVisitor}.
@@ -52,7 +53,10 @@ public final class CSSVisitor30Test extends AbstractCSS30Test
       final String sKey = aFile.getAbsolutePath ();
       if (true)
         s_aLogger.info (sKey);
-      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+      final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile,
+                                                               CCharset.CHARSET_UTF_8_OBJ,
+                                                               ECSSVersion.CSS30,
+                                                               new LoggingCSSParseErrorHandler ());
       assertNotNull (sKey, aCSS);
       CSSVisitor.visitCSSUrl (aCSS, new MockUrlVisitor (sKey));
     }

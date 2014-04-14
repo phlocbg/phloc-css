@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -72,8 +73,7 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
   @Nonnull
   public CSSMediaRule addMediaQuery (@Nonnull @Nonempty final CSSMediaQuery aMediaQuery)
   {
-    if (aMediaQuery == null)
-      throw new NullPointerException ("mediaQuery");
+    ValueEnforcer.notNull (aMediaQuery, "MediaQuery");
 
     m_aMediaQueries.add (aMediaQuery);
     return this;
@@ -82,8 +82,8 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
   @Nonnull
   public CSSMediaRule addMediaQuery (@Nonnegative final int nIndex, @Nonnull @Nonempty final CSSMediaQuery aMediaQuery)
   {
-    if (aMediaQuery == null)
-      throw new NullPointerException ("mediaQuery");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aMediaQuery, "MediaQuery");
 
     if (nIndex >= getMediaQueryCount ())
       m_aMediaQueries.add (aMediaQuery);
@@ -152,8 +152,7 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
   @Nonnull
   public CSSMediaRule addRule (@Nonnull final ICSSTopLevelRule aRule)
   {
-    if (aRule == null)
-      throw new NullPointerException ("rule");
+    ValueEnforcer.notNull (aRule, "Rule");
 
     m_aRules.add (aRule);
     return this;
@@ -162,10 +161,8 @@ public class CSSMediaRule implements ICSSTopLevelRule, ICSSSourceLocationAware
   @Nonnull
   public CSSMediaRule addRule (@Nonnegative final int nIndex, @Nonnull final ICSSTopLevelRule aRule)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aRule == null)
-      throw new NullPointerException ("rule");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aRule, "Rule");
 
     if (nIndex >= getRuleCount ())
       m_aRules.add (aRule);

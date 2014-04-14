@@ -17,7 +17,6 @@
  */
 package com.phloc.css.decl.visit;
 
-
 final class MockModifyingCSSUrlVisitor extends AbstractModifyingCSSUrlVisitor
 {
   @Override

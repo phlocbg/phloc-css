@@ -155,7 +155,8 @@ public final class CSSColorHelper
            isHexColorValue (sRealValue) ||
            ECSSColor.isDefaultColorName (sRealValue) ||
            ECSSColorName.isDefaultColorName (sRealValue) ||
-           sRealValue.equals (CCSSValue.CURRENTCOLOR);
+           sRealValue.equals (CCSSValue.CURRENTCOLOR) ||
+           sRealValue.equals (CCSSValue.TRANSPARENT);
   }
 
   /**
