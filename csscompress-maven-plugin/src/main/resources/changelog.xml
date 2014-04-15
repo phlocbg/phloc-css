@@ -20,6 +20,12 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="csscompress-maven-plugin">
+  <release date="2014-04-15" version="1.2.0" />
+  <entry date="2014-04-15" category="tech" action="update">
+    <change>
+      <text locale="en">Updated to phloc-css 3.7.4</text>
+    </change>
+  </entry>
   <entry date="2014-03-21" category="tech" action="change">
     <change>
       <text locale="en">Made plugin compatible compile with Java 1.5 for better reuse.</text>
