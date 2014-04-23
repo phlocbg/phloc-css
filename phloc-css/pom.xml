@@ -138,8 +138,12 @@
         <artifactId>maven-license-plugin</artifactId>
         <configuration>
           <excludes>
-            <exclude>src/test/resources/css/**</exclude>
-            <exclude>src/test/resources/css30/**</exclude>
+            <exclude>src/test/resources/testfiles/css21/good/themes*</exclude>
+            <exclude>src/test/resources/testfiles/css30/bad/w3c/**</exclude>
+            <exclude>src/test/resources/testfiles/css30/bad_but_succeeding/w3c/**</exclude>
+            <exclude>src/test/resources/testfiles/css30/good/test-charset*</exclude>
+            <exclude>src/test/resources/testfiles/css30/good/w3c/**</exclude>
+            <exclude>src/test/resources/testfiles/css30/good_but_failing/w3c/**</exclude>
           </excludes>
         </configuration>
       </plugin>
