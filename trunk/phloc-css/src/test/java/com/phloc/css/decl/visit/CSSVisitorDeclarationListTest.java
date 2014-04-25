@@ -33,6 +33,7 @@ import com.phloc.css.decl.CSSExpressionMemberTermURI;
 import com.phloc.css.decl.CSSImportRule;
 import com.phloc.css.decl.ICSSTopLevelRule;
 import com.phloc.css.reader.CSSReaderDeclarationList;
+import com.phloc.css.writer.CSSWriter;
 
 /**
  * Test class for class {@link CSSVisitor}.
@@ -78,8 +79,16 @@ public final class CSSVisitorDeclarationListTest
     final CSSDeclarationList aCSS = CSSReaderDeclarationList.readFromString ("background:url(a.gif);background:url(b.gif);",
                                                                              ECSSVersion.CSS30);
     assertNotNull (aCSS);
+
+    // Append ".modified" to all URLs
     final MockModifyingCSSUrlVisitor aVisitor2 = new MockModifyingCSSUrlVisitor ();
     CSSVisitor.visitAllDeclarationUrls (aCSS, aVisitor2);
+
+    // Check the result
+    assertEquals ("background:url(a.gif.modified);background:url(b.gif.modified)",
+                  new CSSWriter (ECSSVersion.CSS30, true).getCSSAsString (aCSS));
+
+    // Re-iterate to check twice
     CSSVisitor.visitAllDeclarationUrls (aCSS, new DefaultCSSUrlVisitor ()
     {
       @Override
