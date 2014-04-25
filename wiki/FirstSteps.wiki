@@ -117,8 +117,13 @@ Since version 3.7.4 both `CSSReader` and `CSSReaderDeclarationList` have the pos
 
 == CSS iteration/visting ==
 Once a CSS file was successfully read, it can easily be iterated using the class `com.phloc.css.decl.visit.CSSVisitor`. It requires a valid instance of `com.phloc.css.decl.CascadingStyleSheet` as well as an implementation of `com.phloc.css.decl.visit.ICSSVisitor`. The `CascadingStyleSheet` can be acquired either by reading from a file/stream or by creating a new one from scratch. For the `ICSSVisitor` it is recommended to use the class `com.phloc.css.decl.visit.DefaultCSSVisitor` as the base class - this class contains empty implementations of all methods defined in the `ICSSVisitor` interface. To visit all declarations (e.g. `color:red;`) it is sufficient to simply override the method `public void onDeclaration (@Nonnull final CSSDeclaration aDeclaration)`. For details please have a look at the JavaDocs of `ICSSVisitor`.
+To start the visiting call `CSSVisitor.visitCSS (CascadingStyleSheet, ICSSVisitor)`.
 
-A special visitor is present for URLs. URLs can occur on several places in CSS files, especially in the `@import` rules and within declarations (like in `background-image: url(../images/bg.gif)`).
+A special visitor is present for URLs. URLs can occur on several places in CSS files, especially in the `@import` rules and within declarations (like in `background-image: url(../images/bg.gif)`). Therefore a special interface `com.phloc.css.decl.visit.ICSSUrlVisitor` together with the empty default implementation `com.phloc.css.decl.visit.DefaultCSSUrlVisitor` is provided. So to visit all URLs within a CSS call `CSSVisitor.visitCSSUrl(CascadingStyleSheet, ICSSUrlVisitor)`.
+
+For modifying URLs (e.g. to adopt paths to a different environment) a special base class `com.phloc.css.decl.visit.AbstractModifyingCSSUrlVisitor` is available. It offers the abstract method `protected abstract String getModifiedURI (@Nonnull String sURI)` to modify a URL and write the result back into the original `CascadingStylesheet`. An example of how this can be used, can be found in the test method `com.phloc.css.decl.visit.CSSVisitorDeclarationListTest.testModifyingCSSUrlVisitor ()`.
+
+*Note:* it is safe to modify a CSS while iterating it, but only changes affecting children of the current node may be considered during the same iteration run.
 
 == CSS writing ==
 TODO
@@ -130,7 +135,40 @@ TODO
 TODO
 
 === Shorthand property handling ===
-TODO
+A "CSS shorthand" property is a property that consists of multiple values. Classical examples are `margin` or `border`. phloc-css contains support for selected shorthand properties since version 3.7.4. All shorthand related classes can be found in package `com.phloc.css.decl.shorthand`. The supported shorthand properties are:
+  * `background`
+  * `font`
+  * `border`
+  * `border-top`
+  * `border-right`
+  * `border-bottom`
+  * `border-left`
+  * `border-width`
+  * `border-style`
+  * `border-color`
+  * `margin`
+  * `padding`
+  * `outline`
+  * `list-style`
+
+All of these shorthand properties are registered in class `CSSShortHandRegistry` and you can manually register your own shorthand descriptors.
+The `CSSShortHandRegistry` allows you to split a single CSSDeclaration like `border:1px dashed` into the corresponding "sub-declarations":
+{{{
+  // Parse a dummy declaration
+  final CSSDeclaration aDecl = CSSReaderDeclarationList.readFromString ("border:1px dashed", ECSSVersion.CSS30).getDeclarationAtIndex (0);
+
+  // Get the Shorthand descriptor for "border"    
+  final CSSShortHandDescriptor aSHD = CSSShortHandRegistry.getShortHandDescriptor (ECSSProperty.BORDER);
+
+  // And now split it into pieces
+  final List <CSSDeclaration> aSplittedDecls = aSHD.getSplitIntoPieces (aDecl);
+}}}
+In the above example, `aSplittedDecls` will contain 3 elements with the following content:
+  * `border-width:1px`
+  * `border-style:dashed`
+  * `border-color:black`
+
+Even though no color value was provided, the default value `black` is returned. For all "sub-declarations", sensible default values are defined.
 
 = Code Examples =
 
