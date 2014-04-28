@@ -53,14 +53,14 @@ import java.util.List;
  * Generate lexer.
  */
 public class LexGenCPP extends LexGen // CodeGenerator implements
-// JavaCCParserConstants
+                                      // JavaCCParserConstants
 {
   @Override
   void PrintClassHead ()
   {
     int i, j;
 
-    final List <String> tn = new ArrayList <String> (toolNames);
+    final List tn = new ArrayList (toolNames);
     tn.add (toolName);
 
     switchToStaticsFile ();
@@ -74,12 +74,12 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
     genCodeLine ("#include \"TokenManager.h\"");
     genCodeLine ("#include \"" + cu_name + "Constants.h\"");
 
-    if (Options.stringValue ("TOKEN_MANAGER_INCLUDES").length () > 0)
+    if (Options.stringValue (Options.USEROPTION__CPP_TOKEN_MANAGER_INCLUDES).length () > 0)
     {
-      genCodeLine ("#include \"" + Options.stringValue ("TOKEN_MANAGER_INCLUDES") + "\"\n");
+      genCodeLine ("#include \"" + Options.stringValue (Options.USEROPTION__CPP_TOKEN_MANAGER_INCLUDES) + "\"\n");
     }
 
-    if (Options.stringValue ("NAMESPACE").length () > 0)
+    if (Options.stringValue (Options.USEROPTION_CPP_NAMESPACE).length () > 0)
     {
       genCodeLine ("namespace " + Options.stringValue ("NAMESPACE_OPEN"));
     }
@@ -102,7 +102,7 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
 
     genCodeLine ("");
     genCodeLine ("/** Token Manager. */");
-    final String superClass = Options.stringValue ("TOKEN_MANAGER_SUPER_CLASS");
+    final String superClass = Options.stringValue (Options.USEROPTION__TOKEN_MANAGER_SUPER_CLASS);
     genClassStart (null, tokMgrClassName, new String [] {}, new String [] { "public TokenManager" +
                                                                             (superClass == null ? "" : ", public " +
                                                                                                        superClass) });
@@ -181,14 +181,14 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
     {
       tp = (TokenProduction) it.next ();
       final List respecs = tp.respecs;
-      List <TokenProduction> tps;
+      List tps;
 
       for (i = 0; i < tp.lexStates.length; i++)
       {
-        if ((tps = allTpsForState.get (tp.lexStates[i])) == null)
+        if ((tps = (List) allTpsForState.get (tp.lexStates[i])) == null)
         {
           tmpLexStateName[maxLexStates++] = tp.lexStates[i];
-          allTpsForState.put (tp.lexStates[i], tps = new ArrayList <TokenProduction> ());
+          allTpsForState.put (tp.lexStates[i], tps = new ArrayList ());
         }
 
         tps.add (tp);
@@ -212,7 +212,7 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
     actions = new Action [maxOrdinal];
     actions[0] = actForEof;
     hasTokenActions = actForEof != null;
-    initStates = new Hashtable <String, NfaState> ();
+    initStates = new Hashtable ();
     canMatchAnyChar = new int [maxLexStates];
     canLoop = new boolean [maxLexStates];
     stateHasActions = new boolean [maxLexStates];
@@ -259,8 +259,8 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
       return;
 
     keepLineCol = Options.getKeepLineColumn ();
-    final List <RegularExpression> choices = new ArrayList <RegularExpression> ();
-    Enumeration <String> e;
+    final List choices = new ArrayList ();
+    Enumeration e;
     TokenProduction tp;
     int i, j;
 
@@ -279,11 +279,11 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
       NfaState.ReInit ();
       RStringLiteral.ReInit ();
 
-      final String key = e.nextElement ();
+      final String key = (String) e.nextElement ();
 
       lexStateIndex = GetIndex (key);
       lexStateSuffix = "_" + lexStateIndex;
-      final List allTps = allTpsForState.get (key);
+      final List allTps = (List) allTpsForState.get (key);
       initStates.put (key, initialState = new NfaState ());
       ignoring = false;
 
@@ -396,7 +396,7 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
       NfaState.ComputeClosures ();
 
       for (i = 0; i < initialState.epsilonMoves.size (); i++)
-        initialState.epsilonMoves.elementAt (i).GenerateCode ();
+        ((NfaState) initialState.epsilonMoves.elementAt (i)).GenerateCode ();
 
       if (hasNfa[lexStateIndex] = (NfaState.generatedStates != 0))
       {
@@ -508,6 +508,8 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
     genCodeLine (/* { */"};");
 
     switchToStaticsFile ();
+    // TODO :: CBA -- Require Unification of output language specific processing
+    // into a single Enum class
     final String fileName = Options.getOutputDirectory () +
                             File.separator +
                             tokMgrClassName +
@@ -538,6 +540,7 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
                  cu_name +
                  " *parserArg = NULL);");
     genCodeLine ("  void SwitchTo(int lexState);");
+    genCodeLine ("  void clear();");
     genCodeLine ("  const JAVACC_SIMPLE_STRING jjKindsForBitVector(int i, " + Options.getLongType () + " vec);");
     genCodeLine ("  const JAVACC_SIMPLE_STRING jjKindsForStateVector(int lexState, int vec[], int start, int end);");
   }

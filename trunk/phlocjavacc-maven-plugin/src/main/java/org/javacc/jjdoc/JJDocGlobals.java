@@ -78,9 +78,14 @@ public class JJDocGlobals extends JavaCCGlobals
           generator = new BNFGenerator ();
         }
         else
-        {
-          generator = new HTMLGenerator ();
-        }
+          if (JJDocOptions.getXText ())
+          {
+            generator = new XTextGenerator ();
+          }
+          else
+          {
+            generator = new HTMLGenerator ();
+          }
     }
     else
     {
@@ -97,12 +102,17 @@ public class JJDocGlobals extends JavaCCGlobals
           generator = new BNFGenerator ();
         }
         else
-        {
-          if (generator instanceof TextGenerator)
+          if (JJDocOptions.getXText ())
           {
-            generator = new HTMLGenerator ();
+            generator = new XTextGenerator ();
           }
-        }
+          else
+          {
+            if (generator instanceof TextGenerator)
+            {
+              generator = new HTMLGenerator ();
+            }
+          }
     }
     return generator;
   }

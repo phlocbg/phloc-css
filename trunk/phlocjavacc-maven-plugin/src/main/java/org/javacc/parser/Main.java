@@ -30,6 +30,11 @@
  */
 package org.javacc.parser;
 
+import java.util.Set;
+
+import org.javacc.utils.OptionInfo;
+import org.javacc.utils.OptionType;
+
 /**
  * Entry point.
  */
@@ -42,6 +47,7 @@ public final class Main
 
   static void help_message ()
   {
+
     System.out.println ("Usage:");
     System.out.println ("    javacc option-settings inputfile");
     System.out.println ("");
@@ -57,57 +63,118 @@ public final class Main
     System.out.println ("of \"-NOSTATIC\".  Option values must be appropriate for the corresponding");
     System.out.println ("option, and must be either an integer, a boolean, or a string value.");
     System.out.println ("");
-    System.out.println ("The integer valued options are:");
-    System.out.println ("");
-    System.out.println ("    LOOKAHEAD              (default 1)");
-    System.out.println ("    CHOICE_AMBIGUITY_CHECK (default 2)");
-    System.out.println ("    OTHER_AMBIGUITY_CHECK  (default 1)");
-    System.out.println ("");
-    System.out.println ("The boolean valued options are:");
-    System.out.println ("");
-    System.out.println ("    STATIC                 (default true)");
-    System.out.println ("    SUPPORT_CLASS_VISIBILITY_PUBLIC (default true)");
-    System.out.println ("    DEBUG_PARSER           (default false)");
-    System.out.println ("    DEBUG_LOOKAHEAD        (default false)");
-    System.out.println ("    DEBUG_TOKEN_MANAGER    (default false)");
-    System.out.println ("    ERROR_REPORTING        (default true)");
-    System.out.println ("    JAVA_UNICODE_ESCAPE    (default false)");
-    System.out.println ("    UNICODE_INPUT          (default false)");
-    System.out.println ("    IGNORE_CASE            (default false)");
-    System.out.println ("    COMMON_TOKEN_ACTION    (default false)");
-    System.out.println ("    USER_TOKEN_MANAGER     (default false)");
-    System.out.println ("    USER_CHAR_STREAM       (default false)");
-    System.out.println ("    BUILD_PARSER           (default true)");
-    System.out.println ("    BUILD_TOKEN_MANAGER    (default true)");
-    System.out.println ("    TOKEN_MANAGER_USES_PARSER (default false)");
-    System.out.println ("    SANITY_CHECK           (default true)");
-    System.out.println ("    FORCE_LA_CHECK         (default false)");
-    System.out.println ("    CACHE_TOKENS           (default false)");
-    System.out.println ("    KEEP_LINE_COLUMN       (default true)");
-    System.out.println ("    IGNORE_ACTIONS         (default false)");
-    System.out.println ("");
-    System.out.println ("The string valued options are:");
-    System.out.println ("");
-    System.out.println ("    OUTPUT_DIRECTORY       (default Current Directory)");
-    System.out.println ("    OUTPUT_LANGUAGE        (default Java, C++ is the only other language allowed)");
-    System.out.println ("    TOKEN_EXTENDS          (default java.lang.Object)");
-    System.out.println ("    TOKEN_FACTORY          (default none)");
-    System.out.println ("    JDK_VERSION            (default 1.5)");
-    System.out.println ("    GRAMMAR_ENCODING       (defaults to platform file encoding)");
-    System.out.println ("");
-    System.out.println ("C++-specific Options:");
-    System.out.println ("");
-    System.out.println ("    NAMESPACE              (default empty)");
-    System.out.println ("    TOKEN_INCLUDES         (default empty)");
-    System.out.println ("    TOKEN_MANAGER_INCLUDES (default empty)");
-    System.out.println ("    TOKEN_MANAGER_SUPERCLASS (default empty)");
-    System.out.println ("    PARSER_INCLUDES        (default empty)");
-    System.out.println ("    PARSER_SUPERCLASS      (default empty)");
 
-    System.out.println ("");
+    // 2013/07/23 -- Changed this to auto-generate from metadata in Options so
+    // that help is always in-sync with codebase
+    printOptions ();
+
     System.out.println ("EXAMPLE:");
     System.out.println ("    javacc -STATIC=false -LOOKAHEAD:2 -debug_parser mygrammar.jj");
     System.out.println ("");
+  }
+
+  private static void printOptions ()
+  {
+
+    final Set <OptionInfo> options = Options.getUserOptions ();
+
+    int maxLengthInt = 0;
+    int maxLengthBool = 0;
+    int maxLengthString = 0;
+
+    for (final OptionInfo i : options)
+    {
+      final int length = i.getName ().length ();
+
+      if (i.getType () == OptionType.INTEGER)
+      {
+        maxLengthInt = length > maxLengthInt ? length : maxLengthInt;
+      }
+      else
+        if (i.getType () == OptionType.BOOLEAN)
+        {
+          maxLengthBool = length > maxLengthBool ? length : maxLengthBool;
+
+        }
+        else
+          if (i.getType () == OptionType.STRING)
+          {
+            maxLengthString = length > maxLengthString ? length : maxLengthString;
+
+          }
+          else
+          {
+            // Not interested
+          }
+    }
+
+    if (maxLengthInt > 0)
+    {
+      System.out.println ("The integer valued options are:");
+      System.out.println ("");
+      for (final OptionInfo i : options)
+      {
+        printOptionInfo (OptionType.INTEGER, i, maxLengthInt);
+      }
+      System.out.println ("");
+    }
+
+    if (maxLengthBool > 0)
+    {
+      System.out.println ("The boolean valued options are:");
+      System.out.println ("");
+      for (final OptionInfo i : options)
+      {
+        printOptionInfo (OptionType.BOOLEAN, i, maxLengthBool);
+      }
+      System.out.println ("");
+    }
+
+    if (maxLengthString > 0)
+    {
+      System.out.println ("The string valued options are:");
+      System.out.println ("");
+      for (final OptionInfo i : options)
+      {
+        printOptionInfo (OptionType.STRING, i, maxLengthString);
+      }
+      System.out.println ("");
+    }
+  }
+
+  private static void printOptionInfo (final OptionType filter, final OptionInfo optionInfo, final int padLength)
+  {
+    if (optionInfo.getType () == filter)
+    {
+      final Object default1 = optionInfo.getDefault ();
+      System.out.println ("    " +
+                          padRight (optionInfo.getName (), padLength + 1) +
+                          (default1 == null ? ""
+                                           : ("(default : " +
+                                              (default1.toString ().length () == 0 ? "<<empty>>" : default1) + ")")));
+    }
+  }
+
+  private static String padRight (final String name, final int maxLengthInt)
+  {
+    final int nameLength = name.length ();
+    if (nameLength == maxLengthInt)
+    {
+      return name;
+    }
+    else
+    {
+      final int charsToPad = maxLengthInt - nameLength;
+      final StringBuilder sb = new StringBuilder (charsToPad);
+      sb.append (name);
+
+      for (int i = 0; i < charsToPad; i++)
+      {
+        sb.append (" ");
+      }
+
+      return sb.toString ();
+    }
   }
 
   /**
@@ -158,14 +225,6 @@ public final class Main
       Options.setCmdLineOption (args[arg]);
     }
 
-    if (Options.getOutputLanguage ().equals ("java"))
-    {
-      lg = new LexGen ();
-    }
-    else
-    {
-      lg = new LexGenCPP ();
-    }
     try
     {
       final java.io.File fp = new java.io.File (args[args.length - 1]);
@@ -200,6 +259,36 @@ public final class Main
       JavaCCGlobals.jjtreeGenerated = JavaCCGlobals.isGeneratedBy ("JJTree", args[args.length - 1]);
       JavaCCGlobals.toolNames = JavaCCGlobals.getToolNames (args[args.length - 1]);
       parser.javacc_input ();
+
+      // 2012/05/02 - Moved this here as cannot evaluate output language
+      // until the cc file has been processed. Was previously setting the 'lg'
+      // variable
+      // to a lexer before the configuration override in the cc file had been
+      // read.
+      final String outputLanguage = Options.getOutputLanguage ();
+      // TODO :: CBA -- Require Unification of output language specific
+      // processing into a single Enum class
+      final boolean isJavaOutput = Options.isOutputLanguageJava ();
+      final boolean isCPPOutput = outputLanguage.equals (Options.OUTPUT_LANGUAGE__CPP);
+
+      // 2013/07/22 Java Modern is a
+      final boolean isJavaModern = isJavaOutput &&
+                                   Options.getJavaTemplateType ().equals (Options.JAVA_TEMPLATE_TYPE_MODERN);
+
+      if (isJavaOutput)
+      {
+        lg = new LexGen ();
+      }
+      else
+        if (isCPPOutput)
+        {
+          lg = new LexGenCPP ();
+        }
+        else
+        {
+          return unhandledLanguageExit (outputLanguage);
+        }
+
       JavaCCGlobals.createOutputDir (Options.getOutputDirectory ());
 
       if (Options.getUnicodeInput ())
@@ -210,36 +299,46 @@ public final class Main
       }
 
       Semanticize.start ();
-      if (Options.getOutputLanguage ().equals ("java"))
+      final boolean isBuildParser = Options.getBuildParser ();
+
+      // 2012/05/02 -- This is not the best way to add-in GWT support, really
+      // the code needs to turn supported languages into enumerations
+      // and have the enumerations describe the deltas between the outputs. The
+      // current approach means that per-langauge configuration is distributed
+      // and small changes between targets does not benefit from inheritance.
+      if (isJavaOutput)
       {
-        if (Options.getBuildParser ())
+        if (isBuildParser)
         {
-          new ParseGen ().start ();
+          new ParseGen ().start (isJavaModern);
         }
-        if (Options.getBuildParser ())
+        if (isBuildParser)
         {
           new LexGen ().start ();
         }
-
-        Options.setStringOption ("PARSER_NAME", JavaCCGlobals.cu_name);
-        OtherFilesGen.start ();
+        Options.setStringOption (Options.NONUSER_OPTION__PARSER_NAME, JavaCCGlobals.cu_name);
+        OtherFilesGen.start (isJavaModern);
       }
       else
-      { // C++ for now
-        if (Options.getBuildParser ())
-        {
-          new ParseGenCPP ().start ();
+        if (isCPPOutput)
+        { // C++ for now
+          if (isBuildParser)
+          {
+            new ParseGenCPP ().start ();
+          }
+          if (isBuildParser)
+          {
+            new LexGenCPP ().start ();
+          }
+          Options.setStringOption (Options.NONUSER_OPTION__PARSER_NAME, JavaCCGlobals.cu_name);
+          OtherFilesGenCPP.start ();
         }
-        if (Options.getBuildParser ())
+        else
         {
-          new LexGenCPP ().start ();
+          unhandledLanguageExit (outputLanguage);
         }
 
-        Options.setStringOption ("PARSER_NAME", JavaCCGlobals.cu_name);
-        OtherFilesGenCPP.start ();
-      }
-
-      if ((JavaCCErrors.get_error_count () == 0) && (Options.getBuildParser () || Options.getBuildTokenManager ()))
+      if ((JavaCCErrors.get_error_count () == 0) && (isBuildParser || Options.getBuildTokenManager ()))
       {
         if (JavaCCErrors.get_warning_count () == 0)
         {
@@ -282,6 +381,12 @@ public final class Main
     }
   }
 
+  private static int unhandledLanguageExit (final String outputLanguage)
+  {
+    System.out.println ("Invalid '" + Options.USEROPTION__OUTPUT_LANGUAGE + "' specified : " + outputLanguage);
+    return 1;
+  }
+
   public static void reInitAll ()
   {
     org.javacc.parser.Expansion.reInit ();
@@ -296,8 +401,6 @@ public final class Main
     org.javacc.parser.LookaheadWalk.reInit ();
     org.javacc.parser.Semanticize.reInit ();
     org.javacc.parser.OtherFilesGen.reInit ();
-    // [phloc] Was missing
-    org.javacc.parser.LexGen.reInit ();
   }
 
 }

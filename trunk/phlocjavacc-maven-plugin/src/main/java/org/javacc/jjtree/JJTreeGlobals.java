@@ -46,7 +46,7 @@ class JJTreeGlobals
     parserImports = null;
     productions = new HashMap ();
 
-    jjtreeOptions = new HashSet <String> ();
+    jjtreeOptions = new HashSet ();
     jjtreeOptions.add ("JJTREE_OUTPUT_DIRECTORY");
     jjtreeOptions.add ("MULTI");
     jjtreeOptions.add ("NODE_PREFIX");
@@ -79,7 +79,7 @@ class JJTreeGlobals
    * This set stores the JJTree-specific options that should not be passed down
    * to JavaCC
    */
-  private static Set <String> jjtreeOptions;
+  private static Set jjtreeOptions;
 
   public static boolean isOptionJJTreeOnly (final String optionName)
   {

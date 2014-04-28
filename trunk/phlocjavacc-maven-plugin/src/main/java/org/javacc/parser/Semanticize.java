@@ -36,8 +36,8 @@ import java.util.List;
 public class Semanticize extends JavaCCGlobals
 {
 
-  static List <List> removeList = new ArrayList <List> ();
-  static List <Object> itemList = new ArrayList <Object> ();
+  static List removeList = new ArrayList ();
+  static List itemList = new ArrayList ();
 
   static void prepareToRemove (final List vec, final Object item)
   {
@@ -49,7 +49,7 @@ public class Semanticize extends JavaCCGlobals
   {
     for (int i = 0; i < removeList.size (); i++)
     {
-      final List list = (removeList.get (i));
+      final List list = (List) (removeList.get (i));
       list.remove (itemList.get (i));
     }
     removeList.clear ();
@@ -110,9 +110,9 @@ public class Semanticize extends JavaCCGlobals
      * In this case, <name> occurrences are OK, while regular expression specs
      * generate a warning.
      */
-    for (final Object element : rexprlist)
+    for (final Iterator it = rexprlist.iterator (); it.hasNext ();)
     {
-      final TokenProduction tp = (TokenProduction) (element);
+      final TokenProduction tp = (TokenProduction) (it.next ());
       final List respecs = tp.respecs;
       for (final Iterator it1 = respecs.iterator (); it1.hasNext ();)
       {
@@ -171,15 +171,17 @@ public class Semanticize extends JavaCCGlobals
      * "named_tokens_table" and "ordered_named_tokens". Duplications are flagged
      * as errors.
      */
-    for (final TokenProduction tp : rexprlist)
+    for (final Iterator it = rexprlist.iterator (); it.hasNext ();)
     {
-      final List <RegExprSpec> respecs = tp.respecs;
-      for (final RegExprSpec res : respecs)
+      final TokenProduction tp = (TokenProduction) (it.next ());
+      final List respecs = tp.respecs;
+      for (final Iterator it1 = respecs.iterator (); it1.hasNext ();)
       {
+        final RegExprSpec res = (RegExprSpec) (it1.next ());
         if (!(res.rexp instanceof RJustName) && !res.rexp.label.equals (""))
         {
           final String s = res.rexp.label;
-          final RegularExpression obj = named_tokens_table.put (s, res.rexp);
+          final Object obj = named_tokens_table.put (s, res.rexp);
           if (obj != null)
           {
             JavaCCErrors.semantic_error (res.rexp, "Multiply defined lexical token name \"" + s + "\".");
@@ -211,9 +213,9 @@ public class Semanticize extends JavaCCGlobals
      */
 
     tokenCount = 1;
-    for (final Object element : rexprlist)
+    for (final Iterator it = rexprlist.iterator (); it.hasNext ();)
     {
-      final TokenProduction tp = (TokenProduction) (element);
+      final TokenProduction tp = (TokenProduction) (it.next ());
       final List respecs = tp.respecs;
       if (tp.lexStates == null)
       {
@@ -240,7 +242,7 @@ public class Semanticize extends JavaCCGlobals
           for (int i = 0; i < table.length; i++)
           {
             // Get table of all case variants of "sl.image" into table2.
-            Hashtable <String, RStringLiteral> table2 = (Hashtable <String, RStringLiteral>) (table[i].get (sl.image.toUpperCase ()));
+            Hashtable table2 = (Hashtable) (table[i].get (sl.image.toUpperCase ()));
             if (table2 == null)
             {
               // There are no case variants of "sl.image" earlier than the
@@ -250,7 +252,7 @@ public class Semanticize extends JavaCCGlobals
               {
                 sl.ordinal = tokenCount++;
               }
-              table2 = new Hashtable <String, RStringLiteral> ();
+              table2 = new Hashtable ();
               table2.put (sl.image, sl);
               table[i].put (sl.image.toUpperCase (), table2);
             }
@@ -289,9 +291,9 @@ public class Semanticize extends JavaCCGlobals
                   // to all previous strings.
                   String pos = "";
                   int count = 0;
-                  for (final Enumeration <RStringLiteral> enum2 = table2.elements (); enum2.hasMoreElements ();)
+                  for (final Enumeration enum2 = table2.elements (); enum2.hasMoreElements ();)
                   {
-                    final RegularExpression rexp = (enum2.nextElement ());
+                    final RegularExpression rexp = (RegularExpression) (enum2.nextElement ());
                     if (count != 0)
                       pos += ",";
                     pos += " line " + rexp.getLine ();
@@ -322,7 +324,7 @@ public class Semanticize extends JavaCCGlobals
                 else
                 {
                   // The rest of the cases do not involve IGNORE_CASE.
-                  final RegularExpression re = table2.get (sl.image);
+                  final RegularExpression re = (RegularExpression) table2.get (sl.image);
                   if (re == null)
                   {
                     if (sl.ordinal == 0)
@@ -416,9 +418,9 @@ public class Semanticize extends JavaCCGlobals
     if (!Options.getUserTokenManager ())
     {
       final FixRJustNames frjn = new FixRJustNames ();
-      for (final Object element : rexprlist)
+      for (final Iterator it = rexprlist.iterator (); it.hasNext ();)
       {
-        final TokenProduction tp = (TokenProduction) (element);
+        final TokenProduction tp = (TokenProduction) (it.next ());
         final List respecs = tp.respecs;
         for (final Iterator it1 = respecs.iterator (); it1.hasNext ();)
         {
@@ -448,9 +450,9 @@ public class Semanticize extends JavaCCGlobals
 
     if (Options.getUserTokenManager ())
     {
-      for (final Object element : rexprlist)
+      for (final Iterator it = rexprlist.iterator (); it.hasNext ();)
       {
-        final TokenProduction tp = (TokenProduction) (element);
+        final TokenProduction tp = (TokenProduction) (it.next ());
         final List respecs = tp.respecs;
         for (final Iterator it1 = respecs.iterator (); it1.hasNext ();)
         {
@@ -459,7 +461,7 @@ public class Semanticize extends JavaCCGlobals
           {
 
             final RJustName jn = (RJustName) res.rexp;
-            final RegularExpression rexp = named_tokens_table.get (jn.label);
+            final RegularExpression rexp = (RegularExpression) named_tokens_table.get (jn.label);
             if (rexp == null)
             {
               jn.ordinal = tokenCount++;
@@ -488,9 +490,9 @@ public class Semanticize extends JavaCCGlobals
      */
     if (Options.getUserTokenManager ())
     {
-      for (final Object element : rexprlist)
+      for (final Iterator it = rexprlist.iterator (); it.hasNext ();)
       {
-        final TokenProduction tp = (TokenProduction) (element);
+        final TokenProduction tp = (TokenProduction) (it.next ());
         final List respecs = tp.respecs;
         for (final Iterator it1 = respecs.iterator (); it1.hasNext ();)
         {
@@ -574,9 +576,9 @@ public class Semanticize extends JavaCCGlobals
       // This is not done if option USER_TOKEN_MANAGER is set to true.
       if (!Options.getUserTokenManager ())
       {
-        for (final Object element : rexprlist)
+        for (final Iterator it = rexprlist.iterator (); it.hasNext ();)
         {
-          final TokenProduction tp = (TokenProduction) (element);
+          final TokenProduction tp = (TokenProduction) (it.next ());
           final List respecs = tp.respecs;
           for (final Iterator it1 = respecs.iterator (); it1.hasNext ();)
           {
@@ -619,17 +621,17 @@ public class Semanticize extends JavaCCGlobals
   // Checks to see if the "str" is superceded by another equal (except case)
   // string
   // in table.
-  public static boolean hasIgnoreCase (final Hashtable <String, RStringLiteral> table, final String str)
+  public static boolean hasIgnoreCase (final Hashtable table, final String str)
   {
     RegularExpression rexp;
-    rexp = (table.get (str));
+    rexp = (RegularExpression) (table.get (str));
     if (rexp != null && !rexp.tpContext.ignoreCase)
     {
       return false;
     }
-    for (final Enumeration <RStringLiteral> enumeration = table.elements (); enumeration.hasMoreElements ();)
+    for (final Enumeration enumeration = table.elements (); enumeration.hasMoreElements ();)
     {
-      rexp = (enumeration.nextElement ());
+      rexp = (RegularExpression) (enumeration.nextElement ());
       if (rexp.tpContext.ignoreCase)
       {
         other = rexp;
@@ -675,9 +677,9 @@ public class Semanticize extends JavaCCGlobals
               else
                 if (exp instanceof Choice)
                 {
-                  for (final Object element : ((Choice) exp).getChoices ())
+                  for (final Iterator it = ((Choice) exp).getChoices ().iterator (); it.hasNext ();)
                   {
-                    if (emptyExpansionExists ((Expansion) element))
+                    if (emptyExpansionExists ((Expansion) it.next ()))
                     {
                       return true;
                     }
@@ -687,9 +689,9 @@ public class Semanticize extends JavaCCGlobals
                 else
                   if (exp instanceof Sequence)
                   {
-                    for (final Object element : ((Sequence) exp).units)
+                    for (final Iterator it = ((Sequence) exp).units.iterator (); it.hasNext ();)
                     {
-                      if (!emptyExpansionExists ((Expansion) element))
+                      if (!emptyExpansionExists ((Expansion) it.next ()))
                       {
                         return false;
                       }
@@ -745,17 +747,17 @@ public class Semanticize extends JavaCCGlobals
           else
             if (exp instanceof Choice)
             {
-              for (final Object element : ((Choice) exp).getChoices ())
+              for (final Iterator it = ((Choice) exp).getChoices ().iterator (); it.hasNext ();)
               {
-                addLeftMost (prod, (Expansion) element);
+                addLeftMost (prod, (Expansion) it.next ());
               }
             }
             else
               if (exp instanceof Sequence)
               {
-                for (final Object element : ((Sequence) exp).units)
+                for (final Iterator it = ((Sequence) exp).units.iterator (); it.hasNext ();)
                 {
-                  final Expansion e = (Expansion) element;
+                  final Expansion e = (Expansion) it.next ();
                   addLeftMost (prod, e);
                   if (!emptyExpansionExists (e))
                   {
@@ -928,7 +930,7 @@ public class Semanticize extends JavaCCGlobals
       if (e instanceof RJustName)
       {
         final RJustName jn = (RJustName) e;
-        final RegularExpression rexp = named_tokens_table.get (jn.label);
+        final RegularExpression rexp = (RegularExpression) named_tokens_table.get (jn.label);
         if (rexp == null)
         {
           JavaCCErrors.semantic_error (e, "Undefined lexical token name \"" + jn.label + "\".");
@@ -1059,7 +1061,7 @@ public class Semanticize extends JavaCCGlobals
       if (e instanceof NonTerminal)
       {
         final NonTerminal nt = (NonTerminal) e;
-        if ((nt.setProd (production_table.get (nt.getName ()))) == null)
+        if ((nt.setProd ((NormalProduction) production_table.get (nt.getName ()))) == null)
         {
           JavaCCErrors.semantic_error (e, "Non-terminal " + nt.getName () + " has not been defined.");
         }
@@ -1194,8 +1196,8 @@ public class Semanticize extends JavaCCGlobals
 
   public static void reInit ()
   {
-    removeList = new ArrayList <List> ();
-    itemList = new ArrayList <Object> ();
+    removeList = new ArrayList ();
+    itemList = new ArrayList ();
     other = null;
     loopString = null;
   }

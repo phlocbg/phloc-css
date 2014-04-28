@@ -47,7 +47,7 @@ public class RCharacterList extends RegularExpression
    * This is the list of descriptors of the character list. Each list entry will
    * narrow to either SingleCharacter or to CharacterRange.
    */
-  public List <Object> descriptors = new ArrayList <Object> ();
+  public List descriptors = new ArrayList ();
 
   static final char [] diffLowerCaseRanges = { 65,
                                               90,
@@ -1772,7 +1772,7 @@ public class RCharacterList extends RegularExpression
   {
     int j;
 
-    final List <Object> newDesc = new ArrayList <Object> (descriptors.size ());
+    final List newDesc = new ArrayList (descriptors.size ());
     int cnt = 0;
 
     Outer: for (int i = 0; i < descriptors.size (); i++)
@@ -1881,7 +1881,7 @@ public class RCharacterList extends RegularExpression
      * + (int)r + " "); } } System.out.println("");
      */
 
-    final List <Object> newDescriptors = new ArrayList <Object> ();
+    final List newDescriptors = new ArrayList ();
     int lastRemoved = -1; // One less than the first valid character.
 
     for (i = 0; i < descriptors.size (); i++)
@@ -1948,7 +1948,7 @@ public class RCharacterList extends RegularExpression
 
   RCharacterList (final char c)
   {
-    descriptors = new ArrayList <Object> ();
+    descriptors = new ArrayList ();
     descriptors.add (new SingleCharacter (c));
     negated_list = false;
     ordinal = Integer.MAX_VALUE;

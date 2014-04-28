@@ -55,10 +55,6 @@ public class JavaFileGenerator
   {
     this.templateName = templateName;
     this.options = options;
-    if (templateName.indexOf ("JavaCC.h") != -1)
-    {
-      System.err.println ("*** cp: " + System.getProperty ("java.class.path"));
-    }
   }
 
   private final String templateName;
@@ -217,6 +213,9 @@ public class JavaFileGenerator
       text = substitute (text);
     }
 
+    // TODO :: Added by Sreenivas on 12 June 2013 for 6.0 release, merged in to
+    // 6.1 release for sake of compatibility by cainsley ... This needs to be
+    // removed urgently!!!
     if (text.startsWith ("\\#"))
     { // Hack to escape # for C++
       text = text.substring (1);

@@ -48,30 +48,134 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
    * ID of the latest version (of JavaCC) in which one of the CharStream classes
    * or the CharStream interface is modified.
    */
-  static final String charStreamVersion = "6.0";
+  static final String charStreamVersion = Version.majorDotMinor;
 
   /**
    * ID of the latest version (of JavaCC) in which the TokenManager interface is
    * modified.
    */
-  static final String tokenManagerVersion = "6.0";
+  static final String tokenManagerVersion = Version.majorDotMinor;
 
   /**
    * ID of the latest version (of JavaCC) in which the Token class is modified.
    */
-  static final String tokenVersion = "6.0";
+  static final String tokenVersion = Version.majorDotMinor;
 
   /**
    * ID of the latest version (of JavaCC) in which the ParseException class is
    * modified.
    */
-  static final String parseExceptionVersion = "6.0";
+  static final String parseExceptionVersion = Version.majorDotMinor;
 
   /**
    * ID of the latest version (of JavaCC) in which the TokenMgrError class is
    * modified.
    */
-  static final String tokenMgrErrorVersion = "6.0";
+  static final String tokenMgrErrorVersion = Version.majorDotMinor;
+
+  public interface JavaResourceTemplateLocations
+  {
+    public String getTokenManagerTemplateResourceUrl ();
+
+    public String getTokenTemplateResourceUrl ();
+
+    public String getTokenMgrErrorTemplateResourceUrl ();
+
+    public String getJavaCharStreamTemplateResourceUrl ();
+
+    public String getCharStreamTemplateResourceUrl ();
+
+    public String getSimpleCharStreamTemplateResourceUrl ();
+
+    public String getParseExceptionTemplateResourceUrl ();
+  }
+
+  public static class JavaModernResourceTemplateLocationImpl implements JavaResourceTemplateLocations
+  {
+    public String getTokenMgrErrorTemplateResourceUrl ()
+    {
+      // Same as Java
+      return "/templates/TokenMgrError.template";
+    }
+
+    public String getCharStreamTemplateResourceUrl ()
+    {
+      // Same as Java
+      return "/templates/CharStream.template";
+    }
+
+    public String getTokenManagerTemplateResourceUrl ()
+    {
+      // Same as Java
+      return "/templates/TokenManager.template";
+    }
+
+    public String getTokenTemplateResourceUrl ()
+    {
+      // Same as Java
+      return "/templates/Token.template";
+    }
+
+    public String getSimpleCharStreamTemplateResourceUrl ()
+    {
+      // TODO :: We need a java Modern version of this, same as Java Classic
+      // currently
+      return "/templates/SimpleCharStream.template";
+    }
+
+    public String getJavaCharStreamTemplateResourceUrl ()
+    {
+      return "/templates/gwt/JavaCharStream.template";
+    }
+
+    public String getParseExceptionTemplateResourceUrl ()
+    {
+      return "/templates/gwt/ParseException.template";
+    }
+  }
+
+  public static class JavaResourceTemplateLocationImpl implements JavaResourceTemplateLocations
+  {
+
+    public String getTokenTemplateResourceUrl ()
+    {
+      return "/templates/Token.template";
+    }
+
+    public String getTokenManagerTemplateResourceUrl ()
+    {
+      return "/templates/TokenManager.template";
+    }
+
+    public String getTokenMgrErrorTemplateResourceUrl ()
+    {
+      return "/templates/TokenMgrError.template";
+    }
+
+    public String getJavaCharStreamTemplateResourceUrl ()
+    {
+      return "/templates/JavaCharStream.template";
+    }
+
+    public String getCharStreamTemplateResourceUrl ()
+    {
+      return "/templates/CharStream.template";
+    }
+
+    public String getSimpleCharStreamTemplateResourceUrl ()
+    {
+      return "/templates/SimpleCharStream.template";
+    }
+
+    public String getParseExceptionTemplateResourceUrl ()
+    {
+      return "/templates/ParseException.template";
+    }
+
+  }
+
+  public static final JavaResourceTemplateLocations RESOURCES_JAVA_CLASSIC = new JavaResourceTemplateLocationImpl ();
+  public static final JavaResourceTemplateLocations RESOURCES_JAVA_MODERN = new JavaModernResourceTemplateLocationImpl ();
 
   /**
    * Replaces all backslahes with double backslashes.
@@ -83,7 +187,7 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
     final int len = str.length ();
 
     while (i < len && str.charAt (i++) != '\\')
-    {}
+      ;
 
     if (i == len) // No backslash found.
       return str;
@@ -181,14 +285,15 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
     }
   }
 
-  public static void gen_JavaCharStream ()
+  public static void gen_JavaCharStream (final JavaResourceTemplateLocations locations)
   {
     try
     {
       final File file = new File (Options.getOutputDirectory (), "JavaCharStream.java");
       final OutputFile outputFile = new OutputFile (file,
                                                     charStreamVersion,
-                                                    new String [] { "STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC" });
+                                                    new String [] { Options.USEROPTION__STATIC,
+                                                                   Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC });
 
       if (!outputFile.needToWrite)
       {
@@ -219,7 +324,8 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
       final Map options = new HashMap (Options.getOptions ());
       options.put ("PREFIX", prefix);
 
-      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/JavaCharStream.template", options);
+      final JavaFileGenerator generator = new JavaFileGenerator (locations.getJavaCharStreamTemplateResourceUrl (),
+                                                                 options);
 
       generator.generate (ostr);
 
@@ -233,14 +339,15 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
     }
   }
 
-  public static void gen_SimpleCharStream ()
+  public static void gen_SimpleCharStream (final JavaResourceTemplateLocations locations)
   {
     try
     {
       final File file = new File (Options.getOutputDirectory (), "SimpleCharStream.java");
       final OutputFile outputFile = new OutputFile (file,
                                                     charStreamVersion,
-                                                    new String [] { "STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC" });
+                                                    new String [] { Options.USEROPTION__STATIC,
+                                                                   Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC });
 
       if (!outputFile.needToWrite)
       {
@@ -271,7 +378,8 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
       final Map options = new HashMap (Options.getOptions ());
       options.put ("PREFIX", prefix);
 
-      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/SimpleCharStream.template", options);
+      final JavaFileGenerator generator = new JavaFileGenerator (locations.getSimpleCharStreamTemplateResourceUrl (),
+                                                                 options);
 
       generator.generate (ostr);
 
@@ -285,14 +393,15 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
     }
   }
 
-  public static void gen_CharStream ()
+  public static void gen_CharStream (final JavaResourceTemplateLocations locations)
   {
     try
     {
       final File file = new File (Options.getOutputDirectory (), "CharStream.java");
       final OutputFile outputFile = new OutputFile (file,
                                                     charStreamVersion,
-                                                    new String [] { "STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC" });
+                                                    new String [] { Options.USEROPTION__STATIC,
+                                                                   Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC });
 
       if (!outputFile.needToWrite)
       {
@@ -320,7 +429,7 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
         }
       }
 
-      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/CharStream.template",
+      final JavaFileGenerator generator = new JavaFileGenerator (locations.getCharStreamTemplateResourceUrl (),
                                                                  Options.getOptions ());
 
       generator.generate (ostr);
@@ -335,12 +444,34 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
     }
   }
 
-  public static void gen_ParseException ()
+  public static void gen_JavaModernFiles ()
+  {
+    genMiscFile ("Provider.java", "/templates/gwt/Provider.template");
+    genMiscFile ("StringProvider.java", "/templates/gwt/StringProvider.template");
+
+    // This provides a bridge to standard Java readers.
+    genMiscFile ("StreamProvider.java", "/templates/gwt/StreamProvider.template");
+  }
+
+  private static void genMiscFile (final String fileName, final String templatePath) throws Error
   {
     try
     {
-      final File file = new File (Options.getOutputDirectory (), "ParseException.java");
-      final OutputFile outputFile = new OutputFile (file, parseExceptionVersion, new String [] { "KEEP_LINE_COL" });
+      final File file = new File (Options.getOutputDirectory (), fileName);
+      final OutputFile outputFile = new OutputFile (file,
+                                                    parseExceptionVersion,
+                                                    new String [] {/*
+                                                                    * cba --
+                                                                    * 2013/07/22
+                                                                    * --
+                                                                    * previously
+                                                                    * wired to a
+                                                                    * typo
+                                                                    * version of
+                                                                    * this
+                                                                    * option --
+                                                                    * KEEP_LINE_COL
+                                                                    */Options.USEROPTION__KEEP_LINE_COLUMN });
 
       if (!outputFile.needToWrite)
       {
@@ -368,7 +499,67 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
         }
       }
 
-      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/ParseException.template",
+      final JavaFileGenerator generator = new JavaFileGenerator (templatePath, Options.getOptions ());
+
+      generator.generate (ostr);
+
+      ostr.close ();
+    }
+    catch (final IOException e)
+    {
+      System.err.println ("Failed to create " + fileName + " " + e);
+      JavaCCErrors.semantic_error ("Could not open file " + fileName + " for writing.");
+      throw new Error ();
+    }
+  }
+
+  public static void gen_ParseException (final JavaResourceTemplateLocations locations)
+  {
+    try
+    {
+      final File file = new File (Options.getOutputDirectory (), "ParseException.java");
+      final OutputFile outputFile = new OutputFile (file,
+                                                    parseExceptionVersion,
+                                                    new String [] {/*
+                                                                    * cba --
+                                                                    * 2013/07/22
+                                                                    * --
+                                                                    * previously
+                                                                    * wired to a
+                                                                    * typo
+                                                                    * version of
+                                                                    * this
+                                                                    * option --
+                                                                    * KEEP_LINE_COL
+                                                                    */Options.USEROPTION__KEEP_LINE_COLUMN });
+
+      if (!outputFile.needToWrite)
+      {
+        return;
+      }
+
+      final PrintWriter ostr = outputFile.getPrintWriter ();
+
+      if (cu_to_insertion_point_1.size () != 0 && ((Token) cu_to_insertion_point_1.get (0)).kind == PACKAGE)
+      {
+        for (int i = 1; i < cu_to_insertion_point_1.size (); i++)
+        {
+          if (((Token) cu_to_insertion_point_1.get (i)).kind == SEMICOLON)
+          {
+            cline = ((Token) (cu_to_insertion_point_1.get (0))).beginLine;
+            ccol = ((Token) (cu_to_insertion_point_1.get (0))).beginColumn;
+            for (int j = 0; j <= i; j++)
+            {
+              printToken ((Token) (cu_to_insertion_point_1.get (j)), ostr);
+            }
+            ostr.println ("");
+            ostr.println ("");
+            break;
+          }
+        }
+      }
+
+      final JavaFileGenerator generator = new JavaFileGenerator (locations.getParseExceptionTemplateResourceUrl (),
                                                                  Options.getOptions ());
 
       generator.generate (ostr);
@@ -383,11 +574,15 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
     }
   }
 
-  public static void gen_TokenMgrError ()
+  public static void gen_TokenMgrError (final JavaResourceTemplateLocations locations)
   {
+
+    final boolean isLegacyExceptionHandling = Options.isLegacyExceptionHandling ();
+    final String filename = isLegacyExceptionHandling ? "TokenMgrError.java" : "TokenMgrException.java";
     try
     {
-      final File file = new File (Options.getOutputDirectory (), "TokenMgrError.java");
+
+      final File file = new File (Options.getOutputDirectory (), filename);
       final OutputFile outputFile = new OutputFile (file, tokenMgrErrorVersion, new String [0]);
 
       if (!outputFile.needToWrite)
@@ -416,31 +611,52 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
         }
       }
 
-      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/TokenMgrError.template",
+      final JavaFileGenerator generator = new JavaFileGenerator (locations.getTokenMgrErrorTemplateResourceUrl (),
                                                                  Options.getOptions ());
 
       generator.generate (ostr);
 
       ostr.close ();
+
     }
     catch (final IOException e)
     {
-      System.err.println ("Failed to create TokenMgrError " + e);
-      JavaCCErrors.semantic_error ("Could not open file TokenMgrError.java for writing.");
+      System.err.println ("Failed to create " + filename + " " + e);
+      JavaCCErrors.semantic_error ("Could not open file " + filename + " for writing.");
       throw new Error ();
     }
   }
 
-  public static void gen_Token ()
+  public static void gen_Token (final JavaResourceTemplateLocations locations)
   {
     try
     {
       final File file = new File (Options.getOutputDirectory (), "Token.java");
       final OutputFile outputFile = new OutputFile (file,
                                                     tokenVersion,
-                                                    new String [] { "TOKEN_EXTENDS",
-                                                                   "KEEP_LINE_COL",
-                                                                   "SUPPORT_CLASS_VISIBILITY_PUBLIC" });
+                                                    new String [] { Options.USEROPTION__TOKEN_EXTENDS, /*
+                                                                                                        * cba
+                                                                                                        * --
+                                                                                                        * 2013
+                                                                                                        * /
+                                                                                                        * 07
+                                                                                                        * /
+                                                                                                        * 22
+                                                                                                        * --
+                                                                                                        * previously
+                                                                                                        * wired
+                                                                                                        * to
+                                                                                                        * a
+                                                                                                        * typo
+                                                                                                        * version
+                                                                                                        * of
+                                                                                                        * this
+                                                                                                        * option
+                                                                                                        * --
+                                                                                                        * KEEP_LINE_COL
+                                                                                                        */
+                                                                   Options.USEROPTION__KEEP_LINE_COLUMN,
+                                                                   Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC });
 
       if (!outputFile.needToWrite)
       {
@@ -468,7 +684,8 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
         }
       }
 
-      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/Token.template", Options.getOptions ());
+      final JavaFileGenerator generator = new JavaFileGenerator (locations.getTokenTemplateResourceUrl (),
+                                                                 Options.getOptions ());
 
       generator.generate (ostr);
 
@@ -482,14 +699,14 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
     }
   }
 
-  public static void gen_TokenManager ()
+  public static void gen_TokenManager (final JavaResourceTemplateLocations locations)
   {
     try
     {
       final File file = new File (Options.getOutputDirectory (), "TokenManager.java");
       final OutputFile outputFile = new OutputFile (file,
                                                     tokenManagerVersion,
-                                                    new String [] { "SUPPORT_CLASS_VISIBILITY_PUBLIC" });
+                                                    new String [] { Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC });
 
       if (!outputFile.needToWrite)
       {
@@ -517,7 +734,7 @@ public class JavaFiles extends JavaCCGlobals implements JavaCCParserConstants
         }
       }
 
-      final JavaFileGenerator generator = new JavaFileGenerator ("/templates/TokenManager.template",
+      final JavaFileGenerator generator = new JavaFileGenerator (locations.getTokenManagerTemplateResourceUrl (),
                                                                  Options.getOptions ());
 
       generator.generate (ostr);

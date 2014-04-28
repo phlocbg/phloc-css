@@ -102,7 +102,7 @@ public class OtherFilesGenCPP extends JavaCCGlobals implements JavaCCParserConst
     ostr.println ("#define " + define);
     ostr.println ("#include \"JavaCC.h\"");
     ostr.println ("");
-    if (Options.stringValue ("NAMESPACE").length () > 0)
+    if (Options.stringValue (Options.USEROPTION_CPP_NAMESPACE).length () > 0)
     {
       ostr.println ("namespace " + Options.stringValue ("NAMESPACE_OPEN"));
     }
@@ -111,9 +111,9 @@ public class OtherFilesGenCPP extends JavaCCGlobals implements JavaCCParserConst
     final String constPrefix = "const";
     ostr.println ("  /** End of File. */");
     ostr.println (constPrefix + "  int _EOF = 0;");
-    for (final Object element : ordered_named_tokens)
+    for (final java.util.Iterator it = ordered_named_tokens.iterator (); it.hasNext ();)
     {
-      re = (RegularExpression) element;
+      re = (RegularExpression) it.next ();
       ostr.println ("  /** RegularExpression Id. */");
       ostr.println (constPrefix + "  int " + re.label + " = " + re.ordinal + ";");
     }
@@ -134,9 +134,9 @@ public class OtherFilesGenCPP extends JavaCCGlobals implements JavaCCParserConst
     printCharArray (ostr, "<EOF>");
     ostr.println (";");
 
-    for (final Object element : rexprlist)
+    for (final java.util.Iterator it = rexprlist.iterator (); it.hasNext ();)
     {
-      final TokenProduction tp = (TokenProduction) (element);
+      final TokenProduction tp = (TokenProduction) (it.next ());
       final List respecs = tp.respecs;
       for (final java.util.Iterator it2 = respecs.iterator (); it2.hasNext ();)
       {
@@ -171,7 +171,7 @@ public class OtherFilesGenCPP extends JavaCCGlobals implements JavaCCParserConst
     }
     ostr.println ("  };");
     ostr.println ("");
-    if (Options.stringValue ("NAMESPACE").length () > 0)
+    if (Options.stringValue (Options.USEROPTION_CPP_NAMESPACE).length () > 0)
     {
       ostr.println (Options.stringValue ("NAMESPACE_CLOSE"));
     }

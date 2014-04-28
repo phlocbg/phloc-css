@@ -37,10 +37,12 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.javacc.Version;
 import org.javacc.parser.Options;
 import org.javacc.parser.OtherFilesGenCPP;
 import org.javacc.parser.OutputFile;
@@ -51,14 +53,14 @@ final class CPPNodeFiles
   private CPPNodeFiles ()
   {}
 
-  private static List <String> headersForJJTreeH = new ArrayList <String> ();
+  private static List headersForJJTreeH = new ArrayList ();
   /**
    * ID of the latest version (of JJTree) in which one of the Node classes was
    * modified.
    */
-  static final String nodeVersion = "6.0";
+  static final String nodeVersion = Version.majorDotMinor;
 
-  static Set <String> nodesToGenerate = new HashSet <String> ();
+  static Set nodesToGenerate = new HashSet ();
 
   static void addType (final String type)
   {
@@ -110,7 +112,7 @@ final class CPPNodeFiles
                                                "NODE_PREFIX",
                                                "NODE_EXTENDS",
                                                "NODE_FACTORY",
-                                               "SUPPORT_CLASS_VISIBILITY_PUBLIC" };
+                                               Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
       outputFile = new OutputFile (file, nodeVersion, options);
       outputFile.setToolName ("JJTree");
 
@@ -119,8 +121,8 @@ final class CPPNodeFiles
         return;
       }
 
-      final Map <String, Object> optionMap = new HashMap <String, Object> (Options.getOptions ());
-      optionMap.put ("PARSER_NAME", JJTreeGlobals.parserName);
+      final Map optionMap = new HashMap (Options.getOptions ());
+      optionMap.put (Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
       optionMap.put ("VISITOR_RETURN_TYPE", getVisitorReturnType ());
       optionMap.put ("VISITOR_DATA_TYPE", getVisitorArgumentType ());
       optionMap.put ("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf (getVisitorReturnType ().equals ("void")));
@@ -158,7 +160,7 @@ final class CPPNodeFiles
                                                "NODE_PREFIX",
                                                "NODE_EXTENDS",
                                                "NODE_FACTORY",
-                                               "SUPPORT_CLASS_VISIBILITY_PUBLIC" };
+                                               Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
       outputFile = new OutputFile (file, nodeVersion, options);
       outputFile.setToolName ("JJTree");
 
@@ -167,8 +169,8 @@ final class CPPNodeFiles
         return;
       }
 
-      final Map <String, Object> optionMap = new HashMap <String, Object> (Options.getOptions ());
-      optionMap.put ("PARSER_NAME", JJTreeGlobals.parserName);
+      final Map optionMap = new HashMap (Options.getOptions ());
+      optionMap.put (Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
       optionMap.put ("VISITOR_RETURN_TYPE", getVisitorReturnType ());
       optionMap.put ("VISITOR_DATA_TYPE", getVisitorArgumentType ());
       optionMap.put ("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf (getVisitorReturnType ().equals ("void")));
@@ -178,15 +180,16 @@ final class CPPNodeFiles
       ostr.println ("#define " + file.getName ().replace ('.', '_').toUpperCase ());
       generateFile (outputFile, "/templates/cpp/TreeIncludeHeader.template", optionMap, false);
 
-      final boolean hasNamespace = Options.stringValue ("NAMESPACE").length () > 0;
+      final boolean hasNamespace = Options.stringValue (Options.USEROPTION_CPP_NAMESPACE).length () > 0;
       if (hasNamespace)
       {
         ostr.println ("namespace " + Options.stringValue ("NAMESPACE_OPEN"));
       }
 
       generateFile (outputFile, "/templates/cpp/SimpleNodeInterface.template", optionMap, false);
-      for (final String s : nodesToGenerate)
+      for (final Iterator i = nodesToGenerate.iterator (); i.hasNext ();)
       {
+        final String s = (String) i.next ();
         optionMap.put ("NODE_TYPE", s);
         generateFile (outputFile, "/templates/cpp/MultiNodeInterface.template", optionMap, false);
       }
@@ -229,7 +232,7 @@ final class CPPNodeFiles
                                                "NODE_PREFIX",
                                                "NODE_EXTENDS",
                                                "NODE_FACTORY",
-                                               "SUPPORT_CLASS_VISIBILITY_PUBLIC" };
+                                               Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
       outputFile = new OutputFile (file, nodeVersion, options);
       outputFile.setToolName ("JJTree");
 
@@ -238,22 +241,23 @@ final class CPPNodeFiles
         return;
       }
 
-      final Map <String, Object> optionMap = new HashMap <String, Object> (Options.getOptions ());
-      optionMap.put ("PARSER_NAME", JJTreeGlobals.parserName);
+      final Map optionMap = new HashMap (Options.getOptions ());
+      optionMap.put (Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
       optionMap.put ("VISITOR_RETURN_TYPE", getVisitorReturnType ());
       optionMap.put ("VISITOR_DATA_TYPE", getVisitorArgumentType ());
       optionMap.put ("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf (getVisitorReturnType ().equals ("void")));
       generateFile (outputFile, "/templates/cpp/TreeImplHeader.template", optionMap, false);
 
-      final boolean hasNamespace = Options.stringValue ("NAMESPACE").length () > 0;
+      final boolean hasNamespace = Options.stringValue (Options.USEROPTION_CPP_NAMESPACE).length () > 0;
       if (hasNamespace)
       {
         outputFile.getPrintWriter ().println ("namespace " + Options.stringValue ("NAMESPACE_OPEN"));
       }
 
       generateFile (outputFile, "/templates/cpp/SimpleNodeImpl.template", optionMap, false);
-      for (final String s : nodesToGenerate)
+      for (final Iterator i = nodesToGenerate.iterator (); i.hasNext ();)
       {
+        final String s = (String) i.next ();
         optionMap.put ("NODE_TYPE", s);
         generateFile (outputFile, "/templates/cpp/MultiNodeImpl.template", optionMap, false);
       }
@@ -310,7 +314,7 @@ final class CPPNodeFiles
       ostr.println ("#define " + file.getName ().replace ('.', '_').toUpperCase ());
 
       ostr.println ("\n#include \"JavaCC.h\"");
-      final boolean hasNamespace = Options.stringValue ("NAMESPACE").length () > 0;
+      final boolean hasNamespace = Options.stringValue (Options.USEROPTION_CPP_NAMESPACE).length () > 0;
       if (hasNamespace)
       {
         ostr.println ("namespace " + Options.stringValue ("NAMESPACE_OPEN"));
@@ -407,7 +411,7 @@ final class CPPNodeFiles
       ostr.println ("\n#include \"JavaCC.h\"");
       ostr.println ("#include \"" + JJTreeGlobals.parserName + "Tree.h" + "\"");
 
-      final boolean hasNamespace = Options.stringValue ("NAMESPACE").length () > 0;
+      final boolean hasNamespace = Options.stringValue (Options.USEROPTION_CPP_NAMESPACE).length () > 0;
       if (hasNamespace)
       {
         ostr.println ("namespace " + Options.stringValue ("NAMESPACE_OPEN"));
@@ -525,16 +529,14 @@ final class CPPNodeFiles
     ostr.println ("};");
   }
 
-  public static void generateFile (final OutputFile outputFile,
-                                   final String template,
-                                   final Map <String, Object> options) throws IOException
+  public static void generateFile (final OutputFile outputFile, final String template, final Map options) throws IOException
   {
     generateFile (outputFile, template, options, true);
   }
 
   public static void generateFile (final OutputFile outputFile,
                                    final String template,
-                                   final Map <String, Object> options,
+                                   final Map options,
                                    final boolean close) throws IOException
   {
     final PrintWriter ostr = outputFile.getPrintWriter ();

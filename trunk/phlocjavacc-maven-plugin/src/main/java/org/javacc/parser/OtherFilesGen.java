@@ -33,49 +33,78 @@ package org.javacc.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.javacc.parser.JavaFiles.JavaResourceTemplateLocations;
+
 /**
  * Generates the Constants file.
  */
 public class OtherFilesGen extends JavaCCGlobals implements JavaCCParserConstants
 {
 
-  static public void start () throws MetaParseException
+  private static final String CONSTANTS_FILENAME_SUFFIX = "Constants.java";
+
+  static public void start (final boolean isJavaModern) throws MetaParseException
   {
+
+    final JavaResourceTemplateLocations templateLoc = isJavaModern ? JavaFiles.RESOURCES_JAVA_MODERN
+                                                                  : JavaFiles.RESOURCES_JAVA_CLASSIC;
 
     Token t = null;
 
     if (JavaCCErrors.get_error_count () != 0)
       throw new MetaParseException ();
 
-    JavaFiles.gen_TokenMgrError ();
-    JavaFiles.gen_ParseException ();
-    JavaFiles.gen_Token ();
+    // Added this if condition -- 2012/10/17 -- cba
+    if (Options.isGenerateBoilerplateCode ())
+    {
+
+      if (isJavaModern)
+      {
+        JavaFiles.gen_JavaModernFiles ();
+      }
+
+      JavaFiles.gen_TokenMgrError (templateLoc);
+      JavaFiles.gen_ParseException (templateLoc);
+      JavaFiles.gen_Token (templateLoc);
+    }
 
     if (Options.getUserTokenManager ())
     {
-      JavaFiles.gen_TokenManager ();
+      // CBA -- I think that Token managers are unique so will always be
+      // generated
+      JavaFiles.gen_TokenManager (templateLoc);
     }
     else
       if (Options.getUserCharStream ())
       {
-        JavaFiles.gen_CharStream ();
+        // Added this if condition -- 2012/10/17 -- cba
+        if (Options.isGenerateBoilerplateCode ())
+        {
+          JavaFiles.gen_CharStream (templateLoc);
+        }
       }
       else
       {
-        if (Options.getJavaUnicodeEscape ())
+        // Added this if condition -- 2012/10/17 -- cba
+
+        if (Options.isGenerateBoilerplateCode ())
         {
-          JavaFiles.gen_JavaCharStream ();
-        }
-        else
-        {
-          JavaFiles.gen_SimpleCharStream ();
+          if (Options.getJavaUnicodeEscape ())
+          {
+            JavaFiles.gen_JavaCharStream (templateLoc);
+          }
+          else
+          {
+            JavaFiles.gen_SimpleCharStream (templateLoc);
+          }
         }
       }
+
     try
     {
       ostr = new java.io.PrintWriter (new java.io.BufferedWriter (new java.io.FileWriter (new java.io.File (Options.getOutputDirectory (),
                                                                                                             cu_name +
-                                                                                                                "Constants.java")),
+                                                                                                                CONSTANTS_FILENAME_SUFFIX)),
                                                                   8192));
     }
     catch (final java.io.IOException e)
@@ -84,9 +113,9 @@ public class OtherFilesGen extends JavaCCGlobals implements JavaCCParserConstant
       throw new Error ();
     }
 
-    final List <String> tn = new ArrayList <String> (toolNames);
+    final List tn = new ArrayList (toolNames);
     tn.add (toolName);
-    ostr.println ("/* " + getIdString (tn, cu_name + "Constants.java") + " */");
+    ostr.println ("/* " + getIdString (tn, cu_name + CONSTANTS_FILENAME_SUFFIX) + " */");
 
     if (cu_to_insertion_point_1.size () != 0 && ((Token) cu_to_insertion_point_1.get (0)).kind == PACKAGE)
     {
@@ -123,9 +152,9 @@ public class OtherFilesGen extends JavaCCGlobals implements JavaCCParserConstant
     RegularExpression re;
     ostr.println ("  /** End of File. */");
     ostr.println ("  int EOF = 0;");
-    for (final Object element : ordered_named_tokens)
+    for (final java.util.Iterator it = ordered_named_tokens.iterator (); it.hasNext ();)
     {
-      re = (RegularExpression) element;
+      re = (RegularExpression) it.next ();
       ostr.println ("  /** RegularExpression Id. */");
       ostr.println ("  int " + re.label + " = " + re.ordinal + ";");
     }
@@ -143,9 +172,9 @@ public class OtherFilesGen extends JavaCCGlobals implements JavaCCParserConstant
     ostr.println ("  String[] tokenImage = {");
     ostr.println ("    \"<EOF>\",");
 
-    for (final Object element : rexprlist)
+    for (final java.util.Iterator it = rexprlist.iterator (); it.hasNext ();)
     {
-      final TokenProduction tp = (TokenProduction) (element);
+      final TokenProduction tp = (TokenProduction) (it.next ());
       final List respecs = tp.respecs;
       for (final java.util.Iterator it2 = respecs.iterator (); it2.hasNext ();)
       {

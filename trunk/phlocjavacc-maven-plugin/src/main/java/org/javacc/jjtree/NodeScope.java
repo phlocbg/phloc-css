@@ -27,6 +27,7 @@
  */
 package org.javacc.jjtree;
 
+
 public class NodeScope
 {
   ASTProduction production;

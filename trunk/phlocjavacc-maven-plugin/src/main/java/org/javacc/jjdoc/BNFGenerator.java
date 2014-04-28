@@ -41,14 +41,14 @@ import org.javacc.parser.TokenProduction;
 
 public class BNFGenerator implements Generator
 {
-  private final Hashtable <String, String> id_map = new Hashtable <String, String> ();
+  private final Hashtable id_map = new Hashtable ();
   private int id = 1;
   protected PrintWriter ostr;
   private boolean printing = true;
 
   protected String get_id (final String nt)
   {
-    String i = id_map.get (nt);
+    String i = (String) id_map.get (nt);
     if (i == null)
     {
       i = "prod" + id++;
@@ -136,16 +136,12 @@ public class BNFGenerator implements Generator
   public void specialTokens (final String s)
   {}
 
-  public void tokenStart (final TokenProduction tp)
-  {
-    printing = false;
-  }
-
-  public void tokenEnd (final TokenProduction tp)
-  {
-    printing = true;
-  }
-
+  // public void tokenStart(TokenProduction tp) {
+  // printing = false;
+  // }
+  // public void tokenEnd(TokenProduction tp) {
+  // printing = true;
+  // }
   public void nonterminalsStart ()
   {}
 
@@ -220,6 +216,14 @@ public class BNFGenerator implements Generator
   public void error (final String message)
   {
     System.err.println (message);
+  }
+
+  public void handleTokenProduction (final TokenProduction tp)
+  {
+    printing = false;
+    final String text = JJDoc.getStandardTokenProductionText (tp);
+    text (text);
+    printing = true;
   }
 
 }

@@ -21,30 +21,30 @@ public class CPPFiles extends JavaCCGlobals implements JavaCCParserConstants
    * ID of the latest version (of JavaCC) in which one of the CharStream classes
    * or the CharStream interface is modified.
    */
-  static final String charStreamVersion = "6.0";
+  static final String charStreamVersion = Version.majorDotMinor;
 
   /**
    * ID of the latest version (of JavaCC) in which the TokenManager interface is
    * modified.
    */
-  static final String tokenManagerVersion = "6.0";
+  static final String tokenManagerVersion = Version.majorDotMinor;
 
   /**
    * ID of the latest version (of JavaCC) in which the Token class is modified.
    */
-  static final String tokenVersion = "6.0";
+  static final String tokenVersion = Version.majorDotMinor;
 
   /**
    * ID of the latest version (of JavaCC) in which the ParseException class is
    * modified.
    */
-  static final String parseExceptionVersion = "6.0";
+  static final String parseExceptionVersion = Version.majorDotMinor;
 
   /**
    * ID of the latest version (of JavaCC) in which the TokenMgrError class is
    * modified.
    */
-  static final String tokenMgrErrorVersion = "6.0";
+  static final String tokenMgrErrorVersion = Version.majorDotMinor;
 
   /**
    * Replaces all backslahes with double backslashes.
@@ -56,7 +56,7 @@ public class CPPFiles extends JavaCCGlobals implements JavaCCParserConstants
     final int len = str.length ();
 
     while (i < len && str.charAt (i++) != '\\')
-    {}
+      ;
 
     if (i == len) // No backslash found.
       return str;
@@ -182,53 +182,58 @@ public class CPPFiles extends JavaCCGlobals implements JavaCCParserConstants
 
   public static void gen_CharStream ()
   {
-    final String [] parameters = new String [] { "STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC" };
+    final String [] parameters = new String [] { Options.USEROPTION__STATIC,
+                                                Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
     genFile ("CharStream.h", charStreamVersion, parameters);
     genFile ("CharStream.cc", charStreamVersion, parameters);
   }
 
   public static void gen_ParseException ()
   {
-    final String [] parameters = new String [] { "STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC" };
+    final String [] parameters = new String [] { Options.USEROPTION__STATIC,
+                                                Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
     genFile ("ParseException.h", parseExceptionVersion, parameters);
     genFile ("ParseException.cc", parseExceptionVersion, parameters);
   }
 
   public static void gen_TokenMgrError ()
   {
-    final String [] parameters = new String [] { "STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC" };
+    final String [] parameters = new String [] { Options.USEROPTION__STATIC,
+                                                Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
     genFile ("TokenMgrError.h", tokenMgrErrorVersion, parameters);
     genFile ("TokenMgrError.cc", tokenMgrErrorVersion, parameters);
   }
 
   public static void gen_Token ()
   {
-    final String [] parameters = new String [] { "STATIC",
-                                                "SUPPORT_CLASS_VISIBILITY_PUBLIC",
-                                                "TOKEN_INCLUDES",
-                                                "TOKEN_EXTENDS" };
+    final String [] parameters = new String [] { Options.USEROPTION__STATIC,
+                                                Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC,
+                                                Options.USEROPTION__CPP_TOKEN_INCLUDES,
+                                                Options.USEROPTION__TOKEN_EXTENDS };
     genFile ("Token.h", tokenMgrErrorVersion, parameters);
     genFile ("Token.cc", tokenMgrErrorVersion, parameters);
   }
 
   public static void gen_TokenManager ()
   {
-    final String [] parameters = new String [] { "STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC" };
+    final String [] parameters = new String [] { Options.USEROPTION__STATIC,
+                                                Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
     genFile ("TokenManager.h", tokenManagerVersion, parameters);
   }
 
   public static void gen_JavaCCDefs ()
   {
-    final String [] parameters = new String [] { "STATIC", "SUPPORT_CLASS_VISIBILITY_PUBLIC" };
+    final String [] parameters = new String [] { Options.USEROPTION__STATIC,
+                                                Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
     genFile ("JavaCC.h", tokenManagerVersion, parameters);
   }
 
   public static void gen_ErrorHandler ()
   {
-    final String [] parameters = new String [] { "STATIC",
-                                                "SUPPORT_CLASS_VISIBILITY_PUBLIC",
-                                                "BUILD_PARSER",
-                                                "BUILD_TOKEN_MANAGER" };
+    final String [] parameters = new String [] { Options.USEROPTION__STATIC,
+                                                Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC,
+                                                Options.USEROPTION__BUILD_PARSER,
+                                                Options.USEROPTION__BUILD_TOKEN_MANAGER };
     genFile ("ErrorHandler.h", parseExceptionVersion, parameters);
   }
 

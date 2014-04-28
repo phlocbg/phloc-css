@@ -192,7 +192,12 @@ public class JJTree
         root.generate (io);
         io.getOut ().close ();
 
-        if (Options.getOutputLanguage ().equals ("java"))
+        final String outputLanguage = Options.getOutputLanguage ();
+
+        // TODO :: Not yet tested this in GWT/Modern mode (disabled by default
+        // in 6.1)
+
+        if (Options.isOutputLanguageJava ())
         {
           NodeFiles.generateTreeConstants_java ();
           NodeFiles.generateVisitor_java ();
@@ -200,13 +205,19 @@ public class JJTree
           JJTreeState.generateTreeState_java ();
         }
         else
-        {
-          CPPNodeFiles.generateTreeConstants ();
-          CPPNodeFiles.generateVisitors ();
-          // CPPNodeFiles.generateDefaultVisitor();
-          CPPJJTreeState.generateTreeState ();
-          // CPPNodeFiles.generateJJTreeH();
-        }
+          if (Options.isOutputLanguageCPP ())
+          {
+            CPPNodeFiles.generateTreeConstants ();
+            CPPNodeFiles.generateVisitors ();
+            // CPPNodeFiles.generateDefaultVisitor();
+            CPPJJTreeState.generateTreeState ();
+            // CPPNodeFiles.generateJJTreeH();
+          }
+          else
+          {
+            p ("Unsupported JJTree output language : " + outputLanguage);
+            return 1;
+          }
 
         p ("Annotated grammar generated successfully in " + io.getOutputFileName ());
 

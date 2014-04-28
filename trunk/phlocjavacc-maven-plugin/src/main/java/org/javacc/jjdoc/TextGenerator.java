@@ -102,22 +102,6 @@ public class TextGenerator implements Generator
   /**
    * {@inheritDoc}
    * 
-   * @see org.javacc.jjdoc.Generator#tokenStart(org.javacc.parser.TokenProduction)
-   */
-  public void tokenStart (final TokenProduction tp)
-  {}
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see org.javacc.jjdoc.Generator#tokenEnd(org.javacc.parser.TokenProduction)
-   */
-  public void tokenEnd (final TokenProduction tp)
-  {}
-
-  /**
-   * {@inheritDoc}
-   * 
    * @see org.javacc.jjdoc.Generator#nonterminalsStart()
    */
   public void nonterminalsStart ()
@@ -141,6 +125,12 @@ public class TextGenerator implements Generator
   public void tokensStart ()
   {
     text ("TOKENS\n");
+  }
+
+  public void handleTokenProduction (final TokenProduction tp)
+  {
+    final String text = JJDoc.getStandardTokenProductionText (tp);
+    text (text);
   }
 
   /**
@@ -255,10 +245,17 @@ public class TextGenerator implements Generator
       else
       {
         String ext = ".html";
+
         if (JJDocOptions.getText ())
         {
           ext = ".txt";
         }
+        else
+          if (JJDocOptions.getXText ())
+          {
+            ext = ".xtext";
+          }
+
         final int i = JJDocGlobals.input_file.lastIndexOf ('.');
         if (i == -1)
         {

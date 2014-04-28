@@ -29,6 +29,7 @@
 package org.javacc.parser;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +44,7 @@ public class Choice extends Expansion
    * The list of choices of this expansion unit. Each List component will narrow
    * to ExpansionUnit.
    */
-  private List <Object> choices = new ArrayList <Object> ();
+  private List choices = new ArrayList ();
 
   public Choice ()
   {}
@@ -65,7 +66,7 @@ public class Choice extends Expansion
    * @param choices
    *        the choices to set
    */
-  public void setChoices (final List <Object> choices)
+  public void setChoices (final List choices)
   {
     this.choices = choices;
   }
@@ -73,21 +74,21 @@ public class Choice extends Expansion
   /**
    * @return the choices
    */
-  public List <Object> getChoices ()
+  public List getChoices ()
   {
     return choices;
   }
 
   @Override
-  public StringBuffer dump (final int indent, final Set <Expansion> alreadyDumped)
+  public StringBuffer dump (final int indent, final Set alreadyDumped)
   {
     final StringBuffer sb = super.dump (indent, alreadyDumped);
     if (alreadyDumped.contains (this))
       return sb;
     alreadyDumped.add (this);
-    for (final Object nextc : getChoices ())
+    for (final Iterator it = getChoices ().iterator (); it.hasNext ();)
     {
-      final Expansion next = (Expansion) nextc;
+      final Expansion next = (Expansion) it.next ();
       sb.append (eol).append (next.dump (indent + 1, alreadyDumped));
     }
     return sb;
