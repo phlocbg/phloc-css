@@ -40,12 +40,12 @@ public class ASTProduction extends JJTreeNode
   String name;
   Vector throws_list = new Vector ();
 
-  private final Hashtable <NodeScope, Integer> scopes = new Hashtable <NodeScope, Integer> ();
+  private final Hashtable scopes = new Hashtable ();
   private int nextNodeScopeNumber = 0;
 
   int getNodeScopeNumber (final NodeScope s)
   {
-    Integer i = scopes.get (s);
+    Integer i = (Integer) scopes.get (s);
     if (i == null)
     {
       i = new Integer (nextNodeScopeNumber++);

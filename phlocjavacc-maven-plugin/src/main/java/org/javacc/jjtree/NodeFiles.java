@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.javacc.Version;
 import org.javacc.parser.Options;
 import org.javacc.parser.OutputFile;
 import org.javacc.utils.JavaFileGenerator;
@@ -53,9 +54,9 @@ final class NodeFiles
    * ID of the latest version (of JJTree) in which one of the Node classes was
    * modified.
    */
-  static final String nodeVersion = "6.0";
+  static final String nodeVersion = Version.majorDotMinor;
 
-  static Set <String> nodesGenerated = new HashSet <String> ();
+  static Set nodesGenerated = new HashSet ();
 
   static void ensure (final IO io, final String nodeType)
   {
@@ -96,7 +97,7 @@ final class NodeFiles
                                                "NODE_PREFIX",
                                                "NODE_EXTENDS",
                                                "NODE_FACTORY",
-                                               "SUPPORT_CLASS_VISIBILITY_PUBLIC" };
+                                               Options.USEROPTION__SUPPORT_CLASS_VISIBILITY_PUBLIC };
       final OutputFile outputFile = new OutputFile (file, nodeVersion, options);
       outputFile.setToolName ("JJTree");
 
@@ -382,8 +383,8 @@ final class NodeFiles
 
     generatePrologue (ostr);
 
-    final Map <String, Object> options = new HashMap <String, Object> (Options.getOptions ());
-    options.put ("PARSER_NAME", JJTreeGlobals.parserName);
+    final Map options = new HashMap (Options.getOptions ());
+    options.put (Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
 
     final JavaFileGenerator generator = new JavaFileGenerator ("/templates/Node.template", options);
 
@@ -398,8 +399,8 @@ final class NodeFiles
 
     generatePrologue (ostr);
 
-    final Map <String, Object> options = new HashMap <String, Object> (Options.getOptions ());
-    options.put ("PARSER_NAME", JJTreeGlobals.parserName);
+    final Map options = new HashMap (Options.getOptions ());
+    options.put (Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
     options.put ("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf (JJTreeOptions.getVisitorReturnType ().equals ("void")));
 
     final JavaFileGenerator generator = new JavaFileGenerator ("/templates/SimpleNode.template", options);
@@ -415,8 +416,8 @@ final class NodeFiles
 
     generatePrologue (ostr);
 
-    final Map <String, Object> options = new HashMap <String, Object> (Options.getOptions ());
-    options.put ("PARSER_NAME", JJTreeGlobals.parserName);
+    final Map options = new HashMap (Options.getOptions ());
+    options.put (Options.NONUSER_OPTION__PARSER_NAME, JJTreeGlobals.parserName);
     options.put ("NODE_TYPE", nodeType);
     options.put ("VISITOR_RETURN_TYPE_VOID", Boolean.valueOf (JJTreeOptions.getVisitorReturnType ().equals ("void")));
 

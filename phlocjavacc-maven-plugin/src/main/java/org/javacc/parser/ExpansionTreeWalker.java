@@ -48,17 +48,17 @@ public final class ExpansionTreeWalker
     {
       if (node instanceof Choice)
       {
-        for (final Object element : ((Choice) node).getChoices ())
+        for (final Iterator it = ((Choice) node).getChoices ().iterator (); it.hasNext ();)
         {
-          preOrderWalk ((Expansion) element, opObj);
+          preOrderWalk ((Expansion) it.next (), opObj);
         }
       }
       else
         if (node instanceof Sequence)
         {
-          for (final Object element : ((Sequence) node).units)
+          for (final Iterator it = ((Sequence) node).units.iterator (); it.hasNext ();)
           {
-            preOrderWalk ((Expansion) element, opObj);
+            preOrderWalk ((Expansion) it.next (), opObj);
           }
         }
         else
@@ -139,17 +139,17 @@ public final class ExpansionTreeWalker
     {
       if (node instanceof Choice)
       {
-        for (final Object element : ((Choice) node).getChoices ())
+        for (final Iterator it = ((Choice) node).getChoices ().iterator (); it.hasNext ();)
         {
-          postOrderWalk ((Expansion) element, opObj);
+          postOrderWalk ((Expansion) it.next (), opObj);
         }
       }
       else
         if (node instanceof Sequence)
         {
-          for (final Object element : ((Sequence) node).units)
+          for (final Iterator it = ((Sequence) node).units.iterator (); it.hasNext ();)
           {
-            postOrderWalk ((Expansion) element, opObj);
+            postOrderWalk ((Expansion) it.next (), opObj);
           }
         }
         else

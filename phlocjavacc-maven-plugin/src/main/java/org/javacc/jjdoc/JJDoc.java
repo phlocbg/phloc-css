@@ -125,59 +125,66 @@ public class JJDoc extends JJDocGlobals
       final TokenProduction tp = (TokenProduction) it.next ();
       emitTopLevelSpecialTokens (tp.firstToken, gen);
 
-      String token = "";
-      if (tp.isExplicit)
-      {
-        if (tp.lexStates == null)
-        {
-          token += "<*> ";
-        }
-        else
-        {
-          token += "<";
-          for (int i = 0; i < tp.lexStates.length; ++i)
-          {
-            token += tp.lexStates[i];
-            if (i < tp.lexStates.length - 1)
-            {
-              token += ",";
-            }
-          }
-          token += "> ";
-        }
-        token += TokenProduction.kindImage[tp.kind];
-        if (tp.ignoreCase)
-        {
-          token += " [IGNORE_CASE]";
-        }
-        token += " : {\n";
-        for (final Iterator it2 = tp.respecs.iterator (); it2.hasNext ();)
-        {
-          final RegExprSpec res = (RegExprSpec) it2.next ();
+      gen.handleTokenProduction (tp);
 
-          token += emitRE (res.rexp);
-
-          if (res.nsTok != null)
-          {
-            token += " : " + res.nsTok.image;
-          }
-
-          token += "\n";
-          if (it2.hasNext ())
-          {
-            token += "| ";
-          }
-        }
-        token += "}\n\n";
-      }
-      if (!token.equals (""))
-      {
-        gen.tokenStart (tp);
-        gen.text (token);
-        gen.tokenEnd (tp);
-      }
+      // if (!token.equals("")) {
+      // gen.tokenStart(tp);
+      // String token = getStandardTokenProductionText(tp);
+      // gen.text(token);
+      // gen.tokenEnd(tp);
+      // }
     }
     gen.tokensEnd ();
+  }
+
+  public static String getStandardTokenProductionText (final TokenProduction tp)
+  {
+    String token = "";
+    if (tp.isExplicit)
+    {
+      if (tp.lexStates == null)
+      {
+        token += "<*> ";
+      }
+      else
+      {
+        token += "<";
+        for (int i = 0; i < tp.lexStates.length; ++i)
+        {
+          token += tp.lexStates[i];
+          if (i < tp.lexStates.length - 1)
+          {
+            token += ",";
+          }
+        }
+        token += "> ";
+      }
+      token += TokenProduction.kindImage[tp.kind];
+      if (tp.ignoreCase)
+      {
+        token += " [IGNORE_CASE]";
+      }
+      token += " : {\n";
+      for (final Iterator it2 = tp.respecs.iterator (); it2.hasNext ();)
+      {
+        final RegExprSpec res = (RegExprSpec) it2.next ();
+
+        token += emitRE (res.rexp);
+
+        if (res.nsTok != null)
+        {
+          token += " : " + res.nsTok.image;
+        }
+
+        token += "\n";
+        if (it2.hasNext ())
+        {
+          token += "| ";
+        }
+      }
+      token += "}\n\n";
+    }
+    return token;
   }
 
   private static void emitNormalProductions (final Generator gen, final List prods)
@@ -194,9 +201,9 @@ public class JJDoc extends JJDocGlobals
         {
           boolean first = true;
           final Choice c = (Choice) np.getExpansion ();
-          for (final Object element : c.getChoices ())
+          for (final Iterator expansionsIterator = c.getChoices ().iterator (); expansionsIterator.hasNext ();)
           {
-            final Expansion e = (Expansion) (element);
+            final Expansion e = (Expansion) (expansionsIterator.next ());
             gen.expansionStart (e, first);
             emitExpansionTree (e, gen);
             gen.expansionEnd (e, first);
@@ -326,9 +333,9 @@ public class JJDoc extends JJDocGlobals
   private static void emitExpansionSequence (final Sequence s, final Generator gen)
   {
     boolean firstUnit = true;
-    for (final Object element : s.units)
+    for (final Iterator it = s.units.iterator (); it.hasNext ();)
     {
-      final Expansion e = (Expansion) element;
+      final Expansion e = (Expansion) it.next ();
       if (e instanceof Lookahead || e instanceof Action)
       {
         continue;
@@ -379,7 +386,7 @@ public class JJDoc extends JJDocGlobals
     gen.text (" )?");
   }
 
-  private static String emitRE (final RegularExpression re)
+  public static String emitRE (final RegularExpression re)
   {
     String returnString = "";
     final boolean hasLabel = !re.label.equals ("");

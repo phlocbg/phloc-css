@@ -52,16 +52,16 @@ public class ASTNodeDescriptor extends JJTreeNode
     return nd;
   }
 
-  static List <String> nodeIds = new ArrayList <String> ();
-  static List <String> nodeNames = new ArrayList <String> ();
-  static Hashtable <String, String> nodeSeen = new Hashtable <String, String> ();
+  static List nodeIds = new ArrayList ();
+  static List nodeNames = new ArrayList ();
+  static Hashtable nodeSeen = new Hashtable ();
 
-  static List <String> getNodeIds ()
+  static List getNodeIds ()
   {
     return nodeIds;
   }
 
-  static List <String> getNodeNames ()
+  static List getNodeNames ()
   {
     return nodeNames;
   }

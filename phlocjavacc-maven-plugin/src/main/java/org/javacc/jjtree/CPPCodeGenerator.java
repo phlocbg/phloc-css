@@ -25,8 +25,8 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
     final IO io = (IO) data;
     io.println ("/*@bgen(jjtree) " +
                 JavaCCGlobals.getIdString (JJTreeGlobals.toolList, new File (io.getOutputFileName ()).getName ()) +
-                (Options.booleanValue ("IGNORE_ACTIONS") ? "" : " */"));
-    io.print ((Options.booleanValue ("IGNORE_ACTIONS") ? "" : "/*") + "@egen*/");
+                (Options.booleanValue (Options.USEROPTION__CPP_IGNORE_ACTIONS) ? "" : " */"));
+    io.print ((Options.booleanValue (Options.USEROPTION__CPP_IGNORE_ACTIONS) ? "" : "/*") + "@egen*/");
 
     return node.childrenAccept (this, io);
   }
@@ -262,17 +262,17 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
   {
     if (arg != null)
     {
-      io.print ("/*@bgen(jjtree) " + arg + (Options.booleanValue ("IGNORE_ACTIONS") ? "" : " */"));
+      io.print ("/*@bgen(jjtree) " + arg + (Options.booleanValue (Options.USEROPTION__CPP_IGNORE_ACTIONS) ? "" : " */"));
     }
     else
     {
-      io.print ("/*@bgen(jjtree)" + (Options.booleanValue ("IGNORE_ACTIONS") ? "" : "*/"));
+      io.print ("/*@bgen(jjtree)" + (Options.booleanValue (Options.USEROPTION__CPP_IGNORE_ACTIONS) ? "" : "*/"));
     }
   }
 
   static void closeJJTreeComment (final IO io)
   {
-    io.print ((Options.booleanValue ("IGNORE_ACTIONS") ? "" : "/*") + "@egen*/");
+    io.print ((Options.booleanValue (Options.USEROPTION__CPP_IGNORE_ACTIONS) ? "" : "/*") + "@egen*/");
   }
 
   String getIndentation (final JJTreeNode n)
@@ -348,7 +348,7 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
 
     if (JJTreeOptions.getTrackTokens ())
     {
-      io.println (indent + ns.nodeVar + ".jjtSetFirstToken(getToken(1));");
+      io.println (indent + ns.nodeVar + "->jjtSetFirstToken(getToken(1));");
     }
   }
 
@@ -369,7 +369,7 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
 
     if (JJTreeOptions.getTrackTokens ())
     {
-      io.println (indent + ns.nodeVar + ".jjtSetLastToken(getToken(0));");
+      io.println (indent + ns.nodeVar + "->jjtSetLastToken(getToken(0));");
     }
   }
 
@@ -387,10 +387,7 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
     io.println (indent + "}");
   }
 
-  private void insertCatchBlocks (final NodeScope ns,
-                                  final IO io,
-                                  final Enumeration <String> thrown_names,
-                                  final String indent)
+  private void insertCatchBlocks (final NodeScope ns, final IO io, final Enumeration thrown_names, final String indent)
   {
     final String thrown;
     // if (thrown_names.hasMoreElements()) {
@@ -426,7 +423,7 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
     openJJTreeComment (io, null);
     io.println ();
 
-    final Enumeration <String> thrown_names = ns.production.throws_list.elements ();
+    final Enumeration thrown_names = ns.production.throws_list.elements ();
     insertCatchBlocks (ns, io, thrown_names, indent);
 
     io.println (indent + "} {");
@@ -440,9 +437,7 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
     closeJJTreeComment (io);
   }
 
-  private static void findThrown (final NodeScope ns,
-                                  final Hashtable <String, String> thrown_set,
-                                  final JJTreeNode expansion_unit)
+  private static void findThrown (final NodeScope ns, final Hashtable thrown_set, final JJTreeNode expansion_unit)
   {
     if (expansion_unit instanceof ASTBNFNonTerminal)
     {
@@ -453,10 +448,10 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
       final ASTProduction prod = (ASTProduction) JJTreeGlobals.productions.get (nt);
       if (prod != null)
       {
-        final Enumeration <String> e = prod.throws_list.elements ();
+        final Enumeration e = prod.throws_list.elements ();
         while (e.hasMoreElements ())
         {
-          final String t = e.nextElement ();
+          final String t = (String) e.nextElement ();
           thrown_set.put (t, t);
         }
       }
@@ -478,9 +473,9 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
     openJJTreeComment (io, null);
     io.println ();
 
-    final Hashtable <String, String> thrown_set = new Hashtable <String, String> ();
+    final Hashtable thrown_set = new Hashtable ();
     findThrown (ns, thrown_set, expansion_unit);
-    final Enumeration <String> thrown_names = thrown_set.elements ();
+    final Enumeration thrown_names = thrown_set.elements ();
     insertCatchBlocks (ns, io, thrown_names, indent);
 
     io.println (indent + "} {");

@@ -45,7 +45,7 @@ public class Action extends Expansion
   private final List action_tokens = new ArrayList ();
 
   @Override
-  public StringBuffer dump (final int indent, final Set <Expansion> alreadyDumped)
+  public StringBuffer dump (final int indent, final Set alreadyDumped)
   {
     final StringBuffer sb = super.dump (indent, alreadyDumped);
     alreadyDumped.add (this);

@@ -43,15 +43,23 @@ public class ASTGrammar extends JJTreeNode
   void generate (final IO io)
   {
     System.out.println ("opt:" + Options.getOutputLanguage ());
-    if (Options.getOutputLanguage ().equals ("java"))
+    // TODO :: CBA -- Require Unification of output language specific processing
+    // into a single Enum class
+    if (Options.isOutputLanguageJava ())
     {
       new JavaCodeGenerator ().visit (this, io);
     }
     else
-    {
-      new CPPCodeGenerator ().visit (this, io);
-      CPPNodeFiles.generateTreeClasses ();
-    }
+      if (Options.getOutputLanguage ().equals (Options.OUTPUT_LANGUAGE__CPP))
+      {
+        new CPPCodeGenerator ().visit (this, io);
+        CPPNodeFiles.generateTreeClasses ();
+      }
+      else
+      {
+        // Catch all to ensure we don't accidently do nothing
+        throw new RuntimeException ("Language type not supported for JJTree : " + Options.getOutputLanguage ());
+      }
   }
 
   /** Accept the visitor. **/

@@ -66,15 +66,16 @@ public class CodeGenerator
   {
     if (!isJavaLanguage ())
     {
-      final String incfileName = fileName.replace (".cc", ".h");
-      includeBuffer.insert (0, "#define " + new File (incfileName).getName ().replace ('.', '_').toUpperCase () + "\n");
-      includeBuffer.insert (0, "#ifndef " + new File (incfileName).getName ().replace ('.', '_').toUpperCase () + "\n");
+      final String incfilePath = fileName.replace (".cc", ".h");
+      final String incfileName = new File (incfilePath).getName ();
+      includeBuffer.insert (0, "#define " + incfileName.replace ('.', '_').toUpperCase () + "\n");
+      includeBuffer.insert (0, "#ifndef " + incfileName.replace ('.', '_').toUpperCase () + "\n");
 
       // dump the statics into the main file with the code.
       mainBuffer.insert (0, staticsBuffer);
 
       // Finally enclose the whole thing in the namespace, if specified.
-      if (Options.stringValue ("NAMESPACE").length () > 0)
+      if (Options.stringValue (Options.USEROPTION_CPP_NAMESPACE).length () > 0)
       {
         mainBuffer.insert (0, "namespace " + Options.stringValue ("NAMESPACE_OPEN") + "\n");
         mainBuffer.append (Options.stringValue ("NAMESPACE_CLOSE") + "\n");
@@ -83,7 +84,7 @@ public class CodeGenerator
 
       mainBuffer.insert (0, "#include \"" + incfileName + "\"\n");
       includeBuffer.append ("#endif\n");
-      saveOutput (incfileName, includeBuffer);
+      saveOutput (incfilePath, includeBuffer);
     }
 
     mainBuffer.insert (0, "/* " + new File (fileName).getName () + " */\n");
@@ -149,8 +150,12 @@ public class CodeGenerator
   protected void printTokenSetup (final Token t)
   {
     Token tt = t;
+
     while (tt.specialToken != null)
+    {
       tt = tt.specialToken;
+    }
+
     cline = tt.beginLine;
     ccol = tt.beginColumn;
   }
@@ -280,14 +285,19 @@ public class CodeGenerator
    */
   public void genAnnotation (final String ann)
   {
-    if (Options.getOutputLanguage ().equals ("java"))
+    if (Options.isOutputLanguageJava ())
     {
       genCode ("@" + ann);
     }
     else
-    { // For now, it's only C++ for now
-      genCode ("/*" + ann + "*/");
-    }
+      if (Options.getOutputLanguage ().equals (Options.OUTPUT_LANGUAGE__CPP))
+      { // For now, it's only C++ for now
+        genCode ("/*" + ann + "*/");
+      }
+      else
+      {
+        throw new RuntimeException ("Unknown language : " + Options.getOutputLanguage ());
+      }
   }
 
   /**
@@ -319,12 +329,13 @@ public class CodeGenerator
                              final String [] superClasses,
                              final String [] superInterfaces)
   {
-    if (isJavaLanguage () && mod != null)
+    final boolean isJavaLanguage = isJavaLanguage ();
+    if (isJavaLanguage && mod != null)
     {
       genModifier (mod);
     }
     genCode ("class " + name);
-    if (isJavaLanguage ())
+    if (isJavaLanguage)
     {
       if (superClasses.length == 1 && superClasses[0] != null)
       {
@@ -347,7 +358,7 @@ public class CodeGenerator
 
     genCommaSeperatedString (superInterfaces);
     genCodeLine (" {");
-    if (!isJavaLanguage ())
+    if (Options.getOutputLanguage ().equals (Options.OUTPUT_LANGUAGE__CPP))
     {
       genCodeLine ("   public:");
     }
@@ -368,7 +379,9 @@ public class CodeGenerator
 
   protected boolean isJavaLanguage ()
   {
-    return Options.getOutputLanguage ().equals ("java");
+    // TODO :: CBA -- Require Unification of output language specific processing
+    // into a single Enum class
+    return Options.isOutputLanguageJava ();
   }
 
   public void switchToMainFile ()

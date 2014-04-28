@@ -56,7 +56,7 @@ public class ParseEngine
   private int indentamt;
   private boolean jj2LA;
   private CodeGenerator codeGenerator;
-  private final boolean isJavaLanguage = Options.getOutputLanguage ().equals ("java");
+  private final boolean isJavaDialect = Options.isOutputLanguageJava ();
 
   /**
    * These lists are used to maintain expansions for which code generation in
@@ -75,9 +75,9 @@ public class ParseEngine
    * optimization and the hashtable makes it look like we do not need the flag
    * "phase3done" any more. But this has not been removed yet.
    */
-  private List <Lookahead> phase2list = new ArrayList <Lookahead> ();
-  private List <Phase3Data> phase3list = new ArrayList <Phase3Data> ();
-  private java.util.Hashtable <Expansion, Phase3Data> phase3table = new java.util.Hashtable <Expansion, Phase3Data> ();
+  private List phase2list = new ArrayList ();
+  private List phase3list = new ArrayList ();
+  private java.util.Hashtable phase3table = new java.util.Hashtable ();
 
   /**
    * The phase 1 routines generates their output into String's and dumps these
@@ -131,7 +131,7 @@ public class ParseEngine
             final Sequence seq = (Sequence) exp;
             for (int i = 0; i < seq.units.size (); i++)
             {
-              final Expansion [] units = seq.units.toArray (new Expansion [seq.units.size ()]);
+              final Expansion [] units = (Expansion []) seq.units.toArray (new Expansion [seq.units.size ()]);
               if (units[i] instanceof Lookahead && ((Lookahead) units[i]).isExplicit ())
               {
                 // An explicit lookahead (rather than one generated implicitly).
@@ -290,7 +290,7 @@ public class ParseEngine
     for (int i = 0; i < conds.length; i++)
     {
       System.err.println ("Lookahead: " + i);
-      System.err.println (conds[i].dump (0, new HashSet <Expansion> ()));
+      System.err.println (conds[i].dump (0, new HashSet ()));
       System.err.println ();
     }
   }
@@ -700,7 +700,7 @@ public class ParseEngine
       voidReturn = true;
     }
     String error_ret = null;
-    if (isJavaLanguage)
+    if (isJavaDialect)
     {
       codeGenerator.printTokenSetup (t);
       ccol = 1;
@@ -731,7 +731,7 @@ public class ParseEngine
         codeGenerator.printTrailingComments (t);
       }
       codeGenerator.genCode (")");
-      if (isJavaLanguage)
+      if (isJavaDialect)
       {
         codeGenerator.genCode (" throws ParseException");
       }
@@ -754,7 +754,7 @@ public class ParseEngine
 
     codeGenerator.genCode (" {");
 
-    if (Options.booleanValue ("STOP_ON_FIRST_ERROR") && error_ret != null)
+    if (Options.booleanValue (Options.USEROPTION__CPP_STOP_ON_FIRST_ERROR) && error_ret != null)
     {
       codeGenerator.genCode (error_ret);
     }
@@ -767,7 +767,7 @@ public class ParseEngine
       codeGenerator.genCode ("    try {");
       indentamt = 6;
     }
-    if (!Options.booleanValue ("IGNORE_ACTIONS") && p.getDeclarationTokens ().size () != 0)
+    if (!Options.booleanValue (Options.USEROPTION__CPP_IGNORE_ACTIONS) && p.getDeclarationTokens ().size () != 0)
     {
       codeGenerator.printTokenSetup ((Token) (p.getDeclarationTokens ().get (0)));
       cline--;
@@ -783,9 +783,17 @@ public class ParseEngine
     codeGenerator.genCodeLine ("");
     if (p.isJumpPatched () && !voidReturn)
     {
-      if (isJavaLanguage)
+      if (isJavaDialect)
       {
-        codeGenerator.genCodeLine ("    throw new Error(\"Missing return statement in function\");");
+        // TODO :: I don't think we need to throw an Error/Exception to mark
+        // that a return statement is missing as the compiler will flag this
+        // error automatically
+        if (Options.isLegacyExceptionHandling ())
+        {
+          codeGenerator.genCodeLine ("    throw new " +
+                                     (Options.isLegacyExceptionHandling () ? "Error" : "RuntimeException") +
+                                     "(\"Missing return statement in function\");");
+        }
       }
       else
       {
@@ -794,7 +802,7 @@ public class ParseEngine
     }
     if (Options.getDebugParser ())
     {
-      if (isJavaLanguage)
+      if (isJavaDialect)
       {
         codeGenerator.genCodeLine ("    } finally {");
       }
@@ -803,17 +811,17 @@ public class ParseEngine
         codeGenerator.genCodeLine ("    } catch(...) { }");
       }
       codeGenerator.genCodeLine ("      trace_return(\"" + JavaCCGlobals.addUnicodeEscapes (p.getLhs ()) + "\");");
-      if (isJavaLanguage)
+      if (isJavaDialect)
       {
         codeGenerator.genCodeLine ("    }");
       }
     }
-    if (!isJavaLanguage && !voidReturn)
+    if (!isJavaDialect && !voidReturn)
     {
       codeGenerator.genCodeLine ("assert(false);");
     }
 
-    if (Options.booleanValue ("STOP_ON_FIRST_ERROR"))
+    if (Options.booleanValue (Options.USEROPTION__CPP_STOP_ON_FIRST_ERROR))
     {
       codeGenerator.genCodeLine ("\n#undef __ERROR_RET__\n");
     }
@@ -851,7 +859,7 @@ public class ParseEngine
         retval += codeGenerator.getTrailingComments (t);
         retval += " = ";
       }
-      final String tail = e_nrw.rhsToken == null ? ");" : (isJavaLanguage ? ")." : ")->") + e_nrw.rhsToken.image + ";";
+      final String tail = e_nrw.rhsToken == null ? ");" : (isJavaDialect ? ")." : ")->") + e_nrw.rhsToken.image + ";";
       if (e_nrw.label.equals (""))
       {
         final Object label = names_of_tokens.get (new Integer (e_nrw.ordinal));
@@ -868,10 +876,12 @@ public class ParseEngine
       {
         retval += "jj_consume_token(" + e_nrw.label + tail;
       }
-      if (!isJavaLanguage && Options.booleanValue ("STOP_ON_FIRST_ERROR"))
+
+      if (!isJavaDialect && Options.booleanValue (Options.USEROPTION__CPP_STOP_ON_FIRST_ERROR))
       {
         retval += "\n    { if (hasError) { return __ERROR_RET__; } }\n";
       }
+
     }
     else
       if (e instanceof NonTerminal)
@@ -901,7 +911,7 @@ public class ParseEngine
           retval += codeGenerator.getTrailingComments (t);
         }
         retval += ");";
-        if (!isJavaLanguage && Options.booleanValue ("STOP_ON_FIRST_ERROR"))
+        if (!isJavaDialect && Options.booleanValue (Options.USEROPTION__CPP_STOP_ON_FIRST_ERROR))
         {
           retval += "\n    { if (hasError) { return __ERROR_RET__; } }\n";
         }
@@ -911,7 +921,7 @@ public class ParseEngine
         {
           final Action e_nrw = (Action) e;
           retval += "\u0003\n";
-          if (!Options.booleanValue ("IGNORE_ACTIONS") && e_nrw.getActionTokens ().size () != 0)
+          if (!Options.booleanValue (Options.USEROPTION__CPP_IGNORE_ACTIONS) && e_nrw.getActionTokens ().size () != 0)
           {
             codeGenerator.printTokenSetup ((Token) (e_nrw.getActionTokens ().get (0)));
             ccol = 1;
@@ -932,9 +942,9 @@ public class ParseEngine
             actions = new String [e_nrw.getChoices ().size () + 1];
             actions[e_nrw.getChoices ().size ()] = "\n" +
                                                    "jj_consume_token(-1);\n" +
-                                                   (isJavaLanguage ? "throw new ParseException();"
-                                                                  : ("errorHandler->handleParseError(token, getToken(1), __FUNCTION__, this), hasError = true;" + (Options.booleanValue ("STOP_ON_FIRST_ERROR") ? "return __ERROR_RET__;\n"
-                                                                                                                                                                                                               : "")));
+                                                   (isJavaDialect ? "throw new ParseException();"
+                                                                 : ("errorHandler->handleParseError(token, getToken(1), __FUNCTION__, this), hasError = true;" + (Options.booleanValue (Options.USEROPTION__CPP_STOP_ON_FIRST_ERROR) ? "return __ERROR_RET__;\n"
+                                                                                                                                                                                                                                    : "")));
 
             // In previous line, the "throw" never throws an exception since the
             // evaluation of jj_consume_token(-1) causes ParseException to be
@@ -961,7 +971,7 @@ public class ParseEngine
                 // all the
                 // expansion choices with if (!error)
                 boolean wrap_in_block = false;
-                if (!JavaCCGlobals.jjtreeGenerated && !isJavaLanguage)
+                if (!JavaCCGlobals.jjtreeGenerated && !isJavaDialect)
                 {
                   // for the last one, if it's an action, we will not protect
                   // it.
@@ -969,7 +979,7 @@ public class ParseEngine
                   if (!(elem instanceof Action) || !(e.parent instanceof BNFProduction) || i != e_nrw.units.size () - 1)
                   {
                     wrap_in_block = true;
-                    retval += "if (" + (isJavaLanguage ? "true" : "!hasError") + ") {\n";
+                    retval += "if (" + (isJavaDialect ? "true" : "!hasError") + ") {\n";
                   }
                 }
                 retval += phase1ExpansionGen ((Expansion) (e_nrw.units.get (i)));
@@ -997,18 +1007,18 @@ public class ParseEngine
                 }
                 retval += "\n";
                 final int labelIndex = ++gensymindex;
-                if (isJavaLanguage)
+                if (isJavaDialect)
                 {
                   retval += "label_" + labelIndex + ":\n";
                 }
-                retval += "while (" + (isJavaLanguage ? "true" : "!hasError") + ") {\u0001";
+                retval += "while (" + (isJavaDialect ? "true" : "!hasError") + ") {\u0001";
                 retval += phase1ExpansionGen (nested_e);
                 conds = new Lookahead [1];
                 conds[0] = la;
                 actions = new String [2];
                 actions[0] = "\n;";
 
-                if (isJavaLanguage)
+                if (isJavaDialect)
                 {
                   actions[1] = "\nbreak label_" + labelIndex + ";";
                 }
@@ -1019,7 +1029,7 @@ public class ParseEngine
 
                 retval += buildLookaheadChecker (conds, actions);
                 retval += "\u0002\n" + "}";
-                if (!isJavaLanguage)
+                if (!isJavaDialect)
                 {
                   retval += "\nend_label_" + labelIndex + ": ;";
                 }
@@ -1042,16 +1052,16 @@ public class ParseEngine
                   }
                   retval += "\n";
                   final int labelIndex = ++gensymindex;
-                  if (isJavaLanguage)
+                  if (isJavaDialect)
                   {
                     retval += "label_" + labelIndex + ":\n";
                   }
-                  retval += "while (" + (isJavaLanguage ? "true" : "!hasError") + ") {\u0001";
+                  retval += "while (" + (isJavaDialect ? "true" : "!hasError") + ") {\u0001";
                   conds = new Lookahead [1];
                   conds[0] = la;
                   actions = new String [2];
                   actions[0] = "\n;";
-                  if (isJavaLanguage)
+                  if (isJavaDialect)
                   {
                     actions[1] = "\nbreak label_" + labelIndex + ";";
                   }
@@ -1062,7 +1072,7 @@ public class ParseEngine
                   retval += buildLookaheadChecker (conds, actions);
                   retval += phase1ExpansionGen (nested_e);
                   retval += "\u0002\n" + "}";
-                  if (!isJavaLanguage)
+                  if (!isJavaDialect)
                   {
                     retval += "\nend_label_" + labelIndex + ": ;";
                   }
@@ -1136,7 +1146,7 @@ public class ParseEngine
                       }
                       if (e_nrw.finallyblk != null)
                       {
-                        if (isJavaLanguage)
+                        if (isJavaDialect)
                         {
                           retval += " finally {\u0003\n";
                         }
@@ -1165,7 +1175,7 @@ public class ParseEngine
   void buildPhase2Routine (final Lookahead la)
   {
     final Expansion e = la.getLaExpansion ();
-    if (isJavaLanguage)
+    if (isJavaDialect)
     {
       codeGenerator.genCodeLine ("  " +
                                  staticOpt () +
@@ -1181,7 +1191,7 @@ public class ParseEngine
     }
     codeGenerator.genCodeLine (" {");
     codeGenerator.genCodeLine ("    jj_la = xla; jj_lastpos = jj_scanpos = token;");
-    if (isJavaLanguage)
+    if (isJavaDialect)
     {
       codeGenerator.genCodeLine ("    try { return !jj_3" + e.internal_name + "(); }");
       codeGenerator.genCodeLine ("    catch(LookaheadSuccess ls) { return true; }");
@@ -1194,7 +1204,7 @@ public class ParseEngine
     }
     if (Options.getErrorReporting ())
     {
-      codeGenerator.genCodeLine ((isJavaLanguage ? "    finally " : " ") +
+      codeGenerator.genCodeLine ((isJavaDialect ? "    finally " : " ") +
                                  "{ jj_save(" +
                                  (Integer.parseInt (e.internal_name.substring (1)) - 1) +
                                  ", xla); }");
@@ -1247,7 +1257,7 @@ public class ParseEngine
           if (seq instanceof NonTerminal)
           {
             final NonTerminal e_nrw = (NonTerminal) seq;
-            final NormalProduction ntprod = (production_table.get (e_nrw.getName ()));
+            final NormalProduction ntprod = (NormalProduction) (production_table.get (e_nrw.getName ()));
             if (ntprod instanceof JavaCodeProduction)
             {
               break; // nothing to do here
@@ -1276,7 +1286,7 @@ public class ParseEngine
       // }
       e.internal_name = "R_" + gensymindex;
     }
-    Phase3Data p3d = (phase3table.get (e));
+    Phase3Data p3d = (Phase3Data) (phase3table.get (e));
     if (p3d == null || p3d.count < inf.count)
     {
       p3d = new Phase3Data (e, inf.count);
@@ -1300,10 +1310,10 @@ public class ParseEngine
         // fact, we rely here on the fact that the "name" fields of both these
         // variables are the same.
         final NonTerminal e_nrw = (NonTerminal) e;
-        final NormalProduction ntprod = (production_table.get (e_nrw.getName ()));
+        final NormalProduction ntprod = (NormalProduction) (production_table.get (e_nrw.getName ()));
         if (ntprod instanceof JavaCodeProduction)
         {
-          // nothing to do here
+          ; // nothing to do here
         }
         else
         {
@@ -1364,7 +1374,7 @@ public class ParseEngine
 
   private String getTypeForToken ()
   {
-    return isJavaLanguage ? "Token" : "Token *";
+    return isJavaDialect ? "Token" : "Token *";
   }
 
   private String genjj_3Call (final Expansion e)
@@ -1386,7 +1396,7 @@ public class ParseEngine
 
     if (!recursive_call)
     {
-      if (isJavaLanguage)
+      if (isJavaDialect)
       {
         codeGenerator.genCodeLine ("  " +
                                    staticOpt () +
@@ -1402,7 +1412,7 @@ public class ParseEngine
       }
 
       codeGenerator.genCodeLine (" {");
-      if (!isJavaLanguage)
+      if (!isJavaDialect)
       {
         codeGenerator.genCodeLine ("    if (jj_done) return true;");
       }
@@ -1454,7 +1464,7 @@ public class ParseEngine
         // fact, we rely here on the fact that the "name" fields of both these
         // variables are the same.
         final NonTerminal e_nrw = (NonTerminal) e;
-        final NormalProduction ntprod = (production_table.get (e_nrw.getName ()));
+        final NormalProduction ntprod = (NormalProduction) (production_table.get (e_nrw.getName ()));
         if (ntprod instanceof JavaCodeProduction)
         {
           codeGenerator.genCodeLine ("    if (true) { jj_la = 0; jj_scanpos = jj_lastpos; " + genReturn (false) + "}");
@@ -1653,7 +1663,7 @@ public class ParseEngine
       if (e instanceof NonTerminal)
       {
         final NonTerminal e_nrw = (NonTerminal) e;
-        final NormalProduction ntprod = (production_table.get (e_nrw.getName ()));
+        final NormalProduction ntprod = (NormalProduction) (production_table.get (e_nrw.getName ()));
         if (ntprod instanceof JavaCodeProduction)
         {
           retval = Integer.MAX_VALUE;
@@ -1756,7 +1766,7 @@ public class ParseEngine
       p = (NormalProduction) prodIterator.next ();
       if (p instanceof JavaCodeProduction)
       {
-        if (!isJavaLanguage)
+        if (!isJavaDialect)
         {
           JavaCCErrors.semantic_error ("Cannot use JAVACODE productions with C++ output (yet).");
           continue;
@@ -1788,7 +1798,7 @@ public class ParseEngine
           codeGenerator.printTrailingComments (t);
         }
         codeGenerator.genCode (")");
-        if (isJavaLanguage)
+        if (isJavaDialect)
         {
           codeGenerator.genCode (" throws ParseException");
         }
@@ -1818,7 +1828,7 @@ public class ParseEngine
         codeGenerator.genCodeLine ("");
         if (Options.getDebugParser ())
         {
-          if (isJavaLanguage)
+          if (isJavaDialect)
           {
             codeGenerator.genCodeLine ("    } finally {");
           }
@@ -1841,7 +1851,7 @@ public class ParseEngine
     codeGenerator.switchToIncludeFile ();
     for (int phase2index = 0; phase2index < phase2list.size (); phase2index++)
     {
-      buildPhase2Routine ((phase2list.get (phase2index)));
+      buildPhase2Routine ((Lookahead) (phase2list.get (phase2index)));
     }
 
     int phase3index = 0;
@@ -1850,13 +1860,13 @@ public class ParseEngine
     {
       for (; phase3index < phase3list.size (); phase3index++)
       {
-        setupPhase3Builds ((phase3list.get (phase3index)));
+        setupPhase3Builds ((Phase3Data) (phase3list.get (phase3index)));
       }
     }
 
-    for (final java.util.Enumeration <Phase3Data> enumeration = phase3table.elements (); enumeration.hasMoreElements ();)
+    for (final java.util.Enumeration enumeration = phase3table.elements (); enumeration.hasMoreElements ();)
     {
-      buildPhase3Routine ((enumeration.nextElement ()), false);
+      buildPhase3Routine ((Phase3Data) (enumeration.nextElement ()), false);
     }
 
     codeGenerator.switchToMainFile ();
@@ -1867,9 +1877,9 @@ public class ParseEngine
     gensymindex = 0;
     indentamt = 0;
     jj2LA = false;
-    phase2list = new ArrayList <Lookahead> ();
-    phase3list = new ArrayList <Phase3Data> ();
-    phase3table = new java.util.Hashtable <Expansion, Phase3Data> ();
+    phase2list = new ArrayList ();
+    phase3list = new ArrayList ();
+    phase3table = new java.util.Hashtable ();
     firstSet = null;
     xsp_declared = false;
     jj3_expansion = null;
