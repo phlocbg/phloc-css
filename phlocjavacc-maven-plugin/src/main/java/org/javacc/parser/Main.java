@@ -402,6 +402,7 @@ public final class Main
     org.javacc.parser.Semanticize.reInit ();
     org.javacc.parser.OtherFilesGen.reInit ();
     org.javacc.parser.LexGen.reInit ();
+    org.javacc.parser.ParseGen.reInit ();
   }
 
 }
