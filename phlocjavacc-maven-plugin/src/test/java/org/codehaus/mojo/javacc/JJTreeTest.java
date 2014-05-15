@@ -29,52 +29,48 @@ import junit.framework.TestCase;
  * @author Benjamin Bentmann
  * @version $Id: JJTreeTest.java 6281 2008-02-09 21:45:03Z bentmann $
  */
-public class JJTreeTest
-    extends TestCase
+public class JJTreeTest extends TestCase
 {
 
-    public void testToStringNullSafe()
-        throws Exception
-    {
-        JJTree tool = new JJTree();
-        String string = tool.toString();
-        assertNotNull( string );
-        assertTrue( string.indexOf( "null" ) < 0 );
-    }
+  public void testToStringNullSafe () throws Exception
+  {
+    final JJTree tool = new JJTree ();
+    final String string = tool.toString ();
+    assertNotNull (string);
+    assertTrue (string.indexOf ("null") < 0);
+  }
 
-    public void testSettersNullSafe()
-        throws Exception
-    {
-        JJTree tool = new JJTree();
-        tool.setInputFile( null );
-        tool.setOutputDirectory( null );
-        tool.setJdkVersion( null );
-        tool.setStatic( null );
-        tool.setBuildNodeFiles( null );
-        tool.setMulti( null );
-        tool.setNodeDefaultVoid( null );
-        tool.setNodeFactory( null );
-        tool.setNodePackage( null );
-        tool.setNodePrefix( null );
-        tool.setNodeScopeHook( null );
-        tool.setNodeUsesParser( null );
-        tool.setVisitor( null );
-        tool.setVisitorException( null );
-        tool.setLog( null );
-    }
+  public void testSettersNullSafe () throws Exception
+  {
+    final JJTree tool = new JJTree ();
+    tool.setInputFile (null);
+    tool.setOutputDirectory (null);
+    tool.setJdkVersion (null);
+    tool.setStatic (null);
+    tool.setBuildNodeFiles (null);
+    tool.setMulti (null);
+    tool.setNodeDefaultVoid (null);
+    tool.setNodeFactory (null);
+    tool.setNodePackage (null);
+    tool.setNodePrefix (null);
+    tool.setNodeScopeHook (null);
+    tool.setNodeUsesParser (null);
+    tool.setVisitor (null);
+    tool.setVisitorException (null);
+    tool.setLog (null);
+  }
 
-    public void testGetOutputFile()
-        throws Exception
-    {
-        File input = new File( "Test.jjt" ).getAbsoluteFile();
-        File outdir = new File( "dir" ).getAbsoluteFile();
+  public void testGetOutputFile () throws Exception
+  {
+    final File input = new File ("Test.jjt").getAbsoluteFile ();
+    final File outdir = new File ("dir").getAbsoluteFile ();
 
-        JJTree tool = new JJTree();
-        tool.setInputFile( input );
-        tool.setOutputDirectory( outdir );
-        File output = tool.getOutputFile();
+    final JJTree tool = new JJTree ();
+    tool.setInputFile (input);
+    tool.setOutputDirectory (outdir);
+    final File output = tool.getOutputFile ();
 
-        assertEquals( new File( outdir, "Test.jj" ), output );
-    }
+    assertEquals (new File (outdir, "Test.jj"), output);
+  }
 
 }

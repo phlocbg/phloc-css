@@ -27,48 +27,45 @@ import junit.framework.TestCase;
  * @author Benjamin Bentmann
  * @version $Id: JavaCCTest.java 6198 2008-02-03 21:32:31Z bentmann $
  */
-public class JavaCCTest
-    extends TestCase
+public class JavaCCTest extends TestCase
 {
 
-    public void testToStringNullSafe()
-        throws Exception
-    {
-        JavaCC tool = new JavaCC();
-        String string = tool.toString();
-        assertNotNull( string );
-        assertTrue( string.indexOf( "null" ) < 0 );
-    }
+  public void testToStringNullSafe () throws Exception
+  {
+    final JavaCC tool = new JavaCC ();
+    final String string = tool.toString ();
+    assertNotNull (string);
+    assertTrue (string.indexOf ("null") < 0);
+  }
 
-    public void testSettersNullSafe()
-        throws Exception
-    {
-        JavaCC tool = new JavaCC();
-        tool.setInputFile( null );
-        tool.setOutputDirectory( null );
-        tool.setJdkVersion( null );
-        tool.setStatic( null );
-        tool.setBuildParser( null );
-        tool.setBuildTokenManager( null );
-        tool.setCacheTokens( null );
-        tool.setChoiceAmbiguityCheck( null );
-        tool.setCommonTokenAction( null );
-        tool.setDebugLookAhead( null );
-        tool.setDebugParser( null );
-        tool.setDebugTokenManager( null );
-        tool.setErrorReporting( null );
-        tool.setForceLaCheck( null );
-        tool.setIgnoreCase( null );
-        tool.setJavaUnicodeEscape( null );
-        tool.setKeepLineColumn( null );
-        tool.setLookAhead( null );
-        tool.setOtherAmbiguityCheck( null );
-        tool.setSanityCheck( null );
-        tool.setTokenManagerUsesParser( null );
-        tool.setUnicodeInput( null );
-        tool.setUserCharStream( null );
-        tool.setUserTokenManager( null );
-        tool.setLog( null );
-    }
+  public void testSettersNullSafe () throws Exception
+  {
+    final JavaCC tool = new JavaCC ();
+    tool.setInputFile (null);
+    tool.setOutputDirectory (null);
+    tool.setJdkVersion (null);
+    tool.setStatic (null);
+    tool.setBuildParser (null);
+    tool.setBuildTokenManager (null);
+    tool.setCacheTokens (null);
+    tool.setChoiceAmbiguityCheck (null);
+    tool.setCommonTokenAction (null);
+    tool.setDebugLookAhead (null);
+    tool.setDebugParser (null);
+    tool.setDebugTokenManager (null);
+    tool.setErrorReporting (null);
+    tool.setForceLaCheck (null);
+    tool.setIgnoreCase (null);
+    tool.setJavaUnicodeEscape (null);
+    tool.setKeepLineColumn (null);
+    tool.setLookAhead (null);
+    tool.setOtherAmbiguityCheck (null);
+    tool.setSanityCheck (null);
+    tool.setTokenManagerUsesParser (null);
+    tool.setUnicodeInput (null);
+    tool.setUserCharStream (null);
+    tool.setUserTokenManager (null);
+    tool.setLog (null);
+  }
 
 }

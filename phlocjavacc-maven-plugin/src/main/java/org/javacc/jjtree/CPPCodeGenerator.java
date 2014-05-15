@@ -348,7 +348,7 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
 
     if (JJTreeOptions.getTrackTokens ())
     {
-      io.println (indent + ns.nodeVar + "->jjtSetFirstToken(getToken(1));");
+      io.println (indent + ns.nodeVar + ".jjtSetFirstToken(getToken(1));");
     }
   }
 
@@ -369,7 +369,7 @@ public class CPPCodeGenerator extends DefaultJJTreeVisitor
 
     if (JJTreeOptions.getTrackTokens ())
     {
-      io.println (indent + ns.nodeVar + "->jjtSetLastToken(getToken(0));");
+      io.println (indent + ns.nodeVar + ".jjtSetLastToken(getToken(0));");
     }
   }
 

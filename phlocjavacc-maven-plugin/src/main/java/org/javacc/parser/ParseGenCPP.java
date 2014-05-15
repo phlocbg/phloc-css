@@ -175,7 +175,6 @@ public class ParseGenCPP extends ParseGen
     }
     genCodeLine ("{");
     genCodeLine ("    head = NULL;");
-    genCodeLine ("    errorHandlerCreated = false;");
     genCodeLine ("    ReInit(tm);");
     genCodeLine ("}");
 
@@ -184,11 +183,22 @@ public class ParseGenCPP extends ParseGen
     switchToMainFile ();
     genCodeLine ("   " + cu_name + "::~" + cu_name + "()");
     genCodeLine ("{");
-    genCodeLine ("  clear();");
+    genCodeLine ("  if (token_source) delete token_source;");
+    genCodeLine ("  if (head) {");
+    genCodeLine ("    Token *next, *t = head;");
+    genCodeLine ("    while (t) {");
+    genCodeLine ("      next = t->next;");
+    genCodeLine ("      delete t;");
+    genCodeLine ("      t = next;");
+    genCodeLine ("    }");
+    genCodeLine ("  }");
+    genCodeLine ("  if (errorHandlerCreated) {");
+    genCodeLine ("    delete errorHandler;");
+    genCodeLine ("  }");
     genCodeLine ("}");
     generateMethodDefHeader ("void", cu_name, "ReInit(TokenManager *tm)");
     genCodeLine ("{");
-    genCodeLine ("    clear();");
+    genCodeLine ("    if (head) delete head;");
     genCodeLine ("    errorHandler = new ErrorHandler();");
     genCodeLine ("    errorHandlerCreated = true;");
     genCodeLine ("    hasError = false;");
@@ -226,28 +236,8 @@ public class ParseGenCPP extends ParseGen
       }
     }
     genCodeLine ("  }");
-    genCodeLine ("");
 
-    // Add clear function for deconstructor and ReInit
-    generateMethodDefHeader ("void", cu_name, "clear()");
-    genCodeLine ("{");
-    genCodeLine ("  //Since token manager was generate from outside,");
-    genCodeLine ("  //parser should not take care of deleting");
-    genCodeLine ("  //if (token_source) delete token_source;");
-    genCodeLine ("  if (head) {");
-    genCodeLine ("    Token *next, *t = head;");
-    genCodeLine ("    while (t) {");
-    genCodeLine ("      next = t->next;");
-    genCodeLine ("      delete t;");
-    genCodeLine ("      t = next;");
-    genCodeLine ("    }");
-    genCodeLine ("  }");
-    genCodeLine ("  if (errorHandlerCreated) {");
-    genCodeLine ("    delete errorHandler;");
-    genCodeLine ("  }");
-    genCodeLine ("}");
     genCodeLine ("");
-
     generateMethodDefHeader ("Token *", cu_name, "jj_consume_token(int kind)", "ParseException");
     genCodeLine ("  {");
     if (Options.getCacheTokens ())
@@ -481,7 +471,7 @@ public class ParseGenCPP extends ParseGen
        * //else //genCodeLine("      exptokseq[i] = jj_expentries.get(i);");
        * //genCodeLine("    }");
        * genCodeLine("    return new _ParseException();");//token, NULL,
-       * tokenImage);"); genCodeLine("  }");
+       * tokenImage);"); genCodeLine(" }");
        */
     }
     else
