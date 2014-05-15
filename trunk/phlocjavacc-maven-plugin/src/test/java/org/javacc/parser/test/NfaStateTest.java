@@ -1,6 +1,14 @@
-package org.javacc.parser;
+package org.javacc.parser.test;
 
 import org.javacc.JavaCCTestCase;
+import org.javacc.parser.CodeGenerator;
+import org.javacc.parser.JavaCCGlobals;
+import org.javacc.parser.JavaCCParser;
+import org.javacc.parser.LexGen;
+import org.javacc.parser.Main;
+import org.javacc.parser.NfaState;
+import org.javacc.parser.Options;
+import org.javacc.parser.Semanticize;
 
 /**
  * A sea anchor, to ensure that code is not inadvertently broken.

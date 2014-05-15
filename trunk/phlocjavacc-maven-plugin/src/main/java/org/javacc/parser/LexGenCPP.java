@@ -53,7 +53,7 @@ import java.util.List;
  * Generate lexer.
  */
 public class LexGenCPP extends LexGen // CodeGenerator implements
-                                      // JavaCCParserConstants
+// JavaCCParserConstants
 {
   @Override
   void PrintClassHead ()
@@ -540,7 +540,6 @@ public class LexGenCPP extends LexGen // CodeGenerator implements
                  cu_name +
                  " *parserArg = NULL);");
     genCodeLine ("  void SwitchTo(int lexState);");
-    genCodeLine ("  void clear();");
     genCodeLine ("  const JAVACC_SIMPLE_STRING jjKindsForBitVector(int i, " + Options.getLongType () + " vec);");
     genCodeLine ("  const JAVACC_SIMPLE_STRING jjKindsForStateVector(int lexState, int vec[], int start, int end);");
   }

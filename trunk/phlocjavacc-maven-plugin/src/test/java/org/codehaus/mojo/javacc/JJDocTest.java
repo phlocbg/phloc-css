@@ -27,28 +27,25 @@ import junit.framework.TestCase;
  * @author Benjamin Bentmann
  * @version $Id: JJDocTest.java 6198 2008-02-03 21:32:31Z bentmann $
  */
-public class JJDocTest
-    extends TestCase
+public class JJDocTest extends TestCase
 {
 
-    public void testToStringNullSafe()
-        throws Exception
-    {
-        JJDoc tool = new JJDoc();
-        String string = tool.toString();
-        assertNotNull( string );
-        assertTrue( string.indexOf( "null" ) < 0 );
-    }
+  public void testToStringNullSafe () throws Exception
+  {
+    final JJDoc tool = new JJDoc ();
+    final String string = tool.toString ();
+    assertNotNull (string);
+    assertTrue (string.indexOf ("null") < 0);
+  }
 
-    public void testSettersNullSafe()
-        throws Exception
-    {
-        JJDoc tool = new JJDoc();
-        tool.setInputFile( null );
-        tool.setOutputFile( null );
-        tool.setOneTable( null );
-        tool.setText( null );
-        tool.setLog( null );
-    }
+  public void testSettersNullSafe () throws Exception
+  {
+    final JJDoc tool = new JJDoc ();
+    tool.setInputFile (null);
+    tool.setOutputFile (null);
+    tool.setOneTable (null);
+    tool.setText (null);
+    tool.setLog (null);
+  }
 
 }

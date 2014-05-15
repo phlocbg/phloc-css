@@ -26,7 +26,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.javacc.jjdoc;
+package org.javacc.jjdoc.test;
 
 import org.javacc.JavaCCTestCase;
 import org.javacc.jjdoc.JJDocMain;

@@ -28,16 +28,16 @@ package org.codehaus.mojo.javacc;
 public class MainStub
 {
 
-    public static void main( String[] args )
+  public static void main (final String [] args)
+  {
+    for (final String arg : args)
     {
-        for ( int i = 0; i < args.length; i++ )
-        {
-            System.out.println( args[i] );
-        }
-
-        System.err.println( System.getProperty( "user.dir" ) );
-
-        System.exit( 27 );
+      System.out.println (arg);
     }
+
+    System.err.println (System.getProperty ("user.dir"));
+
+    System.exit (27);
+  }
 
 }

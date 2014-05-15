@@ -66,10 +66,9 @@ public class CodeGenerator
   {
     if (!isJavaLanguage ())
     {
-      final String incfilePath = fileName.replace (".cc", ".h");
-      final String incfileName = new File (incfilePath).getName ();
-      includeBuffer.insert (0, "#define " + incfileName.replace ('.', '_').toUpperCase () + "\n");
-      includeBuffer.insert (0, "#ifndef " + incfileName.replace ('.', '_').toUpperCase () + "\n");
+      final String incfileName = fileName.replace (".cc", ".h");
+      includeBuffer.insert (0, "#define " + new File (incfileName).getName ().replace ('.', '_').toUpperCase () + "\n");
+      includeBuffer.insert (0, "#ifndef " + new File (incfileName).getName ().replace ('.', '_').toUpperCase () + "\n");
 
       // dump the statics into the main file with the code.
       mainBuffer.insert (0, staticsBuffer);
@@ -84,7 +83,7 @@ public class CodeGenerator
 
       mainBuffer.insert (0, "#include \"" + incfileName + "\"\n");
       includeBuffer.append ("#endif\n");
-      saveOutput (incfilePath, includeBuffer);
+      saveOutput (incfileName, includeBuffer);
     }
 
     mainBuffer.insert (0, "/* " + new File (fileName).getName () + " */\n");

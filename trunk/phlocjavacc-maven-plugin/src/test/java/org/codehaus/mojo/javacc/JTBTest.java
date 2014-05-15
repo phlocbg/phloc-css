@@ -29,53 +29,49 @@ import junit.framework.TestCase;
  * @author Benjamin Bentmann
  * @version $Id: JTBTest.java 6281 2008-02-09 21:45:03Z bentmann $
  */
-public class JTBTest
-    extends TestCase
+public class JTBTest extends TestCase
 {
 
-    public void testToStringNullSafe()
-        throws Exception
-    {
-        JTB tool = new JTB();
-        String string = tool.toString();
-        assertNotNull( string );
-        assertTrue( string.indexOf( "null" ) < 0 );
-    }
+  public void testToStringNullSafe () throws Exception
+  {
+    final JTB tool = new JTB ();
+    final String string = tool.toString ();
+    assertNotNull (string);
+    assertTrue (string.indexOf ("null") < 0);
+  }
 
-    public void testSettersNullSafe()
-        throws Exception
-    {
-        JTB tool = new JTB();
-        tool.setInputFile( null );
-        tool.setOutputDirectory( null );
-        tool.setNodeDirectory( null );
-        tool.setVisitorDirectory( null );
-        tool.setDescriptiveFieldNames( null );
-        tool.setJavadocFriendlyComments( null );
-        tool.setNodePackageName( null );
-        tool.setNodeParentClass( null );
-        tool.setPackageName( null );
-        tool.setParentPointers( null );
-        tool.setPrinter( null );
-        tool.setScheme( null );
-        tool.setSpecialTokens( null );
-        tool.setSupressErrorChecking( null );
-        tool.setVisitorPackageName( null );
-        tool.setLog( null );
-    }
+  public void testSettersNullSafe () throws Exception
+  {
+    final JTB tool = new JTB ();
+    tool.setInputFile (null);
+    tool.setOutputDirectory (null);
+    tool.setNodeDirectory (null);
+    tool.setVisitorDirectory (null);
+    tool.setDescriptiveFieldNames (null);
+    tool.setJavadocFriendlyComments (null);
+    tool.setNodePackageName (null);
+    tool.setNodeParentClass (null);
+    tool.setPackageName (null);
+    tool.setParentPointers (null);
+    tool.setPrinter (null);
+    tool.setScheme (null);
+    tool.setSpecialTokens (null);
+    tool.setSupressErrorChecking (null);
+    tool.setVisitorPackageName (null);
+    tool.setLog (null);
+  }
 
-    public void testGetOutputFile()
-        throws Exception
-    {
-        File input = new File( "Test.jtb" ).getAbsoluteFile();
-        File outdir = new File( "dir" ).getAbsoluteFile();
+  public void testGetOutputFile () throws Exception
+  {
+    final File input = new File ("Test.jtb").getAbsoluteFile ();
+    final File outdir = new File ("dir").getAbsoluteFile ();
 
-        JTB tool = new JTB();
-        tool.setInputFile( input );
-        tool.setOutputDirectory( outdir );
-        File output = tool.getOutputFile();
+    final JTB tool = new JTB ();
+    tool.setInputFile (input);
+    tool.setOutputDirectory (outdir);
+    final File output = tool.getOutputFile ();
 
-        assertEquals( new File( outdir, "Test.jj" ), output );
-    }
+    assertEquals (new File (outdir, "Test.jj"), output);
+  }
 
 }
