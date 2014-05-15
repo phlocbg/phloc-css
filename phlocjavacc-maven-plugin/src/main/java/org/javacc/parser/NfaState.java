@@ -3363,7 +3363,9 @@ public class NfaState
 
     if (statesForState == null)
     {
-      assert (false) : "This should never be null.";
+      // [phloc] disabled
+      if (false)
+        assert (false) : "This should never be null.";
       codeGenerator.genCodeLine ("null;");
       return;
     }
