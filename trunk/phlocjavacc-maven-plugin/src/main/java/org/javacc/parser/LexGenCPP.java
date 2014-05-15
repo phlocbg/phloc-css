@@ -53,7 +53,7 @@ import java.util.List;
  * Generate lexer.
  */
 public class LexGenCPP extends LexGen // CodeGenerator implements
-// JavaCCParserConstants
+                                      // JavaCCParserConstants
 {
   @Override
   void PrintClassHead ()

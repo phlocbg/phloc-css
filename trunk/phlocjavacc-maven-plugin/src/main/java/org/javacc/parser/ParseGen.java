@@ -520,12 +520,25 @@ public class ParseGen extends CodeGenerator implements JavaCCParserConstants
           genCodeLine ("  " + staticOpt () + "public void ReInit(" + readerInterfaceName + " stream) {");
           if (Options.getJavaUnicodeEscape ())
           {
-            genCodeLine ("    jj_input_stream.ReInit(stream, 1, 1);");
+            genCodeLine ("	if (jj_input_stream == null) {");
+            genCodeLine ("      jj_input_stream = new JavaCharStream(stream, 1, 1);");
+            genCodeLine ("   } else {");
+            genCodeLine ("      jj_input_stream.ReInit(stream, 1, 1);");
+            genCodeLine ("   }");
           }
           else
           {
-            genCodeLine ("    jj_input_stream.ReInit(stream, 1, 1);");
+            genCodeLine ("	if (jj_input_stream == null) {");
+            genCodeLine ("      jj_input_stream = new SimpleCharStream(stream, 1, 1);");
+            genCodeLine ("   } else {");
+            genCodeLine ("      jj_input_stream.ReInit(stream, 1, 1);");
+            genCodeLine ("   }");
           }
+
+          genCodeLine ("   if (token_source == null) {");
+          genCodeLine ("      token_source = new " + cu_name + "TokenManager(jj_input_stream);");
+          genCodeLine ("   }");
+          genCodeLine ("");
 
           if (Options.isTokenManagerRequiresParserAccess ())
           {

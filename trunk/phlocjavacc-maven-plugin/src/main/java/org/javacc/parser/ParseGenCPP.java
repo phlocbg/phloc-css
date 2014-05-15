@@ -471,7 +471,7 @@ public class ParseGenCPP extends ParseGen
        * //else //genCodeLine("      exptokseq[i] = jj_expentries.get(i);");
        * //genCodeLine("    }");
        * genCodeLine("    return new _ParseException();");//token, NULL,
-       * tokenImage);"); genCodeLine(" }");
+       * tokenImage);"); genCodeLine("  }");
        */
     }
     else
