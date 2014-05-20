@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>22.7</version>
+    <version>23</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
 
@@ -19,8 +16,9 @@
 
   <name>JavaCC Maven Plugin</name>
   <description>Maven 2 Plugin for processing JavaCC grammar files.</description>
-  <url>http://mojo.codehaus.org/javacc-maven-plugin/</url>
+  <url>http://code.google.com/p/phloc-css</url>
   <inceptionYear>2005</inceptionYear>
+  
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -28,10 +26,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
-  <prerequisites>
-    <maven>2.0.6</maven>
-  </prerequisites>
 
   <scm>
     <url>http://code.google.com/p/phloc-css/source/browse/</url>
@@ -54,6 +48,7 @@
     </developer>
   </developers>
 
+  <!-- [OSS] not necessary 
   <repositories>
     <repository>
       <id>phloc.com</id>
@@ -79,13 +74,16 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
+  -->
 
+  <!-- [OSS] inherit from parent pom
   <distributionManagement>
     <repository>
       <id>repo.phloc.public</id>
       <url>sftp://www.phloc.com:23040/var/www/html-repo/maven2</url>
     </repository>
   </distributionManagement>
+   -->
 
   <dependencies>
     <dependency>
@@ -238,9 +236,14 @@
         </configuration>
       </plugin>
       <plugin>
+        <!-- [OSS] not yet
         <groupId>com.phloc.maven</groupId>
         <artifactId>phlocjavacc-maven-plugin</artifactId>
         <version>2.7.3</version>
+        -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>javacc-maven-plugin</artifactId>
+        <version>2.6</version>
         <executions>
           <execution>
             <id>jjc1</id>
@@ -290,35 +293,6 @@
         </executions>
       </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>javacc-maven-plugin</artifactId>
-                    <versionRange>[2.6,)</versionRange>
-                    <goals>
-                      <goal>jjtree</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 
   <reporting>
@@ -326,7 +300,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.2</version>
+        <version>3.3</version>
       </plugin>
     </plugins>
   </reporting>
