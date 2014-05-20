@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>22.7</version>
+    <version>23</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -69,6 +69,7 @@
     </developer>
   </developers>
   
+  <!-- [OSS] not necessary
   <repositories>
     <repository>
       <id>phloc.com</id>
@@ -93,28 +94,33 @@
         <enabled>false</enabled>
       </snapshots>
     </pluginRepository>
-  </pluginRepositories>  
+  </pluginRepositories>
+   -->  
 
+  <!-- [OSS] inherit
   <distributionManagement>
     <repository>
       <id>repo.phloc.public</id>
       <url>sftp://www.phloc.com:23040/var/www/html-repo/maven2</url>
     </repository>
   </distributionManagement>
+  -->
 
   <dependencies>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-commons</artifactId>
-      <version>4.3.1</version>
+      <version>4.3.2</version>
     </dependency>
     
+    <!-- [OSS] exclude for now
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-jdk5</artifactId>
       <version>1.0.2</version>
       <scope>test</scope>
     </dependency>
+     -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
@@ -125,10 +131,15 @@
   <build>
     <plugins>
       <plugin>
-        <!-- Using our customized plugin that uses JavaCC 6.0.1 -->
+        <!-- Using our customized plugin that uses JavaCC 6.1.2 -->
+        <!-- [OSS] not yet
         <groupId>com.phloc.maven</groupId>
         <artifactId>phlocjavacc-maven-plugin</artifactId>
         <version>2.7.4</version>
+         -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>javacc-maven-plugin</artifactId>
+        <version>2.6</version>
         <executions>
           <execution>
             <goals>
@@ -167,34 +178,5 @@
         </configuration>
       </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>com.phloc.maven</groupId>
-                    <artifactId>phlocjavacc-maven-plugin</artifactId>
-                    <versionRange>[2.7,)</versionRange>
-                    <goals>
-                      <goal>jjtree-javacc</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 </project>
