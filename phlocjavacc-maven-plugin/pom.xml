@@ -11,7 +11,7 @@
 
   <groupId>com.phloc.maven</groupId>
   <artifactId>phlocjavacc-maven-plugin</artifactId>
-  <version>2.7.6</version>
+  <version>2.7.7-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>JavaCC Maven Plugin</name>
@@ -28,9 +28,9 @@
   </licenses>
 
   <scm>
-    <url>scm:svn:https://phloc-css.googlecode.com/svn/tags/phlocjavacc-maven-plugin-2.7.6</url>
-    <connection>scm:svn:http://phloc-css.googlecode.com/svn/tags/phlocjavacc-maven-plugin-2.7.6</connection>
-    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/tags/phlocjavacc-maven-plugin-2.7.6</developerConnection>
+    <url>http://code.google.com/p/phloc-css/source/browse/</url>
+    <connection>scm:svn:http://phloc-css.googlecode.com/svn/trunk/phlocjavacc-maven-plugin</connection>
+    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/trunk/phlocjavacc-maven-plugin</developerConnection>
   </scm>
 
   <organization>
