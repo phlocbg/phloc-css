@@ -146,8 +146,8 @@
       <id>run-its</id>
       <activation>
         <property>
-          <name>maven.test.skip</name>
-          <value>!true</value>
+          <name>it</name>
+          <value>true</value>
         </property>
       </activation>
       <properties>
@@ -158,7 +158,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <version>1.4</version>
+            <version>1.8</version>
             <configuration>
               <projectsDirectory>src/it</projectsDirectory>
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
