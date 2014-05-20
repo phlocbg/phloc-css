@@ -48,43 +48,6 @@
     </developer>
   </developers>
 
-  <!-- [OSS] not necessary 
-  <repositories>
-    <repository>
-      <id>phloc.com</id>
-      <url>http://repo.phloc.com/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>phloc.com</id>
-      <url>http://repo.phloc.com/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
-  -->
-
-  <!-- [OSS] inherit from parent pom
-  <distributionManagement>
-    <repository>
-      <id>repo.phloc.public</id>
-      <url>sftp://www.phloc.com:23040/var/www/html-repo/maven2</url>
-    </repository>
-  </distributionManagement>
-   -->
-
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -236,14 +199,9 @@
         </configuration>
       </plugin>
       <plugin>
-        <!-- [OSS] not yet
         <groupId>com.phloc.maven</groupId>
         <artifactId>phlocjavacc-maven-plugin</artifactId>
-        <version>2.7.3</version>
-        -->
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>javacc-maven-plugin</artifactId>
-        <version>2.6</version>
+        <version>2.7.5</version>
         <executions>
           <execution>
             <id>jjc1</id>
