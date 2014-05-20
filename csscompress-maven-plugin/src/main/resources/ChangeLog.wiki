@@ -2,6 +2,7 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
+<tr border="1"><td>5/20/14</td><td colspan="4">_Release *1.2.1*_</td></tr>
 <tr border="1"><td>4/15/14</td><td colspan="4">_Release *1.2.0*_</td></tr>
 <tr><td>4/15/14</td><td>update</td><td>tech</td><td></td><td>Updated to [http://code.google.com/p/phloc-css phloc-css] 3.7.4</td></tr>
 <tr><td>3/21/14</td><td>change</td><td>tech</td><td></td><td>Made plugin compatible compile with Java 1.5 for better reuse.</td></tr>
