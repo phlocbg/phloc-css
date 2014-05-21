@@ -1,0 +1,28 @@
+# Enerjy Software baseline data (files=4, problems=23).
+path: /csscompress-maven-plugin/src/main/java/com/phloc/maven/csscompress/CSSCompressMojo.java
+problem: JAVA0100:JAVA0100 Class contains 13 non-final fields (maximum: 8)
+problem: JAVA0137:JAVA0137 Non-abstract class 'CSSCompressMojo' missing constructor
+path: /csscompress-maven-plugin/src/main/java/org/slf4j/impl/Loggers.java
+problem: JAVA0001:JAVA0001 Package name 'org.slf4j.impl' does not contain only lower case letters
+problem: JAVA0242:JAVA0242 Transient field 'm_aAdapter' in non-Serializable class
+path: /csscompress-maven-plugin/src/main/java/org/slf4j/impl/Slf4jAdapter.java
+problem: JAVA0001:JAVA0001 Package name 'org.slf4j.impl' does not contain only lower case letters
+problem: JAVA0136:JAVA0136 36 methods defined in class 'Slf4jAdapter' (maximum: 20)
+problem: JAVA0137:JAVA0137 Non-abstract class 'Slf4jAdapter' missing constructor
+problem: JAVA0233:JAVA0233 Definition of serialVersionUID other than 'private static final long serialVersionUID'
+problem: JAVA0132:JAVA0132 Method overload 'Slf4jAdapter.trace(String, Object[])' with compatible signature to 'Slf4jAdapter.trace(String, Object)'
+problem: JAVA0132:JAVA0132 Method overload 'Slf4jAdapter.trace(String, Throwable)' with compatible signature to 'Slf4jAdapter.trace(String, Object)'
+problem: JAVA0132:JAVA0132 Method overload 'Slf4jAdapter.debug(String, Object[])' with compatible signature to 'Slf4jAdapter.debug(String, Object)'
+problem: JAVA0132:JAVA0132 Method overload 'Slf4jAdapter.debug(String, Throwable)' with compatible signature to 'Slf4jAdapter.debug(String, Object)'
+problem: JAVA0132:JAVA0132 Method overload 'Slf4jAdapter.info(String, Object[])' with compatible signature to 'Slf4jAdapter.info(String, Object)'
+problem: JAVA0132:JAVA0132 Method overload 'Slf4jAdapter.info(String, Throwable)' with compatible signature to 'Slf4jAdapter.info(String, Object)'
+problem: JAVA0132:JAVA0132 Method overload 'Slf4jAdapter.warn(String, Object[])' with compatible signature to 'Slf4jAdapter.warn(String, Object)'
+problem: JAVA0132:JAVA0132 Method overload 'Slf4jAdapter.warn(String, Throwable)' with compatible signature to 'Slf4jAdapter.warn(String, Object)'
+problem: JAVA0132:JAVA0132 Method overload 'Slf4jAdapter.error(String, Object[])' with compatible signature to 'Slf4jAdapter.error(String, Object)'
+problem: JAVA0132:JAVA0132 Method overload 'Slf4jAdapter.error(String, Throwable)' with compatible signature to 'Slf4jAdapter.error(String, Object)'
+problem: JAVA0130:JAVA0130 Non-static method '_format' does not use instance fields
+problem: JAVA0130:JAVA0130 Non-static method '_format' does not use instance fields
+problem: JAVA0130:JAVA0130 Non-static method '_format' does not use instance fields
+path: /csscompress-maven-plugin/src/main/java/org/slf4j/impl/StaticLoggerBinder.java
+problem: JAVA0001:JAVA0001 Package name 'org.slf4j.impl' does not contain only lower case letters
+problem: JAVA0242:JAVA0242 Transient field 'm_aLoggers' in non-Serializable class
