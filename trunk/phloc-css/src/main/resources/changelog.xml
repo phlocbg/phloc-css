@@ -20,7 +20,18 @@
 -->
 <changelog xmlns="http://www.phloc.com/ns/changelog/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.phloc.com/ns/changelog/1.0 schemas/changelog-1.0.xsd" version="1.0" component="phloc-css">
+  <release date="2014-05-21" version="3.1.4" />
+  <entry date="2014-05-21" category="tech" action="change">
+    <change>
+      <text locale="en">Updated parent-pom version to 23.1</text>
+    </change>
+  </entry>
   <release date="2014-05-20" version="3.7.5" />
+  <entry date="2014-05-20" category="tech" action="change">
+    <change>
+      <text locale="en">Prepared for Maven central release</text>
+    </change>
+  </entry>
   <release date="2014-04-14" version="3.7.4" />
   <entry date="2014-04-14" category="tech" action="change">
     <change>
