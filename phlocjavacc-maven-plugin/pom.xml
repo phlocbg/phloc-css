@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>23</version>
+    <version>23.1</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
 
