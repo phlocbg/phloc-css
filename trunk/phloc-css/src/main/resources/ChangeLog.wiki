@@ -2,7 +2,7 @@
 = Change log =
 <wiki:comment>This content is generated. Do not modify!</wiki:comment>
 <table border="1" cellspacing="0"><thead><tr><th>Date</th><th>Action</th><th>Category</th><th>Incompatible?</th><th>Description</th></tr></thead><tbody>
-<tr border="1"><td>5/21/14</td><td colspan="4">_Release *3.1.4*_</td></tr>
+<tr border="1"><td>5/21/14</td><td colspan="4">_Release *3.7.6*_</td></tr>
 <tr><td>5/21/14</td><td>change</td><td>tech</td><td></td><td>Updated parent-pom version to 23.1</td></tr>
 <tr border="1"><td>5/20/14</td><td colspan="4">_Release *3.7.5*_</td></tr>
 <tr><td>5/20/14</td><td>change</td><td>tech</td><td></td><td>Prepared for Maven central release</td></tr>
