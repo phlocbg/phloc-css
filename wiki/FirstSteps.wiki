@@ -11,11 +11,14 @@ Prerequisites: as *phloc-css depends* on [http://code.google.com/p/phloc-commons
 
 = Usage with Maven =
 
-To build phloc-css from source, Maven 3.0.4 is required. Any version below does *NOT* work!
+To build phloc-css from source, Maven 3.0.4 is required. Any Maven version below does *NOT* work!
+
+Since version 3.7.5 phloc-css, phloc-css-jdk5 etc. are available on Maven Central.
 
 To use phloc-css for JDK 1.6 put the following to your pom.xml:
 {{{
 ...
+  <!-- Only required for versions before 3.7.5 -->
   <repositories>
 ...
     <repository>
@@ -35,7 +38,7 @@ To use phloc-css for JDK 1.6 put the following to your pom.xml:
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-css</artifactId>
-      <version>3.7.4</version>
+      <version>3.7.6</version>
     </dependency>
     ...
   </dependencies>
@@ -47,7 +50,7 @@ For JDK 1.5 use the following dependency (together with the above repository dec
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-css-jdk5</artifactId>
-      <version>3.7.4</version>
+      <version>3.7.6</version>
     </dependency>
 }}}
 
