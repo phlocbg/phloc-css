@@ -18,7 +18,7 @@
     limitations under the License.
 
 -->
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
@@ -27,7 +27,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-css-jdk5</artifactId>
-  <version>3.7.7-SNAPSHOT</version>
+  <version>3.7.7</version>
   <packaging>bundle</packaging>
   <name>phloc-css-jdk5</name>
   <description>phloc CSS parser an other components</description>
@@ -42,9 +42,9 @@
   </licenses>
  
   <scm>
-    <url>http://code.google.com/p/phloc-css/source/browse/</url>
-    <connection>scm:svn:http://phloc-css.googlecode.com/svn/trunk/phloc-css-jdk5</connection>
-    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/trunk/phloc-css-jdk5</developerConnection>
+    <url>http://code.google.com/p/phloc-css/source/browse/tags/phloc-css-jdk5-3.7.7</url>
+    <connection>scm:svn:http://phloc-css.googlecode.com/svn/tags/phloc-css-jdk5-3.7.7</connection>
+    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/tags/phloc-css-jdk5-3.7.7</developerConnection>
   </scm>
   
   <organization>
