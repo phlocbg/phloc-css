@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -61,8 +62,7 @@ public class CSSExpression implements ICSSWriteable, ICSSSourceLocationAware
   @Nonnull
   public CSSExpression addMember (@Nonnull final ICSSExpressionMember aMember)
   {
-    if (aMember == null)
-      throw new NullPointerException ("member");
+    ValueEnforcer.notNull (aMember, "ExpressionMember");
 
     m_aMembers.add (aMember);
     return this;
@@ -80,10 +80,8 @@ public class CSSExpression implements ICSSWriteable, ICSSSourceLocationAware
   @Nonnull
   public CSSExpression addMember (@Nonnegative final int nIndex, @Nonnull final ICSSExpressionMember aMember)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aMember == null)
-      throw new NullPointerException ("member");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aMember, "ExpressionMember");
 
     if (nIndex >= getMemberCount ())
       m_aMembers.add (aMember);

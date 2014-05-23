@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -43,9 +44,7 @@ public class CSSSupportsConditionNegation implements ICSSSupportsConditionMember
 
   public CSSSupportsConditionNegation (@Nonnull final ICSSSupportsConditionMember aSupportsMember)
   {
-    if (aSupportsMember == null)
-      throw new NullPointerException ("SupportsMember");
-    m_aSupportsMember = aSupportsMember;
+    m_aSupportsMember = ValueEnforcer.notNull (aSupportsMember, "SupportsMember");
   }
 
   /**

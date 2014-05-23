@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -73,8 +74,7 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
   @Nonnull
   public CSSSupportsRule addSupportConditionMember (@Nonnull final ICSSSupportsConditionMember aMember)
   {
-    if (aMember == null)
-      throw new NullPointerException ("member");
+    ValueEnforcer.notNull (aMember, "SupportsConditionMember");
 
     m_aConditionMembers.add (aMember);
     return this;
@@ -84,10 +84,8 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
   public CSSSupportsRule addSupportConditionMember (@Nonnegative final int nIndex,
                                                     @Nonnull final ICSSSupportsConditionMember aMember)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aMember == null)
-      throw new NullPointerException ("member");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aMember, "SupportsConditionMember");
 
     if (nIndex >= getSupportsConditionMemberCount ())
       m_aConditionMembers.add (aMember);
@@ -156,8 +154,7 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
   @Nonnull
   public CSSSupportsRule addRule (@Nonnull final ICSSTopLevelRule aRule)
   {
-    if (aRule == null)
-      throw new NullPointerException ("rule");
+    ValueEnforcer.notNull (aRule, "Rule");
 
     m_aRules.add (aRule);
     return this;
@@ -166,10 +163,8 @@ public class CSSSupportsRule implements ICSSTopLevelRule, ICSSSourceLocationAwar
   @Nonnull
   public CSSSupportsRule addRule (@Nonnegative final int nIndex, @Nonnull final ICSSTopLevelRule aRule)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aRule == null)
-      throw new NullPointerException ("rule");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aRule, "Rule");
 
     if (nIndex >= getRuleCount ())
       m_aRules.add (aRule);
