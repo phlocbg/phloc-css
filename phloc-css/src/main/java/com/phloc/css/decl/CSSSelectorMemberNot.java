@@ -186,12 +186,6 @@ public class CSSSelectorMemberNot implements ICSSSelectorMember, ICSSVersionAwar
     return ECSSVersion.CSS30;
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

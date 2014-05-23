@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -42,9 +43,7 @@ public class CSSExpressionMemberMathUnitProduct implements ICSSExpressionMathMem
 
   public CSSExpressionMemberMathUnitProduct (@Nonnull @Nonempty final CSSExpressionMemberMathProduct aProduct)
   {
-    if (aProduct == null)
-      throw new NullPointerException ("product");
-    m_aProduct = aProduct;
+    m_aProduct = ValueEnforcer.notNull (aProduct, "Product");
   }
 
   @Nonnull
@@ -65,6 +64,11 @@ public class CSSExpressionMemberMathUnitProduct implements ICSSExpressionMathMem
   public ECSSVersion getMinimumCSSVersion ()
   {
     return ECSSVersion.CSS30;
+  }
+
+  public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
+  {
+    m_aProduct.setSourceLocation (aSourceLocation);
   }
 
   @Nullable

@@ -92,7 +92,7 @@ MORE :
 }
 
 <IN_COMMENT>
-SKIP :
+SPECIAL_TOKEN :
 {
   < "*/" > : DEFAULT
 }
