@@ -27,7 +27,6 @@ import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.property.customizer.ICSSPropertyCustomizer;
@@ -108,8 +107,7 @@ public abstract class AbstractCSSProperty implements ICSSProperty
   @Nonnull
   public ICSSValue newValue (@Nonnull @Nonempty final String sValue, final boolean bIsImportant)
   {
-    if (StringHelper.hasNoText (sValue))
-      throw new NullPointerException ("value");
+    ValueEnforcer.notEmpty (sValue, "Value");
 
     // Special handling for browser specific value creation
     if (m_aCustomizer != null)

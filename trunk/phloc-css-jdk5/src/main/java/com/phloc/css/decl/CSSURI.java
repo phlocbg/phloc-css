@@ -22,9 +22,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ICSSSourceLocationAware;
@@ -73,8 +73,7 @@ public class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
   @Nonnull
   public CSSURI setURI (@Nonnull @Nonempty final String sURI)
   {
-    if (StringHelper.hasNoText (sURI))
-      throw new IllegalArgumentException ("URI may not be empty");
+    ValueEnforcer.notEmpty (sURI, "URI");
     if (CSSURLHelper.isURLValue (sURI))
       throw new IllegalArgumentException ("Only the URI and not the CSS-URI value must be passed!");
 
@@ -112,12 +111,6 @@ public class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
     return CSSURLHelper.getAsCSSURL (m_sURI, aSettings.isQuoteURLs ());
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

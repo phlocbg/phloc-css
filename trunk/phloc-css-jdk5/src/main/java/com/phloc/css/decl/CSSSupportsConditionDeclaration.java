@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -50,9 +51,7 @@ public class CSSSupportsConditionDeclaration implements ICSSSupportsConditionMem
 
   public CSSSupportsConditionDeclaration (@Nonnull final CSSDeclaration aDeclaration)
   {
-    if (aDeclaration == null)
-      throw new NullPointerException ("Declaration");
-    m_aDeclaration = aDeclaration;
+    m_aDeclaration = ValueEnforcer.notNull (aDeclaration, "Declaration");
   }
 
   /**
@@ -78,12 +77,6 @@ public class CSSSupportsConditionDeclaration implements ICSSSupportsConditionMem
     return ECSSVersion.CSS30;
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

@@ -24,9 +24,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.state.EChange;
@@ -51,19 +51,13 @@ public class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware,
 
   public CSSKeyframesBlock (@Nonnull @Nonempty final String... aKeyframesSelectors)
   {
-    if (ArrayHelper.isEmpty (aKeyframesSelectors))
-      throw new IllegalArgumentException ("keyframesSelectors");
-    if (ArrayHelper.containsAnyNullElement (aKeyframesSelectors))
-      throw new IllegalArgumentException ("keyframesSelectors contains at least one null element");
+    ValueEnforcer.notEmptyNoNullValue (aKeyframesSelectors, "KeyframesSelectors");
     m_aKeyframesSelectors = ContainerHelper.newList (aKeyframesSelectors);
   }
 
   public CSSKeyframesBlock (@Nonnull @Nonempty final List <String> aKeyframesSelectors)
   {
-    if (ContainerHelper.isEmpty (aKeyframesSelectors))
-      throw new IllegalArgumentException ("keyframesSelectors");
-    if (ContainerHelper.containsAnyNullElement (aKeyframesSelectors))
-      throw new IllegalArgumentException ("keyframesSelectors contains at least one null element");
+    ValueEnforcer.notEmptyNoNullValue (aKeyframesSelectors, "KeyframesSelectors");
     m_aKeyframesSelectors = ContainerHelper.newList (aKeyframesSelectors);
   }
 
@@ -204,12 +198,6 @@ public class CSSKeyframesBlock implements IHasCSSDeclarations, ICSSVersionAware,
     return ECSSVersion.CSS30;
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

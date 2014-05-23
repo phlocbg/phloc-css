@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -97,8 +98,7 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
    */
   public CSSMediaQuery (@Nonnull final EModifier eModifier, @Nullable final String sMedium)
   {
-    if (eModifier == null)
-      throw new NullPointerException ("modifier");
+    ValueEnforcer.notNull (eModifier, "Modifier");
     m_eModifier = eModifier;
     m_sMedium = sMedium;
   }
@@ -166,8 +166,7 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
   @Nonnull
   public CSSMediaQuery addMediaExpression (@Nonnull final CSSMediaExpression aMediaExpression)
   {
-    if (aMediaExpression == null)
-      throw new NullPointerException ("expression");
+    ValueEnforcer.notNull (aMediaExpression, "MediaExpression");
 
     m_aMediaExpressions.add (aMediaExpression);
     return this;
@@ -187,10 +186,8 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
   public CSSMediaQuery addMediaExpression (@Nonnegative final int nIndex,
                                            @Nonnull final CSSMediaExpression aMediaExpression)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aMediaExpression == null)
-      throw new NullPointerException ("expression");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aMediaExpression, "MediaExpression");
 
     if (nIndex >= getMediaExpressionCount ())
       m_aMediaExpressions.add (aMediaExpression);
@@ -310,12 +307,6 @@ public class CSSMediaQuery implements ICSSWriteable, ICSSSourceLocationAware
     return aSB.toString ();
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

@@ -27,6 +27,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclaration;
@@ -99,9 +100,7 @@ final class CSSNodeToDomainObject
    */
   public CSSNodeToDomainObject (@Nonnull final ECSSVersion eVersion)
   {
-    if (eVersion == null)
-      throw new NullPointerException ("version");
-    m_eVersion = eVersion;
+    m_eVersion = ValueEnforcer.notNull (eVersion, "Version");
   }
 
   private void _expectNodeType (@Nonnull final CSSNode aNode, @Nonnull final ECSSNodeType eExpected)

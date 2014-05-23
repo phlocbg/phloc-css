@@ -22,9 +22,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ICSSSourceLocationAware;
@@ -46,12 +46,11 @@ public class CSSSelectorMemberFunctionLike implements ICSSSelectorMember, ICSSSo
   public CSSSelectorMemberFunctionLike (@Nonnull @Nonempty final String sFuncName,
                                         @Nonnull final CSSExpression aParamExpr)
   {
-    if (StringHelper.hasNoText (sFuncName))
-      throw new IllegalArgumentException ("empty function name is not allowed");
+    ValueEnforcer.notEmpty (sFuncName, "FunctionName");
     if (!sFuncName.endsWith ("("))
       throw new IllegalArgumentException ("function name must end with a '('");
-    if (aParamExpr == null)
-      throw new NullPointerException ("paramExpr");
+    ValueEnforcer.notNull (aParamExpr, "ParameterExpression");
+
     m_sFuncName = sFuncName;
     m_aParamExpr = aParamExpr;
   }
@@ -79,12 +78,6 @@ public class CSSSelectorMemberFunctionLike implements ICSSSelectorMember, ICSSSo
     return m_sFuncName + m_aParamExpr.getAsCSSString (aSettings, nIndentLevel) + ')';
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

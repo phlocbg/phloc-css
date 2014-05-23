@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -55,8 +56,8 @@ public class CSSSelectorAttribute implements ICSSSelectorMember, ICSSSourceLocat
   {
     if (!_isValidNamespacePrefix (sNamespacePrefix))
       throw new IllegalArgumentException ("namespacePrefix is illegal!");
-    if (StringHelper.hasNoText (sAttrName))
-      throw new IllegalArgumentException ("attrName");
+    ValueEnforcer.notEmpty (sAttrName, "AttrName");
+
     m_sNamespacePrefix = sNamespacePrefix;
     m_sAttrName = sAttrName;
     m_eOperator = null;
@@ -70,12 +71,10 @@ public class CSSSelectorAttribute implements ICSSSelectorMember, ICSSSourceLocat
   {
     if (!_isValidNamespacePrefix (sNamespacePrefix))
       throw new IllegalArgumentException ("namespacePrefix is illegal!");
-    if (StringHelper.hasNoText (sAttrName))
-      throw new IllegalArgumentException ("attrName");
-    if (eOperator == null)
-      throw new NullPointerException ("operator");
-    if (sAttrValue == null)
-      throw new NullPointerException ("attrValue");
+    ValueEnforcer.notEmpty (sAttrName, "AttrName");
+    ValueEnforcer.notNull (eOperator, "Operator");
+    ValueEnforcer.notNull (sAttrValue, "AttrValue");
+
     m_sNamespacePrefix = sNamespacePrefix;
     m_sAttrName = sAttrName;
     m_eOperator = eOperator;
@@ -121,12 +120,6 @@ public class CSSSelectorAttribute implements ICSSSelectorMember, ICSSSourceLocat
     return aSB.append (']').toString ();
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

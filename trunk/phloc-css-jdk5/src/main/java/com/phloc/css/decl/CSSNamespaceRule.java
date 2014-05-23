@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -98,8 +99,7 @@ public class CSSNamespaceRule implements ICSSWriteable, ICSSSourceLocationAware
   @Nonnull
   public CSSNamespaceRule setNamespaceURL (@Nonnull final String sURL)
   {
-    if (sURL == null)
-      throw new NullPointerException ("URL");
+    ValueEnforcer.notNull (sURL, "URL");
 
     m_sURL = sURL;
     return this;
@@ -124,12 +124,6 @@ public class CSSNamespaceRule implements ICSSWriteable, ICSSSourceLocationAware
     return aSB.append (";\n").toString ();
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;
