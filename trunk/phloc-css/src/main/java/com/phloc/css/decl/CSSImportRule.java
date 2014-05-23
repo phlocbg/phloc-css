@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -89,8 +90,7 @@ public class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
   @Nonnull
   public CSSImportRule addMediaQuery (@Nonnull final CSSMediaQuery aMediaQuery)
   {
-    if (aMediaQuery == null)
-      throw new NullPointerException ("mediaQuery");
+    ValueEnforcer.notNull (aMediaQuery, "MediaQuery");
 
     m_aMediaQueries.add (aMediaQuery);
     return this;
@@ -108,10 +108,8 @@ public class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
   @Nonnull
   public CSSImportRule addMediaQuery (@Nonnegative final int nIndex, @Nonnull final CSSMediaQuery aMediaQuery)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aMediaQuery == null)
-      throw new NullPointerException ("mediaQuery");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aMediaQuery, "MediaQuery");
 
     if (nIndex >= getMediaQueryCount ())
       m_aMediaQueries.add (aMediaQuery);
@@ -204,8 +202,7 @@ public class CSSImportRule implements ICSSWriteable, ICSSSourceLocationAware
   @Nonnull
   public CSSImportRule setLocation (@Nonnull final CSSURI aLocation)
   {
-    if (aLocation == null)
-      throw new NullPointerException ("location");
+    ValueEnforcer.notNull (aLocation, "Location");
 
     m_aLocation = aLocation;
     return this;
