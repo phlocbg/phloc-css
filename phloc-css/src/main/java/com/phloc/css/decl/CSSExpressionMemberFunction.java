@@ -22,10 +22,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ICSSSourceLocationAware;
@@ -74,9 +74,9 @@ public class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSo
   public CSSExpressionMemberFunction (@Nonnull @Nonempty final String sFunctionName,
                                       @Nullable final CSSExpression aExpression)
   {
-    if (StringHelper.hasNoText (sFunctionName))
-      throw new IllegalArgumentException ("Empty function name is not allowed");
+    ValueEnforcer.notEmpty (sFunctionName, "FunctionName");
     // expression may be null
+
     m_sFunctionName = _skipBracketsAtEnd (sFunctionName);
     m_aExpression = aExpression;
   }

@@ -194,8 +194,7 @@ public final class CSSURLHelper
   @Nonempty
   public static String getAsCSSURL (@Nonnull @Nonempty final String sURL, final boolean bForceQuoteURL)
   {
-    if (StringHelper.hasNoText (sURL))
-      throw new IllegalArgumentException ("passed URL is empty!");
+    ValueEnforcer.notEmpty (sURL, "URL");
 
     final StringBuilder aSB = new StringBuilder (CCSSValue.PREFIX_URL_OPEN);
     final boolean bAreQuotesRequired = bForceQuoteURL || isCSSURLRequiringQuotes (sURL);

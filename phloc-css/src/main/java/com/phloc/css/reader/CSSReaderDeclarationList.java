@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.io.IInputStreamProvider;
@@ -62,7 +63,7 @@ import com.phloc.css.reader.errorhandler.ThrowingCSSParseErrorHandler;
  * This is the central user class for reading and parsing partial CSS from
  * different sources. This class reads CSS style declarations as used in HTML
  * <code>&lt;style&gt;</code> attributes only.
- *
+ * 
  * @author Philip Helger
  */
 @Immutable
@@ -108,7 +109,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Set the default CSS parse error handler (for recoverable errors).
-   *
+   * 
    * @param aDefaultParseErrorHandler
    *        The new default error handler to be used. May be <code>null</code>
    *        to indicate that no special error handler should be used.
@@ -149,7 +150,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Set the default CSS parse exception handler (for unrecoverable errors).
-   *
+   * 
    * @param aDefaultParseExceptionHandler
    *        The new default exception handler to be used. May not be
    *        <code>null</code>.
@@ -172,7 +173,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Main reading of the CSS
-   *
+   * 
    * @param aStream
    *        The stream to read from. May not be <code>null</code>.
    * @param eVersion
@@ -237,7 +238,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Check if the passed CSS file can be parsed without error
-   *
+   * 
    * @param aFile
    *        The file to be parsed. May not be <code>null</code>.
    * @param sCharset
@@ -261,7 +262,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Check if the passed CSS file can be parsed without error
-   *
+   * 
    * @param aFile
    *        The file to be parsed. May not be <code>null</code>.
    * @param aCharset
@@ -282,7 +283,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Check if the passed CSS resource can be parsed without error
-   *
+   * 
    * @param aRes
    *        The resource to be parsed. May not be <code>null</code>.
    * @param sCharset
@@ -307,7 +308,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Check if the passed CSS resource can be parsed without error
-   *
+   * 
    * @param aRes
    *        The resource to be parsed. May not be <code>null</code>.
    * @param aCharset
@@ -323,12 +324,9 @@ public final class CSSReaderDeclarationList
                                     @Nonnull final Charset aCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
-    if (aRes == null)
-      throw new NullPointerException ("resources");
-    if (aCharset == null)
-      throw new NullPointerException ("charset");
-    if (eVersion == null)
-      throw new NullPointerException ("version");
+    ValueEnforcer.notNull (aRes, "Resource");
+    ValueEnforcer.notNull (aCharset, "Charset");
+    ValueEnforcer.notNull (eVersion, "Version");
 
     final Reader aReader = aRes.getReader (aCharset);
     if (aReader == null)
@@ -345,7 +343,7 @@ public final class CSSReaderDeclarationList
    * called. This is similar to calling
    * {@link #readFromStream(IInputStreamProvider, String, ECSSVersion)} and
    * checking for a non-<code>null</code> result.
-   *
+   * 
    * @param aIS
    *        The input stream to use. Is automatically closed. May not be
    *        <code>null</code>.
@@ -358,13 +356,11 @@ public final class CSSReaderDeclarationList
    */
   @Deprecated
   public static boolean isValidCSS (@Nonnull @WillClose final InputStream aIS,
-                                    @Nonnull final String sCharset,
+                                    @Nonnull @Nonempty final String sCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
-    if (aIS == null)
-      throw new NullPointerException ("inputStream");
-    if (sCharset == null)
-      throw new NullPointerException ("charset");
+    ValueEnforcer.notNull (aIS, "InputStream");
+    ValueEnforcer.notEmpty (sCharset, "Charset");
 
     return isValidCSS (StreamUtils.createReader (aIS, sCharset), eVersion);
   }
@@ -375,7 +371,7 @@ public final class CSSReaderDeclarationList
    * called. This is similar to calling
    * {@link #readFromStream(IInputStreamProvider,Charset, ECSSVersion)} and
    * checking for a non-<code>null</code> result.
-   *
+   * 
    * @param aIS
    *        The input stream to use. Is automatically closed. May not be
    *        <code>null</code>.
@@ -390,10 +386,8 @@ public final class CSSReaderDeclarationList
                                     @Nonnull final Charset aCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
-    if (aIS == null)
-      throw new NullPointerException ("inputStream");
-    if (aCharset == null)
-      throw new NullPointerException ("charset");
+    ValueEnforcer.notNull (aIS, "InputStream");
+    ValueEnforcer.notNull (aCharset, "Charset");
 
     return isValidCSS (StreamUtils.createReader (aIS, aCharset), eVersion);
   }
@@ -403,7 +397,7 @@ public final class CSSReaderDeclarationList
    * accomplished by fully parsing the CSS file each time the method is called.
    * This is similar to calling {@link #readFromString(String, ECSSVersion)} and
    * checking for a non-<code>null</code> result.
-   *
+   * 
    * @param sCSS
    *        The CSS string to scan. May not be <code>null</code>.
    * @param eVersion
@@ -413,8 +407,7 @@ public final class CSSReaderDeclarationList
    */
   public static boolean isValidCSS (@Nonnull final String sCSS, @Nonnull final ECSSVersion eVersion)
   {
-    if (sCSS == null)
-      throw new NullPointerException ("reader");
+    ValueEnforcer.notNull (sCSS, "CSS");
 
     return isValidCSS (new NonBlockingStringReader (sCSS), eVersion);
   }
@@ -425,7 +418,7 @@ public final class CSSReaderDeclarationList
    * is similar to calling
    * {@link #readFromStream(IInputStreamProvider, Charset, ECSSVersion)} and
    * checking for a non-<code>null</code> result.
-   *
+   * 
    * @param aReader
    *        The reader to use. May not be <code>null</code>.
    * @param eVersion
@@ -435,10 +428,8 @@ public final class CSSReaderDeclarationList
    */
   public static boolean isValidCSS (@Nonnull @WillClose final Reader aReader, @Nonnull final ECSSVersion eVersion)
   {
-    if (aReader == null)
-      throw new NullPointerException ("reader");
-    if (eVersion == null)
-      throw new NullPointerException ("version");
+    ValueEnforcer.notNull (aReader, "Reader");
+    ValueEnforcer.notNull (eVersion, "Version");
 
     try
     {
@@ -568,7 +559,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link IInputStreamProvider}.
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. May not be <code>null</code>.
    * @param sCharset
@@ -588,7 +579,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link IInputStreamProvider}.
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. May not be <code>null</code>.
    * @param aCharset
@@ -608,7 +599,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link IInputStreamProvider}.
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. May not be <code>null</code>.
    * @param sCharset
@@ -633,7 +624,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link IInputStreamProvider}.
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. May not be <code>null</code>.
    * @param aCharset
@@ -657,7 +648,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link IInputStreamProvider}.
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. May not be <code>null</code>.
    * @param sCharset
@@ -682,7 +673,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link IInputStreamProvider}.
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. May not be <code>null</code>.
    * @param aCharset
@@ -706,7 +697,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link IInputStreamProvider}.
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. May not be <code>null</code>.
    * @param sCharset
@@ -736,7 +727,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link IInputStreamProvider}.
-   *
+   * 
    * @param aISP
    *        The input stream provider to use. May not be <code>null</code>.
    * @param aCharset
@@ -759,8 +750,7 @@ public final class CSSReaderDeclarationList
                                                    @Nullable final ICSSParseErrorHandler aCustomErrorHandler,
                                                    @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    if (aISP == null)
-      throw new NullPointerException ("inputStreamProvider");
+    ValueEnforcer.notNull (aISP, "InputStreamProvider");
 
     final InputStream aIS = aISP.getInputStream ();
     if (aIS == null)
@@ -773,7 +763,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link InputStream}.
-   *
+   * 
    * @param aIS
    *        The input stream to use. Will be closed automatically after reading
    *        - independent of success or error. May not be <code>null</code>.
@@ -795,7 +785,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link InputStream}.
-   *
+   * 
    * @param aIS
    *        The input stream to use. Will be closed automatically after reading
    *        - independent of success or error. May not be <code>null</code>.
@@ -817,7 +807,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link InputStream}.
-   *
+   * 
    * @param aIS
    *        The input stream to use. Will be closed automatically after reading
    *        - independent of success or error. May not be <code>null</code>.
@@ -844,7 +834,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link InputStream}.
-   *
+   * 
    * @param aIS
    *        The input stream to use. Will be closed automatically after reading
    *        - independent of success or error. May not be <code>null</code>.
@@ -870,7 +860,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link InputStream}.
-   *
+   * 
    * @param aIS
    *        The input stream to use. Will be closed automatically after reading
    *        - independent of success or error. May not be <code>null</code>.
@@ -897,7 +887,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link InputStream}.
-   *
+   * 
    * @param aIS
    *        The input stream to use. Will be closed automatically after reading
    *        - independent of success or error. May not be <code>null</code>.
@@ -923,7 +913,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link InputStream}.
-   *
+   * 
    * @param aIS
    *        The input stream to use. Will be closed automatically after reading
    *        - independent of success or error. May not be <code>null</code>.
@@ -955,7 +945,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link InputStream}.
-   *
+   * 
    * @param aIS
    *        The input stream to use. Will be closed automatically after reading
    *        - independent of success or error. May not be <code>null</code>.
@@ -990,7 +980,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link Reader}.
-   *
+   * 
    * @param aReader
    *        The reader to use. Will be closed automatically after reading -
    *        independent of success or error. May not be <code>null</code>.
@@ -1008,7 +998,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link Reader}.
-   *
+   * 
    * @param aReader
    *        The reader to use. Will be closed automatically after reading -
    *        independent of success or error. May not be <code>null</code>.
@@ -1030,7 +1020,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link Reader}.
-   *
+   * 
    * @param aReader
    *        The reader to use. Will be closed automatically after reading -
    *        independent of success or error. May not be <code>null</code>.
@@ -1052,7 +1042,7 @@ public final class CSSReaderDeclarationList
 
   /**
    * Read the CSS from the passed {@link Reader}.
-   *
+   * 
    * @param aReader
    *        The reader to use. Will be closed automatically after reading -
    *        independent of success or error. May not be <code>null</code>.

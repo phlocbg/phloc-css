@@ -56,8 +56,8 @@ public class CSSSelectorAttribute implements ICSSSelectorMember, ICSSSourceLocat
   {
     if (!_isValidNamespacePrefix (sNamespacePrefix))
       throw new IllegalArgumentException ("namespacePrefix is illegal!");
-    if (StringHelper.hasNoText (sAttrName))
-      throw new IllegalArgumentException ("attrName");
+    ValueEnforcer.notEmpty (sAttrName, "AttrName");
+
     m_sNamespacePrefix = sNamespacePrefix;
     m_sAttrName = sAttrName;
     m_eOperator = null;
