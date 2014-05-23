@@ -112,12 +112,6 @@ public class CSSURI implements ICSSWriteable, ICSSSourceLocationAware
     return CSSURLHelper.getAsCSSURL (m_sURI, aSettings.isQuoteURLs ());
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

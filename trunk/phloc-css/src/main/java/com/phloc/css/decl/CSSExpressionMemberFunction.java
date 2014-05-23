@@ -33,7 +33,7 @@ import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a CSS function element
- *
+ * 
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -54,7 +54,7 @@ public class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSo
 
   /**
    * Constructor without an expression
-   *
+   * 
    * @param sFunctionName
    *        Function name. May neither be <code>null</code> nor empty.
    */
@@ -65,7 +65,7 @@ public class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSo
 
   /**
    * Constructor
-   *
+   * 
    * @param sFunctionName
    *        Function name. May neither be <code>null</code> nor empty.
    * @param aExpression
@@ -133,12 +133,6 @@ public class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSo
     return m_sFunctionName + "(" + m_aExpression.getAsCSSString (aSettings, nIndentLevel) + ")";
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   *
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;
