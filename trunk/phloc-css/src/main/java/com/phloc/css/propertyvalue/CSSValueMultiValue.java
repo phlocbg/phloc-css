@@ -24,9 +24,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -52,10 +52,8 @@ public class CSSValueMultiValue implements ICSSMultiValue
                              @Nonnull @Nonempty final String [] aValues,
                              final boolean bIsImportant)
   {
-    if (aProperty == null)
-      throw new NullPointerException ("property");
-    if (ArrayHelper.isEmpty (aValues))
-      throw new IllegalArgumentException ("No value passed!");
+    ValueEnforcer.notNull (aProperty, "Property");
+    ValueEnforcer.notEmptyNoNullValue (aValues, "Values");
 
     for (final String sValue : aValues)
       m_aValues.add (new CSSValue (aProperty, sValue, bIsImportant));

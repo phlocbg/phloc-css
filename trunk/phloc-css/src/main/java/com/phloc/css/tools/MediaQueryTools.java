@@ -24,6 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.collections.ContainerHelper;
@@ -201,10 +202,8 @@ public final class MediaQueryTools
                                                             @Nonnull @Nonempty final Iterable <? extends CSSMediaQuery> aMediaQueries,
                                                             final boolean bAllowNestedMediaQueries)
   {
-    if (aCSS == null)
-      throw new NullPointerException ("CSS");
-    if (ContainerHelper.isEmpty (aMediaQueries))
-      throw new IllegalArgumentException ("no mediaQueries present");
+    ValueEnforcer.notNull (aCSS, "CSS");
+    ValueEnforcer.notEmpty (aMediaQueries, "MediaQueries");
 
     if (!canWrapInMediaQuery (aCSS, bAllowNestedMediaQueries))
       return null;

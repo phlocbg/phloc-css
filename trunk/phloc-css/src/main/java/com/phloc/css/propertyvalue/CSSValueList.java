@@ -24,8 +24,8 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -53,12 +53,9 @@ public class CSSValueList implements ICSSMultiValue
                        @Nonnull final String [] aValues,
                        final boolean bIsImportant)
   {
-    if (eProperty == null)
-      throw new NullPointerException ("Property");
-    if (ArrayHelper.isEmpty (aProperties))
-      throw new IllegalArgumentException ("No properties passed!");
-    if (ArrayHelper.isEmpty (aValues))
-      throw new IllegalArgumentException ("No value passed!");
+    ValueEnforcer.notNull (eProperty, "Property");
+    ValueEnforcer.notEmptyNoNullValue (aProperties, "Properties");
+    ValueEnforcer.notEmptyNoNullValue (aValues, "Values");
     if (aProperties.length != aValues.length)
       throw new IllegalArgumentException ("Different number of properties and values passed");
 

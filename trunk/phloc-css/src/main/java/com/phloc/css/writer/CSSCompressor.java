@@ -25,6 +25,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CascadingStyleSheet;
@@ -132,10 +133,8 @@ public final class CSSCompressor
   @Nonnull
   public static String getRewrittenCSS (@Nonnull final String sOriginalCSS, @Nonnull final CSSWriterSettings aSettings)
   {
-    if (sOriginalCSS == null)
-      throw new NullPointerException ("originalCSS");
-    if (aSettings == null)
-      throw new NullPointerException ("settings");
+    ValueEnforcer.notNull (sOriginalCSS, "OriginalCSS");
+    ValueEnforcer.notNull (aSettings, "Settings");
 
     final CascadingStyleSheet aCSS = CSSReader.readFromString (sOriginalCSS, aSettings.getVersion ());
     if (aCSS != null)

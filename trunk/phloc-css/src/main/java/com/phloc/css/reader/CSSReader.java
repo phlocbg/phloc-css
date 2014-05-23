@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.ValueEnforcer;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
@@ -338,12 +339,9 @@ public final class CSSReader
                                     @Nonnull final Charset aFallbackCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
-    if (aRes == null)
-      throw new NullPointerException ("resources");
-    if (aFallbackCharset == null)
-      throw new NullPointerException ("charset");
-    if (eVersion == null)
-      throw new NullPointerException ("version");
+    ValueEnforcer.notNull (aRes, "Resource");
+    ValueEnforcer.notNull (aFallbackCharset, "FallbackCharset");
+    ValueEnforcer.notNull (eVersion, "Version");
 
     final Reader aReader = aRes.getReader (aFallbackCharset);
     if (aReader == null)
@@ -374,13 +372,11 @@ public final class CSSReader
    */
   @Deprecated
   public static boolean isValidCSS (@Nonnull @WillClose final InputStream aIS,
-                                    @Nonnull final String sCharset,
+                                    @Nonnull @Nonempty final String sCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
-    if (aIS == null)
-      throw new NullPointerException ("inputStream");
-    if (sCharset == null)
-      throw new NullPointerException ("charset");
+    ValueEnforcer.notNull (aIS, "InputStream");
+    ValueEnforcer.notEmpty (sCharset, "Charset");
 
     return isValidCSS (StreamUtils.createReader (aIS, sCharset), eVersion);
   }
@@ -407,10 +403,8 @@ public final class CSSReader
                                     @Nonnull final Charset aFallbackCharset,
                                     @Nonnull final ECSSVersion eVersion)
   {
-    if (aIS == null)
-      throw new NullPointerException ("inputStream");
-    if (aFallbackCharset == null)
-      throw new NullPointerException ("charset");
+    ValueEnforcer.notNull (aIS, "InputStream");
+    ValueEnforcer.notNull (aFallbackCharset, "FallbackCharset");
 
     return isValidCSS (StreamUtils.createReader (aIS, aFallbackCharset), eVersion);
   }
@@ -431,8 +425,7 @@ public final class CSSReader
    */
   public static boolean isValidCSS (@Nonnull final String sCSS, @Nonnull final ECSSVersion eVersion)
   {
-    if (sCSS == null)
-      throw new NullPointerException ("reader");
+    ValueEnforcer.notNull (sCSS, "CSS");
 
     return isValidCSS (new NonBlockingStringReader (sCSS), eVersion);
   }
@@ -453,10 +446,8 @@ public final class CSSReader
    */
   public static boolean isValidCSS (@Nonnull @WillClose final Reader aReader, @Nonnull final ECSSVersion eVersion)
   {
-    if (aReader == null)
-      throw new NullPointerException ("reader");
-    if (eVersion == null)
-      throw new NullPointerException ("version");
+    ValueEnforcer.notNull (aReader, "Reader");
+    ValueEnforcer.notNull (eVersion, "Version");
 
     try
     {
@@ -1281,8 +1272,7 @@ public final class CSSReader
   @Nullable
   public static Charset getCharsetDeclaredInCSS (@Nonnull final IInputStreamProvider aISP)
   {
-    if (aISP == null)
-      throw new NullPointerException ("inputStreamProvider");
+    ValueEnforcer.notNull (aISP, "InputStreamProvider");
 
     // Open input stream
     final ReadonlyPair <InputStream, Charset> aISAndBOM = _getInputStreamWithoutBOM (aISP);
@@ -1487,10 +1477,8 @@ public final class CSSReader
                                                     @Nullable final ICSSParseErrorHandler aCustomErrorHandler,
                                                     @Nullable final ICSSParseExceptionHandler aCustomExceptionHandler)
   {
-    if (aRP == null)
-      throw new NullPointerException ("ReaderProvider");
-    if (eVersion == null)
-      throw new NullPointerException ("version");
+    ValueEnforcer.notNull (aRP, "ReaderProvider");
+    ValueEnforcer.notNull (eVersion, "Version");
 
     // Create the reader
     final Reader aReader = aRP.getReader ();
