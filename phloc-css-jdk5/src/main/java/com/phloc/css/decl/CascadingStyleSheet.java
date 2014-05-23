@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -97,8 +98,7 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   @Nonnull
   public CascadingStyleSheet addImportRule (@Nonnull final CSSImportRule aImportRule)
   {
-    if (aImportRule == null)
-      throw new NullPointerException ("ImportRule");
+    ValueEnforcer.notNull (aImportRule, "ImportRule");
 
     m_aImportRules.add (aImportRule);
     return this;
@@ -119,10 +119,8 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   @Nonnull
   public CascadingStyleSheet addImportRule (@Nonnegative final int nIndex, @Nonnull final CSSImportRule aImportRule)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aImportRule == null)
-      throw new NullPointerException ("ImportRule");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aImportRule, "ImportRule");
 
     if (nIndex >= getImportRuleCount ())
       m_aImportRules.add (aImportRule);
@@ -234,8 +232,7 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   @Nonnull
   public CascadingStyleSheet addNamespaceRule (@Nonnull final CSSNamespaceRule aNamespaceRule)
   {
-    if (aNamespaceRule == null)
-      throw new NullPointerException ("NamespaceRule");
+    ValueEnforcer.notNull (aNamespaceRule, "NamespaceRule");
 
     m_aNamespaceRules.add (aNamespaceRule);
     return this;
@@ -255,10 +252,8 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   public CascadingStyleSheet addNamespaceRule (@Nonnegative final int nIndex,
                                                @Nonnull final CSSNamespaceRule aNamespaceRule)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aNamespaceRule == null)
-      throw new NullPointerException ("NamespaceRule");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aNamespaceRule, "NamespaceRule");
 
     if (nIndex >= getNamespaceRuleCount ())
       m_aNamespaceRules.add (aNamespaceRule);
@@ -378,8 +373,7 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   @Nonnull
   public CascadingStyleSheet addRule (@Nonnull final ICSSTopLevelRule aRule)
   {
-    if (aRule == null)
-      throw new NullPointerException ("styleRule");
+    ValueEnforcer.notNull (aRule, "Rule");
 
     m_aRules.add (aRule);
     return this;
@@ -399,10 +393,8 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
   @Nonnull
   public CascadingStyleSheet addRule (@Nonnegative final int nIndex, @Nonnull final ICSSTopLevelRule aRule)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aRule == null)
-      throw new NullPointerException ("styleRule");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aRule, "Rule");
 
     if (nIndex >= getRuleCount ())
       m_aRules.add (aRule);
@@ -1080,12 +1072,6 @@ public class CascadingStyleSheet implements ICSSSourceLocationAware, Serializabl
     return ret;
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

@@ -22,10 +22,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ICSSSourceLocationAware;
@@ -33,7 +33,7 @@ import com.phloc.css.ICSSWriterSettings;
 
 /**
  * Represents a CSS function element
- *
+ * 
  * @author Philip Helger
  */
 @NotThreadSafe
@@ -54,7 +54,7 @@ public class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSo
 
   /**
    * Constructor without an expression
-   *
+   * 
    * @param sFunctionName
    *        Function name. May neither be <code>null</code> nor empty.
    */
@@ -65,7 +65,7 @@ public class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSo
 
   /**
    * Constructor
-   *
+   * 
    * @param sFunctionName
    *        Function name. May neither be <code>null</code> nor empty.
    * @param aExpression
@@ -74,9 +74,9 @@ public class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSo
   public CSSExpressionMemberFunction (@Nonnull @Nonempty final String sFunctionName,
                                       @Nullable final CSSExpression aExpression)
   {
-    if (StringHelper.hasNoText (sFunctionName))
-      throw new IllegalArgumentException ("Empty function name is not allowed");
+    ValueEnforcer.notEmpty (sFunctionName, "FunctionName");
     // expression may be null
+
     m_sFunctionName = _skipBracketsAtEnd (sFunctionName);
     m_aExpression = aExpression;
   }
@@ -133,12 +133,6 @@ public class CSSExpressionMemberFunction implements ICSSExpressionMember, ICSSSo
     return m_sFunctionName + "(" + m_aExpression.getAsCSSString (aSettings, nIndentLevel) + ")";
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   *
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

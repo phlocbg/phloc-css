@@ -21,8 +21,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.parser.ReadonlyToken;
 import com.phloc.css.parser.Token;
@@ -44,8 +44,8 @@ public class CSSParseError
 
   public CSSParseError (@Nonnull @Nonempty final String sErrorMsg)
   {
-    if (StringHelper.hasNoText (sErrorMsg))
-      throw new IllegalArgumentException ("Error message");
+    ValueEnforcer.notEmpty (sErrorMsg, "ErrorMsg");
+
     m_aLastValidToken = null;
     m_sExpectedTokens = null;
     m_aFirstSkippedToken = null;
@@ -58,12 +58,9 @@ public class CSSParseError
                         @Nonnull final String [] aTokenImageVal,
                         @Nullable final Token aLastSkippedToken)
   {
-    if (aLastValidToken == null)
-      throw new NullPointerException ("LastValidToken");
-    if (aExpectedTokenSequencesVal == null)
-      throw new NullPointerException ("ExpectedTokenSequencesVal");
-    if (aTokenImageVal == null)
-      throw new NullPointerException ("TokenImageVal");
+    ValueEnforcer.notNull (aLastValidToken, "LastValidToken");
+    ValueEnforcer.notNull (aExpectedTokenSequencesVal, "ExpectedTokenSequencesVal");
+    ValueEnforcer.notNull (aTokenImageVal, "TokenImageVal");
 
     m_aLastValidToken = new ReadonlyToken (aLastValidToken);
     final StringBuilder aExpected = new StringBuilder ();

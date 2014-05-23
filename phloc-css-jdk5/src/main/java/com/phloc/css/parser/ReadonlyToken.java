@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -41,8 +42,8 @@ public class ReadonlyToken
 
   public ReadonlyToken (@Nonnull final Token aToken)
   {
-    if (aToken == null)
-      throw new NullPointerException ("Token");
+    ValueEnforcer.notNull (aToken, "Token");
+
     m_nKind = aToken.kind;
     m_nBeginLine = aToken.beginLine;
     m_nBeginColumn = aToken.beginColumn;

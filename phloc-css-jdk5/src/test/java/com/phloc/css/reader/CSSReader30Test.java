@@ -424,4 +424,23 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
       }
     }
   }
+
+  @Test
+  public void testReadSingleLineComments ()
+  {
+    final ECSSVersion eVersion = ECSSVersion.CSS30;
+    final CSSWriterSettings aCSSWS = new CSSWriterSettings (eVersion, false);
+    final Charset aCharset = CCharset.CHARSET_UTF_8_OBJ;
+    final File aFile = new File ("src/test/resources/testfiles/css30/good/artificial/test-singleline-comments.css");
+    final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
+    assertNotNull (aCSS);
+    assertEquals (6, aCSS.getRuleCount ());
+    assertEquals (6, aCSS.getStyleRuleCount ());
+
+    assertEquals (2, aCSS.getStyleRuleAtIndex (1).getDeclarationCount ());
+    assertEquals (1, aCSS.getStyleRuleAtIndex (2).getDeclarationCount ());
+    assertEquals (1, aCSS.getStyleRuleAtIndex (3).getDeclarationCount ());
+    assertEquals (0, aCSS.getStyleRuleAtIndex (4).getDeclarationCount ());
+    assertEquals (0, aCSS.getStyleRuleAtIndex (5).getDeclarationCount ());
+  }
 }

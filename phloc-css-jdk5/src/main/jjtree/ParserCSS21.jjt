@@ -80,13 +80,6 @@ TOKEN_MGR_DECLS :
 }
 
 <DEFAULT>
-TOKEN :
-{
-  < S: (" "|"\t"|"\r"|"\n"|"\f")+ >
-| < W: ( <S> )? >
-}
-
-<DEFAULT>
 MORE :
 {
   < "/*" > : IN_COMMENT
@@ -99,12 +92,19 @@ MORE :
 }
 
 <IN_COMMENT>
-SKIP :
+SPECIAL_TOKEN :
 {
   < "*/" > : DEFAULT
 }
 
-<DEFAULT>
+<DEFAULT, IN_UNKNOWN_RULE>
+TOKEN :
+{
+  < S: (" "|"\t"|"\r"|"\n"|"\f")+ >
+| < W: ( <S> )? >
+}
+
+<DEFAULT, IN_UNKNOWN_RULE>
 TOKEN :
 {
 // private reg ex come first (no actions possible!)
@@ -194,7 +194,7 @@ TOKEN :
 | < NAMESPACE_SYM: "@namespace" >
 | < PAGE_SYM: "@page" >
 | < MEDIA_SYM: "@media" >
-| < AT_UNKNOWN: "@" <IDENT> >
+| < AT_UNKNOWN: "@" <IDENT> > : IN_UNKNOWN_RULE
 | < IMPORTANT_SYM: "!" ( <S> )* "important" >
 
 // before ident!
@@ -240,6 +240,14 @@ TOKEN :
 | < FUNCTION: <IDENT> "(" 
             | "progid" ( <S> )* <COLON> ( <S> )* <IDENT> ( <DOT> <IDENT> )* ( <S> )* "(" 
             > { matchedToken.image = image.toString (); }
+}
+
+// Single line comments are handled in all states except in unknown rules, because
+// there, tokens are simply chained together to a string 
+<DEFAULT>
+SPECIAL_TOKEN :
+{
+  < SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
 }
 
 <*> TOKEN:
@@ -816,6 +824,8 @@ void unknownRule() : {}
   <AT_UNKNOWN> { jjtThis.setText (token.image); }
   unknownRuleParameterList()
   unknownRuleBody()
+  // Manually switch from IN_UNKNOWN_RULE to DEFAULT again
+  { token_source.SwitchTo (DEFAULT); }
 }
 
 //

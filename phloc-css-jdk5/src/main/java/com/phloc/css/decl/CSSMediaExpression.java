@@ -22,10 +22,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CCSS;
 import com.phloc.css.CSSSourceLocation;
@@ -63,8 +63,7 @@ public class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware, ICSS
 
   public CSSMediaExpression (@Nonnull @Nonempty final String sFeature, @Nullable final CSSExpression aValue)
   {
-    if (StringHelper.hasNoText (sFeature))
-      throw new IllegalArgumentException ("feature");
+    ValueEnforcer.notEmpty (sFeature, "Feature");
     m_sFeature = sFeature;
     m_aValue = aValue;
   }
@@ -100,12 +99,6 @@ public class CSSMediaExpression implements ICSSWriteable, ICSSVersionAware, ICSS
     return ECSSVersion.CSS30;
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

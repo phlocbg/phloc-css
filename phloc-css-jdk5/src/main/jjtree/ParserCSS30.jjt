@@ -79,13 +79,6 @@ TOKEN_MGR_DECLS :
   private static final org.slf4j.Logger s_aLogger = org.slf4j.LoggerFactory.getLogger (ParserCSS30TokenManager.class);
 }
 
-<DEFAULT, IN_NTH>
-TOKEN :
-{
-  < S: (" "|"\t"|"\r"|"\n"|"\f")+ >
-| < W: ( <S> )? >
-}
-
 <DEFAULT>
 MORE :
 {
@@ -99,9 +92,16 @@ MORE :
 }
 
 <IN_COMMENT>
-SKIP :
+SPECIAL_TOKEN :
 {
   < "*/" > : DEFAULT
+}
+    
+<DEFAULT, IN_NTH, IN_UNKNOWN_RULE>
+TOKEN :
+{
+  < S: (" "|"\t"|"\r"|"\n"|"\f")+ >
+| < W: ( <S> )? >
 }
 
 <IN_NTH>
@@ -113,7 +113,7 @@ TOKEN :
 | < INTEGER: ( ["0"-"9"] )+ >  
 }
 
-<DEFAULT, IN_NTH>
+<DEFAULT, IN_NTH, IN_UNKNOWN_RULE>
 TOKEN :
 {
   < PLUS: "+" >
@@ -122,7 +122,7 @@ TOKEN :
 | < RROUND: ")" > : DEFAULT
 }
 
-<DEFAULT>
+<DEFAULT, IN_UNKNOWN_RULE>
 TOKEN :
 {
 // private reg ex come first (no actions possible!)
@@ -225,7 +225,7 @@ TOKEN :
 | < VIEWPORT_SYM: "@-" <IDENT> "-viewport"
                 | "@viewport" >
 | < SUPPORTS_SYM: "@supports" >
-| < AT_UNKNOWN: "@" <IDENT> >
+| < AT_UNKNOWN: "@" <IDENT> > : IN_UNKNOWN_RULE
 | < IMPORTANT_SYM: "!" ( <S> )* "important" >
 
 // before ident!
@@ -298,6 +298,14 @@ TOKEN :
                  | <HNUM> "-" <HNUM> 
                  | <URANGE_PLACEHOLDER> 
                  ) >  
+}
+
+// Single line comments are handled in all states except in unknown rules, because
+// there, tokens are simply chained together to a string 
+<DEFAULT, IN_NTH>
+SPECIAL_TOKEN :
+{
+  < SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
 }
 
 <*> TOKEN:
@@ -1215,6 +1223,8 @@ void unknownRule() : {}
   <AT_UNKNOWN> { jjtThis.setText (token.image); }
   unknownRuleParameterList()
   unknownRuleBody()
+  // Manually switch from IN_UNKNOWN_RULE to DEFAULT again
+  { token_source.SwitchTo (DEFAULT); }
 }
 
 //

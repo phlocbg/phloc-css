@@ -20,6 +20,7 @@ package com.phloc.css.handler;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.decl.CSSDeclarationList;
@@ -55,10 +56,8 @@ public final class CSSHandler
   public static CascadingStyleSheet readCascadingStyleSheetFromNode (@Nonnull final ECSSVersion eVersion,
                                                                      @Nonnull final CSSNode aNode)
   {
-    if (eVersion == null)
-      throw new NullPointerException ("version");
-    if (aNode == null)
-      throw new NullPointerException ("node");
+    ValueEnforcer.notNull (eVersion, "Version");
+    ValueEnforcer.notNull (aNode, "Node");
     if (!ECSSNodeType.ROOT.isNode (aNode, eVersion))
       throw new CSSHandlingException (aNode, "Passed node is not a root node!");
 
@@ -78,10 +77,8 @@ public final class CSSHandler
   public static CSSDeclarationList readDeclarationListFromNode (@Nonnull final ECSSVersion eVersion,
                                                                 @Nonnull final CSSNode aNode)
   {
-    if (eVersion == null)
-      throw new NullPointerException ("version");
-    if (aNode == null)
-      throw new NullPointerException ("node");
+    ValueEnforcer.notNull (eVersion, "Version");
+    ValueEnforcer.notNull (aNode, "Node");
     if (!ECSSNodeType.STYLEDECLARATIONLIST.isNode (aNode, eVersion))
       throw new CSSHandlingException (aNode, "Passed node is not a style declaration node!");
 

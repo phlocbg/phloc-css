@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.IHasSize;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -101,8 +102,7 @@ public class CSSMediaList implements Serializable, IHasSize
   @Nonnull
   public CSSMediaList addMedium (@Nonnull final ECSSMedium eMedium)
   {
-    if (eMedium == null)
-      throw new NullPointerException ("medium");
+    ValueEnforcer.notNull (eMedium, "Medium");
 
     m_aMedia.add (eMedium);
     return this;
@@ -241,13 +241,13 @@ public class CSSMediaList implements Serializable, IHasSize
    * @param sSeparator
    *        The separator to be used. May not be <code>null</code>.
    * @return A non-<code>null</code> but maybe empty String with all media in
-   *         the order they where inserted and separated by a ", "
+   *         the order they where inserted and separated by the specified
+   *         separator
    */
   @Nonnull
   public String getMediaString (@Nonnull final String sSeparator)
   {
-    if (sSeparator == null)
-      throw new NullPointerException ("separator");
+    ValueEnforcer.notNull (sSeparator, "Separator");
 
     if (m_aMedia.isEmpty ())
       return "";

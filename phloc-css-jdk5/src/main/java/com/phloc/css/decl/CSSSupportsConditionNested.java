@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -74,8 +75,7 @@ public class CSSSupportsConditionNested implements ICSSSupportsConditionMember, 
   @Nonnull
   public CSSSupportsConditionNested addMember (@Nonnull final ICSSSupportsConditionMember aMember)
   {
-    if (aMember == null)
-      throw new NullPointerException ("member");
+    ValueEnforcer.notNull (aMember, "SupportsConditionMember");
 
     m_aMembers.add (aMember);
     return this;
@@ -85,10 +85,8 @@ public class CSSSupportsConditionNested implements ICSSSupportsConditionMember, 
   public CSSSupportsConditionNested addMember (@Nonnegative final int nIndex,
                                                @Nonnull final ICSSSupportsConditionMember aMember)
   {
-    if (nIndex < 0)
-      throw new IllegalArgumentException ("Index too small: " + nIndex);
-    if (aMember == null)
-      throw new NullPointerException ("member");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aMember, "SupportsConditionMember");
 
     if (nIndex >= getMemberCount ())
       m_aMembers.add (aMember);
@@ -197,12 +195,6 @@ public class CSSSupportsConditionNested implements ICSSSupportsConditionMember, 
     return ECSSVersion.CSS30;
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

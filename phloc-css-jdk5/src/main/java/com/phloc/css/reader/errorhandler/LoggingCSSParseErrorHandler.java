@@ -24,6 +24,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.parser.ParseException;
@@ -102,12 +103,9 @@ public class LoggingCSSParseErrorHandler implements ICSSParseErrorHandler
                                                       @Nonnull final String [] aTokenImageVal,
                                                       @Nullable final Token aLastSkippedToken)
   {
-    if (aLastValidToken == null)
-      throw new NullPointerException ("LastValidToken");
-    if (aExpectedTokenSequencesVal == null)
-      throw new NullPointerException ("ExpectedTokenSequencesVal");
-    if (aTokenImageVal == null)
-      throw new NullPointerException ("TokenImageVal");
+    ValueEnforcer.notNull (aLastValidToken, "LastValidToken");
+    ValueEnforcer.notNull (aExpectedTokenSequencesVal, "ExpectedTokenSequencesVal");
+    ValueEnforcer.notNull (aTokenImageVal, "TokenImageVal");
 
     final StringBuilder aExpected = new StringBuilder ();
     int nMaxSize = 0;

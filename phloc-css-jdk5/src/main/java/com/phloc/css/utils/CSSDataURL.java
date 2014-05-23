@@ -32,6 +32,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.omg.CORBA_2_3.portable.OutputStream;
 
 import com.phloc.commons.IHasStringRepresentation;
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.base64.Base64;
 import com.phloc.commons.charset.CharsetManager;
@@ -133,12 +134,9 @@ public class CSSDataURL implements IHasStringRepresentation, Serializable
                      @Nonnull final Charset aCharset,
                      @Nullable final String sContent)
   {
-    if (aMimeType == null)
-      throw new NullPointerException ("MimeType");
-    if (aContent == null)
-      throw new NullPointerException ("Content");
-    if (aCharset == null)
-      throw new NullPointerException ("Charset");
+    ValueEnforcer.notNull (aMimeType, "MimeType");
+    ValueEnforcer.notNull (aContent, "Content");
+    ValueEnforcer.notNull (aCharset, "Charset");
 
     // Check if a charset is contained in the MIME type and if it matches the
     // provided charset

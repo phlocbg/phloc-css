@@ -20,6 +20,7 @@ package com.phloc.css.decl.visit;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.css.decl.CSSDeclaration;
 import com.phloc.css.decl.CSSFontFaceRule;
@@ -357,10 +358,8 @@ public final class CSSVisitor
    */
   public static void visitCSS (@Nonnull final CascadingStyleSheet aCSS, @Nonnull final ICSSVisitor aVisitor)
   {
-    if (aCSS == null)
-      throw new NullPointerException ("CSS");
-    if (aVisitor == null)
-      throw new NullPointerException ("visitor");
+    ValueEnforcer.notNull (aCSS, "CSS");
+    ValueEnforcer.notNull (aVisitor, "Visitor");
 
     aVisitor.begin ();
     try

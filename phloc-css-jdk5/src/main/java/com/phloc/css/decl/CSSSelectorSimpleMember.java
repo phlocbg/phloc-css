@@ -22,9 +22,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.CSSSourceLocation;
 import com.phloc.css.ICSSSourceLocationAware;
@@ -44,8 +44,7 @@ public class CSSSelectorSimpleMember implements ICSSSelectorMember, ICSSSourceLo
 
   public CSSSelectorSimpleMember (@Nonnull @Nonempty final String sValue)
   {
-    if (StringHelper.hasNoText (sValue))
-      throw new IllegalArgumentException ("empty value is not allowed");
+    ValueEnforcer.notEmpty (sValue, "Value");
     m_sValue = sValue;
   }
 
@@ -95,12 +94,6 @@ public class CSSSelectorSimpleMember implements ICSSSelectorMember, ICSSSourceLo
     return m_sValue;
   }
 
-  /**
-   * Set the source location of the object, determined while parsing.
-   * 
-   * @param aSourceLocation
-   *        The source location to use. May be <code>null</code>.
-   */
   public void setSourceLocation (@Nullable final CSSSourceLocation aSourceLocation)
   {
     m_aSourceLocation = aSourceLocation;

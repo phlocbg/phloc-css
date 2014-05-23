@@ -21,6 +21,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -94,8 +95,8 @@ public class CSSWriterSettings implements ICSSWriterSettings
    */
   public CSSWriterSettings (@Nonnull final ECSSVersion eVersion, final boolean bOptimizedOutput)
   {
-    if (eVersion == null)
-      throw new NullPointerException ("version");
+    ValueEnforcer.notNull (eVersion, "Version");
+
     m_eVersion = eVersion;
     m_bOptimizedOutput = bOptimizedOutput;
   }
@@ -108,8 +109,8 @@ public class CSSWriterSettings implements ICSSWriterSettings
    */
   public CSSWriterSettings (@Nonnull final ICSSWriterSettings aBase)
   {
-    if (aBase == null)
-      throw new NullPointerException ("base");
+    ValueEnforcer.notNull (aBase, "Base");
+
     m_eVersion = aBase.getVersion ();
     m_bOptimizedOutput = aBase.isOptimizedOutput ();
     m_sIndent = aBase.getIndent (1);
@@ -163,8 +164,8 @@ public class CSSWriterSettings implements ICSSWriterSettings
   @Nonnull
   public final CSSWriterSettings setIndent (@Nonnull final String sIndent)
   {
-    if (sIndent == null)
-      throw new NullPointerException ("indent");
+    ValueEnforcer.notNull (sIndent, "Indent");
+
     m_sIndent = sIndent;
     return this;
   }

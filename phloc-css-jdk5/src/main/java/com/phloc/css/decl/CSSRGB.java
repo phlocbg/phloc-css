@@ -21,9 +21,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
@@ -102,8 +102,7 @@ public class CSSRGB implements ICSSWriteable
   @Nonnull
   public CSSRGB setRed (@Nonnull @Nonempty final String sRed)
   {
-    if (StringHelper.hasNoText (sRed))
-      throw new IllegalArgumentException ("red");
+    ValueEnforcer.notEmpty (sRed, "Red");
 
     m_sRed = sRed;
     return this;
@@ -122,8 +121,7 @@ public class CSSRGB implements ICSSWriteable
   @Nonnull
   public CSSRGB setGreen (@Nonnull @Nonempty final String sGreen)
   {
-    if (StringHelper.hasNoText (sGreen))
-      throw new IllegalArgumentException ("green");
+    ValueEnforcer.notEmpty (sGreen, "Green");
 
     m_sGreen = sGreen;
     return this;
@@ -142,8 +140,7 @@ public class CSSRGB implements ICSSWriteable
   @Nonnull
   public CSSRGB setBlue (@Nonnull @Nonempty final String sBlue)
   {
-    if (StringHelper.hasNoText (sBlue))
-      throw new IllegalArgumentException ("blue");
+    ValueEnforcer.notEmpty (sBlue, "Blue");
 
     m_sBlue = sBlue;
     return this;
