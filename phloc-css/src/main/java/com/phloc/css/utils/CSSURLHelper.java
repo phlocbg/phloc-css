@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.string.StringHelper;
@@ -101,8 +102,8 @@ public final class CSSURLHelper
   @Nonempty
   public static String getAsCSSURL (@Nonnull final ISimpleURL aURL, final boolean bQuoteURL)
   {
-    if (aURL == null)
-      throw new NullPointerException ("URL");
+    ValueEnforcer.notNull (aURL, "URL");
+
     return getAsCSSURL (aURL.getAsString (), bQuoteURL);
   }
 
@@ -138,8 +139,7 @@ public final class CSSURLHelper
    */
   public static boolean isCSSURLRequiringQuotes (@Nonnull final String sURL)
   {
-    if (sURL == null)
-      throw new NullPointerException ("passed URL is null!");
+    ValueEnforcer.notNull (sURL, "URL");
 
     for (final char c : sURL.toCharArray ())
       if (!isValidCSSURLChar (c))
@@ -161,8 +161,7 @@ public final class CSSURLHelper
   @Nonempty
   public static String getEscapedCSSURL (@Nonnull final String sURL, final char cQuoteChar)
   {
-    if (sURL == null)
-      throw new NullPointerException ("URL");
+    ValueEnforcer.notNull (sURL, "URL");
 
     if (sURL.indexOf (cQuoteChar) < 0 && sURL.indexOf (ParseUtils.URL_ESCAPE_CHAR) < 0)
     {
