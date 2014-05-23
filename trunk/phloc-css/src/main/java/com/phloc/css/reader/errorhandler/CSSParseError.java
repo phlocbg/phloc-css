@@ -23,7 +23,6 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.parser.ReadonlyToken;
 import com.phloc.css.parser.Token;
@@ -45,8 +44,8 @@ public class CSSParseError
 
   public CSSParseError (@Nonnull @Nonempty final String sErrorMsg)
   {
-    if (StringHelper.hasNoText (sErrorMsg))
-      throw new IllegalArgumentException ("Error message");
+    ValueEnforcer.notEmpty (sErrorMsg, "ErrorMsg");
+
     m_aLastValidToken = null;
     m_sExpectedTokens = null;
     m_aFirstSkippedToken = null;

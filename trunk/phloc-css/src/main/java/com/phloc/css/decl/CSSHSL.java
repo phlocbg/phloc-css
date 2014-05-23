@@ -21,9 +21,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ECSSVersion;
 import com.phloc.css.ICSSVersionAware;
@@ -111,8 +111,7 @@ public class CSSHSL implements ICSSWriteable, ICSSVersionAware
   @Nonnull
   public CSSHSL setHue (@Nonnull @Nonempty final String sHue)
   {
-    if (StringHelper.hasNoText (sHue))
-      throw new IllegalArgumentException ("hue");
+    ValueEnforcer.notEmpty (sHue, "Hue");
 
     m_sHue = sHue;
     return this;
@@ -131,8 +130,7 @@ public class CSSHSL implements ICSSWriteable, ICSSVersionAware
   @Nonnull
   public CSSHSL setSaturation (@Nonnull @Nonempty final String sSaturation)
   {
-    if (StringHelper.hasNoText (sSaturation))
-      throw new IllegalArgumentException ("saturation");
+    ValueEnforcer.notEmpty (sSaturation, "Saturation");
 
     m_sSaturation = sSaturation;
     return this;
@@ -151,8 +149,7 @@ public class CSSHSL implements ICSSWriteable, ICSSVersionAware
   @Nonnull
   public CSSHSL setLightness (@Nonnull @Nonempty final String sLightness)
   {
-    if (StringHelper.hasNoText (sLightness))
-      throw new IllegalArgumentException ("lightness");
+    ValueEnforcer.notEmpty (sLightness, "Lightness");
 
     m_sLightness = sLightness;
     return this;

@@ -21,6 +21,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.css.decl.CSSHSL;
@@ -198,12 +199,10 @@ public enum ECSSColor implements ICSSNamedColor
                      @Nonnegative final int nGreen,
                      @Nonnegative final int nBlue)
   {
-    if (nRed < CSSColorHelper.RGB_MIN || nRed > CSSColorHelper.RGB_MAX)
-      throw new IllegalArgumentException ("red");
-    if (nGreen < CSSColorHelper.RGB_MIN || nGreen > CSSColorHelper.RGB_MAX)
-      throw new IllegalArgumentException ("green");
-    if (nBlue < CSSColorHelper.RGB_MIN || nBlue > CSSColorHelper.RGB_MAX)
-      throw new IllegalArgumentException ("blue");
+    ValueEnforcer.isBetweenInclusive (nRed, "Red", CSSColorHelper.RGB_MIN, CSSColorHelper.RGB_MAX);
+    ValueEnforcer.isBetweenInclusive (nGreen, "Green", CSSColorHelper.RGB_MIN, CSSColorHelper.RGB_MAX);
+    ValueEnforcer.isBetweenInclusive (nBlue, "Blue", CSSColorHelper.RGB_MIN, CSSColorHelper.RGB_MAX);
+
     m_sName = sName;
     m_nRed = nRed;
     m_nGreen = nGreen;

@@ -21,9 +21,9 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.phloc.commons.ValueEnforcer;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.css.ICSSWriteable;
 import com.phloc.css.ICSSWriterSettings;
@@ -96,8 +96,7 @@ public class CSSRect implements ICSSWriteable
   @Nonnull
   public CSSRect setTop (@Nonnull @Nonempty final String sTop)
   {
-    if (StringHelper.hasNoText (sTop))
-      throw new IllegalArgumentException ("top");
+    ValueEnforcer.notEmpty (sTop, "Top");
 
     m_sTop = sTop;
     return this;
@@ -123,8 +122,7 @@ public class CSSRect implements ICSSWriteable
   @Nonnull
   public CSSRect setRight (@Nonnull @Nonempty final String sRight)
   {
-    if (StringHelper.hasNoText (sRight))
-      throw new IllegalArgumentException ("right");
+    ValueEnforcer.notEmpty (sRight, "Right");
 
     m_sRight = sRight;
     return this;
@@ -150,8 +148,7 @@ public class CSSRect implements ICSSWriteable
   @Nonnull
   public CSSRect setBottom (@Nonnull @Nonempty final String sBottom)
   {
-    if (StringHelper.hasNoText (sBottom))
-      throw new IllegalArgumentException ("bottom");
+    ValueEnforcer.notEmpty (sBottom, "Bottom");
 
     m_sBottom = sBottom;
     return this;
@@ -177,8 +174,7 @@ public class CSSRect implements ICSSWriteable
   @Nonnull
   public CSSRect setLeft (@Nonnull @Nonempty final String sLeft)
   {
-    if (StringHelper.hasNoText (sLeft))
-      throw new IllegalArgumentException ("left");
+    ValueEnforcer.notEmpty (sLeft, "Left");
 
     m_sLeft = sLeft;
     return this;
