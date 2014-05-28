@@ -305,7 +305,8 @@ TOKEN :
 <DEFAULT, IN_NTH>
 SPECIAL_TOKEN :
 {
-  < SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
+  // Skip until end of line or ";"
+  < SINGLE_LINE_COMMENT: "//" (~["\n","\r",";"])* (";" | ("\n"|"\r"|"\r\n")?) >
 }
 
 <*> TOKEN:
@@ -329,7 +330,7 @@ JAVACODE
 private Token errorSkipTo(final ParseException ex, final int... aKinds) throws ParseException
 {
   // Skip until (including) the first matching token
-  Token tok;
+  Token tok = null;
   do
   {
     tok = getNextToken();
@@ -337,14 +338,14 @@ private Token errorSkipTo(final ParseException ex, final int... aKinds) throws P
     {
       // Encountered EOF while skipping - throw the original exception!
       throw ex;
-    }  
+    }
   } while (!com.phloc.commons.collections.ArrayHelper.contains (aKinds, tok.kind));
   if (s_aLogger.isDebugEnabled ())
     s_aLogger.debug ("Skipped until token " + tok.toString ());
   if (m_aCustomErrorHandler != null)
     m_aCustomErrorHandler.onCSSParseError (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage, tok);
   else  
-    s_aLogger.warn("CSS parse error", ex);
+    s_aLogger.warn("CSS recoverable parse error", ex);
   return tok;
 }
 
@@ -413,15 +414,15 @@ private String javaSkipToClosingBrace() throws ParseException #void {
 CSSNode styleSheet() #Root : {}
 {
   ( <S> | <CDO> | <CDC> )*
-  ( LOOKAHEAD(2)
+  ( LOOKAHEAD( <CHARSET_SYM> )
     charsetRule()
     ( <S> | <CDO> | <CDC> )*
   )?
-  ( LOOKAHEAD(2)
+  ( LOOKAHEAD( <IMPORT_SYM> )
     importRule()
     ( <S> | <CDO> | <CDC> )*
   )*
-  ( LOOKAHEAD(2)
+  ( LOOKAHEAD( <NAMESPACE_SYM> )
     namespaceRule()
     ( <S> | <CDO> | <CDC> )*
   )*
@@ -809,7 +810,7 @@ void pseudo() : {}
   ( <FUNCTION_NTH> { jjtThis.appendText (token.image); }
     pseudoNth()
     <RROUND>  // do not append because of expression!
-  | LOOKAHEAD(2)
+  | LOOKAHEAD( <FUNCTION> )
     <FUNCTION> { jjtThis.appendText (token.image); }
     ( <S> )*
     ( expr() )?

@@ -434,8 +434,8 @@ public final class CSSReader30Test extends AbstractFuncTestCSSReader
     final File aFile = new File ("src/test/resources/testfiles/css30/good/artificial/test-singleline-comments.css");
     final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, aCharset, eVersion);
     assertNotNull (aCSS);
-    assertEquals (6, aCSS.getRuleCount ());
-    assertEquals (6, aCSS.getStyleRuleCount ());
+    assertEquals (12, aCSS.getRuleCount ());
+    assertEquals (12, aCSS.getStyleRuleCount ());
 
     assertEquals (2, aCSS.getStyleRuleAtIndex (1).getDeclarationCount ());
     assertEquals (1, aCSS.getStyleRuleAtIndex (2).getDeclarationCount ());
