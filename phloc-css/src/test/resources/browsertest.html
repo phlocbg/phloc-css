@@ -1,0 +1,43 @@
+<html>
+<head>
+<style>
+.test1 {
+color:red;
+// color:blue; color: green;
+}
+.test2 {
+color:red;
+// color:blue
+color: green;
+color: cyan;
+}
+.test3 {
+color:red;
+// color:blue;
+}
+.test4 {
+color:red
+// color:blue;
+}
+.test5 {
+color:red
+// color:blue;
+color:green
+}
+.test6 {
+;;;;;;
+color:red
+// color:blue;;;;;;;
+;;;;;;color:green;;;;;;
+}
+</style>
+</head>
+<body>
+<div class="test1">Single line comment - skip until ";" - should be green</div>
+<div class="test2">Single line comment - skip until ";" - should be cyan</div>
+<div class="test3">Single line comment - skip until "}" - should be red</div>
+<div class="test4">Single line comment - skip until "}" - should be black</div>
+<div class="test5">Single line comment - skip until ";" - should be green</div>
+<div class="test6">Single line comment - skip until ";" - should be green</div>
+</body>
+</html>

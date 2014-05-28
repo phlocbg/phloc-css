@@ -247,7 +247,8 @@ TOKEN :
 <DEFAULT>
 SPECIAL_TOKEN :
 {
-  < SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
+  // Skip until end of line or ";"
+  < SINGLE_LINE_COMMENT: "//" (~["\n","\r",";"])* (";" | ("\n"|"\r"|"\r\n")?) >
 }
 
 <*> TOKEN:
@@ -286,7 +287,7 @@ private Token errorSkipTo(final ParseException ex, final int... aKinds) throws P
   if (m_aCustomErrorHandler != null)
     m_aCustomErrorHandler.onCSSParseError (ex.currentToken, ex.expectedTokenSequences, ex.tokenImage, tok);
   else  
-    s_aLogger.warn("CSS parse error", ex);
+    s_aLogger.warn("CSS recoverable parse error", ex);
   return tok;
 }
 
@@ -355,15 +356,15 @@ private String javaSkipToClosingBrace() throws ParseException #void {
 CSSNode styleSheet() #Root : {}
 {
   ( <S> | <CDO> | <CDC> )*
-  ( LOOKAHEAD(2)
+  ( LOOKAHEAD( <CHARSET_SYM> )
     charsetRule()
     ( <S> | <CDO> | <CDC> )*
   )?
-  ( LOOKAHEAD(2)
+  ( LOOKAHEAD( <IMPORT_SYM> )
     importRule()
     ( <S> | <CDO> | <CDC> )*
   )*
-  ( LOOKAHEAD(2)
+  ( LOOKAHEAD( <NAMESPACE_SYM> )
     namespaceRule()
     ( <S> | <CDO> | <CDC> )*
   )*

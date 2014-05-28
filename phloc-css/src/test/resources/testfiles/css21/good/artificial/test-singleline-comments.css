@@ -64,5 +64,35 @@
 	//background: url(/personal/download/image/white-transparent-pixel.png) repeat 0 0 #fff;
 }
 
+.test1 {
+color:red;
+// color:blue; color: green;
+}
+.test2 {
+color:red;
+// color:blue
+color: green;
+color: cyan;
+}
+.test3 {
+color:red;
+// color:blue;
+}
+.test4 {
+color:red
+// color:blue;
+}
+.test5 {
+color:red
+// color:blue;;
+color:green
+}
+.test6 {
+;;;;;;
+color:red
+// color:blue;;;;;;;
+;;;;;;color:green;;;;;;
+}
+
 // Test comment
 // EOF
