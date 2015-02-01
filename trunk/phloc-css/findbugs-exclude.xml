@@ -19,7 +19,8 @@
 -->
 <FindBugsFilter>
   <!-- Docs: http://findbugs.sourceforge.net/manual/filter.html -->
-<!--
+
+  <!-- generated classes-->
   <Match>
     <Class name="com.phloc.css.parser.ParseException" />
   </Match>
@@ -38,10 +39,10 @@
   <Match>
     <Class name="com.phloc.css.parser.TokenMgrError" />
   </Match>
-  -->
 
   <Match>
     <Bug code="JCIP_FIELD_ISNT_FINAL_IN_IMMUTABLE_CLASS" />
   </Match>
   
+    <!-- false positives -->
 </FindBugsFilter>
