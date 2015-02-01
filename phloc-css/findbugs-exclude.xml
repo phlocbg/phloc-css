@@ -40,9 +40,16 @@
     <Class name="com.phloc.css.parser.TokenMgrError" />
   </Match>
 
+  <!-- false positives -->
+
   <Match>
     <Bug code="JCIP_FIELD_ISNT_FINAL_IN_IMMUTABLE_CLASS" />
   </Match>
   
-    <!-- false positives -->
+  <Match>
+    <BugPattern name="JCIP_FIELD_ISNT_FINAL_IN_IMMUTABLE_CLASS" />
+  </Match>
+  
+   
+  
 </FindBugsFilter>
