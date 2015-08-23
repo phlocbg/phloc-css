@@ -1,0 +1,620 @@
+
+
+# Introduction #
+
+phloc-css is a Java library for reading and writing CSS 2 and CSS 3 data structures. It has no logic for applying CSS onto HTML elements.
+This page shows some basic code examples that can be used to use the library. All snippets are free for any use.
+
+Prerequisites: as **phloc-css depends** on [phloc-commons](http://code.google.com/p/phloc-commons), the following examples also do. Additionally [SLF4J](http://www.slf4j.org/) is required.
+
+# Usage with Maven #
+
+To build phloc-css from source, Maven 3.0.4 is required. Any Maven version below does **NOT** work!
+
+Since version 3.7.5 phloc-css, phloc-css-jdk5 etc. are available on Maven Central.
+
+To use phloc-css for JDK 1.6 put the following to your pom.xml:
+```
+...
+  <!-- Only required for versions before 3.7.5 -->
+  <repositories>
+...
+    <repository>
+      <id>phloc.com</id>
+      <url>http://repo.phloc.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+...
+  <dependencies>
+    ...
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-css</artifactId>
+      <version>3.7.6</version>
+    </dependency>
+    ...
+  </dependencies>
+...
+```
+
+For JDK 1.5 use the following dependency (together with the above repository declaration):
+```
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-css-jdk5</artifactId>
+      <version>3.7.6</version>
+    </dependency>
+```
+
+# Main classes #
+As phloc-css is mainly concerned about the grammatical structure of CSS, the main classes are for reading and writing CSS. Additionally it offers the possibility to traverse the elements in a CSS and make modifications on them.
+
+## Paradigms used ##
+The following list gives a short overview of special programming techniques that are used inside phloc-css
+  * All interfaces are named starting with a capital 'I' (like in `ICSSVisitor`)
+  * All member variables are private and use the Hungarian notation (like `m_aList`)
+  * All methods returning collections (lists, sets, maps etc.) are returning copies of the content. This helps ensuring thread-safety (where applicable) but also means that modifying returned collections has no impact on the content of the "owning" object. In more or less all cases, there are "add", "remove" and "clear" methods available to modify the content of an object directly. All the methods returning copies of collections should be annotated with `@ReturnsMutableCopy`. In contrast if the inner collection is returned directly (for whatever reason) it should be annotated with `@ReturnsMutableObject`. If an unmodifiable collection is returned, the corresponding annotation is `@ReturnsImmutableObject` (e.g. for `Collections.unmodifiableList` etc.)
+  * For all non primitive parameter the annotations `@Nonnull` or `@Nullable` are used, indicating whether a parameter can be `null` or not. Additionally for Strings and collections the annotation `@Nonempty` may be present, indicating that empty values are also not allowed.
+
+## Basic Classes ##
+A complete stylesheet is represented as an instance of `com.phloc.css.decl.CascadingStyleSheet`. There is no difference between CSS 2.1 and CSS 3.0 instances. The class `com.phloc.css.decl.CascadingStyleSheet` contains all top-level rules that may be present in a CSS:
+  * Import rules (`@import`) - `com.phloc.css.decl.CSSImportRule`
+  * Namespace rules (`@namespace`) - `com.phloc.css.decl.CSSNamespaceRule`
+  * Style rules (e.g. `div{color:red;}`) - `com.phloc.css.decl.CSSStyleRule`
+  * Page rules (`@page`) - `com.phloc.css.decl.CSSPageRule`
+  * Media rules (`@media`) - `com.phloc.css.decl.CSSMediaRule`
+  * Font face rules (`@font-face`) - `com.phloc.css.decl.CSSFontFaceRule`
+  * Keyframes rules (`@keyframes`) - `com.phloc.css.decl.CSSKeyframesRule`
+  * Viewport rules (`@viewport`) - `com.phloc.css.decl.CSSViewportRule`
+  * Supports rules (`@supports`) - `com.phloc.css.decl.CSSSupportsRule`
+  * Any other unknown rules (`@foo`) - `com.phloc.css.decl.CSSUnknownRule`
+
+## CSS reading ##
+phloc-css contains two different possibilities to read CSS data:
+  * Reading a complete CSS file can be achieved using `com.phloc.css.reader.CSSReader`. The result in this case will be an instance of `com.phloc.css.decl.CascadingStyleSheet`.
+  * Reading only a list of style information (as e.g. present in an HTML `style` element can be achieved using `com.phloc.css.reader.CSSReaderDeclarationList`. The result in this case will be an instance of `com.phloc.css.decl.CSSDeclarationList`.
+
+Both reading classes support the reading from either a `java.io.File`, a `java.io.Reader`, a `com.phloc.commons.io.IInputStreamProvider` or a String.
+The reason why `java.io.InputStream` is not supported directly is because internally the stream is passed twice - first to determine a potentially available charset and second to read the content with the correctly determined charset. That's why an `IInputStreamProvider` must be used, that creates 2 unique streams!
+
+### Recoverable Errors ###
+phloc-css differentiates between recoverable errors and unrecoverable errors. An example for a recoverable error is e.g. an "@import" rule in the wrong place or a missing closing bracket within a style declaration.
+For recoverable errors a special handler interface `com.phloc.css.reader.errorhandler.ICSSParseErrorHandler` is present. You can pass an implementation of this error handler to the CSS reader (see above). The following implementations are present by default (all residing in package `com.phloc.css.reader.errorhandler`):
+  * `DoNothingCSSParseErrorHandler` - silently ignoring all recoverable errors
+  * `LoggingCSSParseErrorHandler` - logging all recoverable errors to an SLF4J logger
+  * `ThrowingCSSParseErrorHandler` - throws a `com.phloc.css.parser.ParseException` in case of a recoverable error which is afterwards handled by the unrecoverable error handler (see below). This can be used to enforce handling only 100% valid CSS files. This is the default setting, if no error handler is specified during reading.
+  * `CollectingCSSParseErrorHandler` - collects all recoverable errors into a list of `com.phloc.css.reader.errorhandler.CSSError` instances for later evaluation.
+
+Some error handlers can be nested so that a combination of a logging handler and a collecting handler can easily be achieved like:
+```
+new CollectingCSSParseErrorHandler (new LoggingCSSParseErrorHandler ())
+```
+`DoNothingCSSParseErrorHandler` and `ThrowingCSSParseErrorHandler` cannot be nested because it makes no sense.
+
+Both `CSSReader` and `CSSReaderDeclarationList` (since 3.7.4) have the possibility to define a default recoverable error handler using the method `setDefaultParseErrorHandler(ICSSParseErrorHandler)`. If a reading method is invoked without an explicit `ICSSParseErrorHandler` than this default error handler is used.
+
+### Unrecoverable Errors ###
+In case of an unrecoverable error, the underlying parser engine of JavaCC throws a `com.phloc.css.parser.ParseException`. This exception contains all the necessary information on where the error occurred. In case of such an unrecoverable error, the result of the reading will always be `null` and the exception is not automatically propagated to the caller.
+To explicitly get notified when such a parse error occurs, the handler interface `com.phloc.css.handler.ICSSParseExceptionHandler` is available. The available implementations are (all residing in package `com.phloc.css.handler`):
+  * `DoNothingCSSParseExceptionHandler` - silently ignore all unrecoverable errors
+  * `LoggingCSSParseExceptionHandler` (since 3.7.4) - log all unrecoverable errors to an SLF4J logger
+
+As there is at most one unrecoverable error per parse there is no collecting implementation of an `ICSSParseExceptionHandler` available. If it is desired to propagate the Exception to the caller you need to implement your own `ICSSParseExceptionHandler` subclass that throws an unchecked exception (one derived from `RuntimeException`). Example:
+```
+  final ICSSParseExceptionHandler aThrowingExceptionHandler = new ICSSParseExceptionHandler () {
+    public void onException (final ParseException ex) {
+      throw new IllegalStateException ("Failed to parse CSS", ex);
+    }
+  };
+```
+
+Since version 3.7.4 both `CSSReader` and `CSSReaderDeclarationList` have the possibility to define a default unrecoverable error handler using the method `setDefaultParseExceptionHandler(ICSSParseExceptionHandler)`. If a reading method is invoked without an explicit `ICSSParseExceptionHandler` than this default exception handler is used.
+
+## CSS iteration/visting ##
+Once a CSS file was successfully read, it can easily be iterated using the class `com.phloc.css.decl.visit.CSSVisitor`. It requires a valid instance of `com.phloc.css.decl.CascadingStyleSheet` as well as an implementation of `com.phloc.css.decl.visit.ICSSVisitor`. The `CascadingStyleSheet` can be acquired either by reading from a file/stream or by creating a new one from scratch. For the `ICSSVisitor` it is recommended to use the class `com.phloc.css.decl.visit.DefaultCSSVisitor` as the base class - this class contains empty implementations of all methods defined in the `ICSSVisitor` interface. To visit all declarations (e.g. `color:red;`) it is sufficient to simply override the method `public void onDeclaration (@Nonnull final CSSDeclaration aDeclaration)`. For details please have a look at the JavaDocs of `ICSSVisitor`.
+To start the visiting call `CSSVisitor.visitCSS (CascadingStyleSheet, ICSSVisitor)`.
+
+A special visitor is present for URLs. URLs can occur on several places in CSS files, especially in the `@import` rules and within declarations (like in `background-image: url(../images/bg.gif)`). Therefore a special interface `com.phloc.css.decl.visit.ICSSUrlVisitor` together with the empty default implementation `com.phloc.css.decl.visit.DefaultCSSUrlVisitor` is provided. So to visit all URLs within a CSS call `CSSVisitor.visitCSSUrl(CascadingStyleSheet, ICSSUrlVisitor)`.
+
+For modifying URLs (e.g. to adopt paths to a different environment) a special base class `com.phloc.css.decl.visit.AbstractModifyingCSSUrlVisitor` is available. It offers the abstract method `protected abstract String getModifiedURI (@Nonnull String sURI)` to modify a URL and write the result back into the original `CascadingStylesheet`. An example of how this can be used, can be found in the test method `com.phloc.css.decl.visit.CSSVisitorDeclarationListTest.testModifyingCSSUrlVisitor ()`.
+
+**Note:** it is safe to modify a CSS while iterating it, but only changes affecting children of the current node may be considered during the same iteration run.
+
+## CSS writing ##
+TODO
+
+## CSS utilities ##
+TODO
+
+### DataURL handling ###
+TODO
+
+### Shorthand property handling ###
+A "CSS shorthand" property is a property that consists of multiple values. Classical examples are `margin` or `border`. phloc-css contains support for selected shorthand properties since version 3.7.4. All shorthand related classes can be found in package `com.phloc.css.decl.shorthand`. The supported shorthand properties are:
+  * `background`
+  * `font`
+  * `border`
+  * `border-top`
+  * `border-right`
+  * `border-bottom`
+  * `border-left`
+  * `border-width`
+  * `border-style`
+  * `border-color`
+  * `margin`
+  * `padding`
+  * `outline`
+  * `list-style`
+
+All of these shorthand properties are registered in class `CSSShortHandRegistry` and you can manually register your own shorthand descriptors.
+The `CSSShortHandRegistry` allows you to split a single CSSDeclaration like `border:1px dashed` into the corresponding "sub-declarations":
+```
+  // Parse a dummy declaration
+  final CSSDeclaration aDecl = CSSReaderDeclarationList.readFromString ("border:1px dashed", ECSSVersion.CSS30).getDeclarationAtIndex (0);
+
+  // Get the Shorthand descriptor for "border"    
+  final CSSShortHandDescriptor aSHD = CSSShortHandRegistry.getShortHandDescriptor (ECSSProperty.BORDER);
+
+  // And now split it into pieces
+  final List <CSSDeclaration> aSplittedDecls = aSHD.getSplitIntoPieces (aDecl);
+```
+In the above example, `aSplittedDecls` will contain 3 elements with the following content:
+  * `border-width:1px`
+  * `border-style:dashed`
+  * `border-color:black`
+
+Even though no color value was provided, the default value `black` is returned. For all "sub-declarations", sensible default values are defined.
+
+# Code Examples #
+
+## Reading a CSS 3.0 file ##
+
+```
+import java.io.File;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.commons.charset.CCharset;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.reader.CSSReader;
+
+/**
+ * This is example code to read a CSS declaration from a {@link File}.
+ * 
+ * @author Philip Helger
+ */
+public final class WikiReadCSS
+{
+  private static final Logger s_aLogger = LoggerFactory.getLogger (WikiReadCSS.class);
+
+  /**
+   * Read a CSS 3.0 declaration from a file using UTF-8 encoding.
+   * 
+   * @param aFile
+   *        The file to be read. May not be <code>null</code>.
+   * @return <code>null</code> if the file has syntax errors.
+   */
+  public static CascadingStyleSheet readCSS30 (final File aFile)
+  {
+    // UTF-8 is the fallback if neither a BOM nor @charset rule is present
+    final CascadingStyleSheet aCSS = CSSReader.readFromFile (aFile, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    if (aCSS == null)
+    {
+      // Most probably a syntax error
+      s_aLogger.warn ("Failed to read CSS - please see previous logging entries!");
+      return null;
+    }
+    return aCSS;
+  }
+}
+```
+
+## Writing a CSS 3.0 file ##
+
+```
+import java.io.File;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.io.file.SimpleFileIO;
+import com.phloc.commons.state.ESuccess;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.writer.CSSWriter;
+import com.phloc.css.writer.CSSWriterSettings;
+
+/**
+ * This is example code to write a CSS declaration to a {@link File}.
+ *
+ * @author Philip Helger
+ */
+public final class WikiWriteCSS
+{
+  private static final Logger s_aLogger = LoggerFactory.getLogger (WikiWriteCSS.class);
+
+  /**
+   * Write a CSS 3.0 declaration to a file using UTF-8 encoding.
+   *
+   * @param aCSS
+   *        The CSS to be written to a file. May not be <code>null</code>.
+   * @param aFile
+   *        The file to be written. May not be <code>null</code>.
+   * @return {@link ESuccess#SUCCESS} if everything went okay, and
+   *         {@link ESuccess#FAILURE} if an error occurred
+   */
+  public ESuccess writeCSS30 (final CascadingStyleSheet aCSS, final File aFile)
+  {
+    // 1.param: version to write
+    // 2.param: false== non-optimized output
+    final CSSWriterSettings aSettings = new CSSWriterSettings (ECSSVersion.CSS30, false);
+    try
+    {
+      final CSSWriter aWriter = new CSSWriter (aSettings);
+      // Write the @charset rule: (optional)
+      aWriter.setContentCharset (CCharset.CHARSET_UTF_8_OBJ.name ());
+      // Write a nice file header
+      aWriter.setHeaderText ("This file was generated by phloc-css\nGrab a copy at http://code.google.com/p/phloc-css");
+      // Convert the CSS to a String
+      final String sCSSCode = aWriter.getCSSAsString (aCSS);
+      // Finally write the String to a file
+      return SimpleFileIO.writeFile (aFile, sCSSCode, CCharset.CHARSET_UTF_8_OBJ);
+    }
+    catch (final Exception ex)
+    {
+      s_aLogger.error ("Failed to write the CSS to a file", ex);
+      return ESuccess.FAILURE;
+    }
+  }
+}
+```
+
+## Creating a @font-face rule from scratch ##
+The following code creates a CSS @font-face rule that looks like this:
+```
+@font-face {
+   font-family: "Your typeface";
+   src: url("path/basename.eot");
+   src: local("local font name"),
+        url("path/basename.woff") format("woff"),
+        url("path/basename.otf") format("opentype"),
+        url("path/basename.svg#filename") format("svg");
+ }
+```
+
+```
+import java.io.IOException;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.css.decl.CSSDeclaration;
+import com.phloc.css.decl.CSSExpression;
+import com.phloc.css.decl.CSSExpressionMemberFunction;
+import com.phloc.css.decl.CSSFontFaceRule;
+import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.decl.ECSSExpressionOperator;
+
+/**
+ * This is example code to create a font-face rule from scratch
+ * 
+ * @author Philip Helger
+ */
+public final class WikiCreateFontFaceRule
+{
+  @Nonnull
+  private static CSSExpressionMemberFunction _createFormatFct (@Nonnull @Nonempty final String sFormatName)
+  {
+    return new CSSExpressionMemberFunction ("format", CSSExpression.createString (sFormatName));
+  }
+
+  /**
+   * Create a single font-face rule.
+   * 
+   * @param sTypefaceName
+   *        The name of the font-face in CSS. May neither be <code>null</code>
+   *        nor empty.
+   * @param sLocalName
+   *        The name of the local font to be used. May be <code>null</code>.
+   * @param sPath
+   *        The server-relative path, where the font files reside. May not be
+   *        <code>null</code>.
+   * @param sBasename
+   *        the base name of the font-files (without extension). May neither be
+   *        <code>null</code> nor empty
+   */
+  @Nonnull
+  public static CascadingStyleSheet createFontFace (@Nonnull @Nonempty final String sTypefaceName,
+                                                    @Nullable final String sLocalName,
+                                                    @Nonnull final String sPath,
+                                                    @Nonnull final String sBasename) throws IOException
+  {
+    final CascadingStyleSheet aCSS = new CascadingStyleSheet ();
+    final CSSFontFaceRule aFFR = new CSSFontFaceRule ();
+
+    // The font-family
+    aFFR.addDeclaration (new CSSDeclaration ("font-family", CSSExpression.createString (sTypefaceName), false));
+
+    // The special EOT file
+    aFFR.addDeclaration (new CSSDeclaration ("src", CSSExpression.createURI (sPath + sBasename + ".eot"), false));
+
+    // The generic rules
+    final CSSExpression aExpr = new CSSExpression ();
+    if (StringHelper.hasText (sLocalName))
+      aExpr.addMember (new CSSExpressionMemberFunction ("local", CSSExpression.createString (sLocalName)))
+           .addMember (ECSSExpressionOperator.COMMA);
+    aExpr.addURI (sPath + sBasename + ".woff")
+         .addMember (_createFormatFct ("woff"))
+         .addMember (ECSSExpressionOperator.COMMA)
+         .addURI (sPath + sBasename + ".otf")
+         .addMember (_createFormatFct ("opentype"))
+         .addMember (ECSSExpressionOperator.COMMA)
+         .addURI (sPath + sBasename + ".svg#" + sBasename)
+         .addMember (_createFormatFct ("svg"));
+    aFFR.addDeclaration (new CSSDeclaration ("src", aExpr, false));
+
+    // Add the font-face rule to the main CSS
+    aCSS.addRule (aFFR);
+    return aCSS;
+  }
+}
+```
+
+## Read the CSS content of a HTML style attribute ##
+The following examples reads the CSS content of "sStyle" as CSS 3.0 and creates a CSSDeclarationList from it:
+```
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CSSDeclarationList;
+import com.phloc.css.reader.CSSReaderDeclarationList;
+
+/**
+ * Example how to read the content of a CSS style attribute.
+ * 
+ * @author Philip Helger
+ */
+public final class WikiReadFromHtml
+{
+  public static CSSDeclarationList readFromStyleAttribute ()
+  {
+    final String sStyle = "color:red; background:fixed !important";
+    final CSSDeclarationList aDeclList = CSSReaderDeclarationList.readFromString (sStyle, ECSSVersion.CSS30);
+    if (aDeclList == null)
+      throw new IllegalStateException ("Failed to parse CSS: " + sStyle);
+    return aDeclList;
+  }
+}
+```
+
+## Visiting all declarations contained in an HTML style attribute ##
+Similar to the above example, but visiting all declarations and printing them on stdout. Two different approaches are shown: first all declarations are retrieved via the native API, and second a custom visitor is used to determine all declarations.
+The result of this method looks like this:
+```
+color: red (not important)
+background: fixed (important)
+```
+The example code:
+```
+import javax.annotation.Nonnull;
+
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CSSDeclaration;
+import com.phloc.css.decl.CSSDeclarationList;
+import com.phloc.css.decl.visit.CSSVisitor;
+import com.phloc.css.decl.visit.DefaultCSSVisitor;
+import com.phloc.css.decl.visit.ICSSVisitor;
+import com.phloc.css.reader.CSSReaderDeclarationList;
+import com.phloc.css.writer.CSSWriterSettings;
+
+/**
+ * Example how to read the content of a CSS style attribute, and visit all
+ * contained declarations - with the API and with a visitor.
+ * 
+ * @author Philip Helger
+ */
+public final class WikiVisitFromHtml
+{
+  public static void readFromStyleAttributeWithAPI ()
+  {
+    final String sStyle = "color:red; background:fixed !important";
+    final CSSDeclarationList aDeclList = CSSReaderDeclarationList.readFromString (sStyle, ECSSVersion.CSS30);
+    if (aDeclList == null)
+      throw new IllegalStateException ("Failed to parse CSS: " + sStyle);
+    // For all contained declarations
+    for (final CSSDeclaration aDeclaration : aDeclList.getAllDeclarations ())
+      System.out.println (aDeclaration.getProperty () +
+                          ": " +
+                          aDeclaration.getExpression ().getAsCSSString (new CSSWriterSettings (ECSSVersion.CSS30), 0) +
+                          (aDeclaration.isImportant () ? " (important)" : " (not important)"));
+  }
+
+  public static void readFromStyleAttributeWithVisitor ()
+  {
+    final String sStyle = "color:red; background:fixed !important";
+    final CSSDeclarationList aDeclList = CSSReaderDeclarationList.readFromString (sStyle, ECSSVersion.CSS30);
+    if (aDeclList == null)
+      throw new IllegalStateException ("Failed to parse CSS: " + sStyle);
+    // Create a custom visitor
+    final ICSSVisitor aVisitor = new DefaultCSSVisitor ()
+    {
+      @Override
+      public void onDeclaration (@Nonnull final CSSDeclaration aDeclaration)
+      {
+        System.out.println (aDeclaration.getProperty () +
+                            ": " +
+                            aDeclaration.getExpression ().getAsCSSString (new CSSWriterSettings (ECSSVersion.CSS30), 0) +
+                            (aDeclaration.isImportant () ? " (important)" : " (not important)"));
+      }
+    };
+    CSSVisitor.visitAllDeclarations (aDeclList, aVisitor);
+  }
+}
+```
+
+## Visit all URLs contained in a CSS ##
+The following example reads a CSS from a String and than extracts all contained URLs. The output looks like this:
+```
+Import: foobar.css - source location reaches from [1/1] up to [1/21]
+background - references: a.gif - source location reaches from [2/22] up to [2/31]
+background-image - references: /my/folder/b.gif - source location reaches from [3/25] up to [3/47]
+```
+And here is the code:
+```
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.charset.CCharset;
+import com.phloc.css.CSSSourceLocation;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CSSDeclaration;
+import com.phloc.css.decl.CSSExpressionMemberTermURI;
+import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.decl.ICSSTopLevelRule;
+import com.phloc.css.decl.visit.CSSVisitor;
+import com.phloc.css.decl.visit.DefaultCSSUrlVisitor;
+import com.phloc.css.reader.CSSReader;
+
+/**
+ * Example how to extract all URLs from a certain CSS file using an
+ * ICSSUrlVisitor.
+ * 
+ * @author Philip Helger
+ */
+public final class WikiVisitUrls
+{
+  public static String getSourceLocationString (@Nonnull final CSSSourceLocation aSourceLoc)
+  {
+    return "source location reaches from [" +
+           aSourceLoc.getFirstTokenBeginLineNumber () +
+           "/" +
+           aSourceLoc.getFirstTokenBeginColumnNumber () +
+           "] up to [" +
+           aSourceLoc.getLastTokenEndLineNumber () +
+           "/" +
+           aSourceLoc.getLastTokenEndColumnNumber () +
+           "]";
+  }
+
+  public void readFromStyleAttributeWithAPI ()
+  {
+    final String sStyle = "@import 'foobar.css';\n"
+                          + "div{background:fixed url(a.gif) !important;}\n"
+                          + "span { background-image:url('/my/folder/b.gif');}";
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sStyle, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    CSSVisitor.visitCSSUrl (aCSS, new DefaultCSSUrlVisitor ()
+    {
+      // Called for each import
+      @Override
+      public void onImport (@Nonnull final CSSImportRule aImportRule)
+      {
+        System.out.println ("Import: " +
+                            aImportRule.getLocationString () +
+                            " - " +
+                            getSourceLocationString (aImportRule.getSourceLocation ()));
+      }
+
+      // Call for URLs outside of URLs
+      @Override
+      public void onUrlDeclaration (@Nullable final ICSSTopLevelRule aTopLevelRule,
+                                    @Nonnull final CSSDeclaration aDeclaration,
+                                    @Nonnull final CSSExpressionMemberTermURI aURITerm)
+      {
+        System.out.println (aDeclaration.getProperty () +
+                            " - references: " +
+                            aURITerm.getURIString () +
+                            " - " +
+                            getSourceLocationString (aURITerm.getSourceLocation ()));
+      }
+    });
+  }
+}
+```
+
+## Visit all URLs (incl.data URLs) contained in a CSS ##
+The following example reads a CSS from a String and than extracts all contained URLs with special focus on data URLs. This example works with phloc-css >= 3.5.7. The output looks like this:
+```
+Import: /folder/foobar.css
+background - references data URL with 158 bytes of content
+background-image - references regular URL: /my/folder/b.gif
+```
+And here is the code:
+```
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.charset.CCharset;
+import com.phloc.css.ECSSVersion;
+import com.phloc.css.decl.CSSDeclaration;
+import com.phloc.css.decl.CSSExpressionMemberTermURI;
+import com.phloc.css.decl.CSSImportRule;
+import com.phloc.css.decl.CSSURI;
+import com.phloc.css.decl.CascadingStyleSheet;
+import com.phloc.css.decl.ICSSTopLevelRule;
+import com.phloc.css.decl.visit.CSSVisitor;
+import com.phloc.css.decl.visit.DefaultCSSUrlVisitor;
+import com.phloc.css.decl.visit.ICSSUrlVisitor;
+import com.phloc.css.reader.CSSReader;
+import com.phloc.css.utils.CSSDataURL;
+
+/**
+ * Example how to extract all URLs from a certain CSS file using an
+ * {@link ICSSUrlVisitor} and handle them as data URLs. This example works with
+ * phloc-css >= 3.5.7
+ * 
+ * @author Philip Helger
+ */
+public final class WikiVisitDataUrls
+{
+  public void readFromStyleAttributeWithAPI ()
+  {
+    final String sStyle = "@import '/folder/foobar.css';\n"
+                          + "div{background:fixed url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEgAACxIB0t1+/AAAAAd0SU1FB9EFBAoYMhVvMQIAAAAtSURBVHicY/z//z8DHoBH+v///yy4FDEyMjIwMDDhM3lgpaEuh7gTEzDiDxYA9HEPDF90e5YAAAAASUVORK5CYII=) !important;}\n"
+                          + "span { background-image:url('/my/folder/b.gif');}";
+    final CascadingStyleSheet aCSS = CSSReader.readFromString (sStyle, CCharset.CHARSET_UTF_8_OBJ, ECSSVersion.CSS30);
+    CSSVisitor.visitCSSUrl (aCSS, new DefaultCSSUrlVisitor ()
+    {
+      // Called for each import
+      @Override
+      public void onImport (@Nonnull final CSSImportRule aImportRule)
+      {
+        System.out.println ("Import: " + aImportRule.getLocationString ());
+      }
+
+      // Call for URLs outside of URLs
+      @Override
+      public void onUrlDeclaration (@Nullable final ICSSTopLevelRule aTopLevelRule,
+                                    @Nonnull final CSSDeclaration aDeclaration,
+                                    @Nonnull final CSSExpressionMemberTermURI aURITerm)
+      {
+        final CSSURI aURI = aURITerm.getURI ();
+
+        if (aURI.isDataURL ())
+        {
+          final CSSDataURL aDataURL = aURI.getAsDataURL ();
+          System.out.println (aDeclaration.getProperty () +
+                              " - references data URL with " +
+                              aDataURL.getContentLength () +
+                              " bytes of content");
+        }
+        else
+          System.out.println (aDeclaration.getProperty () + " - references regular URL: " + aURI.getURI ());
+      }
+    });
+  }
+}
+```
+
+# Known shortcomings #
+The following list gives an overview of known shortcomings in phloc-css
+  * Escaped characters (like `\26`) are not interpreted correctly.
