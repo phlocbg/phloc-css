@@ -27,7 +27,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>phloc-css</artifactId>
-  <version>3.7.8-SNAPSHOT</version>
+  <version>3.8.0</version>
   <packaging>bundle</packaging>
   <name>phloc-css</name>
   <description>Java CSS 2 and CSS 3 parser and builder</description>
@@ -45,7 +45,7 @@
     <connection>scm:git:https://github.com/phlocbg/phloc-css</connection>
     <developerConnection>scm:git:https://github.com/phlocbg/phloc-css</developerConnection>
   <url>http://github.com/phlocbg/phloc-css</url>
-    <tag>HEAD</tag>
+    <tag>phloc-css-3.8.0</tag>
 
 </scm>
   <organization>
