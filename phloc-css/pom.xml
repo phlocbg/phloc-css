@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) 2006-2014 phloc systems
+    Copyright (C) 2006-2015 phloc systems
     http://www.phloc.com
     office[at]phloc[dot]com
 
@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>23.2</version>
+    <version>24.0</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -30,8 +30,8 @@
   <version>3.7.8-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>phloc-css</name>
-  <description>phloc CSS parser an other components</description>
-  <url>http://repo.phloc.com/apidocs/phloc-css/${project.version}</url>
+  <description>Java CSS 2 and CSS 3 parser and builder</description>
+  <url>https://github.com/phlocbg/phloc-css/tree/master/phloc-css</url>
   
   <licenses>
     <license>
@@ -42,11 +42,12 @@
   </licenses>
  
   <scm>
-    <url>http://code.google.com/p/phloc-css/source/browse/</url>
-    <connection>scm:svn:http://phloc-css.googlecode.com/svn/trunk/phloc-css</connection>
-    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/trunk/phloc-css</developerConnection>
-  </scm>
-  
+    <connection>scm:git:https://github.com/phlocbg/phloc-css</connection>
+    <developerConnection>scm:git:https://github.com/phlocbg/phloc-css</developerConnection>
+  <url>http://github.com/phlocbg/phloc-css</url>
+    <tag>HEAD</tag>
+
+</scm>
   <organization>
     <name>phloc systems</name>
     <url>http://www.phloc.com</url>
@@ -68,7 +69,6 @@
       <artifactId>phloc-commons</artifactId>
       <version>4.3.6</version>
     </dependency>
-    
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-jdk5</artifactId>
