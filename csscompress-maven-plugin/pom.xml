@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) 2006-2014 phloc systems
+    Copyright (C) 2006-2018 phloc systems
     http://www.phloc.com
     office[at]phloc[dot]com
 
@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>23.2</version>
+    <version>24.0</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -32,7 +32,7 @@
   <packaging>maven-plugin</packaging>
   <name>csscompress-maven-plugin</name>
   <description>Maven plugin for compressing CSS files at build time</description>
-  <url>http://repo.phloc.com/apidocs/csscompress-maven-plugin/${project.version}</url>
+  <url>http://github.com/phlocbg/phloc-css/tree/master/csscompress-maven-plugin</url>
 
   <licenses>
     <license>
@@ -43,9 +43,10 @@
   </licenses>
 
   <scm>
-    <url>http://code.google.com/p/phloc-css/source/browse/</url>
-    <connection>scm:svn:http://phloc-css.googlecode.com/svn/trunk/csscompress-maven-plugin</connection>
-    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/trunk/csscompress-maven-plugin</developerConnection>
+    <connection>scm:git:https://github.com/phlocbg/phloc-css</connection>
+    <developerConnection>scm:git:https://github.com/phlocbg/phloc-css</developerConnection>
+    <url>http://github.com/phlocbg/phloc-css</url>
+    <tag>HEAD</tag>
   </scm>
 
   <organization>
@@ -82,7 +83,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-commons-jdk5</artifactId>
-      <version>4.3.6</version>
+      <version>4.3.5</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>

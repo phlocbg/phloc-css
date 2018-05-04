@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) 2006-2014 phloc systems
+    Copyright (C) 2006-2018 phloc systems
     http://www.phloc.com
     office[at]phloc[dot]com
 
@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>23.1</version>
+    <version>24.0</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -31,7 +31,7 @@
   <packaging>bundle</packaging>
   <name>phloc-css-jdk5</name>
   <description>phloc CSS parser an other components</description>
-  <url>http://repo.phloc.com/apidocs/phloc-css-jdk5/${project.version}</url>
+  <url>https://github.com/phlocbg/phloc-css/tree/master/phloc-css-jdk5</url>
   
   <licenses>
     <license>
@@ -42,24 +42,19 @@
   </licenses>
  
   <scm>
-    <url>http://code.google.com/p/phloc-css/source/browse/</url>
-    <connection>scm:svn:http://phloc-css.googlecode.com/svn/trunk/phloc-css-jdk5</connection>
-    <developerConnection>scm:svn:https://phloc-css.googlecode.com/svn/trunk/phloc-css-jdk5</developerConnection>
-  </scm>
+    <connection>scm:git:https://github.com/phlocbg/phloc-css</connection>
+    <developerConnection>scm:git:https://github.com/phlocbg/phloc-css</developerConnection>
+  <url>http://github.com/phlocbg/phloc-css</url>
+    <tag>HEAD</tag>
+
+</scm>
   
-  <organization>
+<organization>
     <name>phloc systems</name>
     <url>http://www.phloc.com</url>
   </organization>
 
   <developers>
-    <developer>
-      <id>philip</id>
-      <name>Philip Helger</name>
-      <email>ph(at)phloc.com</email>
-      <url>http://www.phloc.com</url>
-      <organization>phloc systems</organization>
-    </developer>
     <developer>
       <id>boris</id>
       <name>Boris Gregorcic</name>
