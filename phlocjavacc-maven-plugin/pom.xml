@@ -22,7 +22,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>24.0</version>
+    <version>24.3</version>
     <relativePath>../phloc-parent-pom/pom.xml</relativePath>
   </parent>
 
@@ -186,8 +186,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -230,7 +230,7 @@
               <goal>javacc</goal>
             </goals>
             <configuration>
-              <jdkVersion>1.5</jdkVersion>
+              <jdkVersion>1.8</jdkVersion>
               <javadocFriendlyComments>true</javadocFriendlyComments>
               <packageName>org.javacc.parser</packageName>
               <sourceDirectory>src/main/java/org/javacc/parser</sourceDirectory>
@@ -244,7 +244,7 @@
               <goal>javacc</goal>
             </goals>
             <configuration>
-              <jdkVersion>1.5</jdkVersion>
+              <jdkVersion>1.8</jdkVersion>
               <javadocFriendlyComments>true</javadocFriendlyComments>
               <packageName>org.javacc.utils</packageName>
               <sourceDirectory>src/main/java/org/javacc/utils</sourceDirectory>
@@ -258,7 +258,7 @@
               <goal>jjtree-javacc</goal>
             </goals>
             <configuration>
-              <jdkVersion>1.5</jdkVersion>
+              <jdkVersion>1.8</jdkVersion>
               <javadocFriendlyComments>true</javadocFriendlyComments>
               <packageName>org.javacc.parser</packageName>
               <sourceDirectory>src/main/java/org/javacc/jjtree</sourceDirectory>
