@@ -18,6 +18,7 @@
 package com.phloc.css.utils;
 
 import java.awt.Color;
+import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -591,6 +592,13 @@ public final class CSSColorHelper
 
   @Nonnull
   @Nonempty
+  private static int _getHexPartAsRGB (final String sHexPart)
+  {
+    return Integer.valueOf (sHexPart, 16).intValue ();
+  }
+
+  @Nonnull
+  @Nonempty
   public static String getHexColorValue (final int nRed, final int nGreen, final int nBlue)
   {
     return new StringBuilder (CCSSValue.HEXVALUE_LENGTH).append (CCSSValue.PREFIX_HEX)
@@ -622,6 +630,73 @@ public final class CSSColorHelper
     // All returned values in the range 0-1
     final float [] aHSL = Color.RGBtoHSB (nRed, nGreen, nBlue, new float [3]);
     return new float [] { aHSL[0] * HSL_MAX, aHSL[1] * PERCENTAGE_MAX, aHSL[2] * PERCENTAGE_MAX };
+  }
+
+  @Nullable
+  public static Color getColorFromHex (final String sColor)
+  {
+    if (!isHexColorValue (sColor))
+    {
+      return null;
+    }
+    final String sHexVal = StringHelper.trimStart (sColor, String.valueOf (CCSSValue.PREFIX_HEX));
+    final List <String> aPortions = StringHelper.getPortions (sHexVal, sColor.length () == 3 ? 1 : 2);
+    final String sR = aPortions.size () > 0 ? aPortions.get (0) : null;
+    final String sG = aPortions.size () > 1 ? aPortions.get (1) : null;
+    final String sB = aPortions.size () > 2 ? aPortions.get (2) : null;
+    return new Color (StringHelper.hasText (sR) ? _getHexPartAsRGB (sR) : 0,
+                      StringHelper.hasText (sG) ? _getHexPartAsRGB (sG) : 0,
+                      StringHelper.hasText (sB) ? _getHexPartAsRGB (sB) : 0);
+  }
+
+  @Nullable
+  public static String getHexFromColor (final Color aColor)
+  {
+    return getHexColorValue (aColor.getRed (), aColor.getGreen (), aColor.getBlue ());
+  }
+
+  /**
+   * Brighten a color by a given amount
+   * 
+   * @param aColor
+   *        The color to lighten
+   * @param nAmount
+   *        The amount to lighten the color. 0 will leave the color unchanged; 1
+   *        will make the color completely white
+   * @return The brightened color
+   */
+  public static Color brighten (final Color aColor, final float nAmount)
+  {
+    if (nAmount < 0 || nAmount > 1)
+    {
+      return aColor;
+    }
+    final int red = (int) ((aColor.getRed () * (1 - nAmount) / 255 + nAmount) * 255);
+    final int green = (int) ((aColor.getGreen () * (1 - nAmount) / 255 + nAmount) * 255);
+    final int blue = (int) ((aColor.getBlue () * (1 - nAmount) / 255 + nAmount) * 255);
+    return new Color (red, green, blue);
+  }
+
+  /**
+   * Darken a color by a given amount
+   * 
+   * @param aColor
+   *        The color to darken
+   * @param nAmount
+   *        The amount to darken the color. 0 will leave the color unchanged; 1
+   *        will make the color completely black
+   * @return The darkened color
+   */
+  public static Color darken (final Color aColor, final float nAmount)
+  {
+    if (nAmount < 0 || nAmount > 1)
+    {
+      return aColor;
+    }
+    final int red = (int) ((aColor.getRed () * (1 - nAmount) / 255) * 255);
+    final int green = (int) ((aColor.getGreen () * (1 - nAmount) / 255) * 255);
+    final int blue = (int) ((aColor.getBlue () * (1 - nAmount) / 255) * 255);
+    return new Color (red, green, blue);
   }
 
   /**
